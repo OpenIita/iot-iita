@@ -1,0 +1,5 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://填写mongodb地址/admin
+      database: iotkit

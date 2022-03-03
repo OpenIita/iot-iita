@@ -1,0 +1,51 @@
+package cc.iotkit.manager.service;
+
+import cc.iotkit.dao.DeviceDao;
+import cc.iotkit.dao.ProductDao;
+import cc.iotkit.dao.SpaceDeviceRepository;
+import cc.iotkit.manager.model.vo.SpaceDeviceVo;
+import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.product.Product;
+import cc.iotkit.model.space.SpaceDevice;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class SpaceDeviceService {
+    @Autowired
+    private SpaceDeviceRepository spaceDeviceRepository;
+    @Autowired
+    private DeviceDao deviceDao;
+    @Autowired
+    private ProductDao productDao;
+
+    public List<SpaceDeviceVo> getUserDevices(String uid, String spaceId) {
+        SpaceDevice device = new SpaceDevice();
+        device.setUid(uid);
+        if (StringUtils.isNotBlank(spaceId)) {
+            device.setSpaceId(spaceId);
+        }
+        List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(Example.of(device));
+        List<SpaceDeviceVo> spaceDeviceVos = new ArrayList<>();
+        spaceDevices.forEach(sd -> {
+            DeviceInfo deviceInfo = deviceDao.get(sd.getDeviceId());
+            Product product = productDao.get(deviceInfo.getProductKey());
+            spaceDeviceVos.add(SpaceDeviceVo.builder()
+                    .uid(sd.getUid())
+                    .deviceId(sd.getDeviceId())
+                    .name(sd.getName())
+                    .picUrl(product.getImg())
+                    .spaceName(sd.getSpaceName())
+                    .online(deviceInfo.getState().getOnline())
+                    .property(deviceInfo.getProperty())
+                    .productKey(deviceInfo.getProductKey())
+                    .build());
+        });
+        return spaceDeviceVos;
+    }
+}

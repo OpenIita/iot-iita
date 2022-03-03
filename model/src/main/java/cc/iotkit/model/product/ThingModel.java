@@ -1,0 +1,104 @@
+package cc.iotkit.model.product;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Data
+@Document
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ThingModel {
+
+    @Id
+    private String id;
+
+    private String productKey;
+
+    private Model model;
+
+    public ThingModel(String productKey) {
+        this.productKey = productKey;
+    }
+
+    @Data
+    public static class Model {
+        private List<Property> properties;
+        private List<Service> services;
+        private List<Event> events;
+
+        public Map<String, Service> serviceMap() {
+            if (services == null) {
+                return new HashMap<>();
+            }
+            return services.stream().collect(Collectors.toMap(Service::getIdentifier, s -> s));
+        }
+    }
+
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Property {
+        private String identifier;
+        private DataType dataType;
+        private String name;
+        private String accessMode;
+    }
+
+    @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Parameter {
+        private String identifier;
+        private DataType dataType;
+        private String name;
+        private Boolean required;
+    }
+
+    @Data
+    public static class Service {
+        private String identifier;
+        private List<Parameter> inputData;
+        private List<Parameter> outputData;
+        private String name;
+    }
+
+    @Data
+    public static class Event {
+        private String identifier;
+        private List<Parameter> outputData;
+        private String name;
+    }
+
+    @Data
+    public static class DataType {
+        private String type;
+        private Map specs;
+
+        public <T> Object parse(T value) {
+            if (value == null) {
+                return null;
+            }
+
+            String val = value.toString();
+            type = type.toLowerCase();
+            switch (type) {
+                case "bool":
+                case "enum":
+                case "int":
+                    return Integer.parseInt(val);
+                default:
+                    return val;
+            }
+
+        }
+    }
+}
