@@ -1,9 +1,9 @@
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.dao.UserInfoRepository;
-import cc.iotkit.manager.config.Constants;
 import cc.iotkit.manager.service.AligenieService;
 import cc.iotkit.manager.service.KeycloakAdminService;
 import cc.iotkit.manager.utils.AuthUtil;

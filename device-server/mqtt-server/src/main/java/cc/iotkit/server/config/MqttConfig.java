@@ -1,6 +1,9 @@
 package cc.iotkit.server.config;
 
+import cc.iotkit.common.Constants;
+import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.server.handler.MqttConsumerHandler;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,26 +32,11 @@ public class MqttConfig {
      */
     public static final String CHANNEL_NAME_OUT = "mqttOutboundChannel";
 
-    @Value("${mqtt.username}")
-    private String username;
-
-    @Value("${mqtt.password}")
-    private String password;
-
     @Value("${mqtt.url}")
     private String url;
 
-    @Value("${mqtt.producer.clientId}")
-    private String producerClientId;
-
-    @Value("${mqtt.producer.defaultTopic}")
-    private String producerDefaultTopic;
-
-    @Value("${mqtt.consumer.clientId}")
-    private String consumerClientId;
-
-    @Value("${mqtt.consumer.defaultTopic}")
-    private String consumerDefaultTopic;
+    @Value(("${spring.profiles.active}"))
+    private String env;
 
     /**
      * MQTT连接器选项
@@ -62,9 +50,9 @@ public class MqttConfig {
         // 这里设置为true表示每次连接到服务器都以新的身份连接
         options.setCleanSession(true);
         // 设置连接的用户名
-        options.setUserName(username);
+        options.setUserName("admin");
         // 设置连接的密码
-        options.setPassword(password.toCharArray());
+        options.setPassword("password".toCharArray());
         options.setServerURIs(StringUtils.split(url, ","));
         // 设置超时时间 单位为秒
         options.setConnectionTimeout(10);
@@ -100,14 +88,16 @@ public class MqttConfig {
      *
      * @return {@link MessageHandler}
      */
+    @SneakyThrows
     @Bean
     @ServiceActivator(inputChannel = CHANNEL_NAME_OUT)
     public MessageHandler mqttOutbound() {
+        String clientId = "mqtt-server-producer-" + env;
+        clientId = "su_" + CodecUtil.aesEncrypt("admin_" + clientId, Constants.MQTT_SECRET);
         MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler(
-                producerClientId,
+                clientId,
                 mqttClientFactory());
         messageHandler.setAsync(true);
-        messageHandler.setDefaultTopic(producerDefaultTopic);
         return messageHandler;
     }
 
@@ -116,13 +106,16 @@ public class MqttConfig {
      *
      * @return {@link MessageProducer}
      */
+    @SneakyThrows
     @Bean
     public MessageProducer inbound() {
         // 可以同时消费（订阅）多个Topic
+        String clientId = "mqtt-server-consumer-" + env;
+        clientId = "su_" + CodecUtil.aesEncrypt("admin_" + clientId, Constants.MQTT_SECRET);
         MqttPahoMessageDrivenChannelAdapter adapter =
                 new MqttPahoMessageDrivenChannelAdapter(
-                        consumerClientId, mqttClientFactory(),
-                        StringUtils.split(consumerDefaultTopic, ","));
+                        clientId, mqttClientFactory(),
+                        "/sys/#");
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);

@@ -1,5 +1,6 @@
 package cc.iotkit.dao;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.model.device.DeviceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;

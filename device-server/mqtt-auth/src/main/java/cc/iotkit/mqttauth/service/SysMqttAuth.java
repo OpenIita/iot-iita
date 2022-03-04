@@ -1,7 +1,7 @@
 package cc.iotkit.mqttauth.service;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.CodecUtil;
-import cc.iotkit.mqttauth.config.Constants;
 import cc.iotkit.mqttauth.model.EmqAcl;
 import cc.iotkit.mqttauth.model.EmqAuthInfo;
 import lombok.extern.slf4j.Slf4j;

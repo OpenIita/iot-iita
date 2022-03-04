@@ -1,9 +1,9 @@
 package cc.iotkit.mqttauth.controller;
 
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.mqttauth.config.Constants;
 import cc.iotkit.mqttauth.model.EmqAcl;
 import cc.iotkit.mqttauth.model.EmqAuthInfo;
 import cc.iotkit.mqttauth.service.DeviceMqttAuth;

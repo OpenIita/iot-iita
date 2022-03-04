@@ -1,8 +1,8 @@
 package cc.iotkit.manager.service;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.dao.AppDesignRepository;
-import cc.iotkit.manager.config.Constants;
 import cc.iotkit.manager.model.vo.AppPageNode;
 import cc.iotkit.model.product.AppDesign;
 import com.fasterxml.jackson.databind.JsonNode;

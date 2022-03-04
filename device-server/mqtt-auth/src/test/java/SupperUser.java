@@ -1,22 +1,14 @@
 import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.mqttauth.config.Constants;
 import cc.iotkit.mqttauth.controller.MqttAuthController;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class SupperUser {
 
-    public static void main(String[] args) throws Exception {
-        System.out.println("clientId:su_" + CodecUtil.aesEncrypt("admin_produce_dev", Constants.MQTT_SECRET));
-
-        String hmac = DigestUtils.md5Hex(Constants.MQTT_SECRET + "2P6MDKr8cB7y8EmM_ABC123DEF456");
-        System.out.println(hmac);
-
-    }
-
     @Test
     public void createSuperuser() throws Exception {
+        //mqtt生成超级用户，作为mqtt-server连接mqtt的clientId
         String clientId = "mqtt-server-producer-dev";
         System.out.println("clientId:su_" + CodecUtil.aesEncrypt("admin_" + clientId, Constants.MQTT_SECRET));
     }

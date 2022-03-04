@@ -1,7 +1,7 @@
 package cc.iotkit.server.handler;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.server.config.Constants;
 import cc.iotkit.server.dao.DeviceDao;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.mq.Request;

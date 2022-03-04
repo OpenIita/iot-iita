@@ -1,7 +1,7 @@
 package cc.iotkit.server.dao;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.model.device.DeviceInfo;
-import cc.iotkit.server.config.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;

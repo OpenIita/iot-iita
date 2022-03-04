@@ -1,5 +1,6 @@
 package cc.iotkit.dao;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ThingModel;
 import org.springframework.beans.factory.annotation.Autowired;

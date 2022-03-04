@@ -1,8 +1,8 @@
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.dao.UserAccountRepository;
-import cc.iotkit.manager.config.Constants;
 import cc.iotkit.model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,6 +1,6 @@
 package cc.iotkit.manager.utils;
 
-import cc.iotkit.manager.config.Constants;
+import cc.iotkit.common.Constants;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

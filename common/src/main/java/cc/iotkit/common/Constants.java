@@ -1,4 +1,4 @@
-package cc.iotkit.manager.config;
+package cc.iotkit.common;
 
 public interface Constants {
 
@@ -6,15 +6,15 @@ public interface Constants {
 
     String ACCOUNT_SECRET = "3n1z33kzvpgz1foijpkepyd3e8tw84us";
 
-    String WECHAT_APP_ID = "wx791cb7bf75950e0c";
-
-    String WECHAT_APP_SECRET = "eeef73ce71f1a722ad6298985d859844";
-
     String PRODUCT_CACHE = "product_cache";
 
     String DEVICE_CACHE = "device_cache";
 
     String THING_MODEL_CACHE = "thing_model_cache";
+
+    String WECHAT_APP_ID = "wx791cb7bf75950e0c";
+
+    String WECHAT_APP_SECRET = "eeef73ce71f1a722ad6298985d859844";
 
     String APP_DESIGN_CACHE = "app_design_cache";
 

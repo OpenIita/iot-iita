@@ -1,9 +1,9 @@
 package cc.iotkit.manager.service;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.dao.UserAccountRepository;
 import cc.iotkit.dao.UserInfoRepository;
-import cc.iotkit.manager.config.Constants;
 import cc.iotkit.model.UserAccount;
 import cc.iotkit.model.UserInfo;
 import lombok.SneakyThrows;
