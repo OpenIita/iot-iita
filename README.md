@@ -3,6 +3,8 @@
 #### 介绍
 iot系统后台项目，包含了mqtt认证服务、mqtt接入服务、web管理后台、规则引擎、第三方接入服务等模块。
 
+前端项目见：https://gitee.com/iotkit-open-source/iot-console-web
+
 
 #### 软件架构
 软件架构说明
@@ -11,10 +13,8 @@ iot系统后台项目，包含了mqtt认证服务、mqtt接入服务、web管理
 
 #### 安装教程
 
-1.  EMQX安装和配置
-2.  keycloak安装和配置
-3.  mongodb安装和配置
-4.  本程序配置
+见：https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《iot平台帮助文档》
+链接有效期至 2022-03-08 03:57:04
 
 #### 使用说明
 
