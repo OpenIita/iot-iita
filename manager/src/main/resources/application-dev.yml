@@ -45,9 +45,5 @@ app:
   systemRole: iot_system_user
 
 mqtt:
-  username: admin
-  password: password
   url: tcp://填写mqtt连接地址
 
-  consumer:
-    clientId: 填写mqtt连接clientId见文档中生成clientId说明

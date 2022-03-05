@@ -2,6 +2,7 @@ package cc.iotkit.manager.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.google.common.collect.Lists;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -23,12 +24,18 @@ import java.util.List;
 @EnableKnife4j
 public class SwaggerConfig {
 
+    @Value("${keycloak.auth-server-url}")
+    private String authServerUrl;
+
+    @Value("${keycloak.realm}")
+    private String realm;
+
     @Bean
     public Docket productApi() {
         //schema
         List<GrantType> grantTypes = new ArrayList<>();
         //密码模式
-        String passwordTokenUrl = "https://auth.iotkit.cc/realms/iotkit/protocol/openid-connect/token";
+        String passwordTokenUrl = String.format("%s/realms/%s/protocol/openid-connect/token", authServerUrl, realm);
         ResourceOwnerPasswordCredentialsGrant resourceOwnerPasswordCredentialsGrant = new ResourceOwnerPasswordCredentialsGrant(passwordTokenUrl);
         grantTypes.add(resourceOwnerPasswordCredentialsGrant);
         OAuth oAuth = new OAuthBuilder().name("oauth2")
