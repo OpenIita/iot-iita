@@ -1,7 +1,9 @@
 # iotkit-parent
 
 #### 介绍
-iot系统后台项目，包含了mqtt认证服务、mqtt接入服务、web管理后台、规则引擎、第三方接入服务等模块。
+此仓库为奇特物联(iotkit)物联网平台开源项目，旨在构建一个小型、简单易用、低门槛的物联网平台。
+
+系统包含了mqtt认证服务、mqtt接入服务、web管理后台、规则引擎、第三方接入服务等模块。
 
 前端项目见：https://gitee.com/iotkit-open-source/iot-console-web
 
