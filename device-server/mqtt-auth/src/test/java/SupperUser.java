@@ -1,5 +1,5 @@
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.CodecUtil;
-import cc.iotkit.mqttauth.config.Constants;
 import cc.iotkit.mqttauth.controller.MqttAuthController;
 import org.junit.Assert;
 import org.junit.Test;

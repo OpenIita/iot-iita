@@ -143,6 +143,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.eclipse.paho</groupId>
+                <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+                <version>1.2.2</version>
+            </dependency>
+
+            <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>model</artifactId>
                 <version>${project.version}</version>

@@ -1,8 +1,11 @@
 package cc.iotkit.mqttauth.service;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.product.Product;
 import cc.iotkit.mqttauth.dao.DeviceDao;
+import cc.iotkit.mqttauth.dao.ProductDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,16 +18,28 @@ public class DeviceService {
 
     @Autowired
     private DeviceDao deviceDao;
+    @Autowired
+    private ProductDao productDao;
 
     public DeviceInfo register(DeviceInfo device) {
-        DeviceInfo deviceInfo = deviceDao.getByPkAndDn(device.getProductKey(), device.getDeviceName());
+
+        String pk = device.getProductKey();
+        Product product = productDao.getProduct(pk);
+        if (product == null) {
+            throw new BizException("Product does not exist");
+        }
+        String uid = product.getUid();
+
+        DeviceInfo deviceInfo = deviceDao.getByPkAndDn(pk, device.getDeviceName());
         if (deviceInfo != null) {
             device.setDeviceId(deviceInfo.getDeviceId());
+            device.setUid(uid);
             deviceDao.updateDevice(device);
             log.info("device register update:{}", JsonUtil.toJsonString(device));
             return device;
         }
 
+        device.setUid(uid);
         device.setDeviceId(newDeviceId(device.getDeviceName()));
         deviceDao.addDevice(device);
         log.info("device registered:{}", JsonUtil.toJsonString(device));

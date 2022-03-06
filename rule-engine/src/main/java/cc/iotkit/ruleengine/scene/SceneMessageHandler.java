@@ -58,7 +58,7 @@ public class SceneMessageHandler {
                 return;
             }
 
-            Map<?, ?> params = new HashMap<>();
+            Map<?, ?> params;
             //匹配到topic，取消息内容
             if (topic.endsWith("_reply")) {
                 ResponseMsg response = JsonUtil.parse(message, ResponseMsg.class);

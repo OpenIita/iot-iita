@@ -87,14 +87,14 @@ public class ProductController {
         return categoryRepository.findAll();
     }
 
-    @PreAuthorize("hasAuthority('iot_admin')")
+    @PreAuthorize("hasRole('iot_admin')")
     @PostMapping("/saveCategory")
     public void saveCategory(Category cate) {
         cate.setCreateAt(System.currentTimeMillis());
         categoryRepository.save(cate);
     }
 
-    @PreAuthorize("hasAuthority('iot_admin')")
+    @PreAuthorize("hasRole('iot_admin')")
     @PostMapping("/delCategory")
     public void delCategory(String id) {
         categoryRepository.deleteById(id);

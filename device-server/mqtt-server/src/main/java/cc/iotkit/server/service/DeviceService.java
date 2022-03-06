@@ -1,5 +1,6 @@
 package cc.iotkit.server.service;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.exception.NotFoundException;
 import cc.iotkit.common.exception.OfflineException;
 import cc.iotkit.common.utils.DeviceUtil;
@@ -57,10 +58,17 @@ public class DeviceService implements IDeviceManager, IDeviceService {
         device.setDeviceName(deviceName);
         device.setModel(model);
 
+        DeviceInfo parentDevice = deviceDao.getByDeviceId(parentId);
+        if (parentDevice == null) {
+            throw new BizException("Parent device does not exist");
+        }
+        String uid = parentDevice.getUid();
+
         DeviceInfo deviceInfo = deviceDao.getByPkAndDn(productKey, deviceName);
         if (deviceInfo != null) {
             device.setId(deviceInfo.getId());
             device.setDeviceId(deviceInfo.getDeviceId());
+            device.setUid(uid);
             deviceDao.updateDevice(device);
             log.info("device register update:{}", JsonUtil.toJsonString(device));
             return deviceInfo;
@@ -70,6 +78,7 @@ public class DeviceService implements IDeviceManager, IDeviceService {
 
         device.setId(deviceId);
         device.setDeviceId(deviceId);
+        device.setUid(uid);
         deviceDao.addDevice(device);
         log.info("device registered:{}", JsonUtil.toJsonString(device));
         return device;

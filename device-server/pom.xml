@@ -15,6 +15,7 @@
         <module>mqtt-auth</module>
         <module>mqtt-server</module>
         <module>device-api</module>
+        <module>mqtt-client-simulator</module>
     </modules>
 
 

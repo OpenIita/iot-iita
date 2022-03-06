@@ -30,7 +30,7 @@ public class RuleConfiguration {
     @Value("${mqtt.url}")
     private String url;
 
-    @Value(("${spring.profiles.active}"))
+    @Value(("${spring.profiles.active:}"))
     private String env;
 
     private MqttPahoMessageDrivenChannelAdapter adapter;
