@@ -5,7 +5,9 @@
 
 系统包含了mqtt认证服务、mqtt接入服务、web管理后台、规则引擎、第三方接入服务等模块。
 
-前端项目见：https://gitee.com/iotkit-open-source/iot-console-web
+ **前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
+
+ **演示地址：** http://120.76.96.206，账号：guest1,密码：guest123  (只读权限)
 
 
 #### 软件架构
