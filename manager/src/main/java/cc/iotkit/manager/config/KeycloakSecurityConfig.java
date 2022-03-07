@@ -54,7 +54,10 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         http
                 .authorizeRequests()
                 .antMatchers("/*.html", "/favicon.ico","/v2/api-docs", "/webjars/**", "/swagger-resources/**", "/*.js").permitAll()
-                .antMatchers("/user/registerCheck", "/user/registerConfirm").permitAll()
+                .antMatchers("/**/save*").hasRole("iot_write")
+                .antMatchers("/**/del*").hasRole("iot_write")
+                .antMatchers("/**/add*").hasRole("iot_write")
+                .antMatchers("/**/clear*").hasRole("iot_write")
                 .antMatchers("/**").hasAnyRole(systemRole)
                 .antMatchers("/api/**").hasAnyRole("iot_client_user")
                 .and().csrf().disable();

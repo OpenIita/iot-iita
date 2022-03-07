@@ -84,10 +84,11 @@ public class DeviceController {
 
     @GetMapping("/{deviceId}/children")
     public List<DeviceInfo> getChildren(@PathVariable("deviceId") String deviceId) {
-        return deviceRepository.findAll(Example.of(DeviceInfo.builder()
-                .parentId(deviceId)
-                .uid(AuthUtil.getUserId())
-                .build()));
+        return deviceRepository.findAll(Example.of(
+                dataOwnerService.wrapExample(
+                        DeviceInfo.builder()
+                                .parentId(deviceId)
+                                .build())));
     }
 
     @GetMapping("/{deviceId}")
