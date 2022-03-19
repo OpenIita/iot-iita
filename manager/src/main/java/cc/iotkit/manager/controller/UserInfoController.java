@@ -6,11 +6,11 @@ import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.manager.service.AligenieService;
 import cc.iotkit.manager.service.KeycloakAdminService;
+import cc.iotkit.manager.service.PulsarAdminService;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Example;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,15 +29,18 @@ public class UserInfoController extends DbBaseController<UserInfoRepository, Use
     private final KeycloakAdminService keycloakAdminService;
     private final UserInfoRepository userInfoRepository;
     private final AligenieService aligenieService;
+    private final PulsarAdminService pulsarAdminService;
 
     @Autowired
     public UserInfoController(UserInfoRepository userInfoRepository,
                               KeycloakAdminService keycloakAdminService,
-                              AligenieService aligenieService) {
+                              AligenieService aligenieService,
+                              PulsarAdminService pulsarAdminService) {
         super(userInfoRepository);
         this.keycloakAdminService = keycloakAdminService;
         this.userInfoRepository = userInfoRepository;
         this.aligenieService = aligenieService;
+        this.pulsarAdminService = pulsarAdminService;
     }
 
     /**
@@ -46,8 +49,7 @@ public class UserInfoController extends DbBaseController<UserInfoRepository, Use
     @PreAuthorize("hasRole('iot_admin')")
     @GetMapping("/platform/users")
     public List<UserInfo> getPlatformUsers() {
-        return userInfoRepository.findAll(Example.of(UserInfo.builder()
-                .type(UserInfo.USER_TYPE_PLATFORM).build()));
+        return userInfoRepository.findByType(UserInfo.USER_TYPE_PLATFORM);
     }
 
     /**
@@ -55,13 +57,26 @@ public class UserInfoController extends DbBaseController<UserInfoRepository, Use
      */
     @PostMapping("/platform/user/add")
     public void addPlatformUser(@RequestBody UserInfo user) {
-        user.setId(UUID.randomUUID().toString());
-        user.setType(UserInfo.USER_TYPE_PLATFORM);
-        user.setOwnerId(AuthUtil.getUserId());
-        user.setRoles(Arrays.asList(Constants.ROLE_SYSTEM));
-        user.setCreateAt(System.currentTimeMillis());
-        keycloakAdminService.createUser(user, Constants.PWD_SYSTEM_USER);
-        userInfoRepository.save(user);
+        try {
+            user.setId(UUID.randomUUID().toString());
+            user.setType(UserInfo.USER_TYPE_PLATFORM);
+            user.setOwnerId(AuthUtil.getUserId());
+            user.setRoles(Arrays.asList(Constants.ROLE_SYSTEM));
+            user.setCreateAt(System.currentTimeMillis());
+            UserInfo keycloakUser = keycloakAdminService.getUser(user.getUid());
+            if (keycloakUser != null) {
+                user.setId(keycloakUser.getId());
+                keycloakAdminService.updateUser(user);
+            } else {
+                keycloakAdminService.createUser(user, Constants.PWD_SYSTEM_USER);
+            }
+            if (!pulsarAdminService.tenantExists(user.getUid())) {
+                pulsarAdminService.createTenant(user.getUid());
+            }
+            userInfoRepository.save(user);
+        } catch (Throwable e) {
+            throw new BizException("add platform user error", e);
+        }
     }
 
     /**
@@ -69,11 +84,7 @@ public class UserInfoController extends DbBaseController<UserInfoRepository, Use
      */
     @GetMapping("/client/users")
     public List<UserInfo> clientUsers() {
-        return userInfoRepository.findAll(Example.of(
-                UserInfo.builder()
-                        .type(UserInfo.USER_TYPE_CLIENT)
-                        .ownerId(AuthUtil.getUserId())
-                        .build()));
+        return userInfoRepository.findByTypeAndOwnerId(UserInfo.USER_TYPE_CLIENT, AuthUtil.getUserId());
     }
 
     /**

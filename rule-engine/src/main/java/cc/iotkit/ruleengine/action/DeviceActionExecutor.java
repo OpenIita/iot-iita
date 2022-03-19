@@ -1,7 +1,7 @@
 package cc.iotkit.ruleengine.action;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.DeviceDao;
+import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.deviceapi.IDeviceService;
 import cc.iotkit.deviceapi.Service;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class DeviceActionExecutor implements ActionExecutor<DeviceAction> {
     private IDeviceService deviceService;
 
     @Autowired
-    private DeviceDao deviceDao;
+    private DeviceCache deviceCache;
 
     @Override
     public String getName() {

@@ -4,11 +4,17 @@ spring:
       uri: mongodb://填写mongodb地址/admin
       database: iotkit
 
+  elasticsearch:
+    rest:
+      uris: http://elasticsearch 连接地址
+      username: elasticsearch 用户名
+      password: 密码
+      connection-timeout: 10s
+
   cache:
     cache-names: foo,bar
     caffeine:
       spec: maximumSize=5000,expireAfterAccess=120s
-
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -47,3 +53,5 @@ app:
 mqtt:
   url: tcp://填写mqtt连接地址
 
+gateway:
+  function-jar: 填写protocol-function打包的jar存放路径:/xx/xx.jar

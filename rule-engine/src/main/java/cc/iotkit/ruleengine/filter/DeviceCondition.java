@@ -1,6 +1,6 @@
 package cc.iotkit.ruleengine.filter;
 
-import cc.iotkit.dao.DeviceDao;
+import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.ruleengine.expression.Expression;
 import lombok.Data;
@@ -20,11 +20,11 @@ public class DeviceCondition {
 
     private String comparator;
 
-    private DeviceDao deviceDao;
+    private DeviceCache deviceCache;
 
     public boolean matches() {
         String[] pkDn = device.split("/");
-        DeviceInfo deviceInfo = deviceDao.getByPkAndDn(pkDn[0], pkDn[1]);
+        DeviceInfo deviceInfo = deviceCache.findByProductKeyAndDeviceName(pkDn[0], pkDn[1]);
         Object left = null;
         if ("property".equals(type)) {
             Map<String, Object> properties = deviceInfo.getProperty();

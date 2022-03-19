@@ -2,7 +2,7 @@ package cc.iotkit.manager.controller.aligenie;
 
 import cc.iotkit.dao.AligenieProductDao;
 import cc.iotkit.dao.AligenieProductRepository;
-import cc.iotkit.dao.ProductDao;
+import cc.iotkit.dao.ProductCache;
 import cc.iotkit.manager.controller.DbBaseController;
 import cc.iotkit.manager.model.aligenie.AligenieProductVo;
 import cc.iotkit.manager.service.DataOwnerService;
@@ -23,18 +23,18 @@ import java.util.List;
 @RequestMapping("/aligenie/product")
 public class AligenieProductController extends DbBaseController<AligenieProductRepository, AligenieProduct> {
 
-    private final ProductDao productDao;
+    private final ProductCache productCache;
     private final AligenieProductDao aligenieProductDao;
     private final DataOwnerService dataOwnerService;
 
 
     @Autowired
     public AligenieProductController(AligenieProductRepository aligenieProductRepository,
-                                     ProductDao productDao,
+                                     ProductCache productCache,
                                      AligenieProductDao aligenieProductDao,
                                      DataOwnerService dataOwnerService) {
         super(aligenieProductRepository);
-        this.productDao = productDao;
+        this.productCache = productCache;
         this.aligenieProductDao = aligenieProductDao;
         this.dataOwnerService = dataOwnerService;
     }
@@ -49,7 +49,7 @@ public class AligenieProductController extends DbBaseController<AligenieProductR
                                 .build()));
 
         for (AligenieProduct ap : aligenieProducts) {
-            Product product = productDao.get(ap.getProductKey());
+            Product product = productCache.findById(ap.getProductKey());
             productVos.add(new AligenieProductVo(ap, product.getName()));
         }
         return productVos;

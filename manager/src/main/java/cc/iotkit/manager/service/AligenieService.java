@@ -2,7 +2,7 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.dao.AligenieDeviceRepository;
 import cc.iotkit.dao.AligenieProductDao;
-import cc.iotkit.dao.DeviceDao;
+import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.dao.SpaceDeviceRepository;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.space.SpaceDevice;
@@ -28,7 +28,7 @@ public class AligenieService {
     private AligenieProductDao aligenieProductDao;
 
     @Autowired
-    private DeviceDao deviceDao;
+    private DeviceCache deviceCache;
 
     public void syncDevice(UserInfo user) {
         if (!user.getUsePlatforms().isAligenie()) {
@@ -58,7 +58,7 @@ public class AligenieService {
 
             //不存在设备，新增
             if (aligenieDevice == null) {
-                DeviceInfo deviceInfo = deviceDao.get(spaceDevice.getDeviceId());
+                DeviceInfo deviceInfo = deviceCache.findByDeviceId(spaceDevice.getDeviceId());
                 AligenieProduct aligenieProduct = aligenieProductDao.getAligenieProduct(deviceInfo.getProductKey());
                 if(aligenieProduct==null){
                     continue;

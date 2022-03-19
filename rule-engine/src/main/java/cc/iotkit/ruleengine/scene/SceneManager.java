@@ -1,7 +1,7 @@
 package cc.iotkit.ruleengine.scene;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.DeviceDao;
+import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.dao.SceneInfoRepository;
 import cc.iotkit.deviceapi.IDeviceService;
 import cc.iotkit.model.rule.RuleAction;
@@ -43,7 +43,7 @@ public class SceneManager {
     private SceneInfoRepository sceneInfoRepository;
 
     @Autowired
-    private DeviceDao deviceDao;
+    private DeviceCache deviceCache;
 
     @Autowired
     private IDeviceService deviceService;
@@ -156,7 +156,7 @@ public class SceneManager {
     private Filter<?> parseFilter(String type, String config) {
         if (DeviceFilter.TYPE.equals(type)) {
             DeviceFilter filter = parse(config, DeviceFilter.class);
-            filter.setDeviceDao(deviceDao);
+            filter.setDeviceCache(deviceCache);
             return filter;
         }
         return null;

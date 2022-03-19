@@ -1,7 +1,7 @@
 package cc.iotkit.manager.service;
 
-import cc.iotkit.dao.DeviceDao;
-import cc.iotkit.dao.ProductDao;
+import cc.iotkit.dao.DeviceCache;
+import cc.iotkit.dao.ProductCache;
 import cc.iotkit.dao.SpaceDeviceRepository;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.model.device.DeviceInfo;
@@ -20,9 +20,9 @@ public class SpaceDeviceService {
     @Autowired
     private SpaceDeviceRepository spaceDeviceRepository;
     @Autowired
-    private DeviceDao deviceDao;
+    private DeviceCache deviceCache;
     @Autowired
-    private ProductDao productDao;
+    private ProductCache productCache;
 
     public List<SpaceDeviceVo> getUserDevices(String uid, String spaceId) {
         SpaceDevice device = new SpaceDevice();
@@ -33,8 +33,8 @@ public class SpaceDeviceService {
         List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(Example.of(device));
         List<SpaceDeviceVo> spaceDeviceVos = new ArrayList<>();
         spaceDevices.forEach(sd -> {
-            DeviceInfo deviceInfo = deviceDao.get(sd.getDeviceId());
-            Product product = productDao.get(deviceInfo.getProductKey());
+            DeviceInfo deviceInfo = deviceCache.findByDeviceId(sd.getDeviceId());
+            Product product = productCache.findById(deviceInfo.getProductKey());
             spaceDeviceVos.add(SpaceDeviceVo.builder()
                     .uid(sd.getUid())
                     .deviceId(sd.getDeviceId())

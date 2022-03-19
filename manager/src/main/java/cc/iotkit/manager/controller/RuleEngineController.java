@@ -41,9 +41,6 @@ public class RuleEngineController {
     private SceneLogRepository sceneLogRepository;
 
     @Autowired
-    private SceneLogDao sceneLogDao;
-
-    @Autowired
     private DataOwnerService dataOwnerService;
 
     @Autowired
@@ -51,9 +48,6 @@ public class RuleEngineController {
 
     @Autowired
     private SceneManager sceneManager;
-
-    @Autowired
-    private TaskLogDao taskLogDao;
 
     @Autowired
     private TaskLogRepository taskLogRepository;
@@ -132,7 +126,7 @@ public class RuleEngineController {
         dataOwnerService.checkOwner(sceneInfo);
         sceneInfoRepository.delete(sceneInfo);
         sceneManager.remove(sceneInfo.getId());
-        sceneLogDao.deleteLogs(sceneId);
+        sceneLogRepository.deleteBySceneId(sceneId);
     }
 
     @PostMapping("/scene/{sceneId}/logs/{size}/{page}")
@@ -150,7 +144,7 @@ public class RuleEngineController {
 
     @DeleteMapping("/scene/{sceneId}/logs/clear")
     public void clearSceneLogs(@PathVariable("sceneId") String sceneId) {
-        sceneLogDao.deleteLogs(sceneId);
+        sceneLogRepository.deleteBySceneId(sceneId);
     }
 
     @PostMapping("/tasks")
@@ -230,7 +224,7 @@ public class RuleEngineController {
         dataOwnerService.checkOwner(taskInfo);
         taskManager.deleteTask(taskId, "delete by " + AuthUtil.getUserId());
         taskInfoRepository.deleteById(taskId);
-        taskLogDao.deleteLogs(taskId);
+        taskLogRepository.deleteByTaskId(taskId);
     }
 
     @PostMapping("/task/{taskId}/logs/{size}/{page}")
@@ -248,7 +242,7 @@ public class RuleEngineController {
 
     @DeleteMapping("/task/{taskId}/logs/clear")
     public void clearTaskLogs(@PathVariable("taskId") String taskId) {
-        taskLogDao.deleteLogs(taskId);
+        taskLogRepository.deleteByTaskId(taskId);
     }
 
 }

@@ -18,6 +18,9 @@ public class DataOwnerService {
         return data;
     }
 
+    /**
+     * 检查数据中的uid与当前登录用户是否一致
+     */
     public <T extends Owned> T checkOwner(T data) {
         //管理员不限制
         if (AuthUtil.isAdmin()) {
@@ -37,19 +40,21 @@ public class DataOwnerService {
         throw new BizException("无权限操作");
     }
 
-    public <T extends Owned> void checkOwner(MongoRepository<T, String> repository, T data) {
+    /**
+     * 从库中取对应数据Id的数据中的uid是否与当前登录用户一致
+     */
+    public <T extends Owned> void checkOwner(MongoRepository<T, String> repository, String id) {
         //管理员不限制
         if (AuthUtil.isAdmin()) {
             return;
         }
 
-        String dataId = data.getId();
-        //没有数据id为新数据
-        if (StringUtils.isBlank(dataId)) {
+        //数据id为空的新数据
+        if (StringUtils.isBlank(id)) {
             return;
         }
 
-        T old = repository.findById(dataId).orElse(null);
+        T old = repository.findById(id).orElse(null);
         //新数据
         if (old == null) {
             return;
@@ -63,8 +68,11 @@ public class DataOwnerService {
         throw new BizException("无权限操作");
     }
 
+    /**
+     * 从库中取对应数据Id的数据中的uid是否与当前登录用户一致，并把当前用户id设置到数据中
+     */
     public <T extends Owned> void checkOwnerSave(MongoRepository<T, String> repository, T data) {
-        checkOwner(repository, data);
+        checkOwner(repository, data.getId());
         data.setUid(AuthUtil.getUserId());
     }
 

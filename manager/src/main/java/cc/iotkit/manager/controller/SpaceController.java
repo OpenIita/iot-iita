@@ -30,9 +30,9 @@ public class SpaceController {
     @Autowired
     private DeviceRepository deviceRepository;
     @Autowired
-    private DeviceDao deviceDao;
+    private DeviceCache deviceCache;
     @Autowired
-    private ProductDao productDao;
+    private ProductCache productCache;
 
     @PostMapping("/list")
     public PagingData<SpaceInfo> getDevices(int page,
@@ -58,8 +58,8 @@ public class SpaceController {
         List<SpaceDeviceVo> deviceVos = new ArrayList<>();
         List<SpaceDevice> devices = spaceDeviceRepository.findAll(Example.of(SpaceDevice.builder().uid(userId).build()));
         devices.forEach(sd -> {
-            DeviceInfo deviceInfo = deviceDao.get(sd.getDeviceId());
-            Product product = productDao.get(deviceInfo.getProductKey());
+            DeviceInfo deviceInfo = deviceCache.findByDeviceId(sd.getDeviceId());
+            Product product = productCache.findById(deviceInfo.getProductKey());
             deviceVos.add(SpaceDeviceVo.builder()
                     .deviceId(sd.getDeviceId())
                     .name(sd.getName())

@@ -39,9 +39,9 @@ public class SpaceController {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private ProductDao productDao;
+    private ProductCache productCache;
     @Autowired
-    private DeviceDao deviceDao;
+    private DeviceCache deviceCache;
     @Autowired
     private SpaceDeviceService spaceDeviceService;
 
@@ -170,8 +170,8 @@ public class SpaceController {
     }
 
     private SpaceDeviceVo buildSpaceDeviceVo(String id, String deviceId, String uid, String name, String spaceName) {
-        DeviceInfo deviceInfo = deviceDao.get(deviceId);
-        Product product = productDao.get(deviceInfo.getProductKey());
+        DeviceInfo deviceInfo = deviceCache.findByDeviceId(deviceId);
+        Product product = productCache.findById(deviceInfo.getProductKey());
         return SpaceDeviceVo.builder()
                 .id(id)
                 .uid(uid)

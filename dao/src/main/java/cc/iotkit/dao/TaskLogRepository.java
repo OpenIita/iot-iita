@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TaskLogRepository extends MongoRepository<TaskLog, String> {
+
+    void deleteByTaskId(String taskId);
+
 }

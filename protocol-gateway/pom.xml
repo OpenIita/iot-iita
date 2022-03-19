@@ -12,8 +12,10 @@
     <artifactId>protocol-gateway</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>gateway-api</module>
+        <module>gateway-client</module>
         <module>gateway-server</module>
+        <module>gateway-server/fun-test</module>
+        <module>protocol-function</module>
     </modules>
 
     <properties>

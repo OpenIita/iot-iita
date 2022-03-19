@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SceneLogRepository extends MongoRepository<SceneLog, String> {
+
+    void deleteBySceneId(String sceneId);
+
 }

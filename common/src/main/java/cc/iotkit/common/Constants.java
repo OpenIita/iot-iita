@@ -58,4 +58,14 @@ public interface Constants {
      */
     String PWD_SYSTEM_USER="s123456";
 
+    /**
+     * 设备原始上报消息的topic
+     */
+    String DEVICE_RAW_MESSAGE_TOPIC="device_raw";
+
+    /**
+     * 设备物模型消息的topic
+     */
+    String THING_MODEL_MESSAGE_TOPIC="device_thing";
+
 }

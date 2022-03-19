@@ -1,7 +1,7 @@
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.exception.NotFoundException;
-import cc.iotkit.dao.DeviceDao;
+import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.dao.DeviceEventRepository;
 import cc.iotkit.dao.DeviceRepository;
 import cc.iotkit.dao.ThingModelRepository;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class DeviceService {
 
     @Autowired
-    private DeviceDao deviceDao;
+    private DeviceCache deviceCache;
     @Autowired
     private DeviceRepository deviceRepository;
     @Autowired

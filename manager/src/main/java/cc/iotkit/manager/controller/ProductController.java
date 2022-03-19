@@ -50,7 +50,6 @@ public class ProductController {
 
     @PostMapping("/save")
     public void save(Product product) {
-        product.setId(product.getCode());
         dataOwnerService.checkOwnerSave(productRepository, product);
 
         if (product.getCreateAt() == null) {
@@ -66,19 +65,19 @@ public class ProductController {
 
     @GetMapping("/thingModel/{productKey}")
     public ThingModel getThingModel(@PathVariable("productKey") String productKey) {
-        productKey = getProduct(productKey).getCode();
+        productKey = getProduct(productKey).getId();
         return thingModelRepository.findById(productKey).orElse(new ThingModel(productKey));
     }
 
     @PostMapping("/thingModel/save")
     public void saveThingModel(String productKey, String model) {
-        productKey = getProduct(productKey).getCode();
+        productKey = getProduct(productKey).getId();
         thingModelRepository.save(new ThingModel(productKey, productKey, JsonUtil.parse(model, ThingModel.Model.class)));
     }
 
     @DeleteMapping("/thingModel/{productKey}")
     public void deleteThingModel(String productKey) {
-        productKey = getProduct(productKey).getCode();
+        productKey = getProduct(productKey).getId();
         thingModelRepository.deleteById(productKey);
     }
 
@@ -104,7 +103,7 @@ public class ProductController {
     @PostMapping("/uploadImg/{productKey}")
     public String uploadImg(@PathVariable("productKey") String productKey,
                             @RequestParam("file") MultipartFile file) {
-        productKey = getProduct(productKey).getCode();
+        productKey = getProduct(productKey).getId();
 
         String fileName = file.getOriginalFilename();
         String end = fileName.substring(fileName.lastIndexOf("."));

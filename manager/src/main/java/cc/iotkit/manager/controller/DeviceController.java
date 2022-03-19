@@ -1,6 +1,6 @@
 package cc.iotkit.manager.controller;
 
-import cc.iotkit.dao.DeviceDao;
+import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.dao.DeviceEventDao;
 import cc.iotkit.dao.DeviceEventRepository;
 import cc.iotkit.dao.DeviceRepository;
@@ -36,7 +36,7 @@ public class DeviceController {
     @Autowired
     private DeviceEventDao deviceEventDao;
     @Autowired
-    private DeviceDao deviceDao;
+    private DeviceCache deviceCache;
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
@@ -78,8 +78,8 @@ public class DeviceController {
         if (online != null) {
             condition.and("state.online").is(online);
         }
-        return new PagingData<>(deviceDao.count(condition),
-                deviceDao.find(condition, (page - 1) * limit, limit, Sort.Order.desc("createAt")));
+        return new PagingData<>(deviceCache.count(condition),
+                deviceCache.find(condition, (page - 1) * limit, limit, Sort.Order.desc("createAt")));
     }
 
     @GetMapping("/{deviceId}/children")

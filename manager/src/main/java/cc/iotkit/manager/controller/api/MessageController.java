@@ -1,7 +1,7 @@
 package cc.iotkit.manager.controller.api;
 
-import cc.iotkit.dao.DeviceDao;
-import cc.iotkit.dao.ProductDao;
+import cc.iotkit.dao.DeviceCache;
+import cc.iotkit.dao.ProductCache;
 import cc.iotkit.dao.UserActionLogRepository;
 import cc.iotkit.manager.model.vo.MessageVo;
 import cc.iotkit.manager.utils.AuthUtil;
@@ -31,9 +31,9 @@ public class MessageController {
     @Autowired
     private UserActionLogRepository userActionLogRepository;
     @Autowired
-    private ProductDao productDao;
+    private ProductCache productCache;
     @Autowired
-    private DeviceDao deviceDao;
+    private DeviceCache deviceCache;
 
     @ApiOperation("取系统消息")
     @PostMapping("/getSysMessages")
@@ -67,9 +67,12 @@ public class MessageController {
         StringBuffer logMsg = new StringBuffer();
         if (log instanceof DeviceEvent) {
             DeviceEvent de = (DeviceEvent) log;
-            DeviceInfo device = deviceDao.getByDeviceId(de.getDeviceId());
-            ThingModel.Model model = productDao.getThingModel(device.getProductKey())
-                    .getModel();
+            DeviceInfo device = deviceCache.findByDeviceId(de.getDeviceId());
+            ThingModel thingModel = productCache.getThingModel(device.getProductKey());
+            if (thingModel == null) {
+                return logMsg.toString();
+            }
+            ThingModel.Model model = thingModel.getModel();
             logMsg.append("将【").append(target).append("】");
 
             String identifier = de.getIdentifier();
