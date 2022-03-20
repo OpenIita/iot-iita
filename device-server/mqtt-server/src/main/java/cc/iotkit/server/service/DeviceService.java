@@ -105,7 +105,7 @@ public class DeviceService implements IDeviceManager, IDeviceService {
         Map<String, Object> params = new HashMap<>();
         params.put("productKey", device.getProductKey());
         params.put("deviceName", device.getDeviceName());
-        CmdRequest request = new CmdRequest(requestId, params);
+        CmdRequest request = new CmdRequest(requestId, "thing.lifetime.deregister", params);
         String msg = JsonUtil.toJsonString(request);
         log.info("start send mqtt msg,topic:{},payload:{}", topic, msg);
         mqttSender.sendToMqtt(topic, msg);
@@ -161,7 +161,12 @@ public class DeviceService implements IDeviceManager, IDeviceService {
         //参数类型转换
         args = thingModelService.paramsParse(thingModel, service, args);
 
-        CmdRequest request = new CmdRequest(requestId, args);
+        String method = "thing.service." + service;
+        if (service.equals(identifier_set)) {
+            method = "thing.service.property.set";
+        }
+
+        CmdRequest request = new CmdRequest(requestId, method, args);
         String msg = JsonUtil.toJsonString(request);
         log.info("start send mqtt msg,topic:{},payload:{}", topic, msg);
         mqttSender.sendToMqtt(topic, msg);
@@ -214,6 +219,7 @@ public class DeviceService implements IDeviceManager, IDeviceService {
     @AllArgsConstructor
     private static class CmdRequest {
         private String id;
+        private String method;
         private Object params;
     }
 }
