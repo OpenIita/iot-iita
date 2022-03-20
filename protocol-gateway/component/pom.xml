@@ -6,20 +6,24 @@
         <artifactId>iotkit-parent</artifactId>
         <groupId>cc.iotkit</groupId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>protocol-gateway</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>gateway-client</module>
-        <module>protocol-server</module>
-        <module>decode-function</module>
-    </modules>
+    <artifactId>component</artifactId>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
+    <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

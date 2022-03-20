@@ -12,6 +12,7 @@
     <artifactId>manager</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -145,7 +146,7 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>gateway-server</artifactId>
+            <artifactId>protocol-server</artifactId>
         </dependency>
 
     </dependencies>
