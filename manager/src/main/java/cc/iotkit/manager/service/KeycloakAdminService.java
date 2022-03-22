@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Slf4j
 @Service
@@ -49,14 +50,13 @@ public class KeycloakAdminService {
         return keycloak;
     }
 
-    public void createUser(UserInfo user,String pwd) {
+    public String createUser(UserInfo user, String pwd) {
         Keycloak keycloak = getKeycloak();
         UsersResource usersResource = keycloak.realm(realm)
                 .users();
         UserRepresentation userRepresentation = new UserRepresentation();
-        userRepresentation.setId(user.getId());
         userRepresentation.setUsername(user.getUid());
-        userRepresentation.setGroups(Arrays.asList(getGroup(user.getType())));
+        userRepresentation.setGroups(Collections.singletonList(getGroup(user.getType())));
         userRepresentation.setRealmRoles(user.getRoles());
         if (user.getEmail() != null) {
             userRepresentation.setEmail(user.getEmail());
@@ -68,12 +68,17 @@ public class KeycloakAdminService {
         credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
         credentialRepresentation.setValue(pwd);
         credentialRepresentation.setTemporary(false);
-        userRepresentation.setCredentials(Arrays.asList(credentialRepresentation));
+        userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
         javax.ws.rs.core.Response response = usersResource.create(userRepresentation);
+        String url = response.getLocation().getPath();
+        String newUid = url.substring(url.lastIndexOf("/") + 1);
+
         if (response.getStatus() >= 300) {
             log.error("create userRepresentation response:{}", JsonUtil.toJsonString(response));
             throw new BizException("create keycloak user failed");
         }
+
+        return newUid;
     }
 
     public void updateUser(UserInfo user) {

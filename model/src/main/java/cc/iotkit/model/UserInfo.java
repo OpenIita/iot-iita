@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
-public class UserInfo {
+public class UserInfo implements Owned {
 
     public static final int USER_TYPE_PLATFORM = 0;
     public static final int USER_TYPE_CLIENT = 1;

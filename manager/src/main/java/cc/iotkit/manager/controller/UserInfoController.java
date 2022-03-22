@@ -5,6 +5,7 @@ import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.manager.service.AligenieService;
+import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.KeycloakAdminService;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.UserInfo;
@@ -14,31 +15,23 @@ import org.springframework.data.domain.Example;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user")
-public class UserInfoController extends DbBaseController<UserInfoRepository, UserInfo> {
+public class UserInfoController {
 
     @Value("${app.systemRole}")
     private String systemRole;
 
-    private final KeycloakAdminService keycloakAdminService;
-    private final UserInfoRepository userInfoRepository;
-    private final AligenieService aligenieService;
-
     @Autowired
-    public UserInfoController(UserInfoRepository userInfoRepository,
-                              KeycloakAdminService keycloakAdminService,
-                              AligenieService aligenieService) {
-        super(userInfoRepository);
-        this.keycloakAdminService = keycloakAdminService;
-        this.userInfoRepository = userInfoRepository;
-        this.aligenieService = aligenieService;
-    }
+    private KeycloakAdminService keycloakAdminService;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+    @Autowired
+    private AligenieService aligenieService;
+    @Autowired
+    private DataOwnerService ownerService;
 
     /**
      * 平台用户列表
@@ -55,12 +48,12 @@ public class UserInfoController extends DbBaseController<UserInfoRepository, Use
      */
     @PostMapping("/platform/user/add")
     public void addPlatformUser(@RequestBody UserInfo user) {
-        user.setId(UUID.randomUUID().toString());
         user.setType(UserInfo.USER_TYPE_PLATFORM);
         user.setOwnerId(AuthUtil.getUserId());
-        user.setRoles(Arrays.asList(Constants.ROLE_SYSTEM));
+        user.setRoles(Collections.singletonList(Constants.ROLE_SYSTEM));
         user.setCreateAt(System.currentTimeMillis());
-        keycloakAdminService.createUser(user, Constants.PWD_SYSTEM_USER);
+        String uid = keycloakAdminService.createUser(user, Constants.PWD_SYSTEM_USER);
+        user.setId(uid);
         userInfoRepository.save(user);
     }
 
@@ -81,13 +74,24 @@ public class UserInfoController extends DbBaseController<UserInfoRepository, Use
      */
     @PostMapping("/client/user/add")
     public void addClientUser(@RequestBody UserInfo user) {
-        user.setId(UUID.randomUUID().toString());
         user.setType(UserInfo.USER_TYPE_CLIENT);
         user.setOwnerId(AuthUtil.getUserId());
-        user.setRoles(Arrays.asList(Constants.ROLE_CLIENT));
+        user.setRoles(Collections.singletonList(Constants.ROLE_CLIENT));
         user.setCreateAt(System.currentTimeMillis());
-        keycloakAdminService.createUser(user, Constants.PWD_CLIENT_USER);
+        String uid = keycloakAdminService.createUser(user, Constants.PWD_CLIENT_USER);
+        user.setId(uid);
         userInfoRepository.save(user);
+    }
+
+    @PostMapping("/client/user/{id}/delete")
+    public void deleteClientUser(@PathVariable("id") String id) {
+        Optional<UserInfo> optUser = userInfoRepository.findById(id);
+        if (!optUser.isPresent()) {
+            throw new BizException("user does not exist");
+        }
+        UserInfo user = optUser.get();
+        ownerService.checkOwner(user);
+        userInfoRepository.deleteById(id);
     }
 
     @PostMapping("/client/user/save")
@@ -102,11 +106,5 @@ public class UserInfoController extends DbBaseController<UserInfoRepository, Use
         }
         ReflectUtil.copyNoNulls(user, oldUser);
         userInfoRepository.save(oldUser);
-
-        boolean isAligenie = user.getUsePlatforms().isAligenie();
-        //同步天猫精灵设备
-        if (oldUser.getUsePlatforms().isAligenie() != isAligenie) {
-            aligenieService.syncDevice(user);
-        }
     }
 }

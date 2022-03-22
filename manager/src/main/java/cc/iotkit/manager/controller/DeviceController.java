@@ -61,7 +61,7 @@ public class DeviceController {
 
     @PostMapping("/list")
     public PagingData<DeviceInfo> getDevices(int page,
-                                             int limit,
+                                             int size,
                                              String pk,
                                              Boolean online,
                                              String dn) {
@@ -79,7 +79,7 @@ public class DeviceController {
             condition.and("state.online").is(online);
         }
         return new PagingData<>(deviceDao.count(condition),
-                deviceDao.find(condition, (page - 1) * limit, limit, Sort.Order.desc("createAt")));
+                deviceDao.find(condition, (page - 1) * size, size, Sort.Order.desc("createAt")));
     }
 
     @GetMapping("/{deviceId}/children")
