@@ -1,12 +1,12 @@
 package cc.iotkit.manager.controller.aligenie;
 
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.dao.AligenieDeviceRepository;
-import cc.iotkit.dao.DeviceRepository;
-import cc.iotkit.dao.UserInfoRepository;
+import cc.iotkit.dao.*;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.aligenie.AligenieDevice;
+import cc.iotkit.model.aligenie.AligenieProduct;
+import cc.iotkit.model.device.DeviceInfo;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +26,8 @@ public class AligenieDeviceController {
     private DataOwnerService ownerService;
     @Autowired
     private DeviceRepository deviceRepository;
+    @Autowired
+    private AligenieProductRepository aligenieProductRepository;
 
     @GetMapping("/list/{uid}")
     public List<AligenieDevice> getDevices(@PathVariable("uid") String uid) {
@@ -46,9 +48,12 @@ public class AligenieDeviceController {
 
         aligenieDeviceRepository.deleteByUid(uid);
         for (Device device : devices) {
+            DeviceInfo deviceInfo = deviceRepository.findById(device.getDeviceId()).get();
+            AligenieProduct product = aligenieProductRepository.findByProductKey(deviceInfo.getProductKey());
             aligenieDeviceRepository.save(AligenieDevice.builder()
                     .uid(uid)
                     .deviceId(device.getDeviceId())
+                    .productId(product.getProductId())
                     .spaceName("客厅")
                     .name(device.getName())
                     .build());

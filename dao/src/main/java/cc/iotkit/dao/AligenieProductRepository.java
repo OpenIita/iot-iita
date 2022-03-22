@@ -10,4 +10,6 @@ import java.util.List;
 public interface AligenieProductRepository extends MongoRepository<AligenieProduct, String> {
 
     List<AligenieProduct> findByUid(String uid);
+
+    AligenieProduct findByProductKey(String productKey);
 }
