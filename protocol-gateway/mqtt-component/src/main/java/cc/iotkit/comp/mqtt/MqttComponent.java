@@ -24,7 +24,7 @@ public class MqttComponent extends AbstractComponent {
 
     public void start() {
         try {
-            Future<String> future = vertx.deployVerticle(new MqttVerticle(mqttConfig, getMessageHandler()));
+            Future<String> future = vertx.deployVerticle(new MqttVerticle(mqttConfig, getHandler()));
             future.onSuccess((s -> {
                 deployedId = s;
                 countDownLatch.countDown();

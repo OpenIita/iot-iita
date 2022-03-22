@@ -1,10 +1,13 @@
 package cc.iotkit.comp;
 
+import cc.iotkit.converter.Converter;
 import lombok.Data;
 
 @Data
-public class AbstractComponent {
+public abstract class AbstractComponent implements Component {
 
-    protected MessageHandler messageHandler;
+    protected MessageHandler handler;
+
+    protected Converter converter;
 
 }

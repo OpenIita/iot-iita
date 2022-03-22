@@ -3,24 +3,26 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>iotkit-parent</artifactId>
+        <artifactId>protocol-gateway</artifactId>
         <groupId>cc.iotkit</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>protocol-gateway</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>gateway-client</module>
-        <module>protocol-server</module>
-        <module>decode-function</module>
-        <module>converter</module>
-    </modules>
+    <artifactId>converter</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

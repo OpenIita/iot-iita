@@ -2,6 +2,7 @@ package cc.iotkit.comp;
 
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.model.RegisterInfo;
+import cc.iotkit.converter.Converter;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Data;
@@ -18,9 +19,12 @@ public class MessageHandler {
 
     private final String script;
 
+    private final Converter converter;
+
     @SneakyThrows
-    public MessageHandler(String script) {
+    public MessageHandler(String script, Converter converter) {
         this.script = script;
+        this.converter = converter;
         engine.eval(script);
     }
 
@@ -40,11 +44,14 @@ public class MessageHandler {
             if (rstType == null) {
                 return;
             }
+            //取脚本执行后返回的数据
             Object data = obj.get("data");
 
             if ("register".equals(rstType)) {
+                //注册数据
                 RegisterInfo regInfo = getData(data, RegisterInfo.class);
             } else if ("report".equals(rstType)) {
+                //上报数据
 
             }
 

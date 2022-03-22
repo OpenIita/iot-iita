@@ -22,7 +22,7 @@ public class ComponentManager {
         if (component == null) {
             return;
         }
-        component.setHandler(new MessageHandler(script));
+        component.setHandler(new MessageHandler(script, component.getConverter()));
         component.start();
     }
 

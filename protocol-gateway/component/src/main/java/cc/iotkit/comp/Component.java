@@ -1,5 +1,7 @@
 package cc.iotkit.comp;
 
+import cc.iotkit.converter.Converter;
+
 public interface Component {
 
     void create(String config);
@@ -11,5 +13,9 @@ public interface Component {
     void destroy();
 
     void setHandler(MessageHandler handler);
+
+    void setConverter(Converter converter);
+
+    Converter getConverter();
 
 }

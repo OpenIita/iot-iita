@@ -24,6 +24,11 @@
             <artifactId>common</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>converter</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
