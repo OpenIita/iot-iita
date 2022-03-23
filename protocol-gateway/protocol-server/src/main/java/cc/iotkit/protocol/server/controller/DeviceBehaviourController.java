@@ -3,11 +3,10 @@ package cc.iotkit.protocol.server.controller;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.protocol.*;
 import cc.iotkit.protocol.client.DeviceBehaviourClient;
-import cc.iotkit.protocol.server.config.ServerConfig;
-import cc.iotkit.protocol.server.service.DeviceBehaviourService;
+import cc.iotkit.protocol.server.config.ProtocolConfig;
+import cc.iotkit.protocol.server.service.BehaviourService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -16,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class DeviceBehaviourController implements DeviceBehaviour {
 
     @Autowired
-    private ServerConfig serverConfig;
+    private ProtocolConfig serverConfig;
 
     @Autowired
-    private DeviceBehaviourService behaviourService;
+    private BehaviourService behaviourService;
 
 
     @Override

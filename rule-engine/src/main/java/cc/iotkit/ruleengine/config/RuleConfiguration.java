@@ -79,7 +79,7 @@ public class RuleConfiguration {
     @Bean
     public MessageProducer inbound() {
         String clientId = "rule-consumer-" + env;
-        clientId = "su_" + CodecUtil.aesEncrypt("admin_" + clientId, Constants.MQTT_SECRET);
+        clientId = "su_" + CodecUtil.aesEncrypt("admin_" + clientId, Constants.PRODUCT_SECRET);
         adapter = new MqttPahoMessageDrivenChannelAdapter(
                 clientId, mqttClientFactory());
         adapter.setCompletionTimeout(5000);

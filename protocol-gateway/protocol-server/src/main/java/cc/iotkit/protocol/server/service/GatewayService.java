@@ -3,7 +3,7 @@ package cc.iotkit.protocol.server.service;
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.protocol.function.DecodeFunction;
-import cc.iotkit.protocol.server.config.ServerConfig;
+import cc.iotkit.protocol.server.config.ProtocolConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
@@ -22,7 +22,7 @@ public class GatewayService {
     private PulsarAdmin pulsarAdmin;
 
     @Autowired
-    private ServerConfig serverConfig;
+    private ProtocolConfig serverConfig;
 
     private PulsarAdmin getPulsarAdmin() throws PulsarClientException {
         if (pulsarAdmin == null) {

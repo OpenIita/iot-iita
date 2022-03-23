@@ -53,7 +53,7 @@ public class MqttAuthController {
                 return false;
             }
             clientId = clientId.replaceFirst("su_", "");
-            return CodecUtil.aesDecrypt(clientId, Constants.MQTT_SECRET).startsWith("admin_");
+            return CodecUtil.aesDecrypt(clientId, Constants.PRODUCT_SECRET).startsWith("admin_");
         } catch (Throwable e) {
             log.error("aesDecrypt error.", e);
             return false;

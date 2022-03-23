@@ -149,6 +149,16 @@
             <artifactId>protocol-server</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>component-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>mqtt-component</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

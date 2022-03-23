@@ -36,7 +36,7 @@ public class Gateway extends Device {
             // MQTT 连接选项
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setUserName(this.deviceName);
-            connOpts.setPassword(DigestUtils.md5Hex(Constants.MQTT_SECRET + clientId).toCharArray());
+            connOpts.setPassword(DigestUtils.md5Hex(Constants.PRODUCT_SECRET + clientId).toCharArray());
             // 保留会话
             connOpts.setCleanSession(true);
 

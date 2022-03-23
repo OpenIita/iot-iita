@@ -12,8 +12,6 @@
         <module>dao</module>
         <module>tppa-server</module>
         <module>protocol-gateway</module>
-        <module>protocol-gateway/mqtt-component</module>
-        <module>protocol-gateway/component</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -250,6 +248,18 @@
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>converter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>component-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>mqtt-component</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

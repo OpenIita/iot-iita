@@ -2,7 +2,7 @@ package cc.iotkit.common;
 
 public interface Constants {
 
-    String MQTT_SECRET = "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU";
+    String PRODUCT_SECRET = "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU";
 
     String ACCOUNT_SECRET = "3n1z33kzvpgz1foijpkepyd3e8tw84us";
 

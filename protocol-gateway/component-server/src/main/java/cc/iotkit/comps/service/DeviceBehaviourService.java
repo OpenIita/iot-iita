@@ -1,19 +1,26 @@
-package cc.iotkit.protocol.server.service;
+package cc.iotkit.comps.service;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.comp.model.DeviceMessage;
+import cc.iotkit.comps.config.ServerConfig;
+import cc.iotkit.comps.model.RegisterInfo;
 import cc.iotkit.dao.DeviceRepository;
 import cc.iotkit.dao.ProductRepository;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Product;
-import cc.iotkit.protocol.RegisterInfo;
-import cc.iotkit.protocol.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pulsar.client.api.Producer;
+import org.apache.pulsar.client.api.PulsarClient;
+import org.apache.pulsar.client.api.PulsarClientException;
+import org.apache.pulsar.client.impl.schema.JSONSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +34,25 @@ public class DeviceBehaviourService {
     private ProductRepository productRepository;
     @Autowired
     private DeviceRepository deviceRepository;
+    @Autowired
+    private ServerConfig serverConfig;
+
+    private Producer<DeviceMessage> deviceMessageProducer;
+
+    @PostConstruct
+    public void init() throws PulsarClientException {
+        //初始化pulsar客户端
+        PulsarClient client = PulsarClient.builder()
+                .serviceUrl(serverConfig.getPulsarBrokerUrl())
+                .build();
+        deviceMessageProducer = client.newProducer(JSONSchema.of(DeviceMessage.class))
+                .topic("persistent://public/default/device_raw")
+                .create();
+
+    }
 
 
-    public Result register(RegisterInfo info) {
+    public void register(RegisterInfo info) {
         try {
             DeviceInfo deviceInfo = register(null, info);
             //子设备注册
@@ -46,13 +69,11 @@ public class DeviceBehaviourService {
             //todo 产生设备注册事件
         } catch (BizException e) {
             log.error("register device error", e);
-            return new Result(false, e.getMessage());
+            throw e;
         } catch (Throwable e) {
             log.error("register device error", e);
-            return new Result(false, "unknown error:" + e.getMessage());
+            throw new BizException("register device error", e);
         }
-
-        return new Result(true, "");
     }
 
     public DeviceInfo register(String parentId, RegisterInfo info) {
@@ -118,12 +139,36 @@ public class DeviceBehaviourService {
         return (System.currentTimeMillis() + "0" + dn + len + rnd).toLowerCase();
     }
 
-    public Result deviceStateChange(String productKey,
-                                    String deviceName,
-                                    boolean online) {
+    public void deviceAuth(String productKey,
+                           String deviceName,
+                           String productSecret,
+                           String deviceSecret) {
+        DeviceInfo deviceInfo = deviceRepository.findByProductKeyAndDeviceName(productKey, deviceName);
+        if (deviceInfo == null) {
+            throw new BizException("device does not exist");
+        }
+        if (!Constants.PRODUCT_SECRET.equals(productSecret)) {
+            throw new BizException("incorrect productSecret");
+        }
+
+        //todo 按产品ProductSecret认证，子设备需要父设备认证后可通过验证
+//        Optional<Product> optProduct = productRepository.findById(productKey);
+//        if (!optProduct.isPresent()) {
+//            throw new BizException("product does not exist");
+//        }
+//        Product product = optProduct.get();
+//        if (product.getNodeType()) {
+//
+//        }
+
+    }
+
+    public void deviceStateChange(String productKey,
+                                  String deviceName,
+                                  boolean online) {
         DeviceInfo device = deviceRepository.findByProductKeyAndDeviceName(productKey, deviceName);
         if (device == null) {
-            return new Result(false, "device does not exist");
+            throw new BizException("device does not exist");
         }
 
         if (online) {
@@ -135,8 +180,9 @@ public class DeviceBehaviourService {
         }
         deviceRepository.save(device);
         //todo 产生在离线事件
-
-        return new Result(true, "");
     }
 
+    public void reportMessage(DeviceMessage message) throws PulsarClientException {
+        deviceMessageProducer.send(message);
+    }
 }

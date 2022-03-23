@@ -15,12 +15,10 @@
         <module>gateway-client</module>
         <module>protocol-server</module>
         <module>decode-function</module>
+        <module>component-server</module>
         <module>converter</module>
+        <module>mqtt-component</module>
+        <module>component</module>
     </modules>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
 </project>

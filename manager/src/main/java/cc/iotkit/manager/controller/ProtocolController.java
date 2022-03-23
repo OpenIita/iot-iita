@@ -2,6 +2,9 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
+import cc.iotkit.comp.mqtt.MqttComponent;
+import cc.iotkit.comps.ComponentManager;
+import cc.iotkit.converter.ScriptConverter;
 import cc.iotkit.dao.ProtocolGatewayRepository;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.manager.service.DataOwnerService;
@@ -18,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @Slf4j
@@ -39,6 +43,9 @@ public class ProtocolController {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private ComponentManager componentManager;
 
     @PostMapping("/addGateway")
     public void addGateway(ProtocolGateway gateway) {
@@ -123,4 +130,13 @@ public class ProtocolController {
         return new Paging<>(gateways.getTotalElements(), gateways.getContent());
     }
 
+    @PostConstruct
+    public void init() {
+        MqttComponent component = new MqttComponent();
+        ScriptConverter converter = new ScriptConverter();
+        converter.setScript("");
+        component.setConverter(converter);
+        componentManager.register("123", component);
+        componentManager.start("123", "");
+    }
 }

@@ -24,7 +24,7 @@ public class DeviceAuthService {
         String clientId = auth.getClientid();
         String[] pkDnAndModel = getPkDnAndModel(clientId);
 
-        String hmac = DigestUtils.md5Hex(Constants.MQTT_SECRET + clientId);
+        String hmac = DigestUtils.md5Hex(Constants.PRODUCT_SECRET + clientId);
         if (!hmac.equalsIgnoreCase(auth.getPassword())) {
             throw new RuntimeException("password is illegal.");
         }

@@ -73,7 +73,7 @@ public class MqttManager implements MqttCallback, IMqttMessageListener {
             if (mqttClient == null) {
                 MemoryPersistence persistence = new MemoryPersistence();
                 String clientId = "mqtt-server-consumer-" + env;
-                clientId = "su_" + CodecUtil.aesEncrypt("admin_" + clientId, Constants.MQTT_SECRET);
+                clientId = "su_" + CodecUtil.aesEncrypt("admin_" + clientId, Constants.PRODUCT_SECRET);
                 mqttClient = new MqttClient(url, clientId, persistence);
                 mqttClient.setCallback(this);
             }

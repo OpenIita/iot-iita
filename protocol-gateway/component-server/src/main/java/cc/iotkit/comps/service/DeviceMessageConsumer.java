@@ -1,12 +1,12 @@
-package cc.iotkit.protocol.server.service;
+package cc.iotkit.comps.service;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.comps.config.ServerConfig;
 import cc.iotkit.dao.ThingModelMessageRepository;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
-import cc.iotkit.protocol.server.config.ProtocolConfig;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.api.*;
@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-//@Service
+@Service
 public class DeviceMessageConsumer implements MessageListener<ThingModelMessage> {
 
-    private final ProtocolConfig serverConfig;
+    private final ServerConfig serverConfig;
 
     private final ThingModelMessageRepository messageRepository;
 
@@ -28,7 +28,7 @@ public class DeviceMessageConsumer implements MessageListener<ThingModelMessage>
 
     @SneakyThrows
     @Autowired
-    public DeviceMessageConsumer(ProtocolConfig serverConfig,
+    public DeviceMessageConsumer(ServerConfig serverConfig,
                                  ThingModelMessageRepository messageRepository,
                                  UserInfoRepository userInfoRepository) {
         this.serverConfig = serverConfig;

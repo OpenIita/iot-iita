@@ -1,6 +1,6 @@
 package cc.iotkit.comp.mqtt;
 
-import cc.iotkit.comp.MessageHandler;
+import cc.iotkit.comp.IMessageHandler;
 import io.netty.handler.codec.mqtt.MqttConnectReturnCode;
 import io.netty.handler.codec.mqtt.MqttProperties;
 import io.netty.handler.codec.mqtt.MqttQoS;
@@ -26,9 +26,9 @@ public class MqttVerticle extends AbstractVerticle {
 
     private final MqttConfig config;
 
-    private final MessageHandler executor;
+    private final IMessageHandler executor;
 
-    public MqttVerticle(MqttConfig config, MessageHandler executor) {
+    public MqttVerticle(MqttConfig config, IMessageHandler executor) {
         this.config = config;
         this.executor = executor;
     }
