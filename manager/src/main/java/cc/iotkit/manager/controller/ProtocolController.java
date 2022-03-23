@@ -14,6 +14,7 @@ import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.protocol.ProtocolGateway;
 import cc.iotkit.protocol.server.service.GatewayService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -130,13 +133,20 @@ public class ProtocolController {
         return new Paging<>(gateways.getTotalElements(), gateways.getContent());
     }
 
-    @PostConstruct
-    public void init() {
+    @GetMapping("/registerMqtt")
+    public void registerMqtt() throws IOException {
         MqttComponent component = new MqttComponent();
+        component.create("{\"port\":2883,\"ssl\":false}");
         ScriptConverter converter = new ScriptConverter();
-        converter.setScript("");
+        converter.setScript(FileUtils.readFileToString(new File("/Users/sjg/home/gitee/open-source/converter.js"), "UTF-8"));
         component.setConverter(converter);
         componentManager.register("123", component);
-        componentManager.start("123", "");
+        componentManager.start("123", FileUtils.readFileToString(new File("/Users/sjg/home/gitee/open-source/component.js"), "UTF-8"));
+    }
+
+    @GetMapping("/deregisterMqtt")
+    public void deregisterMqtt() {
+        componentManager.stop("123");
+        componentManager.deRegister("123");
     }
 }

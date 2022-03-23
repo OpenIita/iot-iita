@@ -1,5 +1,6 @@
 package cc.iotkit.comps;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.DeviceMessage;
 import cc.iotkit.comps.model.AuthInfo;
@@ -23,7 +24,7 @@ import java.util.Map;
 public class MessageHandler implements IMessageHandler {
     private final NashornScriptEngine engine = (NashornScriptEngine) (new ScriptEngineManager()).getEngineByName("nashorn");
 
-    private final String script;
+    private final Object scriptObj;
 
     private final IConverter converter;
 
@@ -32,10 +33,9 @@ public class MessageHandler implements IMessageHandler {
     @SneakyThrows
     public MessageHandler(String script, IConverter converter,
                           DeviceBehaviourService deviceBehaviourService) {
-        this.script = script;
         this.converter = converter;
         this.deviceBehaviourService = deviceBehaviourService;
-        engine.eval(script);
+        scriptObj = engine.eval(script);
     }
 
     public void register(Map<String, Object> head, String msg) {
@@ -49,7 +49,7 @@ public class MessageHandler implements IMessageHandler {
 
     public void onReceive(Map<String, Object> head, String type, String msg) {
         try {
-            ScriptObjectMirror result = (ScriptObjectMirror) engine.invokeFunction("onReceive", head, type, msg);
+            ScriptObjectMirror result = (ScriptObjectMirror) engine.invokeMethod(scriptObj, "onReceive", head, type, msg);
             Object rstType = result.get("type");
             if (rstType == null) {
                 return;
@@ -57,7 +57,7 @@ public class MessageHandler implements IMessageHandler {
             //取脚本执行后返回的数据
             Object data = result.get("data");
             if (!(data instanceof Map)) {
-                return;
+                throw new BizException("script result data is incorrect");
             }
             Map<String, Object> dataMap = (Map) data;
 
@@ -83,18 +83,20 @@ public class MessageHandler implements IMessageHandler {
                 doReport(message);
             }
 
+        } catch (BizException e) {
+            throw e;
         } catch (Throwable e) {
-            log.error("onReceive error", e);
+            throw new BizException("receive component message error", e);
         }
     }
 
     private void doRegister(RegisterInfo reg) throws ScriptException, NoSuchMethodException {
         try {
             deviceBehaviourService.register(reg);
-            engine.invokeFunction("onRegistered", reg, true);
+            engine.invokeMethod(scriptObj, "onRegistered", reg, "true");
         } catch (Throwable e) {
             log.error("register error", e);
-            engine.invokeFunction("onRegistered", reg, false);
+            engine.invokeMethod(scriptObj, "onRegistered", reg, "false");
         }
     }
 
@@ -104,10 +106,10 @@ public class MessageHandler implements IMessageHandler {
                     auth.getDeviceName(),
                     auth.getProductSecret(),
                     auth.getDeviceSecret());
-            engine.invokeFunction("onAuthed", auth, true);
+            engine.invokeMethod(scriptObj, "onAuthed", auth, true);
         } catch (Throwable e) {
             log.error("device auth error", e);
-            engine.invokeFunction("onAuthed", auth, false);
+            engine.invokeMethod(scriptObj, "onAuthed", auth, false);
         }
     }
 
@@ -128,5 +130,4 @@ public class MessageHandler implements IMessageHandler {
             log.error("report device message error", e);
         }
     }
-
 }

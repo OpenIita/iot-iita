@@ -159,6 +159,11 @@
             <artifactId>mqtt-component</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>converter</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

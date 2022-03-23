@@ -104,10 +104,11 @@ public class DeviceBehaviourService {
         } else {
             //不存在,注册新设备
             device = new DeviceInfo();
+            device.setId(newDeviceId(info.getDeviceName()));
             device.setParentId(parentId);
             device.setUid(uid);
-            device.setDeviceId(newDeviceId(info.getDeviceName()));
-            device.setProductKey(info.getProductKey());
+            device.setDeviceId(device.getId());
+            device.setProductKey(pk);
             device.setDeviceName(info.getDeviceName());
             device.setTag(info.getTag());
             device.setState(new DeviceInfo.State(false, null, null));

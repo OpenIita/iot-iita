@@ -26,10 +26,13 @@ public class MqttVerticle extends AbstractVerticle {
 
     private final MqttConfig config;
 
-    private final IMessageHandler executor;
+    private IMessageHandler executor;
 
-    public MqttVerticle(MqttConfig config, IMessageHandler executor) {
+    public MqttVerticle(MqttConfig config) {
         this.config = config;
+    }
+
+    public void setExecutor(IMessageHandler executor) {
         this.executor = executor;
     }
 
@@ -62,6 +65,7 @@ public class MqttVerticle extends AbstractVerticle {
             } catch (Throwable e) {
                 log.error("auth failed", e);
                 endpoint.reject(MqttConnectReturnCode.CONNECTION_REFUSED_NOT_AUTHORIZED);
+                return;
             }
 
             log.info("MQTT client keep alive timeout = {} ", endpoint.keepAliveTimeSeconds());
