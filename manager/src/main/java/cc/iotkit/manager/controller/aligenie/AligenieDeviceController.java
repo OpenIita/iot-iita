@@ -51,7 +51,7 @@ public class AligenieDeviceController {
             DeviceInfo deviceInfo = deviceRepository.findById(device.getDeviceId()).get();
             AligenieProduct product = aligenieProductRepository.findByProductKey(deviceInfo.getProductKey());
             aligenieDeviceRepository.save(AligenieDevice.builder()
-                    .uid(uid)
+                    .uid(user.getId())
                     .deviceId(device.getDeviceId())
                     .productId(product.getProductId())
                     .spaceName("客厅")
