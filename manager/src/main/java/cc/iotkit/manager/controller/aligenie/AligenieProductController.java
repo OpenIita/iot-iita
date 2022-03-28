@@ -1,14 +1,12 @@
 package cc.iotkit.manager.controller.aligenie;
 
-import cc.iotkit.dao.AligenieProductDao;
 import cc.iotkit.dao.AligenieProductRepository;
 import cc.iotkit.dao.ProductCache;
-import cc.iotkit.manager.controller.DbBaseController;
 import cc.iotkit.manager.model.aligenie.AligenieProductVo;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.utils.AuthUtil;
-import cc.iotkit.model.product.Product;
 import cc.iotkit.model.aligenie.AligenieProduct;
+import cc.iotkit.model.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,28 +19,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/aligenie/product")
-public class AligenieProductController extends DbBaseController<AligenieProductRepository, AligenieProduct> {
-
-    private final ProductCache productCache;
-    private final AligenieProductDao aligenieProductDao;
-    private final DataOwnerService dataOwnerService;
-
+public class AligenieProductController {
 
     @Autowired
-    public AligenieProductController(AligenieProductRepository aligenieProductRepository,
-                                     ProductCache productCache,
-                                     AligenieProductDao aligenieProductDao,
-                                     DataOwnerService dataOwnerService) {
-        super(aligenieProductRepository);
-        this.productCache = productCache;
-        this.aligenieProductDao = aligenieProductDao;
-        this.dataOwnerService = dataOwnerService;
-    }
+    private ProductCache productCache;
+    @Autowired
+    private DataOwnerService dataOwnerService;
+    @Autowired
+    private AligenieProductRepository aligenieProductRepository;
+
 
     @GetMapping("/products")
     public List<AligenieProductVo> products() {
         List<AligenieProductVo> productVos = new ArrayList<>();
-        List<AligenieProduct> aligenieProducts = repository
+        List<AligenieProduct> aligenieProducts = aligenieProductRepository
                 .findAll(Example
                         .of(AligenieProduct.builder()
                                 .uid(AuthUtil.getUserId())
@@ -61,7 +51,7 @@ public class AligenieProductController extends DbBaseController<AligenieProductR
             product.setCreateAt(System.currentTimeMillis());
         }
 
-        dataOwnerService.checkOwnerSave(repository,product);
-        aligenieProductDao.save(product.getProductId(), product);
+        dataOwnerService.checkOwnerSave(aligenieProductRepository, product);
+        aligenieProductRepository.save(product);
     }
 }

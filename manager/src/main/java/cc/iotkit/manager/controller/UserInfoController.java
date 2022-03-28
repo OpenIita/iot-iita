@@ -4,7 +4,6 @@ import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.dao.UserInfoRepository;
-import cc.iotkit.manager.service.AligenieService;
 import cc.iotkit.manager.service.KeycloakAdminService;
 import cc.iotkit.manager.service.PulsarAdminService;
 import cc.iotkit.manager.utils.AuthUtil;
@@ -21,25 +20,21 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
-public class UserInfoController extends DbBaseController<UserInfoRepository, UserInfo> {
+public class UserInfoController {
 
     @Value("${app.systemRole}")
     private String systemRole;
 
     private final KeycloakAdminService keycloakAdminService;
     private final UserInfoRepository userInfoRepository;
-    private final AligenieService aligenieService;
     private final PulsarAdminService pulsarAdminService;
 
     @Autowired
     public UserInfoController(UserInfoRepository userInfoRepository,
                               KeycloakAdminService keycloakAdminService,
-                              AligenieService aligenieService,
                               PulsarAdminService pulsarAdminService) {
-        super(userInfoRepository);
         this.keycloakAdminService = keycloakAdminService;
         this.userInfoRepository = userInfoRepository;
-        this.aligenieService = aligenieService;
         this.pulsarAdminService = pulsarAdminService;
     }
 
@@ -113,11 +108,5 @@ public class UserInfoController extends DbBaseController<UserInfoRepository, Use
         }
         ReflectUtil.copyNoNulls(user, oldUser);
         userInfoRepository.save(oldUser);
-
-        boolean isAligenie = user.getUsePlatforms().isAligenie();
-        //同步天猫精灵设备
-        if (oldUser.getUsePlatforms().isAligenie() != isAligenie) {
-            aligenieService.syncDevice(user);
-        }
     }
 }

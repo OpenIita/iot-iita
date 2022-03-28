@@ -4,7 +4,6 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>device-server</module>
         <module>model</module>
         <module>rule-engine</module>
         <module>common</module>
@@ -181,13 +180,13 @@
 
             <dependency>
                 <groupId>io.vertx</groupId>
-                <artifactId>vertx-web</artifactId>
+                <artifactId>vertx-mqtt</artifactId>
                 <version>4.2.6</version>
             </dependency>
 
             <dependency>
                 <groupId>io.vertx</groupId>
-                <artifactId>vertx-mqtt</artifactId>
+                <artifactId>vertx-web-proxy</artifactId>
                 <version>4.2.6</version>
             </dependency>
 
@@ -211,31 +210,7 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>device-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
                 <artifactId>rule-engine</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>gateway-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>decode-function</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>protocol-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

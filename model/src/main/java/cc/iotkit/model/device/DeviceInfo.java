@@ -51,11 +51,12 @@ public class DeviceInfo implements Owned {
     @AllArgsConstructor
     public static class State {
 
-        private Boolean online;
+        private boolean online;
 
         private Long onlineTime;
 
         private Long offlineTime;
 
     }
+
 }

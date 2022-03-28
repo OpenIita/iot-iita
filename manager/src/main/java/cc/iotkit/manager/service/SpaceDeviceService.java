@@ -41,7 +41,7 @@ public class SpaceDeviceService {
                     .name(sd.getName())
                     .picUrl(product.getImg())
                     .spaceName(sd.getSpaceName())
-                    .online(deviceInfo.getState().getOnline())
+                    .online(deviceInfo.getState().isOnline())
                     .property(deviceInfo.getProperty())
                     .productKey(deviceInfo.getProductKey())
                     .build());

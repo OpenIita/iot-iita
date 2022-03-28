@@ -1,21 +1,18 @@
 package cc.iotkit.manager.controller;
 
-import cc.iotkit.dao.DeviceCache;
-import cc.iotkit.dao.DeviceEventDao;
-import cc.iotkit.dao.DeviceEventRepository;
-import cc.iotkit.dao.DeviceRepository;
+import cc.iotkit.dao.*;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.manager.utils.AuthUtil;
-import cc.iotkit.model.device.message.DeviceEvent;
+import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceInfo;
-import cc.iotkit.model.PagingData;
+import cc.iotkit.model.device.message.DeviceProperty;
+import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.ThingModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,15 +29,15 @@ public class DeviceController {
     @Autowired
     private DeviceRepository deviceRepository;
     @Autowired
-    private DeviceEventRepository deviceEventRepository;
-    @Autowired
-    private DeviceEventDao deviceEventDao;
-    @Autowired
-    private DeviceCache deviceCache;
+    private DeviceDao deviceDao;
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
     private ProductController productController;
+    @Autowired
+    private ThingModelMessageDao thingModelMessageDao;
+    @Autowired
+    private DevicePropertyDao devicePropertyDao;
 
     @PostMapping("/{deviceId}/service/{service}")
     public String invokeService(@PathVariable("deviceId") String deviceId,
@@ -60,11 +57,11 @@ public class DeviceController {
     }
 
     @PostMapping("/list")
-    public PagingData<DeviceInfo> getDevices(int page,
-                                             int limit,
-                                             String pk,
-                                             Boolean online,
-                                             String dn) {
+    public Paging<DeviceInfo> getDevices(int page,
+                                         int size,
+                                         String pk,
+                                         Boolean online,
+                                         String dn) {
         Criteria condition = new Criteria();
         if (!AuthUtil.isAdmin()) {
             condition.and("uid").is(AuthUtil.getUserId());
@@ -78,8 +75,8 @@ public class DeviceController {
         if (online != null) {
             condition.and("state.online").is(online);
         }
-        return new PagingData<>(deviceCache.count(condition),
-                deviceCache.find(condition, (page - 1) * limit, limit, Sort.Order.desc("createAt")));
+
+        return deviceDao.find(condition, size, page);
     }
 
     @GetMapping("/{deviceId}/children")
@@ -112,29 +109,28 @@ public class DeviceController {
         deviceRepository.deleteById(deviceId);
     }
 
-    @PostMapping("/{deviceId}/events")
-    public PagingData<DeviceEvent> events(@PathVariable("deviceId") String deviceId,
-                                          int page,
-                                          int limit,
-                                          String type,
-                                          String identifier) {
-        Criteria condition = Criteria.where("deviceId").is(deviceId);
-        if (StringUtils.isNotBlank(type)) {
-            condition.and("type").is(type);
-        }
-        if (StringUtils.isNotBlank(identifier)) {
-            condition.and("identifier").regex(".*" + identifier + ".*");
-        }
+    @PostMapping("/{deviceId}/logs/{size}/{page}")
+    public Paging<ThingModelMessage> logs(
+            @PathVariable("deviceId") String deviceId,
+            @PathVariable("size") int size,
+            @PathVariable("page") int page,
+            String type, String identifier) {
+        return thingModelMessageDao.findByTypeAndIdentifier(deviceId, type, identifier, page, size);
+    }
 
-        return new PagingData<>(deviceEventDao.count(condition),
-                deviceEventDao.find(condition,
-                        (page - 1) * limit, limit, Sort.Order.desc("createAt")));
+    @GetMapping("/{deviceId}/property/{name}/{start}/{end}")
+    public List<DeviceProperty> getPropertyHistory(
+            @PathVariable("deviceId") String deviceId,
+            @PathVariable("name") String name,
+            @PathVariable("start") long start,
+            @PathVariable("end") long end) {
+        return devicePropertyDao.findDevicePropertyHistory(deviceId, name, start, end);
     }
 
     @PostMapping("/{deviceId}/unbind")
     public void unbindDevice(@PathVariable("deviceId") String deviceId) {
         deviceId = getDetail(deviceId).getDeviceId();
-        deviceService.unbindDevice(deviceId);
+//        deviceService.unbindDevice(deviceId);
     }
 
     @GetMapping("/{deviceId}/thingModel")

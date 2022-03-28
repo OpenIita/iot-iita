@@ -21,15 +21,19 @@ import java.util.Map;
 @Document(indexName = "thing_model_messages")
 public class ThingModelMessage {
 
-    public static final String TYPE_PROPERTY="property";
-    public static final String TYPE_EVENT="event";
-    public static final String TYPE_SERVICE="service";
+    public static final String TYPE_LIFETIME = "lifetime";
+    public static final String TYPE_STATE = "state";
+    public static final String TYPE_PROPERTY = "property";
+    public static final String TYPE_EVENT = "event";
+    public static final String TYPE_SERVICE = "service";
 
-    public static final String ID_PROPERTY_GET="get";
-    public static final String ID_PROPERTY_SET="set";
+    public static final String ID_PROPERTY_GET = "get";
+    public static final String ID_PROPERTY_SET = "set";
 
     @Id
     private String mid;
+
+    private String deviceId;
 
     private String productKey;
 
@@ -37,6 +41,8 @@ public class ThingModelMessage {
 
     /**
      * 消息类型
+     * lifetime:生命周期
+     * state:状态
      * property:属性
      * event:事件
      * service:服务
@@ -45,13 +51,18 @@ public class ThingModelMessage {
 
     private String identifier;
 
-    private Map<String,Object> data;
+    /**
+     * 消息状态码
+     */
+    private int code;
+
+    private Object data;
 
     /**
      * 时间戳，设备上的事件或数据产生的本地时间
      */
     @Field(type = FieldType.Date)
-    private Long occur;
+    private Long occurred;
 
     /**
      * 消息上报时间

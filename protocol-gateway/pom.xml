@@ -12,12 +12,10 @@
     <artifactId>protocol-gateway</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>gateway-client</module>
-        <module>protocol-server</module>
-        <module>decode-function</module>
         <module>component-server</module>
         <module>converter</module>
         <module>mqtt-component</module>
+        <module>emqx-component</module>
         <module>component</module>
     </modules>
 

@@ -9,4 +9,8 @@ public class AuthInfo {
 
     private String deviceName;
 
+    private String productSecret;
+
+    private String deviceSecret;
+
 }

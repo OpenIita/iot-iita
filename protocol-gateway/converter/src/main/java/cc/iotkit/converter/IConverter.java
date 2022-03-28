@@ -6,8 +6,8 @@ public interface IConverter {
 
     void setScript(String script);
 
-    ThingModelMessage decode(String msg);
+    ThingModelMessage decode(DeviceMessage msg);
 
-    String encode(DeviceService<?> service, Device device);
+    DeviceMessage encode(ThingService<?> service, Device device);
 
 }

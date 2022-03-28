@@ -31,7 +31,7 @@ public class DeviceCondition {
             left = properties.get(identifier);
         } else if ("state".equals(type)) {
             DeviceInfo.State state = deviceInfo.getState();
-            left = state != null && state.getOnline();
+            left = state != null && state.isOnline();
         }
         return Expression.eval(comparator, left, value);
     }

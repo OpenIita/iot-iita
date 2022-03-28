@@ -58,12 +58,12 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>device-api</artifactId>
+            <artifactId>dao</artifactId>
         </dependency>
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>dao</artifactId>
+            <artifactId>component-server</artifactId>
         </dependency>
 
     </dependencies>

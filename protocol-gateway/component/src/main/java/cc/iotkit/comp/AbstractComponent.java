@@ -10,4 +10,15 @@ public abstract class AbstractComponent implements IComponent {
 
     protected IConverter converter;
 
+    protected CompConfig config;
+
+    @Override
+    public void create(CompConfig config) {
+        this.config=config;
+    }
+
+    @Override
+    public CompConfig getConfig() {
+        return config;
+    }
 }

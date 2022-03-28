@@ -3,9 +3,12 @@ package cc.iotkit.comps.service;
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comps.config.ServerConfig;
+import cc.iotkit.dao.DeviceDao;
+import cc.iotkit.dao.DevicePropertyRepository;
 import cc.iotkit.dao.ThingModelMessageRepository;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.model.UserInfo;
+import cc.iotkit.model.device.message.DeviceProperty;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -21,20 +25,21 @@ import java.util.stream.Collectors;
 public class DeviceMessageConsumer implements MessageListener<ThingModelMessage> {
 
     private final ServerConfig serverConfig;
-
     private final ThingModelMessageRepository messageRepository;
-
-    private final UserInfoRepository userInfoRepository;
+    private final DevicePropertyRepository propertyRepository;
+    private final DeviceDao deviceDao;
 
     @SneakyThrows
     @Autowired
     public DeviceMessageConsumer(ServerConfig serverConfig,
                                  ThingModelMessageRepository messageRepository,
-                                 UserInfoRepository userInfoRepository) {
+                                 UserInfoRepository userInfoRepository,
+                                 DevicePropertyRepository propertyRepository,
+                                 DeviceDao deviceDao) {
         this.serverConfig = serverConfig;
         this.messageRepository = messageRepository;
-        this.userInfoRepository = userInfoRepository;
-
+        this.propertyRepository = propertyRepository;
+        this.deviceDao = deviceDao;
         PulsarClient client = PulsarClient.builder()
                 .serviceUrl(this.serverConfig.getPulsarBrokerUrl())
                 .build();
@@ -56,14 +61,34 @@ public class DeviceMessageConsumer implements MessageListener<ThingModelMessage>
     @Override
     public void received(Consumer<ThingModelMessage> consumer, Message<ThingModelMessage> msg) {
         ThingModelMessage modelMessage = msg.getValue();
-        log.info("receive message:{}", JsonUtil.toJsonString(modelMessage));
+        String deviceId = modelMessage.getDeviceId();
+        log.info("save message to es:{}", JsonUtil.toJsonString(modelMessage));
+        //属性入库
+        if (ThingModelMessage.TYPE_PROPERTY.equals(modelMessage.getType())
+                && "report".equals(modelMessage.getIdentifier())) {
+            log.info("update device property,deviceId:{},property:{}",
+                    deviceId, JsonUtil.toJsonString(modelMessage.getData()));
+            deviceDao.updateProperties(deviceId, (Map<String, Object>) modelMessage.getData());
+
+            //设备属性历史数据存储
+            if (modelMessage.getData() instanceof Map) {
+                Map map = (Map) modelMessage.getData();
+                for (Object key : map.keySet()) {
+                    propertyRepository.save(
+                            new DeviceProperty(
+                                    modelMessage.getMid(),
+                                    deviceId,
+                                    key.toString(),
+                                    map.get(key),
+                                    modelMessage.getOccurred()
+                            )
+                    );
+                }
+            }
+        }
+
         //设备消息日志入库
         messageRepository.save(modelMessage);
-
-        messageRepository.findAll().forEach(m -> {
-            log.info(JsonUtil.toJsonString(m));
-        });
-
         consumer.acknowledge(msg);
     }
 

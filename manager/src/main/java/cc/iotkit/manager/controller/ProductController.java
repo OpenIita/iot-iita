@@ -6,8 +6,8 @@ import cc.iotkit.dao.ProductRepository;
 import cc.iotkit.dao.ThingModelRepository;
 import cc.iotkit.manager.config.AliyunConfig;
 import cc.iotkit.manager.service.DataOwnerService;
+import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.Category;
-import cc.iotkit.model.PagingData;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ThingModel;
 import com.aliyun.oss.OSS;
@@ -42,9 +42,9 @@ public class ProductController {
     private OSS ossClient;
 
     @PostMapping("/list")
-    public PagingData<Product> getProducts(Product form) {
+    public Paging<Product> getProducts(Product form) {
         form = dataOwnerService.wrapExample(form);
-        return new PagingData<>(productRepository.count(Example.of(form)),
+        return new Paging<>(productRepository.count(Example.of(form)),
                 productRepository.findAll(Example.of(form)));
     }
 

@@ -1,15 +1,17 @@
 package cc.iotkit.comp.mqtt;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.comp.IMessageHandler;
+import cc.iotkit.comp.model.ReceiveResult;
 import io.netty.handler.codec.mqtt.MqttConnectReturnCode;
 import io.netty.handler.codec.mqtt.MqttProperties;
 import io.netty.handler.codec.mqtt.MqttQoS;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.PemKeyCertOptions;
-import io.vertx.mqtt.MqttAuth;
-import io.vertx.mqtt.MqttServer;
-import io.vertx.mqtt.MqttServerOptions;
-import io.vertx.mqtt.MqttTopicSubscription;
+import io.vertx.mqtt.*;
 import io.vertx.mqtt.messages.codes.MqttSubAckReasonCode;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +29,8 @@ public class MqttVerticle extends AbstractVerticle {
     private final MqttConfig config;
 
     private IMessageHandler executor;
+
+    private Map<String, MqttEndpoint> endpointMap = new HashMap<>();
 
     public MqttVerticle(MqttConfig config) {
         this.config = config;
@@ -56,12 +60,15 @@ public class MqttVerticle extends AbstractVerticle {
                 return;
             }
 
+            String clientId = endpoint.clientIdentifier();
             String authJson = auth.toJson()
-                    .put("clientid", endpoint.clientIdentifier()).toString();
+                    .put("clientid", clientId).toString();
 
             log.info("MQTT client auth,username:{},password:{}", auth.getUsername(), auth.getPassword());
             try {
-                executor.onReceive(new HashMap<>(), "auth", authJson);
+                ReceiveResult result = executor.onReceive(new HashMap<>(), "auth", authJson);
+                //保存设备与连接关系
+                endpointMap.put(getEndpointKey(result), endpoint);
             } catch (Throwable e) {
                 log.error("auth failed", e);
                 endpoint.reject(MqttConnectReturnCode.CONNECTION_REFUSED_NOT_AUTHORIZED);
@@ -73,13 +80,17 @@ public class MqttVerticle extends AbstractVerticle {
             endpoint.accept(false);
             endpoint.disconnectMessageHandler(disconnectMessage -> {
                 log.info("Received disconnect from client, reason code = {}", disconnectMessage.code());
-                executor.onReceive(new HashMap<>(), "disconnect", authJson);
+                ReceiveResult result = executor.onReceive(new HashMap<>(), "disconnect", clientId);
+                //删除设备与连接关系
+                endpointMap.remove(getEndpointKey(result));
             }).subscribeHandler(subscribe -> {
                 List<MqttSubAckReasonCode> reasonCodes = new ArrayList<>();
                 for (MqttTopicSubscription s : subscribe.topicSubscriptions()) {
                     log.info("Subscription for {},with QoS {}", s.topicName(), s.qualityOfService());
                     try {
-                        executor.onReceive(new HashMap<>(), "subscribe", s.topicName());
+                        Map<String, Object> head = new HashMap<>();
+                        head.put("topic", s.topicName());
+                        executor.onReceive(head, "subscribe", clientId);
                         reasonCodes.add(MqttSubAckReasonCode.qosGranted(s.qualityOfService()));
                     } catch (Throwable e) {
                         log.error("subscribe failed,topic:" + s.topicName(), e);
@@ -93,7 +104,9 @@ public class MqttVerticle extends AbstractVerticle {
                 for (String t : unsubscribe.topics()) {
                     log.info("Unsubscription for {}", t);
                     try {
-                        executor.onReceive(new HashMap<>(), "unsubscribe", t);
+                        Map<String, Object> head = new HashMap<>();
+                        head.put("topic", t);
+                        executor.onReceive(head, "unsubscribe", clientId);
                     } catch (Throwable e) {
                         log.error("unsubscribe failed,topic:" + t, e);
                     }
@@ -108,14 +121,13 @@ public class MqttVerticle extends AbstractVerticle {
                     Map<String, Object> head = new HashMap<>();
                     head.put("topic", message.topicName());
                     executor.onReceive(head, "", payload);
+                    if (message.qosLevel() == MqttQoS.AT_LEAST_ONCE) {
+                        endpoint.publishAcknowledge(message.messageId());
+                    } else if (message.qosLevel() == MqttQoS.EXACTLY_ONCE) {
+                        endpoint.publishReceived(message.messageId());
+                    }
                 } catch (Throwable e) {
                     log.error("handler message failed,topic:" + message.topicName(), e);
-                }
-
-                if (message.qosLevel() == MqttQoS.AT_LEAST_ONCE) {
-                    endpoint.publishAcknowledge(message.messageId());
-                } else if (message.qosLevel() == MqttQoS.EXACTLY_ONCE) {
-                    endpoint.publishReceived(message.messageId());
                 }
             }).publishReleaseHandler(endpoint::publishComplete);
         }).listen(ar -> {
@@ -129,6 +141,34 @@ public class MqttVerticle extends AbstractVerticle {
 
     @Override
     public void stop() throws Exception {
+        for (MqttEndpoint endpoint : endpointMap.values()) {
+            executor.onReceive(new HashMap<>(), "disconnect", endpoint.clientIdentifier());
+        }
         mqttServer.close(voidAsyncResult -> log.info("close mqtt server..."));
+    }
+
+    private String getEndpointKey(ReceiveResult result) {
+        return getEndpointKey(result.getProductKey(), result.getDeviceName());
+    }
+
+    private String getEndpointKey(String productKey, String deviceName) {
+        return String.format("%s_%s", productKey, deviceName);
+    }
+
+    public boolean exist(String productKey, String deviceName) {
+        return endpointMap.containsKey(getEndpointKey(productKey, deviceName));
+    }
+
+    public void publish(String productKey, String deviceName, String topic, String msg) {
+        MqttEndpoint endpoint = endpointMap.get(getEndpointKey(productKey, deviceName));
+        if (endpoint == null) {
+            throw new BizException("endpoint does not exist");
+        }
+        Future<Integer> result = endpoint.publish(topic, Buffer.buffer(msg),
+                MqttQoS.AT_LEAST_ONCE, false, false);
+        result.onFailure(e -> log.error("public topic failed", e));
+        result.onSuccess(integer -> {
+            log.info("publish success,topic:{},payload:{}", topic, msg);
+        });
     }
 }

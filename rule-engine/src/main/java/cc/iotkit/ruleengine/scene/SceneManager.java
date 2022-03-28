@@ -3,11 +3,11 @@ package cc.iotkit.ruleengine.scene;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.dao.SceneInfoRepository;
-import cc.iotkit.deviceapi.IDeviceService;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.SceneInfo;
 import cc.iotkit.ruleengine.action.Action;
 import cc.iotkit.ruleengine.action.DeviceAction;
+import cc.iotkit.ruleengine.action.DeviceActionService;
 import cc.iotkit.ruleengine.config.RuleConfiguration;
 import cc.iotkit.ruleengine.filter.DeviceFilter;
 import cc.iotkit.ruleengine.filter.Filter;
@@ -46,7 +46,7 @@ public class SceneManager {
     private DeviceCache deviceCache;
 
     @Autowired
-    private IDeviceService deviceService;
+    private DeviceActionService deviceActionService;
 
     public SceneManager() {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
@@ -165,7 +165,7 @@ public class SceneManager {
     private Action<?> parseAction(String type, String config) {
         if (DeviceAction.TYPE.equals(type)) {
             DeviceAction action = parse(config, DeviceAction.class);
-            action.setDeviceService(deviceService);
+            action.setDeviceActionService(deviceActionService);
             return action;
         }
         return null;

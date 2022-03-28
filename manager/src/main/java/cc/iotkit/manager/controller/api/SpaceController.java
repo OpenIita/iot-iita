@@ -180,7 +180,7 @@ public class SpaceController {
                 .deviceName(deviceInfo.getDeviceName())
                 .picUrl(product.getImg())
                 .spaceName(spaceName)
-                .online(deviceInfo.getState().getOnline())
+                .online(deviceInfo.getState().isOnline())
                 .property(deviceInfo.getProperty() == null ? new HashMap<>() : deviceInfo.getProperty())
                 .productKey(deviceInfo.getProductKey())
                 .build();

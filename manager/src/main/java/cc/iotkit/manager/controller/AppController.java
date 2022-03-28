@@ -5,9 +5,9 @@ import cc.iotkit.dao.CategoryRepository;
 import cc.iotkit.dao.ProductRepository;
 import cc.iotkit.manager.model.vo.AppDesignVo;
 import cc.iotkit.manager.service.DataOwnerService;
+import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.AppDesign;
 import cc.iotkit.model.product.Category;
-import cc.iotkit.model.PagingData;
 import cc.iotkit.model.product.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +37,7 @@ public class AppController {
     private DataOwnerService dataOwnerService;
 
     @PostMapping("/designs")
-    public PagingData<AppDesignVo> getDesigns() {
+    public Paging<AppDesignVo> getDesigns() {
 
         List<AppDesignVo> appDesignVos = new ArrayList<>();
         List<Product> products = productRepository.findAll(Example
@@ -64,7 +64,7 @@ public class AppController {
             }
         });
 
-        return new PagingData<>(appDesignRepository.count(),
+        return new Paging<>(appDesignRepository.count(),
                 appDesignVos);
     }
 

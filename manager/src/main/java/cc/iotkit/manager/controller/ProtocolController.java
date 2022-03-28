@@ -2,6 +2,7 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
+import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.mqtt.MqttComponent;
 import cc.iotkit.comps.ComponentManager;
 import cc.iotkit.converter.ScriptConverter;
@@ -12,7 +13,6 @@ import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.protocol.ProtocolGateway;
-import cc.iotkit.protocol.server.service.GatewayService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -37,9 +36,6 @@ public class ProtocolController {
 
     @Autowired
     private ProtocolGatewayRepository gatewayRepository;
-
-    @Autowired
-    private GatewayService gatewayService;
 
     @Autowired
     private DataOwnerService dataOwnerService;
@@ -66,7 +62,6 @@ public class ProtocolController {
             gateway.setCreateAt(System.currentTimeMillis());
             gateway.setUid(AuthUtil.getUserId());
             gateway.setUuid(optUser.get().getUid());
-            gatewayService.saveFunction(gateway.getUuid(), gateway.getId(), gateway.getScript(), functionJar);
             gatewayRepository.save(gateway);
         } catch (Throwable e) {
             throw new BizException("add protocol gateway error", e);
@@ -89,7 +84,6 @@ public class ProtocolController {
         dataOwnerService.checkOwner(gateway);
         try {
             gatewayRepository.save(gateway);
-            gatewayService.saveFunction(gateway.getUuid(), gateway.getId(), gateway.getScript(), functionJar);
         } catch (Throwable e) {
             throw new BizException("add protocol gateway error", e);
         }
@@ -105,8 +99,8 @@ public class ProtocolController {
         ProtocolGateway oldGateway = optGateway.get();
         oldGateway.setScript(gateway.getScript());
         try {
-            gatewayService.saveFunction(oldGateway.getUuid(), oldGateway.getId(),
-                    "new (function (){" + oldGateway.getScript() + "})()", functionJar);
+//            gatewayService.saveFunction(oldGateway.getUuid(), oldGateway.getId(),
+//                    "new (function (){" + oldGateway.getScript() + "})()", functionJar);
             gatewayRepository.save(oldGateway);
         } catch (Throwable e) {
             throw new BizException("save protocol gateway script error", e);
@@ -118,7 +112,6 @@ public class ProtocolController {
         dataOwnerService.checkOwner(gatewayRepository, id);
         try {
             gatewayRepository.deleteById(id);
-            gatewayService.deleteFunction(AuthUtil.getUserId(), id);
         } catch (Throwable e) {
             throw new BizException("delete protocol gateway error", e);
         }
@@ -136,7 +129,7 @@ public class ProtocolController {
     @GetMapping("/registerMqtt")
     public void registerMqtt() throws IOException {
         MqttComponent component = new MqttComponent();
-        component.create("{\"port\":2883,\"ssl\":false}");
+        component.create(new CompConfig(300, "{\"port\":2883,\"ssl\":false}"));
         ScriptConverter converter = new ScriptConverter();
         converter.setScript(FileUtils.readFileToString(new File("/Users/sjg/home/gitee/open-source/converter.js"), "UTF-8"));
         component.setConverter(converter);
