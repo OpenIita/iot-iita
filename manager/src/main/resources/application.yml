@@ -7,9 +7,13 @@ spring:
   elasticsearch:
     rest:
       uris: http://elasticsearch 连接地址
-      username: elasticsearch 用户名
-      password: 密码
       connection-timeout: 10s
+
+  redis:
+    host: redis地址
+    port: 6379
+    database: 0
+    password:
 
   cache:
     cache-names: foo,bar
@@ -46,6 +50,10 @@ keycloak:
 keycloak-admin-clientid : 填写keycloak中定义的clientId
 keycloak-admin-user : 填写keycloak中添加的管理员用户名
 keycloak-admin-password : 填写keycloak中添加的管理员密码
+
+pulsar:
+  broker: pulsar://pulsar broker地址:6650
+  service: http://pulsar 服务地址:8080
 
 app:
   systemRole: iot_system_user

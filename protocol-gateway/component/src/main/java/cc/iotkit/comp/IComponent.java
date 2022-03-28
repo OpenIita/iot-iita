@@ -1,5 +1,6 @@
 package cc.iotkit.comp;
 
+import cc.iotkit.comp.model.AuthInfo;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
 import cc.iotkit.converter.DeviceMessage;
@@ -14,6 +15,10 @@ public interface IComponent {
     void stop();
 
     void destroy();
+
+    void onDeviceAuth(AuthInfo authInfo);
+
+    void onDeviceRegister(RegisterInfo info);
 
     void onDeviceStateChange(DeviceState state);
 

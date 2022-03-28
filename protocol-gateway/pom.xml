@@ -17,6 +17,7 @@
         <module>mqtt-component</module>
         <module>emqx-component</module>
         <module>component</module>
+        <module>mqtt-client-simulator</module>
     </modules>
 
 </project>
