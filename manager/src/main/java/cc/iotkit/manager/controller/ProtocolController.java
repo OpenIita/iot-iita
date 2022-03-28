@@ -6,13 +6,14 @@ import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.mqtt.MqttComponent;
 import cc.iotkit.comps.ComponentManager;
 import cc.iotkit.converter.ScriptConverter;
-import cc.iotkit.dao.ProtocolGatewayRepository;
+import cc.iotkit.dao.ProtocolComponentRepository;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.UserInfo;
-import cc.iotkit.model.protocol.ProtocolGateway;
+import cc.iotkit.model.protocol.ProtocolComponent;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
 @Slf4j
@@ -34,8 +42,11 @@ public class ProtocolController {
     @Value("${gateway.function-jar}")
     private String functionJar;
 
+    @Value("${spring.servlet.multipart.upload-dir}")
+    private String uploadDir;
+
     @Autowired
-    private ProtocolGatewayRepository gatewayRepository;
+    private ProtocolComponentRepository protocolComponentRepository;
 
     @Autowired
     private DataOwnerService dataOwnerService;
@@ -46,11 +57,35 @@ public class ProtocolController {
     @Autowired
     private ComponentManager componentManager;
 
-    @PostMapping("/addGateway")
-    public void addGateway(ProtocolGateway gateway) {
-        Optional<ProtocolGateway> optGateway = gatewayRepository.findById(gateway.getId());
-        if (optGateway.isPresent()) {
-            throw new BizException("gateway already exists");
+    private Path fileStorageLocation;
+
+    @SneakyThrows
+    @PostConstruct
+    public void init() {
+        this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Files.createDirectories(this.fileStorageLocation);
+    }
+
+    @PostMapping("/uploadJar")
+    public void uploadJar(@RequestParam("file") MultipartFile file) {
+        if (file == null) {
+            throw new BizException("file is null");
+        }
+
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        try {
+            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            throw new BizException("upload jar error", ex);
+        }
+    }
+
+    @PostMapping("/addComponent")
+    public void addComponent(ProtocolComponent component) {
+        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(component.getId());
+        if (optComponent.isPresent()) {
+            throw new BizException("component already exists");
         }
         try {
             Optional<UserInfo> optUser = userInfoRepository.findById(AuthUtil.getUserId());
@@ -58,72 +93,71 @@ public class ProtocolController {
                 throw new BizException("user does not exists");
             }
 
-            gateway.setScript("new (function () {this.decode = function (msg) {return null; };})().decode(msg)");
-            gateway.setCreateAt(System.currentTimeMillis());
-            gateway.setUid(AuthUtil.getUserId());
-            gateway.setUuid(optUser.get().getUid());
-            gatewayRepository.save(gateway);
+            component.setScript("new (function () {this.decode = function (msg) {return null; };})().decode(msg)");
+            component.setCreateAt(System.currentTimeMillis());
+            component.setUid(AuthUtil.getUserId());
+            protocolComponentRepository.save(component);
         } catch (Throwable e) {
-            throw new BizException("add protocol gateway error", e);
+            throw new BizException("add protocol component error", e);
         }
     }
 
-    @PostMapping("/saveGateway")
-    public void saveGateway(ProtocolGateway gateway) {
-        Optional<ProtocolGateway> optGateway = gatewayRepository.findById(gateway.getId());
-        if (!optGateway.isPresent()) {
-            throw new BizException("the gateway does not exists");
+    @PostMapping("/saveComponent")
+    public void saveComponent(ProtocolComponent component) {
+        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(component.getId());
+        if (!optComponent.isPresent()) {
+            throw new BizException("the protocol component does not exists");
         }
         Optional<UserInfo> optUser = userInfoRepository.findById(AuthUtil.getUserId());
         if (!optUser.isPresent()) {
             throw new BizException("user does not exists");
         }
 
-        ProtocolGateway oldGateway = optGateway.get();
-        gateway = ReflectUtil.copyNoNulls(gateway, oldGateway);
-        dataOwnerService.checkOwner(gateway);
+        ProtocolComponent oldComponent = optComponent.get();
+        component = ReflectUtil.copyNoNulls(component, oldComponent);
+        dataOwnerService.checkOwner(component);
         try {
-            gatewayRepository.save(gateway);
+            protocolComponentRepository.save(component);
         } catch (Throwable e) {
-            throw new BizException("add protocol gateway error", e);
+            throw new BizException("add protocol component error", e);
         }
     }
 
-    @PostMapping("/saveGatewayScript")
-    public void saveGatewayScript(@RequestBody ProtocolGateway gateway) {
-        Optional<ProtocolGateway> optGateway = gatewayRepository.findById(gateway.getId());
-        if (!optGateway.isPresent()) {
-            throw new BizException("the gateway does not exists");
+    @PostMapping("/saveComponentScript")
+    public void saveComponentScript(@RequestBody ProtocolComponent component) {
+        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(component.getId());
+        if (!optComponent.isPresent()) {
+            throw new BizException("the component does not exists");
         }
-        dataOwnerService.checkOwner(gateway);
-        ProtocolGateway oldGateway = optGateway.get();
-        oldGateway.setScript(gateway.getScript());
+        dataOwnerService.checkOwner(component);
+        ProtocolComponent oldComponent = optComponent.get();
+        oldComponent.setScript(component.getScript());
         try {
 //            gatewayService.saveFunction(oldGateway.getUuid(), oldGateway.getId(),
 //                    "new (function (){" + oldGateway.getScript() + "})()", functionJar);
-            gatewayRepository.save(oldGateway);
+            protocolComponentRepository.save(oldComponent);
         } catch (Throwable e) {
-            throw new BizException("save protocol gateway script error", e);
+            throw new BizException("save protocol component script error", e);
         }
     }
 
-    @PostMapping("/deleteGateway/{id}")
-    public void deleteGateway(@PathVariable("id") String id) {
-        dataOwnerService.checkOwner(gatewayRepository, id);
+    @PostMapping("/deleteComponent/{id}")
+    public void deleteComponent(@PathVariable("id") String id) {
+        dataOwnerService.checkOwner(protocolComponentRepository, id);
         try {
-            gatewayRepository.deleteById(id);
+            protocolComponentRepository.deleteById(id);
         } catch (Throwable e) {
-            throw new BizException("delete protocol gateway error", e);
+            throw new BizException("delete protocol component error", e);
         }
     }
 
-    @PostMapping("/gateways/{size}/{page}")
-    public Paging<ProtocolGateway> getGateways(
+    @PostMapping("/components/{size}/{page}")
+    public Paging<ProtocolComponent> getComponents(
             @PathVariable("size") int size,
             @PathVariable("page") int page) {
-        Page<ProtocolGateway> gateways = gatewayRepository.findAll(
+        Page<ProtocolComponent> components = protocolComponentRepository.findAll(
                 PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))));
-        return new Paging<>(gateways.getTotalElements(), gateways.getContent());
+        return new Paging<>(components.getTotalElements(), components.getContent());
     }
 
     @GetMapping("/registerMqtt")

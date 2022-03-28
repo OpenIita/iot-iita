@@ -3,9 +3,11 @@ package cc.iotkit.model.protocol;
 import cc.iotkit.model.Owned;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-public class ProtocolGateway implements Owned {
+@Document
+public class ProtocolComponent implements Owned {
 
     @Id
     private String id;
@@ -15,14 +17,11 @@ public class ProtocolGateway implements Owned {
      */
     private String uid;
 
-    /**
-     * 用户账号ID
-     */
-    private String uuid;
-
     private String name;
 
     private String protocol;
+
+    private String jarFile;
 
     private String config;
 
