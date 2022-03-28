@@ -3,8 +3,8 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
+import cc.iotkit.dao.AligenieDeviceRepository;
 import cc.iotkit.dao.UserInfoRepository;
-import cc.iotkit.manager.service.AligenieService;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.KeycloakAdminService;
 import cc.iotkit.manager.utils.AuthUtil;
@@ -29,7 +29,7 @@ public class UserInfoController {
     @Autowired
     private UserInfoRepository userInfoRepository;
     @Autowired
-    private AligenieService aligenieService;
+    private AligenieDeviceRepository aligenieDeviceRepository;
     @Autowired
     private DataOwnerService ownerService;
 
@@ -91,7 +91,9 @@ public class UserInfoController {
         }
         UserInfo user = optUser.get();
         ownerService.checkOwner(user);
+        keycloakAdminService.deleteUser(id);
         userInfoRepository.deleteById(id);
+        aligenieDeviceRepository.deleteByUid(user.getId());
     }
 
     @PostMapping("/client/user/save")

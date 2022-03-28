@@ -116,6 +116,17 @@ public class KeycloakAdminService {
         userResource.update(userRepresentation);
     }
 
+    public void deleteUser(String id) {
+        Keycloak keycloak = getKeycloak();
+        UserResource userResource = keycloak.realm(realm)
+                .users().get(id);
+        try {
+            userResource.remove();
+        } catch (javax.ws.rs.NotFoundException e) {
+            log.warn("user does not exist");
+        }
+    }
+
     private String getGroup(Integer type) {
         if (type == null) {
             return "";
