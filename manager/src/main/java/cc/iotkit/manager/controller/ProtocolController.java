@@ -1,6 +1,7 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.mqtt.MqttComponent;
@@ -56,21 +57,29 @@ public class ProtocolController {
     @Autowired
     private ComponentManager componentManager;
 
-    private Path getFilePath(String comId, String type) {
-        return Paths.get(String.format("%s/%s/%s", componentDir, comId, type))
+    private Path getFilePath(String comId) {
+        return Paths.get(String.format("%s/%s", componentDir, comId))
                 .toAbsolutePath().normalize();
     }
 
     @PostMapping("/uploadJar")
-    public String uploadJar(@RequestParam("file") MultipartFile file) {
+    public String uploadJar(@RequestParam("file") MultipartFile file, String id) {
         if (file == null) {
             throw new BizException("file is null");
         }
         log.info("saving upload jar file:{}", file.getName());
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
-            String id = UUID.randomUUID().toString();
-            Path jarFilePath = getFilePath(id, "jar");
+            if (StringUtils.hasLength(id)) {
+                Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(id);
+                if (!optComponent.isPresent()) {
+                    throw new BizException("the protocol component does not exists");
+                }
+                dataOwnerService.checkOwner(optComponent.get());
+            } else {
+                id = UUID.randomUUID().toString();
+            }
+            Path jarFilePath = getFilePath(id);
             Files.createDirectories(jarFilePath);
             Path targetLocation = jarFilePath.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -86,7 +95,7 @@ public class ProtocolController {
         if (!StringUtils.hasLength(id)) {
             throw new BizException("component id is blank");
         }
-        Path jarPath = getFilePath(id, "jar");
+        Path jarPath = getFilePath(id);
         if (!jarPath.resolve(component.getJarFile()).toFile().exists()) {
             throw new BizException("component jar file does not exist");
         }
@@ -115,7 +124,7 @@ public class ProtocolController {
         if (!StringUtils.hasLength(id)) {
             throw new BizException("component id is blank");
         }
-        Path jarPath = getFilePath(id, "jar");
+        Path jarPath = getFilePath(id);
         if (!jarPath.resolve(component.getJarFile()).toFile().exists()) {
             throw new BizException("component jar file does not exist");
         }
@@ -139,18 +148,39 @@ public class ProtocolController {
         }
     }
 
-    @PostMapping("/saveComponentScript")
-    public void saveComponentScript(@RequestBody ProtocolComponent component) {
-        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(component.getId());
+    @GetMapping("/getComponentScript/{id}")
+    public String getComponentScript(@PathVariable("id") String id) {
+        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(id);
         if (!optComponent.isPresent()) {
             throw new BizException("the component does not exists");
         }
+        ProtocolComponent component = optComponent.get();
         dataOwnerService.checkOwner(component);
-        ProtocolComponent oldComponent = optComponent.get();
-        oldComponent.setScriptFile(component.getScriptFile());
         try {
-//            gatewayService.saveFunction(oldGateway.getUuid(), oldGateway.getId(),
-//                    "new (function (){" + oldGateway.getScript() + "})()", functionJar);
+            Path path = getFilePath(id);
+            File file = path.resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile();
+            return FileUtils.readFileToString(file, "UTF-8");
+        } catch (Throwable e) {
+            log.error("read component script file error", e);
+            return "";
+        }
+    }
+
+    @PostMapping("/saveComponentScript/{id}")
+    public void saveComponentScript(
+            @PathVariable("id") String id,
+            @RequestBody String script) {
+        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(id);
+        if (!optComponent.isPresent()) {
+            throw new BizException("the component does not exists");
+        }
+        ProtocolComponent oldComponent = optComponent.get();
+        dataOwnerService.checkOwner(oldComponent);
+        try {
+            Path path = getFilePath(id);
+            File file = path.resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile();
+            script = JsonUtil.parse(script, String.class);
+            FileUtils.writeStringToFile(file, script, "UTF-8", false);
             protocolComponentRepository.save(oldComponent);
         } catch (Throwable e) {
             throw new BizException("save protocol component script error", e);

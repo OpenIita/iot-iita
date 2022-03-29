@@ -12,6 +12,8 @@ public class ProtocolComponent implements Owned {
     public static final String STATE_STOPPED = "stopped";
     public static final String STATE_RUNNING = "running";
 
+    public static final String SCRIPT_FILE_NAME = "component.js";
+
     @Id
     private String id;
 
@@ -27,8 +29,6 @@ public class ProtocolComponent implements Owned {
     private String jarFile;
 
     private String config;
-
-    private String scriptFile;
 
     private String state;
 
