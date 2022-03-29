@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class ProtocolComponent implements Owned {
 
+    public static final String STATE_STOPPED = "stopped";
+    public static final String STATE_RUNNING = "running";
+
     @Id
     private String id;
 
@@ -25,7 +28,9 @@ public class ProtocolComponent implements Owned {
 
     private String config;
 
-    private String script;
+    private String scriptFile;
+
+    private String state;
 
     private Long createAt;
 
