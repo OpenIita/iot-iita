@@ -30,6 +30,8 @@ public class ProtocolComponent implements Owned {
 
     private String config;
 
+    private String converter;
+
     private String state;
 
     private Long createAt;

@@ -67,8 +67,3 @@ app:
 mqtt:
   url: tcp://填写mqtt连接地址
 
-component:
-  dir: ./components
-
-gateway:
-  function-jar: 填写protocol-function打包的jar存放路径:/xx/xx.jar
