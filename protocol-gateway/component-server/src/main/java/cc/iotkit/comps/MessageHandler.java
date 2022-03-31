@@ -48,12 +48,12 @@ public class MessageHandler implements IMessageHandler {
         this.component = component;
         this.converter = converter;
         this.deviceBehaviourService = deviceBehaviourService;
-        scriptObj = engine.eval(script);
+        scriptObj = engine.eval(String.format("new (function () {\n%s})()", script));
     }
 
     public ReceiveResult onReceive(Map<String, Object> head, String type, String msg) {
         try {
-            ScriptObjectMirror result = (ScriptObjectMirror) engine.invokeMethod(scriptObj, "onReceive", head, type, msg);
+            ScriptObjectMirror result = (ScriptObjectMirror) invokeMethod("onReceive", head, type, msg);
             log.info("onReceive script result:{}", JsonUtil.toJsonString(result));
             Object rstType = result.get("type");
             if (rstType == null) {
@@ -107,10 +107,10 @@ public class MessageHandler implements IMessageHandler {
     private void doRegister(RegisterInfo reg) throws ScriptException, NoSuchMethodException {
         try {
             deviceBehaviourService.register(reg);
-            engine.invokeMethod(scriptObj, "onRegistered", reg, "true");
         } catch (Throwable e) {
             log.error("register error", e);
-            engine.invokeMethod(scriptObj, "onRegistered", reg, "false");
+        } finally {
+            invokeMethod("onRegistered", reg, "false");
         }
     }
 
@@ -120,11 +120,18 @@ public class MessageHandler implements IMessageHandler {
                     auth.getDeviceName(),
                     auth.getProductSecret(),
                     auth.getDeviceSecret());
-            engine.invokeMethod(scriptObj, "onAuthed", auth, true);
         } catch (Throwable e) {
             log.error("device auth error", e);
-            engine.invokeMethod(scriptObj, "onAuthed", auth, false);
+        } finally {
+            invokeMethod("onAuthed", auth, "false");
         }
+    }
+
+    private Object invokeMethod(String name, Object... args) throws ScriptException, NoSuchMethodException {
+        if (((ScriptObjectMirror) scriptObj).get(name) != null) {
+            return engine.invokeMethod(scriptObj, name, args);
+        }
+        return null;
     }
 
     private void doStateChange(DeviceState state) {

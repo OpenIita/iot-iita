@@ -16,12 +16,12 @@ import java.nio.charset.Charset;
 @Slf4j
 public class ComponentClassLoader {
 
-    protected Class<IComponent> findClass(String name) throws ClassNotFoundException {
+    protected static Class<IComponent> findClass(String name) throws ClassNotFoundException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         return (Class<IComponent>) classLoader.loadClass(name);
     }
 
-    private String addUrl(File jarPath) throws NoSuchMethodException, InvocationTargetException,
+    private static String addUrl(File jarPath) throws NoSuchMethodException, InvocationTargetException,
             IllegalAccessException, IOException {
         URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
         Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
@@ -35,9 +35,9 @@ public class ComponentClassLoader {
         return StreamUtils.copyToString(is, Charset.forName("UTF-8"));
     }
 
-    public IComponent getComponent(File jarPath) {
+    public static IComponent getComponent(File jarFile) {
         try {
-            String className = addUrl(jarPath);
+            String className = addUrl(jarFile);
             Class<IComponent> componentClass = findClass(className);
             return componentClass.newInstance();
         } catch (Throwable e) {

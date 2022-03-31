@@ -6,6 +6,7 @@ import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.mqtt.MqttComponent;
 import cc.iotkit.comps.ComponentManager;
+import cc.iotkit.comps.config.ComponentConfig;
 import cc.iotkit.converter.ScriptConverter;
 import cc.iotkit.dao.ProtocolComponentRepository;
 import cc.iotkit.dao.ProtocolConverterRepository;
@@ -37,11 +38,8 @@ import java.util.UUID;
 @RequestMapping("/protocol")
 public class ProtocolController {
 
-    @Value("${component.dir:./data/components}")
-    private String componentDir;
-
-    @Value("${converter.dir:./data/converters}")
-    private String converterDir;
+    @Autowired
+    private ComponentConfig componentConfig;
 
     @Autowired
     private ProtocolComponentRepository protocolComponentRepository;
@@ -58,16 +56,6 @@ public class ProtocolController {
     @Autowired
     private ComponentManager componentManager;
 
-    private Path getComponentFilePath(String comId) {
-        return Paths.get(String.format("%s/%s", componentDir, comId))
-                .toAbsolutePath().normalize();
-    }
-
-    private Path getConverterFilePath(String conId) {
-        return Paths.get(String.format("%s/%s", converterDir, conId))
-                .toAbsolutePath().normalize();
-    }
-
     @PostMapping("/uploadJar")
     public String uploadJar(@RequestParam("file") MultipartFile file, String id) {
         if (file == null) {
@@ -77,15 +65,11 @@ public class ProtocolController {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (StringUtils.hasLength(id)) {
-                Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(id);
-                if (!optComponent.isPresent()) {
-                    throw new BizException("the protocol component does not exists");
-                }
-                dataOwnerService.checkOwner(optComponent.get());
+                getAndCheckComponent(id);
             } else {
                 id = UUID.randomUUID().toString();
             }
-            Path jarFilePath = getComponentFilePath(id);
+            Path jarFilePath = componentConfig.getComponentFilePath(id);
             Files.createDirectories(jarFilePath);
             Path targetLocation = jarFilePath.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -101,7 +85,7 @@ public class ProtocolController {
         if (!StringUtils.hasLength(id)) {
             throw new BizException("component id is blank");
         }
-        Path jarPath = getComponentFilePath(id);
+        Path jarPath = componentConfig.getComponentFilePath(id);
         if (!jarPath.resolve(component.getJarFile()).toFile().exists()) {
             throw new BizException("component jar file does not exist");
         }
@@ -125,20 +109,15 @@ public class ProtocolController {
         if (!StringUtils.hasLength(id)) {
             throw new BizException("component id is blank");
         }
-        Path jarPath = getComponentFilePath(id);
+        Path jarPath = componentConfig.getComponentFilePath(id);
         if (!jarPath.resolve(component.getJarFile()).toFile().exists()) {
             throw new BizException("component jar file does not exist");
         }
 
-        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(component.getId());
-        if (!optComponent.isPresent()) {
-            throw new BizException("the protocol component does not exists");
-        }
-
-        ProtocolComponent oldComponent = optComponent.get();
+        ProtocolComponent oldComponent = getAndCheckComponent(id);
         component = ReflectUtil.copyNoNulls(component, oldComponent);
-        dataOwnerService.checkOwner(component);
         try {
+            componentManager.deRegister(id);
             protocolComponentRepository.save(component);
         } catch (Throwable e) {
             throw new BizException("add protocol component error", e);
@@ -147,14 +126,9 @@ public class ProtocolController {
 
     @GetMapping("/getComponentScript/{id}")
     public String getComponentScript(@PathVariable("id") String id) {
-        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(id);
-        if (!optComponent.isPresent()) {
-            throw new BizException("the component does not exists");
-        }
-        ProtocolComponent component = optComponent.get();
-        dataOwnerService.checkOwner(component);
+        getAndCheckComponent(id);
         try {
-            Path path = getComponentFilePath(id);
+            Path path = componentConfig.getComponentFilePath(id);
             File file = path.resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile();
             return FileUtils.readFileToString(file, "UTF-8");
         } catch (Throwable e) {
@@ -167,28 +141,37 @@ public class ProtocolController {
     public void saveComponentScript(
             @PathVariable("id") String id,
             @RequestBody String script) {
-        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(id);
-        if (!optComponent.isPresent()) {
-            throw new BizException("the component does not exists");
-        }
-        ProtocolComponent oldComponent = optComponent.get();
-        dataOwnerService.checkOwner(oldComponent);
+        ProtocolComponent oldComponent = getAndCheckComponent(id);
         try {
-            Path path = getComponentFilePath(id);
+            Path path = componentConfig.getComponentFilePath(id);
             File file = path.resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile();
             script = JsonUtil.parse(script, String.class);
             FileUtils.writeStringToFile(file, script, "UTF-8", false);
+
+            componentManager.deRegister(id);
             protocolComponentRepository.save(oldComponent);
         } catch (Throwable e) {
             throw new BizException("save protocol component script error", e);
         }
     }
 
+    private ProtocolComponent getAndCheckComponent(@PathVariable("id") String id) {
+        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(id);
+        if (!optComponent.isPresent()) {
+            throw new BizException("the component does not exists");
+        }
+        ProtocolComponent oldComponent = optComponent.get();
+        dataOwnerService.checkOwner(oldComponent);
+        return oldComponent;
+    }
+
     @PostMapping("/deleteComponent/{id}")
     public void deleteComponent(@PathVariable("id") String id) {
-        dataOwnerService.checkOwner(protocolComponentRepository, id);
+        ProtocolComponent component = getAndCheckComponent(id);
         try {
-            Path path = Paths.get(String.format("%s/%s", componentDir, id))
+            componentManager.deRegister(id);
+
+            Path path = Paths.get(String.format("%s/%s", componentConfig.getComponentDir(), id))
                     .toAbsolutePath().normalize();
             File file = path.toFile();
             try {
@@ -200,7 +183,7 @@ public class ProtocolController {
             } catch (NoSuchFileException e) {
                 log.warn("delete component script error", e);
             }
-            protocolComponentRepository.deleteById(id);
+            protocolComponentRepository.deleteById(component.getId());
         } catch (Throwable e) {
             throw new BizException("delete protocol component error", e);
         }
@@ -212,6 +195,8 @@ public class ProtocolController {
             @PathVariable("page") int page) {
         Page<ProtocolComponent> components = protocolComponentRepository.findAll(
                 PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))));
+        components.getContent().forEach(c -> c.setState(componentManager.isRunning(c.getId()) ?
+                ProtocolComponent.STATE_RUNNING : ProtocolComponent.STATE_STOPPED));
         return new Paging<>(components.getTotalElements(), components.getContent());
     }
 
@@ -240,14 +225,8 @@ public class ProtocolController {
 
     @PostMapping("/saveConverter")
     public void saveConverter(ProtocolConverter converter) {
-        Optional<ProtocolConverter> optConverter = protocolConverterRepository.findById(converter.getId());
-        if (!optConverter.isPresent()) {
-            throw new BizException("the protocol converter does not exists");
-        }
-
-        ProtocolConverter oldConverter = optConverter.get();
+        ProtocolConverter oldConverter = getAndCheckConverter(converter.getId());
         converter = ReflectUtil.copyNoNulls(converter, oldConverter);
-        dataOwnerService.checkOwner(converter);
         try {
             protocolConverterRepository.save(converter);
         } catch (Throwable e) {
@@ -255,16 +234,22 @@ public class ProtocolController {
         }
     }
 
-    @GetMapping("/getConverterScript/{id}")
-    public String getConverterScript(@PathVariable("id") String id) {
+    private ProtocolConverter getAndCheckConverter(String id) {
         Optional<ProtocolConverter> optConverter = protocolConverterRepository.findById(id);
         if (!optConverter.isPresent()) {
-            throw new BizException("the converter does not exists");
+            throw new BizException("the protocol converter does not exists");
         }
+
         ProtocolConverter converter = optConverter.get();
         dataOwnerService.checkOwner(converter);
+        return converter;
+    }
+
+    @GetMapping("/getConverterScript/{id}")
+    public String getConverterScript(@PathVariable("id") String id) {
+        getAndCheckConverter(id);
         try {
-            Path path = getConverterFilePath(id);
+            Path path = componentConfig.getConverterFilePath(id);
             File file = path.resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile();
             return FileUtils.readFileToString(file, "UTF-8");
         } catch (Throwable e) {
@@ -277,14 +262,9 @@ public class ProtocolController {
     public void saveConverterScript(
             @PathVariable("id") String id,
             @RequestBody String script) {
-        Optional<ProtocolConverter> optConverter = protocolConverterRepository.findById(id);
-        if (!optConverter.isPresent()) {
-            throw new BizException("the converter does not exists");
-        }
-        ProtocolConverter oldConverter = optConverter.get();
-        dataOwnerService.checkOwner(oldConverter);
+        getAndCheckConverter(id);
         try {
-            Path path = getConverterFilePath(id);
+            Path path = componentConfig.getConverterFilePath(id);
             File file = path.resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile();
             script = JsonUtil.parse(script, String.class);
             FileUtils.writeStringToFile(file, script, "UTF-8", false);
@@ -295,9 +275,9 @@ public class ProtocolController {
 
     @PostMapping("/deleteConverter/{id}")
     public void deleteConverter(@PathVariable("id") String id) {
-        dataOwnerService.checkOwner(protocolConverterRepository, id);
+        getAndCheckConverter(id);
         try {
-            Path path = Paths.get(String.format("%s/%s", componentDir, id))
+            Path path = Paths.get(String.format("%s/%s", componentConfig.getConverterDir(), id))
                     .toAbsolutePath().normalize();
             File file = path.toFile();
             try {
@@ -315,28 +295,21 @@ public class ProtocolController {
         }
     }
 
-    @PostMapping("/component/{id}/{state}")
-    public void startComponent(@PathVariable("id") String id,
-                               @PathVariable("state") String state) {
-        
-    }
-
-
-    @GetMapping("/registerMqtt")
-    public void registerMqtt() throws IOException {
-        MqttComponent component = new MqttComponent();
-        component.create(new CompConfig(300, "{\"port\":2883,\"ssl\":false}"));
-        ScriptConverter converter = new ScriptConverter();
-        converter.setScript(FileUtils.readFileToString(new File("/Users/sjg/home/gitee/open-source/converter.js"), "UTF-8"));
-        component.setConverter(converter);
-        componentManager.register("123", component);
-        componentManager.start("123", FileUtils.readFileToString(new File("/Users/sjg/home/gitee/open-source/component.js"), "UTF-8"));
-    }
-
-    @GetMapping("/deregisterMqtt")
-    public void deregisterMqtt() {
-        componentManager.stop("123");
-        componentManager.deRegister("123");
+    @PostMapping("/component/{id}/state/{state}")
+    public void changeComponentState(@PathVariable("id") String id,
+                                     @PathVariable("state") String state) {
+        ProtocolComponent component = getAndCheckComponent(id);
+        String converterId = component.getConverter();
+        getAndCheckConverter(converterId);
+        if (ProtocolComponent.STATE_RUNNING.equals(state)) {
+            componentManager.register(component);
+            componentManager.start(component.getId());
+            component.setState(ProtocolComponent.STATE_RUNNING);
+        } else {
+            componentManager.deRegister(id);
+            component.setState(ProtocolComponent.STATE_STOPPED);
+        }
+        protocolComponentRepository.save(component);
     }
 
 }

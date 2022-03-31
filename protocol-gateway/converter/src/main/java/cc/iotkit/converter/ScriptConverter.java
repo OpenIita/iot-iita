@@ -21,7 +21,7 @@ public class ScriptConverter implements IConverter {
 
     public void setScript(String script) {
         try {
-            scriptObj = engine.eval(script);
+            scriptObj = engine.eval(String.format("new (function () {\n%s})()", script));
         } catch (ScriptException e) {
             log.error("eval converter script error", e);
         }
