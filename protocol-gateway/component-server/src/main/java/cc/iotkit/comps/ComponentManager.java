@@ -49,10 +49,14 @@ public class ComponentManager {
 
     @PostConstruct
     public void init() {
-        List<ProtocolComponent> componentList = componentRepository.findByState(ProtocolComponent.STATE_RUNNING);
-        for (ProtocolComponent component : componentList) {
-            register(component);
-            start(component.getId());
+        try {
+            List<ProtocolComponent> componentList = componentRepository.findByState(ProtocolComponent.STATE_RUNNING);
+            for (ProtocolComponent component : componentList) {
+                register(component);
+                start(component.getId());
+            }
+        } catch (Throwable e) {
+            log.error("init protocol components error", e);
         }
     }
 
