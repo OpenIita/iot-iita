@@ -2,6 +2,7 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.exception.NotFoundException;
+import cc.iotkit.common.exception.OfflineException;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.ComponentManager;
 import cc.iotkit.converter.ThingService;
@@ -41,7 +42,7 @@ public class DeviceService {
             dataOwnerService.checkOwner(device);
         }
         if (!device.getState().isOnline()) {
-            throw new BizException("device is offline");
+            throw new OfflineException("device is offline");
         }
 
         ThingService<?> thingService = ThingService.builder()
@@ -71,7 +72,7 @@ public class DeviceService {
             dataOwnerService.checkOwner(device);
         }
         if (!device.getState().isOnline()) {
-            throw new BizException("device is offline");
+            throw new OfflineException("device is offline");
         }
 
         ThingService<?> thingService = ThingService.builder()
