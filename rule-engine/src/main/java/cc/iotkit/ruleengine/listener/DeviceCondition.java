@@ -47,13 +47,13 @@ public class DeviceCondition {
             if ("*".equals(identifier)) {
                 return true;
             }
-            Object left = parameter.get(identifier);
-            if (left == null) {
-                return false;
-            }
             //任意匹配
             if ("*".equals(comparator)) {
                 return true;
+            }
+            Object left = parameter.get(identifier);
+            if (left == null) {
+                return false;
             }
             return Expression.eval(comparator, left, value);
         }

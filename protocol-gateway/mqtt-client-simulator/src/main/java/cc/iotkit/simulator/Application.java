@@ -11,8 +11,8 @@ public class Application {
     public static void main(String[] args) throws IOException {
 
         if (args.length == 0) {
-            Mqtt.broker = "tcp://127.0.0.1:1883";
-//            Mqtt.broker = "tcp://120.76.96.206:1883";
+//            Mqtt.broker = "tcp://127.0.0.1:1883";
+            Mqtt.broker = "tcp://120.76.96.206:1883";
         } else {
             Mqtt.broker = args[0];
         }
@@ -29,6 +29,7 @@ public class Application {
             //插座
             gateway2.addSubDevice("cGCrkK7Ex4FESAwe", "ABE12300001", "S1");
             gateway2.addSubDevice("cGCrkK7Ex4FESAwe", "ABE12300002", "S1");
+            gateway2.addSubDevice("6kYp6jszrDns2yh4", "ABE12400001", "S1");
             gateway2.start();
         }).start();
 

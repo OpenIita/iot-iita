@@ -2,6 +2,8 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
+import cc.iotkit.common.utils.UniqueIdUtil;
+import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.dao.*;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeviceService;
@@ -47,6 +49,8 @@ public class DeviceController {
     @Lazy
     @Autowired
     private DevicePropertyDao devicePropertyDao;
+    @Autowired
+    private DeviceBehaviourService behaviourService;
 
     @PostMapping("/{deviceId}/service/{service}")
     public String invokeService(@PathVariable("deviceId") String deviceId,
@@ -174,5 +178,18 @@ public class DeviceController {
         DeviceInfo device = deviceRepository.findByDeviceId(deviceId);
         dataOwnerService.checkOwner(device);
         deviceDao.updateTag(deviceId, tag);
+    }
+
+    @PostMapping("/{deviceId}/simulateSend")
+    public void simulateSend(
+            @PathVariable("deviceId") String deviceId,
+            @RequestBody ThingModelMessage message) {
+        DeviceInfo device = deviceRepository.findByDeviceId(deviceId);
+        dataOwnerService.checkOwner(device);
+
+        message.setMid(UniqueIdUtil.newRequestId());
+        message.setOccurred(System.currentTimeMillis());
+        message.setTime(System.currentTimeMillis());
+        behaviourService.reportMessage(message);
     }
 }
