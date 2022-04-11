@@ -18,13 +18,13 @@
 
 #### 安装教程
 
-见：https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《iot平台帮助文档》
-链接有效期至 2022-03-31 11:36:32
+见：https://ztktkv.yuque.com/docs/share/b32da919-0108-4112-9406-fe5c6672e0d7?# 《安装和配置》
+链接有效期至 2022-04-08 20:20:01
 
 #### 使用说明
 
 1.  技术文档
-    https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed
+    邀你加入「iot平台技术文档」知识库: https://ztktkv.yuque.com/g/ztktkv/gb3v6g/collaborator/join?token=zz5PUmXzGQqc4h9t# (只读成员)
 2.  系统操作文档
 
 #### 待办事项
