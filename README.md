@@ -4,7 +4,7 @@
 此仓库为奇特物联(iotkit)物联网平台开源项目。
 奇特物联是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能（如多协议设备接入、规则引擎、云云对接等）, 能帮助你快速搭建自己的物联网相关业务平台。
 
-系统包含了设备接入、协议网关、规则引擎、第三方接入服务等模块。
+系统包含了品类、物模型、消息转换、通讯组件、设备管理、规则引擎、数据流转、数据可视化、报警中心等模块。
 
  **前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
 
@@ -13,7 +13,7 @@
 
 #### 软件架构
 软件架构说明
-本系统采用springboot、mongodb、mqtt（EMQX）、keycloak等框架和第三方软件
+本系统采用springboot、mongodb、redis、elasticsearch、pulsar、keycloak等框架和第三方软件
 
 
 #### 安装教程
