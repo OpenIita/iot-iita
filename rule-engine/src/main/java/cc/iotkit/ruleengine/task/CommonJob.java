@@ -2,7 +2,6 @@ package cc.iotkit.ruleengine.task;
 
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.TaskInfo;
-import cc.iotkit.ruleengine.action.ActionExecutorManager;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -11,6 +11,8 @@ public class DeviceCondition {
 
     private String type;
 
+    private String device;
+
     private String identifier;
 
     private List<Parameter> parameters;
@@ -41,9 +43,17 @@ public class DeviceCondition {
         private String comparator;
 
         public boolean matches(Map<?, ?> parameter) {
+            //任意匹配
+            if ("*".equals(identifier)) {
+                return true;
+            }
             Object left = parameter.get(identifier);
             if (left == null) {
                 return false;
+            }
+            //任意匹配
+            if ("*".equals(comparator)) {
+                return true;
             }
             return Expression.eval(comparator, left, value);
         }

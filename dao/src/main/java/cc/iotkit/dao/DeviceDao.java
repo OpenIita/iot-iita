@@ -1,62 +1,67 @@
 package cc.iotkit.dao;
 
-import cc.iotkit.common.Constants;
+import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-import static org.springframework.data.mongodb.core.query.Query.query;
+import java.util.Map;
 
 @Repository
-public class DeviceDao extends BaseDao<DeviceInfo> {
+public class DeviceDao {
 
     @Autowired
-    private DeviceRepository deviceRepository;
+    private MongoTemplate mongoTemplate;
 
-    @Autowired
-    public DeviceDao(MongoTemplate mongoTemplate) {
-        super(mongoTemplate, DeviceInfo.class);
+    public Paging<DeviceInfo> find(Criteria condition, int size, int page) {
+        Query query = Query.query(condition);
+        return new Paging<>(
+                mongoTemplate.count(query, DeviceInfo.class),
+                mongoTemplate.find(
+                        query.with(PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))))
+                        , DeviceInfo.class)
+        );
     }
 
-    public void addDevice(DeviceInfo device) {
-        device.setCreateAt(System.currentTimeMillis());
-        mongoTemplate.insert(device);
-    }
-
-    public void updateDevice(DeviceInfo device) {
-        if (device.getDeviceId() == null) {
+    /**
+     * 更新设备属性
+     */
+    public void updateProperties(String deviceId, Map<String, Object> properties) {
+        if (properties == null) {
             return;
         }
-        mongoTemplate.updateFirst(query(where("deviceId").is(device.getDeviceId())),
-                DaoTool.update(device), DeviceInfo.class);
-    }
-
-    public void updateDeviceByPkAndDn(DeviceInfo device) {
-        if (device.getProductKey() == null || device.getDeviceName() == null) {
-            return;
+        Query query = Query.query(new Criteria().and("deviceId").is(deviceId));
+        Update update = new Update();
+        for (String key : properties.keySet()) {
+            update.set("property." + key, properties.get(key));
         }
-        mongoTemplate.updateFirst(query(where("productKey").is(device.getProductKey()).
-                        and("deviceName").is(device.getDeviceName())),
-                DaoTool.update(device), DeviceInfo.class);
+        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
     }
 
-    @Cacheable(value = "deviceInfoCache", key = "#pk+'_'+#dn")
-    public DeviceInfo getByPkAndDn(String pk, String dn) {
-        Query query = query(where("productKey").is(pk).and("deviceName").is(dn));
-        return mongoTemplate.findOne(query, DeviceInfo.class);
+    /**
+     * 更新设备标签
+     */
+    public void updateTag(String deviceId, DeviceInfo.Tag tag) {
+        Query query = Query.query(new Criteria().and("deviceId").is(deviceId));
+        Update update = new Update();
+        update.set("tag." + tag.getId(), tag);
+        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
     }
 
-    public DeviceInfo getByDeviceId(String deviceId) {
-        Query query = query(where("deviceId").is(deviceId));
-        return mongoTemplate.findOne(query, DeviceInfo.class);
+    /**
+     * 设置设备标签值为空
+     */
+    public void setTagNull(String deviceId, String tagId) {
+        Query query = Query.query(new Criteria().and("deviceId").is(deviceId));
+        Update update = new Update();
+        update.set("tag." + tagId, null);
+        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
     }
 
-    @Cacheable(value = Constants.DEVICE_CACHE, key = "#deviceId")
-    public DeviceInfo get(String deviceId) {
-        return deviceRepository.findById(deviceId).orElse(new DeviceInfo());
-    }
 }

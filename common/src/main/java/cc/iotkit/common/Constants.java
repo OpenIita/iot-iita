@@ -2,7 +2,7 @@ package cc.iotkit.common;
 
 public interface Constants {
 
-    String MQTT_SECRET = "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU";
+    String PRODUCT_SECRET = "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU";
 
     String ACCOUNT_SECRET = "3n1z33kzvpgz1foijpkepyd3e8tw84us";
 
@@ -39,6 +39,11 @@ public interface Constants {
     String ROLE_ADMIN = "iot_admin";
 
     /**
+     * 可写角色
+     */
+    String ROLE_WRITE = "iot_write";
+
+    /**
      * 管理系统用户角色
      */
     String ROLE_SYSTEM = "iot_system_user";
@@ -46,16 +51,26 @@ public interface Constants {
     /**
      * C端用户角色
      */
-    String ROLE_CLIENT= "iot_client_user";
+    String ROLE_CLIENT = "iot_client_user";
 
     /**
      * C端用户默认密码
      */
-    String PWD_CLIENT_USER="c123456";
+    String PWD_CLIENT_USER = "c123456";
 
     /**
      * 系统用户默认密码
      */
-    String PWD_SYSTEM_USER="s123456";
+    String PWD_SYSTEM_USER = "s123456";
+
+    /**
+     * 设备原始上报消息的topic
+     */
+    String DEVICE_RAW_MESSAGE_TOPIC = "device_raw";
+
+    /**
+     * 设备物模型消息的topic
+     */
+    String THING_MODEL_MESSAGE_TOPIC = "device_thing";
 
 }

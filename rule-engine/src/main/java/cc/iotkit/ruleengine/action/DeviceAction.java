@@ -1,7 +1,6 @@
 package cc.iotkit.ruleengine.action;
 
-import cc.iotkit.deviceapi.IDeviceService;
-import cc.iotkit.deviceapi.Service;
+import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,15 +10,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class DeviceAction implements Action<Service> {
+public class DeviceAction implements Action<DeviceActionService.Service> {
 
     public static final String TYPE = "device";
 
     private String type;
 
-    private List<Service> services;
+    private List<DeviceActionService.Service> services;
 
-    private IDeviceService deviceService;
+    private DeviceActionService deviceActionService;
 
     @Override
     public String getType() {
@@ -27,9 +26,9 @@ public class DeviceAction implements Action<Service> {
     }
 
     @Override
-    public void execute() {
-        for (Service service : services) {
-            deviceService.invoke(service);
+    public void execute(ThingModelMessage msg) {
+        for (DeviceActionService.Service service : services) {
+            deviceActionService.invoke(service);
         }
     }
 

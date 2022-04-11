@@ -1,5 +1,6 @@
 package cc.iotkit.ruleengine.listener;
 
+import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,8 +15,6 @@ public class DeviceListener implements Listener<DeviceCondition> {
 
     private String type;
 
-    private String topic;
-
     private List<DeviceCondition> conditions;
 
     @Override
@@ -24,21 +23,16 @@ public class DeviceListener implements Listener<DeviceCondition> {
     }
 
     @Override
-    public boolean execute(String topic, Map<?, ?> params) {
-        String[] parts = topic.split("/");
-        if (parts.length < 2) {
-            log.error("topic:{} is not Satisfiable", topic);
-            return false;
-        }
-
-        String identifier = parts[parts.length - 1];
+    public boolean execute(ThingModelMessage message) {
+        String identifier = message.getIdentifier();
+        Map<String, Object> mapData = message.dataToMap();
         for (DeviceCondition condition : this.conditions) {
-            if (!condition.matches(condition.getType(), identifier, params)) {
-                return false;
+            if (condition.matches(message.getType(), identifier, mapData)) {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
 }

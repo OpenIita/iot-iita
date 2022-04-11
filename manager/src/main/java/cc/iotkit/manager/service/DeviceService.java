@@ -1,21 +1,17 @@
 package cc.iotkit.manager.service;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.exception.NotFoundException;
-import cc.iotkit.dao.DeviceDao;
-import cc.iotkit.dao.DeviceEventRepository;
+import cc.iotkit.common.utils.UniqueIdUtil;
+import cc.iotkit.comps.ComponentManager;
+import cc.iotkit.converter.ThingService;
 import cc.iotkit.dao.DeviceRepository;
-import cc.iotkit.dao.ThingModelRepository;
-import cc.iotkit.deviceapi.IDeviceManager;
 import cc.iotkit.model.device.DeviceInfo;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -23,53 +19,73 @@ import java.util.Map;
 public class DeviceService {
 
     @Autowired
-    private DeviceDao deviceDao;
-    @Autowired
     private DeviceRepository deviceRepository;
-    @Autowired
-    private ThingModelRepository thingModelRepository;
-    @Autowired
-    private ThingModelService thingModelService;
-    @Autowired
-    private DeviceEventRepository deviceEventRepository;
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
-    private IDeviceManager deviceManager;
+    private ComponentManager componentManager;
+    @Autowired
+    private ThingModelService thingModelService;
 
-    public String invokeService(String deviceId, String service, Map<String, Object> args) {
+    public String invokeService(String deviceId, String service,
+                                Map<String, Object> args) {
+        return invokeService(deviceId, service, args, true);
+    }
+
+    public String invokeService(String deviceId, String service,
+                                Map<String, Object> args, boolean checkOwner) {
         DeviceInfo device = deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new NotFoundException("device not found by deviceId"));
 
-        dataOwnerService.checkOwner(device);
-        return this.deviceManager.invokeService(deviceId, service, args);
+        if (checkOwner) {
+            dataOwnerService.checkOwner(device);
+        }
+        if (!device.getState().isOnline()) {
+            throw new BizException("device is offline");
+        }
+
+        ThingService<?> thingService = ThingService.builder()
+                .mid(UniqueIdUtil.newRequestId())
+                .productKey(device.getProductKey())
+                .deviceName(device.getDeviceName())
+                .type(ThingModelMessage.TYPE_SERVICE)
+                .identifier(service)
+                .params(args)
+                .build();
+        thingModelService.parseParams(thingService);
+
+        componentManager.send(thingService);
+        return thingService.getMid();
     }
 
     public String setProperty(String deviceId, Map<String, Object> properties) {
+        return setProperty(deviceId, properties, true);
+    }
+
+    public String setProperty(String deviceId, Map<String, Object> properties,
+                              boolean checkOwner) {
         DeviceInfo device = deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new NotFoundException("device not found by deviceId"));
 
-        dataOwnerService.checkOwner(device);
-        return deviceManager.setProperty(deviceId, properties);
+        if (checkOwner) {
+            dataOwnerService.checkOwner(device);
+        }
+        if (!device.getState().isOnline()) {
+            throw new BizException("device is offline");
+        }
+
+        ThingService<?> thingService = ThingService.builder()
+                .mid(UniqueIdUtil.newRequestId())
+                .productKey(device.getProductKey())
+                .deviceName(device.getDeviceName())
+                .type(ThingModelMessage.TYPE_PROPERTY)
+                .identifier("set")
+                .params(properties)
+                .build();
+        thingModelService.parseParams(thingService);
+
+        componentManager.send(thingService);
+        return thingService.getMid();
     }
 
-    public void unbindDevice(String deviceId) {
-        deviceManager.unbind(deviceId);
-    }
-
-    public List<DeviceInfo> findDevices(DeviceInfo form) {
-        return deviceRepository.findAll(Example.of(form));
-    }
-
-    public long count(DeviceInfo form) {
-        return deviceRepository.count(Example.of(form));
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    private static class CmdRequest {
-        private String id;
-        private Object params;
-    }
 }

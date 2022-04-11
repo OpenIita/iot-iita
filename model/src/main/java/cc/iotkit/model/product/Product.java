@@ -18,8 +18,6 @@ public class Product implements Owned {
     @Id
     private String id;
 
-    private String code;
-
     private String name;
 
     private String category;

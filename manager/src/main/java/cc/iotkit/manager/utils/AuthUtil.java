@@ -34,4 +34,8 @@ public class AuthUtil {
         return AuthUtil.getUserRoles().contains(Constants.ROLE_ADMIN);
     }
 
+    public static boolean hasWriteRole(){
+        return AuthUtil.getUserRoles().contains(Constants.ROLE_WRITE);
+    }
+
 }

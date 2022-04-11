@@ -24,6 +24,11 @@ public class AligenieDevice {
     private String uid;
 
     /**
+     * 用户token
+     */
+    private String token;
+
+    /**
      * 空间中的设备id
      */
     private String deviceId;

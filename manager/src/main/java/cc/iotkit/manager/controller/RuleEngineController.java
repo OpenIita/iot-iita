@@ -6,20 +6,18 @@ import cc.iotkit.dao.*;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.Paging;
-import cc.iotkit.model.rule.SceneInfo;
-import cc.iotkit.model.rule.SceneLog;
+import cc.iotkit.model.rule.RuleInfo;
+import cc.iotkit.model.rule.RuleLog;
 import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.rule.TaskLog;
-import cc.iotkit.ruleengine.scene.SceneManager;
+import cc.iotkit.ruleengine.rule.RuleManager;
 import cc.iotkit.ruleengine.task.TaskManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,13 +33,11 @@ public class RuleEngineController {
     private TaskInfoRepository taskInfoRepository;
 
     @Autowired
-    private SceneInfoRepository sceneInfoRepository;
+    private RuleInfoRepository ruleInfoRepository;
 
+    @Lazy
     @Autowired
-    private SceneLogRepository sceneLogRepository;
-
-    @Autowired
-    private SceneLogDao sceneLogDao;
+    private RuleLogRepository ruleLogRepository;
 
     @Autowired
     private DataOwnerService dataOwnerService;
@@ -50,107 +46,111 @@ public class RuleEngineController {
     private TaskManager taskManager;
 
     @Autowired
-    private SceneManager sceneManager;
+    private RuleManager ruleManager;
 
-    @Autowired
-    private TaskLogDao taskLogDao;
-
+    @Lazy
     @Autowired
     private TaskLogRepository taskLogRepository;
 
-    @PostMapping("/scenes")
-    public List<SceneInfo> scenes() {
-        return sceneInfoRepository.findAll(Example.of(dataOwnerService
-                .wrapExample(new SceneInfo()))
-        );
-    }
-
-    @PostMapping("/saveScene")
-    public void saveScene(@RequestBody SceneInfo scene) {
-        if (StringUtils.isBlank(scene.getId())) {
-            scene.setId(UUID.randomUUID().toString());
-            scene.setState(SceneInfo.STATE_STOPPED);
-            scene.setCreateAt(System.currentTimeMillis());
-            scene.setUid(AuthUtil.getUserId());
-            sceneInfoRepository.save(scene);
-            sceneManager.add(scene);
-        } else {
-            Optional<SceneInfo> oldScene = sceneInfoRepository.findById(scene.getId());
-            if (!oldScene.isPresent()) {
-                throw new BizException("Scene does not exist");
-            }
-            SceneInfo sceneInfo = oldScene.get();
-            if (SceneInfo.STATE_RUNNING.equals(sceneInfo.getState())) {
-                throw new BizException("Scene is running");
-            }
-
-            dataOwnerService.checkOwner(sceneInfo);
-
-            sceneInfo.setListeners(scene.getListeners());
-            sceneInfo.setFilters(scene.getFilters());
-            sceneInfo.setActions(scene.getActions());
-            sceneInfo.setName(scene.getName());
-            sceneInfo.setDesc(scene.getDesc());
-
-            sceneInfoRepository.save(sceneInfo);
-        }
-    }
-
-    @PostMapping("/scene/{sceneId}/pause")
-    public void pauseScene(@PathVariable("sceneId") String sceneId) {
-        Optional<SceneInfo> sceneOpt = sceneInfoRepository.findById(sceneId);
-        if (!sceneOpt.isPresent()) {
-            throw new BizException("Scene does not exist");
-        }
-        SceneInfo sceneInfo = sceneOpt.get();
-        dataOwnerService.checkOwner(sceneInfo);
-        sceneInfo.setState(SceneInfo.STATE_STOPPED);
-        sceneInfoRepository.save(sceneInfo);
-        sceneManager.pause(sceneInfo.getId());
-    }
-
-    @PostMapping("/scene/{sceneId}/resume")
-    public void resumeScene(@PathVariable("sceneId") String sceneId) {
-        Optional<SceneInfo> sceneOpt = sceneInfoRepository.findById(sceneId);
-        if (!sceneOpt.isPresent()) {
-            throw new BizException("Scene does not exist");
-        }
-        SceneInfo sceneInfo = sceneOpt.get();
-        dataOwnerService.checkOwner(sceneInfo);
-        sceneInfo.setState(SceneInfo.STATE_RUNNING);
-        sceneInfoRepository.save(sceneInfo);
-        sceneManager.resume(sceneInfo);
-    }
-
-    @DeleteMapping("/scene/{sceneId}/delete")
-    public void deleteScene(@PathVariable("sceneId") String sceneId) {
-        Optional<SceneInfo> sceneOpt = sceneInfoRepository.findById(sceneId);
-        if (!sceneOpt.isPresent()) {
-            throw new BizException("Scene does not exist");
-        }
-        SceneInfo sceneInfo = sceneOpt.get();
-        dataOwnerService.checkOwner(sceneInfo);
-        sceneInfoRepository.delete(sceneInfo);
-        sceneManager.remove(sceneInfo.getId());
-        sceneLogDao.deleteLogs(sceneId);
-    }
-
-    @PostMapping("/scene/{sceneId}/logs/{size}/{page}")
-    public Paging<SceneLog> getSceneLogs(
-            @PathVariable("sceneId") String sceneId,
+    @PostMapping("/rules/{type}/{size}/{page}")
+    public Paging<RuleInfo> rules(
+            @PathVariable("type") String type,
             @PathVariable("size") int size,
             @PathVariable("page") int page
     ) {
-        SceneLog sceneLog=new SceneLog();
-        sceneLog.setSceneId(sceneId);
-        Page<SceneLog> sceneLogs = sceneLogRepository.findAll(Example.of(sceneLog),
-                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("logAt"))));
-        return new Paging<>(sceneLogs.getTotalElements(), sceneLogs.getContent());
+        RuleInfo ruleInfo = new RuleInfo();
+        ruleInfo.setType(type);
+        Page<RuleInfo> rules = ruleInfoRepository.findAll(Example.of(dataOwnerService
+                .wrapExample(ruleInfo)), Pageable.ofSize(size).withPage(page - 1));
+        return new Paging<>(rules.getTotalElements(), rules.getContent());
     }
 
-    @DeleteMapping("/scene/{sceneId}/logs/clear")
-    public void clearSceneLogs(@PathVariable("sceneId") String sceneId) {
-        sceneLogDao.deleteLogs(sceneId);
+    @PostMapping("/rule/save")
+    public void saveRule(@RequestBody RuleInfo rule) {
+        if (StringUtils.isBlank(rule.getId())) {
+            rule.setId(UUID.randomUUID().toString());
+            rule.setState(RuleInfo.STATE_STOPPED);
+            rule.setCreateAt(System.currentTimeMillis());
+            rule.setUid(AuthUtil.getUserId());
+            ruleInfoRepository.save(rule);
+            ruleManager.add(rule);
+        } else {
+            Optional<RuleInfo> oldRule = ruleInfoRepository.findById(rule.getId());
+            if (!oldRule.isPresent()) {
+                throw new BizException("Rule does not exist");
+            }
+            RuleInfo ruleInfo = oldRule.get();
+            if (RuleInfo.STATE_RUNNING.equals(ruleInfo.getState())) {
+                throw new BizException("Rule is running");
+            }
+
+            dataOwnerService.checkOwner(ruleInfo);
+
+            ruleInfo.setListeners(rule.getListeners());
+            ruleInfo.setFilters(rule.getFilters());
+            ruleInfo.setActions(rule.getActions());
+            ruleInfo.setName(rule.getName());
+            ruleInfo.setDesc(rule.getDesc());
+
+            ruleInfoRepository.save(ruleInfo);
+        }
+    }
+
+    @PostMapping("/rule/{ruleId}/pause")
+    public void pauseRule(@PathVariable("ruleId") String ruleId) {
+        Optional<RuleInfo> ruleOpt = ruleInfoRepository.findById(ruleId);
+        if (!ruleOpt.isPresent()) {
+            throw new BizException("Rule does not exist");
+        }
+        RuleInfo ruleInfo = ruleOpt.get();
+        dataOwnerService.checkOwner(ruleInfo);
+        ruleInfo.setState(RuleInfo.STATE_STOPPED);
+        ruleInfoRepository.save(ruleInfo);
+        ruleManager.pause(ruleInfo.getId());
+    }
+
+    @PostMapping("/rule/{ruleId}/resume")
+    public void resumeRule(@PathVariable("ruleId") String ruleId) {
+        Optional<RuleInfo> ruleOpt = ruleInfoRepository.findById(ruleId);
+        if (!ruleOpt.isPresent()) {
+            throw new BizException("Rule does not exist");
+        }
+        RuleInfo ruleInfo = ruleOpt.get();
+        dataOwnerService.checkOwner(ruleInfo);
+        ruleInfo.setState(RuleInfo.STATE_RUNNING);
+        ruleInfoRepository.save(ruleInfo);
+        ruleManager.resume(ruleInfo);
+    }
+
+    @DeleteMapping("/rule/{ruleId}/delete")
+    public void deleteRule(@PathVariable("ruleId") String ruleId) {
+        Optional<RuleInfo> ruleOpt = ruleInfoRepository.findById(ruleId);
+        if (!ruleOpt.isPresent()) {
+            throw new BizException("Rule does not exist");
+        }
+        RuleInfo ruleInfo = ruleOpt.get();
+        dataOwnerService.checkOwner(ruleInfo);
+        ruleInfoRepository.delete(ruleInfo);
+        ruleManager.remove(ruleInfo.getId());
+        ruleLogRepository.deleteByRuleId(ruleId);
+    }
+
+    @PostMapping("/rule/{ruleId}/logs/{size}/{page}")
+    public Paging<RuleLog> getRuleLogs(
+            @PathVariable("ruleId") String ruleId,
+            @PathVariable("size") int size,
+            @PathVariable("page") int page
+    ) {
+        RuleLog ruleLog = new RuleLog();
+        ruleLog.setRuleId(ruleId);
+        Page<RuleLog> ruleLogs = ruleLogRepository.findByRuleId(ruleId,
+                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("logAt"))));
+        return new Paging<>(ruleLogs.getTotalElements(), ruleLogs.getContent());
+    }
+
+    @DeleteMapping("/rule/{ruleId}/logs/clear")
+    public void clearRuleLogs(@PathVariable("ruleId") String ruleId) {
+        ruleLogRepository.deleteByRuleId(ruleId);
     }
 
     @PostMapping("/tasks")
@@ -230,7 +230,7 @@ public class RuleEngineController {
         dataOwnerService.checkOwner(taskInfo);
         taskManager.deleteTask(taskId, "delete by " + AuthUtil.getUserId());
         taskInfoRepository.deleteById(taskId);
-        taskLogDao.deleteLogs(taskId);
+        taskLogRepository.deleteByTaskId(taskId);
     }
 
     @PostMapping("/task/{taskId}/logs/{size}/{page}")
@@ -241,14 +241,14 @@ public class RuleEngineController {
     ) {
         TaskLog taskLog = new TaskLog();
         taskLog.setTaskId(taskId);
-        Page<TaskLog> taskLogs = taskLogRepository.findAll(Example.of(taskLog),
+        Page<TaskLog> taskLogs = taskLogRepository.findByTaskId(taskId,
                 PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("logAt"))));
         return new Paging<>(taskLogs.getTotalElements(), taskLogs.getContent());
     }
 
     @DeleteMapping("/task/{taskId}/logs/clear")
     public void clearTaskLogs(@PathVariable("taskId") String taskId) {
-        taskLogDao.deleteLogs(taskId);
+        taskLogRepository.deleteByTaskId(taskId);
     }
 
 }

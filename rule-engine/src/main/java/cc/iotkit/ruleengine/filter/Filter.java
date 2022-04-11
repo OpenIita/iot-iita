@@ -1,5 +1,7 @@
 package cc.iotkit.ruleengine.filter;
 
+import cc.iotkit.model.device.message.ThingModelMessage;
+
 import java.util.List;
 
 /**
@@ -11,5 +13,7 @@ public interface Filter<T> {
 
     List<T> getConditions();
 
-    boolean execute();
+    void init();
+
+    boolean execute(ThingModelMessage msg);
 }

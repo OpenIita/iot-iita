@@ -6,8 +6,8 @@ import cc.iotkit.dao.ProductRepository;
 import cc.iotkit.dao.ThingModelRepository;
 import cc.iotkit.manager.config.AliyunConfig;
 import cc.iotkit.manager.service.DataOwnerService;
+import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.Category;
-import cc.iotkit.model.PagingData;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ThingModel;
 import com.aliyun.oss.OSS;
@@ -42,15 +42,14 @@ public class ProductController {
     private OSS ossClient;
 
     @PostMapping("/list")
-    public PagingData<Product> getProducts(Product form) {
+    public Paging<Product> getProducts(Product form) {
         form = dataOwnerService.wrapExample(form);
-        return new PagingData<>(productRepository.count(Example.of(form)),
+        return new Paging<>(productRepository.count(Example.of(form)),
                 productRepository.findAll(Example.of(form)));
     }
 
     @PostMapping("/save")
     public void save(Product product) {
-        product.setId(product.getCode());
         dataOwnerService.checkOwnerSave(productRepository, product);
 
         if (product.getCreateAt() == null) {
@@ -66,19 +65,19 @@ public class ProductController {
 
     @GetMapping("/thingModel/{productKey}")
     public ThingModel getThingModel(@PathVariable("productKey") String productKey) {
-        productKey = getProduct(productKey).getCode();
+        productKey = getProduct(productKey).getId();
         return thingModelRepository.findById(productKey).orElse(new ThingModel(productKey));
     }
 
     @PostMapping("/thingModel/save")
     public void saveThingModel(String productKey, String model) {
-        productKey = getProduct(productKey).getCode();
+        productKey = getProduct(productKey).getId();
         thingModelRepository.save(new ThingModel(productKey, productKey, JsonUtil.parse(model, ThingModel.Model.class)));
     }
 
     @DeleteMapping("/thingModel/{productKey}")
     public void deleteThingModel(String productKey) {
-        productKey = getProduct(productKey).getCode();
+        productKey = getProduct(productKey).getId();
         thingModelRepository.deleteById(productKey);
     }
 
@@ -104,7 +103,7 @@ public class ProductController {
     @PostMapping("/uploadImg/{productKey}")
     public String uploadImg(@PathVariable("productKey") String productKey,
                             @RequestParam("file") MultipartFile file) {
-        productKey = getProduct(productKey).getCode();
+        productKey = getProduct(productKey).getId();
 
         String fileName = file.getOriginalFilename();
         String end = fileName.substring(fileName.lastIndexOf("."));

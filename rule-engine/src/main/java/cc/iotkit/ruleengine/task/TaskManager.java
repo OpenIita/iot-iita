@@ -2,7 +2,7 @@ package cc.iotkit.ruleengine.task;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.dao.TaskInfoRepository;
-import cc.iotkit.dao.TaskLogDao;
+import cc.iotkit.dao.TaskLogRepository;
 import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.rule.TaskLog;
 import lombok.SneakyThrows;
@@ -12,6 +12,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,8 +32,9 @@ public class TaskManager implements ApplicationContextAware {
     @Autowired
     private TaskInfoRepository taskInfoRepository;
 
+    @Lazy
     @Autowired
-    private TaskLogDao taskLogDao;
+    private TaskLogRepository taskLogRepository;
 
     public TaskManager() {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
@@ -205,7 +207,7 @@ public class TaskManager implements ApplicationContextAware {
     }
 
     public void addLog(String taskId, boolean success, String content) {
-        taskLogDao.save(TaskLog.builder()
+        taskLogRepository.save(TaskLog.builder()
                 .id(UUID.randomUUID().toString())
                 .taskId(taskId)
                 .success(success)

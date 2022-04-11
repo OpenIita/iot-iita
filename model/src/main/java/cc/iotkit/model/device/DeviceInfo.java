@@ -37,17 +37,35 @@ public class DeviceInfo implements Owned {
 
     private State state = new State();
 
-    private Map<String,Object> property;
+    private Map<String, Object> property;
+
+    /**
+     * 设备标签
+     */
+    private Map<String, Tag> tag;
 
     private Long createAt;
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class State {
 
-        private Boolean online;
+        private boolean online;
 
         private Long onlineTime;
 
         private Long offlineTime;
+
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Tag {
+        private String id;
+        private String name;
+        private Object value;
+    }
+
 }

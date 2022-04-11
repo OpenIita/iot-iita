@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -99,6 +100,21 @@ public class KeycloakAdminService {
             userRepresentation.setRealmRoles(user.getRoles());
         }
         userResource.update(userRepresentation);
+    }
+
+    public UserInfo getUser(String uid) {
+        Keycloak keycloak = getKeycloak();
+        List<UserRepresentation> users = keycloak.realm(realm)
+                .users().search(uid);
+        if (users.size() == 0) {
+            return null;
+        }
+        UserRepresentation user = users.get(0);
+
+        return UserInfo.builder()
+                .id(user.getId())
+                .uid(uid)
+                .build();
     }
 
     public void resetUserPwd(String id, String pwd) {

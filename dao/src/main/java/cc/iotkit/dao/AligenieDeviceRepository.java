@@ -15,4 +15,6 @@ public interface AligenieDeviceRepository extends MongoRepository<AligenieDevice
 
     AligenieDevice findByUidAndDeviceId(String uid, String deviceId);
 
+    List<AligenieDevice> findByDeviceId(String deviceId);
+
 }

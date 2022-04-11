@@ -7,11 +7,11 @@ import cc.iotkit.dao.AligenieDeviceRepository;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.KeycloakAdminService;
+import cc.iotkit.manager.service.PulsarAdminService;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Example;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +29,12 @@ public class UserInfoController {
     @Autowired
     private UserInfoRepository userInfoRepository;
     @Autowired
+    private PulsarAdminService pulsarAdminService;
+    @Autowired
     private AligenieDeviceRepository aligenieDeviceRepository;
     @Autowired
     private DataOwnerService ownerService;
+
 
     /**
      * 平台用户列表
@@ -39,8 +42,7 @@ public class UserInfoController {
     @PreAuthorize("hasRole('iot_admin')")
     @GetMapping("/platform/users")
     public List<UserInfo> getPlatformUsers() {
-        return userInfoRepository.findAll(Example.of(UserInfo.builder()
-                .type(UserInfo.USER_TYPE_PLATFORM).build()));
+        return userInfoRepository.findByType(UserInfo.USER_TYPE_PLATFORM);
     }
 
     /**
@@ -48,13 +50,26 @@ public class UserInfoController {
      */
     @PostMapping("/platform/user/add")
     public void addPlatformUser(@RequestBody UserInfo user) {
-        user.setType(UserInfo.USER_TYPE_PLATFORM);
-        user.setOwnerId(AuthUtil.getUserId());
-        user.setRoles(Collections.singletonList(Constants.ROLE_SYSTEM));
-        user.setCreateAt(System.currentTimeMillis());
-        String uid = keycloakAdminService.createUser(user, Constants.PWD_SYSTEM_USER);
-        user.setId(uid);
-        userInfoRepository.save(user);
+        try {
+            user.setId(UUID.randomUUID().toString());
+            user.setType(UserInfo.USER_TYPE_PLATFORM);
+            user.setOwnerId(AuthUtil.getUserId());
+            user.setRoles(Arrays.asList(Constants.ROLE_SYSTEM));
+            user.setCreateAt(System.currentTimeMillis());
+            UserInfo keycloakUser = keycloakAdminService.getUser(user.getUid());
+            if (keycloakUser != null) {
+                user.setId(keycloakUser.getId());
+                keycloakAdminService.updateUser(user);
+            } else {
+                keycloakAdminService.createUser(user, Constants.PWD_SYSTEM_USER);
+            }
+            if (!pulsarAdminService.tenantExists(user.getUid())) {
+                pulsarAdminService.createTenant(user.getUid());
+            }
+            userInfoRepository.save(user);
+        } catch (Throwable e) {
+            throw new BizException("add platform user error", e);
+        }
     }
 
     /**
@@ -62,11 +77,7 @@ public class UserInfoController {
      */
     @GetMapping("/client/users")
     public List<UserInfo> clientUsers() {
-        return userInfoRepository.findAll(Example.of(
-                UserInfo.builder()
-                        .type(UserInfo.USER_TYPE_CLIENT)
-                        .ownerId(AuthUtil.getUserId())
-                        .build()));
+        return userInfoRepository.findByTypeAndOwnerId(UserInfo.USER_TYPE_CLIENT, AuthUtil.getUserId());
     }
 
     /**

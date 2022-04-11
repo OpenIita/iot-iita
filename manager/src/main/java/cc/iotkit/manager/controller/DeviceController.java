@@ -1,26 +1,28 @@
 package cc.iotkit.manager.controller;
 
-import cc.iotkit.dao.DeviceDao;
-import cc.iotkit.dao.DeviceEventDao;
-import cc.iotkit.dao.DeviceEventRepository;
-import cc.iotkit.dao.DeviceRepository;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.utils.DeviceUtil;
+import cc.iotkit.dao.*;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.manager.utils.AuthUtil;
-import cc.iotkit.model.device.message.DeviceEvent;
+import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceInfo;
-import cc.iotkit.model.PagingData;
+import cc.iotkit.model.device.message.DeviceProperty;
+import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ThingModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -32,15 +34,19 @@ public class DeviceController {
     @Autowired
     private DeviceRepository deviceRepository;
     @Autowired
-    private DeviceEventRepository deviceEventRepository;
-    @Autowired
-    private DeviceEventDao deviceEventDao;
+    private ProductRepository productRepository;
     @Autowired
     private DeviceDao deviceDao;
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
     private ProductController productController;
+    @Lazy
+    @Autowired
+    private ThingModelMessageDao thingModelMessageDao;
+    @Lazy
+    @Autowired
+    private DevicePropertyDao devicePropertyDao;
 
     @PostMapping("/{deviceId}/service/{service}")
     public String invokeService(@PathVariable("deviceId") String deviceId,
@@ -49,22 +55,23 @@ public class DeviceController {
         if (StringUtils.isBlank(deviceId) || StringUtils.isBlank(service)) {
             throw new RuntimeException("deviceId/service is blank.");
         }
-
+        dataOwnerService.checkWriteRole();
         return deviceService.invokeService(deviceId, service, args);
     }
 
     @PostMapping("/{deviceId}/service/property/set")
     public String setProperty(@PathVariable("deviceId") String deviceId,
                               @RequestBody Map<String, Object> args) {
+        dataOwnerService.checkWriteRole();
         return deviceService.setProperty(deviceId, args);
     }
 
     @PostMapping("/list")
-    public PagingData<DeviceInfo> getDevices(int page,
-                                             int size,
-                                             String pk,
-                                             Boolean online,
-                                             String dn) {
+    public Paging<DeviceInfo> getDevices(int page,
+                                         int size,
+                                         String pk,
+                                         Boolean online,
+                                         String dn) {
         Criteria condition = new Criteria();
         if (!AuthUtil.isAdmin()) {
             condition.and("uid").is(AuthUtil.getUserId());
@@ -78,8 +85,27 @@ public class DeviceController {
         if (online != null) {
             condition.and("state.online").is(online);
         }
-        return new PagingData<>(deviceDao.count(condition),
-                deviceDao.find(condition, (page - 1) * size, size, Sort.Order.desc("createAt")));
+
+        return deviceDao.find(condition, size, page);
+    }
+
+    @PostMapping("/create")
+    public void createDevice(String productKey, String deviceName) {
+        Optional<Product> productOpt = productRepository.findById(productKey);
+        if (!productOpt.isPresent()) {
+            throw new BizException("the product does not exist");
+        }
+
+        DeviceInfo device = new DeviceInfo();
+        device.setId(DeviceUtil.newDeviceId(deviceName));
+        device.setUid(productOpt.get().getUid());
+        device.setDeviceId(device.getId());
+        device.setProductKey(productKey);
+        device.setDeviceName(deviceName);
+        device.setState(new DeviceInfo.State(false, null, null));
+        device.setCreateAt(System.currentTimeMillis());
+
+        deviceRepository.save(device);
     }
 
     @GetMapping("/{deviceId}/children")
@@ -112,34 +138,41 @@ public class DeviceController {
         deviceRepository.deleteById(deviceId);
     }
 
-    @PostMapping("/{deviceId}/events")
-    public PagingData<DeviceEvent> events(@PathVariable("deviceId") String deviceId,
-                                          int page,
-                                          int limit,
-                                          String type,
-                                          String identifier) {
-        Criteria condition = Criteria.where("deviceId").is(deviceId);
-        if (StringUtils.isNotBlank(type)) {
-            condition.and("type").is(type);
-        }
-        if (StringUtils.isNotBlank(identifier)) {
-            condition.and("identifier").regex(".*" + identifier + ".*");
-        }
+    @PostMapping("/{deviceId}/logs/{size}/{page}")
+    public Paging<ThingModelMessage> logs(
+            @PathVariable("deviceId") String deviceId,
+            @PathVariable("size") int size,
+            @PathVariable("page") int page,
+            String type, String identifier) {
+        return thingModelMessageDao.findByTypeAndIdentifier(deviceId, type, identifier, page, size);
+    }
 
-        return new PagingData<>(deviceEventDao.count(condition),
-                deviceEventDao.find(condition,
-                        (page - 1) * limit, limit, Sort.Order.desc("createAt")));
+    @GetMapping("/{deviceId}/property/{name}/{start}/{end}")
+    public List<DeviceProperty> getPropertyHistory(
+            @PathVariable("deviceId") String deviceId,
+            @PathVariable("name") String name,
+            @PathVariable("start") long start,
+            @PathVariable("end") long end) {
+        return devicePropertyDao.findDevicePropertyHistory(deviceId, name, start, end);
     }
 
     @PostMapping("/{deviceId}/unbind")
     public void unbindDevice(@PathVariable("deviceId") String deviceId) {
         deviceId = getDetail(deviceId).getDeviceId();
-        deviceService.unbindDevice(deviceId);
+//        deviceService.unbindDevice(deviceId);
     }
 
     @GetMapping("/{deviceId}/thingModel")
     public ThingModel getThingModel(@PathVariable("deviceId") String deviceId) {
         DeviceInfo deviceInfo = getDetail(deviceId);
         return productController.getThingModel(deviceInfo.getProductKey());
+    }
+
+    @PostMapping("/{deviceId}/tag/add")
+    public void addTag(@PathVariable("deviceId") String deviceId,
+                       DeviceInfo.Tag tag) {
+        DeviceInfo device = deviceRepository.findByDeviceId(deviceId);
+        dataOwnerService.checkOwner(device);
+        deviceDao.updateTag(deviceId, tag);
     }
 }
