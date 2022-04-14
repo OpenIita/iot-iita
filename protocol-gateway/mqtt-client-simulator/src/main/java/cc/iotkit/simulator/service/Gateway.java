@@ -41,6 +41,7 @@ public class Gateway extends Device {
             connOpts.setPassword(DigestUtils.md5Hex(Constants.PRODUCT_SECRET + clientId).toCharArray());
             // 保留会话
             connOpts.setCleanSession(true);
+            connOpts.setKeepAliveInterval(10);
 
             // 设置回调
             client.setCallback(new OnMessageCallback(client, this));
@@ -71,9 +72,12 @@ public class Gateway extends Device {
                     Request request = new Request();
                     request.setId(UUID.randomUUID().toString());
                     request.setParams(subDevice);
+                    topic = String.format("/sys/%s/%s/s/register", productKey, deviceName);
+                    String payload = JsonUtil.toJsonString(request);
                     client.publish(String.format("/sys/%s/%s/s/register", productKey, deviceName),
-                            new MqttMessage(JsonUtil.toJsonString(request).getBytes())
+                            new MqttMessage(payload.getBytes())
                     );
+                    log.info("publish message,topic:{},payload:{}", topic, payload);
                 }
             }
         } catch (Throwable e) {

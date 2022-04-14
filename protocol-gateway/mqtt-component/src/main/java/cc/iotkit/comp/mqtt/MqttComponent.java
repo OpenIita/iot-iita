@@ -34,6 +34,7 @@ public class MqttComponent extends AbstractComponent {
 
     public void start() {
         try {
+            System.out.println("start:======2222222222");
             mqttVerticle.setExecutor(getHandler());
             countDownLatch = new CountDownLatch(1);
             Future<String> future = vertx.deployVerticle(mqttVerticle);

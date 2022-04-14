@@ -76,9 +76,9 @@ public class EmqxComponent extends AbstractComponent {
             }
 
             client.publishHandler(s -> {
-                String topic = s.topicName();
-                String payload = s.payload().toString();
-                log.info("receive message,topic:{},payload:{}", topic, payload);
+                        String topic = s.topicName();
+                        String payload = s.payload().toString();
+                        log.info("receive message,topic:{},payload:{}", topic, payload);
 
 //
 //                //取消订阅
@@ -105,10 +105,10 @@ public class EmqxComponent extends AbstractComponent {
 //                if (topic.endsWith("/register")) {
 
 
-                Map<String, Object> head = new HashMap<>();
-                head.put("topic", topic);
-                getHandler().onReceive(head, "", payload);
-            }).subscribe(subscribes).onSuccess(a -> log.info("subscribe topic success"))
+                        Map<String, Object> head = new HashMap<>();
+                        head.put("topic", topic);
+                        getHandler().onReceive(head, "", payload);
+                    }).subscribe(subscribes).onSuccess(a -> log.info("subscribe topic success"))
                     .onFailure(e -> log.error("subscribe topic failed", e));
 
         } catch (Throwable e) {

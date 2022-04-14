@@ -79,7 +79,12 @@ public class MqttVerticle extends AbstractVerticle {
             log.info("MQTT client keep alive timeout = {} ", endpoint.keepAliveTimeSeconds());
 
             endpoint.accept(false);
-            endpoint.disconnectMessageHandler(disconnectMessage -> {
+            endpoint.closeHandler((v) -> {
+                log.warn("client connection closed,clientId:{}", clientId);
+                ReceiveResult result = executor.onReceive(new HashMap<>(), "disconnect", clientId);
+                //删除设备与连接关系
+                endpointMap.remove(getEndpointKey(result));
+            }).disconnectMessageHandler(disconnectMessage -> {
                 log.info("Received disconnect from client, reason code = {}", disconnectMessage.code());
                 ReceiveResult result = executor.onReceive(new HashMap<>(), "disconnect", clientId);
                 //删除设备与连接关系

@@ -68,7 +68,7 @@ public class ComponentManager {
 
         Path path = componentConfig.getComponentFilePath(id);
         File file = path.resolve(component.getJarFile()).toAbsolutePath().toFile();
-        IComponent componentInstance = ComponentClassLoader.getComponent(file);
+        IComponent componentInstance = ComponentClassLoader.getComponent(component.getId(), file);
         if (componentInstance == null) {
             throw new BizException("instance component failed");
         }

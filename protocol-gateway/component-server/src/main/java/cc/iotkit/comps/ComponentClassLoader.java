@@ -11,34 +11,44 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public class ComponentClassLoader {
+    private static final Map<String, URLClassLoader> classLoaders = new HashMap<>();
 
-    protected static Class<IComponent> findClass(String name) throws ClassNotFoundException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        return (Class<IComponent>) classLoader.loadClass(name);
+    protected static Class<IComponent> findClass(String name, String clsName) throws ClassNotFoundException {
+        ClassLoader classLoader = classLoaders.get(name);
+        return (Class<IComponent>) classLoader.loadClass(clsName);
     }
 
-    private static String addUrl(File jarPath) throws NoSuchMethodException, InvocationTargetException,
+    private static String addUrl(String name, File jarPath) throws NoSuchMethodException, InvocationTargetException,
             IllegalAccessException, IOException {
-        URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        URLClassLoader classLoader = classLoaders.get(name);
+        if (classLoader != null) {
+            classLoader.close();
+        }
+
+        classLoader = URLClassLoader.newInstance(new URL[]{jarPath.toURI().toURL()}, ClassLoader.getSystemClassLoader());
+        classLoaders.put(name, classLoader);
+
         Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
         if (!method.isAccessible()) {
             method.setAccessible(true);
         }
+
         URL url = jarPath.toURI().toURL();
         method.invoke(classLoader, url);
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        InputStream is = loader.getResourceAsStream("component.spi");
-        return StreamUtils.copyToString(is, Charset.forName("UTF-8"));
+        InputStream is = classLoader.getResourceAsStream("component.spi");
+        return StreamUtils.copyToString(is, StandardCharsets.UTF_8);
     }
 
-    public static IComponent getComponent(File jarFile) {
+    public static IComponent getComponent(String name, File jarFile) {
         try {
-            String className = addUrl(jarFile);
-            Class<IComponent> componentClass = findClass(className);
+            String className = addUrl(name, jarFile);
+            Class<IComponent> componentClass = findClass(name, className);
             return componentClass.newInstance();
         } catch (Throwable e) {
             log.error("instance component from jar error", e);
