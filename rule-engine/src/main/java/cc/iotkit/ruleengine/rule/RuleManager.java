@@ -59,6 +59,10 @@ public class RuleManager {
                     1000, Sort.by(Sort.Order.desc("createAt"))));
             rules.get().forEach(rule -> {
                 try {
+                    //不添加停止的规则
+                    if (RuleInfo.STATE_STOPPED.equals(rule.getState())) {
+                        return;
+                    }
                     log.info("got rule {} to init", rule.getId());
                     add(rule);
                 } catch (Throwable e) {

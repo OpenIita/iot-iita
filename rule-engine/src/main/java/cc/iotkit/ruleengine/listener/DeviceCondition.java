@@ -47,10 +47,11 @@ public class DeviceCondition {
             if ("*".equals(identifier)) {
                 return true;
             }
-            //任意匹配
-            if ("*".equals(comparator)) {
+            //存在参数，值任意匹配
+            if (parameter.containsKey(identifier) && "*".equals(comparator)) {
                 return true;
             }
+
             Object left = parameter.get(identifier);
             if (left == null) {
                 return false;

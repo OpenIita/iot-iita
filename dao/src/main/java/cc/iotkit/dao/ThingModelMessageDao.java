@@ -35,7 +35,7 @@ public class ThingModelMessageDao {
             builder.must(QueryBuilders.matchPhraseQuery("identifier", identifier));
         }
         NativeSearchQuery query = new NativeSearchQueryBuilder().withQuery(builder)
-                .withPageable(PageRequest.of(page, size, Sort.by(Sort.Order.desc("time"))))
+                .withPageable(PageRequest.of(page-1, size, Sort.by(Sort.Order.desc("time"))))
                 .build();
         SearchHits<ThingModelMessage> result = template.search(query, ThingModelMessage.class);
         return new Paging<>(result.getTotalHits(), result.getSearchHits().stream()
