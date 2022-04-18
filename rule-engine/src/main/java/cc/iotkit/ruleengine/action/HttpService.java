@@ -2,46 +2,35 @@ package cc.iotkit.ruleengine.action;
 
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.model.device.message.ThingModelMessage;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.apache.commons.beanutils.BeanUtils;
 
-import javax.script.ScriptEngineManager;
 import java.io.IOException;
 import java.util.Map;
 
+@EqualsAndHashCode(callSuper = true)
 @Slf4j
 @Data
-public class HttpService {
-    private final NashornScriptEngine engine = (NashornScriptEngine) (new ScriptEngineManager())
-            .getEngineByName("nashorn");
-
-    private String script;
-
+public class HttpService extends ScriptService {
     private String url;
 
-    private ScriptObjectMirror scriptObject;
-
-    private OkHttpClient httpClient = new OkHttpClient();
+    private final OkHttpClient httpClient = new OkHttpClient();
 
     @SneakyThrows
-    public void execute(ThingModelMessage msg) {
-        if (scriptObject == null) {
-            scriptObject = (ScriptObjectMirror) engine.eval("new (function(){" + script + "})()");
-        }
+    public String execute(ThingModelMessage msg) {
         //执行转换脚本
-        ScriptObjectMirror result = (ScriptObjectMirror) engine.invokeMethod(scriptObject, "translate", msg);
-        Object objResult = JsonUtil.toObject(result);
-        if (!(objResult instanceof Map)) {
-            return;
+        Map result = execScript(msg);
+        if (result == null) {
+            log.warn("execScript result is null");
+            return "execScript result is null";
         }
 
         HttpData httpData = new HttpData();
-        BeanUtils.populate(httpData, (Map) objResult);
+        BeanUtils.populate(httpData, result);
 
         //组装http请求
         String url = this.url + httpData.getPath();
@@ -59,16 +48,23 @@ public class HttpService {
                 httpData.getBody().toString());
 
         Request request = builder.method(httpData.getMethod().toUpperCase(), requestBody).build();
-        log.info("send http request:{} ,{}", url, JsonUtil.toJsonString(objResult));
+        String requestDataStr = JsonUtil.toJsonString(result);
+        log.info("send http request:{} ,{}", url, requestDataStr);
 
+        String responseBody = "";
+        int responseCode;
         //发送请求
         try (Response response = httpClient.newCall(request).execute()) {
             ResponseBody body = response.body();
-            String content = body == null ? "" : body.string();
-            log.info("send result,code:{},response:{}", response.code(), content);
+            responseCode = response.code();
+            responseBody = body == null ? "" : body.string();
+            log.info("send result,code:{},response:{}", responseCode, responseBody);
         } catch (IOException e) {
             throw new RuntimeException("send request failed", e);
         }
+
+        return String.format("send request,url:%s,method:%s,receive response,code:%s,body:%s",
+                url, requestDataStr, responseCode, responseBody);
 
     }
 

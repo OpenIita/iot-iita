@@ -1,5 +1,6 @@
 package cc.iotkit.ruleengine.rule;
 
+import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.dao.RuleLogRepository;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.rule.RuleLog;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,7 +47,10 @@ public class RuleExecutor {
             }
             ruleLog.setState(RuleLog.STATE_MATCHED_FILTER);
 
-            doActions(rule, message);
+            //执行动作返回执行内容
+            List<String> results = doActions(rule, message);
+            //保存动作内容和状态
+            ruleLog.setContent(JsonUtil.toJsonString(results));
             ruleLog.setState(RuleLog.STATE_EXECUTED_ACTION);
             ruleLog.setSuccess(true);
             log.info("rule execution completed,id:{}", rule.getId());
@@ -81,10 +86,12 @@ public class RuleExecutor {
         return true;
     }
 
-    private void doActions(Rule rule, ThingModelMessage msg) {
+    private List<String> doActions(Rule rule, ThingModelMessage msg) {
+        List<String> results = new ArrayList<>();
         for (Action<?> action : rule.getActions()) {
-            action.execute(msg);
+            results.addAll(action.execute(msg));
         }
+        return results;
     }
 
 }

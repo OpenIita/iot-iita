@@ -10,5 +10,8 @@ public interface Action<T> {
 
     List<T> getServices();
 
-    void execute(ThingModelMessage msg);
+    /**
+     * 执行动作返回执行动作内容
+     */
+    List<String> execute(ThingModelMessage msg);
 }

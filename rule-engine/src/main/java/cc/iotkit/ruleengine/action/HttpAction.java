@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -24,10 +25,12 @@ public class HttpAction implements Action<HttpService> {
     }
 
     @Override
-    public void execute(ThingModelMessage msg) {
+    public List<String> execute(ThingModelMessage msg) {
+        List<String> results = new ArrayList<>();
         for (HttpService service : services) {
-            service.execute(msg);
+            results.add(service.execute(msg));
         }
+        return results;
     }
 
 }

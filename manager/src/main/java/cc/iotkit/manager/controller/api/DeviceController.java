@@ -10,10 +10,8 @@ import cc.iotkit.manager.model.vo.AppPageNode;
 import cc.iotkit.manager.service.AppDesignService;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.manager.utils.AuthUtil;
-import cc.iotkit.model.*;
-import cc.iotkit.model.device.message.DeviceEvent;
+import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.device.DeviceInfo;
-import cc.iotkit.model.mq.Request;
 import cc.iotkit.model.space.SpaceDevice;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -115,28 +113,6 @@ public class DeviceController {
             return result;
         }
 
-        try {
-            //记录用户操作日志
-            Request request = new Request();
-            if (StringUtils.isNotBlank(args)) {
-                request.setParams(JsonUtil.parse(args, Map.class));
-            }
-            userActionLogRepository.save(UserActionLog.builder()
-                    .uid(AuthUtil.getUserId())
-                    .type(UserActionLog.Type.DEVICE_CONTROL.getValue())
-                    .target(device.getName())
-                    .log(DeviceEvent.builder()
-                            .deviceId(deviceId)
-                            .identifier(service)
-                            .request(request)
-                            .type(service.equals("set") ? "property" : "service")
-                            .createAt(System.currentTimeMillis())
-                            .build())
-                    .result(result.getRequestId())
-                    .createAt(System.currentTimeMillis()).build());
-        } catch (Throwable e) {
-            log.error("save log error", e);
-        }
         return result;
     }
 

@@ -1,6 +1,5 @@
 package cc.iotkit.ruleengine.action;
 
-import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,15 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class DeviceAction implements Action<DeviceActionService.Service> {
+public class AlertAction implements Action<AlertService<?>> {
 
-    public static final String TYPE = "device";
+    public static final String TYPE = "http";
 
     private String type;
 
-    private List<DeviceActionService.Service> services;
-
-    private DeviceActionService deviceActionService;
+    private List<AlertService<?>> services;
 
     @Override
     public String getType() {
@@ -30,9 +27,8 @@ public class DeviceAction implements Action<DeviceActionService.Service> {
     @Override
     public List<String> execute(ThingModelMessage msg) {
         List<String> results = new ArrayList<>();
-        for (DeviceActionService.Service service : services) {
-            deviceActionService.invoke(service);
-            results.add(JsonUtil.toJsonString(service));
+        for (AlertService<?> service : services) {
+            results.add(service.execute(msg));
         }
         return results;
     }
