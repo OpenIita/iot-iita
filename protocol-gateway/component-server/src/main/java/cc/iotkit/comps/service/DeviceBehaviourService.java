@@ -99,7 +99,10 @@ public class DeviceBehaviourService {
         DeviceInfo device = deviceRepository.findByProductKeyAndDeviceName(pk, info.getDeviceName());
 
         if (device != null) {
-            log.info("device already registered.");
+            log.info("device already registered");
+            //更换网关重新注册更新父级ID
+            device.setParentId(parentId);
+            deviceRepository.save(device);
             return device;
         }
         //不存在,注册新设备

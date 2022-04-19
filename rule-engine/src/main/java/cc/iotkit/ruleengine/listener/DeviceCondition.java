@@ -2,6 +2,7 @@ package cc.iotkit.ruleengine.listener;
 
 import cc.iotkit.ruleengine.expression.Expression;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -47,8 +48,10 @@ public class DeviceCondition {
             if ("*".equals(identifier)) {
                 return true;
             }
-            //存在参数，值任意匹配
-            if (parameter.containsKey(identifier) && "*".equals(comparator)) {
+
+            //存在参数或无参数条件，值任意匹配
+            if ((StringUtils.isBlank(identifier) || parameter.containsKey(identifier))
+                    && "*".equals(comparator)) {
                 return true;
             }
 
