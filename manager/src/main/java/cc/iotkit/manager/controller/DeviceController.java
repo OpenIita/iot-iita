@@ -136,7 +136,7 @@ public class DeviceController {
                         .build())).orElse(new DeviceInfo()));
     }
 
-    @DeleteMapping("/{deviceId}")
+    @PostMapping("/{deviceId}/delete")
     public void deleteDevice(@PathVariable("deviceId") String deviceId) {
         deviceId = getDetail(deviceId).getDeviceId();
         deviceRepository.deleteById(deviceId);

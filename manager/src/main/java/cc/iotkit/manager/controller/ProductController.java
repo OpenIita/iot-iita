@@ -75,7 +75,7 @@ public class ProductController {
         thingModelRepository.save(new ThingModel(productKey, productKey, JsonUtil.parse(model, ThingModel.Model.class)));
     }
 
-    @DeleteMapping("/thingModel/{productKey}")
+    @PostMapping("/thingModel/{productKey}/delete")
     public void deleteThingModel(String productKey) {
         productKey = getProduct(productKey).getId();
         thingModelRepository.deleteById(productKey);

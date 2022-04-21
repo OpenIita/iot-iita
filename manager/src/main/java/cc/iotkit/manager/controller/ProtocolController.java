@@ -137,7 +137,7 @@ public class ProtocolController {
     public void saveComponentScript(
             @PathVariable("id") String id,
             @RequestBody String script) {
-        ProtocolComponent oldComponent = getAndCheckComponent(id);
+        getAndCheckComponent(id);
         try {
             Path path = componentConfig.getComponentFilePath(id);
             File file = path.resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile();
@@ -145,7 +145,6 @@ public class ProtocolController {
             FileUtils.writeStringToFile(file, script, "UTF-8", false);
 
             componentManager.deRegister(id);
-            protocolComponentRepository.save(oldComponent);
         } catch (Throwable e) {
             throw new BizException("save protocol component script error", e);
         }
