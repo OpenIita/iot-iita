@@ -1,12 +1,12 @@
 package cc.iotkit.manager.service;
 
-import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.exception.NotFoundException;
 import cc.iotkit.common.exception.OfflineException;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.ComponentManager;
 import cc.iotkit.converter.ThingService;
 import cc.iotkit.dao.DeviceRepository;
+import cc.iotkit.dao.ThingModelMessageRepository;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +27,8 @@ public class DeviceService {
     private ComponentManager componentManager;
     @Autowired
     private ThingModelService thingModelService;
+    @Autowired
+    private ThingModelMessageRepository thingModelMessageRepository;
 
     public String invokeService(String deviceId, String service,
                                 Map<String, Object> args) {
@@ -56,7 +58,23 @@ public class DeviceService {
         thingModelService.parseParams(thingService);
 
         componentManager.send(thingService);
-        return thingService.getMid();
+        String mid = thingService.getMid();
+
+        //保存设备日志
+        ThingModelMessage thingModelMessage = ThingModelMessage.builder()
+                .mid(mid)
+                .deviceId(deviceId)
+                .productKey(device.getProductKey())
+                .deviceName(device.getDeviceName())
+                .type(ThingModelMessage.TYPE_SERVICE)
+                .identifier(service)
+                .data(args)
+                .occurred(System.currentTimeMillis())
+                .time(System.currentTimeMillis())
+                .build();
+        thingModelMessageRepository.save(thingModelMessage);
+
+        return mid;
     }
 
     public String setProperty(String deviceId, Map<String, Object> properties) {
@@ -86,7 +104,23 @@ public class DeviceService {
         thingModelService.parseParams(thingService);
 
         componentManager.send(thingService);
-        return thingService.getMid();
+        String mid = thingService.getMid();
+
+        //保存设备日志
+        ThingModelMessage thingModelMessage = ThingModelMessage.builder()
+                .mid(mid)
+                .deviceId(deviceId)
+                .productKey(device.getProductKey())
+                .deviceName(device.getDeviceName())
+                .type(ThingModelMessage.TYPE_PROPERTY)
+                .identifier("set")
+                .data(properties)
+                .occurred(System.currentTimeMillis())
+                .time(System.currentTimeMillis())
+                .build();
+        thingModelMessageRepository.save(thingModelMessage);
+
+        return mid;
     }
 
 }
