@@ -1,5 +1,6 @@
 package cc.iotkit.manager.controller.aligenie;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.exception.OfflineException;
 import cc.iotkit.common.utils.JsonUtil;
@@ -65,7 +66,7 @@ public class AligenieDeviceController {
                 .serviceUrl(pulsarBrokerUrl)
                 .build();
         deviceMessageProducer = client.newProducer(JSONSchema.of(ThingModelMessage.class))
-                .topic("persistent://iotkit/default/device_thing")
+                .topic("persistent://iotkit/default/" + Constants.THING_MODEL_MESSAGE_TOPIC)
                 .create();
     }
 

@@ -51,7 +51,7 @@ public class DeviceBehaviourService {
                 .serviceUrl(serverConfig.getPulsarBrokerUrl())
                 .build();
         deviceMessageProducer = client.newProducer(JSONSchema.of(ThingModelMessage.class))
-                .topic("persistent://iotkit/default/device_thing")
+                .topic("persistent://iotkit/default/" + Constants.THING_MODEL_MESSAGE_TOPIC)
                 .create();
     }
 
