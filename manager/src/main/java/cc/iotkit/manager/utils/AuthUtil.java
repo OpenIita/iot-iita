@@ -34,7 +34,11 @@ public class AuthUtil {
         return AuthUtil.getUserRoles().contains(Constants.ROLE_ADMIN);
     }
 
-    public static boolean hasWriteRole(){
+    public static boolean isClientUser() {
+        return AuthUtil.getUserRoles().contains(Constants.ROLE_CLIENT);
+    }
+
+    public static boolean hasWriteRole() {
         return AuthUtil.getUserRoles().contains(Constants.ROLE_WRITE);
     }
 

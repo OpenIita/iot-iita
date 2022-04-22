@@ -7,7 +7,7 @@ import cc.iotkit.converter.IConverter;
 import lombok.Data;
 
 @Data
-public abstract class AbstractComponent implements IComponent {
+public abstract class AbstractDeviceComponent implements IDeviceComponent {
 
     protected IMessageHandler handler;
 
@@ -15,9 +15,11 @@ public abstract class AbstractComponent implements IComponent {
 
     protected CompConfig config;
 
+    protected String script;
+
     @Override
     public void create(CompConfig config) {
-        this.config=config;
+        this.config = config;
     }
 
     @Override

@@ -1,10 +1,12 @@
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.dao.*;
+import cc.iotkit.manager.model.query.DeviceQuery;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.manager.utils.AuthUtil;
@@ -52,7 +54,7 @@ public class DeviceController {
     @Autowired
     private DeviceBehaviourService behaviourService;
 
-    @PostMapping("/{deviceId}/service/{service}")
+    @PostMapping(Constants.API.DEVICE_INVOKE_SERVICE)
     public String invokeService(@PathVariable("deviceId") String deviceId,
                                 @PathVariable("service") String service,
                                 @RequestBody Map<String, Object> args) {
@@ -63,7 +65,7 @@ public class DeviceController {
         return deviceService.invokeService(deviceId, service, args);
     }
 
-    @PostMapping("/{deviceId}/service/property/set")
+    @PostMapping(Constants.API.DEVICE_SET_PROPERTIES)
     public String setProperty(@PathVariable("deviceId") String deviceId,
                               @RequestBody Map<String, Object> args) {
         dataOwnerService.checkWriteRole();
@@ -88,6 +90,39 @@ public class DeviceController {
         }
         if (online != null) {
             condition.and("state.online").is(online);
+        }
+
+        return deviceDao.find(condition, size, page);
+    }
+
+    @PostMapping("/list/{size}/{page}")
+    public Paging<DeviceInfo> getDevices(
+            @PathVariable("size") int size,
+            @PathVariable("page") int page,
+            @RequestBody DeviceQuery query) {
+        Criteria condition = new Criteria();
+
+        String uid = AuthUtil.getUserId();
+        if (!AuthUtil.isAdmin()) {
+            //客户端用户使用绑定子用户查询
+            if (AuthUtil.isClientUser()) {
+                condition.and("subUid").elemMatch(new Criteria().is(uid));
+            } else {
+                condition.and("uid").is(uid);
+            }
+        }
+
+        String pk = query.getProductKey();
+        if (StringUtils.isNotBlank(pk)) {
+            condition.and("productKey").is(pk);
+        }
+        String dn = query.getDeviceName();
+        if (StringUtils.isNotBlank(dn)) {
+            condition.and("deviceName").regex(".*" + dn + ".*");
+        }
+        String state = query.getState();
+        if (state != null) {
+            condition.and("state.online").is(state);
         }
 
         return deviceDao.find(condition, size, page);
@@ -121,7 +156,7 @@ public class DeviceController {
                                 .build())));
     }
 
-    @GetMapping("/{deviceId}")
+    @GetMapping(Constants.API.DEVICE_DETAIL)
     public DeviceInfo getDetail(@PathVariable("deviceId") String deviceId) {
         return dataOwnerService.checkOwner(deviceRepository.findById(deviceId).orElse(new DeviceInfo()));
     }

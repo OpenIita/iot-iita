@@ -11,4 +11,6 @@ public interface ProtocolComponentRepository extends MongoRepository<ProtocolCom
 
     List<ProtocolComponent> findByState(String state);
 
+    List<ProtocolComponent> findByStateAndType(String state, String type);
+
 }

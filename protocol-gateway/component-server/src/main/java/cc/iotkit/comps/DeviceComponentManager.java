@@ -1,10 +1,11 @@
 package cc.iotkit.comps;
 
 
+import cc.iotkit.common.ComponentClassLoader;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.CompConfig;
-import cc.iotkit.comp.IComponent;
+import cc.iotkit.comp.IDeviceComponent;
 import cc.iotkit.comps.config.CacheKey;
 import cc.iotkit.comps.config.ComponentConfig;
 import cc.iotkit.comps.service.DeviceBehaviourService;
@@ -32,10 +33,9 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
-public class ComponentManager {
+public class DeviceComponentManager {
 
-    private final Map<String, IComponent> components = new HashMap<>();
-    private final Map<String, String> scripts = new HashMap<>();
+    private final Map<String, IDeviceComponent> components = new HashMap<>();
     private final Map<String, Boolean> states = new HashMap<>();
 
     @Autowired
@@ -68,9 +68,11 @@ public class ComponentManager {
 
         Path path = componentConfig.getComponentFilePath(id);
         File file = path.resolve(component.getJarFile()).toAbsolutePath().toFile();
-        IComponent componentInstance = ComponentClassLoader.getComponent(component.getId(), file);
-        if (componentInstance == null) {
-            throw new BizException("instance component failed");
+        IDeviceComponent componentInstance;
+        try {
+            componentInstance = ComponentClassLoader.getComponent(component.getId(), file);
+        } catch (Throwable e) {
+            throw new BizException("get device component instance error");
         }
         componentInstance.create(new CompConfig(300, component.getConfig()));
 
@@ -85,21 +87,21 @@ public class ComponentManager {
 
             String componentScript = FileUtils.readFileToString(path.
                     resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile(), "UTF-8");
-            register(id, componentInstance, componentScript);
+            componentInstance.setScript(componentScript);
+
+            register(id, componentInstance);
         } catch (IOException e) {
-            throw new BizException("get component script error", e);
+            throw new BizException("get device component script error", e);
         }
     }
 
-    public void register(String id, IComponent component, String script) {
+    public void register(String id, IDeviceComponent component) {
         components.put(id, component);
-        scripts.put(id, script);
         states.put(id, false);
     }
 
     public void deRegister(String id) {
-        IComponent component = components.remove(id);
-        scripts.remove(id);
+        IDeviceComponent component = components.remove(id);
         states.remove(id);
         if (component == null) {
             return;
@@ -109,21 +111,20 @@ public class ComponentManager {
     }
 
     public void start(String id) {
-        IComponent component = components.get(id);
+        IDeviceComponent component = components.get(id);
         if (component == null) {
             return;
         }
-        String script = scripts.get(id);
         component.setHandler(
-                new MessageHandler(this, component,
-                        script, component.getConverter(),
+                new DeviceMessageHandler(this, component,
+                        component.getScript(), component.getConverter(),
                         deviceBehaviourService));
         component.start();
         states.put(id, true);
     }
 
     public void stop(String id) {
-        IComponent component = components.get(id);
+        IDeviceComponent component = components.get(id);
         if (component == null) {
             return;
         }
@@ -141,7 +142,7 @@ public class ComponentManager {
             throw new BizException("there is no components");
         }
 
-        for (IComponent com : components.values()) {
+        for (IDeviceComponent com : components.values()) {
             if (com.exist(service.getProductKey(), service.getDeviceName())) {
                 //对下发消息进行编码转换
                 DeviceMessage message = com.getConverter().encode(service, null);

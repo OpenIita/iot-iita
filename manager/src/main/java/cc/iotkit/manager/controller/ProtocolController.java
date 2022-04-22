@@ -3,7 +3,7 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.ReflectUtil;
-import cc.iotkit.comps.ComponentManager;
+import cc.iotkit.comps.DeviceComponentManager;
 import cc.iotkit.comps.config.ComponentConfig;
 import cc.iotkit.dao.ProtocolComponentRepository;
 import cc.iotkit.dao.ProtocolConverterRepository;
@@ -50,7 +50,7 @@ public class ProtocolController {
     private UserInfoRepository userInfoRepository;
 
     @Autowired
-    private ComponentManager componentManager;
+    private DeviceComponentManager deviceComponentManager;
 
     @PostMapping("/uploadJar")
     public String uploadJar(@RequestParam("file") MultipartFile file, String id) {
@@ -113,7 +113,7 @@ public class ProtocolController {
         ProtocolComponent oldComponent = getAndCheckComponent(id);
         component = ReflectUtil.copyNoNulls(component, oldComponent);
         try {
-            componentManager.deRegister(id);
+            deviceComponentManager.deRegister(id);
             protocolComponentRepository.save(component);
         } catch (Throwable e) {
             throw new BizException("add protocol component error", e);
@@ -144,7 +144,7 @@ public class ProtocolController {
             script = JsonUtil.parse(script, String.class);
             FileUtils.writeStringToFile(file, script, "UTF-8", false);
 
-            componentManager.deRegister(id);
+            deviceComponentManager.deRegister(id);
         } catch (Throwable e) {
             throw new BizException("save protocol component script error", e);
         }
@@ -164,7 +164,7 @@ public class ProtocolController {
     public void deleteComponent(@PathVariable("id") String id) {
         ProtocolComponent component = getAndCheckComponent(id);
         try {
-            componentManager.deRegister(id);
+            deviceComponentManager.deRegister(id);
 
             Path path = Paths.get(String.format("%s/%s", componentConfig.getComponentDir(), id))
                     .toAbsolutePath().normalize();
@@ -190,7 +190,7 @@ public class ProtocolController {
             @PathVariable("page") int page) {
         Page<ProtocolComponent> components = protocolComponentRepository.findAll(
                 PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))));
-        components.getContent().forEach(c -> c.setState(componentManager.isRunning(c.getId()) ?
+        components.getContent().forEach(c -> c.setState(deviceComponentManager.isRunning(c.getId()) ?
                 ProtocolComponent.STATE_RUNNING : ProtocolComponent.STATE_STOPPED));
         return new Paging<>(components.getTotalElements(), components.getContent());
     }
@@ -297,11 +297,11 @@ public class ProtocolController {
         String converterId = component.getConverter();
         getAndCheckConverter(converterId);
         if (ProtocolComponent.STATE_RUNNING.equals(state)) {
-            componentManager.register(component);
-            componentManager.start(component.getId());
+            deviceComponentManager.register(component);
+            deviceComponentManager.start(component.getId());
             component.setState(ProtocolComponent.STATE_RUNNING);
         } else {
-            componentManager.deRegister(id);
+            deviceComponentManager.deRegister(id);
             component.setState(ProtocolComponent.STATE_STOPPED);
         }
         protocolComponentRepository.save(component);

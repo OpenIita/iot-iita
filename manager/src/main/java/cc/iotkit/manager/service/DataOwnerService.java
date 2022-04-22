@@ -3,9 +3,12 @@ package cc.iotkit.manager.service;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.Owned;
+import cc.iotkit.model.device.DeviceInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DataOwnerService {
@@ -33,8 +36,19 @@ public class DataOwnerService {
         if (StringUtils.isBlank(data.getUid())) {
             return data;
         }
-        if (AuthUtil.getUserId().equals(data.getUid())) {
+
+        String uid = AuthUtil.getUserId();
+        if (uid.equals(data.getUid())) {
             return data;
+        }
+
+        if (data instanceof DeviceInfo) {
+            DeviceInfo device = (DeviceInfo) data;
+            //设备子用户验证
+            List<String> subUid = device.getSubUid();
+            if (subUid != null && subUid.contains(uid)) {
+                return data;
+            }
         }
 
         throw new BizException("无权限操作");

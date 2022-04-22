@@ -2,7 +2,7 @@ package cc.iotkit.comp.emqx;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.comp.AbstractComponent;
+import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.converter.DeviceMessage;
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 @Slf4j
-public class EmqxComponent extends AbstractComponent {
+public class EmqxDeviceComponent extends AbstractDeviceComponent {
 
     private Vertx vertx;
     private AuthVerticle authVerticle;

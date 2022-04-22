@@ -11,6 +11,8 @@ public class ProtocolComponent implements Owned {
 
     public static final String STATE_STOPPED = "stopped";
     public static final String STATE_RUNNING = "running";
+    public static final String TYPE_DEVICE = "device";
+    public static final String TYPE_BIZ = "biz";
 
     public static final String SCRIPT_FILE_NAME = "component.js";
 
@@ -23,6 +25,8 @@ public class ProtocolComponent implements Owned {
     private String uid;
 
     private String name;
+
+    private String type = TYPE_DEVICE;
 
     private String protocol;
 

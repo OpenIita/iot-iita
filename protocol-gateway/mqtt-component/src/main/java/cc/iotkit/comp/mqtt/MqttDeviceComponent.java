@@ -2,7 +2,7 @@ package cc.iotkit.comp.mqtt;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.comp.AbstractComponent;
+import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.converter.DeviceMessage;
@@ -17,13 +17,13 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 @Slf4j
-public class MqttComponent extends AbstractComponent {
+public class MqttDeviceComponent extends AbstractDeviceComponent {
 
     private Vertx vertx;
     private CountDownLatch countDownLatch;
     private String deployedId;
     private MqttVerticle mqttVerticle;
-    private Map<String, Device> deviceChildToParent = new HashMap<>();
+    private final Map<String, Device> deviceChildToParent = new HashMap<>();
 
     public void create(CompConfig config) {
         super.create(config);
@@ -34,7 +34,6 @@ public class MqttComponent extends AbstractComponent {
 
     public void start() {
         try {
-            System.out.println("start:======2222222222");
             mqttVerticle.setExecutor(getHandler());
             countDownLatch = new CountDownLatch(1);
             Future<String> future = vertx.deployVerticle(mqttVerticle);

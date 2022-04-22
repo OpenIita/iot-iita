@@ -3,7 +3,7 @@ package cc.iotkit.comps;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
-import cc.iotkit.comp.IComponent;
+import cc.iotkit.comp.IDeviceComponent;
 import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.AuthInfo;
 import cc.iotkit.comp.model.ReceiveResult;
@@ -22,12 +22,11 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 @Slf4j
 @Data
-public class MessageHandler implements IMessageHandler {
+public class DeviceMessageHandler implements IMessageHandler {
     private final NashornScriptEngine engine = (NashornScriptEngine) (new ScriptEngineManager()).getEngineByName("nashorn");
 
     private final Object scriptObj;
@@ -36,16 +35,16 @@ public class MessageHandler implements IMessageHandler {
 
     private final DeviceBehaviourService deviceBehaviourService;
 
-    private final ComponentManager componentManager;
+    private final DeviceComponentManager deviceComponentManager;
 
-    private final IComponent component;
+    private final IDeviceComponent component;
 
     @SneakyThrows
-    public MessageHandler(ComponentManager componentManager,
-                          IComponent component,
-                          String script, IConverter converter,
-                          DeviceBehaviourService deviceBehaviourService) {
-        this.componentManager = componentManager;
+    public DeviceMessageHandler(DeviceComponentManager deviceComponentManager,
+                                IDeviceComponent component,
+                                String script, IConverter converter,
+                                DeviceBehaviourService deviceBehaviourService) {
+        this.deviceComponentManager = deviceComponentManager;
         this.component = component;
         this.converter = converter;
         this.deviceBehaviourService = deviceBehaviourService;
@@ -157,7 +156,7 @@ public class MessageHandler implements IMessageHandler {
 
         //服务回复需要重新对应mid
         if (thingModelMessage.getIdentifier().endsWith("_reply")) {
-            String platformMid = componentManager.getPlatformMid(message.getDeviceName(), message.getMid());
+            String platformMid = deviceComponentManager.getPlatformMid(message.getDeviceName(), message.getMid());
             if (platformMid == null) {
                 platformMid = UniqueIdUtil.newRequestId();
             }

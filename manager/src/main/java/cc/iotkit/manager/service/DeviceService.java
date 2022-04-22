@@ -3,7 +3,7 @@ package cc.iotkit.manager.service;
 import cc.iotkit.common.exception.NotFoundException;
 import cc.iotkit.common.exception.OfflineException;
 import cc.iotkit.common.utils.UniqueIdUtil;
-import cc.iotkit.comps.ComponentManager;
+import cc.iotkit.comps.DeviceComponentManager;
 import cc.iotkit.converter.ThingService;
 import cc.iotkit.dao.DeviceRepository;
 import cc.iotkit.dao.ThingModelMessageRepository;
@@ -24,7 +24,7 @@ public class DeviceService {
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
-    private ComponentManager componentManager;
+    private DeviceComponentManager deviceComponentManager;
     @Autowired
     private ThingModelService thingModelService;
     @Autowired
@@ -57,7 +57,7 @@ public class DeviceService {
                 .build();
         thingModelService.parseParams(thingService);
 
-        componentManager.send(thingService);
+        deviceComponentManager.send(thingService);
         String mid = thingService.getMid();
 
         //保存设备日志
@@ -103,7 +103,7 @@ public class DeviceService {
                 .build();
         thingModelService.parseParams(thingService);
 
-        componentManager.send(thingService);
+        deviceComponentManager.send(thingService);
         String mid = thingService.getMid();
 
         //保存设备日志

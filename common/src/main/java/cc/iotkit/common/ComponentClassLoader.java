@@ -1,8 +1,4 @@
-package cc.iotkit.comps;
-
-import cc.iotkit.comp.IComponent;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StreamUtils;
+package cc.iotkit.common;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,13 +11,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
+import org.apache.commons.io.IOUtils;
+
 public class ComponentClassLoader {
     private static final Map<String, URLClassLoader> classLoaders = new HashMap<>();
 
-    protected static Class<IComponent> findClass(String name, String clsName) throws ClassNotFoundException {
+    protected static <T> Class<T> findClass(String name, String clsName) throws ClassNotFoundException {
         ClassLoader classLoader = classLoaders.get(name);
-        return (Class<IComponent>) classLoader.loadClass(clsName);
+        return (Class<T>) classLoader.loadClass(clsName);
     }
 
     private static String addUrl(String name, File jarPath) throws NoSuchMethodException, InvocationTargetException,
@@ -42,18 +39,17 @@ public class ComponentClassLoader {
         URL url = jarPath.toURI().toURL();
         method.invoke(classLoader, url);
         InputStream is = classLoader.getResourceAsStream("component.spi");
-        return StreamUtils.copyToString(is, StandardCharsets.UTF_8);
-    }
-
-    public static IComponent getComponent(String name, File jarFile) {
-        try {
-            String className = addUrl(name, jarFile);
-            Class<IComponent> componentClass = findClass(name, className);
-            return componentClass.newInstance();
-        } catch (Throwable e) {
-            log.error("instance component from jar error", e);
+        if (is == null) {
             return null;
         }
+
+        return IOUtils.toString(is, StandardCharsets.UTF_8);
+    }
+
+    public static <T> T getComponent(String name, File jarFile) throws Exception {
+        String className = addUrl(name, jarFile);
+        Class<T> componentClass = findClass(name, className);
+        return componentClass.newInstance();
     }
 
 }
