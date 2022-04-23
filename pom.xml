@@ -27,6 +27,7 @@
     <properties>
         <java.version>1.8</java.version>
         <keycloak-spring.version>17.0.0</keycloak-spring.version>
+        <vertx.version>4.2.2</vertx.version>
     </properties>
 
     <dependencyManagement>
@@ -175,25 +176,25 @@
             <dependency>
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-core</artifactId>
-                <version>4.2.6</version>
+                <version>${vertx.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-mqtt</artifactId>
-                <version>4.2.6</version>
+                <version>${vertx.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-web-proxy</artifactId>
-                <version>4.2.6</version>
+                <version>${vertx.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-web-client</artifactId>
-                <version>4.2.6</version>
+                <version>${vertx.version}</version>
             </dependency>
 
             <dependency>

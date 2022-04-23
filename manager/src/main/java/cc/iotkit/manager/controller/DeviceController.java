@@ -10,6 +10,7 @@ import cc.iotkit.manager.model.query.DeviceQuery;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
@@ -55,44 +56,21 @@ public class DeviceController {
     private DeviceBehaviourService behaviourService;
 
     @PostMapping(Constants.API.DEVICE_INVOKE_SERVICE)
-    public String invokeService(@PathVariable("deviceId") String deviceId,
-                                @PathVariable("service") String service,
-                                @RequestBody Map<String, Object> args) {
+    public InvokeResult invokeService(@PathVariable("deviceId") String deviceId,
+                                      @PathVariable("service") String service,
+                                      @RequestBody Map<String, Object> args) {
         if (StringUtils.isBlank(deviceId) || StringUtils.isBlank(service)) {
             throw new RuntimeException("deviceId/service is blank.");
         }
         dataOwnerService.checkWriteRole();
-        return deviceService.invokeService(deviceId, service, args);
+        return new InvokeResult(deviceService.invokeService(deviceId, service, args));
     }
 
     @PostMapping(Constants.API.DEVICE_SET_PROPERTIES)
-    public String setProperty(@PathVariable("deviceId") String deviceId,
-                              @RequestBody Map<String, Object> args) {
+    public InvokeResult setProperty(@PathVariable("deviceId") String deviceId,
+                                    @RequestBody Map<String, Object> args) {
         dataOwnerService.checkWriteRole();
-        return deviceService.setProperty(deviceId, args);
-    }
-
-    @PostMapping("/list")
-    public Paging<DeviceInfo> getDevices(int page,
-                                         int size,
-                                         String pk,
-                                         Boolean online,
-                                         String dn) {
-        Criteria condition = new Criteria();
-        if (!AuthUtil.isAdmin()) {
-            condition.and("uid").is(AuthUtil.getUserId());
-        }
-        if (StringUtils.isNotBlank(pk)) {
-            condition.and("productKey").is(pk);
-        }
-        if (StringUtils.isNotBlank(dn)) {
-            condition.and("deviceName").regex(".*" + dn + ".*");
-        }
-        if (online != null) {
-            condition.and("state.online").is(online);
-        }
-
-        return deviceDao.find(condition, size, page);
+        return new InvokeResult(deviceService.setProperty(deviceId, args));
     }
 
     @PostMapping("/list/{size}/{page}")
@@ -121,8 +99,8 @@ public class DeviceController {
             condition.and("deviceName").regex(".*" + dn + ".*");
         }
         String state = query.getState();
-        if (state != null) {
-            condition.and("state.online").is(state);
+        if (StringUtils.isNotBlank(state)) {
+            condition.and("state.online").is(state.equals("online"));
         }
 
         return deviceDao.find(condition, size, page);

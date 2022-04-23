@@ -50,7 +50,8 @@ public class DeviceComponentManager {
     @PostConstruct
     public void init() {
         try {
-            List<ProtocolComponent> componentList = componentRepository.findByState(ProtocolComponent.STATE_RUNNING);
+            List<ProtocolComponent> componentList = componentRepository.findByStateAndType(
+                    ProtocolComponent.STATE_RUNNING, ProtocolComponent.TYPE_DEVICE);
             for (ProtocolComponent component : componentList) {
                 register(component);
                 start(component.getId());

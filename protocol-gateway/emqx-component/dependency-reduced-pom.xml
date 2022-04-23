@@ -43,19 +43,19 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
-      <version>4.2.6</version>
+      <version>4.2.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web-proxy</artifactId>
-      <version>4.2.6</version>
+      <version>4.2.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-mqtt</artifactId>
-      <version>4.2.6</version>
+      <version>4.2.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

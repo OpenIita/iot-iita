@@ -61,16 +61,16 @@ public class BizComponentManager {
         } catch (Throwable e) {
             throw new BizException("get component instance error");
         }
-        componentInstance.create(new CompConfig(300, component.getConfig()));
-
         try {
             String componentScript = FileUtils.readFileToString(path.
                     resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile(), "UTF-8");
             componentInstance.setScript(componentScript);
-            register(id, componentInstance);
         } catch (IOException e) {
             throw new BizException("get component script error", e);
         }
+        componentInstance.create(new CompConfig(300, component.getConfig()));
+
+        register(id, componentInstance);
     }
 
     public void register(String id, IComponent component) {
