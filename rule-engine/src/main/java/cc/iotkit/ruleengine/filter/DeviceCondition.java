@@ -41,7 +41,7 @@ public class DeviceCondition {
             deviceInfo = deviceCache.findByDeviceId(device);
         } else {
             //用pk/dn取
-            deviceInfo = deviceCache.findByProductKeyAndDeviceName(pkDn[0], pkDn[1]);
+            deviceInfo = deviceCache.getDeviceInfo(pkDn[0], pkDn[1]);
         }
         Object left = null;
         if ("property".equals(type)) {

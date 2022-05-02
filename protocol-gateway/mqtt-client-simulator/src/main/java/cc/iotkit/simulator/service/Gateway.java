@@ -6,6 +6,7 @@ import cc.iotkit.simulator.config.Mqtt;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -120,9 +121,14 @@ public class Gateway extends Device {
                     //子设备注册成功
                     if (response.code == 0) {
                         Map<String, Object> data = response.getData();
+                        String productKey = data.get("productKey").toString();
+                        if (StringUtils.isBlank(productKey)) {
+                            return;
+                        }
+
                         //订阅子设备消息
                         String subTopic = String.format("/sys/%s/%s/c/#",
-                                data.get("productKey"), data.get("deviceName"));
+                                productKey, data.get("deviceName"));
                         log.info("subscribe topic:{}", subTopic);
                         client.subscribe(subTopic);
                     }

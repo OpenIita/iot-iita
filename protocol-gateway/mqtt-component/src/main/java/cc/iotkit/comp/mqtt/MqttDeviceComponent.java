@@ -5,13 +5,17 @@ import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
+import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;
+import cc.iotkit.converter.ThingService;
+import cc.iotkit.model.device.message.ThingModelMessage;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -24,6 +28,7 @@ public class MqttDeviceComponent extends AbstractDeviceComponent {
     private String deployedId;
     private MqttVerticle mqttVerticle;
     private final Map<String, Device> deviceChildToParent = new HashMap<>();
+    private TransparentConverter transparentConverter = new TransparentConverter();
 
     public void create(CompConfig config) {
         super.create(config);
@@ -120,6 +125,22 @@ public class MqttDeviceComponent extends AbstractDeviceComponent {
     @Override
     public CompConfig getConfig() {
         return config;
+    }
+
+    /**
+     * 透传解码
+     */
+    public ThingModelMessage transparentDecode(Map<String, Object> msg) throws InvocationTargetException, IllegalAccessException {
+        TransparentMsg transparentMsg = new TransparentMsg();
+        BeanUtils.populate(transparentMsg, msg);
+        return transparentConverter.decode(transparentMsg);
+    }
+
+    /**
+     * 透传编码
+     */
+    public DeviceMessage transparentEncode(ThingService<?> service, cc.iotkit.converter.Device device) {
+        return transparentConverter.encode(service, device);
     }
 
     @Data

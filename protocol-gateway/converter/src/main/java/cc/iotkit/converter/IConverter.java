@@ -10,4 +10,5 @@ public interface IConverter {
 
     DeviceMessage encode(ThingService<?> service, Device device);
 
+    void putScriptEnv(String key, Object value);
 }

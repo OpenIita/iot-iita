@@ -15,18 +15,13 @@ import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Data
 @Slf4j
@@ -159,13 +154,6 @@ public class HttpBizComponent implements IComponent {
             data.put(entry.getKey(), entry.getValue());
         }
         return data;
-    }
-
-    public static void main(String[] args) throws IOException {
-        HttpBizComponent component = new HttpBizComponent();
-        component.setScript(FileUtils.readFileToString(new File("/Users/sjg/home/gitee/open-source/iotkit-parent/protocol-gateway/http-biz-component/src/main/resources/component.js"), UTF_8));
-        component.create(new CompConfig(1000, "{\"port\":9081}"));
-        component.start();
     }
 
 }

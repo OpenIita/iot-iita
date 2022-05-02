@@ -6,14 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
+
 @Repository
 public class DeviceCache {
 
     @Autowired
     private DeviceRepository deviceRepository;
 
+    private static DeviceCache INSTANCE;
+
+    @PostConstruct
+    public void init() {
+        INSTANCE = this;
+    }
+
+    public static DeviceCache getInstance() {
+        return INSTANCE;
+    }
+
     @Cacheable(value = Constants.DEVICE_CACHE, key = "#pk+'_'+#dn")
-    public DeviceInfo findByProductKeyAndDeviceName(String pk, String dn) {
+    public DeviceInfo getDeviceInfo(String pk, String dn) {
         return deviceRepository.findByProductKeyAndDeviceName(pk, dn);
     }
 
@@ -26,4 +39,5 @@ public class DeviceCache {
     public DeviceInfo get(String deviceId) {
         return deviceRepository.findById(deviceId).orElse(new DeviceInfo());
     }
+
 }

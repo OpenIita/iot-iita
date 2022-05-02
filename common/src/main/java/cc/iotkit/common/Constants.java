@@ -18,20 +18,7 @@ public interface Constants {
 
     String APP_DESIGN_CACHE = "app_design_cache";
 
-    /**
-     * 天猫精灵平台
-     */
-    String PLATFORM_ALIGENIE = "aligenie";
-
-    /**
-     * topic前缀第三方接入网关
-     */
-    String TOPIC_PREFIX_GATEWAY = "gateway";
-
-    /**
-     * topic前缀APP
-     */
-    String TOPIC_PREFIX_APP = "app";
+    String PRODUCT_SCRIPT_CACHE = "product_script_cache";
 
     /**
      * 管理员角色

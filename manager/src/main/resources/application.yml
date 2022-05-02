@@ -24,7 +24,7 @@ spring:
   cache:
     cache-names: foo,bar
     caffeine:
-      spec: maximumSize=5000,expireAfterAccess=120s
+      spec: maximumSize=5000,expireAfterAccess=300s
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

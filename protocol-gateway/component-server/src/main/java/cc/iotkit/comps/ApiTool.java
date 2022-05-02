@@ -112,22 +112,23 @@ public class ApiTool {
             if (method == HttpMethod.POST) {
                 request.sendJson(params)
                         .onSuccess((response) -> {
-                            System.out.println(response.bodyAsString());
+                            log.info("send succeed,response:{}", response.bodyAsString());
                             apiResponse.set(response.bodyAsJson(ApiResponse.class));
                             wait.countDown();
                         })
                         .onFailure((err) -> {
-                            err.printStackTrace();
+                            log.error("send failed", err);
                             wait.countDown();
                         });
             } else if (method == HttpMethod.GET) {
                 request.send()
                         .onSuccess((response) -> {
+                            log.info("send succeed,response:{}", response.bodyAsString());
                             apiResponse.set(response.bodyAsJson(ApiResponse.class));
                             wait.countDown();
                         })
                         .onFailure((err) -> {
-                            err.printStackTrace();
+                            log.error("send failed", err);
                             wait.countDown();
                         });
             }
@@ -140,6 +141,7 @@ public class ApiTool {
         } catch (Throwable e) {
             apiResponse.get().setStatus(500);
             apiResponse.get().setMessage(e.getMessage());
+            log.error("send error", e);
         }
         return apiResponse.get();
     }

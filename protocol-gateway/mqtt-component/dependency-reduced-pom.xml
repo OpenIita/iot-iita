@@ -26,6 +26,7 @@
               <include>io.vertx:vertx-core</include>
               <include>io.vertx:vertx-mqtt</include>
               <include>io.netty:netty-codec-mqtt</include>
+              <include>org.luaj:luaj-jse</include>
             </includes>
           </artifactSet>
         </configuration>
@@ -71,6 +72,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.luaj</groupId>
+      <artifactId>luaj-jse</artifactId>
+      <version>3.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>common</artifactId>
       <version>0.1.0-SNAPSHOT</version>
@@ -79,6 +86,12 @@
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>component</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>cc.iotkit</groupId>
+      <artifactId>dao</artifactId>
       <version>0.1.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
