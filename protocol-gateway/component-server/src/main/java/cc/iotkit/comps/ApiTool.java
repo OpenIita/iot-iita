@@ -25,10 +25,14 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class ApiTool {
 
-    private static final Vertx vertx;
-    private static final WebClient client;
+    private final Vertx vertx;
+    private final WebClient client;
 
-    static {
+    private String host;
+    private int port;
+    private int timeout;
+
+    public ApiTool() {
         if (Vertx.currentContext() == null) {
             vertx = Vertx.vertx();
         } else {
@@ -41,24 +45,20 @@ public class ApiTool {
         client = WebClient.create(vertx, options);
     }
 
-    private static String host;
-    private static int port;
-    private static int timeout;
-
-    public static void config(String host, int port, int timeout) {
-        ApiTool.host = host;
-        ApiTool.port = port;
-        ApiTool.timeout = timeout;
+    public void config(String host, int port, int timeout) {
+        this.host = host;
+        this.port = port;
+        this.timeout = timeout;
     }
 
-    private static String getPath(String path) {
+    private String getPath(String path) {
         return Paths.get(Constants.API.DEVICE_BASE, path).toString();
     }
 
     /**
      * 获取用户的设备列表
      */
-    public static ApiResponse getDevices(String token) {
+    public ApiResponse getDevices(String token) {
         HttpRequest<Buffer> request = client
                 .post(port, host, getPath(Constants.API.DEVICE_LIST
                         .replace("{size}", "1000")
@@ -69,7 +69,7 @@ public class ApiTool {
     /**
      * 获取设备详情
      */
-    public static ApiResponse getDeviceDetail(String token, String deviceId) {
+    public ApiResponse getDeviceDetail(String token, String deviceId) {
         HttpRequest<Buffer> request = client
                 .get(port, host, getPath(Constants.API.DEVICE_DETAIL
                         .replace("{deviceId}", deviceId)));
@@ -79,7 +79,7 @@ public class ApiTool {
     /**
      * 设置属性
      */
-    public static ApiResponse setProperties(String token, String deviceId, Map<String, Object> properties) {
+    public ApiResponse setProperties(String token, String deviceId, Map<String, Object> properties) {
         HttpRequest<Buffer> request = client
                 .post(port, host, getPath(Constants.API.DEVICE_SET_PROPERTIES
                         .replace("{deviceId}", deviceId)));
@@ -89,7 +89,7 @@ public class ApiTool {
     /**
      * 调用服务
      */
-    public static ApiResponse invokeService(String token, String deviceId, String service, Map<String, Object> params) {
+    public ApiResponse invokeService(String token, String deviceId, String service, Map<String, Object> params) {
         HttpRequest<Buffer> request = client
                 .post(port, host, getPath(Constants.API.DEVICE_INVOKE_SERVICE
                         .replace("{deviceId}", deviceId)
@@ -97,7 +97,7 @@ public class ApiTool {
         return send(token, HttpMethod.POST, request, params);
     }
 
-    private static ApiResponse send(String token, HttpMethod method, HttpRequest<Buffer> request, Map<String, Object> params) {
+    private ApiResponse send(String token, HttpMethod method, HttpRequest<Buffer> request, Map<String, Object> params) {
         request = request
                 .timeout(timeout)
                 .putHeader("wrap-response", "json")
@@ -146,7 +146,7 @@ public class ApiTool {
         return apiResponse.get();
     }
 
-    public static void log(String msg) {
+    public void log(String msg) {
         log.info(msg);
     }
 

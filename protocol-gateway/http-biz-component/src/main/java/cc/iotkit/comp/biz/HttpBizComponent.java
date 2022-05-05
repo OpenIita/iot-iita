@@ -129,6 +129,11 @@ public class HttpBizComponent implements IComponent {
     }
 
     @Override
+    public void putScriptEnv(String key, Object value) {
+        engine.put(key, value);
+    }
+
+    @Override
     public void stop() {
         backendServer.close();
     }

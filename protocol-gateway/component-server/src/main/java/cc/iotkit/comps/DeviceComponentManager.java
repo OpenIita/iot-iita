@@ -126,10 +126,13 @@ public class DeviceComponentManager {
         if (component == null) {
             return;
         }
-        component.setHandler(
-                new DeviceMessageHandler(this, component,
-                        component.getScript(), component.getConverter(),
-                        deviceBehaviourService));
+        DeviceMessageHandler messageHandler = new DeviceMessageHandler(this, component,
+                component.getScript(), component.getConverter(),
+                deviceBehaviourService);
+        messageHandler.putScriptEnv("apiTool", new ApiTool());
+        messageHandler.putScriptEnv("deviceBehaviour", deviceBehaviourService);
+
+        component.setHandler(messageHandler);
         component.start();
         states.put(id, true);
     }

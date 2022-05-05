@@ -196,6 +196,11 @@ public class DeviceMessageHandler implements IMessageHandler {
         }
     }
 
+    @Override
+    public void putScriptEnv(String key, Object value) {
+        engine.put(key, value);
+    }
+
     @Data
     public static class Action {
         public static final String TYPE_ACK = "ack";

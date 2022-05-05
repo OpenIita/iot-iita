@@ -38,4 +38,8 @@ public abstract class AbstractDeviceComponent implements IDeviceComponent {
     public CompConfig getConfig() {
         return config;
     }
+
+    @Override
+    public void putScriptEnv(String key, Object value) {
+    }
 }

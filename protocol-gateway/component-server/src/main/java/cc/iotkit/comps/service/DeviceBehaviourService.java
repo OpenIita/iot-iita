@@ -250,4 +250,12 @@ public class DeviceBehaviourService {
             log.error("send thing model message error", e);
         }
     }
+
+    /**
+     * 提供给js调用的方法
+     */
+    public void reportMessage(String jsonMsg) {
+        ThingModelMessage message = JsonUtil.parse(jsonMsg, ThingModelMessage.class);
+        reportMessage(message);
+    }
 }
