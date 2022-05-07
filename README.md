@@ -26,7 +26,7 @@
 1.  技术文档
     邀你加入「iot平台技术文档」知识库: https://ztktkv.yuque.com/g/ztktkv/gb3v6g/collaborator/join?token=zz5PUmXzGQqc4h9t# (只读成员)
     
-      **这是我宝贵的技术文档分享，看完后请帮忙给本仓库点个star。 :sparkles:** 
+      **这是我宝贵的技术文档分享，请给本仓库点个star :sparkles: 支持一下，谢谢！** 
 2.  系统操作文档
 
 #### 待办事项
