@@ -43,7 +43,7 @@ public class DeviceBehaviourService {
     private ServerConfig serverConfig;
     @Autowired
     private DeviceCache deviceCache;
-    @Autowired
+//    @Autowired
     private DeviceStateHolder deviceStateHolder;
 
     private Producer<ThingModelMessage> deviceMessageProducer;
@@ -209,11 +209,11 @@ public class DeviceBehaviourService {
         if (online) {
             device.getState().setOnline(true);
             device.getState().setOnlineTime(System.currentTimeMillis());
-            deviceStateHolder.online(device.getDeviceId());
+//            deviceStateHolder.online(device.getDeviceId());
         } else {
             device.getState().setOnline(false);
             device.getState().setOfflineTime(System.currentTimeMillis());
-            deviceStateHolder.offline(device.getDeviceId());
+//            deviceStateHolder.offline(device.getDeviceId());
         }
         deviceRepository.save(device);
 

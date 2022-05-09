@@ -48,7 +48,13 @@ public class SpaceDevice {
     private String spaceId;
 
     /**
-     * 空间名称
+     * 添加时间
      */
-    private String spaceName;
+    private Long addAt;
+
+    /**
+     * 使用时间
+     */
+    private Long useAt;
+
 }

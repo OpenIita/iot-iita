@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * 设备状态维持，每1分钟更新一次心跳
  */
 @Slf4j
-@Service
+//@Service
 public class DeviceStateHolder implements MessageListener<DeviceStateHolder.OfflineMessage> {
 
     private ScheduledThreadPoolExecutor stateHolderTask;

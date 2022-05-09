@@ -51,6 +51,11 @@ public class CacheConfig {
                         Caffeine.newBuilder()
                                 .expireAfterWrite(5, TimeUnit.MINUTES)
                                 .build()
+                ), new CaffeineCache(
+                        Constants.SPACE_CACHE,
+                        Caffeine.newBuilder()
+                                .expireAfterWrite(5, TimeUnit.MINUTES)
+                                .build()
                 )
         ));
         return manager;

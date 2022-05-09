@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -53,9 +54,11 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         super.configure(http);
         http
                 .authorizeRequests()
-                .antMatchers("/*.html", "/favicon.ico","/v2/api-docs", "/webjars/**", "/swagger-resources/**", "/*.js").permitAll()
+                .antMatchers("/*.html", "/favicon.ico", "/v2/api-docs", "/webjars/**", "/swagger-resources/**", "/*.js").permitAll()
                 .antMatchers("/api/**").hasRole("iot_client_user")
                 .antMatchers("/aligenieDevice/invoke/**").hasRole("iot_client_user")
+                .antMatchers(HttpMethod.DELETE).hasRole("iot_write")
+                .antMatchers(HttpMethod.PUT).hasRole("iot_write")
                 .antMatchers("/**/save*/**").hasRole("iot_write")
                 .antMatchers("/**/del*/**").hasRole("iot_write")
                 .antMatchers("/**/add*/**").hasRole("iot_write")

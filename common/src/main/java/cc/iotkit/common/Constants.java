@@ -10,6 +10,8 @@ public interface Constants {
 
     String DEVICE_CACHE = "device_cache";
 
+    String SPACE_CACHE = "device_cache";
+
     String THING_MODEL_CACHE = "thing_model_cache";
 
     String WECHAT_APP_ID = "wx791cb7bf75950e0c";

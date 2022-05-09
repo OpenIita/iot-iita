@@ -31,13 +31,8 @@ public class DeviceCache {
     }
 
     @Cacheable(value = Constants.DEVICE_CACHE, key = "#deviceId")
-    public DeviceInfo findByDeviceId(String deviceId) {
-        return deviceRepository.findByDeviceId(deviceId);
-    }
-
-    @Cacheable(value = Constants.DEVICE_CACHE, key = "#deviceId")
     public DeviceInfo get(String deviceId) {
-        return deviceRepository.findById(deviceId).orElse(new DeviceInfo());
+        return deviceRepository.findById(deviceId).orElse(null);
     }
 
 }

@@ -31,22 +31,17 @@ public class ProductCache {
         return INSTANCE;
     }
 
-    @Cacheable(value = Constants.PRODUCT_CACHE, key = "'pk'+#pk", unless = "#result == null")
+    @Cacheable(value = Constants.PRODUCT_CACHE, key = "'product'+#pk")
     public Product findById(String pk) {
         return productRepository.findById(pk).orElse(new Product());
     }
 
-    @Cacheable(value = Constants.THING_MODEL_CACHE, key = "'pk'+#pk", unless = "#result == null")
+    @Cacheable(value = Constants.THING_MODEL_CACHE, key = "'thing_model'+#pk")
     public ThingModel getThingModel(String pk) {
         return thingModelRepository.findByProductKey(pk);
     }
 
-    @Cacheable(value = Constants.PRODUCT_SCRIPT_CACHE, key = "'pk'+#pk", unless = "#result == null")
-    public ProductModel getProductScript(String pk) {
-        return productModelRepository.findById(pk).orElse(null);
-    }
-
-    @Cacheable(value = Constants.PRODUCT_SCRIPT_CACHE, key = "'model'+#model", unless = "#result == null")
+    @Cacheable(value = Constants.PRODUCT_SCRIPT_CACHE, key = "'product_script'+#model")
     public ProductModel getProductScriptByModel(String model) {
         return productModelRepository.findByModel(model);
     }

@@ -44,6 +44,11 @@ public class SpaceDeviceVo {
     private String picUrl;
 
     /**
+     * 空间ID
+     */
+    private String spaceId;
+
+    /**
      * 空间名称
      */
     private String spaceName;
