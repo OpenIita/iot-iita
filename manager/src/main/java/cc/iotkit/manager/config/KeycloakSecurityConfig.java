@@ -62,6 +62,11 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
                 .antMatchers("/space/saveSpace/**").hasRole("iot_client_user")
                 .antMatchers("/space/delSpace/**").hasRole("iot_client_user")
                 .antMatchers("/space/saveHome/**").hasRole("iot_client_user")
+                .antMatchers("/space/currentHome/**").hasRole("iot_client_user")
+                .antMatchers("/space/myRecentDevices/**").hasRole("iot_client_user")
+                .antMatchers("/space/spaces/**").hasRole("iot_client_user")
+                .antMatchers("/space/myDevices/**").hasRole("iot_client_user")
+                .antMatchers("/space/findDevice/**").hasRole("iot_client_user")
 
                 .antMatchers(HttpMethod.DELETE).hasRole("iot_write")
                 .antMatchers(HttpMethod.PUT).hasRole("iot_write")

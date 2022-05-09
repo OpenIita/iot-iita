@@ -1,12 +1,16 @@
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.dao.*;
+import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +36,8 @@ public class SpaceDeviceController {
     @Autowired
     private ProductCache productCache;
     @Autowired
+    private CategoryCache categoryCache;
+    @Autowired
     private SpaceCache spaceCache;
 
     /**
@@ -49,7 +55,7 @@ public class SpaceDeviceController {
      * @param spaceId 空间id
      */
     @GetMapping("/myDevices/{spaceId}")
-    public List<SpaceDeviceVo> getMyDevices(String spaceId) {
+    public List<SpaceDeviceVo> getMyDevices(@PathVariable("spaceId") String spaceId) {
         List<SpaceDevice> spaceDevices = spaceDeviceRepository.findByUidOrderByUseAtDesc(AuthUtil.getUserId());
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
@@ -76,26 +82,6 @@ public class SpaceDeviceController {
                 .build();
     }
 
-
-//    @PostMapping("/list")
-//    public Paging<SpaceInfo> getDevices(int page,
-//                                            int limit,
-//                                            String address) {
-//        Criteria condition = new Criteria();
-//        if (StringUtils.isNotBlank(address)) {
-//            condition.and("address").regex(".*" + address + ".*");
-//        }
-//        List<UserInfo> userInfoList = userInfoDao.find(condition, (page - 1) * limit,
-//                limit, Sort.Order.desc("createAt"));
-//
-//        List<SpaceInfo> spaces = userInfoList.stream().map((u ->
-//                new SpaceInfo(u.getAddress(), u.getUid())))
-//                .collect(Collectors.toList());
-//
-//        return new Paging<>(userInfoDao.count(condition),
-//                spaces);
-//    }
-
     @GetMapping("/{userId}/devices")
     public List<SpaceDeviceVo> getDevices(@PathVariable("userId") String userId) {
         List<SpaceDeviceVo> deviceVos = new ArrayList<>();
@@ -114,6 +100,53 @@ public class SpaceDeviceController {
                     .build());
         });
         return deviceVos;
+    }
+
+    @GetMapping("/findDevice")
+    List<FindDeviceVo> findDevice(String mac) {
+        if (StringUtils.isBlank(mac)) {
+            throw new BizException("mac is blank");
+        }
+
+        List<FindDeviceVo> findDeviceVos = new ArrayList<>();
+        List<DeviceInfo> devices = deviceRepository.findByDeviceName(mac);
+        if (devices == null) {
+            return findDeviceVos;
+        }
+
+        //查找网关下子设备
+        List<DeviceInfo> subDevices = new ArrayList<>();
+        for (DeviceInfo device : devices) {
+            if (device.getParentId() == null) {
+                subDevices = deviceRepository.findByParentId(device.getDeviceId());
+            }
+        }
+        devices.addAll(subDevices);
+
+        //查找空间设备
+        for (DeviceInfo device : devices) {
+            SpaceDevice spaceDevice = spaceDeviceRepository.findByDeviceId(device.getDeviceId());
+            if (spaceDevice == null) {
+                //没有被其它人占用
+                findDeviceVos.add(getFindDeviceVo(device));
+            }
+        }
+        return findDeviceVos;
+    }
+
+    private FindDeviceVo getFindDeviceVo(DeviceInfo device) {
+        FindDeviceVo findDeviceVo = FindDeviceVo.builder()
+                .deviceId(device.getDeviceId())
+                .deviceName(device.getDeviceName())
+                .productKey(device.getProductKey())
+                .build();
+
+        Product product = productCache.findById(device.getProductKey());
+        Category category = categoryCache.getById(product.getCategory());
+        findDeviceVo.setProductName(product.getName());
+        findDeviceVo.setProductImg(product.getImg());
+        findDeviceVo.setCategoryName(category.getName());
+        return findDeviceVo;
     }
 
 }
