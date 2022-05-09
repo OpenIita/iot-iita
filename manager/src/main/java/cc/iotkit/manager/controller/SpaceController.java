@@ -26,6 +26,17 @@ public class SpaceController {
     @Autowired
     private DataOwnerService dataOwnerService;
 
+    /**
+     * 取用户当前家庭
+     */
+    @GetMapping("/currentHome")
+    public Home getCurrentHome() {
+        return homeRepository.findByUidAndCurrent(AuthUtil.getUserId(), true);
+    }
+
+    /**
+     * 保存家庭信息
+     */
     @PostMapping("/saveHome/{id}")
     public void saveHome(@PathVariable("id") String id, Home home) {
         Optional<Home> optHome = homeRepository.findById(id);
@@ -44,17 +55,17 @@ public class SpaceController {
     }
 
     /**
-     * 我的空间设备列表
+     * 我的空间列表
      */
-    @GetMapping("/spaces")
-    public List<Space> getSpaces() {
-        return spaceRepository.findByUidOrderByCreateAtDesc(AuthUtil.getUserId());
+    @GetMapping("/spaces/{homeId}")
+    public List<Space> getSpaces(@PathVariable("homeId") String homeId) {
+        return spaceRepository.findByUidAndHomeIdOrderByCreateAtDesc(AuthUtil.getUserId(), homeId);
     }
 
     /**
      * 在当前家庭中添加空间
      */
-    @PostMapping("/add")
+    @PostMapping("/addSpace")
     public void addSpace(String name) {
         String uid = AuthUtil.getUserId();
         Home currHome = homeRepository.findByUidAndCurrent(uid, true);

@@ -11,4 +11,6 @@ public interface SpaceRepository extends MongoRepository<Space, String> {
 
     List<Space> findByUidOrderByCreateAtDesc(String uid);
 
+    List<Space> findByUidAndHomeIdOrderByCreateAtDesc(String uid, String homeId);
+
 }
