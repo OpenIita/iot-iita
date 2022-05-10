@@ -14,4 +14,6 @@ public interface SpaceDeviceRepository extends MongoRepository<SpaceDevice, Stri
     List<SpaceDevice> findByUidAndSpaceIdOrderByAddAtDesc(String uid, String spaceId);
 
     SpaceDevice findByDeviceId(String deviceId);
+
+    SpaceDevice findByDeviceIdAndUid(String deviceId, String uid);
 }

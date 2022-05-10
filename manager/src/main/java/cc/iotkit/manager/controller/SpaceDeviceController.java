@@ -4,6 +4,7 @@ import cc.iotkit.common.exception.BizException;
 import cc.iotkit.dao.*;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
+import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
@@ -13,13 +14,11 @@ import cc.iotkit.model.space.SpaceDevice;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -39,6 +38,10 @@ public class SpaceDeviceController {
     private CategoryCache categoryCache;
     @Autowired
     private SpaceCache spaceCache;
+    @Autowired
+    private SpaceRepository spaceRepository;
+    @Autowired
+    private DataOwnerService dataOwnerService;
 
     /**
      * 我最近使用的设备列表
@@ -56,7 +59,8 @@ public class SpaceDeviceController {
      */
     @GetMapping("/myDevices/{spaceId}")
     public List<SpaceDeviceVo> getMyDevices(@PathVariable("spaceId") String spaceId) {
-        List<SpaceDevice> spaceDevices = spaceDeviceRepository.findByUidOrderByUseAtDesc(AuthUtil.getUserId());
+        List<SpaceDevice> spaceDevices = spaceDeviceRepository.
+                findByUidAndSpaceIdOrderByAddAtDesc(AuthUtil.getUserId(), spaceId);
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
 
@@ -75,6 +79,7 @@ public class SpaceDeviceController {
                 .spaceId(sd.getSpaceId())
                 .spaceName(space.getName())
                 .productKey(device.getProductKey())
+                .category(product.getCategory())
                 .picUrl(product.getImg())
                 .online(state != null && state.isOnline())
                 .property(device.getProperty())
@@ -149,4 +154,64 @@ public class SpaceDeviceController {
         return findDeviceVo;
     }
 
+    @PostMapping("/addDevice")
+    public void addDevice(SpaceDevice device) {
+        String deviceId = device.getDeviceId();
+        DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
+        if (deviceInfo == null) {
+            throw new BizException("device does not exist");
+        }
+        String spaceId = device.getSpaceId();
+        Optional<Space> optSpace = spaceRepository.findById(spaceId);
+        if (!optSpace.isPresent()) {
+            throw new BizException("space does not exist");
+        }
+
+        SpaceDevice oldSpaceDevice = spaceDeviceRepository.findByDeviceId(deviceId);
+        if (oldSpaceDevice != null) {
+            throw new BizException("device has been added");
+        }
+
+        Space space = optSpace.get();
+
+        SpaceDevice spaceDevice = SpaceDevice.builder()
+                .deviceId(deviceId)
+                .spaceId(spaceId)
+                .deviceId(deviceId)
+                .name(device.getName())
+                .homeId(space.getHomeId())
+                .uid(AuthUtil.getUserId())
+                .addAt(System.currentTimeMillis())
+                .build();
+        spaceDeviceRepository.save(spaceDevice);
+
+        //更新设备子用户列表
+        List<String> subUid = deviceInfo.getSubUid();
+        if (subUid == null) {
+            subUid = new ArrayList<>();
+        }
+
+        String uid = AuthUtil.getUserId();
+        if (!subUid.contains(uid)) {
+            subUid.add(uid);
+        }
+        deviceRepository.save(deviceInfo);
+    }
+
+    @DeleteMapping("/removeDevice")
+    public void removeDevice(String deviceId) {
+        String uid = AuthUtil.getUserId();
+        SpaceDevice spaceDevice = spaceDeviceRepository.findByDeviceIdAndUid(deviceId, uid);
+        if (spaceDevice == null) {
+            throw new BizException("space device does not exist");
+        }
+
+        spaceDeviceRepository.deleteById(spaceDevice.getId());
+        DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
+        List<String> subUid = deviceInfo.getSubUid();
+        if (subUid != null) {
+            subUid.remove(uid);
+            deviceRepository.save(deviceInfo);
+        }
+    }
 }

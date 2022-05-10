@@ -68,4 +68,8 @@ public class SpaceDeviceVo {
      */
     private String productKey;
 
+    /**
+     * 品类
+     */
+    private String category;
 }

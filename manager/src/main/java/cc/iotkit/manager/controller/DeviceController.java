@@ -62,14 +62,12 @@ public class DeviceController {
         if (StringUtils.isBlank(deviceId) || StringUtils.isBlank(service)) {
             throw new RuntimeException("deviceId/service is blank.");
         }
-        dataOwnerService.checkWriteRole();
         return new InvokeResult(deviceService.invokeService(deviceId, service, args));
     }
 
     @PostMapping(Constants.API.DEVICE_SET_PROPERTIES)
     public InvokeResult setProperty(@PathVariable("deviceId") String deviceId,
                                     @RequestBody Map<String, Object> args) {
-        dataOwnerService.checkWriteRole();
         return new InvokeResult(deviceService.setProperty(deviceId, args));
     }
 
