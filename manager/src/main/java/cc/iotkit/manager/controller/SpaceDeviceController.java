@@ -189,6 +189,7 @@ public class SpaceDeviceController {
         List<String> subUid = deviceInfo.getSubUid();
         if (subUid == null) {
             subUid = new ArrayList<>();
+            deviceInfo.setSubUid(subUid);
         }
 
         String uid = AuthUtil.getUserId();
