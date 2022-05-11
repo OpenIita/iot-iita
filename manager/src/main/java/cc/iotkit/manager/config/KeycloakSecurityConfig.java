@@ -68,6 +68,9 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
                 .antMatchers("/space/myDevices/**").hasRole("iot_client_user")
                 .antMatchers("/space/findDevice/**").hasRole("iot_client_user")
                 .antMatchers("/space/addDevice/**").hasRole("iot_client_user")
+                .antMatchers("/space/saveDevice").hasRole("iot_client_user")
+                .antMatchers("/space/removeDevice").hasRole("iot_client_user")
+                .antMatchers("/space/device/*").hasRole("iot_client_user")
                 .antMatchers("/device/*/service/property/set").hasRole("iot_client_user")
                 .antMatchers("/device/*/service/*/invoke").hasRole("iot_client_user")
 
@@ -75,6 +78,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
                 .antMatchers(HttpMethod.DELETE).hasRole("iot_write")
                 .antMatchers(HttpMethod.PUT).hasRole("iot_write")
                 .antMatchers("/**/save*/**").hasRole("iot_write")
+                .antMatchers("/**/remove*/**").hasRole("iot_write")
                 .antMatchers("/**/del*/**").hasRole("iot_write")
                 .antMatchers("/**/add*/**").hasRole("iot_write")
                 .antMatchers("/**/clear*/**").hasRole("iot_write")

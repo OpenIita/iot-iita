@@ -69,7 +69,17 @@ public class SpaceDeviceVo {
     private String productKey;
 
     /**
+     * 产品名
+     */
+    private String productName;
+
+    /**
      * 品类
      */
     private String category;
+
+    /**
+     * 品类名
+     */
+    private String categoryName;
 }

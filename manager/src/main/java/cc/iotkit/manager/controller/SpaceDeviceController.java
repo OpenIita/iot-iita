@@ -69,6 +69,7 @@ public class SpaceDeviceController {
         DeviceInfo device = deviceCache.get(sd.getDeviceId());
         Space space = spaceCache.getSpace(sd.getSpaceId());
         Product product = productCache.findById(device.getProductKey());
+        Category category = categoryCache.getById(product.getCategory());
         DeviceInfo.State state = device.getState();
 
         return SpaceDeviceVo.builder()
@@ -79,7 +80,9 @@ public class SpaceDeviceController {
                 .spaceId(sd.getSpaceId())
                 .spaceName(space.getName())
                 .productKey(device.getProductKey())
+                .productName(product.getName())
                 .category(product.getCategory())
+                .categoryName(category.getName())
                 .picUrl(product.getImg())
                 .online(state != null && state.isOnline())
                 .property(device.getProperty())
@@ -89,22 +92,8 @@ public class SpaceDeviceController {
 
     @GetMapping("/{userId}/devices")
     public List<SpaceDeviceVo> getDevices(@PathVariable("userId") String userId) {
-        List<SpaceDeviceVo> deviceVos = new ArrayList<>();
-        List<SpaceDevice> devices = spaceDeviceRepository.findAll(Example.of(SpaceDevice.builder().uid(userId).build()));
-        devices.forEach(sd -> {
-            DeviceInfo deviceInfo = deviceCache.get(sd.getDeviceId());
-            Product product = productCache.findById(deviceInfo.getProductKey());
-            deviceVos.add(SpaceDeviceVo.builder()
-                    .deviceId(sd.getDeviceId())
-                    .name(sd.getName())
-                    .picUrl(product.getImg())
-                    .spaceName("")
-                    .online(deviceInfo.getState().isOnline())
-                    .property(deviceInfo.getProperty())
-                    .productKey(deviceInfo.getProductKey())
-                    .build());
-        });
-        return deviceVos;
+        List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(Example.of(SpaceDevice.builder().uid(userId).build()));
+        return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
 
     @GetMapping("/findDevice")
@@ -206,6 +195,7 @@ public class SpaceDeviceController {
         if (spaceDevice == null) {
             throw new BizException("space device does not exist");
         }
+        dataOwnerService.checkOwner(spaceDevice);
 
         spaceDeviceRepository.deleteById(spaceDevice.getId());
         DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
@@ -214,5 +204,28 @@ public class SpaceDeviceController {
             subUid.remove(uid);
             deviceRepository.save(deviceInfo);
         }
+    }
+
+    @PostMapping("/saveDevice")
+    public void saveDevice(SpaceDevice spaceDevice) {
+        dataOwnerService.checkOwner(spaceDevice);
+        Optional<SpaceDevice> optData = spaceDeviceRepository.findById(spaceDevice.getId());
+        if (!optData.isPresent()) {
+            throw new BizException("space device does not exist");
+        }
+        SpaceDevice oldData = optData.get();
+        oldData.setName(spaceDevice.getName());
+        oldData.setSpaceId(spaceDevice.getSpaceId());
+        spaceDeviceRepository.save(oldData);
+    }
+
+    @GetMapping("/device/{deviceId}")
+    public SpaceDeviceVo getSpaceDevice(@PathVariable("deviceId") String deviceId) {
+        String uid = AuthUtil.getUserId();
+        SpaceDevice spaceDevice = spaceDeviceRepository.findByDeviceIdAndUid(deviceId, uid);
+        //更新设备使用时间
+        spaceDevice.setUseAt(System.currentTimeMillis());
+        spaceDeviceRepository.save(spaceDevice);
+        return parseSpaceDevice(spaceDevice);
     }
 }
