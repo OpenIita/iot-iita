@@ -8,6 +8,7 @@ import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.dao.*;
 import cc.iotkit.manager.model.query.DeviceQuery;
 import cc.iotkit.manager.service.DataOwnerService;
+import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.InvokeResult;
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,8 @@ public class DeviceController {
     private DevicePropertyDao devicePropertyDao;
     @Autowired
     private DeviceBehaviourService behaviourService;
+    @Autowired
+    DeferredDataConsumer deferredDataConsumer;
 
     @PostMapping(Constants.API.DEVICE_INVOKE_SERVICE)
     public InvokeResult invokeService(@PathVariable("deviceId") String deviceId,
@@ -202,5 +206,22 @@ public class DeviceController {
         message.setOccurred(System.currentTimeMillis());
         message.setTime(System.currentTimeMillis());
         behaviourService.reportMessage(message);
+    }
+
+    /**
+     * 消费设备信息消息（实时推送设备信息）
+     */
+    @GetMapping("/{deviceId}/consumer/{clientId}")
+    public DeferredResult<ThingModelMessage> consumerDeviceInfo(
+            @PathVariable("deviceId") String deviceId,
+            @PathVariable("clientId") String clientId
+    ) {
+        String uid = AuthUtil.getUserId();
+        DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
+        dataOwnerService.checkOwner(deviceInfo);
+
+        //按用户+客户端ID订阅
+        return deferredDataConsumer.newConsumer(uid + clientId,
+                Constants.HTTP_CONSUMER_DEVICE_INFO_TOPIC + deviceId);
     }
 }

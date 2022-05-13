@@ -64,6 +64,10 @@ public interface Constants {
      */
     String THING_MODEL_MESSAGE_TOPIC = "device_thing";
 
+    /**
+     * http消费设备信息的topic
+     */
+    String HTTP_CONSUMER_DEVICE_INFO_TOPIC = "device_info:";
 
     interface API {
 

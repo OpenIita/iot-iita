@@ -66,7 +66,7 @@ public class SpaceDeviceController {
 
 
     private SpaceDeviceVo parseSpaceDevice(SpaceDevice sd) {
-        DeviceInfo device = deviceCache.get(sd.getDeviceId());
+        DeviceInfo device = deviceRepository.findByDeviceId(sd.getDeviceId());
         Space space = spaceCache.getSpace(sd.getSpaceId());
         Product product = productCache.findById(device.getProductKey());
         Category category = categoryCache.getById(product.getCategory());
