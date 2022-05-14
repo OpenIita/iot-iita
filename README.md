@@ -21,12 +21,11 @@
 #### 安装教程
 
 见：https://ztktkv.yuque.com/docs/share/b32da919-0108-4112-9406-fe5c6672e0d7?# 《安装和配置》
-链接有效期至 2022-04-08 20:20:01
 
 #### 使用说明
 
 1.  技术文档
-    邀你加入「iot平台技术文档」知识库: https://ztktkv.yuque.com/g/ztktkv/gb3v6g/collaborator/join?token=zz5PUmXzGQqc4h9t# (只读成员)
+    邀你加入「iot平台技术文档」知识库: https://ztktkv.yuque.com/g/ztktkv/gb3v6g/collaborator/join?token=zz5PUmXzGQqc4h9t# 
     
       **这是我宝贵的技术文档分享，请给本仓库点个star :sparkles: 支持一下，谢谢！** 
 2.  系统操作文档
