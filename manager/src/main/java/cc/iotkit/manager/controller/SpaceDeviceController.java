@@ -1,11 +1,13 @@
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.dao.*;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
@@ -14,10 +16,12 @@ import cc.iotkit.model.space.SpaceDevice;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,11 +46,13 @@ public class SpaceDeviceController {
     private SpaceRepository spaceRepository;
     @Autowired
     private DataOwnerService dataOwnerService;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     /**
      * 我最近使用的设备列表
      */
-    @GetMapping("/myRecentDevices")
+    @GetMapping(Constants.API_SPACE.RECENT_DEVICES)
     public List<SpaceDeviceVo> getMyRecentDevices() {
         List<SpaceDevice> spaceDevices = spaceDeviceRepository.findByUidOrderByUseAtDesc(AuthUtil.getUserId());
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
@@ -57,13 +63,20 @@ public class SpaceDeviceController {
      *
      * @param spaceId 空间id
      */
-    @GetMapping("/myDevices/{spaceId}")
+    @GetMapping(Constants.API_SPACE.SPACE_DEVICES)
     public List<SpaceDeviceVo> getMyDevices(@PathVariable("spaceId") String spaceId) {
-        List<SpaceDevice> spaceDevices = spaceDeviceRepository.
-                findByUidAndSpaceIdOrderByAddAtDesc(AuthUtil.getUserId(), spaceId);
+        String uid = AuthUtil.getUserId();
+        List<SpaceDevice> spaceDevices;
+        if ("all".equals(spaceId)) {
+            //全部设备
+            spaceDevices = spaceDeviceRepository.findByUidOrderByUseAtDesc(uid);
+        } else {
+            //按空间获取
+            spaceDevices = spaceDeviceRepository.
+                    findByUidAndSpaceIdOrderByAddAtDesc(uid, spaceId);
+        }
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
-
 
     private SpaceDeviceVo parseSpaceDevice(SpaceDevice sd) {
         DeviceInfo device = deviceRepository.findByDeviceId(sd.getDeviceId());
@@ -90,13 +103,14 @@ public class SpaceDeviceController {
                 .build();
     }
 
+    @PreAuthorize("hasRole('iot_system_user')")
     @GetMapping("/{userId}/devices")
     public List<SpaceDeviceVo> getDevices(@PathVariable("userId") String userId) {
         List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(Example.of(SpaceDevice.builder().uid(userId).build()));
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
 
-    @GetMapping("/findDevice")
+    @GetMapping(Constants.API_SPACE.FIND_DEVICE)
     List<FindDeviceVo> findDevice(String mac) {
         if (StringUtils.isBlank(mac)) {
             throw new BizException("mac is blank");
@@ -143,7 +157,7 @@ public class SpaceDeviceController {
         return findDeviceVo;
     }
 
-    @PostMapping("/addDevice")
+    @PostMapping(Constants.API_SPACE.ADD_DEVICE)
     public void addDevice(SpaceDevice device) {
         String deviceId = device.getDeviceId();
         DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
@@ -182,13 +196,26 @@ public class SpaceDeviceController {
         }
 
         String uid = AuthUtil.getUserId();
+        Optional<UserInfo> optUser = userInfoRepository.findById(uid);
+        if (!optUser.isPresent()) {
+            throw new BizException("user does not exist");
+        }
         if (!subUid.contains(uid)) {
             subUid.add(uid);
         }
+
+        //更新设备标签
+        List<String> platforms = optUser.get().getUsePlatforms();
+        Map<String, DeviceInfo.Tag> tags = deviceInfo.getTag();
+        for (String platform : platforms) {
+            Constants.ThirdPlatform thirdPlatform = Constants.ThirdPlatform.valueOf(platform);
+            tags.put(platform, new DeviceInfo.Tag(platform, thirdPlatform.desc, "是"));
+        }
+
         deviceRepository.save(deviceInfo);
     }
 
-    @DeleteMapping("/removeDevice")
+    @DeleteMapping(Constants.API_SPACE.REMOVE_DEVICE)
     public void removeDevice(String deviceId) {
         String uid = AuthUtil.getUserId();
         SpaceDevice spaceDevice = spaceDeviceRepository.findByDeviceIdAndUid(deviceId, uid);
@@ -199,14 +226,23 @@ public class SpaceDeviceController {
 
         spaceDeviceRepository.deleteById(spaceDevice.getId());
         DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
-        List<String> subUid = deviceInfo.getSubUid();
-        if (subUid != null) {
-            subUid.remove(uid);
-            deviceRepository.save(deviceInfo);
+        Optional<UserInfo> optUser = userInfoRepository.findById(uid);
+        if (!optUser.isPresent()) {
+            throw new BizException("user does not exist");
         }
+
+        List<String> platforms = optUser.get().getUsePlatforms();
+        List<String> subUid = deviceInfo.getSubUid();
+        subUid.remove(uid);
+        //删除设备标签
+        for (String platform : platforms) {
+            deviceInfo.getTag().remove(platform);
+        }
+
+        deviceRepository.save(deviceInfo);
     }
 
-    @PostMapping("/saveDevice")
+    @PostMapping(Constants.API_SPACE.SAVE_DEVICE)
     public void saveDevice(SpaceDevice spaceDevice) {
         dataOwnerService.checkOwner(spaceDevice);
         Optional<SpaceDevice> optData = spaceDeviceRepository.findById(spaceDevice.getId());
@@ -219,7 +255,7 @@ public class SpaceDeviceController {
         spaceDeviceRepository.save(oldData);
     }
 
-    @GetMapping("/device/{deviceId}")
+    @GetMapping(Constants.API_SPACE.GET_DEVICE)
     public SpaceDeviceVo getSpaceDevice(@PathVariable("deviceId") String deviceId) {
         String uid = AuthUtil.getUserId();
         SpaceDevice spaceDevice = spaceDeviceRepository.findByDeviceIdAndUid(deviceId, uid);

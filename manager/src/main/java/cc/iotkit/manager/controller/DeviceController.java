@@ -59,7 +59,7 @@ public class DeviceController {
     @Autowired
     DeferredDataConsumer deferredDataConsumer;
 
-    @PostMapping(Constants.API.DEVICE_INVOKE_SERVICE)
+    @PostMapping(Constants.API_DEVICE.INVOKE_SERVICE)
     public InvokeResult invokeService(@PathVariable("deviceId") String deviceId,
                                       @PathVariable("service") String service,
                                       @RequestBody Map<String, Object> args) {
@@ -69,7 +69,7 @@ public class DeviceController {
         return new InvokeResult(deviceService.invokeService(deviceId, service, args));
     }
 
-    @PostMapping(Constants.API.DEVICE_SET_PROPERTIES)
+    @PostMapping(Constants.API_DEVICE.SET_PROPERTIES)
     public InvokeResult setProperty(@PathVariable("deviceId") String deviceId,
                                     @RequestBody Map<String, Object> args) {
         return new InvokeResult(deviceService.setProperty(deviceId, args));
@@ -136,7 +136,7 @@ public class DeviceController {
                                 .build())));
     }
 
-    @GetMapping(Constants.API.DEVICE_DETAIL)
+    @GetMapping(Constants.API_DEVICE.DETAIL)
     public DeviceInfo getDetail(@PathVariable("deviceId") String deviceId) {
         return dataOwnerService.checkOwner(deviceRepository.findById(deviceId).orElse(new DeviceInfo()));
     }

@@ -1,5 +1,7 @@
 package cc.iotkit.common;
 
+import lombok.Data;
+
 public interface Constants {
 
     String PRODUCT_SECRET = "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU";
@@ -55,11 +57,6 @@ public interface Constants {
     String PWD_SYSTEM_USER = "s123456";
 
     /**
-     * 设备原始上报消息的topic
-     */
-    String DEVICE_RAW_MESSAGE_TOPIC = "device_raw";
-
-    /**
      * 设备物模型消息的topic
      */
     String THING_MODEL_MESSAGE_TOPIC = "device_thing";
@@ -69,33 +66,91 @@ public interface Constants {
      */
     String HTTP_CONSUMER_DEVICE_INFO_TOPIC = "device_info:";
 
-    interface API {
+    /**
+     * 三方平台类型
+     */
+    enum ThirdPlatform {
+        dueros("小度"),
+        aligenie("天猫精灵"),
+        miiot("小爱");
+
+        public String desc;
+
+        ThirdPlatform(String desc) {
+            this.desc = desc;
+        }
+
+    }
+
+    interface API_DEVICE {
 
         /**
          * 设备-基路径
          */
-        String DEVICE_BASE = "/device";
+        String BASE = "/device";
 
         /**
          * 设备-设备列表
          */
-        String DEVICE_LIST = "/list/{size}/{page}";
+        String LIST = "/list/{size}/{page}";
 
         /**
          * 设备-设备详情
          */
-        String DEVICE_DETAIL = "/{deviceId}/detail";
+        String DETAIL = "/{deviceId}/detail";
 
         /**
          * 设备-属性设置
          */
-        String DEVICE_SET_PROPERTIES = "/{deviceId}/service/property/set";
+        String SET_PROPERTIES = "/{deviceId}/service/property/set";
 
         /**
          * 设备-服务调用
          */
-        String DEVICE_INVOKE_SERVICE = "/{deviceId}/service/{service}/invoke";
+        String INVOKE_SERVICE = "/{deviceId}/service/{service}/invoke";
 
     }
 
+    interface API_SPACE {
+
+        /**
+         * 空间-基路径
+         */
+        String BASE = "/space";
+
+        /**
+         * 最近使用设备列表
+         */
+        String RECENT_DEVICES = "/myRecentDevices";
+
+        /**
+         * 我的空间设备列表
+         */
+        String SPACE_DEVICES = "/myDevices/{spaceId}";
+
+        /**
+         * 查找设备
+         */
+        String FIND_DEVICE = "/findDevice";
+
+        /**
+         * 空间添加设备
+         */
+        String ADD_DEVICE = "/addDevice";
+
+        /**
+         * 空间删除设备
+         */
+        String REMOVE_DEVICE = "/removeDevice";
+
+        /**
+         * 空间修改设备
+         */
+        String SAVE_DEVICE = "/saveDevice";
+
+        /**
+         * 获取空间设备信息
+         */
+        String GET_DEVICE = "/device/{deviceId}";
+    }
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -72,16 +73,10 @@ public class UserInfo implements Owned {
 
     /**
      * 用户使用的平台
+     * 见:Constants.THIRD_PLATFORM
      */
-    private Platforms usePlatforms = new Platforms();
+    private List<String> usePlatforms = new ArrayList<>();
 
     private Long createAt;
 
-    @Data
-    public static class Platforms {
-        /**
-         * 天猫精灵
-         */
-        private boolean aligenie;
-    }
 }

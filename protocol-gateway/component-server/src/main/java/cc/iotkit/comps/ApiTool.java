@@ -51,8 +51,32 @@ public class ApiTool {
         this.timeout = timeout;
     }
 
-    private String getPath(String path) {
-        return Paths.get(Constants.API.DEVICE_BASE, path).toString();
+    private String getDevicePath(String path) {
+        return Paths.get(Constants.API_DEVICE.BASE, path).toString();
+    }
+
+    private String getSpacePath(String path) {
+        return Paths.get(Constants.API_SPACE.BASE, path).toString();
+    }
+
+    /**
+     * 获取用户空间中设备列表
+     */
+    public ApiResponse getSpaceDevices(String token) {
+        HttpRequest<Buffer> request = client
+                .get(port, host, getSpacePath(Constants.API_SPACE.SPACE_DEVICES
+                        .replace("{spaceId}", "all")));
+        return send(token, HttpMethod.GET, request, new HashMap<>());
+    }
+
+    /**
+     * 获取空间设备详情
+     */
+    public ApiResponse getSpaceDeviceDetail(String token, String deviceId) {
+        HttpRequest<Buffer> request = client
+                .get(port, host, getSpacePath(Constants.API_SPACE.GET_DEVICE
+                        .replace("{deviceId}", deviceId)));
+        return send(token, HttpMethod.GET, request, new HashMap<>());
     }
 
     /**
@@ -60,7 +84,7 @@ public class ApiTool {
      */
     public ApiResponse getDevices(String token) {
         HttpRequest<Buffer> request = client
-                .post(port, host, getPath(Constants.API.DEVICE_LIST
+                .post(port, host, getDevicePath(Constants.API_DEVICE.LIST
                         .replace("{size}", "1000")
                         .replace("{page}", "1")));
         return send(token, HttpMethod.POST, request, new HashMap<>());
@@ -71,7 +95,7 @@ public class ApiTool {
      */
     public ApiResponse getDeviceDetail(String token, String deviceId) {
         HttpRequest<Buffer> request = client
-                .get(port, host, getPath(Constants.API.DEVICE_DETAIL
+                .get(port, host, getDevicePath(Constants.API_DEVICE.DETAIL
                         .replace("{deviceId}", deviceId)));
         return send(token, HttpMethod.GET, request, new HashMap<>());
     }
@@ -81,7 +105,7 @@ public class ApiTool {
      */
     public ApiResponse setProperties(String token, String deviceId, Map<String, Object> properties) {
         HttpRequest<Buffer> request = client
-                .post(port, host, getPath(Constants.API.DEVICE_SET_PROPERTIES
+                .post(port, host, getDevicePath(Constants.API_DEVICE.SET_PROPERTIES
                         .replace("{deviceId}", deviceId)));
         return send(token, HttpMethod.POST, request, properties);
     }
@@ -91,7 +115,7 @@ public class ApiTool {
      */
     public ApiResponse invokeService(String token, String deviceId, String service, Map<String, Object> params) {
         HttpRequest<Buffer> request = client
-                .post(port, host, getPath(Constants.API.DEVICE_INVOKE_SERVICE
+                .post(port, host, getDevicePath(Constants.API_DEVICE.INVOKE_SERVICE
                         .replace("{deviceId}", deviceId)
                         .replace("{service}", service)));
         return send(token, HttpMethod.POST, request, params);

@@ -3,7 +3,6 @@ package cc.iotkit.manager.controller.api;
 import cc.iotkit.dao.AppDesignRepository;
 import cc.iotkit.dao.DeviceRepository;
 import cc.iotkit.dao.SpaceDeviceRepository;
-import cc.iotkit.dao.UserActionLogRepository;
 import cc.iotkit.manager.model.vo.AppPageNode;
 import cc.iotkit.manager.service.AppDesignService;
 import cc.iotkit.manager.service.DeviceService;
@@ -38,8 +37,6 @@ public class DeviceController {
     private SpaceDeviceRepository spaceDeviceRepository;
     @Autowired
     private AppDesignRepository appDesignRepository;
-    @Autowired
-    private UserActionLogRepository userActionLogRepository;
     @Autowired
     private AppDesignService appDesignService;
 

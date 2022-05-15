@@ -69,6 +69,7 @@ public class BizComponentManager {
                     resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile(), "UTF-8");
             componentInstance.setScript(componentScript);
             componentInstance.putScriptEnv("deviceBehaviour", deviceBehaviourService);
+            componentInstance.putScriptEnv("apiTool", new ApiTool());
         } catch (IOException e) {
             throw new BizException("get component script error", e);
         }
