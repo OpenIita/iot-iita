@@ -6,6 +6,7 @@ import cc.iotkit.common.exception.BizException;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;
 import cc.iotkit.comps.config.ComponentConfig;
+import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.dao.ProtocolComponentRepository;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,8 @@ public class BizComponentManager {
     private ComponentConfig componentConfig;
     @Autowired
     private ProtocolComponentRepository componentRepository;
+    @Autowired
+    private DeviceBehaviourService deviceBehaviourService;
 
     @PostConstruct
     public void init() {
@@ -61,16 +64,18 @@ public class BizComponentManager {
         } catch (Throwable e) {
             throw new BizException("get component instance error");
         }
-        componentInstance.create(new CompConfig(300, component.getConfig()));
-
         try {
             String componentScript = FileUtils.readFileToString(path.
                     resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile(), "UTF-8");
             componentInstance.setScript(componentScript);
-            register(id, componentInstance);
+            componentInstance.putScriptEnv("deviceBehaviour", deviceBehaviourService);
+            componentInstance.putScriptEnv("apiTool", new ApiTool());
         } catch (IOException e) {
             throw new BizException("get component script error", e);
         }
+        componentInstance.create(new CompConfig(300, component.getConfig()));
+
+        register(id, componentInstance);
     }
 
     public void register(String id, IComponent component) {

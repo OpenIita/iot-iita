@@ -1,5 +1,6 @@
 package cc.iotkit.model.space;
 
+import cc.iotkit.model.Owned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
-public class SpaceDevice {
+public class SpaceDevice implements Owned {
 
     @Id
     private String id;
@@ -48,7 +49,13 @@ public class SpaceDevice {
     private String spaceId;
 
     /**
-     * 空间名称
+     * 添加时间
      */
-    private String spaceName;
+    private Long addAt;
+
+    /**
+     * 使用时间
+     */
+    private Long useAt;
+
 }

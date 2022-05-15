@@ -156,7 +156,7 @@ public class DeviceMessageHandler implements IMessageHandler {
 
         //服务回复需要重新对应mid
         if (thingModelMessage.getIdentifier().endsWith("_reply")) {
-            String platformMid = deviceComponentManager.getPlatformMid(message.getDeviceName(), message.getMid());
+            String platformMid = deviceComponentManager.getPlatformMid(thingModelMessage.getDeviceName(), message.getMid());
             if (platformMid == null) {
                 platformMid = UniqueIdUtil.newRequestId();
             }
@@ -194,6 +194,11 @@ public class DeviceMessageHandler implements IMessageHandler {
         } catch (Throwable e) {
             log.error("do action error", e);
         }
+    }
+
+    @Override
+    public void putScriptEnv(String key, Object value) {
+        engine.put(key, value);
     }
 
     @Data

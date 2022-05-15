@@ -33,14 +33,13 @@ public class SpaceDeviceService {
         List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(Example.of(device));
         List<SpaceDeviceVo> spaceDeviceVos = new ArrayList<>();
         spaceDevices.forEach(sd -> {
-            DeviceInfo deviceInfo = deviceCache.findByDeviceId(sd.getDeviceId());
+            DeviceInfo deviceInfo = deviceCache.get(sd.getDeviceId());
             Product product = productCache.findById(deviceInfo.getProductKey());
             spaceDeviceVos.add(SpaceDeviceVo.builder()
                     .uid(sd.getUid())
                     .deviceId(sd.getDeviceId())
                     .name(sd.getName())
                     .picUrl(product.getImg())
-                    .spaceName(sd.getSpaceName())
                     .online(deviceInfo.getState().isOnline())
                     .property(deviceInfo.getProperty())
                     .productKey(deviceInfo.getProductKey())

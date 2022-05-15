@@ -15,4 +15,6 @@ public interface DeviceRepository extends MongoRepository<DeviceInfo, String> {
 
     List<DeviceInfo> findByParentId(String parentId);
 
+    List<DeviceInfo> findByDeviceName(String deviceName);
+
 }

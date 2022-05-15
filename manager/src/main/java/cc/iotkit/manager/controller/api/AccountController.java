@@ -3,8 +3,6 @@ package cc.iotkit.manager.controller.api;
 import cc.iotkit.dao.AppInfoRepository;
 import cc.iotkit.dao.HomeRepository;
 import cc.iotkit.dao.UserInfoRepository;
-import cc.iotkit.manager.model.vo.LoginResult;
-import cc.iotkit.manager.service.AccountService;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.AppInfo;
 import cc.iotkit.model.space.Home;
@@ -23,25 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     @Autowired
-    private AccountService accountService;
-    @Autowired
     private HomeRepository homeRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
     @Autowired
     private AppInfoRepository appInfoRepository;
-
-    @ApiOperation("用户注册")
-    @PostMapping("/register")
-    public void register(String uid, String pwd) {
-        accountService.register(uid, pwd);
-    }
-
-    @ApiOperation("用户登录")
-    @PostMapping("/login")
-    public LoginResult login(String uid, String pwd) {
-        return new LoginResult(accountService.login(uid, pwd));
-    }
 
     @ApiOperation("设置当前家庭")
     @PostMapping("/setHomeId")

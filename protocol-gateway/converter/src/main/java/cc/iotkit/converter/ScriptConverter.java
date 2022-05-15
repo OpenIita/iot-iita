@@ -29,7 +29,12 @@ public class ScriptConverter implements IConverter {
 
     public ThingModelMessage decode(DeviceMessage msg) {
         try {
-            ScriptObjectMirror result = (ScriptObjectMirror) engine.invokeMethod(scriptObj, "decode", msg);
+            Object rst = engine.invokeMethod(scriptObj, "decode", msg);
+            if (rst instanceof ThingModelMessage) {
+                return (ThingModelMessage) rst;
+            }
+
+            ScriptObjectMirror result = (ScriptObjectMirror) rst;
             ThingModelMessage modelMessage = new ThingModelMessage();
             BeanUtils.populate(modelMessage, result);
             return modelMessage;
@@ -53,4 +58,8 @@ public class ScriptConverter implements IConverter {
         return null;
     }
 
+    @Override
+    public void putScriptEnv(String key, Object value) {
+        engine.put(key, value);
+    }
 }

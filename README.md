@@ -4,11 +4,13 @@
 此仓库为奇特物联(iotkit)物联网平台开源项目。
 奇特物联是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能, 能帮助你快速搭建自己的物联网相关业务平台。
 
-系统包含了品类、物模型、消息转换、通讯组件、设备管理、规则引擎、数据流转、数据可视化、报警中心等模块。
+系统包含了品类、物模型、消息转换、通讯组件（mqtt通讯组件、小度音箱接入组件、onenet Studio接入组件）、云端低代码设备开发、设备管理、规则引擎、第三方平台接入、数据流转、数据可视化、报警中心等模块和智能家居APP（小程序）。
 
  **前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
 
  **演示地址：** [演示地址](http://120.76.96.206)，账号：guest1,密码：guest123  (只读权限)
+
+ **智能家居小程序：** https://gitee.com/iotkit-open-source/iot-mp-home 
 
 
 #### 软件架构
@@ -19,14 +21,13 @@
 #### 安装教程
 
 见：https://ztktkv.yuque.com/docs/share/b32da919-0108-4112-9406-fe5c6672e0d7?# 《安装和配置》
-链接有效期至 2022-04-08 20:20:01
 
 #### 使用说明
 
 1.  技术文档
-    邀你加入「iot平台技术文档」知识库: https://ztktkv.yuque.com/g/ztktkv/gb3v6g/collaborator/join?token=zz5PUmXzGQqc4h9t# (只读成员)
+    邀你加入「iot平台技术文档」知识库: https://ztktkv.yuque.com/g/ztktkv/gb3v6g/collaborator/join?token=zz5PUmXzGQqc4h9t# 
     
-      **这是我宝贵的技术文档分享，看完后请帮忙给本仓库点个star。 :sparkles:** 
+      **这是我宝贵的技术文档分享，请给本仓库点个star :sparkles: 支持一下，谢谢！** 
 2.  系统操作文档
 
 #### 待办事项
@@ -53,3 +54,4 @@
 微信群:
 
 ![输入图片说明](doc/ma.png)
+

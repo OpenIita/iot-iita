@@ -1,9 +1,11 @@
 package cc.iotkit.dao;
 
-import cc.iotkit.model.UserAccount;
+import cc.iotkit.model.ThirdUserSession;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserAccountRepository extends MongoRepository<UserAccount, String> {
+public interface ThirdUserSessionRepository extends MongoRepository<ThirdUserSession, String> {
+
+
 }

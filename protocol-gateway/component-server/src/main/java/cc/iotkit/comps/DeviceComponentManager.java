@@ -9,11 +9,16 @@ import cc.iotkit.comp.IDeviceComponent;
 import cc.iotkit.comps.config.CacheKey;
 import cc.iotkit.comps.config.ComponentConfig;
 import cc.iotkit.comps.service.DeviceBehaviourService;
+import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.converter.ScriptConverter;
 import cc.iotkit.converter.ThingService;
+import cc.iotkit.dao.DeviceCache;
+import cc.iotkit.dao.ProductCache;
 import cc.iotkit.dao.ProtocolComponentRepository;
+import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.model.product.Product;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import cc.iotkit.model.protocol.ProtocolConverter;
 import lombok.extern.slf4j.Slf4j;
@@ -46,11 +51,16 @@ public class DeviceComponentManager {
     private ComponentConfig componentConfig;
     @Autowired
     private ProtocolComponentRepository componentRepository;
+    @Autowired
+    private DeviceCache deviceCache;
+    @Autowired
+    ProductCache productCache;
 
     @PostConstruct
     public void init() {
         try {
-            List<ProtocolComponent> componentList = componentRepository.findByState(ProtocolComponent.STATE_RUNNING);
+            List<ProtocolComponent> componentList = componentRepository.findByStateAndType(
+                    ProtocolComponent.STATE_RUNNING, ProtocolComponent.TYPE_DEVICE);
             for (ProtocolComponent component : componentList) {
                 register(component);
                 start(component.getId());
@@ -83,6 +93,7 @@ public class DeviceComponentManager {
                     resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile(), "UTF-8");
 
             scriptConverter.setScript(converterScript);
+            scriptConverter.putScriptEnv("component", componentInstance);
             componentInstance.setConverter(scriptConverter);
 
             String componentScript = FileUtils.readFileToString(path.
@@ -115,10 +126,13 @@ public class DeviceComponentManager {
         if (component == null) {
             return;
         }
-        component.setHandler(
-                new DeviceMessageHandler(this, component,
-                        component.getScript(), component.getConverter(),
-                        deviceBehaviourService));
+        DeviceMessageHandler messageHandler = new DeviceMessageHandler(this, component,
+                component.getScript(), component.getConverter(),
+                deviceBehaviourService);
+        messageHandler.putScriptEnv("apiTool", new ApiTool());
+        messageHandler.putScriptEnv("deviceBehaviour", deviceBehaviourService);
+
+        component.setHandler(messageHandler);
         component.start();
         states.put(id, true);
     }
@@ -142,16 +156,29 @@ public class DeviceComponentManager {
             throw new BizException("there is no components");
         }
 
+        DeviceInfo deviceInfo = deviceCache.getDeviceInfo(service.getProductKey(), service.getDeviceName());
+        Product product = productCache.findById(service.getProductKey());
+        String linkPk = service.getProductKey();
+        String linkDn = service.getDeviceName();
+
+        if (product.isTransparent()) {
+            //如果是透传设备，取父级设备进行链路查找
+            DeviceInfo parent = deviceCache.get(deviceInfo.getParentId());
+            linkPk = parent.getProductKey();
+            linkDn = parent.getDeviceName();
+        }
+
         for (IDeviceComponent com : components.values()) {
-            if (com.exist(service.getProductKey(), service.getDeviceName())) {
+            if (com.exist(linkPk, linkDn)) {
+                Device device = new Device(deviceInfo.getDeviceId(), deviceInfo.getModel(), product.isTransparent());
                 //对下发消息进行编码转换
-                DeviceMessage message = com.getConverter().encode(service, null);
+                DeviceMessage message = com.getConverter().encode(service, device);
                 if (message == null) {
                     throw new BizException("encode send message failed");
                 }
                 //保存设备端mid与平台mid对应关系
                 redisTemplate.opsForValue().set(
-                        CacheKey.getKeyCmdMid(service.getDeviceName(), message.getMid()),
+                        CacheKey.getKeyCmdMid(message.getDeviceName(), message.getMid()),
                         service.getMid(), com.getConfig().getCmdTimeout(), TimeUnit.SECONDS);
                 com.send(message);
 

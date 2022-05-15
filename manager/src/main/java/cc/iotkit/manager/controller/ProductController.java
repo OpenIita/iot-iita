@@ -1,14 +1,17 @@
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.dao.CategoryRepository;
 import cc.iotkit.dao.ProductRepository;
+import cc.iotkit.dao.ProductModelRepository;
 import cc.iotkit.dao.ThingModelRepository;
 import cc.iotkit.manager.config.AliyunConfig;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
+import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.model.product.ThingModel;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
@@ -17,12 +20,16 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -39,13 +46,21 @@ public class ProductController {
     private DataOwnerService dataOwnerService;
     @Autowired
     private AliyunConfig aliyunConfig;
+    @Autowired
+    private ProductModelRepository productModelRepository;
+
     private OSS ossClient;
 
-    @PostMapping("/list")
-    public Paging<Product> getProducts(Product form) {
+    @PostMapping("/list/{size}/{page}")
+    public Paging<Product> getProducts(
+            @PathVariable("size") int size,
+            @PathVariable("page") int page,
+            Product form) {
         form = dataOwnerService.wrapExample(form);
-        return new Paging<>(productRepository.count(Example.of(form)),
-                productRepository.findAll(Example.of(form)));
+        Page<Product> products = productRepository.findAll(Example.of(form),
+                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt")))
+        );
+        return new Paging<>(products.getTotalElements(), products.getContent());
     }
 
     @PostMapping("/save")
@@ -120,5 +135,30 @@ public class ProductController {
                 file.getInputStream());
         return ossClient.generatePresignedUrl(bucket, fileName,
                 new Date(new Date().getTime() + 3600L * 1000 * 24 * 365 * 10)).toString();
+    }
+
+    @GetMapping("/{productKey}/models")
+    public List<ProductModel> getModels(@PathVariable("productKey") String productKey) {
+        dataOwnerService.checkOwner(productRepository, productKey);
+        return productModelRepository.findByProductKey(productKey);
+    }
+
+    @PostMapping("/saveProductModel")
+    public void saveProductModel(ProductModel productModel) {
+        String model = productModel.getModel();
+        String productKey = productModel.getProductKey();
+        Optional<Product> optProduct = productRepository.findById(productKey);
+        if (!optProduct.isPresent()) {
+            throw new BizException("product does not exist");
+        }
+        dataOwnerService.checkOwner(optProduct.get());
+
+        ProductModel oldScript = productModelRepository.findByModel(model);
+        if (oldScript != null && !oldScript.getProductKey().equals(productKey)) {
+            throw new BizException("model already exists");
+        }
+
+        productModel.setModifyAt(System.currentTimeMillis());
+        productModelRepository.save(productModel);
     }
 }

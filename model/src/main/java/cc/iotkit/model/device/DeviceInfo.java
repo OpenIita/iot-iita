@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,16 +41,16 @@ public class DeviceInfo implements Owned {
     /**
      * 关联子用户ID列表
      */
-    private List<String> subUid;
+    private List<String> subUid = new ArrayList<>();
 
     private State state = new State();
 
-    private Map<String, Object> property;
+    private Map<String, Object> property = new HashMap<>();
 
     /**
      * 设备标签
      */
-    private Map<String, Tag> tag;
+    private Map<String, Tag> tag = new HashMap<>();
 
     private Long createAt;
 

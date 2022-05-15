@@ -134,7 +134,7 @@ public class SpaceController {
         List<SpaceDeviceVo> spaceDeviceVos = new ArrayList<>();
         spaceDevices.forEach(sd -> spaceDeviceVos.add(buildSpaceDeviceVo(
                 sd.getId(), sd.getDeviceId(),
-                sd.getUid(), sd.getName(), sd.getSpaceName())));
+                sd.getUid(), sd.getName(), "")));
         return spaceDeviceVos;
     }
 
@@ -146,7 +146,7 @@ public class SpaceController {
 
         return buildSpaceDeviceVo(device.getId(), device.getDeviceId(),
                 AuthUtil.getUserId(), device.getName(),
-                device.getSpaceName());
+               "");
     }
 
     @ApiOperation("使用mac获取设备信息")
@@ -170,7 +170,7 @@ public class SpaceController {
     }
 
     private SpaceDeviceVo buildSpaceDeviceVo(String id, String deviceId, String uid, String name, String spaceName) {
-        DeviceInfo deviceInfo = deviceCache.findByDeviceId(deviceId);
+        DeviceInfo deviceInfo = deviceCache.get(deviceId);
         Product product = productCache.findById(deviceInfo.getProductKey());
         return SpaceDeviceVo.builder()
                 .id(id)
@@ -211,7 +211,6 @@ public class SpaceController {
                 .name(name == null ? product.getName() : name)
                 .homeId(space.getHomeId())
                 .spaceId(space.getId())
-                .spaceName(space.getName())
                 .build());
     }
 

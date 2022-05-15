@@ -38,10 +38,10 @@ public class DeviceCondition {
         String[] pkDn = device.split("/");
         if (pkDn.length < 2) {
             //用deviceId取
-            deviceInfo = deviceCache.findByDeviceId(device);
+            deviceInfo = deviceCache.get(device);
         } else {
             //用pk/dn取
-            deviceInfo = deviceCache.findByProductKeyAndDeviceName(pkDn[0], pkDn[1]);
+            deviceInfo = deviceCache.getDeviceInfo(pkDn[0], pkDn[1]);
         }
         Object left = null;
         if ("property".equals(type)) {

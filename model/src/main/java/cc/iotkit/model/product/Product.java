@@ -31,5 +31,14 @@ public class Product implements Owned {
 
     private String img;
 
+    /**
+     * 是否透传
+     */
+    private Boolean transparent;
+
     private Long createAt;
+
+    public boolean isTransparent() {
+        return transparent != null && transparent;
+    }
 }

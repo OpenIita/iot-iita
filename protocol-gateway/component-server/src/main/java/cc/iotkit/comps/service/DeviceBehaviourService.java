@@ -8,13 +8,13 @@ import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
 import cc.iotkit.comps.config.ServerConfig;
-import cc.iotkit.dao.DeviceCache;
-import cc.iotkit.dao.DeviceRepository;
-import cc.iotkit.dao.ProductRepository;
+import cc.iotkit.dao.*;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
+import cc.iotkit.model.product.ProductModel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
@@ -34,12 +34,16 @@ public class DeviceBehaviourService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
+    private ProductModelRepository productModelRepository;
+    @Autowired
+    private ProductCache productCache;
+    @Autowired
     private DeviceRepository deviceRepository;
     @Autowired
     private ServerConfig serverConfig;
     @Autowired
     private DeviceCache deviceCache;
-    @Autowired
+//    @Autowired
     private DeviceStateHolder deviceStateHolder;
 
     private Producer<ThingModelMessage> deviceMessageProducer;
@@ -69,17 +73,6 @@ public class DeviceBehaviourService {
                                     subDevice.getTag(), null));
                 }
             }
-
-            //设备注册消息
-            ThingModelMessage modelMessage = new ThingModelMessage(
-                    UniqueIdUtil.newRequestId(), "",
-                    info.getProductKey(), info.getDeviceName(),
-                    ThingModelMessage.TYPE_LIFETIME, "register",
-                    0, new HashMap<>(), System.currentTimeMillis(),
-                    System.currentTimeMillis()
-            );
-
-            reportMessage(modelMessage);
         } catch (BizException e) {
             log.error("register device error", e);
             throw e;
@@ -91,33 +84,75 @@ public class DeviceBehaviourService {
 
     public DeviceInfo register(String parentId, RegisterInfo info) {
         String pk = info.getProductKey();
+        String dn = info.getDeviceName();
+        String model = info.getModel();
+
+        //子设备注册处理
+        if (parentId != null) {
+            //透传设备：pk为空、model不为空，使用model查询产品
+            if (StringUtils.isBlank(pk) && StringUtils.isNotBlank(model)) {
+                ProductModel productModel = productModelRepository.findByModel(model);
+                if (productModel == null) {
+                    throw new BizException("product model does not exist");
+                }
+                pk = productModel.getProductKey();
+            }
+        }
+
         Optional<Product> optProduct = productRepository.findById(pk);
         if (!optProduct.isPresent()) {
             throw new BizException("Product does not exist");
         }
-        String uid = optProduct.get().getUid();
+        Product product = optProduct.get();
+        String uid = product.getUid();
         DeviceInfo device = deviceRepository.findByProductKeyAndDeviceName(pk, info.getDeviceName());
+        boolean reportMsg = false;
 
         if (device != null) {
             log.info("device already registered");
-            //更换网关重新注册更新父级ID
+            device.setModel(model);
+        } else {
+            //不存在,注册新设备
+            device = new DeviceInfo();
+            device.setId(DeviceUtil.newDeviceId(dn));
             device.setParentId(parentId);
-            deviceRepository.save(device);
-            return device;
+            device.setUid(uid);
+            device.setDeviceId(device.getId());
+            device.setProductKey(pk);
+            device.setDeviceName(dn);
+            device.setModel(model);
+            //默认离线
+            device.setState(new DeviceInfo.State(false, null, null));
+            device.setCreateAt(System.currentTimeMillis());
+            reportMsg = true;
         }
-        //不存在,注册新设备
-        device = new DeviceInfo();
-        device.setId(DeviceUtil.newDeviceId(info.getDeviceName()));
-        device.setParentId(parentId);
-        device.setUid(uid);
-        device.setDeviceId(device.getId());
-        device.setProductKey(pk);
-        device.setDeviceName(info.getDeviceName());
-        device.setState(new DeviceInfo.State(false, null, null));
-        device.setCreateAt(System.currentTimeMillis());
 
+        //透传设备，默认在线
+        if (product.isTransparent()) {
+            device.setState(new DeviceInfo.State(true, System.currentTimeMillis(), null));
+        }
+
+        if (parentId != null) {
+            //子设备更换网关重新注册更新父级ID
+            device.setParentId(parentId);
+            reportMsg = true;
+        }
         deviceRepository.save(device);
-        log.info("device registered:{}", JsonUtil.toJsonString(device));
+
+        //新设备或更换网关需要产生注册消息
+        if (reportMsg) {
+            log.info("device registered:{}", JsonUtil.toJsonString(device));
+            //新注册设备注册消息
+            ThingModelMessage modelMessage = new ThingModelMessage(
+                    UniqueIdUtil.newRequestId(), "",
+                    pk, dn,
+                    ThingModelMessage.TYPE_LIFETIME, "register",
+                    0, new HashMap<>(), System.currentTimeMillis(),
+                    System.currentTimeMillis()
+            );
+
+            reportMessage(modelMessage);
+        }
 
         return device;
     }
@@ -155,11 +190,17 @@ public class DeviceBehaviourService {
         }
         deviceStateChange(device, online);
 
-        //可能是父设备,父设备离线，子设备也要离线
-        if (!online && device.getParentId() == null) {
-            List<DeviceInfo> subDevices = deviceRepository.findByParentId(device.getDeviceId());
-            for (DeviceInfo subDevice : subDevices) {
-                deviceStateChange(subDevice, false);
+        if (device.getParentId() != null) {
+            return;
+        }
+
+        List<DeviceInfo> subDevices = deviceRepository.findByParentId(device.getDeviceId());
+        for (DeviceInfo subDevice : subDevices) {
+            Product product = productCache.findById(subDevice.getProductKey());
+            Boolean transparent = product.getTransparent();
+            //透传设备父设备上线，子设备也上线。非透传设备父设备离线，子设备才离线
+            if (transparent != null && transparent || !online) {
+                deviceStateChange(subDevice, online);
             }
         }
     }
@@ -168,11 +209,11 @@ public class DeviceBehaviourService {
         if (online) {
             device.getState().setOnline(true);
             device.getState().setOnlineTime(System.currentTimeMillis());
-            deviceStateHolder.online(device.getDeviceId());
+//            deviceStateHolder.online(device.getDeviceId());
         } else {
             device.getState().setOnline(false);
             device.getState().setOfflineTime(System.currentTimeMillis());
-            deviceStateHolder.offline(device.getDeviceId());
+//            deviceStateHolder.offline(device.getDeviceId());
         }
         deviceRepository.save(device);
 
@@ -192,7 +233,7 @@ public class DeviceBehaviourService {
 
     public void reportMessage(ThingModelMessage message) {
         try {
-            DeviceInfo device = deviceCache.findByProductKeyAndDeviceName(message.getProductKey(),
+            DeviceInfo device = deviceCache.getDeviceInfo(message.getProductKey(),
                     message.getDeviceName());
             if (device == null) {
                 return;
@@ -208,5 +249,13 @@ public class DeviceBehaviourService {
         } catch (PulsarClientException e) {
             log.error("send thing model message error", e);
         }
+    }
+
+    /**
+     * 提供给js调用的方法
+     */
+    public void reportMessage(String jsonMsg) {
+        ThingModelMessage message = JsonUtil.parse(jsonMsg, ThingModelMessage.class);
+        reportMessage(message);
     }
 }

@@ -8,8 +8,10 @@ import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.dao.*;
 import cc.iotkit.manager.model.query.DeviceQuery;
 import cc.iotkit.manager.service.DataOwnerService;
+import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
@@ -23,6 +25,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
 import java.util.Map;
@@ -53,46 +56,23 @@ public class DeviceController {
     private DevicePropertyDao devicePropertyDao;
     @Autowired
     private DeviceBehaviourService behaviourService;
+    @Autowired
+    DeferredDataConsumer deferredDataConsumer;
 
-    @PostMapping(Constants.API.DEVICE_INVOKE_SERVICE)
-    public String invokeService(@PathVariable("deviceId") String deviceId,
-                                @PathVariable("service") String service,
-                                @RequestBody Map<String, Object> args) {
+    @PostMapping(Constants.API_DEVICE.INVOKE_SERVICE)
+    public InvokeResult invokeService(@PathVariable("deviceId") String deviceId,
+                                      @PathVariable("service") String service,
+                                      @RequestBody Map<String, Object> args) {
         if (StringUtils.isBlank(deviceId) || StringUtils.isBlank(service)) {
             throw new RuntimeException("deviceId/service is blank.");
         }
-        dataOwnerService.checkWriteRole();
-        return deviceService.invokeService(deviceId, service, args);
+        return new InvokeResult(deviceService.invokeService(deviceId, service, args));
     }
 
-    @PostMapping(Constants.API.DEVICE_SET_PROPERTIES)
-    public String setProperty(@PathVariable("deviceId") String deviceId,
-                              @RequestBody Map<String, Object> args) {
-        dataOwnerService.checkWriteRole();
-        return deviceService.setProperty(deviceId, args);
-    }
-
-    @PostMapping("/list")
-    public Paging<DeviceInfo> getDevices(int page,
-                                         int size,
-                                         String pk,
-                                         Boolean online,
-                                         String dn) {
-        Criteria condition = new Criteria();
-        if (!AuthUtil.isAdmin()) {
-            condition.and("uid").is(AuthUtil.getUserId());
-        }
-        if (StringUtils.isNotBlank(pk)) {
-            condition.and("productKey").is(pk);
-        }
-        if (StringUtils.isNotBlank(dn)) {
-            condition.and("deviceName").regex(".*" + dn + ".*");
-        }
-        if (online != null) {
-            condition.and("state.online").is(online);
-        }
-
-        return deviceDao.find(condition, size, page);
+    @PostMapping(Constants.API_DEVICE.SET_PROPERTIES)
+    public InvokeResult setProperty(@PathVariable("deviceId") String deviceId,
+                                    @RequestBody Map<String, Object> args) {
+        return new InvokeResult(deviceService.setProperty(deviceId, args));
     }
 
     @PostMapping("/list/{size}/{page}")
@@ -121,8 +101,8 @@ public class DeviceController {
             condition.and("deviceName").regex(".*" + dn + ".*");
         }
         String state = query.getState();
-        if (state != null) {
-            condition.and("state.online").is(state);
+        if (StringUtils.isNotBlank(state)) {
+            condition.and("state.online").is(state.equals("online"));
         }
 
         return deviceDao.find(condition, size, page);
@@ -156,7 +136,7 @@ public class DeviceController {
                                 .build())));
     }
 
-    @GetMapping(Constants.API.DEVICE_DETAIL)
+    @GetMapping(Constants.API_DEVICE.DETAIL)
     public DeviceInfo getDetail(@PathVariable("deviceId") String deviceId) {
         return dataOwnerService.checkOwner(deviceRepository.findById(deviceId).orElse(new DeviceInfo()));
     }
@@ -226,5 +206,22 @@ public class DeviceController {
         message.setOccurred(System.currentTimeMillis());
         message.setTime(System.currentTimeMillis());
         behaviourService.reportMessage(message);
+    }
+
+    /**
+     * 消费设备信息消息（实时推送设备信息）
+     */
+    @GetMapping("/{deviceId}/consumer/{clientId}")
+    public DeferredResult<ThingModelMessage> consumerDeviceInfo(
+            @PathVariable("deviceId") String deviceId,
+            @PathVariable("clientId") String clientId
+    ) {
+        String uid = AuthUtil.getUserId();
+        DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
+        dataOwnerService.checkOwner(deviceInfo);
+
+        //按用户+客户端ID订阅
+        return deferredDataConsumer.newConsumer(uid + clientId,
+                Constants.HTTP_CONSUMER_DEVICE_INFO_TOPIC + deviceId);
     }
 }
