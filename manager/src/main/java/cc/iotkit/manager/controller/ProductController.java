@@ -114,7 +114,7 @@ public class ProductController {
         }
 
         fileName = "product/" + productKey + "/cover" + end;
-        String bucket = "iotkit-img";
+        String bucket = aliyunConfig.getBucketId();
         // 填写Bucket名称和Object完整路径。Object完整路径中不能包含Bucket名称。
         PutObjectResult result = ossClient.putObject(bucket, fileName,
                 file.getInputStream());

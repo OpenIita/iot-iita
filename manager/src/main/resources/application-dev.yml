@@ -32,6 +32,7 @@ spring:
       matching-strategy: ant_path_matcher
 
 aliyun:
+  bucketId: 填写阿里云bucketId
   endpoint: oss-cn-shenzhen.aliyuncs.com
   accessKeyId: 填写阿里云accessKeyId
   accessKeySecret: 填写阿里云accessKeySecret

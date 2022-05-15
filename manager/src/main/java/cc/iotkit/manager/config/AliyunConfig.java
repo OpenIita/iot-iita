@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 @Data
 public class AliyunConfig {
 
+    private String bucketId;
+
     private String endpoint;
 
     private String accessKeyId;
