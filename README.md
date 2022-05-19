@@ -13,6 +13,11 @@
  **智能家居小程序：** https://gitee.com/iotkit-open-source/iot-mp-home 
 
 
+ **系统截图** 
+![输入图片说明](doc/WechatIMG538.png)
+![输入图片说明](doc/WechatIMG539.png)
+
+
 #### 软件架构
 软件架构说明
 本系统采用springboot、mongodb、redis、elasticsearch、pulsar、sa-token等框架和第三方软件
@@ -20,7 +25,93 @@
 
 #### 安装教程
 
-见：https://ztktkv.yuque.com/docs/share/b32da919-0108-4112-9406-fe5c6672e0d7?# 《安装和配置》
+ **application-dev.yml配置：** 
+
+```
+server:
+  port: 8086
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 12MB
+
+  #mongodb数据库配置
+  data:
+    mongodb:
+      uri: mongodb://填写mongodb地址
+      database: iotkit
+
+  elasticsearch:
+    rest:
+      #使用内置es的配置
+      uris: http://127.0.0.1:9200
+      username: 
+      password: 
+      connection-timeout: 10s
+
+  redis:
+    #使用内置redis的配置
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password: 
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+#图片存储用的是阿里云oss，如果需要上传产品图片才需要配置
+aliyun:
+  bucketId: 填写阿里云bucketId
+  endpoint: oss-cn-shenzhen.aliyuncs.com
+  accessKeyId: 填写阿里云accessKeyId
+  accessKeySecret: 填写阿里云accessKeySecret
+
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: satoken
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 2592000
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false
+
+#pulsar消息队列配置，需要进行配置
+pulsar:
+  broker: pulsar://pulsar broker地址:6650
+  service: http://pulsar 服务地址:8080
+
+
+```
+
+ **启用内置es和redis配置** 
+增加启动参数
+
+```
+embeddedElasticSearch=true
+embeddedRedisServer=true
+```
+
+如idea中：
+![输入图片说明](doc/WX20220519-131333@2x.png)
+
+
+以上，最小配置项：pulsar消息队列配置、mongodb数据库配置。
+
+monogodb和pulsar安装配置见末尾。
+
+
+
 
 #### 使用说明
 
@@ -35,15 +126,6 @@
 - 数据大屏
 
 
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
 #### 捐助与支持
 如果您觉得我的开源软件对你有所帮助请打个赏，1元钱也是爱。
 
@@ -54,3 +136,12 @@
 微信群:
 
 ![输入图片说明](doc/ma.png)
+
+
+  **mongodb安装配置** 
+
+![输入图片说明](doc/mongodb%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE.jpg)
+
+ **Pulsar安装配置** 
+![输入图片说明](doc/%E5%AE%89%E8%A3%85Pulsar.jpg)
+
