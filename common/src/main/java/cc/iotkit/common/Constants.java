@@ -1,7 +1,5 @@
 package cc.iotkit.common;
 
-import lombok.Data;
-
 public interface Constants {
 
     String PRODUCT_SECRET = "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU";
@@ -17,6 +15,10 @@ public interface Constants {
     String SPACE_CACHE = "space_cache";
 
     String THING_MODEL_CACHE = "thing_model_cache";
+
+    String USER_CACHE = "user_info_cache";
+
+    String OAUTH_CLIENT_CACHE = "oauth_client_cache";
 
     String WECHAT_APP_ID = "wx791cb7bf75950e0c";
 
@@ -65,6 +67,11 @@ public interface Constants {
      * http消费设备信息的topic
      */
     String HTTP_CONSUMER_DEVICE_INFO_TOPIC = "device_info:";
+
+    /**
+     * 写权限
+     */
+    String PERMISSION_WRITE = "write";
 
     /**
      * 三方平台类型

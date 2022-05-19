@@ -16,7 +16,6 @@ import cc.iotkit.model.space.SpaceDevice;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -103,7 +102,6 @@ public class SpaceDeviceController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('iot_system_user')")
     @GetMapping("/{userId}/devices")
     public List<SpaceDeviceVo> getDevices(@PathVariable("userId") String userId) {
         List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(Example.of(SpaceDevice.builder().uid(userId).build()));

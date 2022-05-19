@@ -1,19 +1,15 @@
 package cc.iotkit.manager.controller.aligenie;
 
 import cc.iotkit.dao.AligenieProductRepository;
-import cc.iotkit.manager.model.aligenie.AligenieProductVo;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.aligenie.AligenieProduct;
-import cc.iotkit.model.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

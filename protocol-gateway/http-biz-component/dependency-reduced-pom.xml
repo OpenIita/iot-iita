@@ -3,7 +3,7 @@
   <parent>
     <artifactId>protocol-gateway</artifactId>
     <groupId>cc.iotkit</groupId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>http-biz-component</artifactId>
@@ -58,7 +58,7 @@
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>component</artifactId>
-      <version>0.1.0-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

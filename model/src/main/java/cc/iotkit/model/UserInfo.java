@@ -36,6 +36,11 @@ public class UserInfo implements Owned {
     private String ownerId;
 
     /**
+     * 密钥（密码加密后的内容）
+     */
+    private String secret;
+
+    /**
      * 用户昵称
      */
     private String nickName;
@@ -69,7 +74,12 @@ public class UserInfo implements Owned {
     /**
      * 角色
      */
-    private List<String> roles;
+    private List<String> roles = new ArrayList<>();
+
+    /**
+     * 权限
+     */
+    private List<String> permissions = new ArrayList<>();
 
     /**
      * 用户使用的平台

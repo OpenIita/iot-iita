@@ -2,17 +2,17 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.dao.AligenieDeviceRepository;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.manager.service.KeycloakAdminService;
 import cc.iotkit.manager.service.PulsarAdminService;
 import cc.iotkit.manager.utils.AuthUtil;
 import cc.iotkit.model.UserInfo;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -24,8 +24,6 @@ public class UserInfoController {
     @Value("${app.systemRole}")
     private String systemRole;
 
-    @Autowired
-    private KeycloakAdminService keycloakAdminService;
     @Autowired
     private UserInfoRepository userInfoRepository;
     @Autowired
@@ -39,7 +37,7 @@ public class UserInfoController {
     /**
      * 平台用户列表
      */
-    @PreAuthorize("hasRole('iot_admin')")
+    @SaCheckRole("iot_admin")
     @GetMapping("/platform/users")
     public List<UserInfo> getPlatformUsers() {
         return userInfoRepository.findByType(UserInfo.USER_TYPE_PLATFORM);
@@ -54,18 +52,10 @@ public class UserInfoController {
             user.setId(UUID.randomUUID().toString());
             user.setType(UserInfo.USER_TYPE_PLATFORM);
             user.setOwnerId(AuthUtil.getUserId());
-            user.setRoles(Arrays.asList(Constants.ROLE_SYSTEM));
+            user.setRoles(Collections.singletonList(Constants.ROLE_SYSTEM));
+            user.setPermissions(Collections.singletonList(Constants.PERMISSION_WRITE));
             user.setCreateAt(System.currentTimeMillis());
-            UserInfo keycloakUser = keycloakAdminService.getUser(user.getUid());
-            if (keycloakUser != null) {
-                user.setId(keycloakUser.getId());
-                keycloakAdminService.updateUser(user);
-            } else {
-                keycloakAdminService.createUser(user, Constants.PWD_SYSTEM_USER);
-            }
-            if (!pulsarAdminService.tenantExists(user.getUid())) {
-                pulsarAdminService.createTenant(user.getUid());
-            }
+            user.setSecret(CodecUtil.aesEncrypt(Constants.PWD_SYSTEM_USER, Constants.PWD_SYSTEM_USER));
             userInfoRepository.save(user);
         } catch (Throwable e) {
             throw new BizException("add platform user error", e);
@@ -84,25 +74,23 @@ public class UserInfoController {
      * 添加C端用户
      */
     @PostMapping("/client/user/add")
-    public void addClientUser(@RequestBody UserInfo user) {
+    public void addClientUser(@RequestBody UserInfo user) throws Exception {
         user.setType(UserInfo.USER_TYPE_CLIENT);
         user.setOwnerId(AuthUtil.getUserId());
         user.setRoles(Collections.singletonList(Constants.ROLE_CLIENT));
         user.setCreateAt(System.currentTimeMillis());
-        String uid = keycloakAdminService.createUser(user, Constants.PWD_CLIENT_USER);
-        user.setId(uid);
+        user.setSecret(CodecUtil.aesEncrypt(Constants.PWD_CLIENT_USER, Constants.ACCOUNT_SECRET));
         userInfoRepository.save(user);
     }
 
     @PostMapping("/client/user/{id}/delete")
     public void deleteClientUser(@PathVariable("id") String id) {
         Optional<UserInfo> optUser = userInfoRepository.findById(id);
-        if (!optUser.isPresent()) {
+        if (optUser.isEmpty()) {
             throw new BizException("user does not exist");
         }
         UserInfo user = optUser.get();
         ownerService.checkOwner(user);
-        keycloakAdminService.deleteUser(id);
         userInfoRepository.deleteById(id);
         aligenieDeviceRepository.deleteByUid(user.getId());
     }
@@ -110,7 +98,7 @@ public class UserInfoController {
     @PostMapping("/client/user/save")
     public void saveClientUser(@RequestBody UserInfo user) {
         Optional<UserInfo> userOpt = userInfoRepository.findById(user.getId());
-        if (!userOpt.isPresent()) {
+        if (userOpt.isEmpty()) {
             return;
         }
         UserInfo oldUser = userOpt.get();

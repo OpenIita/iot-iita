@@ -11,6 +11,7 @@
         <module>dao</module>
         <module>protocol-gateway</module>
         <module>standalone-package</module>
+        <module>oauth2-server</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -21,13 +22,13 @@
 
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
     <name>iotkit-parent</name>
     <description>iotkit parent</description>
     <properties>
         <java.version>11</java.version>
-        <keycloak-spring.version>17.0.0</keycloak-spring.version>
         <vertx.version>4.2.2</vertx.version>
+        <sa-token.version>1.30.0</sa-token.version>
     </properties>
 
     <dependencyManagement>
@@ -96,21 +97,21 @@
             </dependency>
 
             <dependency>
-                <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-spring-boot-starter</artifactId>
-                <version>${keycloak-spring.version}</version>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-oauth2</artifactId>
+                <version>${sa-token.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-spring-security-adapter</artifactId>
-                <version>${keycloak-spring.version}</version>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot-starter</artifactId>
+                <version>${sa-token.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-admin-client</artifactId>
-                <version>${keycloak-spring.version}</version>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-dao-redis-jackson</artifactId>
+                <version>${sa-token.version}</version>
             </dependency>
 
             <dependency>
@@ -177,6 +178,24 @@
                 <groupId>org.luaj</groupId>
                 <artifactId>luaj-jse</artifactId>
                 <version>3.0.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>it.ozimov</groupId>
+                <artifactId>embedded-redis</artifactId>
+                <version>0.7.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>2.17.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.ejlchina</groupId>
+                <artifactId>okhttps</artifactId>
+                <version>3.1.1</version>
             </dependency>
 
             <dependency>
@@ -254,6 +273,12 @@
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>standalone-package</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>oauth2-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -1,5 +1,6 @@
 package cc.iotkit.manager.config;
 
+import cn.dev33.satoken.util.SaResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,9 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
             GlobalExceptionHandler.RequestResult requestResult = (GlobalExceptionHandler.RequestResult) body;
             return new ApiResponse(Integer.parseInt(requestResult.getCode()), requestResult.getMessage(),
                     "", System.currentTimeMillis());
+        } else if (body instanceof SaResult) {
+            SaResult result = (SaResult) body;
+            return new ApiResponse(result.getCode(), result.getMsg(), result.getData(), System.currentTimeMillis());
         } else if (body instanceof Map) {
             Map map = (Map) body;
             //spring mvc内部异常

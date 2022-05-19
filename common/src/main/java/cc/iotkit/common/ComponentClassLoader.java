@@ -32,7 +32,7 @@ public class ComponentClassLoader {
         classLoaders.put(name, classLoader);
 
         Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-        if (!method.isAccessible()) {
+        if (!method.canAccess(classLoader)) {
             method.setAccessible(true);
         }
 

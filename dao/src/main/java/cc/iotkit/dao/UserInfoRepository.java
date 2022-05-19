@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface UserInfoRepository extends MongoRepository<UserInfo, String> {
 
+    UserInfo findByUid(String uid);
+
     List<UserInfo> findByType(int type);
 
     List<UserInfo> findByTypeAndOwnerId(int type, String ownerId);

@@ -1,8 +1,6 @@
 package cc.iotkit.manager.controller.aligenie;
 
-import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.dao.*;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeviceService;
@@ -10,21 +8,13 @@ import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.aligenie.AligenieDevice;
 import cc.iotkit.model.aligenie.AligenieProduct;
 import cc.iotkit.model.device.DeviceInfo;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pulsar.client.api.Producer;
-import org.apache.pulsar.client.api.PulsarClient;
-import org.apache.pulsar.client.api.PulsarClientException;
-import org.apache.pulsar.client.impl.schema.JSONSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -46,23 +36,8 @@ public class AligenieDeviceController {
     private DeviceService deviceService;
     @Autowired
     private DeviceDao deviceDao;
-    @Value("${app.aligenie.push.device}")
-    private String pushDevice;
     @Value("${pulsar.broker}")
     private String pulsarBrokerUrl;
-
-    private Producer<ThingModelMessage> deviceMessageProducer;
-
-    @PostConstruct
-    public void init() throws PulsarClientException {
-        //初始化pulsar客户端
-        PulsarClient client = PulsarClient.builder()
-                .serviceUrl(pulsarBrokerUrl)
-                .build();
-        deviceMessageProducer = client.newProducer(JSONSchema.of(ThingModelMessage.class))
-                .topic("persistent://iotkit/default/" + Constants.THING_MODEL_MESSAGE_TOPIC)
-                .create();
-    }
 
     @GetMapping("/list/{uid}")
     public List<AligenieDevice> getDevices(@PathVariable("uid") String uid) {
@@ -73,9 +48,9 @@ public class AligenieDeviceController {
 
     @PostMapping("/bind/{uid}")
     public void bind(@PathVariable("uid") String uid,
-                     @RequestBody List<Device> devices) throws PulsarClientException {
+                     @RequestBody List<Device> devices) {
         Optional<UserInfo> optUser = userInfoRepository.findById(uid);
-        if (!optUser.isPresent()) {
+        if (optUser.isEmpty()) {
             throw new BizException("user does not exist");
         }
         UserInfo user = optUser.get();
@@ -106,23 +81,6 @@ public class AligenieDeviceController {
             deviceDao.updateTag(device.getDeviceId(),
                     new DeviceInfo.Tag("aligenie", "天猫精灵接入", "是"));
         }
-
-        DeviceInfo deviceInfo = deviceRepository.findByDeviceId(pushDevice);
-        if (deviceInfo == null) {
-            return;
-        }
-
-        Map<String, Object> uidData = new HashMap<>();
-        uidData.put("uid", uid);
-        deviceMessageProducer.send(ThingModelMessage.builder()
-                .deviceId(pushDevice)
-                .productKey(deviceInfo.getProductKey())
-                .deviceName(deviceInfo.getDeviceName())
-                .type(ThingModelMessage.TYPE_EVENT)
-                .identifier("userDevicesChange")
-                .mid(UniqueIdUtil.newRequestId())
-                .data(uidData)
-                .build());
     }
 
     @Data

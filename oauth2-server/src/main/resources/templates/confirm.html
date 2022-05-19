@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>奇特物联认证授权</title>
+		<style type="text/css">
+			body{
+				min-height: 500px;
+			    background: linear-gradient( 270deg, rgb(46 124 255) 0%, rgb(52 3 65) 100% );
+			 }
+			.bgimg{
+				position:absolute;
+				background-image:url(http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/KdJYpTp5ywNhmrmC/cover.png?Expires=1968261336&OSSAccessKeyId=LTAI5t8UFEH5eGrBUS5zSiof&Signature=df%2F6JEcxBlXitSNIENPMYJlRE8Y%3D);
+				background-size: 100% 100%;
+				width:60%;
+				height:60%;
+				margin-top:10%;
+			}
+			*{margin: 0px; padding: 0px;}
+			.login-box{
+				position: absolute;
+				right: 100px;
+				width: 400px;
+				height: 400px;
+				margin: 20vh auto;
+				padding: 30px 50px;
+				background-color: #fff;
+				overflow: inherit;
+				border-radius: 10px;
+			}
+			.login-box .title{color:#333;font-size:22px;text-align:center;margin:20px 20px}
+			.login-box button{padding: 5px 15px; cursor: pointer; }
+		</style>
+	</head>
+	<body>
+		<div class="bgimg">
+		</div>
+		<div class="login-box">
+			<div class="title">奇特物联授权确认</div> <br>
+			<div>
+				正在确认授权...
+			</div>
+			<div id="divFailed"></div>
+		</div>
+		<script src="https://unpkg.zhimg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script>window.jQuery || alert('当前页面CDN服务商已宕机，请将所有js包更换为本地依赖')</script>
+		<script type="text/javascript">
+			// 同意授权
+			function yes() {
+				$.ajax({
+					url: '/oauth2/doConfirm',
+					data: {
+						client_id: getParam('client_id'),
+						scope: getParam('scope')
+					},
+					dataType: 'json',
+					success: function(res) {
+						if(res.code == 200) {
+								location.reload(true);
+						} else {
+							// 重定向至授权失败URL 
+							$("#divFailed").text('授权失败！');
+						}
+					},
+					error: function(e) {
+						console.log('error');
+					}
+				});
+			}
+			
+			// 拒绝授权
+			function no() {
+				var url = joinParam(getParam('redirect_uri'), "handle=refuse&msg=用户拒绝了授权");
+				location.href = url;
+			}
+			
+			// 从url中查询到指定名称的参数值 
+			function getParam(name, defaultValue){
+				var query = window.location.search.substring(1);
+				var vars = query.split("&");
+				for (var i=0;i<vars.length;i++) {
+					var pair = vars[i].split("=");
+					if(pair[0] == name){return pair[1];}
+				}
+				return(defaultValue == undefined ? null : defaultValue);
+			}
+			
+			// 在url上拼接上kv参数并返回 
+			function joinParam(url, parameStr) {
+				if(parameStr == null || parameStr.length == 0) {
+					return url;
+				}
+				var index = url.indexOf('?');
+				// ? 不存在
+				if(index == -1) {
+					return url + '?' + parameStr;
+				}
+				// ? 是最后一位
+				if(index == url.length - 1) {
+					return url + parameStr;
+				}
+				// ? 是其中一位
+				if(index > -1 && index < url.length - 1) {
+					// 如果最后一位是 不是&, 且 parameStr 第一位不是 &, 就增送一个 &
+					if(url.lastIndexOf('&') != url.length - 1 && parameStrindexOf('&') != 0) {
+						return url + '&' + parameStr;
+					} else {
+						return url + parameStr;
+					}
+				}
+			}
+
+			yes();
+						
+		</script>
+	</body>
+</html>

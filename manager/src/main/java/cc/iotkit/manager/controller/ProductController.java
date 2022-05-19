@@ -13,6 +13,7 @@ import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.model.product.ThingModel;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectResult;
@@ -23,7 +24,6 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -101,14 +101,14 @@ public class ProductController {
         return categoryRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('iot_admin')")
+    @SaCheckRole("iot_admin")
     @PostMapping("/saveCategory")
     public void saveCategory(Category cate) {
         cate.setCreateAt(System.currentTimeMillis());
         categoryRepository.save(cate);
     }
 
-    @PreAuthorize("hasRole('iot_admin')")
+    @SaCheckRole("iot_admin")
     @PostMapping("/delCategory")
     public void delCategory(String id) {
         categoryRepository.deleteById(id);

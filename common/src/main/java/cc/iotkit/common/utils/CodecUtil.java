@@ -96,5 +96,4 @@ public class CodecUtil {
         encryptStr = new String(HexUtil.parseHex(encryptStr));
         return StringUtils.isEmpty(encryptStr) ? "" : aesDecryptByBytes(base64Decode(encryptStr), decryptKey);
     }
-
 }

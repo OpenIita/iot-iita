@@ -1,42 +1,30 @@
 package cc.iotkit.manager.config;
 
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.InternalSettingsPreparer;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.transport.Netty4Plugin;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 
-@Slf4j
-@Configuration
-public class ElasticSearchConfig {
+public class EmbeddedElasticSearchConfig {
 
     static {
         System.setProperty("es.set.netty.runtime.available.processors", "false");
     }
 
-    @SneakyThrows
-    @Bean
-    public EmbeddedElasticSearch getEmbeddedElasticSearch(ConfigProperty configProperty) {
-        if (configProperty.enabled) {
-            EmbeddedElasticSearch embeddedElasticSearch = new EmbeddedElasticSearch(configProperty);
-            embeddedElasticSearch.start();
-            return embeddedElasticSearch;
-        }
-        return null;
+    public static boolean embeddedEnable() {
+        return "true".equals(System.getProperty("embeddedElasticSearch"));
     }
 
-    @Component
-    @ConfigurationProperties(prefix = "elasticsearch.embedded")
-    public static class ConfigProperty {
+    @SneakyThrows
+    public static void startEmbeddedElasticSearch() {
+        EmbeddedElasticSearch embeddedElasticSearch = new EmbeddedElasticSearch(new ConfigProperty());
+        embeddedElasticSearch.start();
+    }
 
-        private boolean enabled;
+    public static class ConfigProperty {
 
         private String dataPath = "./data/elasticsearch";
 

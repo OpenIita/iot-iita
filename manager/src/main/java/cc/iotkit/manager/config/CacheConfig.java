@@ -61,6 +61,16 @@ public class CacheConfig {
                         Caffeine.newBuilder()
                                 .expireAfterWrite(5, TimeUnit.MINUTES)
                                 .build()
+                ), new CaffeineCache(
+                        Constants.USER_CACHE,
+                        Caffeine.newBuilder()
+                                .expireAfterWrite(5, TimeUnit.MINUTES)
+                                .build()
+                ), new CaffeineCache(
+                        Constants.OAUTH_CLIENT_CACHE,
+                        Caffeine.newBuilder()
+                                .expireAfterWrite(5, TimeUnit.MINUTES)
+                                .build()
                 )
         ));
         return manager;

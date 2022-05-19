@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>奇特物联登录授权</title>
+		<style type="text/css">
+			body{
+				min-height: 500px;
+			    background: linear-gradient( 270deg, rgb(46 124 255) 0%, rgb(52 3 65) 100% );
+			}
+			.bgimg{
+				position:absolute;
+				background-image:url(http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/KdJYpTp5ywNhmrmC/cover.png?Expires=1968261336&OSSAccessKeyId=LTAI5t8UFEH5eGrBUS5zSiof&Signature=df%2F6JEcxBlXitSNIENPMYJlRE8Y%3D);
+				background-size: 100% 100%;
+				width:60%;
+				height:60%;
+				margin-top:10%;
+			}
+			*{margin: 0px; padding: 0px;}
+			.login-box{
+				position: absolute;
+				right: 100px;
+				width: 400px;
+				height: 400px;
+				margin: 20vh auto;
+				padding: 30px 50px;
+				background-color: #fff;
+				overflow: inherit;
+				border-radius: 10px;
+			}
+			.login-box .title{color:#333;font-size:22px;text-align:center;margin:20px 20px}
+			.login-box .form{list-style:none; padding:20px 20px;}
+			.login-box li{
+				padding:10px 10px;
+				line-height:30px;
+				text-align:center;
+			}
+			.login-box input{
+				width:100%;
+				line-height: 30px;
+				margin-bottom: 10px;
+				border-radius: 5px;
+				border: 1px solid #999;
+				padding:5px 10px;
+			}
+			.login-box button{
+				padding: 5px 15px;
+				cursor: pointer;
+				width: 100%;
+				line-height:30px;
+				border: 1px solid #5e77ff;
+				background-color: #5e77ff;
+				color: #fff;
+				border-radius: 5px;
+			}
+			.login-box button:hover{
+				background-color: #2746f1;
+			}
+			.login-box .tip{
+				margin-top:20px;
+				color:#666;
+			}
+			.tip.error{
+				color:red;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="bgimg">
+		</div>
+		<div class="login-box">
+			<div class="title">奇特物联登录授权</div>
+			<ul class="form">
+				<li>
+					<input name="name" placeholder="请输入账号"/>
+				</li>
+				<li>
+					<input name="pwd" type="password" placeholder="请输入密码" /> <br>
+				</li>
+				<li>
+					<button onclick="doLogin()">登录</button>
+				</li>
+				<li class="tip" id="liTip"></li>
+				<li style="color:#aaa;">
+					Copyright © 2021 － 2022 奇特物联
+				</li>
+			</ul>
+		</div>
+		<script src="https://unpkg.zhimg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script>window.jQuery || alert('当前页面CDN服务商已宕机，请将所有js包更换为本地依赖')</script>
+		<script type="text/javascript">
+			// 登录方法
+			function doLogin() {
+				var name=$.trim($('[name=name]').val());
+				var pwd=$.trim($('[name=pwd]').val());
+				if(!name || !pwd){
+					$("#liTip").addClass("error").text("账号或密码不能为空!");
+				}
+				$.ajax({
+					url: '/oauth2/doLogin',
+					data: {
+						name: name,
+						pwd: pwd
+					},
+					dataType: 'json', 
+					success: function(res) {
+						if(res.code == 200) {
+							$("#liTip").removeClass("error").text("登录成功!");
+							setTimeout(function() {
+								location.reload(true);
+							}, 800);
+						} else {
+							$("#liTip").addClass("error").text(res.msg);
+						}
+					},
+					error: function(e) {
+						console.log('error');
+					}
+				});
+			}
+		</script>
+	</body>
+</html>
