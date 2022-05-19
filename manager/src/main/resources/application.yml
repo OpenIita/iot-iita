@@ -8,30 +8,32 @@ spring:
       max-file-size: 10MB
       max-request-size: 12MB
 
+  #mongodb数据库配置
   data:
     mongodb:
-      uri: mongodb://填写mongodb地址/admin
+      uri: mongodb://填写mongodb地址
       database: iotkit
 
   elasticsearch:
     rest:
-      uris: http://elasticsearch 连接地址
+      #使用内置es的配置
+      uris: http://127.0.0.1:9200
+      username:
+      password:
       connection-timeout: 10s
 
   redis:
-    host: redis地址
+    #使用内置redis的配置
+    host: 127.0.0.1
     port: 6379
     database: 0
     password:
 
-  cache:
-    cache-names: foo,bar
-    caffeine:
-      spec: maximumSize=5000,expireAfterAccess=300s
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+#图片存储用的是阿里云oss，如果需要上传产品图片才需要配置
 aliyun:
   bucketId: 填写阿里云bucketId
   endpoint: oss-cn-shenzhen.aliyuncs.com
@@ -53,14 +55,8 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: false
-  
+
+#pulsar消息队列配置，需要进行配置
 pulsar:
   broker: pulsar://pulsar broker地址:6650
   service: http://pulsar 服务地址:8080
-
-app:
-  systemRole: iot_system_user
-
-mqtt:
-  url: tcp://填写mqtt连接地址
-
