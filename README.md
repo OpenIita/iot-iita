@@ -103,13 +103,17 @@ embeddedRedisServer=true
 ```
 
 如idea中：
+
 ![输入图片说明](doc/WX20220519-131333@2x.png)
+
+ **mongodb数据库示例脚本** 
+
+请加QQ或微信群获取
 
 
 以上，最小配置项：pulsar消息队列配置、mongodb数据库配置。
 
 monogodb和pulsar安装配置见末尾。
-
 
 
 
@@ -119,7 +123,20 @@ monogodb和pulsar安装配置见末尾。
     邀你加入「iot平台技术文档」知识库: https://ztktkv.yuque.com/g/ztktkv/gb3v6g/collaborator/join?token=zz5PUmXzGQqc4h9t# 
     
       **这是我宝贵的技术文档分享，请给本仓库点个star :sparkles: 支持一下，谢谢！** 
-2.  系统操作文档
+2.  系统操作说明
+
+ **开启MQTT标准协议接入功能** 
+
+在消息转换器管理中编辑”奇特MQTT标准协议“，编辑转换脚本（示例脚本进群获取）。
+
+启用MQTT标准协议组件：
+
+在组件管理中修改”MQTT标准协议组件“，上传组件jar包，将mqtt-component项目执行打包生成的mqtt-component-xx.jar上传，然后再编写脚本（示例脚本进群获取），然后点击”状态“启用组件。
+
+ **使用模拟器进行设备测试** 
+
+启动项目中的mqtt-client-simulator模拟器，模拟设备接入系统
+
 
 #### 待办事项
 - ->告警中心
