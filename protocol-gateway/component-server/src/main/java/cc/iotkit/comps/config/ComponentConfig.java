@@ -1,7 +1,10 @@
 package cc.iotkit.comps.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.nio.file.Path;
@@ -25,5 +28,10 @@ public class ComponentConfig {
     public Path getConverterFilePath(String conId) {
         return Paths.get(converterDir, conId)
                 .toAbsolutePath().normalize();
+    }
+
+    @Bean("objectMapper")
+    public ObjectMapper myMapper() {
+        return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 }

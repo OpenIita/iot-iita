@@ -26,6 +26,21 @@
               <include>io.vertx:vertx-core</include>
               <include>io.vertx:vertx-web-proxy</include>
               <include>io.vertx:vertx-mqtt</include>
+              <include>io.vertx:vertx-web</include>
+              <include>io.vertx:vertx-http-proxy</include>
+              <include>org.luaj:luaj-jse</include>
+              <include>io.netty:netty-common</include>
+              <include>io.netty:netty-transport</include>
+              <include>io.netty:netty-handler</include>
+              <include>io.netty:netty-resolver</include>
+              <include>io.netty:netty-buffer</include>
+              <include>io.netty:netty-handler</include>
+              <include>io.netty:netty-proxy</include>
+              <include>io.netty:netty-codec</include>
+              <include>io.netty:netty-codec-mqtt</include>
+              <include>io.netty:netty-codec-dns</include>
+              <include>io.netty:netty-resolver-dns</include>
+              <include>io.netty:netty-tcnative-boringssl-static</include>
             </includes>
           </artifactSet>
         </configuration>
@@ -73,6 +88,18 @@
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>component</artifactId>
+      <version>0.2.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.luaj</groupId>
+      <artifactId>luaj-jse</artifactId>
+      <version>3.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>cc.iotkit</groupId>
+      <artifactId>dao</artifactId>
       <version>0.2.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
