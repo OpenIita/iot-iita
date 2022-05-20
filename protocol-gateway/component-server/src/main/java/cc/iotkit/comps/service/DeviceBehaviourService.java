@@ -134,6 +134,10 @@ public class DeviceBehaviourService {
             device.setState(new DeviceInfo.State(false, null, null));
             device.setCreateAt(System.currentTimeMillis());
             reportMsg = true;
+
+
+            //auth、acl
+
         }
 
         //透传设备，默认在线
