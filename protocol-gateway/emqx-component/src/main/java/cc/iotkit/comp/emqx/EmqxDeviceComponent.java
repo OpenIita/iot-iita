@@ -10,6 +10,8 @@ import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.utils.SpringUtils;
 import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.converter.ThingService;
+import cc.iotkit.dao.DeviceRepository;
+import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.netty.handler.codec.mqtt.MqttQoS;
@@ -36,7 +38,6 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
     private static final Logger log = LoggerFactory.getLogger(EmqxDeviceComponent.class);
     private Vertx vertx;
     private AuthVerticle authVerticle;
-    //private MqttVerticle mqttVerticle;
     private CountDownLatch countDownLatch;
     private String deployedId;
     private EmqxConfig mqttConfig;
@@ -44,9 +45,6 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
 
     //组件mqtt clientId，默认通过mqtt auth验证。
     private Set<String> compMqttClientIdList = new HashSet<>();
-
-
-    private final Map<String, Device> deviceChildToParent = new HashMap<>();
 
     private TransparentConverter transparentConverter = new TransparentConverter();
 
@@ -170,9 +168,23 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
         if (parent == null) {
             return;
         }
-        Device device = new Device(state.getProductKey(), state.getDeviceName());
+        //Device device = new Device(state.getProductKey(), state.getDeviceName());
+        DeviceRepository deviceRepository = SpringUtils.getBean(DeviceRepository.class);
 
-        if (DeviceState.STATE_ONLINE.equals(state.getState())) {
+        DeviceInfo deviceInfo = deviceRepository.findByProductKeyAndDeviceName(state.getProductKey(), state.getDeviceName());
+        if (deviceInfo != null) {
+            boolean isOnline = DeviceState.STATE_ONLINE.equals(state.getState());
+            deviceInfo.getState().setOnline(isOnline);
+            if(!isOnline) {
+                deviceInfo.getState().setOfflineTime(System.currentTimeMillis());
+            }
+            if(isOnline) {
+                deviceInfo.getState().setOnlineTime(System.currentTimeMillis());
+            }
+            deviceRepository.save(deviceInfo);
+        }
+
+        /*if (DeviceState.STATE_ONLINE.equals(state.getState())) {
             //保存子设备所属父设备
             deviceChildToParent.put(device.toString(),
                     new Device(parent.getProductKey(), parent.getDeviceName())
@@ -180,17 +192,20 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
         } else {
             //删除关系
             deviceChildToParent.remove(device.toString());
-        }
+        }*/
     }
 
     @Override
     public void send(DeviceMessage message) {
-        Device child = new Device(message.getProductKey(), message.getDeviceName());
+        /*DeviceRepository deviceRepository = SpringUtils.getBean(DeviceRepository.class);
+
+        DeviceInfo child = deviceRepository.findByProductKeyAndDeviceName(message.getProductKey(), message.getDeviceName());
         //作为子设备查找父设备
-        Device parent = deviceChildToParent.get(child.toString());
+        DeviceInfo parent = deviceRepository.findByDeviceId(child.getParentId());
+
         if (parent == null) {
             parent = child;
-        }
+        }*/
 
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
@@ -215,15 +230,21 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
 
     @Override
     public boolean exist(String productKey, String deviceName) {
-        return true;
 
-        /*//先作为子设备查找是否存在父设备
-        Device device = deviceChildToParent.get(new Device(productKey, deviceName).toString());
-        if (device != null) {
+        DeviceRepository deviceRepository = SpringUtils.getBean(DeviceRepository.class);
+
+        DeviceInfo child = deviceRepository.findByProductKeyAndDeviceName(productKey, deviceName);
+        if (child != null) {
             return true;
-        }*/
+        }
 
-        //return mqttVerticle.exist(productKey, deviceName);
+        //作为子设备查找父设备
+        DeviceInfo parent = deviceRepository.findByDeviceId(child.getParentId());
+
+        if (parent != null) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -243,8 +264,8 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
         return transparentConverter.encode(service, device);
     }
 
-    public Object getCompMqttClientIdList(){
-        String[] result =  compMqttClientIdList.toArray(new String[0]);
+    public Object getCompMqttClientIdList() {
+        String[] result = compMqttClientIdList.toArray(new String[0]);
         return JsonUtil.toJsonString(result);
     }
 
