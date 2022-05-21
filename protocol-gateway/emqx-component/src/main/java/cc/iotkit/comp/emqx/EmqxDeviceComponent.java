@@ -43,7 +43,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
     private EmqxConfig mqttConfig;
     MqttClient client;
 
-    //组件mqtt clientId，默认通过mqtt auth验证。
+    //组件mqtt clientId，默认通过mqtt auth / acl验证。
     private Set<String> compMqttClientIdList = new HashSet<>();
 
     private TransparentConverter transparentConverter = new TransparentConverter();
@@ -238,12 +238,6 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
             return true;
         }
 
-        //作为子设备查找父设备
-        DeviceInfo parent = deviceRepository.findByDeviceId(child.getParentId());
-
-        if (parent != null) {
-            return true;
-        }
         return false;
     }
 
