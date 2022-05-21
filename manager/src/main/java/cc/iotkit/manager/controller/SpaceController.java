@@ -4,7 +4,7 @@ import cc.iotkit.common.exception.BizException;
 import cc.iotkit.dao.HomeRepository;
 import cc.iotkit.dao.SpaceRepository;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import org.apache.commons.lang3.StringUtils;

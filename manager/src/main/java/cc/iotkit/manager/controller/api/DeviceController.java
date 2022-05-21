@@ -6,7 +6,7 @@ import cc.iotkit.dao.SpaceDeviceRepository;
 import cc.iotkit.manager.model.vo.AppPageNode;
 import cc.iotkit.manager.service.AppDesignService;
 import cc.iotkit.manager.service.DeviceService;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.space.SpaceDevice;
 import io.swagger.annotations.ApiImplicitParam;

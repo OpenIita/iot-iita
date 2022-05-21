@@ -2,7 +2,7 @@ package cc.iotkit.manager.controller.aligenie;
 
 import cc.iotkit.dao.AligenieProductRepository;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.aligenie.AligenieProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

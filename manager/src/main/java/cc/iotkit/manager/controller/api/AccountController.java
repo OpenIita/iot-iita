@@ -3,7 +3,7 @@ package cc.iotkit.manager.controller.api;
 import cc.iotkit.dao.AppInfoRepository;
 import cc.iotkit.dao.HomeRepository;
 import cc.iotkit.dao.UserInfoRepository;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.AppInfo;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.UserInfo;

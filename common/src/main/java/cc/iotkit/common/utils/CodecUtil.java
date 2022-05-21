@@ -1,6 +1,7 @@
 package cc.iotkit.common.utils;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.crypto.Cipher;
@@ -96,4 +97,9 @@ public class CodecUtil {
         encryptStr = new String(HexUtil.parseHex(encryptStr));
         return StringUtils.isEmpty(encryptStr) ? "" : aesDecryptByBytes(base64Decode(encryptStr), decryptKey);
     }
+
+    public static String md5Str(String content) {
+        return DigestUtils.md5Hex(content);
+    }
+
 }

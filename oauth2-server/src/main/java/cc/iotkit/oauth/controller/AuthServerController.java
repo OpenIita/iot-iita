@@ -1,25 +1,28 @@
 package cc.iotkit.oauth.controller;
 
-import cc.iotkit.common.Constants;
-import cc.iotkit.common.utils.CodecUtil;
+import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.oauth.service.TokenRequestHandler;
+import cc.iotkit.utils.AuthUtil;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.oauth2.config.SaOAuth2Config;
 import cn.dev33.satoken.oauth2.logic.SaOAuth2Util;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 public class AuthServerController {
 
@@ -28,8 +31,10 @@ public class AuthServerController {
 
     // 处理所有OAuth相关请求
     @RequestMapping("/oauth2/*")
-    public Object request() {
-        return TokenRequestHandler.serverRequest();
+    public Object request(HttpServletRequest request) {
+        Object result = TokenRequestHandler.serverRequest();
+        log.info("oauth path:{},result:{}", request.getRequestURI(), JsonUtil.toJsonString(result));
+        return result;
     }
 
     // Sa-OAuth2 定制化配置
@@ -44,8 +49,7 @@ public class AuthServerController {
                         UserInfo userInfo = userInfoRepository.findByUid(name);
                         if (userInfo != null) {
                             String secret = userInfo.getSecret();
-                            String encodePwd = CodecUtil.aesEncrypt(pwd, Constants.ACCOUNT_SECRET);
-                            if (encodePwd.equals(secret)) {
+                            if (AuthUtil.checkPwd(pwd, secret)) {
                                 StpUtil.login(userInfo.getId(), "PC");
                                 return SaResult.ok();
                             }
@@ -94,4 +98,6 @@ public class AuthServerController {
         map.put("address", "山东省 青岛市 城阳区");
         return SaResult.data(map);
     }
+
+
 }

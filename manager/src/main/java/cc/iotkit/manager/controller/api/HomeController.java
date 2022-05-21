@@ -4,7 +4,7 @@ import cc.iotkit.dao.HomeRepository;
 import cc.iotkit.dao.SpaceRepository;
 import cc.iotkit.dao.UserActionLogRepository;
 import cc.iotkit.dao.UserInfoRepository;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.UserActionLog;

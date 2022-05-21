@@ -4,7 +4,7 @@ import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.dao.*;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.model.rule.RuleLog;

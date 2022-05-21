@@ -9,7 +9,7 @@ import cc.iotkit.dao.ProtocolComponentRepository;
 import cc.iotkit.dao.ProtocolConverterRepository;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import cc.iotkit.model.protocol.ProtocolConverter;
