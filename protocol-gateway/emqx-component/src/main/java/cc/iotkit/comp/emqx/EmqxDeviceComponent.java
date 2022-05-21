@@ -91,25 +91,19 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
             }
             client = MqttClient.create(vertx, options);
 
-            // handler will be called when we have a message in topic we subscribe for
-            /*client.publishHandler(p -> {
-                log.info("Client received message on [{}] payload [{}] with QoS [{}]", p.topicName(), p.payload().toString(Charset.defaultCharset()), p.qosLevel());
-            });*/
-
             List<String> topics = mqttConfig.getSubscribeTopics();
             Map<String, Integer> subscribes = new HashMap<>();
 
-            subscribes.put("/sys/+/+/s/#", 1);
+            for (String topic : topics) {
+                subscribes.put(topic, 1);
+            }
+
+            /*subscribes.put("/sys/+/+/s/#", 1);
             subscribes.put("/sys/client/connected", 1);
             subscribes.put("/sys/client/disconnected", 1);
             subscribes.put("/sys/session/subscribed", 1);
-            subscribes.put("/sys/session/unsubscribed", 1);
+            subscribes.put("/sys/session/unsubscribed", 1);*/
 
-            //"/sys/+/+/s/#","/sys/client/disconnected"
-
-            /*for (String topic : topics) {
-                subscribes.put(topic, 1);
-            }*/
 
             // handler will be called when we have a message in topic we subscribe for
             client.publishHandler(p -> {
