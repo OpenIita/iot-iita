@@ -199,6 +199,7 @@ public class DeviceBehaviourService {
                                   boolean online) {
         DeviceInfo device = deviceRepository.findByProductKeyAndDeviceName(productKey, deviceName);
         if (device == null) {
+            log.warn(String.format("productKey: %s,device: %s,online: %s",productKey,device,online));
             throw new BizException("device does not exist");
         }
         deviceStateChange(device, online);

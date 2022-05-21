@@ -10,19 +10,19 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://填写mongodb地址/admin
+      uri: mongodb://iotkit:123456@192.168.100.118:27017/?authSource=iotkit
       database: iotkit
 
   elasticsearch:
     rest:
-      uris: http://elasticsearch 连接地址
+      uris: http://192.168.100.118:9200
       connection-timeout: 10s
 
   redis:
-    host: redis地址
+    host: 192.168.100.50
     port: 6379
     database: 0
-    password:
+    password: 5tgbNHY^
 
   cache:
     cache-names: foo,bar
@@ -33,10 +33,10 @@ spring:
       matching-strategy: ant_path_matcher
 
 aliyun:
-  bucketId: 填写阿里云bucketId
+  bucketId: iotkit-images
   endpoint: oss-cn-shenzhen.aliyuncs.com
-  accessKeyId: 填写阿里云accessKeyId
-  accessKeySecret: 填写阿里云accessKeySecret
+  accessKeyId: LTAI4FmGGouSnScYrGe7rQLA
+  accessKeySecret: 9S0xjffwmGW2B3HsE4Efw1TqUy8YXC
 
 sa-token:
   # token名称 (同时也是cookie名称)
@@ -53,14 +53,24 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: false
-  
+
+security:
+  oauth2:
+    resource:
+      filter-order: 3
+
+oauth2:
+  auth-server-url: http://127.0.0.1:8086
+
 pulsar:
-  broker: pulsar://pulsar broker地址:6650
-  service: http://pulsar 服务地址:8080
+  broker: pulsar://192.168.100.66:6650
+  service: http://192.168.100.66:8080
 
 app:
   systemRole: iot_system_user
-
+  aligenie:
+    push:
+      device:
 mqtt:
-  url: tcp://填写mqtt连接地址
+  url: tcp:/192.168.100.118:1883
 

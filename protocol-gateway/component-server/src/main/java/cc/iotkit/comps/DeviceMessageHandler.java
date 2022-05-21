@@ -48,6 +48,8 @@ public class DeviceMessageHandler implements IMessageHandler {
         this.component = component;
         this.converter = converter;
         this.deviceBehaviourService = deviceBehaviourService;
+
+        engine.put("component", component);
         scriptObj = engine.eval(String.format("new (function () {\n%s})()", script));
     }
 
@@ -64,6 +66,7 @@ public class DeviceMessageHandler implements IMessageHandler {
             if (!(data instanceof Map)) {
                 throw new BizException("script result data is incorrect");
             }
+
             Map<String, Object> dataMap = (Map) data;
             //获取动作数据
             Action action = getAction(result.get("action"));

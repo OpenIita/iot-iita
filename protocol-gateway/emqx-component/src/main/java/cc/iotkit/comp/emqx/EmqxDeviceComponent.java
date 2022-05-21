@@ -7,6 +7,7 @@ import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.DeviceState;
+import cc.iotkit.comp.utils.SpringUtils;
 import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.converter.ThingService;
 import cc.iotkit.model.device.message.ThingModelMessage;
@@ -19,15 +20,14 @@ import io.vertx.mqtt.MqttClient;
 import io.vertx.mqtt.MqttClientOptions;
 import lombok.*;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 
@@ -41,6 +41,10 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
     private String deployedId;
     private EmqxConfig mqttConfig;
     MqttClient client;
+
+    //组件mqtt clientId，默认通过mqtt auth验证。
+    private Set<String> compMqttClientIdList = new HashSet<>();
+
 
     private final Map<String, Device> deviceChildToParent = new HashMap<>();
 
@@ -56,6 +60,8 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
     @Override
     public void start() {
         try {
+            compMqttClientIdList.add(mqttConfig.getClientId());
+
             authVerticle.setExecutor(getHandler());
             countDownLatch = new CountDownLatch(1);
             Future<String> future = vertx.deployVerticle(authVerticle);
@@ -78,18 +84,17 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
                     .setCleanSession(true)
                     .setKeepAliveInterval(60);
 
+
             if (mqttConfig.isSsl()) {
                 options.setSsl(true)
                         .setTrustAll(true);
             }
             client = MqttClient.create(vertx, options);
 
-
             // handler will be called when we have a message in topic we subscribe for
             /*client.publishHandler(p -> {
                 log.info("Client received message on [{}] payload [{}] with QoS [{}]", p.topicName(), p.payload().toString(Charset.defaultCharset()), p.qosLevel());
             });*/
-
 
             List<String> topics = mqttConfig.getSubscribeTopics();
             Map<String, Integer> subscribes = new HashMap<>();
@@ -115,77 +120,14 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
 
                 try {
                     IMessageHandler messageHandler = getHandler();
-
                     if (messageHandler != null) {
                         Map<String, Object> head = new HashMap<>();
                         head.put("topic", topic);
-                        if (topic.equals("/sys/client/connected")) {
-                            JsonNode payloadJson = JsonUtil.parse(payload);
-                            String clientId = payloadJson.get("clientid").textValue();
-                            log.warn("client connection connected,clientId:{}", clientId);
-                            head.put("clientId", clientId);
-                            messageHandler.onReceive(head, "connect", payload);
-                            return;
-                        }
-
-                        //连接断开
-                        if (topic.equals("/sys/client/disconnected")) {
-                            JsonNode payloadJson = JsonUtil.parse(payload);
-                            String clientId = payloadJson.get("clientid").textValue();
-                            log.warn("client connection closed,clientId:{}", clientId);
-                            head.put("clientId", clientId);
-                            messageHandler.onReceive(head, "disconnect", payload);
-                            return;
-                        }
-
-                        /**
-                        ** 子设备在线离线状态（topic: ^/sys/.+/.+/c/#$）**： 改为从 从 acl 访问控制 获取离线在线状态。
-
-
-                        if (topic.equals("/sys/session/subscribed")) {
-                            JsonNode payloadJson = JsonUtil.parse(payload);
-                            String _topic = payloadJson.get("topic").textValue();
-
-                            //在线
-                            if (_topic.matches(Constants.MQTT.DEVICE_SUBSCRIBE_TOPIC)) {
-                                //head.put("topic", _topic);
-                                String clientId = payloadJson.get("clientid").textValue();
-                                log.warn("session subscribe, topic:{}", _topic);
-                                head.put("clientId", clientId);
-                                messageHandler.onReceive(head, "subscribe", payload);
-                            }
-
-                            return;
-                        }
-
-
-                        if (topic.equals("/sys/session/unsubscribed")) {
-                            JsonNode payloadJson = JsonUtil.parse(payload);
-                            String _topic = payloadJson.get("topic").textValue();
-
-                            //离线
-                            if (_topic.matches(Constants.MQTT.DEVICE_SUBSCRIBE_TOPIC)) {
-                                //head.put("topic", _topic);
-                                String clientId = payloadJson.get("clientid").textValue();
-                                log.warn("session unsubscribe, topic:{}", _topic);
-                                head.put("clientId", clientId);
-                                messageHandler.onReceive(head, "unsubscribe", payload);
-                            }
-
-                            return;
-                        }*/
-
-                        String[] parts = topic.split("/");
-                        if (parts.length < 5) {
-                            log.error("message topic is illegal.");
-                            return;
-                        }
-
                         messageHandler.onReceive(head, "", payload);
 
                     }
                 } catch (Exception e) {
-                    log.error("message topic is illegal.", e);
+                    log.error("message is illegal.", e);
                 }
             });
 
@@ -206,10 +148,6 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
             }).exceptionHandler(event -> {
                 log.error("client fail: ", event.getCause());
             });
-
-            /** client.pingResponseHandler(s -> {
-             log.info("We have just received PINGRESP packet");
-             });*/
 
         } catch (Throwable e) {
             throw new BizException("start emqx auth component error", e);
@@ -309,6 +247,11 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
      */
     public DeviceMessage transparentEncode(ThingService<?> service, cc.iotkit.converter.Device device) {
         return transparentConverter.encode(service, device);
+    }
+
+    public Object getCompMqttClientIdList(){
+        String[] result =  compMqttClientIdList.toArray(new String[0]);
+        return JsonUtil.toJsonString(result);
     }
 
     @Data
