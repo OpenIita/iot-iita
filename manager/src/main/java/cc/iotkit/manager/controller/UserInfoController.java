@@ -8,11 +8,10 @@ import cc.iotkit.dao.AligenieDeviceRepository;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.PulsarAdminService;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.UserInfo;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -20,9 +19,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/user")
 public class UserInfoController {
-
-    @Value("${app.systemRole}")
-    private String systemRole;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -55,7 +51,7 @@ public class UserInfoController {
             user.setRoles(Collections.singletonList(Constants.ROLE_SYSTEM));
             user.setPermissions(Collections.singletonList(Constants.PERMISSION_WRITE));
             user.setCreateAt(System.currentTimeMillis());
-            user.setSecret(CodecUtil.aesEncrypt(Constants.PWD_SYSTEM_USER, Constants.PWD_SYSTEM_USER));
+            user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_SYSTEM_USER));
             userInfoRepository.save(user);
         } catch (Throwable e) {
             throw new BizException("add platform user error", e);
@@ -79,7 +75,7 @@ public class UserInfoController {
         user.setOwnerId(AuthUtil.getUserId());
         user.setRoles(Collections.singletonList(Constants.ROLE_CLIENT));
         user.setCreateAt(System.currentTimeMillis());
-        user.setSecret(CodecUtil.aesEncrypt(Constants.PWD_CLIENT_USER, Constants.ACCOUNT_SECRET));
+        user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_CLIENT_USER));
         userInfoRepository.save(user);
     }
 

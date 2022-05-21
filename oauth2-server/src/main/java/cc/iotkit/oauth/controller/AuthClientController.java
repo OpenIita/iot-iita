@@ -2,10 +2,12 @@ package cc.iotkit.oauth.controller;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.CodecUtil;
+import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.dao.OauthClientCache;
 import cc.iotkit.dao.UserInfoCache;
 import cc.iotkit.model.OauthClient;
 import cc.iotkit.model.UserInfo;
+import cc.iotkit.oauth.vo.UserInfoVo;
 import cc.iotkit.utils.SoMap;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.StpUtil;
@@ -63,15 +65,15 @@ public class AuthClientController {
                 .toString();
         SoMap so = SoMap.getSoMap().setJsonString(str);
         log.info("get token by code result:{}", so);
-        // code不等于200  代表请求失败
-        if (so.getInt("code") != 200) {
+        // 存在code,不是token结构
+        if (so.getInt("code") != 0) {
             return SaResult.error(so.getString("msg"));
         }
 
         // 根据openid获取其对应的userId
-        SoMap data = so.getMap("data");
-        String uid = getUserIdByOpenid(data.getString("openid"));
-        String access_token = data.getString("access_token");
+        SoMap data = new SoMap();
+        String uid = getUserIdByOpenid(so.getString("openid"));
+        String access_token = so.getString("access_token");
         UserInfo userInfo = userInfoCache.getUserInfo(uid);
         data.put("name", userInfo.getNickName());
         data.put("uid", uid);
@@ -92,34 +94,17 @@ public class AuthClientController {
         return new RedirectView(redirect_uri);
     }
 
-    // 根据 Access-Token 置换相关的资源: 获取账号昵称、头像、性别等信息
-    @RequestMapping("/getUserinfo")
-    public SaResult getUserinfo(String accessToken) {
-        // 调用Server端接口，查询开放的资源
-        String str = OkHttps.sync(serverUrl + "/oauth2/userinfo")
-                .addBodyPara("access_token", accessToken)
-                .post()
-                .getBody()
-                .toString();
-        SoMap so = SoMap.getSoMap().setJsonString(str);
-        // code不等于200  代表请求失败
-        if (so.getInt("code") != 200) {
-            return SaResult.error(so.getString("msg"));
-        }
-
-        // 返回相关参数 (data=获取到的资源 )
-        SoMap data = so.getMap("data");
-        return SaResult.data(data);
-    }
-
     @GetMapping("/checkLogin")
     public SaResult checkLogin() {
         try {
-            StpUtil.checkLogin();
+            String uid = StpUtil.getLoginId().toString();
+            UserInfo userInfo = userInfoCache.getUserInfo(uid);
+            UserInfoVo userVo = new UserInfoVo();
+            ReflectUtil.copyNoNulls(userInfo, userVo);
+            return SaResult.ok().setData(userVo);
         } catch (Throwable e) {
             return SaResult.error("no login");
         }
-        return SaResult.ok();
     }
 
     @SneakyThrows

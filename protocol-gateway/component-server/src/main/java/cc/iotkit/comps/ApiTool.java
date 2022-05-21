@@ -125,7 +125,7 @@ public class ApiTool {
         request = request
                 .timeout(timeout)
                 .putHeader("wrap-response", "json")
-                .putHeader("authorization", "Bearer " + token);
+                .putHeader("token", token);
 
         AtomicReference<ApiResponse> apiResponse = new AtomicReference<>(
                 new ApiResponse(500, "", null, System.currentTimeMillis()));

@@ -4,10 +4,12 @@ import cn.dev33.satoken.interceptor.SaAnnotationInterceptor;
 import cn.dev33.satoken.interceptor.SaRouteInterceptor;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@Slf4j
 @Configuration
 public class SaTokenConfigure implements WebMvcConfigurer {
 
@@ -17,23 +19,8 @@ public class SaTokenConfigure implements WebMvcConfigurer {
         registry.addInterceptor(new SaAnnotationInterceptor()).addPathPatterns("/**");
         // 注册路由拦截器，自定义认证规则
         registry.addInterceptor(new SaRouteInterceptor((req, res, handler) -> {
-            System.out.println(req.getRequestPath());
-            // 根据路由划分模块，不同模块不同鉴权
+            log.info("resource role check,path:{}", req.getRequestPath());
             SaRouter
-                    //管理员、系统用户角色能使用的功能
-                    .match("/**")
-                    .notMatch("/oauth2/**","/*.png").check(c -> StpUtil.checkRoleOr("iot_admin", "iot_system"))
-                    //需要有可写权限的功能
-                    .match(
-                            "/**/save*/**",
-                            "/**/remove*/**",
-                            "/**/del*/**",
-                            "/**/add*/**",
-                            "/**/clear*/**",
-                            "/**/set*/**",
-                            "/**/set",
-                            "/**/invoke"
-                    ).check(c -> StpUtil.checkPermission("write"))
                     //管理员、系统、客户端用户角色能使用的功能
                     .match("/space/addSpace/**",
                             "/space/saveSpace/**",
@@ -52,7 +39,26 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                             "/device/*/service/property/set",
                             "/device/*/service/*/invoke"
                     )
+                    .check(c -> StpUtil.checkRoleOr("iot_admin", "iot_system", "iot_client"));
+
+            SaRouter
+                    //需要有可写权限的功能
+                    .match(
+                            "/**/save*/**",
+                            "/**/remove*/**",
+                            "/**/del*/**",
+                            "/**/add*/**",
+                            "/**/clear*/**",
+                            "/**/set*/**",
+                            "/**/set",
+                            "/**/invoke"
+                    ).check(c -> StpUtil.checkPermission("write"));
+
+            SaRouter
+                    //管理员、系统用户角色能使用的功能
+                    .match("/**")
                     .check(c -> StpUtil.checkRoleOr("iot_admin", "iot_system", "iot_client"))
+
             ;
         })).addPathPatterns("/**")
                 .excludePathPatterns(

@@ -1,7 +1,7 @@
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.Owned;
 import cc.iotkit.model.device.DeviceInfo;
 import org.apache.commons.lang3.StringUtils;

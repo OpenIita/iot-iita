@@ -3,7 +3,7 @@ package cc.iotkit.manager.controller.api;
 import cc.iotkit.dao.*;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.manager.service.SpaceDeviceService;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.space.Space;

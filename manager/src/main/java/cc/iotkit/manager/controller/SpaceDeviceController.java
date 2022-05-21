@@ -6,7 +6,7 @@ import cc.iotkit.dao.*;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.manager.utils.AuthUtil;
+import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
