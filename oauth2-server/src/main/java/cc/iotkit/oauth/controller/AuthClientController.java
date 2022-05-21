@@ -77,7 +77,7 @@ public class AuthClientController {
         UserInfo userInfo = userInfoCache.getUserInfo(uid);
         data.put("name", userInfo.getNickName());
         data.put("uid", uid);
-
+        data.put("access_token", access_token);
         // 返回相关参数
         StpUtil.login(uid, SaLoginConfig.setToken(access_token));
         return SaResult.data(data);
