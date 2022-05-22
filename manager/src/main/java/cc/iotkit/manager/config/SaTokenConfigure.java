@@ -3,6 +3,7 @@ package cc.iotkit.manager.config;
 import cn.dev33.satoken.interceptor.SaAnnotationInterceptor;
 import cn.dev33.satoken.interceptor.SaRouteInterceptor;
 import cn.dev33.satoken.router.SaRouter;
+import cn.dev33.satoken.router.SaRouterStaff;
 import cn.dev33.satoken.stp.StpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -20,28 +21,35 @@ public class SaTokenConfigure implements WebMvcConfigurer {
         // 注册路由拦截器，自定义认证规则
         registry.addInterceptor(new SaRouteInterceptor((req, res, handler) -> {
             log.info("resource role check,path:{}", req.getRequestPath());
-            SaRouter
-                    //管理员、系统、客户端用户角色能使用的功能
-                    .match("/space/addSpace/**",
-                            "/space/saveSpace/**",
-                            "/space/delSpace/**",
-                            "/space/saveHome/**",
-                            "/space/currentHome/**",
-                            "/space/myRecentDevices/**",
-                            "/space/spaces/**",
-                            "/space/myDevices/**",
-                            "/space/findDevice/**",
-                            "/space/addDevice/**",
-                            "/space/saveDevice",
-                            "/space/removeDevice",
-                            "/space/device/*",
-                            "/device/*/consumer/*",
-                            "/device/*/service/property/set",
-                            "/device/*/service/*/invoke"
-                    )
-                    .check(c -> StpUtil.checkRoleOr("iot_admin", "iot_system", "iot_client"));
+
+            //客户端角色能使用的功能
+            if (StpUtil.hasRole("iot_client")) {
+                if (SaRouter
+                        .match("/space/addSpace/**",
+                                "/space/saveSpace/**",
+                                "/space/delSpace/**",
+                                "/space/saveHome/**",
+                                "/space/currentHome/**",
+                                "/space/myRecentDevices/**",
+                                "/space/spaces/**",
+                                "/space/myDevices/**",
+                                "/space/findDevice/**",
+                                "/space/addDevice/**",
+                                "/space/saveDevice",
+                                "/space/removeDevice",
+                                "/space/device/*",
+                                "/device/*/consumer/*",
+                                "/device/*/service/property/set",
+                                "/device/*/service/*/invoke"
+                        ).isHit()) {
+                    return;
+                }
+            }
 
             SaRouter
+                    //除了以上所有功能都需要 管理员或系统用户角色
+                    .match("/**")
+                    .check(c -> StpUtil.checkRoleOr("iot_admin", "iot_system"))
                     //需要有可写权限的功能
                     .match(
                             "/**/save*/**",
@@ -54,12 +62,6 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                             "/**/invoke"
                     ).check(c -> StpUtil.checkPermission("write"));
 
-            SaRouter
-                    //管理员、系统用户角色能使用的功能
-                    .match("/**")
-                    .check(c -> StpUtil.checkRoleOr("iot_admin", "iot_system", "iot_client"))
-
-            ;
         })).addPathPatterns("/**")
                 .excludePathPatterns(
                         "/*.png",
