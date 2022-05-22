@@ -40,6 +40,7 @@ public class AuthVerticle extends AbstractVerticle {
         //第二步 配置Router解析url
         backendRouter.route(HttpMethod.POST, "/mqtt/auth").handler(rc -> {
             String json = rc.getBodyAsString();
+            log.info("mqtt auth:{}", json);
             try {
                 Map<String, Object> head = new HashMap<>();
                 head.put("topic", "/mqtt/auth");
@@ -54,6 +55,7 @@ public class AuthVerticle extends AbstractVerticle {
         });
         backendRouter.route(HttpMethod.POST, "/mqtt/acl").handler(rc -> {
             String json = rc.getBodyAsString();
+            log.info("mqtt acl:{}", json);
             try {
                 Map<String, Object> head = new HashMap<>();
                 head.put("topic", "/mqtt/acl");
