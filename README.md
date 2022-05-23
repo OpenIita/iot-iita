@@ -156,7 +156,7 @@ monogodb和pulsar安装配置见末尾。
 
 微信群:
 
-![输入图片说明](doc/ma.png)
+![输入图片说明](doc/ma.png) 
 
 
   **mongodb安装配置** 
