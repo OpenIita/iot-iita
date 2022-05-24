@@ -4,8 +4,8 @@ import cc.iotkit.comp.IMessageHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -31,12 +31,20 @@ public class AuthVerticle extends AbstractVerticle {
     @Override
     public void start() throws Exception {
         backendServer = vertx.createHttpServer();
-        Router backendRouter = Router.router(vertx);
 
+        //第一步 声明Router&初始化Router
+        Router backendRouter = Router.router(vertx);
+        //获取body参数，得先添加这句
+        backendRouter.route().handler(BodyHandler.create());
+
+        //第二步 配置Router解析url
         backendRouter.route(HttpMethod.POST, "/mqtt/auth").handler(rc -> {
-            JsonObject json = rc.getBodyAsJson();
+            String json = rc.getBodyAsString();
+            log.info("mqtt auth:{}", json);
             try {
-                executor.onReceive(new HashMap<>(), "auth", json.toString());
+                Map<String, Object> head = new HashMap<>();
+                head.put("topic", "/mqtt/auth");
+                executor.onReceive(head, "auth", json);
                 rc.response().setStatusCode(200)
                         .end();
             } catch (Throwable e) {
@@ -46,11 +54,13 @@ public class AuthVerticle extends AbstractVerticle {
             }
         });
         backendRouter.route(HttpMethod.POST, "/mqtt/acl").handler(rc -> {
-            JsonObject json = rc.getBodyAsJson();
+            String json = rc.getBodyAsString();
+            log.info("mqtt acl:{}", json);
             try {
                 Map<String, Object> head = new HashMap<>();
-                head.put("topic", json.getString("topic"));
-                executor.onReceive(head, "subscribe", json.toString());
+                head.put("topic", "/mqtt/acl");
+                executor.onReceive(head, "acl", json);
+
                 rc.response().setStatusCode(200)
                         .end();
             } catch (Throwable e) {

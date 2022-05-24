@@ -16,8 +16,6 @@ public interface IDeviceComponent extends IComponent {
 
     void send(DeviceMessage message);
 
-    boolean exist(String productKey, String deviceName);
-
     void setHandler(IMessageHandler handler);
 
     void setConverter(IConverter converter);

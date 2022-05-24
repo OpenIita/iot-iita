@@ -4,7 +4,7 @@
 此仓库为奇特物联(iotkit)物联网平台开源项目。
 奇特物联是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能, 能帮助你快速搭建自己的物联网相关业务平台。
 
-系统包含了品类、物模型、消息转换、通讯组件（mqtt通讯组件、小度音箱接入组件、onenet Studio接入组件）、云端低代码设备开发、设备管理、规则引擎、第三方平台接入、数据流转、数据可视化、报警中心等模块和智能家居APP（小程序），集成了[Sa-Token](https://gitee.com/dromara/sa-token) 认证框架。
+系统包含了品类、物模型、消息转换、通讯组件（mqtt/EMQX通讯组件、小度音箱接入组件、onenet Studio接入组件）、云端低代码设备开发、设备管理、规则引擎、第三方平台接入、数据流转、数据可视化、报警中心等模块和智能家居APP（小程序），集成了[Sa-Token](https://gitee.com/dromara/sa-token) 认证框架。
 
  **前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
 

@@ -18,10 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @Slf4j
@@ -41,8 +38,11 @@ public class HttpBizComponent implements IComponent {
 
     private HttpServer backendServer;
 
+    private String id;
+
     @Override
     public void create(CompConfig config) {
+        this.id = UUID.randomUUID().toString();
         this.httpConfig = JsonUtil.parse(config.getOther(), HttpConfig.class);
         try {
             scriptObj = engine.eval(String.format("new (function () {\n%s})()", script));

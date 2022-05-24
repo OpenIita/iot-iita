@@ -19,6 +19,7 @@ public class Application {
         if (EmbeddedRedisConfig.embeddedEnable()) {
             EmbeddedRedisConfig.startEmbeddedRedisServer();
         }
+        System.setProperty("nashorn.args","--no-deprecation-warning");
 
         SpringApplication.run(Application.class, args);
     }

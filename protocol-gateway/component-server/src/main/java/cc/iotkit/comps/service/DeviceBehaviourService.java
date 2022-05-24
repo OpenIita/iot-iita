@@ -15,14 +15,13 @@ import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.pulsar.client.api.Producer;
-import org.apache.pulsar.client.api.PulsarClient;
-import org.apache.pulsar.client.api.PulsarClientException;
+import org.apache.pulsar.client.api.*;
 import org.apache.pulsar.client.impl.schema.JSONSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,10 @@ public class DeviceBehaviourService {
 //    @Autowired
     private DeviceStateHolder deviceStateHolder;
 
-    private Producer<ThingModelMessage> deviceMessageProducer;
+    //旧实现，ThingModelMessage序列化失败
+    //private Producer<ThingModelMessage> deviceMessageProducer;
+
+    private Producer<byte[]> deviceMessageProducer;
 
     @PostConstruct
     public void init() throws PulsarClientException {
@@ -54,7 +56,14 @@ public class DeviceBehaviourService {
         PulsarClient client = PulsarClient.builder()
                 .serviceUrl(serverConfig.getPulsarBrokerUrl())
                 .build();
+        /**
+         旧实现，ThingModelMessage序列化失败
         deviceMessageProducer = client.newProducer(JSONSchema.of(ThingModelMessage.class))
+                .topic("persistent://iotkit/default/" + Constants.THING_MODEL_MESSAGE_TOPIC)
+                .create();
+         */
+
+        deviceMessageProducer = client.newProducer()
                 .topic("persistent://iotkit/default/" + Constants.THING_MODEL_MESSAGE_TOPIC)
                 .create();
     }
@@ -125,6 +134,10 @@ public class DeviceBehaviourService {
             device.setState(new DeviceInfo.State(false, null, null));
             device.setCreateAt(System.currentTimeMillis());
             reportMsg = true;
+
+
+            //auth、acl
+
         }
 
         //透传设备，默认在线
@@ -186,6 +199,7 @@ public class DeviceBehaviourService {
                                   boolean online) {
         DeviceInfo device = deviceRepository.findByProductKeyAndDeviceName(productKey, deviceName);
         if (device == null) {
+            log.warn(String.format("productKey: %s,device: %s,online: %s",productKey,device,online));
             throw new BizException("device does not exist");
         }
         deviceStateChange(device, online);
@@ -245,8 +259,18 @@ public class DeviceBehaviourService {
                 message.setTime(System.currentTimeMillis());
             }
             message.setDeviceId(device.getDeviceId());
-            deviceMessageProducer.send(message);
-        } catch (PulsarClientException e) {
+
+            // 旧实现，ThingModelMessage序列化失败
+            //deviceMessageProducer.send(message);
+
+            // 新实现，用JsonUtil.toJsonString序列化ThingModelMessage，解决 ThingModelMessage序列化失败的问题
+            TypedMessageBuilder<byte[]> builder = deviceMessageProducer.newMessage();
+            builder.value(JsonUtil.toJsonString(message).getBytes(StandardCharsets.UTF_8));
+            builder.send();
+
+
+        }
+        catch (PulsarClientException e) {
             log.error("send thing model message error", e);
         }
     }

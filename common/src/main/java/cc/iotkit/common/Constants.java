@@ -160,4 +160,8 @@ public interface Constants {
          */
         String GET_DEVICE = "/device/{deviceId}";
     }
+
+    interface  MQTT {
+        String DEVICE_SUBSCRIBE_TOPIC = "^/sys/.+/.+/c/#$";
+    }
 }

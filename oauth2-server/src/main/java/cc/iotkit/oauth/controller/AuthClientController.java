@@ -17,13 +17,15 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.beans.BeanMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Slf4j
 @RestController
@@ -38,14 +40,9 @@ public class AuthClientController {
     @Autowired
     private UserInfoCache userInfoCache;
 
-    // 进入首页
-    @RequestMapping("/")
-    public Object index(HttpServletRequest request) {
-        request.setAttribute("uid", StpUtil.getLoginIdDefaultNull());
-        return new ModelAndView("index.html");
-    }
-
-    // 根据Code码进行登录，获取 Access-Token 和 openid
+    /**
+     * 根据Code码进行登录，获取 Access-Token 和 用户信息
+     */
     @RequestMapping("/codeLogin")
     public SaResult codeLogin(String code, String clientId) {
         OauthClient oauthClient = oauthClientCache.getClient(clientId);
@@ -71,19 +68,24 @@ public class AuthClientController {
         }
 
         // 根据openid获取其对应的userId
-        SoMap data = new SoMap();
         String uid = getUserIdByOpenid(so.getString("openid"));
         String access_token = so.getString("access_token");
-        UserInfo userInfo = userInfoCache.getUserInfo(uid);
-        data.put("name", userInfo.getNickName());
-        data.put("uid", uid);
+        UserInfoVo userVo = getUserInfo(uid);
+        BeanMap beanMap = BeanMap.create(userVo);
+        Map<String,Object> data=new HashMap<>();
+        beanMap.forEach((key,value)->{
+            data.put(key.toString(),value);
+        });
+        data.put("access_token", access_token);
 
         // 返回相关参数
         StpUtil.login(uid, SaLoginConfig.setToken(access_token));
         return SaResult.data(data);
     }
 
-    // 注销登录
+    /**
+     * 注销登录
+     */
     @RequestMapping("/logout")
     public RedirectView logout(String accessToken, String redirect_uri) {
         //先注销client中cookie的token
@@ -94,13 +96,14 @@ public class AuthClientController {
         return new RedirectView(redirect_uri);
     }
 
+    /**
+     * 登录验证
+     */
     @GetMapping("/checkLogin")
     public SaResult checkLogin() {
         try {
             String uid = StpUtil.getLoginId().toString();
-            UserInfo userInfo = userInfoCache.getUserInfo(uid);
-            UserInfoVo userVo = new UserInfoVo();
-            ReflectUtil.copyNoNulls(userInfo, userVo);
+            UserInfoVo userVo = getUserInfo(uid);
             return SaResult.ok().setData(userVo);
         } catch (Throwable e) {
             return SaResult.error("no login");
@@ -111,6 +114,13 @@ public class AuthClientController {
     private String getUserIdByOpenid(String openid) {
         String clientIdLoginId = CodecUtil.aesDecrypt(openid, Constants.ACCOUNT_SECRET);
         return clientIdLoginId.split(":")[1];
+    }
+
+    private UserInfoVo getUserInfo(String uid) {
+        UserInfo userInfo = userInfoCache.getUserInfo(uid);
+        UserInfoVo userVo = new UserInfoVo();
+        ReflectUtil.copyNoNulls(userInfo, userVo);
+        return userVo;
     }
 
 }

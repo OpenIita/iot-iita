@@ -2,6 +2,8 @@ package cc.iotkit.comp;
 
 public interface IComponent {
 
+    String getId();
+
     void create(CompConfig config);
 
     void start();

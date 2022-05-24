@@ -5,9 +5,7 @@ import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.oauth.service.TokenRequestHandler;
 import cc.iotkit.utils.AuthUtil;
-import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.oauth2.config.SaOAuth2Config;
-import cn.dev33.satoken.oauth2.logic.SaOAuth2Util;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Slf4j
@@ -29,7 +26,9 @@ public class AuthServerController {
     @Autowired
     private UserInfoRepository userInfoRepository;
 
-    // 处理所有OAuth相关请求
+    /**
+     * 处理所有OAuth相关请求
+     */
     @RequestMapping("/oauth2/*")
     public Object request(HttpServletRequest request) {
         Object result = TokenRequestHandler.serverRequest();
@@ -37,7 +36,9 @@ public class AuthServerController {
         return result;
     }
 
-    // Sa-OAuth2 定制化配置
+    /**
+     * Sa-OAuth2 自定义配置
+     */
     @Autowired
     public void setSaOAuth2Config(SaOAuth2Config cfg) {
         cfg.
@@ -67,6 +68,11 @@ public class AuthServerController {
                     return new ModelAndView("confirm.html", map);
                 })
         ;
+
+        //开启密码授权、刷新token和client授权模式
+        cfg.setIsPassword(true);
+        cfg.setIsNewRefresh(true);
+        cfg.setIsClient(true);
     }
 
     // 全局异常拦截
@@ -76,28 +82,9 @@ public class AuthServerController {
         return SaResult.error(e.getMessage());
     }
 
-    // ---------- 开放相关资源接口： Client端根据 Access-Token ，置换相关资源 ------------
-
-    // 获取Userinfo信息：昵称、头像、性别等等
     @RequestMapping("/oauth2/userinfo")
     public SaResult userinfo() {
-        // 获取 Access-Token 对应的账号id
-        String accessToken = SaHolder.getRequest().getParamNotNull("access_token");
-        Object loginId = SaOAuth2Util.getLoginIdByAccessToken(accessToken);
-        System.out.println("-------- 此Access-Token对应的账号id: " + loginId);
-
-        // 校验 Access-Token 是否具有权限: userinfo
-        SaOAuth2Util.checkScope(accessToken, "userinfo");
-
-        // 模拟账号信息 （真实环境需要查询数据库获取信息）
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("nickname", "shengzhang_");
-        map.put("avatar", "http://xxx.com/1.jpg");
-        map.put("age", "18");
-        map.put("sex", "男");
-        map.put("address", "山东省 青岛市 城阳区");
-        return SaResult.data(map);
+        return SaResult.ok();
     }
-
 
 }
