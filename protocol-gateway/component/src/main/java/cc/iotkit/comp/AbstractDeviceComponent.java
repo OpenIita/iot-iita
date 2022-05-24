@@ -6,6 +6,8 @@ import cc.iotkit.comp.model.RegisterInfo;
 import cc.iotkit.converter.IConverter;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public abstract class AbstractDeviceComponent implements IDeviceComponent {
 
@@ -17,9 +19,12 @@ public abstract class AbstractDeviceComponent implements IDeviceComponent {
 
     protected String script;
 
+    private String id;
+
     @Override
     public void create(CompConfig config) {
         this.config = config;
+        this.id = UUID.randomUUID().toString();
     }
 
     @Override

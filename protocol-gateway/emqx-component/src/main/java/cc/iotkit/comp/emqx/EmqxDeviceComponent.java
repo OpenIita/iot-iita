@@ -1,6 +1,5 @@
 package cc.iotkit.comp.emqx;
 
-import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.AbstractDeviceComponent;
@@ -13,7 +12,6 @@ import cc.iotkit.converter.ThingService;
 import cc.iotkit.dao.DeviceRepository;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
-import com.fasterxml.jackson.databind.JsonNode;
 import io.netty.handler.codec.mqtt.MqttQoS;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -22,8 +20,6 @@ import io.vertx.mqtt.MqttClient;
 import io.vertx.mqtt.MqttClientOptions;
 import lombok.*;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,12 +37,12 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
     private CountDownLatch countDownLatch;
     private String deployedId;
     private EmqxConfig mqttConfig;
-    MqttClient client;
+    private MqttClient client;
 
     //组件mqtt clientId，默认通过mqtt auth / acl验证。
-    private Set<String> compMqttClientIdList = new HashSet<>();
+    private final Set<String> compMqttClientIdList = new HashSet<>();
 
-    private TransparentConverter transparentConverter = new TransparentConverter();
+    private final TransparentConverter transparentConverter = new TransparentConverter();
 
     public void create(CompConfig config) {
         super.create(config);
@@ -66,7 +62,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
             future.onSuccess((s -> {
                 deployedId = s;
                 countDownLatch.countDown();
-                log.error("start emqx auth component success", s);
+                log.error("start emqx auth component success");
             }));
             future.onFailure((e) -> {
                 countDownLatch.countDown();
@@ -168,45 +164,24 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
         if (parent == null) {
             return;
         }
-        //Device device = new Device(state.getProductKey(), state.getDeviceName());
         DeviceRepository deviceRepository = SpringUtils.getBean(DeviceRepository.class);
 
         DeviceInfo deviceInfo = deviceRepository.findByProductKeyAndDeviceName(state.getProductKey(), state.getDeviceName());
         if (deviceInfo != null) {
             boolean isOnline = DeviceState.STATE_ONLINE.equals(state.getState());
             deviceInfo.getState().setOnline(isOnline);
-            if(!isOnline) {
+            if (!isOnline) {
                 deviceInfo.getState().setOfflineTime(System.currentTimeMillis());
             }
-            if(isOnline) {
+            if (isOnline) {
                 deviceInfo.getState().setOnlineTime(System.currentTimeMillis());
             }
             deviceRepository.save(deviceInfo);
         }
-
-        /*if (DeviceState.STATE_ONLINE.equals(state.getState())) {
-            //保存子设备所属父设备
-            deviceChildToParent.put(device.toString(),
-                    new Device(parent.getProductKey(), parent.getDeviceName())
-            );
-        } else {
-            //删除关系
-            deviceChildToParent.remove(device.toString());
-        }*/
     }
 
     @Override
     public void send(DeviceMessage message) {
-        /*DeviceRepository deviceRepository = SpringUtils.getBean(DeviceRepository.class);
-
-        DeviceInfo child = deviceRepository.findByProductKeyAndDeviceName(message.getProductKey(), message.getDeviceName());
-        //作为子设备查找父设备
-        DeviceInfo parent = deviceRepository.findByDeviceId(child.getParentId());
-
-        if (parent == null) {
-            parent = child;
-        }*/
-
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
             throw new BizException("message content is not Map");
@@ -228,20 +203,6 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
                 false);
     }
 
-    @Override
-    public boolean exist(String productKey, String deviceName) {
-
-        DeviceRepository deviceRepository = SpringUtils.getBean(DeviceRepository.class);
-
-        DeviceInfo child = deviceRepository.findByProductKeyAndDeviceName(productKey, deviceName);
-        if (child != null) {
-            return true;
-        }
-
-        return false;
-    }
-
-
     /**
      * 透传解码
      */
@@ -258,6 +219,9 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
         return transparentConverter.encode(service, device);
     }
 
+    /**
+     * 提供js调用
+     */
     public Object getCompMqttClientIdList() {
         String[] result = compMqttClientIdList.toArray(new String[0]);
         return JsonUtil.toJsonString(result);

@@ -39,15 +39,20 @@ public class DeviceMessageHandler implements IMessageHandler {
 
     private final IDeviceComponent component;
 
+    private final DeviceRouter deviceRouter;
+
     @SneakyThrows
     public DeviceMessageHandler(DeviceComponentManager deviceComponentManager,
                                 IDeviceComponent component,
                                 String script, IConverter converter,
-                                DeviceBehaviourService deviceBehaviourService) {
+                                DeviceBehaviourService deviceBehaviourService,
+                                DeviceRouter deviceRouter
+    ) {
         this.deviceComponentManager = deviceComponentManager;
         this.component = component;
         this.converter = converter;
         this.deviceBehaviourService = deviceBehaviourService;
+        this.deviceRouter = deviceRouter;
 
         engine.put("component", component);
         scriptObj = engine.eval(String.format("new (function () {\n%s})()", script));
@@ -145,10 +150,16 @@ public class DeviceMessageHandler implements IMessageHandler {
 
     private void doStateChange(DeviceState state) {
         try {
+            String pk = state.getProductKey();
+            String dn = state.getDeviceName();
+            boolean isOnline = DeviceState.STATE_ONLINE.equals(state.getState());
+            if (isOnline) {
+                deviceRouter.putRouter(pk, dn, component);
+            } else {
+                deviceRouter.removeRouter(pk, dn);
+            }
             component.onDeviceStateChange(state);
-            deviceBehaviourService.deviceStateChange(state.getProductKey(),
-                    state.getDeviceName(),
-                    DeviceState.STATE_ONLINE.equals(state.getState()));
+            deviceBehaviourService.deviceStateChange(pk, dn, isOnline);
         } catch (Throwable e) {
             log.error("device state change error", e);
         }

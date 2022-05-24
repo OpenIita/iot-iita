@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Slf4j
 @RestController
@@ -69,11 +72,15 @@ public class AuthClientController {
         String access_token = so.getString("access_token");
         UserInfoVo userVo = getUserInfo(uid);
         BeanMap beanMap = BeanMap.create(userVo);
-        beanMap.put("access_token", access_token);
+        Map<String,Object> data=new HashMap<>();
+        beanMap.forEach((key,value)->{
+            data.put(key.toString(),value);
+        });
+        data.put("access_token", access_token);
 
         // 返回相关参数
         StpUtil.login(uid, SaLoginConfig.setToken(access_token));
-        return SaResult.data(beanMap);
+        return SaResult.data(data);
     }
 
     /**

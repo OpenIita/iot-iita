@@ -5,6 +5,7 @@ import cc.iotkit.common.ComponentClassLoader;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.CompConfig;
+import cc.iotkit.comp.IComponent;
 import cc.iotkit.comp.IDeviceComponent;
 import cc.iotkit.comps.config.CacheKey;
 import cc.iotkit.comps.config.ComponentConfig;
@@ -55,6 +56,8 @@ public class DeviceComponentManager {
     private DeviceCache deviceCache;
     @Autowired
     ProductCache productCache;
+    @Autowired
+    private DeviceRouter deviceRouter;
 
     @PostConstruct
     public void init() {
@@ -126,9 +129,10 @@ public class DeviceComponentManager {
         if (component == null) {
             return;
         }
-        DeviceMessageHandler messageHandler = new DeviceMessageHandler(this, component,
+        DeviceMessageHandler messageHandler = new DeviceMessageHandler(
+                this, component,
                 component.getScript(), component.getConverter(),
-                deviceBehaviourService);
+                deviceBehaviourService, deviceRouter);
         messageHandler.putScriptEnv("apiTool", new ApiTool());
         messageHandler.putScriptEnv("deviceBehaviour", deviceBehaviourService);
 
@@ -168,34 +172,34 @@ public class DeviceComponentManager {
             linkDn = parent.getDeviceName();
         }
 
-        for (IDeviceComponent com : components.values()) {
-            if (com.exist(linkPk, linkDn)) {
-                Device device = new Device(deviceInfo.getDeviceId(), deviceInfo.getModel(), product.isTransparent());
-                //对下发消息进行编码转换
-                DeviceMessage message = com.getConverter().encode(service, device);
-                if (message == null) {
-                    throw new BizException("encode send message failed");
-                }
-                //保存设备端mid与平台mid对应关系
-                redisTemplate.opsForValue().set(
-                        CacheKey.getKeyCmdMid(message.getDeviceName(), message.getMid()),
-                        service.getMid(), com.getConfig().getCmdTimeout(), TimeUnit.SECONDS);
-                com.send(message);
-
-                ThingModelMessage thingModelMessage = ThingModelMessage.builder()
-                        .mid(service.getMid())
-                        .productKey(service.getProductKey())
-                        .deviceName(service.getDeviceName())
-                        .identifier(service.getIdentifier())
-                        .type(service.getType())
-                        .data(service.getParams())
-                        .build();
-                deviceBehaviourService.reportMessage(thingModelMessage);
-
-                return;
-            }
+        IComponent component = deviceRouter.getRouter(linkPk, linkDn);
+        if (!(component instanceof IDeviceComponent)) {
+            throw new BizException("send destination does not exist");
         }
-        throw new BizException("send destination not found");
+        IDeviceComponent deviceComponent = (IDeviceComponent) component;
+
+        Device device = new Device(deviceInfo.getDeviceId(), deviceInfo.getModel(), product.isTransparent());
+        //对下发消息进行编码转换
+        DeviceMessage message = deviceComponent.getConverter().encode(service, device);
+        if (message == null) {
+            throw new BizException("encode send message failed");
+        }
+        //保存设备端mid与平台mid对应关系
+        redisTemplate.opsForValue().set(
+                CacheKey.getKeyCmdMid(message.getDeviceName(), message.getMid()),
+                service.getMid(), deviceComponent.getConfig().getCmdTimeout(), TimeUnit.SECONDS);
+        //发送消息给设备
+        deviceComponent.send(message);
+
+        ThingModelMessage thingModelMessage = ThingModelMessage.builder()
+                .mid(service.getMid())
+                .productKey(service.getProductKey())
+                .deviceName(service.getDeviceName())
+                .identifier(service.getIdentifier())
+                .type(service.getType())
+                .data(service.getParams())
+                .build();
+        deviceBehaviourService.reportMessage(thingModelMessage);
     }
 
     public String getPlatformMid(String deviceName, String mid) {

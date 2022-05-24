@@ -27,7 +27,7 @@ public class MqttDeviceComponent extends AbstractDeviceComponent {
     private String deployedId;
     private MqttVerticle mqttVerticle;
     private final Map<String, Device> deviceChildToParent = new HashMap<>();
-    private TransparentConverter transparentConverter = new TransparentConverter();
+    private final TransparentConverter transparentConverter = new TransparentConverter();
 
     public void create(CompConfig config) {
         super.create(config);
@@ -108,17 +108,6 @@ public class MqttDeviceComponent extends AbstractDeviceComponent {
         log.info("publish topic:{},payload:{}", msg.getTopic(), msg.getPayload());
         mqttVerticle.publish(parent.getProductKey(), parent.getDeviceName(),
                 msg.getTopic(), msg.getPayload());
-    }
-
-    @Override
-    public boolean exist(String productKey, String deviceName) {
-        //先作为子设备查找是否存在父设备
-        Device device = deviceChildToParent.get(new Device(productKey, deviceName).toString());
-        if (device != null) {
-            return true;
-        }
-
-        return mqttVerticle.exist(productKey, deviceName);
     }
 
     @Override
