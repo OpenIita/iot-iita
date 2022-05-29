@@ -27,6 +27,11 @@ public class CacheConfig {
                         Caffeine.newBuilder()
                                 .expireAfterWrite(5, TimeUnit.MINUTES)
                                 .build()
+                ), new CaffeineCache(
+                        Constants.DEVICE_STATS_CACHE,
+                        Caffeine.newBuilder()
+                                .expireAfterWrite(5, TimeUnit.MINUTES)
+                                .build()
                 ),
                 new CaffeineCache(
                         Constants.PRODUCT_CACHE,

@@ -1,6 +1,6 @@
 package cc.iotkit.comp.emqx;
 
-import cc.iotkit.converter.ThingService;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;

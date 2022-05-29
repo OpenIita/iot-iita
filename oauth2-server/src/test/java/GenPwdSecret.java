@@ -10,5 +10,4 @@ public class GenPwdSecret {
         System.out.println(secret);
         System.out.println(AuthUtil.checkPwd("guest123", secret));
     }
-
 }

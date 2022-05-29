@@ -3,7 +3,7 @@ package cc.iotkit.comp.emqx;
 
 import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.converter.ThingService;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.dao.ProductCache;
 import cc.iotkit.model.device.DeviceInfo;

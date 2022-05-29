@@ -8,7 +8,7 @@ import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.utils.SpringUtils;
 import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.converter.ThingService;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.dao.DeviceRepository;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;

@@ -1,7 +1,6 @@
 package cc.iotkit.comp.mqtt;
 
-import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.converter.ThingService;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.model.device.message.ThingModelMessage;
 
 public interface IScripter {

@@ -1,4 +1,4 @@
-package cc.iotkit.converter;
+package cc.iotkit.common.thing;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -10,6 +10,8 @@ public interface Constants {
 
     String DEVICE_CACHE = "device_cache";
 
+    String DEVICE_STATS_CACHE = "device_stats_cache";
+
     String CATEGORY_CACHE = "category_cache";
 
     String SPACE_CACHE = "space_cache";

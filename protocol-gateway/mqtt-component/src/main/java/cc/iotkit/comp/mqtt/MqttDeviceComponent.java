@@ -6,7 +6,7 @@ import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.converter.ThingService;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;

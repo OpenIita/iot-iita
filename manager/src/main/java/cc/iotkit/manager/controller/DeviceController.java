@@ -2,6 +2,7 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.common.utils.DeviceUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.service.DeviceBehaviourService;
@@ -30,6 +31,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -111,8 +113,16 @@ public class DeviceController {
     @PostMapping("/create")
     public void createDevice(String productKey, String deviceName) {
         Optional<Product> productOpt = productRepository.findById(productKey);
-        if (!productOpt.isPresent()) {
+        if (productOpt.isEmpty()) {
             throw new BizException("the product does not exist");
+        }
+
+        //生成设备密钥
+        String chars = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";
+        int maxPos = chars.length();
+        StringBuilder secret = new StringBuilder();
+        for (var i = 0; i < 16; i++) {
+            secret.append(chars.charAt((int) Math.floor(Math.random() * maxPos)));
         }
 
         DeviceInfo device = new DeviceInfo();
@@ -121,6 +131,7 @@ public class DeviceController {
         device.setDeviceId(device.getId());
         device.setProductKey(productKey);
         device.setDeviceName(deviceName);
+        device.setSecret(secret.toString());
         device.setState(new DeviceInfo.State(false, null, null));
         device.setCreateAt(System.currentTimeMillis());
 

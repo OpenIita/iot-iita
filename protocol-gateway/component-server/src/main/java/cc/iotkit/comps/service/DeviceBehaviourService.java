@@ -15,8 +15,10 @@ import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.pulsar.client.api.*;
-import org.apache.pulsar.client.impl.schema.JSONSchema;
+import org.apache.pulsar.client.api.Producer;
+import org.apache.pulsar.client.api.PulsarClient;
+import org.apache.pulsar.client.api.PulsarClientException;
+import org.apache.pulsar.client.api.TypedMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +44,6 @@ public class DeviceBehaviourService {
     private ServerConfig serverConfig;
     @Autowired
     private DeviceCache deviceCache;
-//    @Autowired
-    private DeviceStateHolder deviceStateHolder;
-
     //旧实现，ThingModelMessage序列化失败
     //private Producer<ThingModelMessage> deviceMessageProducer;
 
@@ -58,9 +57,9 @@ public class DeviceBehaviourService {
                 .build();
         /**
          旧实现，ThingModelMessage序列化失败
-        deviceMessageProducer = client.newProducer(JSONSchema.of(ThingModelMessage.class))
-                .topic("persistent://iotkit/default/" + Constants.THING_MODEL_MESSAGE_TOPIC)
-                .create();
+         deviceMessageProducer = client.newProducer(JSONSchema.of(ThingModelMessage.class))
+         .topic("persistent://iotkit/default/" + Constants.THING_MODEL_MESSAGE_TOPIC)
+         .create();
          */
 
         deviceMessageProducer = client.newProducer()
@@ -199,7 +198,7 @@ public class DeviceBehaviourService {
                                   boolean online) {
         DeviceInfo device = deviceRepository.findByProductKeyAndDeviceName(productKey, deviceName);
         if (device == null) {
-            log.warn(String.format("productKey: %s,device: %s,online: %s",productKey,device,online));
+            log.warn(String.format("productKey: %s,device: %s,online: %s", productKey, device, online));
             throw new BizException("device does not exist");
         }
         deviceStateChange(device, online);
@@ -269,8 +268,7 @@ public class DeviceBehaviourService {
             builder.send();
 
 
-        }
-        catch (PulsarClientException e) {
+        } catch (PulsarClientException e) {
             log.error("send thing model message error", e);
         }
     }
