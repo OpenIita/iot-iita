@@ -56,6 +56,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                             "/**/remove*/**",
                             "/**/del*/**",
                             "/**/add*/**",
+                            "/**/create*/**",
                             "/**/clear*/**",
                             "/**/set*/**",
                             "/**/set",

@@ -17,4 +17,6 @@ public interface DeviceRepository extends MongoRepository<DeviceInfo, String> {
 
     List<DeviceInfo> findByDeviceName(String deviceName);
 
+    long countByUid(String uid);
+
 }

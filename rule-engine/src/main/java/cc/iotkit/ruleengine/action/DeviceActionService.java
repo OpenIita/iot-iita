@@ -2,7 +2,7 @@ package cc.iotkit.ruleengine.action;
 
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.DeviceComponentManager;
-import cc.iotkit.converter.ThingService;
+import cc.iotkit.common.thing.ThingService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

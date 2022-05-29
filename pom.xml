@@ -12,6 +12,7 @@
         <module>protocol-gateway</module>
         <module>standalone-package</module>
         <module>oauth2-server</module>
+        <module>virtual-device</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -279,6 +280,12 @@
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>oauth2-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>virtual-device</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

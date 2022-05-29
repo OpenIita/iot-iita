@@ -25,11 +25,22 @@ public class DeviceInfo implements Owned {
 
     private String deviceId;
 
+    /**
+     * 产品key
+     */
     private String productKey;
 
     private String deviceName;
 
+    /**
+     * 设备型号
+     */
     private String model;
+
+    /**
+     * 设备密钥
+     */
+    private String secret;
 
     private String parentId;
 

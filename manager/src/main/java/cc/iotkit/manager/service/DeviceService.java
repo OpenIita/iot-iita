@@ -4,11 +4,12 @@ import cc.iotkit.common.exception.NotFoundException;
 import cc.iotkit.common.exception.OfflineException;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.DeviceComponentManager;
-import cc.iotkit.converter.ThingService;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.dao.DeviceRepository;
 import cc.iotkit.dao.ThingModelMessageRepository;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.virtualdevice.VirtualManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class DeviceService {
     private ThingModelService thingModelService;
     @Autowired
     private ThingModelMessageRepository thingModelMessageRepository;
+    @Autowired
+    private VirtualManager virtualManager;
 
     public String invokeService(String deviceId, String service,
                                 Map<String, Object> args) {
@@ -103,7 +106,13 @@ public class DeviceService {
                 .build();
         thingModelService.parseParams(thingService);
 
-        deviceComponentManager.send(thingService);
+        if (virtualManager.isVirtual(deviceId)) {
+            //虚拟设备指令下发
+            virtualManager.send(thingService);
+        } else {
+            //设备指令下发
+            deviceComponentManager.send(thingService);
+        }
         String mid = thingService.getMid();
 
         //保存设备日志

@@ -3,10 +3,10 @@ package cc.iotkit.comps.service;
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comps.config.ServerConfig;
-import cc.iotkit.dao.DeviceDao;
-import cc.iotkit.dao.DevicePropertyRepository;
-import cc.iotkit.dao.ThingModelMessageRepository;
+import cc.iotkit.dao.*;
+import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
+import cc.iotkit.model.device.message.DeviceReport;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -30,8 +31,13 @@ public class DeviceMessageConsumer implements MessageListener<ThingModelMessage>
     @Lazy
     @Autowired
     private DevicePropertyRepository propertyRepository;
+    @Lazy
+    @Autowired
+    private DeviceReportRepository deviceReportRepository;
     @Autowired
     private DeviceDao deviceDao;
+    @Autowired
+    private DeviceCache deviceCache;
 
     @PostConstruct
     public void init() throws PulsarClientException {
@@ -85,8 +91,11 @@ public class DeviceMessageConsumer implements MessageListener<ThingModelMessage>
             }
 
             try {
+                //todo 存在性能问题，量大可再拆分处理
                 //设备消息日志入库
                 messageRepository.save(modelMessage);
+                //设备上报日志入库
+                deviceReportRepository.save(getDeviceReport(modelMessage));
             } catch (Throwable e) {
                 log.warn("save device message to es error", e);
             }
@@ -95,6 +104,21 @@ public class DeviceMessageConsumer implements MessageListener<ThingModelMessage>
             log.error("device message consumer error", e);
         }
         consumer.acknowledge(msg);
+    }
+
+    private DeviceReport getDeviceReport(ThingModelMessage message) {
+        DeviceInfo device = deviceCache.get(message.getDeviceId());
+        return DeviceReport.builder()
+                .id(UUID.randomUUID().toString())
+                .deviceId(message.getDeviceId())
+                .productKey(message.getProductKey())
+                .deviceName(message.getDeviceName())
+                .uid(device.getUid())
+                .identifier(message.getIdentifier())
+                .type(message.getType())
+                .code(message.getCode())
+                .time(message.getTime())
+                .build();
     }
 
     @Override

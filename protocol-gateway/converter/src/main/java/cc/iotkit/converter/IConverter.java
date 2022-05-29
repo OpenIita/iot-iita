@@ -1,5 +1,6 @@
 package cc.iotkit.converter;
 
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.model.device.message.ThingModelMessage;
 
 public interface IConverter {

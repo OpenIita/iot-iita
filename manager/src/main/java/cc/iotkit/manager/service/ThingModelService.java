@@ -1,6 +1,6 @@
 package cc.iotkit.manager.service;
 
-import cc.iotkit.converter.ThingService;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.dao.ThingModelRepository;
 import cc.iotkit.model.product.ThingModel;
 import org.springframework.beans.factory.annotation.Autowired;

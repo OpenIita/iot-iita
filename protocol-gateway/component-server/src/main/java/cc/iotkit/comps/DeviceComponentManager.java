@@ -13,7 +13,7 @@ import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.converter.ScriptConverter;
-import cc.iotkit.converter.ThingService;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.dao.ProductCache;
 import cc.iotkit.dao.ProtocolComponentRepository;
