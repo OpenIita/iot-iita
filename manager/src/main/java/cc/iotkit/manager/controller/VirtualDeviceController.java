@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +41,13 @@ public class VirtualDeviceController {
             @PathVariable("size") int size,
             @PathVariable("page") int page) {
         String uid = AuthUtil.getUserId();
-        Page<VirtualDevice> virtualDevices = virtualDeviceRepository.findByUid(uid,
-                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt")));
+        Page<VirtualDevice> virtualDevices;
+        if (AuthUtil.isAdmin()) {
+            virtualDevices = virtualDeviceRepository.findAll(pageable);
+        } else {
+            virtualDevices = virtualDeviceRepository.findByUid(uid, pageable);
+        }
         return new Paging<>(virtualDevices.getTotalElements(), virtualDevices.getContent());
     }
 

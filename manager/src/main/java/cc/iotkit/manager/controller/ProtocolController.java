@@ -53,7 +53,9 @@ public class ProtocolController {
     private ComponentManager componentManager;
 
     @PostMapping("/uploadJar")
-    public String uploadJar(@RequestParam("file") MultipartFile file, String id) {
+    public String uploadJar(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("id") String id) {
         if (file == null) {
             throw new BizException("file is null");
         }
@@ -297,7 +299,7 @@ public class ProtocolController {
     public void changeComponentState(@PathVariable("id") String id,
                                      @PathVariable("state") String state) {
         ProtocolComponent component = getAndCheckComponent(id);
-        if(ProtocolComponent.TYPE_DEVICE.equals(component.getType())){
+        if (ProtocolComponent.TYPE_DEVICE.equals(component.getType())) {
             String converterId = component.getConverter();
             getAndCheckConverter(converterId);
         }

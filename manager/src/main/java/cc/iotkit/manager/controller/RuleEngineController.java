@@ -99,7 +99,7 @@ public class RuleEngineController {
     @PostMapping("/rule/{ruleId}/pause")
     public void pauseRule(@PathVariable("ruleId") String ruleId) {
         Optional<RuleInfo> ruleOpt = ruleInfoRepository.findById(ruleId);
-        if (!ruleOpt.isPresent()) {
+        if (ruleOpt.isEmpty()) {
             throw new BizException("Rule does not exist");
         }
         RuleInfo ruleInfo = ruleOpt.get();
@@ -112,7 +112,7 @@ public class RuleEngineController {
     @PostMapping("/rule/{ruleId}/resume")
     public void resumeRule(@PathVariable("ruleId") String ruleId) {
         Optional<RuleInfo> ruleOpt = ruleInfoRepository.findById(ruleId);
-        if (!ruleOpt.isPresent()) {
+        if (ruleOpt.isEmpty()) {
             throw new BizException("Rule does not exist");
         }
         RuleInfo ruleInfo = ruleOpt.get();
@@ -125,7 +125,7 @@ public class RuleEngineController {
     @DeleteMapping("/rule/{ruleId}/delete")
     public void deleteRule(@PathVariable("ruleId") String ruleId) {
         Optional<RuleInfo> ruleOpt = ruleInfoRepository.findById(ruleId);
-        if (!ruleOpt.isPresent()) {
+        if (ruleOpt.isEmpty()) {
             throw new BizException("Rule does not exist");
         }
         RuleInfo ruleInfo = ruleOpt.get();
@@ -169,7 +169,7 @@ public class RuleEngineController {
             taskInfo.setState(TaskInfo.STATE_STOP);
         } else {
             Optional<TaskInfo> taskOpt = taskInfoRepository.findById(taskInfo.getId());
-            if (!taskOpt.isPresent()) {
+            if (taskOpt.isEmpty()) {
                 throw new BizException("Task does not exist");
             }
             TaskInfo oldTask = taskOpt.get();
@@ -183,7 +183,7 @@ public class RuleEngineController {
     @PostMapping("/task/{taskId}/pause")
     public void pauseTask(@PathVariable("taskId") String taskId) {
         Optional<TaskInfo> optionalTaskInfo = taskInfoRepository.findById(taskId);
-        if (!optionalTaskInfo.isPresent()) {
+        if (optionalTaskInfo.isEmpty()) {
             throw new BizException("Task does not exist");
         }
         dataOwnerService.checkOwner(optionalTaskInfo.get());
@@ -193,7 +193,7 @@ public class RuleEngineController {
     @PostMapping("/task/{taskId}/resume")
     public void resumeTask(@PathVariable("taskId") String taskId) {
         Optional<TaskInfo> optionalTaskInfo = taskInfoRepository.findById(taskId);
-        if (!optionalTaskInfo.isPresent()) {
+        if (optionalTaskInfo.isEmpty()) {
             throw new BizException("Task does not exist");
         }
         dataOwnerService.checkOwner(optionalTaskInfo.get());
@@ -203,7 +203,7 @@ public class RuleEngineController {
     @PostMapping("/task/{taskId}/renew")
     public void renewTask(@PathVariable("taskId") String taskId) {
         Optional<TaskInfo> optionalTaskInfo = taskInfoRepository.findById(taskId);
-        if (!optionalTaskInfo.isPresent()) {
+        if (optionalTaskInfo.isEmpty()) {
             throw new BizException("Task does not exist");
         }
         TaskInfo taskInfo = optionalTaskInfo.get();
@@ -222,7 +222,7 @@ public class RuleEngineController {
     @DeleteMapping("/task/{taskId}/delete")
     public void deleteTask(@PathVariable("taskId") String taskId) {
         Optional<TaskInfo> optionalTaskInfo = taskInfoRepository.findById(taskId);
-        if (!optionalTaskInfo.isPresent()) {
+        if (optionalTaskInfo.isEmpty()) {
             throw new BizException("Task does not exist");
         }
         TaskInfo taskInfo = optionalTaskInfo.get();
