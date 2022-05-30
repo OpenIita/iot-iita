@@ -18,6 +18,7 @@
 ![输入图片说明](doc/WechatIMG539.png)
 
 
+
 #### 软件架构
 软件架构说明
 本系统采用springboot、mongodb、redis、elasticsearch、pulsar、sa-token等框架和第三方软件
