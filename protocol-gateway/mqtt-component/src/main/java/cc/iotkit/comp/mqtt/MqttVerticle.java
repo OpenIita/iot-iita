@@ -8,7 +8,6 @@ import io.netty.handler.codec.mqtt.MqttProperties;
 import io.netty.handler.codec.mqtt.MqttQoS;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
-import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.PemKeyCertOptions;
 import io.vertx.mqtt.*;
@@ -30,7 +29,7 @@ public class MqttVerticle extends AbstractVerticle {
 
     private IMessageHandler executor;
 
-    private Map<String, MqttEndpoint> endpointMap = new HashMap<>();
+    private final Map<String, MqttEndpoint> endpointMap = new HashMap<>();
 
     public MqttVerticle(MqttConfig config) {
         this.config = config;

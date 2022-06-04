@@ -181,7 +181,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
     }
 
     @Override
-    public void send(DeviceMessage message) {
+    public DeviceMessage send(DeviceMessage message) {
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
             throw new BizException("message content is not Map");
@@ -201,6 +201,8 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
                 MqttQoS.AT_LEAST_ONCE,
                 false,
                 false);
+
+        return message;
     }
 
     /**

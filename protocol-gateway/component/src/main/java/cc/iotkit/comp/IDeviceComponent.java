@@ -14,7 +14,7 @@ public interface IDeviceComponent extends IComponent {
 
     void onDeviceStateChange(DeviceState state);
 
-    void send(DeviceMessage message);
+    DeviceMessage send(DeviceMessage message);
 
     void setHandler(IMessageHandler handler);
 

@@ -15,7 +15,7 @@ public class DeviceUtil {
         int maxDnLen = 16;
         String dn = deviceNae.replaceAll("[^0-9A-Za-z]", "");
         if (dn.length() > maxDnLen) {
-            dn = dn.substring(dn.length() - maxDnLen);
+            dn = dn.substring(dn.length() - maxDnLen + 1);
         } else {
             dn = (dn + "00000000000000000000").substring(0, maxDnLen);
         }
