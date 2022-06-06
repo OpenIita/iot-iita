@@ -19,7 +19,7 @@ public abstract class AbstractDeviceComponent implements IDeviceComponent {
 
     protected String script;
 
-    private String id;
+    protected String id;
 
     @Override
     public void create(CompConfig config) {

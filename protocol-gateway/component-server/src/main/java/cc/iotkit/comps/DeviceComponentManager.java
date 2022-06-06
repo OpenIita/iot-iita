@@ -135,6 +135,7 @@ public class DeviceComponentManager {
                 deviceBehaviourService, deviceRouter);
         messageHandler.putScriptEnv("apiTool", new ApiTool());
         messageHandler.putScriptEnv("deviceBehaviour", deviceBehaviourService);
+        messageHandler.putScriptEnv("component", component);
 
         component.setHandler(messageHandler);
         component.start();
@@ -178,19 +179,36 @@ public class DeviceComponentManager {
         }
         IDeviceComponent deviceComponent = (IDeviceComponent) component;
 
-        Device device = new Device(deviceInfo.getDeviceId(), deviceInfo.getModel(), product.isTransparent());
+        //构建必要的设备信息
+        Map<String, Object> tag = new HashMap<>();
+        deviceInfo.getTag().forEach((k, v) -> tag.put(k, v.getValue()));
+        Device device = new Device(deviceInfo.getDeviceId(),
+                deviceInfo.getModel(),
+                deviceInfo.getProperty(),
+                tag,
+                product.isTransparent());
+
         //对下发消息进行编码转换
         DeviceMessage message = deviceComponent.getConverter().encode(service, device);
         if (message == null) {
             throw new BizException("encode send message failed");
         }
-        //保存设备端mid与平台mid对应关系
-        redisTemplate.opsForValue().set(
-                CacheKey.getKeyCmdMid(message.getDeviceName(), message.getMid()),
-                service.getMid(), deviceComponent.getConfig().getCmdTimeout(), TimeUnit.SECONDS);
-        //发送消息给设备
-        deviceComponent.send(message);
 
+        String sendMid = message.getMid();
+        long timeout=deviceComponent.getConfig().getCmdTimeout();
+
+        //保存设备端mid与平台mid对应关系
+        saveMidMapping(message,timeout,service.getMid());
+        //发送消息给设备
+        message = deviceComponent.send(message);
+
+        //mid发生改变
+        if (!sendMid.equals(message.getMid())) {
+            //重新保存消息id映射
+            saveMidMapping(message,timeout,service.getMid());
+        }
+
+        //产生下发消息
         ThingModelMessage thingModelMessage = ThingModelMessage.builder()
                 .mid(service.getMid())
                 .productKey(service.getProductKey())
@@ -200,6 +218,15 @@ public class DeviceComponentManager {
                 .data(service.getParams())
                 .build();
         deviceBehaviourService.reportMessage(thingModelMessage);
+    }
+
+    /**
+     * 保存设备端mid与平台mid对应关系
+     */
+    private void saveMidMapping(DeviceMessage message, long cmdTimeout, String serviceMid) {
+        redisTemplate.opsForValue().set(
+                CacheKey.getKeyCmdMid(message.getDeviceName(), message.getMid()),
+                serviceMid, cmdTimeout, TimeUnit.SECONDS);
     }
 
     public String getPlatformMid(String deviceName, String mid) {

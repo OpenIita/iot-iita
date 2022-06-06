@@ -43,12 +43,12 @@ public interface Constants {
     /**
      * 管理系统用户角色
      */
-    String ROLE_SYSTEM = "iot_system_user";
+    String ROLE_SYSTEM = "iot_system";
 
     /**
      * C端用户角色
      */
-    String ROLE_CLIENT = "iot_client_user";
+    String ROLE_CLIENT = "iot_client";
 
     /**
      * C端用户默认密码

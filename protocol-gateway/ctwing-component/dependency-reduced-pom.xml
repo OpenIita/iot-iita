@@ -6,7 +6,7 @@
     <version>0.2.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>mqtt-component</artifactId>
+  <artifactId>ctwing-component</artifactId>
   <build>
     <plugins>
       <plugin>
@@ -23,10 +23,15 @@
         <configuration>
           <artifactSet>
             <includes>
+              <include>io.vertx:vertx-web-proxy</include>
+              <include>io.vertx:vertx-web</include>
+              <include>io.vertx:vertx-bridge-common</include>
+              <include>io.vertx:vertx-http-proxy</include>
               <include>io.vertx:vertx-core</include>
-              <include>io.vertx:vertx-mqtt</include>
-              <include>io.netty:netty-codec-mqtt</include>
-              <include>org.luaj:luaj-jse</include>
+              <include>io.netty:netty-codec-http2</include>
+              <include>com.ctg.ag:ctg-ag-sdk-core</include>
+              <include>com.ctg.ag:ag-sdk-biz-84356.tar.gz</include>
+              <include>org.apache.httpcomponents:httpasyncclient</include>
             </includes>
           </artifactSet>
         </configuration>
@@ -42,46 +47,16 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-core</artifactId>
-      <version>4.2.2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-mqtt</artifactId>
-      <version>4.2.2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-codec-mqtt</artifactId>
-      <version>4.1.72.Final</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.22</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.32</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.luaj</groupId>
-      <artifactId>luaj-jse</artifactId>
-      <version>3.0.1</version>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web-proxy</artifactId>
+      <version>4.2.2</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>cc.iotkit</groupId>
-      <artifactId>common</artifactId>
-      <version>0.2.1-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
@@ -90,10 +65,20 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>cc.iotkit</groupId>
-      <artifactId>dao</artifactId>
-      <version>0.2.1-SNAPSHOT</version>
-      <scope>compile</scope>
+      <groupId>com.ctg.ag</groupId>
+      <artifactId>ctg-ag-sdk-core</artifactId>
+      <version>2.5.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ctg.ag</groupId>
+      <artifactId>ag-sdk-biz-84356.tar.gz</artifactId>
+      <version>20220603.182201-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
+  <properties>
+    <maven.compiler.target>8</maven.compiler.target>
+    <maven.compiler.source>8</maven.compiler.source>
+  </properties>
 </project>

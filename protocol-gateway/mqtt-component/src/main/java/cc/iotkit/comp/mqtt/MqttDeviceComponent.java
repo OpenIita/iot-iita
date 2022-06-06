@@ -87,7 +87,7 @@ public class MqttDeviceComponent extends AbstractDeviceComponent {
     }
 
     @Override
-    public void send(DeviceMessage message) {
+    public DeviceMessage send(DeviceMessage message) {
         Device child = new Device(message.getProductKey(), message.getDeviceName());
         //作为子设备查找父设备
         Device parent = deviceChildToParent.get(child.toString());
@@ -108,6 +108,8 @@ public class MqttDeviceComponent extends AbstractDeviceComponent {
         log.info("publish topic:{},payload:{}", msg.getTopic(), msg.getPayload());
         mqttVerticle.publish(parent.getProductKey(), parent.getDeviceName(),
                 msg.getTopic(), msg.getPayload());
+
+        return message;
     }
 
     @Override

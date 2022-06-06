@@ -9,13 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>emqx-component</artifactId>
+    <artifactId>ctwing-component</artifactId>
+
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-core</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
         <dependency>
@@ -24,34 +30,22 @@
         </dependency>
 
         <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-mqtt</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>model</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>common</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>component</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.luaj</groupId>
-            <artifactId>luaj-jse</artifactId>
+            <groupId>com.ctg.ag</groupId>
+            <artifactId>ctg-ag-sdk-core</artifactId>
+            <version>2.5.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>dao</artifactId>
+            <groupId>com.ctg.ag</groupId>
+            <artifactId>ag-sdk-biz-84356.tar.gz</artifactId>
+            <version>20220603.182201-SNAPSHOT</version>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -71,31 +65,15 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-<!--                            <include>io.vertx:vertx-core</include>-->
-<!--                            <include>io.vertx:vertx-web-proxy</include>-->
-<!--                            <include>io.vertx:vertx-mqtt</include>-->
-
-                            <include>io.vertx:vertx-core</include>
                             <include>io.vertx:vertx-web-proxy</include>
-                            <include>io.vertx:vertx-mqtt</include>
                             <include>io.vertx:vertx-web</include>
+                            <include>io.vertx:vertx-bridge-common</include>
                             <include>io.vertx:vertx-http-proxy</include>
-
-                            <include>org.luaj:luaj-jse</include>
-
-                            <include>io.netty:netty-common</include>
-                            <include>io.netty:netty-transport</include>
-                            <include>io.netty:netty-handler</include>
-                            <include>io.netty:netty-resolver</include>
-                            <include>io.netty:netty-buffer</include>
-                            <include>io.netty:netty-handler</include>
-                            <include>io.netty:netty-proxy</include>
-                            <include>io.netty:netty-codec</include>
-                            <include>io.netty:netty-codec-mqtt</include>
-                            <include>io.netty:netty-codec-dns</include>
-                            <include>io.netty:netty-resolver-dns</include>
-
-                            <include>io.netty:netty-tcnative-boringssl-static</include>
+                            <include>io.vertx:vertx-core</include>
+                            <include>io.netty:netty-codec-http2</include>
+                            <include>com.ctg.ag:ctg-ag-sdk-core</include>
+                            <include>com.ctg.ag:ag-sdk-biz-84356.tar.gz</include>
+                            <include>org.apache.httpcomponents:httpasyncclient</include>
                         </includes>
                     </artifactSet>
                 </configuration>

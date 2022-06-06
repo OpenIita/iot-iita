@@ -5,9 +5,13 @@ import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.dao.AligenieDeviceRepository;
+import cc.iotkit.dao.HomeRepository;
+import cc.iotkit.dao.SpaceRepository;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.PulsarAdminService;
+import cc.iotkit.model.space.Home;
+import cc.iotkit.model.space.Space;
 import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.UserInfo;
 import cn.dev33.satoken.annotation.SaCheckRole;
@@ -28,6 +32,10 @@ public class UserInfoController {
     private AligenieDeviceRepository aligenieDeviceRepository;
     @Autowired
     private DataOwnerService ownerService;
+    @Autowired
+    private HomeRepository homeRepository;
+    @Autowired
+    private SpaceRepository spaceRepository;
 
 
     /**
@@ -76,7 +84,27 @@ public class UserInfoController {
         user.setRoles(Collections.singletonList(Constants.ROLE_CLIENT));
         user.setCreateAt(System.currentTimeMillis());
         user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_CLIENT_USER));
-        userInfoRepository.save(user);
+        user = userInfoRepository.save(user);
+
+        //添加默认家庭
+        Home home = homeRepository.save(Home.builder()
+                .name("我的家庭")
+                .address("")
+                .deviceNum(0)
+                .spaceNum(0)
+                .uid(user.getId())
+                .current(true)
+                .build());
+
+        //添加默认房间
+        for (String name : new String[]{"客厅", "卧室", "厨房"}) {
+            spaceRepository.save(Space.builder()
+                    .homeId(home.getId())
+                    .name(name)
+                    .uid(user.getId())
+                    .createAt(System.currentTimeMillis())
+                    .build());
+        }
     }
 
     @PostMapping("/client/user/{id}/delete")
