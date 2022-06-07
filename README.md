@@ -50,5 +50,4 @@ https://xiwasong.github.io
 
 微信群:
 
-![输入图片说明](doc/ma.png) 
-
+![输入图片说明](doc/ma.png)
