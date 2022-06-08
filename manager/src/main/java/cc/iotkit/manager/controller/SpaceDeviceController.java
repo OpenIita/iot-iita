@@ -102,12 +102,18 @@ public class SpaceDeviceController {
                 .build();
     }
 
+    /**
+     * 获取用户所有设备列表
+     */
     @GetMapping("/{userId}/devices")
     public List<SpaceDeviceVo> getDevices(@PathVariable("userId") String userId) {
         List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(Example.of(SpaceDevice.builder().uid(userId).build()));
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
 
+    /**
+     * 搜索未添加过的设备
+     */
     @GetMapping(Constants.API_SPACE.FIND_DEVICE)
     List<FindDeviceVo> findDevice(String mac) {
         if (StringUtils.isBlank(mac)) {
@@ -155,6 +161,9 @@ public class SpaceDeviceController {
         return findDeviceVo;
     }
 
+    /**
+     * 往指定房间中添加设备
+     */
     @PostMapping(Constants.API_SPACE.ADD_DEVICE)
     public void addDevice(SpaceDevice device) {
         String deviceId = device.getDeviceId();
@@ -202,7 +211,7 @@ public class SpaceDeviceController {
             subUid.add(uid);
         }
 
-        //更新设备标签
+        //更新设备标签，标识设备是用的哪个第三方平台
         List<String> platforms = optUser.get().getUsePlatforms();
         Map<String, DeviceInfo.Tag> tags = deviceInfo.getTag();
         for (String platform : platforms) {
@@ -213,6 +222,9 @@ public class SpaceDeviceController {
         deviceRepository.save(deviceInfo);
     }
 
+    /**
+     * 移除房间中的设备
+     */
     @DeleteMapping(Constants.API_SPACE.REMOVE_DEVICE)
     public void removeDevice(String deviceId) {
         String uid = AuthUtil.getUserId();
@@ -225,7 +237,7 @@ public class SpaceDeviceController {
         spaceDeviceRepository.deleteById(spaceDevice.getId());
         DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
         Optional<UserInfo> optUser = userInfoRepository.findById(uid);
-        if (!optUser.isPresent()) {
+        if (optUser.isEmpty()) {
             throw new BizException("user does not exist");
         }
 
@@ -240,11 +252,14 @@ public class SpaceDeviceController {
         deviceRepository.save(deviceInfo);
     }
 
+    /**
+     * 保存房间设备信息
+     */
     @PostMapping(Constants.API_SPACE.SAVE_DEVICE)
     public void saveDevice(SpaceDevice spaceDevice) {
         dataOwnerService.checkOwner(spaceDevice);
         Optional<SpaceDevice> optData = spaceDeviceRepository.findById(spaceDevice.getId());
-        if (!optData.isPresent()) {
+        if (optData.isEmpty()) {
             throw new BizException("space device does not exist");
         }
         SpaceDevice oldData = optData.get();
@@ -253,6 +268,9 @@ public class SpaceDeviceController {
         spaceDeviceRepository.save(oldData);
     }
 
+    /**
+     * 获取房间中指定设备信息
+     */
     @GetMapping(Constants.API_SPACE.GET_DEVICE)
     public SpaceDeviceVo getSpaceDevice(@PathVariable("deviceId") String deviceId) {
         String uid = AuthUtil.getUserId();
@@ -261,5 +279,29 @@ public class SpaceDeviceController {
         spaceDevice.setUseAt(System.currentTimeMillis());
         spaceDeviceRepository.save(spaceDevice);
         return parseSpaceDevice(spaceDevice);
+    }
+
+    /**
+     * 设置设备的第三方平台openUid
+     * 如：小度接入使用的openUid
+     */
+    @PostMapping(Constants.API_SPACE.SET_OPEN_UID)
+    public void setOpenUid(String deviceId, String platform, String openUid) {
+        SpaceDevice spaceDevice = spaceDeviceRepository.findByDeviceId(deviceId);
+        if (spaceDevice == null) {
+            throw new BizException("space device does not exist");
+        }
+
+        //只能修改自己的设备
+        dataOwnerService.checkOwner(spaceDevice);
+
+        //找到设备
+        DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
+        Map<String, DeviceInfo.Tag> tags = deviceInfo.getTag();
+        String openUidName = platform + "OpenUid";
+        //给设备添加对应平台openUid的设备标签
+        Constants.ThirdOpenUid thirdOpenUid = Constants.ThirdOpenUid.valueOf(openUidName);
+        tags.put(openUidName, new DeviceInfo.Tag(openUidName, thirdOpenUid.desc, openUid));
+        deviceRepository.save(deviceInfo);
     }
 }

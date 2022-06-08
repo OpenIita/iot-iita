@@ -2,6 +2,7 @@ package cc.iotkit.manager.config;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
+import cn.dev33.satoken.exception.NotRoleException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler {
             return new RequestResult("401", "未授权的请求");
         }
 
-        if (e instanceof NotPermissionException) {
+        if (e instanceof NotPermissionException || e instanceof NotRoleException) {
             response.setStatus(403);
             return new RequestResult("403", "没有权限");
         }
