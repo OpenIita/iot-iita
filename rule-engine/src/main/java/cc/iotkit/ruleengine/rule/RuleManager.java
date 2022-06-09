@@ -5,10 +5,7 @@ import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.dao.RuleInfoRepository;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
-import cc.iotkit.ruleengine.action.Action;
-import cc.iotkit.ruleengine.action.DeviceAction;
-import cc.iotkit.ruleengine.action.DeviceActionService;
-import cc.iotkit.ruleengine.action.HttpAction;
+import cc.iotkit.ruleengine.action.*;
 import cc.iotkit.ruleengine.config.RuleConfiguration;
 import cc.iotkit.ruleengine.filter.DeviceFilter;
 import cc.iotkit.ruleengine.filter.Filter;
@@ -132,7 +129,11 @@ public class RuleManager {
             action.setDeviceActionService(deviceActionService);
             return action;
         } else if (HttpAction.TYPE.equals(type)) {
-            return parse(config, HttpAction.class);
+            HttpAction httpAction = parse(config, HttpAction.class);
+            for (HttpService service : httpAction.getServices()) {
+                service.setDeviceCache(deviceCache);
+            }
+            return httpAction;
         }
         return null;
     }

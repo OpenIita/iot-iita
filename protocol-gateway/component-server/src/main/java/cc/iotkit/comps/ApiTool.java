@@ -1,10 +1,12 @@
 package cc.iotkit.comps;
 
 import cc.iotkit.common.Constants;
+import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.client.HttpRequest;
+import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
 import lombok.AllArgsConstructor;
@@ -91,6 +93,19 @@ public class ApiTool {
     }
 
     /**
+     * 设置第三方平台的openUid
+     */
+    public ApiResponse setOpenUid(String token, String deviceId, String platform, String openUid) {
+        HttpRequest<Buffer> request = client
+                .post(port, host, getSpacePath(Constants.API_SPACE.SET_OPEN_UID));
+        Map<String, Object> map = new HashMap<>();
+        map.put("deviceId", deviceId);
+        map.put("platform", platform);
+        map.put("openUid", openUid);
+        return send(token, HttpMethod.POST, request, map, false);
+    }
+
+    /**
      * 获取设备详情
      */
     public ApiResponse getDeviceDetail(String token, String deviceId) {
@@ -121,7 +136,17 @@ public class ApiTool {
         return send(token, HttpMethod.POST, request, params);
     }
 
-    private ApiResponse send(String token, HttpMethod method, HttpRequest<Buffer> request, Map<String, Object> params) {
+    private ApiResponse send(String token, HttpMethod method,
+                             HttpRequest<Buffer> request,
+                             Map<String, Object> params) {
+        return send(token, method, request, params, true);
+    }
+
+    private ApiResponse send(String token, HttpMethod method,
+                             HttpRequest<Buffer> request,
+                             Map<String, Object> params,
+                             boolean isJson
+    ) {
         request = request
                 .timeout(timeout)
                 .putHeader("wrap-response", "json")
@@ -133,29 +158,23 @@ public class ApiTool {
             //转为同步模式便于提供给js调用
             CountDownLatch wait = new CountDownLatch(1);
 
-            if (method == HttpMethod.POST) {
+            if (method == HttpMethod.POST && isJson) {
                 request.sendJson(params)
-                        .onSuccess((response) -> {
-                            log.info("send succeed,response:{}", response.bodyAsString());
-                            apiResponse.set(response.bodyAsJson(ApiResponse.class));
-                            wait.countDown();
-                        })
-                        .onFailure((err) -> {
-                            log.error("send failed", err);
-                            wait.countDown();
-                        });
-            } else if (method == HttpMethod.GET) {
+                        .onSuccess((response) -> onSendSuccess(apiResponse, wait, response))
+                        .onFailure((err) -> onSendFail(wait, err));
+            } else if (method == HttpMethod.POST) {
+                //添加表单参数
+                MultiMap multiMap = MultiMap.caseInsensitiveMultiMap();
+                params.forEach((k, v) -> multiMap.add(k, v.toString()));
+                request.sendForm(multiMap)
+                        .onSuccess((response) -> onSendSuccess(apiResponse, wait, response))
+                        .onFailure((err) -> onSendFail(wait, err));
+            } else {
                 request.send()
-                        .onSuccess((response) -> {
-                            log.info("send succeed,response:{}", response.bodyAsString());
-                            apiResponse.set(response.bodyAsJson(ApiResponse.class));
-                            wait.countDown();
-                        })
-                        .onFailure((err) -> {
-                            log.error("send failed", err);
-                            wait.countDown();
-                        });
+                        .onSuccess((response) -> onSendSuccess(apiResponse, wait, response))
+                        .onFailure((err) -> onSendFail(wait, err));
             }
+
             if (wait.await(timeout, TimeUnit.MILLISECONDS)) {
                 return apiResponse.get();
             } else {
@@ -168,6 +187,17 @@ public class ApiTool {
             log.error("send error", e);
         }
         return apiResponse.get();
+    }
+
+    private void onSendFail(CountDownLatch wait, Throwable err) {
+        log.error("send failed", err);
+        wait.countDown();
+    }
+
+    private void onSendSuccess(AtomicReference<ApiResponse> apiResponse, CountDownLatch wait, HttpResponse<Buffer> response) {
+        log.info("send succeed,response:{}", response.bodyAsString());
+        apiResponse.set(response.bodyAsJson(ApiResponse.class));
+        wait.countDown();
     }
 
     public void log(String msg) {

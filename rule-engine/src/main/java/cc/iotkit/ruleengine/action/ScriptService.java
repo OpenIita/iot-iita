@@ -1,6 +1,8 @@
 package cc.iotkit.ruleengine.action;
 
 import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.dao.DeviceCache;
+import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
@@ -21,13 +23,24 @@ public class ScriptService {
 
     private ScriptObjectMirror scriptObject;
 
+    private DeviceCache deviceCache;
+
     public Map execScript(ThingModelMessage msg) {
         try {
             if (scriptObject == null) {
                 scriptObject = (ScriptObjectMirror) engine.eval("new (function(){" + script + "})()");
             }
+            //取设备信息
+            DeviceInfo deviceInfo = deviceCache.get(msg.getDeviceId());
+
             //执行转换脚本
-            ScriptObjectMirror result = (ScriptObjectMirror) engine.invokeMethod(scriptObject, "translate", msg);
+            ScriptObjectMirror result = (ScriptObjectMirror) engine
+                    .invokeMethod(scriptObject, "translate", msg, deviceInfo);
+
+            if (result == null) {
+                return null;
+            }
+
             Object objResult = JsonUtil.toObject(result);
             if (!(objResult instanceof Map)) {
                 return null;

@@ -2,7 +2,6 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.common.utils.DeviceUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.service.DeviceBehaviourService;
@@ -31,7 +30,6 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @RestController

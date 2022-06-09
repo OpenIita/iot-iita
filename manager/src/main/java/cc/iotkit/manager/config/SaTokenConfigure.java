@@ -36,6 +36,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                                 "/space/addDevice/**",
                                 "/space/saveDevice",
                                 "/space/removeDevice",
+                                "/space/setOpenUid",
                                 "/space/device/*",
                                 "/device/*/consumer/*",
                                 "/device/*/service/property/set",

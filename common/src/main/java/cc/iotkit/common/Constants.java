@@ -88,7 +88,21 @@ public interface Constants {
         ThirdPlatform(String desc) {
             this.desc = desc;
         }
+    }
 
+    /**
+     * 三方平台openUid名称
+     */
+    enum ThirdOpenUid{
+        duerosOpenUid("小度OpenUid"),
+        aligenieOpenUid("天猫精灵OpenUid"),
+        miiotOpenUid("小爱OpenUid");
+
+        public String desc;
+
+        ThirdOpenUid(String desc) {
+            this.desc = desc;
+        }
     }
 
     interface API_DEVICE {
@@ -161,6 +175,11 @@ public interface Constants {
          * 获取空间设备信息
          */
         String GET_DEVICE = "/device/{deviceId}";
+
+        /**
+         * 设置第三方平台openUid
+         */
+        String SET_OPEN_UID = "/setOpenUid";
     }
 
     interface  MQTT {
