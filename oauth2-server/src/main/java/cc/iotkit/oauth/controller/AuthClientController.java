@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,9 +74,9 @@ public class AuthClientController {
         String access_token = so.getString("access_token");
         UserInfoVo userVo = getUserInfo(uid);
         BeanMap beanMap = BeanMap.create(userVo);
-        Map<String,Object> data=new HashMap<>();
-        beanMap.forEach((key,value)->{
-            data.put(key.toString(),value);
+        Map<String, Object> data = new HashMap<>();
+        beanMap.forEach((key, value) -> {
+            data.put(key.toString(), value);
         });
         data.put("access_token", access_token);
 
@@ -100,12 +102,13 @@ public class AuthClientController {
      * 登录验证
      */
     @GetMapping("/checkLogin")
-    public SaResult checkLogin() {
+    public SaResult checkLogin(HttpServletResponse response) {
         try {
             String uid = StpUtil.getLoginId().toString();
             UserInfoVo userVo = getUserInfo(uid);
             return SaResult.ok().setData(userVo);
         } catch (Throwable e) {
+            response.addCookie(new Cookie("token", ""));
             return SaResult.error("no login");
         }
     }

@@ -7,7 +7,6 @@ import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.AppInfo;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.UserInfo;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -27,7 +26,6 @@ public class AccountController {
     @Autowired
     private AppInfoRepository appInfoRepository;
 
-    @ApiOperation("设置当前家庭")
     @PostMapping("/setHomeId")
     public void setHomeId(String homeId) {
         if (StringUtils.isBlank(homeId)) {

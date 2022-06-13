@@ -1,0 +1,56 @@
+package cc.iotkit.mq.vertx;
+
+import cc.iotkit.mq.ConsumerHandler;
+import cc.iotkit.mq.MqConsumer;
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Handler;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.CountDownLatch;
+
+@Slf4j
+public class VertxMqConsumer<T> implements MqConsumer<T> {
+
+    private final MqConsumerVerticle<T> consumerVerticle;
+
+    private final CountDownLatch countDownLatch = new CountDownLatch(1);
+
+    @SneakyThrows
+    public VertxMqConsumer(Class<T> cls) {
+        consumerVerticle = new MqConsumerVerticle<>(cls);
+        VertxManager.getVertx().deployVerticle(consumerVerticle, stringAsyncResult -> {
+            countDownLatch.countDown();
+        });
+        //等待初始化穿完成
+        countDownLatch.await();
+    }
+
+    @Override
+    public void consume(String topic, ConsumerHandler<T> handler) {
+        consumerVerticle.consume(topic, handler);
+    }
+
+    public static class MqConsumerVerticle<T> extends AbstractVerticle {
+
+        private final Class<T> cls;
+        private EventBus eventBus;
+
+        public MqConsumerVerticle(Class<T> cls) {
+            this.cls = cls;
+        }
+
+        @Override
+        public void start() {
+            eventBus = vertx.eventBus();
+            eventBus.registerCodec(new BeanCodec<>(cls));
+        }
+
+        public void consume(String topic, ConsumerHandler<T> handler) {
+            eventBus.consumer(topic, (Handler<Message<T>>) msg -> handler.handler(msg.body()));
+        }
+    }
+
+}

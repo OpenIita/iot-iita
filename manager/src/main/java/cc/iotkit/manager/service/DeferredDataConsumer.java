@@ -2,14 +2,14 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.comps.config.ServerConfig;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.mq.ConsumerHandler;
+import cc.iotkit.mq.MqConsumer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pulsar.client.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -18,29 +18,23 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.*;
 
+/**
+ * 长连接推送消息消费
+ */
 @Slf4j
 @Component
-public class DeferredDataConsumer implements MessageListener<ThingModelMessage>, Runnable {
+public class DeferredDataConsumer implements ConsumerHandler<ThingModelMessage>, Runnable {
 
     private final Map<String, Set<String>> topicConsumers = new ConcurrentHashMap<>();
     private final Map<String, DeferredResultInfo> consumerDeferred = new ConcurrentHashMap<>();
     private final DelayQueue<DelayedPush> delayedPushes = new DelayQueue<>();
 
     @Autowired
-    private ServerConfig serverConfig;
+    private MqConsumer<ThingModelMessage> thingModelMessageConsumer;
 
     @PostConstruct
-    public void init() throws PulsarClientException {
-        PulsarClient client = PulsarClient.builder()
-                .serviceUrl(this.serverConfig.getPulsarBrokerUrl())
-                .build();
-
-        client.newConsumer(Schema.JSON(ThingModelMessage.class))
-                .topic("persistent://iotkit/default/" + Constants.THING_MODEL_MESSAGE_TOPIC)
-                .subscriptionName("device-info-push")
-                .consumerName("device-info-push-consumer")
-                .messageListener(this).subscribe();
-
+    public void init() {
+        thingModelMessageConsumer.consume(Constants.THING_MODEL_MESSAGE_TOPIC,this);
         Executors.newCachedThreadPool().submit(this);
     }
 
@@ -91,21 +85,17 @@ public class DeferredDataConsumer implements MessageListener<ThingModelMessage>,
     }
 
     @Override
-    public void received(Consumer<ThingModelMessage> consumer, Message<ThingModelMessage> msg) {
-        ThingModelMessage thingModelMessage = msg.getValue();
-        String type = thingModelMessage.getType();
-        String identifier = thingModelMessage.getIdentifier();
+    public void handler(ThingModelMessage msg) {
+        String type = msg.getType();
+        String identifier = msg.getIdentifier();
         //属性上报和上下线消息
         if ((ThingModelMessage.TYPE_PROPERTY.equals(type) && "report".equals(identifier)) ||
                 ThingModelMessage.TYPE_STATE.equals(type)) {
-            publish(Constants.HTTP_CONSUMER_DEVICE_INFO_TOPIC + thingModelMessage.getDeviceId(),
-                    thingModelMessage);
+            publish(Constants.HTTP_CONSUMER_DEVICE_INFO_TOPIC + msg.getDeviceId(),
+                    msg);
         }
     }
 
-    @Override
-    public void reachedEndOfTopic(Consumer<ThingModelMessage> consumer) {
-    }
 
     @Override
     public void run() {
