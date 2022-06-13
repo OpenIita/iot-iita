@@ -22,7 +22,9 @@
 
 #### 软件架构
 软件架构说明
-本系统采用springboot、mongodb、redis、elasticsearch、pulsar、sa-token等框架和第三方软件
+本系统采用springboot、mongodb、redis、elasticsearch、pulsar、sa-token等框架和第三方软件。
+
+默认使用内置的redis、es和消息总线减小部署难度。
 
 
 #### 安装配置文档
