@@ -2,23 +2,24 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.dao.AligenieDeviceRepository;
 import cc.iotkit.dao.HomeRepository;
 import cc.iotkit.dao.SpaceRepository;
 import cc.iotkit.dao.UserInfoRepository;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.manager.service.PulsarAdminService;
+import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.utils.AuthUtil;
-import cc.iotkit.model.UserInfo;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -26,8 +27,6 @@ public class UserInfoController {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
-    @Autowired
-    private PulsarAdminService pulsarAdminService;
     @Autowired
     private AligenieDeviceRepository aligenieDeviceRepository;
     @Autowired

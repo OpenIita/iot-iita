@@ -7,23 +7,17 @@ import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
-import cc.iotkit.comps.config.ServerConfig;
 import cc.iotkit.dao.*;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
+import cc.iotkit.mq.MqProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.pulsar.client.api.Producer;
-import org.apache.pulsar.client.api.PulsarClient;
-import org.apache.pulsar.client.api.PulsarClientException;
-import org.apache.pulsar.client.api.TypedMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -41,31 +35,9 @@ public class DeviceBehaviourService {
     @Autowired
     private DeviceRepository deviceRepository;
     @Autowired
-    private ServerConfig serverConfig;
-    @Autowired
     private DeviceCache deviceCache;
-    //旧实现，ThingModelMessage序列化失败
-    //private Producer<ThingModelMessage> deviceMessageProducer;
-
-    private Producer<byte[]> deviceMessageProducer;
-
-    @PostConstruct
-    public void init() throws PulsarClientException {
-        //初始化pulsar客户端
-        PulsarClient client = PulsarClient.builder()
-                .serviceUrl(serverConfig.getPulsarBrokerUrl())
-                .build();
-        /**
-         旧实现，ThingModelMessage序列化失败
-         deviceMessageProducer = client.newProducer(JSONSchema.of(ThingModelMessage.class))
-         .topic("persistent://iotkit/default/" + Constants.THING_MODEL_MESSAGE_TOPIC)
-         .create();
-         */
-
-        deviceMessageProducer = client.newProducer()
-                .topic("persistent://iotkit/default/" + Constants.THING_MODEL_MESSAGE_TOPIC)
-                .create();
-    }
+    @Autowired
+    private MqProducer<ThingModelMessage> producer;
 
     public void register(RegisterInfo info) {
         try {
@@ -259,16 +231,9 @@ public class DeviceBehaviourService {
             }
             message.setDeviceId(device.getDeviceId());
 
-            // 旧实现，ThingModelMessage序列化失败
-            //deviceMessageProducer.send(message);
+            producer.publish(Constants.THING_MODEL_MESSAGE_TOPIC, message);
 
-            // 新实现，用JsonUtil.toJsonString序列化ThingModelMessage，解决 ThingModelMessage序列化失败的问题
-            TypedMessageBuilder<byte[]> builder = deviceMessageProducer.newMessage();
-            builder.value(JsonUtil.toJsonString(message).getBytes(StandardCharsets.UTF_8));
-            builder.send();
-
-
-        } catch (PulsarClientException e) {
+        } catch (Throwable e) {
             log.error("send thing model message error", e);
         }
     }

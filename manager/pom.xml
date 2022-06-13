@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iotkit-parent</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.2.1-SNAPSHOT</version>
+        <version>0.2.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -133,6 +133,11 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>virtual-device</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>message-bus</artifactId>
         </dependency>
 
     </dependencies>

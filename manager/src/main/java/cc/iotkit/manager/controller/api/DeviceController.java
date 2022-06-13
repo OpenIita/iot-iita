@@ -6,12 +6,9 @@ import cc.iotkit.dao.SpaceDeviceRepository;
 import cc.iotkit.manager.model.vo.AppPageNode;
 import cc.iotkit.manager.service.AppDesignService;
 import cc.iotkit.manager.service.DeviceService;
-import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.space.SpaceDevice;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import cc.iotkit.utils.AuthUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +37,11 @@ public class DeviceController {
     @Autowired
     private AppDesignService appDesignService;
 
-    @ApiOperation("设备列表")
     @GetMapping("/list")
     public List<DeviceInfo> list() {
         return deviceRepository.findAll();
     }
 
-    @ApiOperation("设备详情")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "设备ID", name = "deviceId", required = true, dataType = "String"),
-    })
     @GetMapping("/{deviceId}")
     public DeviceInfo detail(@PathVariable("deviceId") String deviceId) {
         if (StringUtils.isBlank(deviceId)) {
@@ -58,7 +50,6 @@ public class DeviceController {
         return deviceRepository.findById(deviceId).orElseThrow(() -> new RuntimeException("device not found."));
     }
 
-    @ApiOperation("获取用户所有设备ID列表")
     @GetMapping("/getAllDeviceIds")
     public List<String> getAllDeviceIds() {
         List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(

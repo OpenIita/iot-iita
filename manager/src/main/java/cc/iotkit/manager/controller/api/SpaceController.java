@@ -3,14 +3,11 @@ package cc.iotkit.manager.controller.api;
 import cc.iotkit.dao.*;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.manager.service.SpaceDeviceService;
-import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import cc.iotkit.utils.AuthUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -45,12 +42,6 @@ public class SpaceController {
     @Autowired
     private SpaceDeviceService spaceDeviceService;
 
-    @ApiOperation("添加网关")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "名称", name = "name", required = true, dataType = "String"),
-            @ApiImplicitParam(value = "产品productKey", name = "pk", required = true, dataType = "String"),
-            @ApiImplicitParam(value = "MAC", name = "mac", required = true, dataType = "String")
-    })
     @PostMapping("/addGateway")
     public void addGateway(String pk, String mac, String name, String spaceId) {
         if (StringUtils.isBlank(name) || StringUtils.isBlank(mac) || StringUtils.isBlank(spaceId)) {
@@ -67,12 +58,6 @@ public class SpaceController {
 //        addDevices.forEach((d -> addSpaceDevice(null, d, space)));
     }
 
-    @ApiOperation("添加设备")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "设备ID", name = "deviceId", required = true, dataType = "String"),
-            @ApiImplicitParam(value = "名称", name = "name", required = true, dataType = "String"),
-            @ApiImplicitParam(value = "空间Id", name = "spaceId", required = true, dataType = "String"),
-    })
     @PostMapping("/add")
     public void add(String deviceId, String name, String spaceId) {
         if (StringUtils.isBlank(deviceId) || StringUtils.isBlank(name) || StringUtils.isBlank(spaceId)) {
@@ -85,7 +70,6 @@ public class SpaceController {
         addSpaceDevice(name, device, space);
     }
 
-    @ApiOperation("设备发现")
     @PostMapping("/scan")
     public List<SpaceDeviceVo> scan() {
         //找到网关产品id
@@ -119,7 +103,6 @@ public class SpaceController {
                 .collect(Collectors.toList());
     }
 
-    @ApiOperation("空间设备列表")
     @GetMapping("/devices")
     public List<SpaceDeviceVo> devices(String homeId, String spaceId) {
         SpaceDevice device = new SpaceDevice();
@@ -138,7 +121,6 @@ public class SpaceController {
         return spaceDeviceVos;
     }
 
-    @ApiOperation("获取空间设备信息")
     @GetMapping("/getSpaceDevice")
     public SpaceDeviceVo getSpaceDevice(String id) {
         SpaceDevice device = spaceDeviceRepository.findById(id)
@@ -149,7 +131,6 @@ public class SpaceController {
                "");
     }
 
-    @ApiOperation("使用mac获取设备信息")
     @GetMapping("/getDeviceByMac")
     public SpaceDeviceVo getDeviceByMac(String mac) {
         DeviceInfo device = deviceRepository.findOne(Example.of(DeviceInfo.builder().deviceName(mac).build()))

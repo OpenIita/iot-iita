@@ -4,14 +4,11 @@ import cc.iotkit.dao.HomeRepository;
 import cc.iotkit.dao.SpaceRepository;
 import cc.iotkit.dao.UserActionLogRepository;
 import cc.iotkit.dao.UserInfoRepository;
-import cc.iotkit.utils.AuthUtil;
-import cc.iotkit.model.space.Home;
-import cc.iotkit.model.space.Space;
 import cc.iotkit.model.UserActionLog;
 import cc.iotkit.model.UserInfo;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import cc.iotkit.model.space.Home;
+import cc.iotkit.model.space.Space;
+import cc.iotkit.utils.AuthUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -38,11 +35,6 @@ public class HomeController {
     public HomeController() {
     }
 
-    @ApiOperation("添加家庭")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "名称", name = "name", required = true, dataType = "String"),
-            @ApiImplicitParam(value = "地址", name = "address", required = true, dataType = "String"),
-    })
     @PostMapping("/add")
     public void add(String name, String address) {
         if (StringUtils.isBlank(name) || StringUtils.isBlank(address)) {
@@ -57,7 +49,6 @@ public class HomeController {
         userInfoRepository.save(userInfo);
     }
 
-    @ApiOperation("我家庭列表")
     @GetMapping("/list")
     public List<Home> list() {
 //        return homeRepository.findAll();
@@ -65,7 +56,6 @@ public class HomeController {
                 .uid(AuthUtil.getUserId()).build()));
     }
 
-    @ApiOperation("添加空间")
     @PostMapping("/addSpace")
     public void addSpace(String homeId, String name) {
         if (StringUtils.isBlank(homeId) || StringUtils.isBlank(name)) {
@@ -91,11 +81,6 @@ public class HomeController {
 
     }
 
-    @ApiOperation("修改空间")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "空间id", name = "spaceId", required = true, dataType = "String"),
-            @ApiImplicitParam(value = "空间名称", name = "name", required = true, dataType = "String"),
-    })
     @PostMapping("/updateSpace")
     public void updateSpace(String spaceId, String name) {
         if (StringUtils.isBlank(name) || StringUtils.isBlank(spaceId)) {
@@ -106,10 +91,6 @@ public class HomeController {
         spaceRepository.save(space);
     }
 
-    @ApiOperation("空间列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "家庭id", name = "homeId", required = true, dataType = "String"),
-    })
     @PostMapping("/spaces")
     public List<Space> spaces(String homeId) {
         if (StringUtils.isBlank(homeId)) {
