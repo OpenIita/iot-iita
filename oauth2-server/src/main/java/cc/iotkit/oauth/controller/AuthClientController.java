@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,13 +100,12 @@ public class AuthClientController {
      * 登录验证
      */
     @GetMapping("/checkLogin")
-    public SaResult checkLogin(HttpServletResponse response) {
+    public SaResult checkLogin() {
         try {
             String uid = StpUtil.getLoginId().toString();
             UserInfoVo userVo = getUserInfo(uid);
             return SaResult.ok().setData(userVo);
         } catch (Throwable e) {
-            response.addCookie(new Cookie("token", ""));
             return SaResult.error("no login");
         }
     }
