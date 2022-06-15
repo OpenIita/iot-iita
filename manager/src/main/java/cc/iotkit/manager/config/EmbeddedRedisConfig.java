@@ -9,7 +9,7 @@ public class EmbeddedRedisConfig {
     }
 
     public static void startEmbeddedRedisServer() {
-        RedisServer redisServer = new RedisServer();
+        RedisServer redisServer = RedisServer.builder().setting("maxheap 200m").build();
         redisServer.start();
     }
 
