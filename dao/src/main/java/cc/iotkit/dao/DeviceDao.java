@@ -140,4 +140,59 @@ public class DeviceDao {
         return getDeviceStatsByCategory(null);
     }
 
+    /**
+     * 根据分组id查询分组下所有设备
+     */
+    public List<DeviceInfo> findByGroupId(String groupId) {
+        Query query = Query.query(new Criteria().and("group." + groupId).exists(true));
+        return mongoTemplate.find(query, DeviceInfo.class);
+    }
+
+    /**
+     * 按分组id统计设备数量
+     */
+    public long countByGroupId(String groupId) {
+        Query query = Query.query(new Criteria().and("group." + groupId).exists(true));
+        return mongoTemplate.count(query, DeviceInfo.class);
+    }
+
+    /**
+     * 按设备id更新设备分组
+     */
+    public void updateGroupByDeviceId(String deviceId, DeviceInfo.Group group) {
+        Query query = Query.query(new Criteria().and("deviceId").is(deviceId));
+        Update update = new Update();
+        update.set("group." + group.getId(), group);
+        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
+    }
+
+    /**
+     * 按组id更新设备分组
+     */
+    public void updateGroup(String groupId, DeviceInfo.Group group) {
+        Query query = Query.query(new Criteria().and("group." + groupId).exists(true));
+        Update update = new Update();
+        update.set("group." + group.getId(), group);
+        mongoTemplate.updateMulti(query, update, DeviceInfo.class);
+    }
+
+    /**
+     * 移除指定设备信息中的分组
+     */
+    public void removeGroup(String deviceId, String groupId) {
+        Query query = Query.query(new Criteria().and("deviceId").is(deviceId).and("group." + groupId).exists(true));
+        Update update = new Update();
+        update.unset("group." + groupId);
+        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
+    }
+
+    /**
+     * 移除设备信息中的分组
+     */
+    public void removeGroup(String groupId) {
+        Query query = Query.query(new Criteria().and("group." + groupId).exists(true));
+        Update update = new Update();
+        update.unset("group." + groupId);
+        mongoTemplate.updateMulti(query, update, DeviceInfo.class);
+    }
 }

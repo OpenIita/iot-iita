@@ -54,14 +54,25 @@ public class DeviceInfo implements Owned {
      */
     private List<String> subUid = new ArrayList<>();
 
+    /**
+     * 设备在离线状态
+     */
     private State state = new State();
 
+    /**
+     * 设备属性
+     */
     private Map<String, Object> property = new HashMap<>();
 
     /**
      * 设备标签
      */
     private Map<String, Tag> tag = new HashMap<>();
+
+    /**
+     * 设备所属分组
+     */
+    private Map<String, Group> group = new HashMap<>();
 
     private Long createAt;
 
@@ -85,6 +96,14 @@ public class DeviceInfo implements Owned {
         private String id;
         private String name;
         private Object value;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Group {
+        private String id;
+        private String name;
     }
 
 }

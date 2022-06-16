@@ -3,6 +3,7 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
+import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.dao.*;
@@ -10,6 +11,7 @@ import cc.iotkit.manager.model.query.DeviceQuery;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceService;
+import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.Paging;
@@ -23,6 +25,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -30,6 +35,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Slf4j
 @RestController
@@ -58,6 +64,10 @@ public class DeviceController {
     private DeviceBehaviourService behaviourService;
     @Autowired
     DeferredDataConsumer deferredDataConsumer;
+    @Autowired
+    private DeviceGroupRepository deviceGroupRepository;
+    @Autowired
+    private DeviceCache deviceCache;
 
     @PostMapping(Constants.API_DEVICE.INVOKE_SERVICE)
     public InvokeResult invokeService(@PathVariable("deviceId") String deviceId,
@@ -96,9 +106,18 @@ public class DeviceController {
         if (StringUtils.isNotBlank(pk)) {
             condition.and("productKey").is(pk);
         }
-        String dn = query.getDeviceName();
-        if (StringUtils.isNotBlank(dn)) {
-            condition.and("deviceName").regex(".*" + dn + ".*");
+        //关键字查询
+        String keyword = query.getKeyword();
+        if (StringUtils.isNotBlank(keyword)) {
+            Pattern pattern = Pattern.compile("^.*" + keyword + ".*$", Pattern.CASE_INSENSITIVE);
+            condition.orOperator(
+                    Criteria.where("deviceName").regex(pattern),
+                    Criteria.where("deviceId").regex(pattern)
+            );
+        }
+        String group = query.getGroup();
+        if (StringUtils.isNotBlank(group)) {
+            condition.and("group." + group).exists(true);
         }
         String state = query.getState();
         if (StringUtils.isNotBlank(state)) {
@@ -233,4 +252,145 @@ public class DeviceController {
         return deferredDataConsumer.newConsumer(uid + clientId,
                 Constants.HTTP_CONSUMER_DEVICE_INFO_TOPIC + deviceId);
     }
+
+    /**
+     * 获取分组列表
+     */
+    @PostMapping("/groups/{size}/{page}")
+    public Paging<DeviceGroup> getDevices(
+            @PathVariable("size") int size,
+            @PathVariable("page") int page,
+            String name
+    ) {
+        Page<DeviceGroup> groupPage = deviceGroupRepository.findByNameLike(name,
+                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))));
+        return new Paging<>(groupPage.getTotalElements(), groupPage.getContent());
+    }
+
+    /**
+     * 添加设备分组
+     */
+    @PostMapping("/group/add")
+    public void addGroup(DeviceGroup group) {
+        group.setUid(AuthUtil.getUserId());
+        if (deviceGroupRepository.existsById(group.getId())) {
+            throw new BizException("group id already exists");
+        }
+        deviceGroupRepository.save(group);
+    }
+
+    /**
+     * 修改设备分组
+     */
+    @PostMapping("/group/save")
+    public void saveGroup(DeviceGroup group) {
+        Optional<DeviceGroup> optGroup = deviceGroupRepository.findById(group.getId());
+        if (optGroup.isEmpty()) {
+            throw new BizException("group id does not exists");
+        }
+        DeviceGroup dbGroup = optGroup.get();
+        dataOwnerService.checkOwner(dbGroup);
+        ReflectUtil.copyNoNulls(group, dbGroup);
+
+        deviceGroupRepository.save(dbGroup);
+        //更新设备中的组信息
+        deviceDao.updateGroup(dbGroup.getId(), new DeviceInfo.Group(dbGroup.getId(), dbGroup.getName()));
+    }
+
+    /**
+     * 删除分组
+     */
+    @DeleteMapping("/group/delete/{id}")
+    public void deleteGroup(@PathVariable("id") String id) {
+        Optional<DeviceGroup> optGroup = deviceGroupRepository.findById(id);
+        if (optGroup.isEmpty()) {
+            throw new BizException("device group does not exist");
+        }
+        DeviceGroup group = optGroup.get();
+        dataOwnerService.checkOwner(group);
+        //删除分组
+        deviceGroupRepository.deleteById(id);
+
+        //移除设备信息中的分组
+        deviceDao.removeGroup(group.getId());
+    }
+
+    /**
+     * 清空组下所有设备
+     */
+    @PostMapping("/group/clear/{id}")
+    public void clearGroup(@PathVariable("id") String id) {
+        Optional<DeviceGroup> optGroup = deviceGroupRepository.findById(id);
+        if (optGroup.isEmpty()) {
+            throw new BizException("device group does not exist");
+        }
+        DeviceGroup group = optGroup.get();
+        dataOwnerService.checkOwner(group);
+
+        //设备数量清零
+        group.setDeviceQty(0);
+        deviceGroupRepository.save(group);
+
+        //移除设备信息中的分组
+        deviceDao.removeGroup(group.getId());
+    }
+
+    /**
+     * 添加设备到组
+     */
+    @PostMapping("/group/addDevices/{group}")
+    public void addToGroup(@PathVariable("group") String group, @RequestBody List<String> devices) {
+        Optional<DeviceGroup> optGroup = deviceGroupRepository.findById(group);
+        if (optGroup.isEmpty()) {
+            throw new BizException("device group does not exists");
+        }
+        DeviceGroup deviceGroup = optGroup.get();
+        dataOwnerService.checkOwner(deviceGroup);
+
+        for (String device : devices) {
+            DeviceInfo deviceInfo = deviceCache.get(device);
+            if (deviceInfo == null) {
+                continue;
+            }
+
+            dataOwnerService.checkOwner(deviceInfo);
+            //更新设备所在组
+            deviceDao.updateGroupByDeviceId(device, new DeviceInfo.Group(group, deviceGroup.getName()));
+        }
+        //统计组下设备数量
+        long qty = deviceDao.countByGroupId(group);
+        //更新组信息
+        deviceGroup.setDeviceQty((int) qty);
+        deviceGroupRepository.save(deviceGroup);
+    }
+
+    /**
+     * 将设备从组中移除
+     */
+    @PostMapping("/group/removeDevices/{group}")
+    public void removeDevices(@PathVariable("group") String group, @RequestBody List<String> devices) {
+        Optional<DeviceGroup> optGroup = deviceGroupRepository.findById(group);
+        if (optGroup.isEmpty()) {
+            throw new BizException("device group does not exists");
+        }
+        DeviceGroup deviceGroup = optGroup.get();
+        dataOwnerService.checkOwner(deviceGroup);
+
+        for (String device : devices) {
+            DeviceInfo deviceInfo = deviceCache.get(device);
+            if (deviceInfo == null) {
+                continue;
+            }
+
+            dataOwnerService.checkOwner(deviceInfo);
+            //删除设备所在组
+            deviceDao.removeGroup(device, group);
+        }
+        //统计组下设备数量
+        long qty = deviceDao.countByGroupId(group);
+        //更新组信息
+        deviceGroup.setDeviceQty((int) qty);
+        deviceGroupRepository.save(deviceGroup);
+    }
+
 }
