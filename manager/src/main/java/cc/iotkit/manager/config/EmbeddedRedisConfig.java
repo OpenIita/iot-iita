@@ -9,7 +9,13 @@ public class EmbeddedRedisConfig {
     }
 
     public static void startEmbeddedRedisServer() {
-        RedisServer redisServer = RedisServer.builder().setting("maxheap 200m").build();
+        RedisServer redisServer;
+       String os= System.getProperty("os.name").toLowerCase();
+      if(os.contains("windows")){
+          redisServer = RedisServer.builder().setting("maxheap 200m").build();
+      }else{
+          redisServer=new RedisServer();
+      }
         redisServer.start();
     }
 
