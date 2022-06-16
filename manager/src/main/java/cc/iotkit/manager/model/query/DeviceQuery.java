@@ -7,7 +7,9 @@ public class DeviceQuery {
 
     private String productKey;
 
-    private String deviceName;
+    private String keyword;
+
+    private String group;
 
     private String state;
 
