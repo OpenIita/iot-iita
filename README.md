@@ -1,7 +1,7 @@
 
 
 <p align="center">
-<img alt="logo" src="https://xiwasong.github.io/img/logo.png" width="50" height="50">
+<img alt="logo" src="https://xiwasong.github.io/img/logo.png" width="100" height="100">
 </p>
 <p align="center">
 <img  src="https://img.shields.io/badge/Release-v0.2.0-brightgreen.svg"> <img  src="https://img.shields.io/badge/JDK-11+-important.svg"> <img  src="https://img.shields.io/badge/mongodb-5.09-blue.svg"> <img  src="https://img.shields.io/badge/Redis-5.0-important.svg"> <img  src="https://img.shields.io/badge/SpringBoot-2.6.2-blue.svg"> <img  src="https://img.shields.io/badge/Elasticsearch-7.15.2-red.svg">  <img  src="https://img.shields.io/badge/Satoken-1.30.0-yellow.svg"> <img  src="https://img.shields.io/badge/License-Apache2.0-lightgrey.svg">
