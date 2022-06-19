@@ -52,9 +52,12 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                     .check(c -> StpUtil.checkRoleOr("iot_admin", "iot_system"))
                     //需要有可写权限的功能
                     .match(
+                            "/**/save*",
                             "/**/save*/**",
                             "/**/remove*/**",
+                            "/**/del*",
                             "/**/del*/**",
+                            "/**/add*",
                             "/**/add*/**",
                             "/**/create*/**",
                             "/**/clear*/**",
