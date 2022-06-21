@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller.api;
 
 import cc.iotkit.dao.HomeRepository;
@@ -51,9 +60,7 @@ public class HomeController {
 
     @GetMapping("/list")
     public List<Home> list() {
-//        return homeRepository.findAll();
-        return homeRepository.findAll(Example.of(Home.builder()
-                .uid(AuthUtil.getUserId()).build()));
+        return homeRepository.findByUid(AuthUtil.getUserId());
     }
 
     @PostMapping("/addSpace")
@@ -62,8 +69,10 @@ public class HomeController {
             throw new RuntimeException("name/homeId is blank.");
         }
         String uid = AuthUtil.getUserId();
-        Home home = homeRepository.findOne(Example.of(Home.builder().uid(uid).id(homeId).build()))
-                .orElseThrow(() -> new RuntimeException("用户家庭不存在"));
+        Home home = homeRepository.findByUidAndId(uid, homeId);
+        if (home == null) {
+            throw new RuntimeException("用户家庭不存在");
+        }
 
         Space s = spaceRepository.save(Space.builder()
                 .name(name)
@@ -96,8 +105,7 @@ public class HomeController {
         if (StringUtils.isBlank(homeId)) {
             throw new RuntimeException("homeId is blank.");
         }
-//        return spaceRepository.findAll();
-        return spaceRepository.findAll(Example.of(Space.builder().homeId(homeId).build()));
+        return spaceRepository.findByHomeId(homeId);
     }
 
     @GetMapping("/getCurrentHome")

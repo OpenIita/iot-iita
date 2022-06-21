@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * 第三方接入用户会话
  */
 @Data
-@Document
+@Document(indexName = "third_user_session")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,5 +38,6 @@ public class ThirdUserSession {
     /**
      * 授权时间
      */
+    @Field(type = FieldType.Date)
     private Long authAt;
 }

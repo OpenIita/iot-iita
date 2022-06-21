@@ -1,0 +1,62 @@
+[
+  {
+    "id": "fee0e826-963f-4e53-a2cf-11e3e5f784ea",
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "name": "移动Onenet Studio接入",
+    "type": "biz",
+    "protocol": "http",
+    "jarFile": "http-biz-component-0.1.0-SNAPSHOT.jar",
+    "config": "{\"port\":\"8086\"}",
+    "converter": "6260396d67aced2696184053",
+    "state": "running",
+    "createAt": 1652238780184
+  },
+  {
+    "id": "eabb131d-8fd1-43a8-88d9-a198abfd3d42",
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "name": "MQTT标准协议组件",
+    "type": "device",
+    "protocol": "mqtt",
+    "jarFile": "mqtt-component-0.2.1-SNAPSHOT.jar",
+    "config": "{\"port\":1883,\"ssl\":false,\"type\":\"server\"}",
+    "converter": "6260396d67aced2696184053",
+    "state": "running",
+    "createAt": 1650473458084
+  },
+  {
+    "id": "cd8253c1-b489-434c-845d-d18c7b70dcea",
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "name": "电信NB协议接入组件",
+    "type": "device",
+    "protocol": "http",
+    "jarFile": "ctwing-component-0.2.1-SNAPSHOT.jar",
+    "config": "{\"port\":\"8087\"}",
+    "converter": "62995ba4dbf51a5ec41d5f7b",
+    "state": "stopped",
+    "createAt": 1654235056032
+  },
+  {
+    "id": "6c095554-35e7-4e9d-a8d2-bb919e9479f4",
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "name": "EMQX标准协议组件",
+    "type": "device",
+    "protocol": "mqtt",
+    "jarFile": "emqx-component-0.2.1-SNAPSHOT.jar",
+    "config": "{\"port\":\"1884\",\"ssl\":false,\"type\":\"client\",\"subscribeTopics\":[\"/sys/+/+/s/#\",\"/sys/client/connected\",\"/sys/client/disconnected\",\"/sys/session/subscribed\",\"/sys/session/unsubscribed\"],\"authPort\":\"8088\",\"broker\":\"127.0.0.1\",\"clientId\":\"test\",\"username\":\"test\",\"password\":\"123\"}",
+    "converter": "6260396d67aced2696184053",
+    "state": "running",
+    "createAt": 1653180468724
+  },
+  {
+    "id": "3ababc5e-15e9-45a7-8f38-2a6afd45c780",
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "name": "小度音箱接入组件",
+    "type": "biz",
+    "protocol": "http",
+    "jarFile": "http-biz-component-0.1.0-SNAPSHOT.jar",
+    "config": "{\"port\":\"8084\"}",
+    "converter": "",
+    "state": "running",
+    "createAt": 1650685502665
+  }
+]

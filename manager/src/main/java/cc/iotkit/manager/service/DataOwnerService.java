@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.exception.BizException;
@@ -5,7 +14,7 @@ import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.Owned;
 import cc.iotkit.model.device.DeviceInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,7 +66,7 @@ public class DataOwnerService {
     /**
      * 从库中取对应数据Id的数据中的uid是否与当前登录用户一致
      */
-    public <T extends Owned> void checkOwner(MongoRepository<T, String> repository, String id) {
+    public <T extends Owned> void checkOwner(ElasticsearchRepository<T, String> repository, String id) {
         //管理员不限制
         if (AuthUtil.isAdmin()) {
             return;
@@ -85,7 +94,7 @@ public class DataOwnerService {
     /**
      * 从库中取对应数据Id的数据中的uid是否与当前登录用户一致，并把当前用户id设置到数据中
      */
-    public <T extends Owned> void checkOwnerSave(MongoRepository<T, String> repository, T data) {
+    public <T extends Owned> void checkOwnerSave(ElasticsearchRepository<T, String> repository, T data) {
         checkOwner(repository, data.getId());
         data.setUid(AuthUtil.getUserId());
     }

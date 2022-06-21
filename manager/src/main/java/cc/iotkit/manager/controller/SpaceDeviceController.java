@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.Constants;
@@ -15,7 +24,6 @@ import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,7 +40,7 @@ public class SpaceDeviceController {
     @Autowired
     private SpaceDeviceRepository spaceDeviceRepository;
     @Autowired
-    private DeviceRepository deviceRepository;
+    private DeviceInfoRepository deviceInfoRepository;
     @Autowired
     private DeviceCache deviceCache;
     @Autowired
@@ -78,7 +86,7 @@ public class SpaceDeviceController {
     }
 
     private SpaceDeviceVo parseSpaceDevice(SpaceDevice sd) {
-        DeviceInfo device = deviceRepository.findByDeviceId(sd.getDeviceId());
+        DeviceInfo device = deviceInfoRepository.findByDeviceId(sd.getDeviceId());
         Space space = spaceCache.getSpace(sd.getSpaceId());
         Product product = productCache.findById(device.getProductKey());
         Category category = categoryCache.getById(product.getCategory());
@@ -107,7 +115,7 @@ public class SpaceDeviceController {
      */
     @GetMapping("/{userId}/devices")
     public List<SpaceDeviceVo> getDevices(@PathVariable("userId") String userId) {
-        List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(Example.of(SpaceDevice.builder().uid(userId).build()));
+        List<SpaceDevice> spaceDevices = spaceDeviceRepository.findByUid(userId);
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
 
@@ -121,7 +129,7 @@ public class SpaceDeviceController {
         }
 
         List<FindDeviceVo> findDeviceVos = new ArrayList<>();
-        List<DeviceInfo> devices = deviceRepository.findByDeviceName(mac);
+        List<DeviceInfo> devices = deviceInfoRepository.findByDeviceName(mac);
         if (devices == null) {
             return findDeviceVos;
         }
@@ -130,7 +138,7 @@ public class SpaceDeviceController {
         List<DeviceInfo> subDevices = new ArrayList<>();
         for (DeviceInfo device : devices) {
             if (device.getParentId() == null) {
-                subDevices = deviceRepository.findByParentId(device.getDeviceId());
+                subDevices = deviceInfoRepository.findByParentId(device.getDeviceId());
             }
         }
         devices.addAll(subDevices);
@@ -167,7 +175,7 @@ public class SpaceDeviceController {
     @PostMapping(Constants.API_SPACE.ADD_DEVICE)
     public void addDevice(SpaceDevice device) {
         String deviceId = device.getDeviceId();
-        DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
+        DeviceInfo deviceInfo = deviceInfoRepository.findByDeviceId(deviceId);
         if (deviceInfo == null) {
             throw new BizException("device does not exist");
         }
@@ -219,7 +227,7 @@ public class SpaceDeviceController {
             tags.put(platform, new DeviceInfo.Tag(platform, thirdPlatform.desc, "是"));
         }
 
-        deviceRepository.save(deviceInfo);
+        deviceInfoRepository.save(deviceInfo);
     }
 
     /**
@@ -235,7 +243,7 @@ public class SpaceDeviceController {
         dataOwnerService.checkOwner(spaceDevice);
 
         spaceDeviceRepository.deleteById(spaceDevice.getId());
-        DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
+        DeviceInfo deviceInfo = deviceInfoRepository.findByDeviceId(deviceId);
         Optional<UserInfo> optUser = userInfoRepository.findById(uid);
         if (optUser.isEmpty()) {
             throw new BizException("user does not exist");
@@ -249,7 +257,7 @@ public class SpaceDeviceController {
             deviceInfo.getTag().remove(platform);
         }
 
-        deviceRepository.save(deviceInfo);
+        deviceInfoRepository.save(deviceInfo);
     }
 
     /**
@@ -296,12 +304,12 @@ public class SpaceDeviceController {
         dataOwnerService.checkOwner(spaceDevice);
 
         //找到设备
-        DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
+        DeviceInfo deviceInfo = deviceInfoRepository.findByDeviceId(deviceId);
         Map<String, DeviceInfo.Tag> tags = deviceInfo.getTag();
         String openUidName = platform + "OpenUid";
         //给设备添加对应平台openUid的设备标签
         Constants.ThirdOpenUid thirdOpenUid = Constants.ThirdOpenUid.valueOf(openUidName);
         tags.put(openUidName, new DeviceInfo.Tag(openUidName, thirdOpenUid.desc, openUid));
-        deviceRepository.save(deviceInfo);
+        deviceInfoRepository.save(deviceInfo);
     }
 }

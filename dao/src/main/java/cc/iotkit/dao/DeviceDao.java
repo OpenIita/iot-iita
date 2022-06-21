@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.dao;
 
 import cc.iotkit.model.Paging;
@@ -5,16 +14,23 @@ import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.stats.DataItem;
+import cn.hutool.core.bean.BeanUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.ScriptType;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.clients.elasticsearch7.ElasticsearchAggregations;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -27,20 +43,25 @@ import java.util.stream.Collectors;
 public class DeviceDao {
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
+
+    @Autowired
+    private DeviceInfoRepository deviceInfoRepository;
     @Autowired
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
 
     public Paging<DeviceInfo> find(Criteria condition, int size, int page) {
-        Query query = Query.query(condition);
-        return new Paging<>(
-                mongoTemplate.count(query, DeviceInfo.class),
-                mongoTemplate.find(
-                        query.with(PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))))
-                        , DeviceInfo.class)
-        );
+        Query query = new CriteriaQuery(condition);
+        long total = elasticsearchRestTemplate.count(query, DeviceInfo.class);
+        query = query.setPageable(PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))));
+        SearchHits<DeviceInfo> searchHits = elasticsearchRestTemplate.search(query, DeviceInfo.class);
+        List<DeviceInfo> list = new ArrayList<>();
+        for (SearchHit<DeviceInfo> searchHit : searchHits) {
+            list.add(searchHit.getContent());
+        }
+        return new Paging<>(total, list);
     }
 
     /**
@@ -50,80 +71,101 @@ public class DeviceDao {
         if (properties == null) {
             return;
         }
-        Query query = Query.query(new Criteria().and("deviceId").is(deviceId));
-        Update update = new Update();
-        for (String key : properties.keySet()) {
-            update.set("property." + key, properties.get(key));
-        }
-        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("property", BeanUtil.beanToMap(properties));
+        param.put("keys", properties.keySet());
+
+        UpdateQuery updateQuery = UpdateQuery.builder(new CriteriaQuery(new Criteria()
+                .and("deviceId").is(deviceId)))
+                .withParams(param)
+                .withScript("for(key in params.keys){ctx._source.property[key]=params.property[key];}")
+                .withScriptType(ScriptType.INLINE)
+                .build();
+        elasticsearchRestTemplate.updateByQuery(updateQuery, IndexCoordinates.of("device_info"));
     }
 
     /**
      * 更新设备标签
      */
     public void updateTag(String deviceId, DeviceInfo.Tag tag) {
-        Query query = Query.query(new Criteria().and("deviceId").is(deviceId));
-        Update update = new Update();
-        update.set("tag." + tag.getId(), tag);
-        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
+        Map<String, Object> param = new HashMap<>();
+        param.put("tag", BeanUtil.beanToMap(tag));
+
+        UpdateQuery updateQuery = UpdateQuery.builder(new CriteriaQuery(new Criteria()
+                .and("deviceId").is(deviceId)))
+                .withParams(param)
+                .withScript(String.format("ctx._source.tag.%s=params.tag", tag.getId()))
+                .withScriptType(ScriptType.INLINE)
+                .build();
+        elasticsearchRestTemplate.updateByQuery(updateQuery, IndexCoordinates.of("device_info"));
     }
 
     /**
      * 设置设备标签值为空
      */
     public void setTagNull(String deviceId, String tagId) {
-        Query query = Query.query(new Criteria().and("deviceId").is(deviceId));
-        Update update = new Update();
-        update.set("tag." + tagId, null);
-        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
+//        Query query = Query.query(new Criteria().and("deviceId").is(deviceId));
+//        Update update = new Update();
+//        update.set("tag." + tagId, null);
+//        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
     }
 
     /**
      * 获取按品类统计的用户设备数
      */
     public List<DataItem> getDeviceStatsByCategory(String uid) {
-        MatchOperation matchOperation;
-        if (StringUtils.isBlank(uid)) {
-            matchOperation = Aggregation.match(new Criteria());
-        } else {
-            matchOperation = Aggregation.match(Criteria.where("uid").is(uid));
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        if (StringUtils.isNotBlank(uid)) {
+            queryBuilder =
+                    queryBuilder.must(QueryBuilders.termQuery("uid.keyword", uid));
         }
 
         //先按产品分组统计
-        GroupOperation groupOperation = Aggregation.group("productKey").count().as("total");
-        ProjectionOperation projectionOperation = Aggregation.project("productKey", "uid");
-        Aggregation aggregation = Aggregation.newAggregation(projectionOperation, groupOperation, matchOperation);
-        AggregationResults<Map> result = mongoTemplate.aggregate(aggregation, DeviceInfo.class, Map.class);
-        List<Map> stats = result.getMappedResults();
+        NativeSearchQuery query = new NativeSearchQueryBuilder()
+                .withQuery(queryBuilder)
+                .withAggregations(
+                        AggregationBuilders.terms("countByPk").field("productKey.keyword")
+                                .size(1000)
+                                .subAggregation(AggregationBuilders.count("count").field("productKey.keyword"))
+                )
+                .build();
 
-        //取用户产品列表
-        List<Product> products;
-        if (StringUtils.isBlank(uid)) {
-            products = productRepository.findAll();
-        } else {
+        ElasticsearchAggregations result = (ElasticsearchAggregations) elasticsearchRestTemplate
+                .search(query, DeviceInfo.class).getAggregations();
+        ParsedStringTerms terms = result.aggregations().get("countByPk");
+        List<? extends Terms.Bucket> buckets = terms.getBuckets();
+        Map<String, Long> productCount = new HashMap<>();
+        for (Terms.Bucket bucket : buckets) {
+            productCount.put(bucket.getKeyAsString(), bucket.getDocCount());
+        }
+
+        //取用户下产品列表
+        Iterable<Product> products;
+        if (StringUtils.isNotBlank(uid)) {
             products = productRepository.findByUid(uid);
+        } else {
+            products = productRepository.findAll();
         }
         Map<String, String> pkCateMap = new HashMap<>();
         for (Product product : products) {
             pkCateMap.put(product.getId(), product.getCategory());
         }
 
-        //取品类
-        List<Category> categories = categoryRepository.findAll();
+        //取品类列表
         Map<String, String> cateNames = new HashMap<>();
-        for (Category category : categories) {
+        for (Category category : categoryRepository.findAll()) {
             cateNames.put(category.getId(), category.getName());
         }
 
         Map<String, Long> cateStats = new HashMap<>();
-        for (Map stat : stats) {
-            String productKey = stat.get("_id").toString();
-            String cateName = cateNames.get(pkCateMap.get(productKey));
+        productCount.forEach((key, val) -> {
+            String cateName = cateNames.get(pkCateMap.get(key));
             //按品类汇总
             long total = cateStats.getOrDefault(cateName, 0L);
-            total += (Integer) stat.get("total");
+            total += val;
             cateStats.put(cateName, total);
-        }
+        });
 
         List<DataItem> items = new ArrayList<>();
         cateStats.forEach((key, val) -> {
@@ -144,55 +186,75 @@ public class DeviceDao {
      * 根据分组id查询分组下所有设备
      */
     public List<DeviceInfo> findByGroupId(String groupId) {
-        Query query = Query.query(new Criteria().and("group." + groupId).exists(true));
-        return mongoTemplate.find(query, DeviceInfo.class);
+        Query query = new CriteriaQuery(new Criteria().and("group." + groupId).exists());
+        SearchHits<DeviceInfo> searchHits = elasticsearchRestTemplate.search(query, DeviceInfo.class);
+        return searchHits.stream().map(SearchHit::getContent).collect(Collectors.toList());
     }
 
     /**
      * 按分组id统计设备数量
      */
     public long countByGroupId(String groupId) {
-        Query query = Query.query(new Criteria().and("group." + groupId).exists(true));
-        return mongoTemplate.count(query, DeviceInfo.class);
+        Query query = new CriteriaQuery(new Criteria().and("group." + groupId).exists());
+        return elasticsearchRestTemplate.count(query, DeviceInfo.class);
     }
 
     /**
      * 按设备id更新设备分组
      */
     public void updateGroupByDeviceId(String deviceId, DeviceInfo.Group group) {
-        Query query = Query.query(new Criteria().and("deviceId").is(deviceId));
-        Update update = new Update();
-        update.set("group." + group.getId(), group);
-        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
+        Map<String, Object> param = new HashMap<>();
+        param.put("group", BeanUtil.beanToMap(group));
+
+        UpdateQuery updateQuery = UpdateQuery.builder(new CriteriaQuery(new Criteria()
+                .and("deviceId").is(deviceId)))
+                .withParams(param)
+                .withScript(String.format("ctx._source.group.%s=params.group", group.getId()))
+                .withScriptType(ScriptType.INLINE)
+                .build();
+        elasticsearchRestTemplate.updateByQuery(updateQuery, IndexCoordinates.of("device_info"));
     }
 
     /**
      * 按组id更新设备分组
      */
     public void updateGroup(String groupId, DeviceInfo.Group group) {
-        Query query = Query.query(new Criteria().and("group." + groupId).exists(true));
-        Update update = new Update();
-        update.set("group." + group.getId(), group);
-        mongoTemplate.updateMulti(query, update, DeviceInfo.class);
+        Map<String, Object> param = new HashMap<>();
+        param.put("group", BeanUtil.beanToMap(group));
+
+        UpdateQuery updateQuery = UpdateQuery.builder(new CriteriaQuery(new Criteria()
+                .and("group." + groupId).exists()))
+                .withParams(param)
+                .withScript(String.format("ctx._source.group.%s=params.group", groupId))
+                .withScriptType(ScriptType.INLINE)
+                .build();
+
+        elasticsearchRestTemplate.update(updateQuery, IndexCoordinates.of("device_info"));
     }
 
     /**
      * 移除指定设备信息中的分组
      */
     public void removeGroup(String deviceId, String groupId) {
-        Query query = Query.query(new Criteria().and("deviceId").is(deviceId).and("group." + groupId).exists(true));
-        Update update = new Update();
-        update.unset("group." + groupId);
-        mongoTemplate.updateFirst(query, update, DeviceInfo.class);
+        UpdateQuery updateQuery = UpdateQuery.builder(new CriteriaQuery(
+                Criteria.where("deviceId").is(deviceId)))
+                .withScript(String.format("ctx._source.group.remove('%s')", groupId))
+                .withScriptType(ScriptType.INLINE)
+                .build();
+
+        elasticsearchRestTemplate.updateByQuery(updateQuery, IndexCoordinates.of("device_info"));
     }
 
     /**
      * 移除设备信息中的分组
      */
     public void removeGroup(String groupId) {
-        Query query = Query.query(new Criteria().and("group." + groupId).exists(true));
-        Update update = new Update();
-        update.unset("group." + groupId);
-        mongoTemplate.updateMulti(query, update, DeviceInfo.class);
+        UpdateQuery updateQuery = UpdateQuery.builder(new CriteriaQuery(new Criteria()
+                .and("group." + groupId).exists()))
+                .withScript(String.format("ctx._source.group.remove('%s')", groupId))
+                .withScriptType(ScriptType.INLINE)
+                .build();
+
+        elasticsearchRestTemplate.update(updateQuery, IndexCoordinates.of("device_info"));
     }
 }

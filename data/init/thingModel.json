@@ -1,0 +1,980 @@
+[
+  {
+    "id": "xpsYHExTKPFaQMS7",
+    "productKey": "xpsYHExTKPFaQMS7",
+    "model": {
+      "properties": [
+        {
+          "identifier": "powerstate",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "brightness",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "1",
+              "max": "100"
+            }
+          },
+          "name": "亮度",
+          "accessMode": "rw"
+        }
+      ],
+      "services": [],
+      "events": []
+    }
+  },
+  {
+    "id": "hdX3PCMcFrCYpesJ",
+    "productKey": "hdX3PCMcFrCYpesJ",
+    "model": {
+      "properties": [
+        {
+          "identifier": "windSpeed",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "1",
+              "max": "10"
+            }
+          },
+          "name": "风速",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "powerSwitch",
+          "dataType": {
+            "type": "bool",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "电源开关",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "workMode",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "1": "正常风",
+              "2": "自然风",
+              "3": "睡眠风",
+              "4": "静音风"
+            }
+          },
+          "name": "工作模式",
+          "accessMode": "rw"
+        }
+      ],
+      "services": [],
+      "events": []
+    }
+  },
+  {
+    "id": "hbtgIA0SuVw9lxjB",
+    "productKey": "hbtgIA0SuVw9lxjB",
+    "model": {
+      "properties": [],
+      "services": [
+        {
+          "identifier": "allowJoin",
+          "inputData": [],
+          "outputData": [],
+          "name": "开启入网"
+        },
+        {
+          "identifier": "rawSend",
+          "inputData": [
+            {
+              "identifier": "data",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "10240"
+                }
+              },
+              "name": "数据"
+            },
+            {
+              "identifier": "mac",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "128"
+                }
+              },
+              "name": "设备mac"
+            },
+            {
+              "identifier": "model",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "128"
+                }
+              },
+              "name": "设备型号"
+            }
+          ],
+          "outputData": [],
+          "name": "透传下发"
+        }
+      ],
+      "events": [
+        {
+          "identifier": "rawReport",
+          "outputData": [
+            {
+              "identifier": "data",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "10240"
+                }
+              },
+              "name": "数据"
+            },
+            {
+              "identifier": "mac",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "128"
+                }
+              },
+              "name": "设备mac"
+            },
+            {
+              "identifier": "model",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "128"
+                }
+              },
+              "name": "设备型号"
+            }
+          ],
+          "name": "透传上报"
+        }
+      ]
+    }
+  },
+  {
+    "id": "eDhXKwEzwFybM5R7",
+    "productKey": "eDhXKwEzwFybM5R7",
+    "model": {
+      "properties": [
+        {
+          "identifier": "powerstate",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "全开关",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "powerstate_1",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关1",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "powerstate_2",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关2",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "powerstate_3",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关3",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "DeviceType",
+          "dataType": {
+            "type": "text",
+            "specs": {
+              "length": "128"
+            }
+          },
+          "name": "型号",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "rssi",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "-127",
+              "max": "127"
+            }
+          },
+          "name": "信号强度",
+          "accessMode": "r"
+        }
+      ],
+      "services": [],
+      "events": [
+        {
+          "identifier": "faultReportEvent",
+          "outputData": [
+            {
+              "identifier": "code",
+              "dataType": {
+                "type": "int32",
+                "specs": {}
+              },
+              "name": "错误代码"
+            }
+          ],
+          "name": "故障上报"
+        }
+      ]
+    }
+  },
+  {
+    "id": "cGCrkK7Ex4FESAwe",
+    "productKey": "cGCrkK7Ex4FESAwe",
+    "model": {
+      "properties": [
+        {
+          "identifier": "rssi",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "-127",
+              "max": "127"
+            }
+          },
+          "name": "信号强度",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "DeviceType",
+          "dataType": {
+            "type": "text",
+            "specs": {
+              "length": "128"
+            }
+          },
+          "name": "设备型号",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "powerstate",
+          "dataType": {
+            "type": "bool",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关",
+          "accessMode": "rw"
+        }
+      ],
+      "services": [
+        {
+          "identifier": "Toggle",
+          "inputData": [],
+          "outputData": [],
+          "name": "开关切换"
+        }
+      ],
+      "events": [
+        {
+          "identifier": "faultReportEvent",
+          "outputData": [
+            {
+              "identifier": "code",
+              "dataType": {
+                "type": "int32",
+                "specs": {
+                  "min": "0",
+                  "max": "255"
+                }
+              },
+              "name": "错误代码"
+            }
+          ],
+          "name": "故障上报"
+        }
+      ]
+    }
+  },
+  {
+    "id": "Rf4QSjbm65X45753",
+    "productKey": "Rf4QSjbm65X45753",
+    "model": {
+      "properties": [
+        {
+          "identifier": "powerstate",
+          "dataType": {
+            "type": "bool",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关状态",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "volt",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "100"
+            }
+          },
+          "name": "电压",
+          "accessMode": "r"
+        }
+      ],
+      "services": [
+        {
+          "identifier": "service1",
+          "inputData": [
+            {
+              "identifier": "p1",
+              "dataType": {
+                "type": "int32",
+                "specs": {
+                  "min": "1",
+                  "max": "100"
+                }
+              },
+              "name": "参数1"
+            },
+            {
+              "identifier": "p2",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "90"
+                }
+              },
+              "name": "参数2"
+            }
+          ],
+          "outputData": [],
+          "name": "服务1"
+        }
+      ],
+      "events": [
+        {
+          "identifier": "event1",
+          "outputData": [
+            {
+              "identifier": "p1",
+              "dataType": {
+                "type": "int32",
+                "specs": {
+                  "min": "0",
+                  "max": "100"
+                }
+              },
+              "name": "参数p1"
+            },
+            {
+              "identifier": "p2",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "100"
+                }
+              },
+              "name": "参数p2"
+            }
+          ],
+          "name": "测试event1"
+        }
+      ]
+    },
+    "_class": "cc.iotkit.model.ThingModel"
+  },
+  {
+    "id": "PN3EDmkBZDD8whDd",
+    "productKey": "PN3EDmkBZDD8whDd",
+    "model": {
+      "properties": [
+        {
+          "identifier": "power",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "电量",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "DeviceType",
+          "dataType": {
+            "type": "text",
+            "specs": {
+              "length": "128"
+            }
+          },
+          "name": "设备型号",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "rssi",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "-127",
+              "max": "127"
+            }
+          },
+          "name": "信号强度",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "doorStatus",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "门状态",
+          "accessMode": "r"
+        }
+      ],
+      "services": [],
+      "events": [
+        {
+          "identifier": "prylockEvent",
+          "outputData": [],
+          "name": "防撬报警事件"
+        }
+      ]
+    }
+  },
+  {
+    "id": "N523nWsCiG3CAn6X",
+    "productKey": "N523nWsCiG3CAn6X",
+    "model": {
+      "properties": [
+        {
+          "identifier": "DeviceType",
+          "dataType": {
+            "type": "text",
+            "specs": {
+              "length": "128"
+            }
+          },
+          "name": "设备型号",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "UnbindAndDelete",
+          "dataType": {
+            "type": "bool",
+            "specs": {
+              "0": "否",
+              "1": "是"
+            }
+          },
+          "name": "解绑并删除设备",
+          "accessMode": "rw"
+        }
+      ],
+      "services": [
+        {
+          "identifier": "Reboot",
+          "inputData": [],
+          "outputData": [],
+          "name": "重启"
+        },
+        {
+          "identifier": "AllowJoin",
+          "inputData": [],
+          "outputData": [],
+          "name": "开启组网"
+        },
+        {
+          "identifier": "OpenTrace",
+          "inputData": [
+            {
+              "identifier": "enable",
+              "dataType": {
+                "type": "bool",
+                "specs": {
+                  "0": "Close",
+                  "1": "Open"
+                }
+              },
+              "name": "值"
+            }
+          ],
+          "outputData": [],
+          "name": "打开调试"
+        },
+        {
+          "identifier": "ShowDesc",
+          "inputData": [
+            {
+              "identifier": "ieee",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "32"
+                }
+              },
+              "name": "设备地址"
+            }
+          ],
+          "outputData": [],
+          "name": "显示设备信息"
+        },
+        {
+          "identifier": "rawSend",
+          "inputData": [
+            {
+              "identifier": "model",
+              "dataType": {
+                "type": "text",
+                "specs": {}
+              },
+              "name": "设备型号"
+            },
+            {
+              "identifier": "mac",
+              "dataType": {
+                "type": "text",
+                "specs": {}
+              },
+              "name": "设备mac"
+            },
+            {
+              "identifier": "data",
+              "dataType": {
+                "type": "text",
+                "specs": {}
+              },
+              "name": "数据"
+            }
+          ],
+          "outputData": [],
+          "name": "透传下发"
+        }
+      ],
+      "events": [
+        {
+          "identifier": "faultReport",
+          "outputData": [
+            {
+              "identifier": "code",
+              "dataType": {
+                "type": "int32",
+                "specs": {
+                  "min": "0",
+                  "max": "255"
+                }
+              },
+              "name": "错误码"
+            }
+          ],
+          "name": "故障上报"
+        },
+        {
+          "identifier": "rawReport",
+          "outputData": [
+            {
+              "identifier": "model",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "128"
+                }
+              },
+              "name": "设备型号"
+            },
+            {
+              "identifier": "mac",
+              "dataType": {
+                "type": "text",
+                "specs": {}
+              },
+              "name": "设备mac"
+            },
+            {
+              "identifier": "data",
+              "dataType": {
+                "type": "text",
+                "specs": {}
+              },
+              "name": "数据"
+            }
+          ],
+          "name": "透传上报"
+        }
+      ]
+    }
+  },
+  {
+    "id": "KdJYpTp5ywNhmrmC",
+    "productKey": "KdJYpTp5ywNhmrmC",
+    "model": {
+      "properties": [],
+      "services": [],
+      "events": [
+        {
+          "identifier": "userDevicesChange",
+          "outputData": [
+            {
+              "identifier": "uid",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "100"
+                }
+              },
+              "name": "用户Id"
+            }
+          ],
+          "name": "用户设备列表变更"
+        }
+      ]
+    }
+  },
+  {
+    "id": "Eit3kmGJtxSHfCKT",
+    "productKey": "Eit3kmGJtxSHfCKT",
+    "model": {
+      "properties": [
+        {
+          "identifier": "flow",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "100000"
+            }
+          },
+          "name": "用量",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "fee",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "100000"
+            }
+          },
+          "name": "费用",
+          "accessMode": "rw"
+        }
+      ],
+      "services": [],
+      "events": []
+    }
+  },
+  {
+    "id": "D8c5pXFmt2KJDxNm",
+    "productKey": "D8c5pXFmt2KJDxNm",
+    "model": {
+      "properties": [
+        {
+          "identifier": "powerstate_1",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关1",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "powerstate_2",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关2",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "powerstate_3",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关3",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "powerstate_4",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关4",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "DeviceType",
+          "dataType": {
+            "type": "text",
+            "specs": {
+              "length": "128"
+            }
+          },
+          "name": "型号",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "rssi",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "-127",
+              "max": "127"
+            }
+          },
+          "name": "信号强度",
+          "accessMode": "r"
+        }
+      ],
+      "services": [],
+      "events": [
+        {
+          "identifier": "faultReportEvent",
+          "outputData": [
+            {
+              "identifier": "code",
+              "dataType": {
+                "type": "int32",
+                "specs": {}
+              },
+              "name": "错误代码"
+            }
+          ],
+          "name": "故障上报"
+        }
+      ]
+    }
+  },
+  {
+    "id": "AWcJnf7ymGSkaz5M",
+    "productKey": "AWcJnf7ymGSkaz5M",
+    "model": {
+      "properties": [
+        {
+          "identifier": "rssi",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "-128",
+              "max": "128"
+            }
+          },
+          "name": "信号强度",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "switch",
+          "dataType": {
+            "type": "bool",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "开关",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "voltage",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "1000"
+            }
+          },
+          "name": "电压",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "current",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "1000"
+            }
+          },
+          "name": "电流",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "power",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "1000000"
+            }
+          },
+          "name": "功率",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "electricty",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "1000000000"
+            }
+          },
+          "name": "电量",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "back_light",
+          "dataType": {
+            "type": "bool",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "背光灯",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "start_onoff",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "off",
+              "1": "onoff with swithc",
+              "2": "on"
+            }
+          },
+          "name": "上电启动配置",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "cycle_timer",
+          "dataType": {
+            "type": "text",
+            "specs": {
+              "length": "64"
+            }
+          },
+          "name": "循环定时",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "countdown",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "1000000"
+            }
+          },
+          "name": "倒计时",
+          "accessMode": "rw"
+        }
+      ],
+      "services": [],
+      "events": []
+    }
+  },
+  {
+    "id": "6kYp6jszrDns2yh4",
+    "productKey": "6kYp6jszrDns2yh4",
+    "model": {
+      "properties": [
+        {
+          "identifier": "humidity",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "100"
+            }
+          },
+          "name": "湿度\t",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "temperature",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "-38",
+              "max": "656"
+            }
+          },
+          "name": "温度\t",
+          "accessMode": "r"
+        }
+      ],
+      "services": [],
+      "events": [
+        {
+          "identifier": "temperatureTooLowEvent",
+          "outputData": [],
+          "name": "温度过低事件"
+        }
+      ]
+    }
+  }
+]

@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.dao.*;
@@ -19,7 +28,7 @@ public class StatsController {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private DeviceRepository deviceRepository;
+    private DeviceInfoRepository deviceInfoRepository;
     @Autowired
     private DeviceReportRepository deviceReportRepository;
     @Autowired
@@ -36,7 +45,7 @@ public class StatsController {
         if (AuthUtil.isAdmin()) {
             mainStats.setCategoryTotal(categoryRepository.count());
             mainStats.setProductTotal(productRepository.count());
-            mainStats.setDeviceTotal(deviceRepository.count());
+            mainStats.setDeviceTotal(deviceInfoRepository.count());
             mainStats.setReportTotal(deviceReportRepository.count());
             //上报数据统计
             mainStats.setReportDataStats(deviceReportDao.getDeviceMessageStats(now - 48 * 3600 * 1000, now));
@@ -45,7 +54,7 @@ public class StatsController {
         } else {
             mainStats.setCategoryTotal(categoryRepository.count());
             mainStats.setProductTotal(productRepository.countByUid(uid));
-            mainStats.setDeviceTotal(deviceRepository.countByUid(uid));
+            mainStats.setDeviceTotal(deviceInfoRepository.countByUid(uid));
             mainStats.setReportTotal(deviceReportRepository.countByUid(uid));
             //上报数据统计
             mainStats.setReportDataStats(deviceReportDao.getDeviceMessageStatsWithUid(uid, now - 48 * 3600 * 1000, now));

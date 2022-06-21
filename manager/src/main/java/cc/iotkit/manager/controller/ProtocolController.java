@@ -204,8 +204,6 @@ public class ProtocolController {
     public Paging<ProtocolConverter> getConverters(
             @PathVariable("size") int size,
             @PathVariable("page") int page) {
-        protocolConverterRepository.deleteById("");
-        protocolConverterRepository.deleteById("null");
         Page<ProtocolConverter> converters = protocolConverterRepository.findAll(
                 PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))));
         return new Paging<>(converters.getTotalElements(), converters.getContent());

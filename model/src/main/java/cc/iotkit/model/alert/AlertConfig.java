@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.model.alert;
 
 import cc.iotkit.model.Owned;
@@ -6,7 +15,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * 告警配置
@@ -15,7 +26,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
+@Document(indexName = "alert_config")
 public class AlertConfig implements Owned {
     public static final String TYPE_EMAIL="email";
     public static final String TYPE_DINGDING_ROBOT="dingding_robot";
@@ -53,6 +64,7 @@ public class AlertConfig implements Owned {
      */
     private boolean enable;
 
+    @Field(type = FieldType.Date)
     private Long createAt;
 
 }

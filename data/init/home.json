@@ -1,0 +1,54 @@
+[
+  {
+    "id": "629e1d80a176d816952f1e82",
+    "name": "我的家庭",
+    "address": "",
+    "uid": "629e1d7fa176d816952f1e81",
+    "spaceNum": 0,
+    "deviceNum": 0,
+    "current": true
+  },
+  {
+    "id": "629e18e96b16ad6a3e158645",
+    "name": "我的家",
+    "uid": "629daa3de5a005209d182876",
+    "current": true
+  },
+  {
+    "id": "6238a49fecf37861bed7ad11",
+    "name": "我深圳的家",
+    "address": "广东省深圳市南山区西丽镇",
+    "uid": "04c6722f-9a6d-40f3-ac9b-cd791b4c8933",
+    "current": true
+  },
+  {
+    "id":"6238a485ecf37861bed7ad10",
+    "name": "我深圳的家",
+    "address": "广东省深圳市南山区西丽镇",
+    "uid": "232f506f-76c0-46eb-890b-15edd1022ba1"
+  },
+  {
+    "id": "6238a2caecf37861bed7ad0f",
+    "name": "我深圳的家",
+    "address": "广东省深圳市南山区西丽镇",
+    "uid": "232f506f-76c0-46eb-890b-15edd1022ba1"
+  },
+  {
+    "id": "6238a2adecf37861bed7ad0e",
+    "name": "我深圳的家",
+    "address": "广东省深圳市南山区西丽镇",
+    "uid": "232f506f-76c0-46eb-890b-15edd1022ba1"
+  },
+  {
+    "id": "61bafc1e16cb60612ab95f98",
+    "name": "myhome",
+    "address": "shengzhen nanshan",
+    "uid": "183b4732-ce7f-4e4c-9c18-7e49fbf45579"
+  },
+  {
+    "id": "61bafb6fb8477d132da69513",
+    "name": "myhome",
+    "address": "shengzhen nanshan",
+    "uid": "183b4732-ce7f-4e4c-9c18-7e49fbf45579"
+  }
+]

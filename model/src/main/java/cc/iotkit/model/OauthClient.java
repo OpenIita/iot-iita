@@ -2,13 +2,15 @@ package cc.iotkit.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * oauth2的client
  */
 @Data
-@Document
+@Document(indexName = "oauth_client")
 public class OauthClient {
 
     @Id
@@ -20,6 +22,7 @@ public class OauthClient {
 
     private String allowUrl;
 
+    @Field(type = FieldType.Date)
     private Long createAt;
 
 }

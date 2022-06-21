@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.dao.AppDesignRepository;
@@ -9,10 +18,10 @@ import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.AppDesign;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
+import cc.iotkit.utils.AuthUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,11 +49,15 @@ public class AppController {
     public Paging<AppDesignVo> getDesigns() {
 
         List<AppDesignVo> appDesignVos = new ArrayList<>();
-        List<Product> products = productRepository.findAll(Example
-                .of(dataOwnerService.wrapExample(new Product())));
-
-        List<AppDesign> appDesigns = appDesignRepository.findAll(Example
-                .of(dataOwnerService.wrapExample(new AppDesign())));
+        Iterable<Product> products;
+        Iterable<AppDesign> appDesigns;
+        if (AuthUtil.isAdmin()) {
+            products = productRepository.findAll();
+            appDesigns = appDesignRepository.findAll();
+        } else {
+            products = productRepository.findByUid(AuthUtil.getUserId());
+            appDesigns = appDesignRepository.findByUid(AuthUtil.getUserId());
+        }
 
         products.forEach(product -> {
             Category category = categoryRepository.findById(product.getCategory()).orElse(new Category());

@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller.api;
 
 import cc.iotkit.dao.AppInfoRepository;
@@ -37,8 +46,10 @@ public class AccountController {
             throw new RuntimeException("用户不属于该家庭");
         }
 
-        UserInfo userInfo = userInfoRepository.findOne(Example.of(UserInfo.builder().uid(uid).build()))
-                .orElseThrow(() -> new RuntimeException(("用户信息不存在")));
+        UserInfo userInfo = userInfoRepository.findByUid(uid);
+        if (userInfo == null) {
+            throw new RuntimeException("用户信息不存在");
+        }
         userInfo.setCurrHomeId(homeId);
         userInfoRepository.save(userInfo);
     }
@@ -52,6 +63,6 @@ public class AccountController {
 
     @GetMapping("/getAppInfo")
     public AppInfo getAppInfo() {
-        return appInfoRepository.findAll().get(0);
+        return appInfoRepository.findAll().iterator().next();
     }
 }

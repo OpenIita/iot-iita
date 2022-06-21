@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.exception.NotFoundException;
@@ -5,7 +14,7 @@ import cc.iotkit.common.exception.OfflineException;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.DeviceComponentManager;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.dao.DeviceRepository;
+import cc.iotkit.dao.DeviceInfoRepository;
 import cc.iotkit.dao.ThingModelMessageRepository;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
@@ -21,7 +30,7 @@ import java.util.Map;
 public class DeviceService {
 
     @Autowired
-    private DeviceRepository deviceRepository;
+    private DeviceInfoRepository deviceInfoRepository;
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
@@ -40,7 +49,7 @@ public class DeviceService {
 
     public String invokeService(String deviceId, String service,
                                 Map<String, Object> args, boolean checkOwner) {
-        DeviceInfo device = deviceRepository.findById(deviceId)
+        DeviceInfo device = deviceInfoRepository.findById(deviceId)
                 .orElseThrow(() -> new NotFoundException("device not found by deviceId"));
 
         if (checkOwner) {
@@ -86,7 +95,7 @@ public class DeviceService {
 
     public String setProperty(String deviceId, Map<String, Object> properties,
                               boolean checkOwner) {
-        DeviceInfo device = deviceRepository.findById(deviceId)
+        DeviceInfo device = deviceInfoRepository.findById(deviceId)
                 .orElseThrow(() -> new NotFoundException("device not found by deviceId"));
 
         if (checkOwner) {

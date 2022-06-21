@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
@@ -20,6 +29,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -60,8 +70,12 @@ public class RuleEngineController {
     ) {
         RuleInfo ruleInfo = new RuleInfo();
         ruleInfo.setType(type);
-        Page<RuleInfo> rules = ruleInfoRepository.findAll(Example.of(dataOwnerService
-                .wrapExample(ruleInfo)), Pageable.ofSize(size).withPage(page - 1));
+        Page<RuleInfo> rules;
+        if (AuthUtil.isAdmin()) {
+            rules = ruleInfoRepository.findByType(type, Pageable.ofSize(size).withPage(page - 1));
+        } else {
+            rules = ruleInfoRepository.findByUidAndType(AuthUtil.getUserId(), type, Pageable.ofSize(size).withPage(page - 1));
+        }
         return new Paging<>(rules.getTotalElements(), rules.getContent());
     }
 
@@ -155,9 +169,12 @@ public class RuleEngineController {
 
     @PostMapping("/tasks")
     public List<TaskInfo> tasks() {
-        return taskInfoRepository.findAll(Example.of(dataOwnerService
-                .wrapExample(new TaskInfo()))
-        );
+        List<TaskInfo> list = new ArrayList<>();
+        if (AuthUtil.isAdmin()) {
+            taskInfoRepository.findAll().forEach(list::add);
+            return list;
+        }
+        return taskInfoRepository.findByUid(AuthUtil.getUserId());
     }
 
     @PostMapping("/saveTask")

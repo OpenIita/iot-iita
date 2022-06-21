@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller.api;
 
 import cc.iotkit.dao.ProductRepository;
@@ -10,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController("api-product")
@@ -23,7 +33,9 @@ public class ProductController {
 
     @GetMapping("/list")
     public List<Product> list() {
-        return productRepository.findAll();
+        List<Product> list = new ArrayList<>();
+        productRepository.findAll().forEach(list::add);
+        return list;
     }
 
     @GetMapping("/{pk}")
