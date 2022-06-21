@@ -20,7 +20,6 @@ import cc.iotkit.model.device.DeviceInfo;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,8 +44,6 @@ public class AligenieDeviceController {
     private DeviceService deviceService;
     @Autowired
     private DeviceDao deviceDao;
-    @Value("${pulsar.broker}")
-    private String pulsarBrokerUrl;
 
     @GetMapping("/list/{uid}")
     public List<AligenieDevice> getDevices(@PathVariable("uid") String uid) {
