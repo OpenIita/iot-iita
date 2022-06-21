@@ -33,9 +33,9 @@
 
 #### 软件架构
 软件架构说明
-本系统采用springboot、mongodb、redis、elasticsearch、sa-token等框架和第三方软件。
+本系统采用springboot、redis、elasticsearch、sa-token等框架和第三方软件。
 
-默认使用内置的redis、es和消息总线以减小启动难度，可实现零配置一键启动，程序在第一次启动的时候会使用data/init目录的示例数据进行初始化。
+默认使用内置的redis、es和消息总线以减小启动难度，可实现 **零配置一键启动** ，程序在第一次启动的时候会使用data/init目录的示例数据进行初始化。
 
 
 #### 安装配置文档
