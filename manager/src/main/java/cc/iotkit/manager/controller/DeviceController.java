@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.Constants;
@@ -24,18 +33,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Slf4j
 @RestController
@@ -45,7 +52,7 @@ public class DeviceController {
     @Autowired
     private DeviceService deviceService;
     @Autowired
-    private DeviceRepository deviceRepository;
+    private DeviceInfoRepository deviceInfoRepository;
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -96,32 +103,30 @@ public class DeviceController {
         if (!AuthUtil.isAdmin()) {
             //客户端用户使用绑定子用户查询
             if (AuthUtil.isClientUser()) {
-                condition.and("subUid").elemMatch(new Criteria().is(uid));
+                condition = condition.and("subUid").matches(uid);
             } else {
-                condition.and("uid").is(uid);
+                condition = condition.and("uid").is(uid);
             }
         }
 
         String pk = query.getProductKey();
         if (StringUtils.isNotBlank(pk)) {
-            condition.and("productKey").is(pk);
+            condition = condition.and("productKey").is(pk);
         }
         //关键字查询
         String keyword = query.getKeyword();
         if (StringUtils.isNotBlank(keyword)) {
-            Pattern pattern = Pattern.compile("^.*" + keyword + ".*$", Pattern.CASE_INSENSITIVE);
-            condition.orOperator(
-                    Criteria.where("deviceName").regex(pattern),
-                    Criteria.where("deviceId").regex(pattern)
+            condition = condition.and(
+                    Criteria.where("deviceName").contains(keyword).and("deviceId").contains(keyword)
             );
         }
         String group = query.getGroup();
         if (StringUtils.isNotBlank(group)) {
-            condition.and("group." + group).exists(true);
+            condition = condition.and("group." + group).exists();
         }
         String state = query.getState();
         if (StringUtils.isNotBlank(state)) {
-            condition.and("state.online").is(state.equals("online"));
+            condition = condition.and("state.online").is(state.equals("online"));
         }
 
         return deviceDao.find(condition, size, page);
@@ -152,37 +157,33 @@ public class DeviceController {
         device.setState(new DeviceInfo.State(false, null, null));
         device.setCreateAt(System.currentTimeMillis());
 
-        deviceRepository.save(device);
+        deviceInfoRepository.save(device);
     }
 
     @GetMapping("/{deviceId}/children")
     public List<DeviceInfo> getChildren(@PathVariable("deviceId") String deviceId) {
-        return deviceRepository.findAll(Example.of(
-                dataOwnerService.wrapExample(
-                        DeviceInfo.builder()
-                                .parentId(deviceId)
-                                .build())));
+        if (AuthUtil.isAdmin()) {
+            return deviceInfoRepository.findByParentId(deviceId);
+        }
+        return deviceInfoRepository.findByParentIdAndUid(deviceId, AuthUtil.getUserId());
     }
 
     @GetMapping(Constants.API_DEVICE.DETAIL)
     public DeviceInfo getDetail(@PathVariable("deviceId") String deviceId) {
-        return dataOwnerService.checkOwner(deviceRepository.findById(deviceId).orElse(new DeviceInfo()));
+        return dataOwnerService.checkOwner(deviceInfoRepository.findById(deviceId).orElse(new DeviceInfo()));
     }
 
     @GetMapping("/{pk}/{dn}")
     public DeviceInfo getByPkDn(@PathVariable("pk") String pk,
                                 @PathVariable("dn") String dn) {
         return dataOwnerService.checkOwner(
-                deviceRepository.findOne(Example.of(DeviceInfo.builder()
-                        .productKey(pk)
-                        .deviceName(dn)
-                        .build())).orElse(new DeviceInfo()));
+                deviceInfoRepository.findByProductKeyAndDeviceName(pk, dn));
     }
 
     @PostMapping("/{deviceId}/delete")
     public void deleteDevice(@PathVariable("deviceId") String deviceId) {
         deviceId = getDetail(deviceId).getDeviceId();
-        deviceRepository.deleteById(deviceId);
+        deviceInfoRepository.deleteById(deviceId);
     }
 
     @PostMapping("/{deviceId}/logs/{size}/{page}")
@@ -218,7 +219,7 @@ public class DeviceController {
     @PostMapping("/{deviceId}/tag/add")
     public void addTag(@PathVariable("deviceId") String deviceId,
                        DeviceInfo.Tag tag) {
-        DeviceInfo device = deviceRepository.findByDeviceId(deviceId);
+        DeviceInfo device = deviceInfoRepository.findByDeviceId(deviceId);
         dataOwnerService.checkOwner(device);
         deviceDao.updateTag(deviceId, tag);
     }
@@ -227,7 +228,7 @@ public class DeviceController {
     public void simulateSend(
             @PathVariable("deviceId") String deviceId,
             @RequestBody ThingModelMessage message) {
-        DeviceInfo device = deviceRepository.findByDeviceId(deviceId);
+        DeviceInfo device = deviceInfoRepository.findByDeviceId(deviceId);
         dataOwnerService.checkOwner(device);
 
         message.setMid(UniqueIdUtil.newRequestId());
@@ -245,7 +246,7 @@ public class DeviceController {
             @PathVariable("clientId") String clientId
     ) {
         String uid = AuthUtil.getUserId();
-        DeviceInfo deviceInfo = deviceRepository.findByDeviceId(deviceId);
+        DeviceInfo deviceInfo = deviceInfoRepository.findByDeviceId(deviceId);
         dataOwnerService.checkOwner(deviceInfo);
 
         //按用户+客户端ID订阅

@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.model.rule;
 
 import cc.iotkit.model.Owned;
@@ -6,7 +15,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.List;
 
@@ -15,7 +26,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
+@Document(indexName = "task_info")
 public class TaskInfo implements Owned {
 
     public static String TYPE_TIMER = "timer";
@@ -63,6 +74,7 @@ public class TaskInfo implements Owned {
      */
     private String uid;
 
+    @Field(type = FieldType.Date)
     private Long createAt;
 
     /**

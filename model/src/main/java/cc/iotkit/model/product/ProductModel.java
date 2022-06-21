@@ -1,18 +1,19 @@
 package cc.iotkit.model.product;
 
-import cc.iotkit.model.Owned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
+@Document(indexName = "product_model")
 public class ProductModel {
 
     public static final String TYPE_JS = "JavaScript";
@@ -40,6 +41,7 @@ public class ProductModel {
      */
     private String state;
 
+    @Field(type = FieldType.Date)
     private Long modifyAt;
 
 }

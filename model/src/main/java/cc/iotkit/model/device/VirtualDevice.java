@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
  * 虚拟设备
  */
 @Data
-@Document
+@Document(indexName = "virtual_device")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -97,6 +99,7 @@ public class VirtualDevice implements Owned {
     /**
      * 创建时间
      */
+    @Field(type = FieldType.Date)
     private Long createAt = System.currentTimeMillis();
 
 }

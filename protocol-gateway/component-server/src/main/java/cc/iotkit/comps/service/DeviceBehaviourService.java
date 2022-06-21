@@ -33,7 +33,7 @@ public class DeviceBehaviourService {
     @Autowired
     private ProductCache productCache;
     @Autowired
-    private DeviceRepository deviceRepository;
+    private DeviceInfoRepository deviceInfoRepository;
     @Autowired
     private DeviceCache deviceCache;
     @Autowired
@@ -85,7 +85,7 @@ public class DeviceBehaviourService {
         }
         Product product = optProduct.get();
         String uid = product.getUid();
-        DeviceInfo device = deviceRepository.findByProductKeyAndDeviceName(pk, info.getDeviceName());
+        DeviceInfo device = deviceInfoRepository.findByProductKeyAndDeviceName(pk, info.getDeviceName());
         boolean reportMsg = false;
 
         if (device != null) {
@@ -121,7 +121,7 @@ public class DeviceBehaviourService {
             device.setParentId(parentId);
             reportMsg = true;
         }
-        deviceRepository.save(device);
+        deviceInfoRepository.save(device);
 
         //新设备或更换网关需要产生注册消息
         if (reportMsg) {
@@ -145,7 +145,7 @@ public class DeviceBehaviourService {
                            String deviceName,
                            String productSecret,
                            String deviceSecret) {
-        DeviceInfo deviceInfo = deviceRepository.findByProductKeyAndDeviceName(productKey, deviceName);
+        DeviceInfo deviceInfo = deviceInfoRepository.findByProductKeyAndDeviceName(productKey, deviceName);
         if (deviceInfo == null) {
             throw new BizException("device does not exist");
         }
@@ -168,7 +168,7 @@ public class DeviceBehaviourService {
     public void deviceStateChange(String productKey,
                                   String deviceName,
                                   boolean online) {
-        DeviceInfo device = deviceRepository.findByProductKeyAndDeviceName(productKey, deviceName);
+        DeviceInfo device = deviceInfoRepository.findByProductKeyAndDeviceName(productKey, deviceName);
         if (device == null) {
             log.warn(String.format("productKey: %s,device: %s,online: %s", productKey, device, online));
             throw new BizException("device does not exist");
@@ -179,7 +179,7 @@ public class DeviceBehaviourService {
             return;
         }
 
-        List<DeviceInfo> subDevices = deviceRepository.findByParentId(device.getDeviceId());
+        List<DeviceInfo> subDevices = deviceInfoRepository.findByParentId(device.getDeviceId());
         for (DeviceInfo subDevice : subDevices) {
             Product product = productCache.findById(subDevice.getProductKey());
             Boolean transparent = product.getTransparent();
@@ -200,7 +200,7 @@ public class DeviceBehaviourService {
             device.getState().setOfflineTime(System.currentTimeMillis());
 //            deviceStateHolder.offline(device.getDeviceId());
         }
-        deviceRepository.save(device);
+        deviceInfoRepository.save(device);
 
         //设备状态变更消息
         ThingModelMessage modelMessage = new ThingModelMessage(

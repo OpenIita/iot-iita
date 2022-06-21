@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller.api;
 
 import cc.iotkit.dao.*;
@@ -10,7 +19,7 @@ import cc.iotkit.model.space.SpaceDevice;
 import cc.iotkit.utils.AuthUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
+import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +37,7 @@ public class SpaceController {
     @Autowired
     private SpaceDeviceRepository spaceDeviceRepository;
     @Autowired
-    private DeviceRepository deviceRepository;
+    private DeviceInfoRepository deviceInfoRepository;
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
@@ -41,6 +50,8 @@ public class SpaceController {
     private DeviceCache deviceCache;
     @Autowired
     private SpaceDeviceService spaceDeviceService;
+    @Autowired
+    private CommonDao commonDao;
 
     @PostMapping("/addGateway")
     public void addGateway(String pk, String mac, String name, String spaceId) {
@@ -48,14 +59,12 @@ public class SpaceController {
             throw new RuntimeException("pk/name/mac/spaceId is blank.");
         }
         mac = mac.toUpperCase();
-        DeviceInfo device = deviceRepository.findOne(Example.of(DeviceInfo.builder()
-                .productKey(pk)
-                .deviceName(mac).build())).orElseThrow(() -> new RuntimeException("未找到该设备"));
+        DeviceInfo device = deviceInfoRepository.findByProductKeyAndDeviceName(pk, mac);
+        if (device == null) {
+            throw new RuntimeException("未找到该设备");
+        }
         Space space = spaceRepository.findById(spaceId).orElseThrow(() -> new RuntimeException("未找到空间"));
         addSpaceDevice(name, device, space);
-//
-//        List<DeviceInfo> addDevices = deviceRepository.findAll(Example.of(DeviceInfo.builder().parentId(device.getDeviceId()).build()));
-//        addDevices.forEach((d -> addSpaceDevice(null, d, space)));
     }
 
     @PostMapping("/add")
@@ -63,7 +72,7 @@ public class SpaceController {
         if (StringUtils.isBlank(deviceId) || StringUtils.isBlank(name) || StringUtils.isBlank(spaceId)) {
             throw new RuntimeException("deviceId/name/spaceId is blank.");
         }
-        DeviceInfo device = deviceRepository.findById(deviceId)
+        DeviceInfo device = deviceInfoRepository.findById(deviceId)
                 .orElseThrow(() -> new RuntimeException("device not found."));
         Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new RuntimeException("space not found."));
@@ -73,8 +82,7 @@ public class SpaceController {
     @PostMapping("/scan")
     public List<SpaceDeviceVo> scan() {
         //找到网关产品id
-        List<String> gateways = productRepository.findAll(Example
-                .of(Product.builder().category("gateway").build()))
+        List<String> gateways = productRepository.findByCategory("gateway")
                 .stream().map(Product::getId).collect(Collectors.toList());
         //找到用户已添加的所有设备
         List<SpaceDeviceVo> spaceDeviceVos = spaceDeviceService.getUserDevices(AuthUtil.getUserId(), "");
@@ -84,8 +92,8 @@ public class SpaceController {
 
         List<DeviceInfo> foundDevices = new ArrayList<>();
         //找到网关下的所有设备
-        userGateways.forEach((g) -> foundDevices.addAll(deviceRepository.findAll(Example.of(DeviceInfo.builder()
-                .parentId(g.getDeviceId()).build()))));
+        userGateways.forEach((g) -> foundDevices.addAll(
+                deviceInfoRepository.findByParentId(g.getDeviceId())));
 
         //过滤已添加的设备
         return foundDevices.stream().filter((d) -> {
@@ -105,15 +113,16 @@ public class SpaceController {
 
     @GetMapping("/devices")
     public List<SpaceDeviceVo> devices(String homeId, String spaceId) {
+        Criteria criteria = new Criteria();
+
         SpaceDevice device = new SpaceDevice();
         device.setUid(AuthUtil.getUserId());
         if (StringUtils.isNotBlank(spaceId)) {
-            device.setSpaceId(spaceId);
+            criteria = criteria.and("spaceId").is(spaceId);
         } else {
-            device.setHomeId(homeId);
+            criteria = criteria.and("homeId").is(homeId);
         }
-
-        List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(Example.of(device));
+        List<SpaceDevice> spaceDevices = commonDao.find(SpaceDevice.class, criteria);
         List<SpaceDeviceVo> spaceDeviceVos = new ArrayList<>();
         spaceDevices.forEach(sd -> spaceDeviceVos.add(buildSpaceDeviceVo(
                 sd.getId(), sd.getDeviceId(),
@@ -128,15 +137,17 @@ public class SpaceController {
 
         return buildSpaceDeviceVo(device.getId(), device.getDeviceId(),
                 AuthUtil.getUserId(), device.getName(),
-               "");
+                "");
     }
 
     @GetMapping("/getDeviceByMac")
     public SpaceDeviceVo getDeviceByMac(String mac) {
-        DeviceInfo device = deviceRepository.findOne(Example.of(DeviceInfo.builder().deviceName(mac).build()))
-                .orElseThrow(() -> new RuntimeException("device not found by mac"));
+        List<DeviceInfo> devices = deviceInfoRepository.findByDeviceName(mac);
+        if (devices.size() == 0) {
+            throw new RuntimeException("device not found by mac");
+        }
 
-        return buildSpaceDeviceVo("", device.getDeviceId(),
+        return buildSpaceDeviceVo("", devices.get(0).getDeviceId(),
                 AuthUtil.getUserId(), "", "");
     }
 
@@ -170,10 +181,7 @@ public class SpaceController {
     private void addSpaceDevice(String name, DeviceInfo device, Space space) {
         String uid = AuthUtil.getUserId();
 
-        SpaceDevice sd = spaceDeviceRepository.findOne(Example.of(SpaceDevice
-                .builder()
-                .deviceId(device.getDeviceId()).build())
-        ).orElse(null);
+        SpaceDevice sd = spaceDeviceRepository.findByDeviceId(device.getDeviceId());
         String id = null;
 
         //重复添加，更新

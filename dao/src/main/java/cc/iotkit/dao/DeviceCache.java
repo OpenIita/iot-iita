@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.dao;
 
 import cc.iotkit.common.Constants;
@@ -14,7 +23,7 @@ import java.util.List;
 public class DeviceCache {
 
     @Autowired
-    private DeviceRepository deviceRepository;
+    private DeviceInfoRepository deviceInfoRepository;
     @Autowired
     private DeviceDao deviceDao;
 
@@ -31,12 +40,12 @@ public class DeviceCache {
 
     @Cacheable(value = Constants.DEVICE_CACHE, key = "#pk+'_'+#dn")
     public DeviceInfo getDeviceInfo(String pk, String dn) {
-        return deviceRepository.findByProductKeyAndDeviceName(pk, dn);
+        return deviceInfoRepository.findByProductKeyAndDeviceName(pk, dn);
     }
 
     @Cacheable(value = Constants.DEVICE_CACHE, key = "#deviceId")
     public DeviceInfo get(String deviceId) {
-        return deviceRepository.findById(deviceId).orElse(null);
+        return deviceInfoRepository.findById(deviceId).orElse(null);
     }
 
     @Cacheable(value = Constants.DEVICE_STATS_CACHE, key = "#uid")

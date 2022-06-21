@@ -3,13 +3,15 @@ package cc.iotkit.model.device;
 import cc.iotkit.model.Owned;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * 设备分组
  */
 @Data
-@Document
+@Document(indexName = "device_group")
 public class DeviceGroup implements Owned {
 
     /**
@@ -41,6 +43,7 @@ public class DeviceGroup implements Owned {
     /**
      * 创建时间
      */
+    @Field(type = FieldType.Date)
     private long createAt;
 
 }

@@ -1,11 +1,17 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.CategoryRepository;
-import cc.iotkit.dao.ProductRepository;
-import cc.iotkit.dao.ProductModelRepository;
-import cc.iotkit.dao.ThingModelRepository;
+import cc.iotkit.dao.*;
 import cc.iotkit.manager.config.AliyunConfig;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.model.Paging;
@@ -13,20 +19,21 @@ import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.model.product.ThingModel;
+import cc.iotkit.utils.AuthUtil;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +55,9 @@ public class ProductController {
     private AliyunConfig aliyunConfig;
     @Autowired
     private ProductModelRepository productModelRepository;
+    @Autowired
+    private CommonDao commonDao;
+
 
     private OSS ossClient;
 
@@ -55,12 +65,16 @@ public class ProductController {
     public Paging<Product> getProducts(
             @PathVariable("size") int size,
             @PathVariable("page") int page,
-            Product form) {
-        form = dataOwnerService.wrapExample(form);
-        Page<Product> products = productRepository.findAll(Example.of(form),
-                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt")))
-        );
-        return new Paging<>(products.getTotalElements(), products.getContent());
+            String id) {
+        Criteria criteria = new Criteria();
+
+        if (StringUtils.isNotBlank(id)) {
+            criteria = criteria.and("id").is(id);
+        }
+        if (!AuthUtil.isAdmin()) {
+            criteria = criteria.and("uid").is(AuthUtil.getUserId());
+        }
+        return commonDao.pagedFind(Product.class, criteria, Sort.Order.desc("createAt"), size, page);
     }
 
     @PostMapping("/save")
@@ -98,7 +112,9 @@ public class ProductController {
 
     @GetMapping("/categories")
     public List<Category> getCategories() {
-        return categoryRepository.findAll();
+        List<Category> list = new ArrayList<>();
+        categoryRepository.findAll().forEach(list::add);
+        return list;
     }
 
     @SaCheckRole("iot_admin")

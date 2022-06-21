@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.service;
 
 import cc.iotkit.dao.DeviceCache;
@@ -27,10 +36,14 @@ public class SpaceDeviceService {
     public List<SpaceDeviceVo> getUserDevices(String uid, String spaceId) {
         SpaceDevice device = new SpaceDevice();
         device.setUid(uid);
+        List<SpaceDevice> spaceDevices;
         if (StringUtils.isNotBlank(spaceId)) {
             device.setSpaceId(spaceId);
+            spaceDevices = spaceDeviceRepository.findByUidAndSpaceIdOrderByAddAtDesc(uid, spaceId);
+        } else {
+            spaceDevices = spaceDeviceRepository.findBySpaceIdOrderByAddAtDesc(spaceId);
         }
-        List<SpaceDevice> spaceDevices = spaceDeviceRepository.findAll(Example.of(device));
+
         List<SpaceDeviceVo> spaceDeviceVos = new ArrayList<>();
         spaceDevices.forEach(sd -> {
             DeviceInfo deviceInfo = deviceCache.get(sd.getDeviceId());

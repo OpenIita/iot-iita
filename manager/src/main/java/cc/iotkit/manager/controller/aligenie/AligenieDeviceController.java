@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.manager.controller.aligenie;
 
 import cc.iotkit.common.exception.BizException;
@@ -29,7 +38,7 @@ public class AligenieDeviceController {
     @Autowired
     private DataOwnerService ownerService;
     @Autowired
-    private DeviceRepository deviceRepository;
+    private DeviceInfoRepository deviceInfoRepository;
     @Autowired
     private AligenieProductRepository aligenieProductRepository;
     @Autowired
@@ -66,7 +75,7 @@ public class AligenieDeviceController {
         aligenieDeviceRepository.deleteByUid(uid);
 
         for (Device device : devices) {
-            DeviceInfo deviceInfo = deviceRepository.findById(device.getDeviceId()).get();
+            DeviceInfo deviceInfo = deviceInfoRepository.findById(device.getDeviceId()).get();
             AligenieProduct product = aligenieProductRepository.findByProductKey(deviceInfo.getProductKey());
             aligenieDeviceRepository.save(AligenieDevice.builder()
                     .uid(user.getId())

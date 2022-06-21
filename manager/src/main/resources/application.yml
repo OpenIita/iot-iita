@@ -8,12 +8,6 @@ spring:
       max-file-size: 10MB
       max-request-size: 12MB
 
-  #mongodb数据库配置
-  data:
-    mongodb:
-      uri: mongodb://填写mongodb地址
-      database: iotkit
-
   elasticsearch:
     rest:
       #使用内置es的配置
