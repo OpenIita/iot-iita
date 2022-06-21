@@ -42,9 +42,11 @@
  **注：** 内置es在修改设备组时会报错，此时需要换成外置的es
 
 
-#### 安装配置文档
-见官网：
-https://xiwasong.github.io
+#### 运行步骤
+
+1、clone代码，在idea中导入项目
+
+2、在manager模块的Application类上右键运行
 
 
 
