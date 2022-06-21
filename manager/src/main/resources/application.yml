@@ -29,7 +29,7 @@ spring:
 
 #图片存储用的是阿里云oss，如果需要上传产品图片才需要配置
 aliyun:
-  bucketId: 填写阿里云bucketId
+  bucketId: iotkit-img
   endpoint: oss-cn-shenzhen.aliyuncs.com
   accessKeyId: 填写阿里云accessKeyId
   accessKeySecret: 填写阿里云accessKeySecret
@@ -49,11 +49,6 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: false
-
-#pulsar消息队列配置，需要进行配置
-pulsar:
-  broker: pulsar://pulsar broker地址:6650
-  service: http://pulsar 服务地址:8080
 
 #认证中心地址
 oauth2:

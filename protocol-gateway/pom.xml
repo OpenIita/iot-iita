@@ -19,7 +19,7 @@
         <module>component</module>
         <module>mqtt-client-simulator</module>
         <module>http-biz-component</module>
-        <module>ctwing-component</module>
+<!--        <module>ctwing-component</module>-->
     </modules>
 
 </project>

@@ -24,7 +24,7 @@ public class EmbeddedElasticSearchConfig {
     }
 
     public static boolean embeddedEnable() {
-        return "true".equals(System.getProperty("embeddedElasticSearch"));
+        return !"true".equals(System.getProperty("disabledEmbeddedEs"));
     }
 
     @SneakyThrows
