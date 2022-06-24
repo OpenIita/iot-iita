@@ -14,7 +14,7 @@ function getPkDn(clientId){
 }
 
 function auth(head,type,payload){
-    if(isServerId(payload.clientid) > -1){
+    if(isServerId(payload.clientid)){
         return {
             type:"serverAuth",
             data:{
@@ -60,51 +60,13 @@ function acl(head,type,payload){
         };
     }
 
-
-    /**
-     * /sys/N523nWsCiG3CAn6X/AA:BB:CC:EE:01/c/#
-     * /sys/N523nWsCiG3CAn6X/AA:BB:CC:EE:01/c/register_reply
-     */
-    if (/^\/sys\/.+\/.+\/c\/#?$/i.test(_topic)) {
-        if (payload.access == 1) { // 1、subscribe 2、public
-            return subscribe(head,type,payload);
-        }
+    if (/^\/sys\/.+\/.+\/c\/#/i.test(_topic)) {
+	  return subscribe(head,type,payload);
+    }
+    if (/^\/sys\/.+\/.+\/s\/.*/i.test(_topic)) {
+	  return subscribe(head,type,payload);
     }
 
-    if (/^\/sys\/.+\/.+\/c\/register_reply$/i.test(_topic)) {
-        if (payload.access == 1) { // 1、subscribe 2、public
-            return subscribe(head,type,payload);
-        }
-    }
-
-    if (/^\/sys\/.+\/.+\/s\/register$/i.test(_topic)) {
-        if (payload.access == 2) { // 1、subscribe 2、public
-            return subscribe(head,type,payload);
-        }
-    }
-
-    if (/^\/sys\/.+\/.+\/s\/service\/allowJoin_reply$/i.test(_topic)) {
-        if (payload.access == 2) { // 1、subscribe 2、public
-            return subscribe(head,type,payload);
-        }
-    }
-    if (/^\/sys\/.+\/.+\/s\/service\/rawSend_reply$/i.test(_topic)) {
-        if (payload.access == 2) { // 1、subscribe 2、public
-            return subscribe(head,type,payload);
-        }
-    }
-
-    if (/^\/sys\/.+\/.+\/s\/event\/property\/post$/i.test(_topic)) {
-        if (payload.access == 2) { // 1、subscribe 2、public
-            return subscribe(head,type,payload);
-        }
-    }
-
-    if (/^\/sys\/.+\/.+\/s\/service\/.+_reply$/i.test(_topic)) {
-        if (payload.access == 2) { // 1、subscribe 2、public
-            return subscribe(head,type,payload);
-        }
-    }
 }
 
 function register(head,type,payload){
