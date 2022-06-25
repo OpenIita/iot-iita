@@ -43,10 +43,11 @@
 
 
 #### 运行步骤
+1、安装jdk11
 
-1、clone代码，在idea中导入项目
+2、clone代码，在idea中导入项目
 
-2、在manager模块的Application类上右键运行
+3、在manager模块的Application类上右键运行
 
 
 
