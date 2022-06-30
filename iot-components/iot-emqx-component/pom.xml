@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>iot-components</artifactId>
+        <groupId>cc.iotkit</groupId>
+        <version>0.3.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>iot-emqx-component</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-web-proxy</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-mqtt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.luaj</groupId>
+            <artifactId>luaj-jse</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-dao</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-component-base</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <artifactSet>
+                        <includes>
+<!--                            <include>io.vertx:vertx-core</include>-->
+<!--                            <include>io.vertx:vertx-web-proxy</include>-->
+<!--                            <include>io.vertx:vertx-mqtt</include>-->
+
+                            <include>io.vertx:vertx-core</include>
+                            <include>io.vertx:vertx-web-proxy</include>
+                            <include>io.vertx:vertx-mqtt</include>
+                            <include>io.vertx:vertx-web</include>
+                            <include>io.vertx:vertx-http-proxy</include>
+
+                            <include>org.luaj:luaj-jse</include>
+
+                            <include>io.netty:netty-common</include>
+                            <include>io.netty:netty-transport</include>
+                            <include>io.netty:netty-handler</include>
+                            <include>io.netty:netty-resolver</include>
+                            <include>io.netty:netty-buffer</include>
+                            <include>io.netty:netty-handler</include>
+                            <include>io.netty:netty-proxy</include>
+                            <include>io.netty:netty-codec</include>
+                            <include>io.netty:netty-codec-mqtt</include>
+                            <include>io.netty:netty-codec-dns</include>
+                            <include>io.netty:netty-resolver-dns</include>
+
+                            <include>io.netty:netty-tcnative-boringssl-static</include>
+                        </includes>
+                    </artifactSet>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

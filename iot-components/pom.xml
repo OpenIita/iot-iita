@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>iotkit-parent</artifactId>
+        <groupId>cc.iotkit</groupId>
+        <version>0.3.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>iot-components</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>iot-component-server</module>
+        <module>iot-component-converter</module>
+        <module>iot-mqtt-component</module>
+        <module>iot-emqx-component</module>
+        <module>iot-component-base</module>
+        <module>iot-http-biz-component</module>
+<!--        <module>iot-ctwing-component</module>-->
+    </modules>
+
+</project>

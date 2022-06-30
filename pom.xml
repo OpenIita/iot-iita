@@ -4,16 +4,16 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>model</module>
-        <module>rule-engine</module>
-        <module>common</module>
-        <module>manager</module>
-        <module>dao</module>
-        <module>protocol-gateway</module>
-        <module>standalone-package</module>
-        <module>oauth2-server</module>
-        <module>virtual-device</module>
-        <module>message-bus</module>
+        <module>iot-rule-engine</module>
+        <module>iot-common</module>
+        <module>iot-standalone</module>
+        <module>iot-components</module>
+        <module>iot-package</module>
+        <module>iot-auth-server</module>
+        <module>iot-virtual-device</module>
+        <module>iot-message-bus</module>
+        <module>iot-test-tool</module>
+        <module>iot-data-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -24,7 +24,7 @@
 
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.3.1-SNAPSHOT</version>
     <name>iotkit-parent</name>
     <description>iotkit parent</description>
     <properties>
@@ -222,73 +222,73 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>model</artifactId>
+                <artifactId>iot-model</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>common</artifactId>
+                <artifactId>iot-dao</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>dao</artifactId>
+                <artifactId>iot-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>rule-engine</artifactId>
+                <artifactId>iot-rule-engine</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>component</artifactId>
+                <artifactId>iot-component-base</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>converter</artifactId>
+                <artifactId>iot-component-converter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>component-server</artifactId>
+                <artifactId>iot-component-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>mqtt-component</artifactId>
+                <artifactId>iot-mqtt-component</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>standalone-package</artifactId>
+                <artifactId>iot-package</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>oauth2-server</artifactId>
+                <artifactId>iot-auth-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>virtual-device</artifactId>
+                <artifactId>iot-virtual-device</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>message-bus</artifactId>
+                <artifactId>iot-message-bus</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

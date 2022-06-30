@@ -1,0 +1,36 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <property name="CONSOLE_LOG_PATTERN"
+                  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%5p}{TRACE=blue, DEBUG=green, INFO=green,
+            WARN=yellow, ERROR=red, FATAL=red} %tid --- [%style{%15.15t}{magenta}] %-40.40logger{39}---[%4L] : %m%n"/>
+        <property name="FILE_LOG_PATTERN"
+                  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %tid --- [%15.15t] %-40.40logger{39}---[%4L] : %m%n"/>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${CONSOLE_LOG_PATTERN}"/>
+        </Console>
+        <RollingRandomAccessFile name="FILE" fileName="logs/logging-log4j2.log" append="true"
+                                 filePattern="logs/logging-log4j2.log.%d{yyyyMMdd}">
+            <PatternLayout>
+                <Pattern>${FILE_LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <AsyncLogger name="cc.iotkit" level="debug" additivity="false" includeLocation="true">
+            <AppenderRef ref="Console"/>
+            <appender-ref ref="FILE"/>
+        </AsyncLogger>
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
