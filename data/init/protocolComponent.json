@@ -17,7 +17,7 @@
     "name": "MQTT标准协议组件",
     "type": "device",
     "protocol": "mqtt",
-    "jarFile": "mqtt-component-0.3.0-SNAPSHOT.jar",
+    "jarFile": "iot-mqtt-component-0.3.1-SNAPSHOT.jar",
     "config": "{\"port\":1883,\"ssl\":false,\"type\":\"server\"}",
     "converter": "6260396d67aced2696184053",
     "state": "running",
