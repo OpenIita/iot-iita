@@ -46,7 +46,7 @@
 
 2、clone代码，在idea中导入项目
 
-3、在manager模块的Application类上右键运行
+3、在iot-standalone模块的Application类上右键运行
 
 
 
