@@ -30,12 +30,12 @@ public class BeanCodec<T> implements MessageCodec<T, T> {
 
     @Override
     public T transform(T o) {
-        return Json.decodeValue(JsonUtil.toJsonString(o), beanType);
+        return JsonUtil.parse(JsonUtil.toJsonString(o), beanType);
     }
 
     @Override
     public String name() {
-        return "beanCodec";
+        return beanType.getSimpleName();
     }
 
     @Override

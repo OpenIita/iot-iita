@@ -79,6 +79,14 @@ public class Gateway extends Device {
             log.info("subscribe topic:{}", topic);
 
             client.subscribe(topic, 1, r -> {
+                //配置获取
+//                String configGetTopic = String.format("/sys/%s/%s/s/config/get", productKey, deviceName);
+//                Request configRequest = new Request();
+//                configRequest.setId(UUID.randomUUID().toString());
+//                String configPayload = JsonUtil.toJsonString(configRequest);
+//                client.publish(configGetTopic, Buffer.buffer(configPayload), MqttQoS.AT_LEAST_ONCE, false, false);
+//                log.info("publish message,topic:{},payload:{}", configGetTopic, configPayload);
+
                 //注册子设备
                 for (Device subDevice : subDevices) {
                     log.info("start register sub device,pk:{},dn:{}", subDevice.getProductKey(), subDevice.getDeviceName());

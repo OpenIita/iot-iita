@@ -20,6 +20,7 @@ import cc.iotkit.manager.model.query.DeviceQuery;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceService;
+import cc.iotkit.model.device.DeviceConfig;
 import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.InvokeResult;
@@ -75,6 +76,8 @@ public class DeviceController {
     private DeviceGroupRepository deviceGroupRepository;
     @Autowired
     private DeviceCache deviceCache;
+    @Autowired
+    private DeviceConfigRepository deviceConfigRepository;
 
     @PostMapping(Constants.API_DEVICE.INVOKE_SERVICE)
     public InvokeResult invokeService(@PathVariable("deviceId") String deviceId,
@@ -392,6 +395,48 @@ public class DeviceController {
         //更新组信息
         deviceGroup.setDeviceQty((int) qty);
         deviceGroupRepository.save(deviceGroup);
+    }
+
+    /**
+     * 保存设备配置
+     */
+    @PostMapping("/config/{deviceId}/save")
+    public void saveConfig(@PathVariable("deviceId") String deviceId, String config) {
+        DeviceInfo deviceInfo = deviceCache.get(deviceId);
+        dataOwnerService.checkOwner(deviceInfo);
+
+        DeviceConfig deviceConfig = deviceConfigRepository.findByDeviceId(deviceId);
+        if (deviceConfig == null) {
+            deviceConfig = DeviceConfig.builder()
+                    .deviceId(deviceId)
+                    .deviceName(deviceInfo.getDeviceName())
+                    .productKey(deviceInfo.getProductKey())
+                    .config(config)
+                    .createAt(System.currentTimeMillis())
+                    .build();
+        } else {
+            deviceConfig.setConfig(config);
+        }
+
+        deviceConfigRepository.save(deviceConfig);
+    }
+
+    /**
+     * 获取设备配置
+     */
+    @GetMapping("/config/{deviceId}/get")
+    public DeviceConfig getConfig(@PathVariable("deviceId") String deviceId) {
+        DeviceInfo deviceInfo = deviceCache.get(deviceId);
+        dataOwnerService.checkOwner(deviceInfo);
+        return deviceConfigRepository.findByDeviceId(deviceId);
+    }
+
+    /**
+     * 设备配置下发
+     */
+    @PostMapping("/config/{deviceId}/send")
+    public InvokeResult sendConfig(@PathVariable("deviceId") String deviceId) {
+        return new InvokeResult(deviceService.sendConfig(deviceId));
     }
 
 }

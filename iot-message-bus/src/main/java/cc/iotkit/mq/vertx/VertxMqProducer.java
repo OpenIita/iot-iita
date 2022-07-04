@@ -52,7 +52,7 @@ public class VertxMqProducer<T> implements MqProducer<T> {
         }
 
         public void publish(String topic, T msg) {
-            eventBus.publish(topic, msg, new DeliveryOptions().setCodecName("beanCodec"));
+            eventBus.publish(topic, msg, new DeliveryOptions().setCodecName(cls.getSimpleName()));
         }
     }
 }

@@ -63,6 +63,30 @@ this.decode = function (msg) {
 	  time: new Date().getTime(),
 	  code: payload.code
 	};
+  }else if(topic.endsWith("/config/set_reply")){
+	//设备配置设置回复
+	return {
+	  mid: msg.mid,
+	  productKey: msg.productKey,
+	  deviceName: msg.deviceName,
+	  type:"config",
+	  identifier: "set_reply",
+	  occur: new Date().getTime(),
+	  time: new Date().getTime(),
+	  code: payload.code
+	};
+  }else if(topic.endsWith("/config/get")){
+	//设备配置获取
+	return {
+	  mid: msg.mid,
+	  productKey: msg.productKey,
+	  deviceName: msg.deviceName,
+	  type:"config",
+	  identifier: "get",
+	  occur: new Date().getTime(),
+	  time: new Date().getTime(),
+	  data: {},
+	};
   } else if (topic.endsWith("_reply")) {
 	//服务回复
 	return {
@@ -119,7 +143,12 @@ this.encode = function (service,device) {
   }else if(type=="service"){
 	method+=identifier;
 	topic+=identifier;
+  }else if(type=="config"){
+	//设备配置下发
+	method+=identifier;
+	topic="/sys/"+service.productKey+"/"+service.deviceName+"/c/config/"+identifier;
   }
+  
   for(var p in service.params){
 	params[p]=service.params[p];
   }

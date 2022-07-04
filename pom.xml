@@ -24,7 +24,7 @@
 
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.3.2-SNAPSHOT</version>
     <name>iotkit-parent</name>
     <description>iotkit parent</description>
     <properties>
@@ -289,6 +289,12 @@
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-message-bus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-device-dao</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
