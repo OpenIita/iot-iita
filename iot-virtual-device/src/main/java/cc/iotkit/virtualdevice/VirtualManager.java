@@ -161,6 +161,7 @@ public class VirtualManager {
                 //更新deviceId的虚拟设备Id对应关系
                 Set<String> virtualIds = deviceIdToVirtualId.getOrDefault(deviceId, new HashSet<>());
                 virtualIds.add(id);
+                //一个真实设备可能会被多个虚拟设备使用
                 deviceIdToVirtualId.put(deviceId, virtualIds);
             }
 
@@ -211,9 +212,14 @@ public class VirtualManager {
         virtualScripts.remove(id);
 
         //更新deviceId的虚拟设备Id对应关系
-        for (String deviceId : deviceIdToVirtualId.keySet()) {
+        Iterator<String> keyIterator = deviceIdToVirtualId.keySet().iterator();
+        while (keyIterator.hasNext()) {
+            String deviceId = keyIterator.next();
             Set<String> virtualIds = deviceIdToVirtualId.get(deviceId);
             virtualIds.remove(id);
+            if (virtualIds.size() == 0) {
+                keyIterator.remove();
+            }
         }
 
         //删除job

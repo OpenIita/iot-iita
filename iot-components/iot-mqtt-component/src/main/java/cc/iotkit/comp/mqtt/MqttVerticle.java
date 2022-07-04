@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.comp.mqtt;
 
 import cc.iotkit.common.exception.BizException;
@@ -13,6 +22,7 @@ import io.vertx.core.net.PemKeyCertOptions;
 import io.vertx.mqtt.*;
 import io.vertx.mqtt.messages.codes.MqttSubAckReasonCode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -122,6 +132,10 @@ public class MqttVerticle extends AbstractVerticle {
                 String payload = message.payload().toString(Charset.defaultCharset());
                 log.info("Received message:{}, with QoS {}", payload,
                         message.qosLevel());
+                if (StringUtils.isBlank(payload)) {
+                    return;
+                }
+
                 try {
                     Map<String, Object> head = new HashMap<>();
                     head.put("topic", message.topicName());

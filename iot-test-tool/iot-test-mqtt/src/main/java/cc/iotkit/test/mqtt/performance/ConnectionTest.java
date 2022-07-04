@@ -33,7 +33,7 @@ public class ConnectionTest {
             Mqtt.brokerHost = args[0];
         }
 
-        int total = 1000;
+        int total = 500;
         if (args.length > 1) {
             total = Integer.parseInt(args[1]);
         }
@@ -46,17 +46,17 @@ public class ConnectionTest {
                 Gateway gateway = new Gateway("hbtgIA0SuVw9lxjB",
                         "TEST:GW:" + StringUtils.leftPad(finalI + "", 6, "0"));
 
-                gateway.addSubDevice("Rf4QSjbm65X45753",
-                        "TEST_SW_" + StringUtils.leftPad(finalI + "", 6, "0"),
-                        "S01");
-
-                gateway.addSubDevice("cGCrkK7Ex4FESAwe",
-                        "TEST_SC_" + StringUtils.leftPad(finalI + "", 6, "0"),
-                        "S01");
-
-                gateway.addSubDevice("xpsYHExTKPFaQMS7",
-                        "TEST_LT_" + StringUtils.leftPad(finalI + "", 6, "0"),
-                        "L01");
+//                gateway.addSubDevice("Rf4QSjbm65X45753",
+//                        "TEST_SW_" + StringUtils.leftPad(finalI + "", 6, "0"),
+//                        "S01");
+//
+//                gateway.addSubDevice("cGCrkK7Ex4FESAwe",
+//                        "TEST_SC_" + StringUtils.leftPad(finalI + "", 6, "0"),
+//                        "S01");
+//
+//                gateway.addSubDevice("xpsYHExTKPFaQMS7",
+//                        "TEST_LT_" + StringUtils.leftPad(finalI + "", 6, "0"),
+//                        "L01");
 
                 gateway.start();
             });

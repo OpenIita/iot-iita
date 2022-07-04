@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.comps.service;
 
 import cc.iotkit.common.Constants;
@@ -194,11 +203,9 @@ public class DeviceBehaviourService {
         if (online) {
             device.getState().setOnline(true);
             device.getState().setOnlineTime(System.currentTimeMillis());
-//            deviceStateHolder.online(device.getDeviceId());
         } else {
             device.getState().setOnline(false);
             device.getState().setOfflineTime(System.currentTimeMillis());
-//            deviceStateHolder.offline(device.getDeviceId());
         }
         deviceInfoRepository.save(device);
 

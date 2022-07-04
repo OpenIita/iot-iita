@@ -9,6 +9,7 @@
  */
 package cc.iotkit.mq.vertx;
 
+import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.mq.ConsumerHandler;
 import cc.iotkit.mq.MqConsumer;
 import io.vertx.core.AbstractVerticle;

@@ -75,6 +75,21 @@ public interface Constants {
     String THING_MODEL_MESSAGE_TOPIC = "device_thing";
 
     /**
+     * 设备属性上报消息的topic
+     */
+    String DEVICE_PROPERTY_REPORT_TOPIC = "device_property_report";
+
+    /**
+     * 不含消息内容的设备上报记录的topic，用于统计
+     */
+    String DEVICE_REPORT_RECORD_TOPIC = "device_report_record";
+
+    /**
+     * 设备配置消息topic
+     */
+    String DEVICE_CONFIG_TOPIC = "device_config";
+
+    /**
      * http消费设备信息的topic
      */
     String HTTP_CONSUMER_DEVICE_INFO_TOPIC = "device_info:";
@@ -102,7 +117,7 @@ public interface Constants {
     /**
      * 三方平台openUid名称
      */
-    enum ThirdOpenUid{
+    enum ThirdOpenUid {
         duerosOpenUid("小度OpenUid"),
         aligenieOpenUid("天猫精灵OpenUid"),
         miiotOpenUid("小爱OpenUid");
@@ -191,7 +206,7 @@ public interface Constants {
         String SET_OPEN_UID = "/setOpenUid";
     }
 
-    interface  MQTT {
+    interface MQTT {
         String DEVICE_SUBSCRIBE_TOPIC = "^/sys/.+/.+/c/#$";
     }
 }
