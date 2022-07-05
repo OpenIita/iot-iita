@@ -6,7 +6,7 @@
 <p align="center"><img  src="https://img.shields.io/badge/JDK-11+-important.svg">  <img  src="https://img.shields.io/badge/Redis-5.0-important.svg"> <img  src="https://img.shields.io/badge/SpringBoot-2.6.2-blue.svg"> <img  src="https://img.shields.io/badge/Elasticsearch-7.15.2-red.svg">  <img  src="https://img.shields.io/badge/Satoken-1.30.0-yellow.svg"> 
 </p>
 <p align="center"><img  src="https://img.shields.io/badge/License-Apache2.0-lightgrey.svg"> 
-<img  src="https://img.shields.io/badge/Copyright-奇特物联/iotkit-60569f.svg"> <img  src="https://img.shields.io/badge/v0.3.1-60569f.svg">
+<img  src="https://img.shields.io/badge/Copyright-奇特物联/iotkit-60569f.svg"> <img  src="https://img.shields.io/badge/v0.3.2-60569f.svg">
 <img  src="https://img.shields.io/badge/物联网平台-f44e91.svg">
 </p>
 
@@ -70,5 +70,10 @@
 
 ![输入图片说明](doc/ma.png)
 
+### roadmap
+
+绿色:已完成,蓝色:进行中,橙色:规划中
+
+![输入图片说明](https://images.gitee.com/uploads/images/2022/0704/113451_70c06321_504690.png)
 
 
