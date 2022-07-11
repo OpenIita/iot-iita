@@ -52,11 +52,10 @@
 
 #### 技术文档
 
-邀你加入「iot平台技术文档」知识库: https://ztktkv.yuque.com/g/ztktkv/gb3v6g/collaborator/join?token=zz5PUmXzGQqc4h9t# 
+https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《iot平台技术文档》密码：vdwe
 
-人数有限，将定期删除较早加入用户。
     
-**这是我宝贵的技术文档分享，请给本仓库点个star  :star:  支持一下，谢谢！** 
+ **这是我宝贵的技术文档分享，请给本仓库点个star**   :star:  **支持一下，谢谢！**  :star:  :star:  :star:  :star: 
 
 
 #### 捐助与支持
