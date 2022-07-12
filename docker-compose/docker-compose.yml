@@ -1,0 +1,68 @@
+version: '1'
+services:
+  redis:
+    image: redis:latest
+    container_name: iotkit-ce-redis
+      ports:
+        - 6379:6379
+    volumes:
+      - redis-volume:/data
+    command: redis-server --appendonly yes --requirepass
+    environment:
+      - TZ=Asia/Shanghai
+  elasticsearch:
+    image: elasticsearch:7.12.0
+    container_name: iotkit-ce-elasticsearch
+    environment:
+      ES_JAVA_OPTS: -Djava.net.preferIPv4Stack=true -Xms1g -Xmx1g
+      transport.host: 0.0.0.0
+      discovery.type: single-node
+      bootstrap.memory_lock: "true"
+      discovery.zen.minimum_master_nodes: 1
+      discovery.zen.ping.unicast.hosts: elasticsearch
+    volumes:
+      - elasticsearch-volume:/usr/share/elasticsearch/data
+      ports:
+        - 9200:9200
+        - 9300:9300
+  ui:
+    image: 填写前端镜像
+    container_name: iotkit-ce-ui
+    ports:
+      - 9001:80
+    environment:
+      - VUE_APP_API_URL=http://iotkit:8086/ #API根路径
+      - VUE_APP_AUTH_URL=http://iotkit:8086/oauth2 #权限认证
+    volumes:
+      - iotkit-volume:/usr/share/nginx/html/upload
+    links:
+      - iotkit:iotkit
+  iotkit:
+    image: 填写后端镜像
+    container_name: iotkit-ce
+    ports:
+      - 8086:8086 # API端口
+      - 1883-1890:1883-1890 # 预留
+      - 8000-8010:8000-8010 # 预留
+    volumes:
+      - iotkit-volume:/app  # 服务根路径
+    environment:
+      - JAVA_OPTS=-Duser.language=zh -XX:+UseG1GC
+      - TZ=Asia/Shanghai
+      - spring.redis.host=redis
+      - spring.redis.port=6379
+      #- spring.redis.password=password
+      - spring.elasticsearch.rest.uris=http://elasticsearch:9200
+      #- spring.elasticsearch.resr.username=admin
+      #- spring.elasticsearch.resr.password=admin
+      - spring.elasticsearch..rest.connection-timeout=10s
+    links:
+      - redis:redis
+      - elasticsearch:elasticsearch
+    depends_on:
+      - redis
+      - elasticsearch
+volumes:
+  redis-volume:
+  elasticsearch-volume:
+  iotkit-volume:
