@@ -12,7 +12,7 @@ package cc.iotkit.manager.service;
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.UserInfoRepository;
+import cc.iotkit.data.IUserInfoData;
 import cc.iotkit.manager.utils.WeChatUtil;
 import cc.iotkit.model.UserInfo;
 import lombok.Data;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 public class WeChatService {
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
+    private IUserInfoData userInfoData;
 
     public String login(String encryptedData, String iv, String loginCode) {
         WxSession wxSession = authCode2Session(Constants.WECHAT_APP_ID, Constants.WECHAT_APP_SECRET, loginCode);
@@ -40,7 +40,7 @@ public class WeChatService {
             throw new RuntimeException("微信授权认证失败:" + wxSession.getErrmsg());
         }
 
-        UserInfo userInfo = userInfoRepository.findById(wxSession.getOpenid()).orElse(null);
+        UserInfo userInfo = userInfoData.findById(wxSession.getOpenid());
         //判断用户表中是否存在该用户，不存在则进行解密得到用户信息，并进行新增用户
         String strUserInfo = WeChatUtil.decryptData(encryptedData, wxSession.getSession_key(), iv);
         if (StringUtils.isEmpty(strUserInfo)) {
@@ -52,7 +52,7 @@ public class WeChatService {
             decryptUser.setId(userInfo.getId());
         }
 //        decryptUser.setId(decryptUser.getOpenId());
-        userInfoRepository.save(decryptUser);
+        userInfoData.save(decryptUser);
 
         try {
             return CodecUtil.aesEncrypt(System.currentTimeMillis() + "_" + wxSession.getOpenid(), Constants.ACCOUNT_SECRET);

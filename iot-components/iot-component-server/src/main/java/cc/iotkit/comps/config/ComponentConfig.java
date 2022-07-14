@@ -1,6 +1,5 @@
 package cc.iotkit.comps.config;
 
-import cc.iotkit.model.device.message.DeviceReport;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.mq.MqConsumer;
 import cc.iotkit.mq.MqProducer;
@@ -54,13 +53,4 @@ public class ComponentConfig {
         return new VertxMqConsumer<>(ThingModelMessage.class);
     }
 
-    @Bean("deviceReportProducer")
-    public MqProducer<DeviceReport> getDeviceReportProducer() {
-        return new VertxMqProducer<>(DeviceReport.class);
-    }
-
-    @Bean("deviceReportConsumer")
-    public MqConsumer<DeviceReport> getDeviceReportConsumer() {
-        return new VertxMqConsumer<>(DeviceReport.class);
-    }
 }

@@ -13,12 +13,12 @@ import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.dao.DeviceCache;
-import cc.iotkit.dao.VirtualDeviceLogRepository;
-import cc.iotkit.dao.VirtualDeviceRepository;
+import cc.iotkit.data.IVirtualDeviceData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.device.VirtualDeviceLog;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.temporal.IVirtualDeviceLogData;
 import cc.iotkit.virtualdevice.trigger.RandomScheduleBuilder;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
@@ -40,7 +40,7 @@ public class VirtualManager {
     private final Map<String, Set<String>> deviceIdToVirtualId = new HashMap<>();
 
     @Autowired
-    private VirtualDeviceRepository virtualDeviceRepository;
+    private IVirtualDeviceData virtualDeviceData;
     @Autowired
     private DeviceCache deviceCache;
     @Autowired
@@ -48,7 +48,7 @@ public class VirtualManager {
     @Autowired
     private DeviceBehaviourService deviceBehaviourService;
     @Autowired
-    private VirtualDeviceLogRepository virtualDeviceLogRepository;
+    private IVirtualDeviceLogData virtualDeviceLogData;
 
 
     @PostConstruct
@@ -123,7 +123,7 @@ public class VirtualManager {
             virtualDeviceLog.setResult(e.getMessage());
             log.error("run VirtualDevice error", e);
         }
-        virtualDeviceLogRepository.save(virtualDeviceLog);
+        virtualDeviceLogData.add(virtualDeviceLog);
     }
 
     /**
@@ -138,9 +138,9 @@ public class VirtualManager {
      * 获取所有虚拟设备
      */
     private List<VirtualDevice> getAllVirtualDevices() {
-        List<VirtualDevice> randomVirtualDevices = virtualDeviceRepository
+        List<VirtualDevice> randomVirtualDevices = virtualDeviceData
                 .findByTriggerAndState(VirtualDevice.TRIGGER_RANDOM, VirtualDevice.STATE_RUNNING);
-        List<VirtualDevice> cronVirtualDevices = virtualDeviceRepository
+        List<VirtualDevice> cronVirtualDevices = virtualDeviceData
                 .findByTriggerAndState(VirtualDevice.TRIGGER_CRON, VirtualDevice.STATE_RUNNING);
         cronVirtualDevices.addAll(randomVirtualDevices);
         return cronVirtualDevices;
@@ -296,7 +296,7 @@ public class VirtualManager {
      * 保存虚拟设备日志
      */
     public void saveLog(VirtualDeviceLog log) {
-        virtualDeviceLogRepository.save(log);
+        virtualDeviceLogData.add(log);
     }
 
 }

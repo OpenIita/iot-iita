@@ -11,7 +11,10 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.*;
+import cc.iotkit.data.ICategoryData;
+import cc.iotkit.data.IProductData;
+import cc.iotkit.data.IProductModelData;
+import cc.iotkit.data.IThingModelData;
 import cc.iotkit.manager.config.AliyunConfig;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.model.Paging;
@@ -26,17 +29,12 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -44,19 +42,17 @@ import java.util.Optional;
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private IProductData productData;
     @Autowired
-    private ThingModelRepository thingModelRepository;
+    private IThingModelData thingModelData;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private ICategoryData categoryData;
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
     private AliyunConfig aliyunConfig;
     @Autowired
-    private ProductModelRepository productModelRepository;
-    @Autowired
-    private CommonDao commonDao;
+    private IProductModelData productModelData;
 
 
     private OSS ossClient;
@@ -64,70 +60,63 @@ public class ProductController {
     @PostMapping("/list/{size}/{page}")
     public Paging<Product> getProducts(
             @PathVariable("size") int size,
-            @PathVariable("page") int page,
-            String id) {
-        Criteria criteria = new Criteria();
-
-        if (StringUtils.isNotBlank(id)) {
-            criteria = criteria.and("id").is(id);
-        }
+            @PathVariable("page") int page) {
         if (!AuthUtil.isAdmin()) {
-            criteria = criteria.and("uid").is(AuthUtil.getUserId());
+            return productData.findByUid(AuthUtil.getUserId(), page - 1, size);
         }
-        return commonDao.pagedFind(Product.class, criteria, Sort.Order.desc("createAt"), size, page);
+
+        return productData.findAll(page - 1, size);
     }
 
     @PostMapping("/save")
     public void save(Product product) {
-        dataOwnerService.checkOwnerSave(productRepository, product);
+        dataOwnerService.checkOwnerSave(productData, product);
 
         if (product.getCreateAt() == null) {
             product.setCreateAt(System.currentTimeMillis());
         }
-        productRepository.save(product);
+        productData.save(product);
     }
 
     @GetMapping("/{productKey}")
     public Product getProduct(@PathVariable("productKey") String productKey) {
-        return dataOwnerService.checkOwner(productRepository.findById(productKey).orElse(new Product()));
+        return dataOwnerService.checkOwner(productData.findById(productKey));
     }
 
     @GetMapping("/thingModel/{productKey}")
     public ThingModel getThingModel(@PathVariable("productKey") String productKey) {
         productKey = getProduct(productKey).getId();
-        return thingModelRepository.findById(productKey).orElse(new ThingModel(productKey));
+        return thingModelData.findById(productKey);
     }
 
     @PostMapping("/thingModel/save")
     public void saveThingModel(String productKey, String model) {
         productKey = getProduct(productKey).getId();
-        thingModelRepository.save(new ThingModel(productKey, productKey, JsonUtil.parse(model, ThingModel.Model.class)));
+        thingModelData.save(new ThingModel(productKey, productKey, JsonUtil.parse(model, ThingModel.Model.class)));
     }
 
     @PostMapping("/thingModel/{productKey}/delete")
     public void deleteThingModel(String productKey) {
         productKey = getProduct(productKey).getId();
-        thingModelRepository.deleteById(productKey);
+        thingModelData.deleteById(productKey);
     }
 
     @GetMapping("/categories")
     public List<Category> getCategories() {
-        List<Category> list = new ArrayList<>();
-        categoryRepository.findAll().forEach(list::add);
-        return list;
+        return categoryData.findAll();
     }
 
     @SaCheckRole("iot_admin")
     @PostMapping("/saveCategory")
     public void saveCategory(Category cate) {
         cate.setCreateAt(System.currentTimeMillis());
-        categoryRepository.save(cate);
+        categoryData.save(cate);
     }
 
     @SaCheckRole("iot_admin")
     @PostMapping("/delCategory")
     public void delCategory(String id) {
-        categoryRepository.deleteById(id);
+        categoryData.deleteById(id);
     }
 
     @SneakyThrows
@@ -155,26 +144,26 @@ public class ProductController {
 
     @GetMapping("/{productKey}/models")
     public List<ProductModel> getModels(@PathVariable("productKey") String productKey) {
-        dataOwnerService.checkOwner(productRepository, productKey);
-        return productModelRepository.findByProductKey(productKey);
+        dataOwnerService.checkOwner(productData, productKey);
+        return productModelData.findByProductKey(productKey);
     }
 
     @PostMapping("/saveProductModel")
     public void saveProductModel(ProductModel productModel) {
         String model = productModel.getModel();
         String productKey = productModel.getProductKey();
-        Optional<Product> optProduct = productRepository.findById(productKey);
-        if (!optProduct.isPresent()) {
+        Product product = productData.findById(productKey);
+        if (product == null) {
             throw new BizException("product does not exist");
         }
-        dataOwnerService.checkOwner(optProduct.get());
+        dataOwnerService.checkOwner(product);
 
-        ProductModel oldScript = productModelRepository.findByModel(model);
+        ProductModel oldScript = productModelData.findByModel(model);
         if (oldScript != null && !oldScript.getProductKey().equals(productKey)) {
             throw new BizException("model already exists");
         }
 
         productModel.setModifyAt(System.currentTimeMillis());
-        productModelRepository.save(productModel);
+        productModelData.save(productModel);
     }
 }

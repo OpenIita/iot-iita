@@ -10,11 +10,11 @@
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.Owned;
 import cc.iotkit.model.device.DeviceInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 public class DataOwnerService {
 
-    public <T extends Owned> T wrapExample(T data) {
+    public <T extends Owned<?>> T wrapExample(T data) {
         if (AuthUtil.isAdmin()) {
             return data;
         }
@@ -66,18 +66,18 @@ public class DataOwnerService {
     /**
      * 从库中取对应数据Id的数据中的uid是否与当前登录用户一致
      */
-    public <T extends Owned> void checkOwner(ElasticsearchRepository<T, String> repository, String id) {
+    public void checkOwner(ICommonData service, Object id) {
         //管理员不限制
         if (AuthUtil.isAdmin()) {
             return;
         }
 
         //数据id为空的新数据
-        if (StringUtils.isBlank(id)) {
+        if (StringUtils.isBlank(id.toString())) {
             return;
         }
 
-        T old = repository.findById(id).orElse(null);
+        Owned<?> old = (Owned<?>) service.findById(id);
         //新数据
         if (old == null) {
             return;
@@ -94,8 +94,8 @@ public class DataOwnerService {
     /**
      * 从库中取对应数据Id的数据中的uid是否与当前登录用户一致，并把当前用户id设置到数据中
      */
-    public <T extends Owned> void checkOwnerSave(ElasticsearchRepository<T, String> repository, T data) {
-        checkOwner(repository, data.getId());
+    public void checkOwnerSave(ICommonData<?, ?> service, Owned<?> data) {
+        checkOwner(service, data.getId());
         data.setUid(AuthUtil.getUserId());
     }
 

@@ -11,7 +11,8 @@ package cc.iotkit.ruleengine.rule;
 
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.dao.DeviceCache;
-import cc.iotkit.dao.RuleInfoRepository;
+import cc.iotkit.data.IRuleInfoData;
+import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.ruleengine.action.*;
@@ -44,7 +45,7 @@ public class RuleManager {
     private RuleMessageHandler ruleMessageHandler;
 
     @Autowired
-    private RuleInfoRepository ruleInfoRepository;
+    private IRuleInfoData ruleInfoData;
 
     @Autowired
     private DeviceCache deviceCache;
@@ -61,9 +62,8 @@ public class RuleManager {
     public void initRules() {
         int idx = 0;
         while (true) {
-            Page<RuleInfo> rules = ruleInfoRepository.findAll(PageRequest.of(idx,
-                    1000, Sort.by(Sort.Order.desc("createAt"))));
-            rules.get().forEach(rule -> {
+            Paging<RuleInfo> rules = ruleInfoData.findAll(idx, 1000);
+            rules.getData().forEach(rule -> {
                 try {
                     //不添加停止的规则
                     if (RuleInfo.STATE_STOPPED.equals(rule.getState())) {
@@ -76,7 +76,7 @@ public class RuleManager {
                 }
             });
             idx++;
-            if (rules.getContent().size() == 0) {
+            if (rules.getTotal() == 0) {
                 break;
             }
         }

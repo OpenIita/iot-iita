@@ -11,14 +11,13 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.dao.ProductCache;
-import cc.iotkit.dao.SpaceDeviceRepository;
+import cc.iotkit.data.ISpaceDeviceData;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.space.SpaceDevice;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import java.util.List;
 @Service
 public class SpaceDeviceService {
     @Autowired
-    private SpaceDeviceRepository spaceDeviceRepository;
+    private ISpaceDeviceData spaceDeviceData;
     @Autowired
     private DeviceCache deviceCache;
     @Autowired
@@ -39,9 +38,9 @@ public class SpaceDeviceService {
         List<SpaceDevice> spaceDevices;
         if (StringUtils.isNotBlank(spaceId)) {
             device.setSpaceId(spaceId);
-            spaceDevices = spaceDeviceRepository.findByUidAndSpaceIdOrderByAddAtDesc(uid, spaceId);
+            spaceDevices = spaceDeviceData.findByUidAndSpaceIdOrderByAddAtDesc(uid, spaceId);
         } else {
-            spaceDevices = spaceDeviceRepository.findBySpaceIdOrderByAddAtDesc(spaceId);
+            spaceDevices = spaceDeviceData.findBySpaceIdOrderByAddAtDesc(spaceId);
         }
 
         List<SpaceDeviceVo> spaceDeviceVos = new ArrayList<>();

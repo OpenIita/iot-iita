@@ -15,12 +15,12 @@ import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.DeviceComponentManager;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.dao.DeviceConfigRepository;
-import cc.iotkit.dao.DeviceInfoRepository;
-import cc.iotkit.dao.ThingModelMessageRepository;
+import cc.iotkit.data.IDeviceConfigData;
+import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceConfig;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.temporal.IThingModelMessageData;
 import cc.iotkit.virtualdevice.VirtualManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ import java.util.Map;
 public class DeviceService {
 
     @Autowired
-    private DeviceInfoRepository deviceInfoRepository;
+    private IDeviceInfoData deviceInfoData;
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
@@ -41,11 +41,11 @@ public class DeviceService {
     @Autowired
     private ThingModelService thingModelService;
     @Autowired
-    private ThingModelMessageRepository thingModelMessageRepository;
+    private IThingModelMessageData thingModelMessageData;
     @Autowired
     private VirtualManager virtualManager;
     @Autowired
-    private DeviceConfigRepository deviceConfigRepository;
+    private IDeviceConfigData deviceConfigData;
 
     /**
      * 设备服务调用
@@ -90,7 +90,7 @@ public class DeviceService {
     public String sendConfig(String deviceId, boolean checkOwner) {
         DeviceInfo device = getAndCheckDevice(deviceId, checkOwner);
 
-        DeviceConfig config = deviceConfigRepository.findByDeviceId(deviceId);
+        DeviceConfig config = deviceConfigData.findByDeviceId(deviceId);
         Map data = JsonUtil.parse(config.getConfig(), Map.class);
 
         return send(deviceId, device.getProductKey(), device.getDeviceName(), data,
@@ -108,8 +108,10 @@ public class DeviceService {
      * 检查设备操作权限和状态
      */
     private DeviceInfo getAndCheckDevice(String deviceId, boolean checkOwner) {
-        DeviceInfo device = deviceInfoRepository.findById(deviceId)
-                .orElseThrow(() -> new NotFoundException("device not found by deviceId"));
+        DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
+        if (device == null) {
+            throw new NotFoundException("device not found by deviceId");
+        }
 
         if (checkOwner) {
             dataOwnerService.checkOwner(device);
@@ -126,7 +128,7 @@ public class DeviceService {
      */
     private String send(String deviceId, String pk, String dn,
                         Object data, String type, String identifier) {
-        ThingService<?> thingService = ThingService.builder()
+        ThingService<Object> thingService = ThingService.builder()
                 .mid(UniqueIdUtil.newRequestId())
                 .productKey(pk)
                 .deviceName(dn)
@@ -160,7 +162,7 @@ public class DeviceService {
                 .occurred(System.currentTimeMillis())
                 .time(System.currentTimeMillis())
                 .build();
-        thingModelMessageRepository.save(thingModelMessage);
+        thingModelMessageData.add(thingModelMessage);
 
         return mid;
     }

@@ -12,10 +12,9 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
-import cc.iotkit.dao.AligenieDeviceRepository;
-import cc.iotkit.dao.HomeRepository;
-import cc.iotkit.dao.SpaceRepository;
-import cc.iotkit.dao.UserInfoRepository;
+import cc.iotkit.data.IHomeData;
+import cc.iotkit.data.ISpaceData;
+import cc.iotkit.data.IUserInfoData;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.space.Home;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -35,15 +33,13 @@ import java.util.UUID;
 public class UserInfoController {
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
-    @Autowired
-    private AligenieDeviceRepository aligenieDeviceRepository;
+    private IUserInfoData userInfoData;
     @Autowired
     private DataOwnerService ownerService;
     @Autowired
-    private HomeRepository homeRepository;
+    private IHomeData homeData;
     @Autowired
-    private SpaceRepository spaceRepository;
+    private ISpaceData spaceData;
 
 
     /**
@@ -52,7 +48,7 @@ public class UserInfoController {
     @SaCheckRole("iot_admin")
     @GetMapping("/platform/users")
     public List<UserInfo> getPlatformUsers() {
-        return userInfoRepository.findByType(UserInfo.USER_TYPE_PLATFORM);
+        return userInfoData.findByType(UserInfo.USER_TYPE_PLATFORM);
     }
 
     /**
@@ -68,7 +64,7 @@ public class UserInfoController {
             user.setPermissions(Collections.singletonList(Constants.PERMISSION_WRITE));
             user.setCreateAt(System.currentTimeMillis());
             user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_SYSTEM_USER));
-            userInfoRepository.save(user);
+            userInfoData.save(user);
         } catch (Throwable e) {
             throw new BizException("add platform user error", e);
         }
@@ -79,7 +75,7 @@ public class UserInfoController {
      */
     @GetMapping("/client/users")
     public List<UserInfo> clientUsers() {
-        return userInfoRepository.findByTypeAndOwnerId(UserInfo.USER_TYPE_CLIENT, AuthUtil.getUserId());
+        return userInfoData.findByTypeAndOwnerId(UserInfo.USER_TYPE_CLIENT, AuthUtil.getUserId());
     }
 
     /**
@@ -92,10 +88,10 @@ public class UserInfoController {
         user.setRoles(Collections.singletonList(Constants.ROLE_CLIENT));
         user.setCreateAt(System.currentTimeMillis());
         user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_CLIENT_USER));
-        user = userInfoRepository.save(user);
+        user = userInfoData.save(user);
 
         //添加默认家庭
-        Home home = homeRepository.save(Home.builder()
+        Home home = homeData.save(Home.builder()
                 .name("我的家庭")
                 .address("")
                 .deviceNum(0)
@@ -106,7 +102,7 @@ public class UserInfoController {
 
         //添加默认房间
         for (String name : new String[]{"客厅", "卧室", "厨房"}) {
-            spaceRepository.save(Space.builder()
+            spaceData.save(Space.builder()
                     .homeId(home.getId())
                     .name(name)
                     .uid(user.getId())
@@ -117,27 +113,23 @@ public class UserInfoController {
 
     @PostMapping("/client/user/{id}/delete")
     public void deleteClientUser(@PathVariable("id") String id) {
-        Optional<UserInfo> optUser = userInfoRepository.findById(id);
-        if (optUser.isEmpty()) {
+        UserInfo user = userInfoData.findById(id);
+        if (user == null) {
             throw new BizException("user does not exist");
         }
-        UserInfo user = optUser.get();
-        ownerService.checkOwner(user);
-        userInfoRepository.deleteById(id);
-        aligenieDeviceRepository.deleteByUid(user.getId());
+        userInfoData.deleteById(id);
     }
 
     @PostMapping("/client/user/save")
     public void saveClientUser(@RequestBody UserInfo user) {
-        Optional<UserInfo> userOpt = userInfoRepository.findById(user.getId());
-        if (userOpt.isEmpty()) {
+        UserInfo oldUser = userInfoData.findById(user.getId());
+        if (oldUser == null) {
             return;
         }
-        UserInfo oldUser = userOpt.get();
         if (!AuthUtil.getUserId().equals(oldUser.getOwnerId())) {
             throw new BizException("无权限操作");
         }
         ReflectUtil.copyNoNulls(user, oldUser);
-        userInfoRepository.save(oldUser);
+        userInfoData.save(oldUser);
     }
 }

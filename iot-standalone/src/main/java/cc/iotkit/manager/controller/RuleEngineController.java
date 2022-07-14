@@ -11,9 +11,9 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
-import cc.iotkit.dao.*;
+import cc.iotkit.data.IRuleInfoData;
+import cc.iotkit.data.ITaskInfoData;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.model.rule.RuleLog;
@@ -21,17 +21,16 @@ import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.rule.TaskLog;
 import cc.iotkit.ruleengine.rule.RuleManager;
 import cc.iotkit.ruleengine.task.TaskManager;
+import cc.iotkit.temporal.IRuleLogData;
+import cc.iotkit.temporal.ITaskLogData;
+import cc.iotkit.utils.AuthUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -40,14 +39,13 @@ import java.util.UUID;
 public class RuleEngineController {
 
     @Autowired
-    private TaskInfoRepository taskInfoRepository;
+    private ITaskInfoData taskInfoData;
 
     @Autowired
-    private RuleInfoRepository ruleInfoRepository;
+    private IRuleInfoData ruleInfoData;
 
-    @Lazy
     @Autowired
-    private RuleLogRepository ruleLogRepository;
+    private IRuleLogData ruleLogData;
 
     @Autowired
     private DataOwnerService dataOwnerService;
@@ -58,9 +56,8 @@ public class RuleEngineController {
     @Autowired
     private RuleManager ruleManager;
 
-    @Lazy
     @Autowired
-    private TaskLogRepository taskLogRepository;
+    private ITaskLogData taskLogData;
 
     @PostMapping("/rules/{type}/{size}/{page}")
     public Paging<RuleInfo> rules(
@@ -70,13 +67,11 @@ public class RuleEngineController {
     ) {
         RuleInfo ruleInfo = new RuleInfo();
         ruleInfo.setType(type);
-        Page<RuleInfo> rules;
         if (AuthUtil.isAdmin()) {
-            rules = ruleInfoRepository.findByType(type, Pageable.ofSize(size).withPage(page - 1));
+            return ruleInfoData.findByType(type, page - 1, size);
         } else {
-            rules = ruleInfoRepository.findByUidAndType(AuthUtil.getUserId(), type, Pageable.ofSize(size).withPage(page - 1));
+            return ruleInfoData.findByUidAndType(AuthUtil.getUserId(), type, page - 1, size);
         }
-        return new Paging<>(rules.getTotalElements(), rules.getContent());
     }
 
     @PostMapping("/rule/save")
@@ -86,14 +81,13 @@ public class RuleEngineController {
             rule.setState(RuleInfo.STATE_STOPPED);
             rule.setCreateAt(System.currentTimeMillis());
             rule.setUid(AuthUtil.getUserId());
-            ruleInfoRepository.save(rule);
+            ruleInfoData.save(rule);
             ruleManager.add(rule);
         } else {
-            Optional<RuleInfo> oldRule = ruleInfoRepository.findById(rule.getId());
-            if (!oldRule.isPresent()) {
+            RuleInfo ruleInfo = ruleInfoData.findById(rule.getId());
+            if (ruleInfo == null) {
                 throw new BizException("Rule does not exist");
             }
-            RuleInfo ruleInfo = oldRule.get();
             if (RuleInfo.STATE_RUNNING.equals(ruleInfo.getState())) {
                 throw new BizException("Rule is running");
             }
@@ -106,47 +100,44 @@ public class RuleEngineController {
             ruleInfo.setName(rule.getName());
             ruleInfo.setDesc(rule.getDesc());
 
-            ruleInfoRepository.save(ruleInfo);
+            ruleInfoData.save(ruleInfo);
         }
     }
 
     @PostMapping("/rule/{ruleId}/pause")
     public void pauseRule(@PathVariable("ruleId") String ruleId) {
-        Optional<RuleInfo> ruleOpt = ruleInfoRepository.findById(ruleId);
-        if (ruleOpt.isEmpty()) {
+        RuleInfo ruleInfo = ruleInfoData.findById(ruleId);
+        if (ruleInfo == null) {
             throw new BizException("Rule does not exist");
         }
-        RuleInfo ruleInfo = ruleOpt.get();
         dataOwnerService.checkOwner(ruleInfo);
         ruleInfo.setState(RuleInfo.STATE_STOPPED);
-        ruleInfoRepository.save(ruleInfo);
+        ruleInfoData.save(ruleInfo);
         ruleManager.pause(ruleInfo.getId());
     }
 
     @PostMapping("/rule/{ruleId}/resume")
     public void resumeRule(@PathVariable("ruleId") String ruleId) {
-        Optional<RuleInfo> ruleOpt = ruleInfoRepository.findById(ruleId);
-        if (ruleOpt.isEmpty()) {
+        RuleInfo ruleInfo = ruleInfoData.findById(ruleId);
+        if (ruleInfo == null) {
             throw new BizException("Rule does not exist");
         }
-        RuleInfo ruleInfo = ruleOpt.get();
         dataOwnerService.checkOwner(ruleInfo);
         ruleInfo.setState(RuleInfo.STATE_RUNNING);
-        ruleInfoRepository.save(ruleInfo);
+        ruleInfoData.save(ruleInfo);
         ruleManager.resume(ruleInfo);
     }
 
     @DeleteMapping("/rule/{ruleId}/delete")
     public void deleteRule(@PathVariable("ruleId") String ruleId) {
-        Optional<RuleInfo> ruleOpt = ruleInfoRepository.findById(ruleId);
-        if (ruleOpt.isEmpty()) {
+        RuleInfo ruleInfo = ruleInfoData.findById(ruleId);
+        if (ruleInfo == null) {
             throw new BizException("Rule does not exist");
         }
-        RuleInfo ruleInfo = ruleOpt.get();
         dataOwnerService.checkOwner(ruleInfo);
-        ruleInfoRepository.delete(ruleInfo);
+        ruleInfoData.deleteById(ruleInfo.getId());
         ruleManager.remove(ruleInfo.getId());
-        ruleLogRepository.deleteByRuleId(ruleId);
+        ruleLogData.deleteByRuleId(ruleId);
     }
 
     @PostMapping("/rule/{ruleId}/logs/{size}/{page}")
@@ -157,24 +148,20 @@ public class RuleEngineController {
     ) {
         RuleLog ruleLog = new RuleLog();
         ruleLog.setRuleId(ruleId);
-        Page<RuleLog> ruleLogs = ruleLogRepository.findByRuleId(ruleId,
-                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("logAt"))));
-        return new Paging<>(ruleLogs.getTotalElements(), ruleLogs.getContent());
+        return ruleLogData.findByRuleId(ruleId, page - 1, size);
     }
 
     @DeleteMapping("/rule/{ruleId}/logs/clear")
     public void clearRuleLogs(@PathVariable("ruleId") String ruleId) {
-        ruleLogRepository.deleteByRuleId(ruleId);
+        ruleLogData.deleteByRuleId(ruleId);
     }
 
     @PostMapping("/tasks")
     public List<TaskInfo> tasks() {
-        List<TaskInfo> list = new ArrayList<>();
         if (AuthUtil.isAdmin()) {
-            taskInfoRepository.findAll().forEach(list::add);
-            return list;
+            return taskInfoData.findAll();
         }
-        return taskInfoRepository.findByUid(AuthUtil.getUserId());
+        return taskInfoData.findByUid(AuthUtil.getUserId());
     }
 
     @PostMapping("/saveTask")
@@ -185,46 +172,43 @@ public class RuleEngineController {
             taskInfo.setCreateAt(System.currentTimeMillis());
             taskInfo.setState(TaskInfo.STATE_STOP);
         } else {
-            Optional<TaskInfo> taskOpt = taskInfoRepository.findById(taskInfo.getId());
-            if (taskOpt.isEmpty()) {
+            TaskInfo oldTask = taskInfoData.findById(taskInfo.getId());
+            if (oldTask == null) {
                 throw new BizException("Task does not exist");
             }
-            TaskInfo oldTask = taskOpt.get();
             taskInfo = ReflectUtil.copyNoNulls(taskInfo, oldTask);
             dataOwnerService.checkOwner(taskInfo);
         }
 
-        taskInfoRepository.save(taskInfo);
+        taskInfoData.save(taskInfo);
     }
 
     @PostMapping("/task/{taskId}/pause")
     public void pauseTask(@PathVariable("taskId") String taskId) {
-        Optional<TaskInfo> optionalTaskInfo = taskInfoRepository.findById(taskId);
-        if (optionalTaskInfo.isEmpty()) {
+        TaskInfo taskInfo = taskInfoData.findById(taskId);
+        if (taskInfo == null) {
             throw new BizException("Task does not exist");
         }
-        dataOwnerService.checkOwner(optionalTaskInfo.get());
+        dataOwnerService.checkOwner(taskInfo);
         taskManager.pauseTask(taskId, "stop by " + AuthUtil.getUserId());
     }
 
     @PostMapping("/task/{taskId}/resume")
     public void resumeTask(@PathVariable("taskId") String taskId) {
-        Optional<TaskInfo> optionalTaskInfo = taskInfoRepository.findById(taskId);
-        if (optionalTaskInfo.isEmpty()) {
+        TaskInfo taskInfo = taskInfoData.findById(taskId);
+        if (taskInfo == null) {
             throw new BizException("Task does not exist");
         }
-        dataOwnerService.checkOwner(optionalTaskInfo.get());
+        dataOwnerService.checkOwner(taskInfo);
         taskManager.resumeTask(taskId, "resume by " + AuthUtil.getUserId());
     }
 
     @PostMapping("/task/{taskId}/renew")
     public void renewTask(@PathVariable("taskId") String taskId) {
-        Optional<TaskInfo> optionalTaskInfo = taskInfoRepository.findById(taskId);
-        if (optionalTaskInfo.isEmpty()) {
+        TaskInfo taskInfo = taskInfoData.findById(taskId);
+        if (taskInfo == null) {
             throw new BizException("Task does not exist");
         }
-        TaskInfo taskInfo = optionalTaskInfo.get();
-
         dataOwnerService.checkOwner(taskInfo);
         try {
             taskManager.renewTask(taskInfo);
@@ -238,16 +222,15 @@ public class RuleEngineController {
 
     @DeleteMapping("/task/{taskId}/delete")
     public void deleteTask(@PathVariable("taskId") String taskId) {
-        Optional<TaskInfo> optionalTaskInfo = taskInfoRepository.findById(taskId);
-        if (optionalTaskInfo.isEmpty()) {
+        TaskInfo taskInfo = taskInfoData.findById(taskId);
+        if (taskInfo == null) {
             throw new BizException("Task does not exist");
         }
-        TaskInfo taskInfo = optionalTaskInfo.get();
 
         dataOwnerService.checkOwner(taskInfo);
         taskManager.deleteTask(taskId, "delete by " + AuthUtil.getUserId());
-        taskInfoRepository.deleteById(taskId);
-        taskLogRepository.deleteByTaskId(taskId);
+        taskInfoData.deleteById(taskId);
+        taskLogData.deleteByTaskId(taskId);
     }
 
     @PostMapping("/task/{taskId}/logs/{size}/{page}")
@@ -258,14 +241,12 @@ public class RuleEngineController {
     ) {
         TaskLog taskLog = new TaskLog();
         taskLog.setTaskId(taskId);
-        Page<TaskLog> taskLogs = taskLogRepository.findByTaskId(taskId,
-                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("logAt"))));
-        return new Paging<>(taskLogs.getTotalElements(), taskLogs.getContent());
+        return taskLogData.findByTaskId(taskId, page - 1, size);
     }
 
     @DeleteMapping("/task/{taskId}/logs/clear")
     public void clearTaskLogs(@PathVariable("taskId") String taskId) {
-        taskLogRepository.deleteByTaskId(taskId);
+        taskLogData.deleteByTaskId(taskId);
     }
 
 }

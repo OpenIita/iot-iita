@@ -25,7 +25,7 @@ import cc.iotkit.converter.ScriptConverter;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.dao.ProductCache;
-import cc.iotkit.dao.ProtocolComponentRepository;
+import cc.iotkit.data.IProtocolComponentData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
@@ -60,7 +60,7 @@ public class DeviceComponentManager {
     @Autowired
     private ComponentConfig componentConfig;
     @Autowired
-    private ProtocolComponentRepository componentRepository;
+    private IProtocolComponentData protocolComponentData;
     @Autowired
     private DeviceCache deviceCache;
     @Autowired
@@ -71,7 +71,7 @@ public class DeviceComponentManager {
     @PostConstruct
     public void init() {
         try {
-            List<ProtocolComponent> componentList = componentRepository.findByStateAndType(
+            List<ProtocolComponent> componentList = protocolComponentData.findByStateAndType(
                     ProtocolComponent.STATE_RUNNING, ProtocolComponent.TYPE_DEVICE);
             for (ProtocolComponent component : componentList) {
                 register(component);

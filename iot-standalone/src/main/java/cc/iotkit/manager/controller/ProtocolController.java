@@ -14,20 +14,17 @@ import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.comps.ComponentManager;
 import cc.iotkit.comps.config.ComponentConfig;
-import cc.iotkit.dao.ProtocolComponentRepository;
-import cc.iotkit.dao.ProtocolConverterRepository;
-import cc.iotkit.dao.UserInfoRepository;
+import cc.iotkit.data.IProtocolComponentData;
+import cc.iotkit.data.IProtocolConverterData;
+import cc.iotkit.data.IUserInfoData;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import cc.iotkit.model.protocol.ProtocolConverter;
+import cc.iotkit.utils.AuthUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -47,16 +44,16 @@ public class ProtocolController {
     private ComponentConfig componentConfig;
 
     @Autowired
-    private ProtocolComponentRepository protocolComponentRepository;
+    private IProtocolComponentData protocolComponentData;
 
     @Autowired
-    private ProtocolConverterRepository protocolConverterRepository;
+    private IProtocolConverterData protocolConverterData;
 
     @Autowired
     private DataOwnerService dataOwnerService;
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
+    private IUserInfoData userInfoData;
 
     @Autowired
     private ComponentManager componentManager;
@@ -69,7 +66,7 @@ public class ProtocolController {
             throw new BizException("file is null");
         }
         log.info("saving upload jar file:{}", file.getName());
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         try {
             if (StringUtils.hasLength(id)) {
                 getAndCheckComponent(id);
@@ -97,14 +94,14 @@ public class ProtocolController {
             throw new BizException("component jar file does not exist");
         }
 
-        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(id);
-        if (optComponent.isPresent()) {
+        ProtocolComponent protocolComponent = protocolComponentData.findById(id);
+        if (protocolComponent == null) {
             throw new BizException("component already exists");
         }
         try {
             component.setCreateAt(System.currentTimeMillis());
             component.setUid(AuthUtil.getUserId());
-            protocolComponentRepository.save(component);
+            protocolComponentData.save(component);
         } catch (Throwable e) {
             throw new BizException("add protocol component error", e);
         }
@@ -126,7 +123,7 @@ public class ProtocolController {
 
         try {
             componentManager.deRegister(id);
-            protocolComponentRepository.save(component);
+            protocolComponentData.save(component);
         } catch (Throwable e) {
             throw new BizException("add protocol component error", e);
         }
@@ -163,11 +160,10 @@ public class ProtocolController {
     }
 
     private ProtocolComponent getAndCheckComponent(@PathVariable("id") String id) {
-        Optional<ProtocolComponent> optComponent = protocolComponentRepository.findById(id);
-        if (!optComponent.isPresent()) {
+        ProtocolComponent oldComponent = protocolComponentData.findById(id);
+        if (oldComponent == null) {
             throw new BizException("the component does not exists");
         }
-        ProtocolComponent oldComponent = optComponent.get();
         dataOwnerService.checkOwner(oldComponent);
         return oldComponent;
     }
@@ -190,7 +186,7 @@ public class ProtocolController {
             } catch (NoSuchFileException e) {
                 log.warn("delete component script error", e);
             }
-            protocolComponentRepository.deleteById(component.getId());
+            protocolComponentData.deleteById(component.getId());
         } catch (Throwable e) {
             throw new BizException("delete protocol component error", e);
         }
@@ -200,22 +196,19 @@ public class ProtocolController {
     public Paging<ProtocolComponent> getComponents(
             @PathVariable("size") int size,
             @PathVariable("page") int page) {
-        Page<ProtocolComponent> components = protocolComponentRepository.findAll(
-                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))));
-        components.getContent().forEach(c -> c.setState(
+        Paging<ProtocolComponent> components = protocolComponentData.findAll(page - 1, size);
+        components.getData().forEach(c -> c.setState(
                 componentManager.isRunning(c.getId()) ?
                         ProtocolComponent.STATE_RUNNING : ProtocolComponent.STATE_STOPPED
         ));
-        return new Paging<>(components.getTotalElements(), components.getContent());
+        return components;
     }
 
     @PostMapping("/converters/{size}/{page}")
     public Paging<ProtocolConverter> getConverters(
             @PathVariable("size") int size,
             @PathVariable("page") int page) {
-        Page<ProtocolConverter> converters = protocolConverterRepository.findAll(
-                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt"))));
-        return new Paging<>(converters.getTotalElements(), converters.getContent());
+        return protocolConverterData.findAll(page - 1, size);
     }
 
     @PostMapping("/addConverter")
@@ -224,7 +217,7 @@ public class ProtocolController {
             converter.setId(null);
             converter.setCreateAt(System.currentTimeMillis());
             converter.setUid(AuthUtil.getUserId());
-            protocolConverterRepository.save(converter);
+            protocolConverterData.save(converter);
         } catch (Throwable e) {
             throw new BizException("add protocol converter error", e);
         }
@@ -235,19 +228,18 @@ public class ProtocolController {
         ProtocolConverter oldConverter = getAndCheckConverter(converter.getId());
         converter = ReflectUtil.copyNoNulls(converter, oldConverter);
         try {
-            protocolConverterRepository.save(converter);
+            protocolConverterData.save(converter);
         } catch (Throwable e) {
             throw new BizException("add protocol converter error", e);
         }
     }
 
     private ProtocolConverter getAndCheckConverter(String id) {
-        Optional<ProtocolConverter> optConverter = protocolConverterRepository.findById(id);
-        if (!optConverter.isPresent()) {
+        ProtocolConverter converter = protocolConverterData.findById(id);
+        if (converter == null) {
             throw new BizException("the protocol converter does not exists");
         }
 
-        ProtocolConverter converter = optConverter.get();
         dataOwnerService.checkOwner(converter);
         return converter;
     }
@@ -296,7 +288,7 @@ public class ProtocolController {
             } catch (NoSuchFileException e) {
                 log.warn("delete converter script error", e);
             }
-            protocolConverterRepository.deleteById(id);
+            protocolConverterData.deleteById(id);
         } catch (Throwable e) {
             throw new BizException("delete protocol converter error", e);
         }
@@ -319,7 +311,7 @@ public class ProtocolController {
             componentManager.deRegister(id);
             component.setState(ProtocolComponent.STATE_STOPPED);
         }
-        protocolComponentRepository.save(component);
+        protocolComponentData.save(component);
     }
 
 }

@@ -13,7 +13,7 @@
         <module>iot-virtual-device</module>
         <module>iot-message-bus</module>
         <module>iot-test-tool</module>
-        <module>iot-data-service</module>
+        <module>iot-data</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -24,7 +24,7 @@
 
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>0.3.3-SNAPSHOT</version>
     <name>iotkit-parent</name>
     <description>iotkit parent</description>
     <properties>
@@ -77,7 +77,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.22</version>
+                <version>1.18.24</version>
             </dependency>
 
             <dependency>
@@ -294,7 +294,31 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-device-dao</artifactId>
+                <artifactId>iot-data-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-temporal-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-es-temporal-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-data-cache</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-rdb-data-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
