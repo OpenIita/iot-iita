@@ -71,7 +71,7 @@ function subRegister(topic,parent,payload){
 		content:{
 		  topic:topic.replace("/s/","/c/")+"_reply",
 		  payload:JSON.stringify({
-			id:payload.id,
+			id:"0",
 			code:0,
 			data:{
 			  "productKey":params.productKey,
