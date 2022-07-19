@@ -30,6 +30,7 @@ import com.aliyun.oss.model.PutObjectResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +43,7 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
+    @Qualifier("productDataCache")
     private IProductData productData;
     @Autowired
     private IThingModelData thingModelData;
@@ -62,10 +64,10 @@ public class ProductController {
             @PathVariable("size") int size,
             @PathVariable("page") int page) {
         if (!AuthUtil.isAdmin()) {
-            return productData.findByUid(AuthUtil.getUserId(), page - 1, size);
+            return productData.findByUid(AuthUtil.getUserId(), page, size);
         }
 
-        return productData.findAll(page - 1, size);
+        return productData.findAll(page, size);
     }
 
     @PostMapping("/save")

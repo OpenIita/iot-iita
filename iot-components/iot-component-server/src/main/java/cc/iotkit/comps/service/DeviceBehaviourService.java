@@ -16,7 +16,6 @@ import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
-import cc.iotkit.dao.*;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductModelData;
 import cc.iotkit.data.IProductData;
@@ -28,6 +27,7 @@ import cc.iotkit.mq.MqProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -41,14 +41,12 @@ public class DeviceBehaviourService {
     @Autowired
     private IProductModelData productModelData;
     @Autowired
-    private ProductCache productCache;
-    @Autowired
+    @Qualifier("deviceInfoDataCache")
     private IDeviceInfoData deviceInfoData;
-    @Autowired
-    private DeviceCache deviceCache;
     @Autowired
     private MqProducer<ThingModelMessage> producer;
     @Autowired
+    @Qualifier("productDataCache")
     private IProductData productData;
 
     public void register(RegisterInfo info) {
@@ -187,13 +185,16 @@ public class DeviceBehaviourService {
         }
         deviceStateChange(device, online);
 
+        //父设备ID不为空说明是子设备
         if (device.getParentId() != null) {
             return;
         }
 
-        List<DeviceInfo> subDevices = deviceInfoData.findByParentId(device.getDeviceId());
-        for (DeviceInfo subDevice : subDevices) {
-            Product product = productCache.findById(subDevice.getProductKey());
+        //否则为父设备，同步透传子设备状态
+        List<String> subDeviceIds = deviceInfoData.findSubDeviceIds(device.getDeviceId());
+        for (String subDeviceId : subDeviceIds) {
+            DeviceInfo subDevice=deviceInfoData.findByDeviceId(subDeviceId);
+            Product product = productData.findById(subDevice.getProductKey());
             Boolean transparent = product.getTransparent();
             //透传设备父设备上线，子设备也上线。非透传设备父设备离线，子设备才离线
             if (transparent != null && transparent || !online) {
@@ -229,8 +230,8 @@ public class DeviceBehaviourService {
 
     public void reportMessage(ThingModelMessage message) {
         try {
-            DeviceInfo device = deviceCache.getDeviceInfo(message.getProductKey(),
-                    message.getDeviceName());
+            DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(
+                    message.getProductKey(), message.getDeviceName());
             if (device == null) {
                 return;
             }

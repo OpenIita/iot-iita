@@ -2,6 +2,7 @@ package cc.iotkit.data.model;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -26,6 +27,7 @@ public class TbDeviceConfig {
     /**
      * 设备配置json内容
      */
+    @Column(columnDefinition = "text")
     private String config;
 
     private Long createAt;

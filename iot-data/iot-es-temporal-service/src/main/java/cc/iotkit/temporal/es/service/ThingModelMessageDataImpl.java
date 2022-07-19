@@ -17,6 +17,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
 
     @Override
     public List<TimeData> getDeviceMessageStatsWithUid(String uid, long start, long end) {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

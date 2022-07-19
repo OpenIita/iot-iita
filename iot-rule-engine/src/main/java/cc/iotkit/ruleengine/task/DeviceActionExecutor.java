@@ -10,7 +10,6 @@
 package cc.iotkit.ruleengine.task;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.DeviceCache;
 import cc.iotkit.ruleengine.action.DeviceAction;
 import cc.iotkit.ruleengine.action.DeviceActionService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DeviceActionExecutor implements ActionExecutor<DeviceAction> {
 
     @Autowired
-    private DeviceCache deviceCache;
-    @Autowired
     private DeviceActionService deviceActionService;
 
     private Map<Integer, DeviceAction> actionMap = new ConcurrentHashMap<>();
@@ -47,9 +44,11 @@ public class DeviceActionExecutor implements ActionExecutor<DeviceAction> {
             return;
         }
         //将执行的数据转换为动作配置
-        DeviceAction action = actionMap.putIfAbsent(config.hashCode(), JsonUtil.parse(config, DeviceAction.class));
+        Integer code = config.hashCode();
+        DeviceAction action = actionMap.get(code);
         if (action == null) {
-            return;
+            action = JsonUtil.parse(config, DeviceAction.class);
+            actionMap.put(code, action);
         }
 
         log.info("start device service invoke,{}", JsonUtil.toJsonString(action));

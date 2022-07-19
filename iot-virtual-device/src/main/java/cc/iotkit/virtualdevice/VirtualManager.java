@@ -12,7 +12,7 @@ package cc.iotkit.virtualdevice;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comps.service.DeviceBehaviourService;
-import cc.iotkit.dao.DeviceCache;
+import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IVirtualDeviceData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.VirtualDevice;
@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.annotation.PostConstruct;
 import javax.script.ScriptEngineManager;
@@ -42,7 +43,8 @@ public class VirtualManager {
     @Autowired
     private IVirtualDeviceData virtualDeviceData;
     @Autowired
-    private DeviceCache deviceCache;
+    @Qualifier("deviceInfoDataCache")
+    private IDeviceInfoData deviceInfoData;
     @Autowired
     private Scheduler scheduler;
     @Autowired
@@ -53,10 +55,15 @@ public class VirtualManager {
 
     @PostConstruct
     public void init() {
-        List<VirtualDevice> virtualDevices = getAllVirtualDevices();
-        for (VirtualDevice virtualDevice : virtualDevices) {
-            addTask(virtualDevice);
-        }
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                List<VirtualDevice> virtualDevices = getAllVirtualDevices();
+                for (VirtualDevice virtualDevice : virtualDevices) {
+                    addTask(virtualDevice);
+                }
+            }
+        }, 8000);
     }
 
     /**
@@ -70,7 +77,7 @@ public class VirtualManager {
      * 调用虚拟设备下发
      */
     public void send(ThingService<?> service) {
-        DeviceInfo deviceInfo = deviceCache.getDeviceInfo(service.getProductKey(), service.getDeviceName());
+        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(service.getProductKey(), service.getDeviceName());
         String deviceId = deviceInfo.getDeviceId();
 
         //根据设备Id取虚拟设备列表
@@ -116,7 +123,7 @@ public class VirtualManager {
         try {
             Object scriptObj = engine.eval(String.format("new (function () {\n%s})()", virtualDevice.getScript()));
             for (String deviceId : devices) {
-                DeviceInfo device = deviceCache.get(deviceId);
+                DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
                 processReport(invokeMethod(scriptObj, "report", device));
             }
         } catch (Throwable e) {
@@ -157,7 +164,7 @@ public class VirtualManager {
             virtualScripts.put(id, engine.eval(String.format("new (function () {\n%s})()", script)));
             List<DeviceInfo> devices = new ArrayList<>();
             for (String deviceId : virtualDevice.getDevices()) {
-                devices.add(deviceCache.get(deviceId));
+                devices.add(deviceInfoData.findByDeviceId(deviceId));
                 //更新deviceId的虚拟设备Id对应关系
                 Set<String> virtualIds = deviceIdToVirtualId.getOrDefault(deviceId, new HashSet<>());
                 virtualIds.add(id);

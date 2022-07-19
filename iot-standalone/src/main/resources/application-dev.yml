@@ -8,7 +8,6 @@ spring:
       max-file-size: 10MB
       max-request-size: 12MB
 
-
   # <<=======内置H2数据库连接设置开始==========
   #  jpa:
   #    show-sql: true
@@ -43,8 +42,8 @@ spring:
     testOnBorrow: true
   jpa:
     database: MySQL
-    database-platform: org.hibernate.dialect.MySQL5Dialect
-    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    show-sql: true
     hibernate:
       ddl-auto: update
     properties:

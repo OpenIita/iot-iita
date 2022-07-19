@@ -8,7 +8,7 @@
     "jarFile": "http-biz-component-0.1.0-SNAPSHOT.jar",
     "config": "{\"port\":\"8086\"}",
     "converter": "6260396d67aced2696184053",
-    "state": "running",
+    "state": "stopped",
     "createAt": 1652238780184
   },
   {
@@ -44,7 +44,7 @@
     "jarFile": "emqx-component-0.2.1-SNAPSHOT.jar",
     "config": "{\"port\":\"1884\",\"ssl\":false,\"type\":\"client\",\"subscribeTopics\":[\"/sys/+/+/s/#\",\"/sys/client/connected\",\"/sys/client/disconnected\",\"/sys/session/subscribed\",\"/sys/session/unsubscribed\"],\"authPort\":\"8088\",\"broker\":\"127.0.0.1\",\"clientId\":\"test\",\"username\":\"test\",\"password\":\"123\"}",
     "converter": "6260396d67aced2696184053",
-    "state": "running",
+    "state": "stopped",
     "createAt": 1653180468724
   },
   {
@@ -56,7 +56,7 @@
     "jarFile": "http-biz-component-0.1.0-SNAPSHOT.jar",
     "config": "{\"port\":\"8084\"}",
     "converter": "",
-    "state": "running",
+    "state": "stopped",
     "createAt": 1650685502665
   }
 ]

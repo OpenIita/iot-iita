@@ -23,8 +23,8 @@ import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.converter.ScriptConverter;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.dao.DeviceCache;
-import cc.iotkit.dao.ProductCache;
+import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.data.IProductData;
 import cc.iotkit.data.IProtocolComponentData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
@@ -34,6 +34,7 @@ import cc.iotkit.model.protocol.ProtocolConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -62,23 +63,25 @@ public class DeviceComponentManager {
     @Autowired
     private IProtocolComponentData protocolComponentData;
     @Autowired
-    private DeviceCache deviceCache;
+    @Qualifier("productDataCache")
+    IProductData productData;
     @Autowired
-    ProductCache productCache;
+    @Qualifier("deviceInfoDataCache")
+    private IDeviceInfoData deviceInfoData;
     @Autowired
     private DeviceRouter deviceRouter;
 
     @PostConstruct
     public void init() {
-        try {
-            List<ProtocolComponent> componentList = protocolComponentData.findByStateAndType(
-                    ProtocolComponent.STATE_RUNNING, ProtocolComponent.TYPE_DEVICE);
-            for (ProtocolComponent component : componentList) {
+        List<ProtocolComponent> componentList = protocolComponentData.findByStateAndType(
+                ProtocolComponent.STATE_RUNNING, ProtocolComponent.TYPE_DEVICE);
+        for (ProtocolComponent component : componentList) {
+            try {
                 register(component);
                 start(component.getId());
+            } catch (Throwable e) {
+                log.error("init protocol components error", e);
             }
-        } catch (Throwable e) {
-            log.error("init protocol components error", e);
         }
     }
 
@@ -170,14 +173,14 @@ public class DeviceComponentManager {
             throw new BizException("there is no components");
         }
 
-        DeviceInfo deviceInfo = deviceCache.getDeviceInfo(service.getProductKey(), service.getDeviceName());
-        Product product = productCache.findById(service.getProductKey());
+        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(service.getProductKey(), service.getDeviceName());
+        Product product = productData.findById(service.getProductKey());
         String linkPk = service.getProductKey();
         String linkDn = service.getDeviceName();
 
         if (product.isTransparent()) {
             //如果是透传设备，取父级设备进行链路查找
-            DeviceInfo parent = deviceCache.get(deviceInfo.getParentId());
+            DeviceInfo parent = deviceInfoData.findByDeviceId(deviceInfo.getParentId());
             linkPk = parent.getProductKey();
             linkDn = parent.getDeviceName();
         }

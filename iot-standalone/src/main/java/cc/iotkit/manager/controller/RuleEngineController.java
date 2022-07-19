@@ -68,9 +68,9 @@ public class RuleEngineController {
         RuleInfo ruleInfo = new RuleInfo();
         ruleInfo.setType(type);
         if (AuthUtil.isAdmin()) {
-            return ruleInfoData.findByType(type, page - 1, size);
+            return ruleInfoData.findByType(type, page, size);
         } else {
-            return ruleInfoData.findByUidAndType(AuthUtil.getUserId(), type, page - 1, size);
+            return ruleInfoData.findByUidAndType(AuthUtil.getUserId(), type, page, size);
         }
     }
 
@@ -241,7 +241,7 @@ public class RuleEngineController {
     ) {
         TaskLog taskLog = new TaskLog();
         taskLog.setTaskId(taskId);
-        return taskLogData.findByTaskId(taskId, page - 1, size);
+        return taskLogData.findByTaskId(taskId, page, size);
     }
 
     @DeleteMapping("/task/{taskId}/logs/clear")

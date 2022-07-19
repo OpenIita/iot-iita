@@ -7,9 +7,12 @@ import cc.iotkit.data.model.*;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.stats.DataItem;
-import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Primary
 @Service
 public class DeviceInfoDataImpl implements IDeviceInfoData {
 
@@ -34,12 +38,20 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     private JdbcTemplate jdbcTemplate;
 
     @Override
+    public void saveProperties(String deviceId, Map<String, Object> properties) {
+    }
+
+    @Override
+    public Map<String, Object> getProperties(String deviceId) {
+        return new HashMap<>();
+    }
+
+    @Override
     public DeviceInfo findByDeviceId(String deviceId) {
         TbDeviceInfo tbDeviceInfo = deviceInfoRepository.findByDeviceId(deviceId);
         DeviceInfo dto = DeviceInfoMapper.M.toDto(tbDeviceInfo);
 
         fillDeviceInfo(deviceId, tbDeviceInfo, dto);
-
         return dto;
     }
 
@@ -97,6 +109,9 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
      * 将数据库中查出来的vo转为dto
      */
     private DeviceInfo parseVoToDto(TbDeviceInfo vo) {
+        if (vo == null) {
+            return null;
+        }
         DeviceInfo dto = DeviceInfoMapper.M.toDto(vo);
         fillDeviceInfo(vo.getDeviceId(), vo, dto);
         return dto;
@@ -121,6 +136,13 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     @Override
     public List<DeviceInfo> findByParentId(String parentId) {
         return parseVoToDto(deviceInfoRepository.findByParentId(parentId));
+    }
+
+    @Override
+    public List<String> findSubDeviceIds(String parentId) {
+        return jdbcTemplate.queryForList(
+                "select device_id from device_info " +
+                        "where parent_id=?", String.class, parentId);
     }
 
     @Override
@@ -185,6 +207,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
             keyword = "%" + keyword.trim() + "%";
             sql += "and (a.device_id like ? or a.device_name like ?) ";
             args.add(keyword);
+            args.add(keyword);//两个参数
         }
 
         sql += String.format("order by create_at desc limit %d,%d", (page - 1) * size, size);
@@ -206,32 +229,34 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
                 .createAt(rs.getLong("create_at"))
                 .build(), args.toArray());
 
-        sql = sql.replaceAll("SELECT.*FROM", "SELECT count(*) FROM ");
+        sql = sql.replaceAll("SELECT[\\s\\S]+FROM", "SELECT count(*) FROM ");
         sql = sql.replaceAll("order by create_at desc limit.*", "");
-        Long total = jdbcTemplate.queryForObject(sql, Long.class, args);
+        Long total = jdbcTemplate.queryForObject(sql, Long.class, args.toArray());
 
         //把当前页的deviceId串连起来作为in的参数
         String deviceIds = list.stream().map(d -> "'" + d.getDeviceId() + "'").collect(Collectors.joining(","));
 
         //取设备所属分组
-        List<DeviceIdGroup> groups = jdbcTemplate.queryForList("SELECT \n" +
-                "a.id,\n" +
-                "a.`name` \n" +
-                "b.device_id as deviceId \n" +
-                "FROM\n" +
-                "device_group a \n" +
-                "JOIN device_group_mapping b on a.id=b.group_id\n" +
-                String.format("WHERE b.device_id in(%s)", deviceIds), DeviceIdGroup.class);
+        List<DeviceIdGroup> groups = list.size() == 0 ? new ArrayList<>() :
+                jdbcTemplate.query("SELECT \n" +
+                        "a.id,\n" +
+                        "a.`name`, \n" +
+                        "b.device_id as deviceId \n" +
+                        "FROM\n" +
+                        "device_group a \n" +
+                        "JOIN device_group_mapping b on a.id=b.group_id\n" +
+                        String.format("WHERE b.device_id in(%s)", deviceIds), new BeanPropertyRowMapper<>(DeviceIdGroup.class));
 
         //取设备标签
-        List<TbDeviceTag> tags = jdbcTemplate.queryForList("\n" +
-                "SELECT\n" +
-                "a.id,\n" +
-                "a.`code`,\n" +
-                "a.`name`,\n" +
-                "a.`value`\n" +
-                "FROM device_tag a " +
-                String.format("WHERE a.device_id IN(%s)", deviceIds), TbDeviceTag.class);
+        List<TbDeviceTag> tags = list.size() == 0 ? new ArrayList<>() :
+                jdbcTemplate.query("\n" +
+                        "SELECT\n" +
+                        "a.id,\n" +
+                        "a.`code`,\n" +
+                        "a.`name`,\n" +
+                        "a.`value`\n" +
+                        "FROM device_tag a " +
+                        String.format("WHERE a.device_id IN(%s)", deviceIds), new BeanPropertyRowMapper<>(TbDeviceTag.class));
 
         for (DeviceInfo device : list) {
             //设置设备分组
@@ -303,13 +328,13 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
 
     @Override
     public void updateGroup(String groupId, DeviceInfo.Group group) {
-        deviceGroupRepository.save(new TbDeviceGroup());
+        //更新设备信息中的分组信息，关系数据库中不需要实现
     }
 
     @Override
     @Transactional
     public void removeGroup(String deviceId, String groupId) {
-        jdbcTemplate.update("delete device_group_mapping " +
+        jdbcTemplate.update("delete from device_group_mapping " +
                 "where device_id=? and group_id=?", deviceId, groupId);
         //更新设备数量
         updateGroupDeviceCount(groupId);
@@ -318,7 +343,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     @Override
     @Transactional
     public void removeGroup(String groupId) {
-        jdbcTemplate.update("delete device_group_mapping " +
+        jdbcTemplate.update("delete from device_group_mapping " +
                 "where group_id=?", groupId);
         //更新设备数量
         updateGroupDeviceCount(groupId);
@@ -402,13 +427,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
 
     @Override
     public Paging<DeviceInfo> findAll(int page, int size) {
-        return new Paging<>();
+        Page<TbDeviceInfo> paged = deviceInfoRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
+        return new Paging<>(paged.getTotalElements(), parseVoToDto(paged.getContent()));
     }
 
-    @Data
-    public static class DeviceIdGroup {
-        private String id;
-        private String deviceId;
-        private String name;
-    }
 }

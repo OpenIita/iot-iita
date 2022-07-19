@@ -44,7 +44,6 @@ public class VirtualDeviceController {
             @PathVariable("size") int size,
             @PathVariable("page") int page) {
         String uid = AuthUtil.getUserId();
-        page = page - 1;
         if (AuthUtil.isAdmin()) {
             return virtualDeviceData.findAll(page, size);
         } else {

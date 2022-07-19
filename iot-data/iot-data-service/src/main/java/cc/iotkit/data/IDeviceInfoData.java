@@ -14,8 +14,24 @@ import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.stats.DataItem;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
+
+    /**
+     * 保存设备属性
+     *
+     * @param deviceId   设备id
+     * @param properties 设备属性map
+     */
+    void saveProperties(String deviceId, Map<String, Object> properties);
+
+    /**
+     * 获取设备属性map
+     *
+     * @param deviceId 设备id
+     */
+    Map<String, Object> getProperties(String deviceId);
 
     /**
      * 根据设备ID取设备信息
@@ -35,6 +51,13 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
      * @param parentId 父设备ID
      */
     List<DeviceInfo> findByParentId(String parentId);
+
+    /**
+     * 根据父设备ID取子设备ID列表
+     *
+     * @param parentId 父设备ID
+     */
+    List<String> findSubDeviceIds(String parentId);
 
     /**
      * 根据deviceName查找设备

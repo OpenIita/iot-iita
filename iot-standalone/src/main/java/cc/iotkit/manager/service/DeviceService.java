@@ -24,6 +24,7 @@ import cc.iotkit.temporal.IThingModelMessageData;
 import cc.iotkit.virtualdevice.VirtualManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -33,6 +34,7 @@ import java.util.Map;
 public class DeviceService {
 
     @Autowired
+    @Qualifier("deviceInfoDataCache")
     private IDeviceInfoData deviceInfoData;
     @Autowired
     private DataOwnerService dataOwnerService;

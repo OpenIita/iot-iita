@@ -8,6 +8,7 @@ import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Primary
 @Service
 public class DeviceGroupDataImpl implements IDeviceGroupData {
 
@@ -24,7 +26,8 @@ public class DeviceGroupDataImpl implements IDeviceGroupData {
 
     @Override
     public Paging<DeviceGroup> findByNameLike(String name, int page, int size) {
-        Page<TbDeviceGroup> groups = deviceGroupRepository.findByNameLike(name, Pageable.ofSize(size).withPage(page - 1));
+        Page<TbDeviceGroup> groups = deviceGroupRepository.findByNameLike("%" + name.trim() + "%",
+                Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(groups.getTotalElements(), groups.getContent()
                 .stream().map(DeviceGroupMapper.M::toDto)
                 .collect(Collectors.toList()));

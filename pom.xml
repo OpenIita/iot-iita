@@ -24,7 +24,7 @@
 
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
-    <version>0.3.3-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
     <name>iotkit-parent</name>
     <description>iotkit parent</description>
     <properties>

@@ -196,7 +196,7 @@ public class ProtocolController {
     public Paging<ProtocolComponent> getComponents(
             @PathVariable("size") int size,
             @PathVariable("page") int page) {
-        Paging<ProtocolComponent> components = protocolComponentData.findAll(page - 1, size);
+        Paging<ProtocolComponent> components = protocolComponentData.findAll(page, size);
         components.getData().forEach(c -> c.setState(
                 componentManager.isRunning(c.getId()) ?
                         ProtocolComponent.STATE_RUNNING : ProtocolComponent.STATE_STOPPED
@@ -208,7 +208,7 @@ public class ProtocolController {
     public Paging<ProtocolConverter> getConverters(
             @PathVariable("size") int size,
             @PathVariable("page") int page) {
-        return protocolConverterData.findAll(page - 1, size);
+        return protocolConverterData.findAll(page, size);
     }
 
     @PostMapping("/addConverter")

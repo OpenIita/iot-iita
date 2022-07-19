@@ -3,10 +3,12 @@ package cc.iotkit.data.service;
 import cc.iotkit.data.IHomeData;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.space.Home;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Primary
 @Service
 public class HomeDataImpl implements IHomeData {
     @Override

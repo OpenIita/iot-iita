@@ -9,7 +9,7 @@
  */
 package cc.iotkit.ruleengine.filter;
 
-import cc.iotkit.dao.DeviceCache;
+import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.ruleengine.expression.Expression;
 import lombok.Data;
@@ -29,7 +29,7 @@ public class DeviceCondition {
 
     private String comparator;
 
-    private DeviceCache deviceCache;
+    private IDeviceInfoData deviceInfoData;
 
     public DeviceCondition clone() {
         DeviceCondition con = new DeviceCondition();
@@ -38,7 +38,7 @@ public class DeviceCondition {
         con.setIdentifier(identifier);
         con.setValue(value);
         con.setComparator(comparator);
-        con.setDeviceCache(deviceCache);
+        con.setDeviceInfoData(deviceInfoData);
         return con;
     }
 
@@ -47,10 +47,10 @@ public class DeviceCondition {
         String[] pkDn = device.split("/");
         if (pkDn.length < 2) {
             //用deviceId取
-            deviceInfo = deviceCache.get(device);
+            deviceInfo = deviceInfoData.findByDeviceId(device);
         } else {
             //用pk/dn取
-            deviceInfo = deviceCache.getDeviceInfo(pkDn[0], pkDn[1]);
+            deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(pkDn[0], pkDn[1]);
         }
         Object left = null;
         if ("property".equals(type)) {

@@ -15,7 +15,6 @@ import cc.iotkit.common.utils.DeviceUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.service.DeviceBehaviourService;
-import cc.iotkit.dao.*;
 import cc.iotkit.data.IDeviceConfigData;
 import cc.iotkit.data.IDeviceGroupData;
 import cc.iotkit.data.IDeviceInfoData;
@@ -39,6 +38,7 @@ import cc.iotkit.model.product.ThingModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -54,8 +54,10 @@ public class DeviceController {
     @Autowired
     private DeviceService deviceService;
     @Autowired
+    @Qualifier("deviceInfoDataCache")
     private IDeviceInfoData deviceInfoData;
     @Autowired
+    @Qualifier("productDataCache")
     private IProductData productData;
     @Autowired
     private DataOwnerService dataOwnerService;
@@ -73,8 +75,6 @@ public class DeviceController {
     DeferredDataConsumer deferredDataConsumer;
     @Autowired
     private IDeviceGroupData deviceGroupData;
-    @Autowired
-    private DeviceCache deviceCache;
     @Autowired
     private IDeviceConfigData deviceConfigData;
 
@@ -334,7 +334,7 @@ public class DeviceController {
         dataOwnerService.checkOwner(deviceGroup);
 
         for (String device : devices) {
-            DeviceInfo deviceInfo = deviceCache.get(device);
+            DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(device);
             if (deviceInfo == null) {
                 continue;
             }
@@ -362,7 +362,7 @@ public class DeviceController {
         dataOwnerService.checkOwner(deviceGroup);
 
         for (String device : devices) {
-            DeviceInfo deviceInfo = deviceCache.get(device);
+            DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(device);
             if (deviceInfo == null) {
                 continue;
             }
@@ -383,7 +383,7 @@ public class DeviceController {
      */
     @PostMapping("/config/{deviceId}/save")
     public void saveConfig(@PathVariable("deviceId") String deviceId, String config) {
-        DeviceInfo deviceInfo = deviceCache.get(deviceId);
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
         dataOwnerService.checkOwner(deviceInfo);
 
         DeviceConfig deviceConfig = deviceConfigData.findByDeviceId(deviceId);
@@ -407,7 +407,7 @@ public class DeviceController {
      */
     @GetMapping("/config/{deviceId}/get")
     public DeviceConfig getConfig(@PathVariable("deviceId") String deviceId) {
-        DeviceInfo deviceInfo = deviceCache.get(deviceId);
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
         dataOwnerService.checkOwner(deviceInfo);
         return deviceConfigData.findByDeviceId(deviceId);
     }

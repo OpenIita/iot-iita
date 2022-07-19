@@ -173,7 +173,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
         if (parent == null) {
             return;
         }
-        IDeviceInfoData deviceInfoService = SpringUtils.getBean(IDeviceInfoData.class);
+        IDeviceInfoData deviceInfoService = SpringUtils.getBean("deviceInfoDataCache");
 
         DeviceInfo deviceInfo = deviceInfoService.findByProductKeyAndDeviceName(state.getProductKey(), state.getDeviceName());
         if (deviceInfo != null) {

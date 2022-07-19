@@ -2,6 +2,7 @@ package cc.iotkit.data.model;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -25,6 +26,7 @@ public class TbProductModel {
 
     private String type;
 
+    @Column(columnDefinition = "text")
     private String script;
 
     /**

@@ -9,10 +9,11 @@
  */
 package cc.iotkit.oauth.service;
 
-import cc.iotkit.dao.UserInfoCache;
+import cc.iotkit.data.IUserInfoData;
 import cc.iotkit.model.UserInfo;
 import cn.dev33.satoken.stp.StpInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,14 +22,15 @@ import java.util.List;
 public class StpInterfaceImpl implements StpInterface {
 
     @Autowired
-    private UserInfoCache userInfoCache;
+    @Qualifier("userInfoDataCache")
+    private IUserInfoData userInfoData;
 
     /**
      * 返回一个账号所拥有的权限码集合
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        UserInfo userInfo = userInfoCache.getUserInfo(loginId.toString());
+        UserInfo userInfo = userInfoData.findById(loginId.toString());
         return userInfo.getPermissions();
     }
 
@@ -37,7 +39,7 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        UserInfo userInfo = userInfoCache.getUserInfo(loginId.toString());
+        UserInfo userInfo = userInfoData.findById(loginId.toString());
         return userInfo.getRoles();
     }
 

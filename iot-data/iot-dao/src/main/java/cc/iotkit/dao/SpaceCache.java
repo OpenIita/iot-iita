@@ -26,7 +26,7 @@ public class SpaceCache {
         return INSTANCE;
     }
 
-    @Cacheable(value = Constants.SPACE_CACHE, key = "#spaceId")
+    @Cacheable(value = Constants.CACHE_SPACE, key = "#spaceId")
     public Space getSpace(String spaceId) {
         return spaceData.findById(spaceId);
     }

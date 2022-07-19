@@ -11,11 +11,7 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.dao.*;
-import cc.iotkit.data.IDeviceInfoData;
-import cc.iotkit.data.ISpaceData;
-import cc.iotkit.data.ISpaceDeviceData;
-import cc.iotkit.data.IUserInfoData;
+import cc.iotkit.data.*;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.manager.service.DataOwnerService;
@@ -28,12 +24,12 @@ import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -44,16 +40,16 @@ public class SpaceDeviceController {
     @Autowired
     private ISpaceDeviceData spaceDeviceData;
     @Autowired
+    @Qualifier("deviceInfoDataCache")
     private IDeviceInfoData deviceInfoData;
     @Autowired
-    private DeviceCache deviceCache;
+    @Qualifier("productDataCache")
+    private IProductData productData;
     @Autowired
-    private ProductCache productCache;
+    @Qualifier("categoryDataCache")
+    private ICategoryData categoryData;
     @Autowired
-    private CategoryCache categoryCache;
-    @Autowired
-    private SpaceCache spaceCache;
-    @Autowired
+    @Qualifier("spaceDataCache")
     private ISpaceData spaceData;
     @Autowired
     private DataOwnerService dataOwnerService;
@@ -91,9 +87,9 @@ public class SpaceDeviceController {
 
     private SpaceDeviceVo parseSpaceDevice(SpaceDevice sd) {
         DeviceInfo device = deviceInfoData.findByDeviceId(sd.getDeviceId());
-        Space space = spaceCache.getSpace(sd.getSpaceId());
-        Product product = productCache.findById(device.getProductKey());
-        Category category = categoryCache.getById(product.getCategory());
+        Space space = spaceData.findById(sd.getSpaceId());
+        Product product = productData.findById(device.getProductKey());
+        Category category = categoryData.findById(product.getCategory());
         DeviceInfo.State state = device.getState();
 
         return SpaceDeviceVo.builder()
@@ -169,8 +165,8 @@ public class SpaceDeviceController {
                 .productKey(device.getProductKey())
                 .build();
 
-        Product product = productCache.findById(device.getProductKey());
-        Category category = categoryCache.getById(product.getCategory());
+        Product product = productData.findById(device.getProductKey());
+        Category category = categoryData.findById(product.getCategory());
         findDeviceVo.setProductName(product.getName());
         findDeviceVo.setProductImg(product.getImg());
         findDeviceVo.setCategoryName(category.getName());

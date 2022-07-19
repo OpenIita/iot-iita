@@ -1,22 +1,48 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.data.service;
 
 import cc.iotkit.data.ITaskInfoData;
+import cc.iotkit.data.dao.TaskInfoRepository;
+import cc.iotkit.data.model.TaskInfoMapper;
+import cc.iotkit.data.model.TbTaskInfo;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.TaskInfo;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
+@Primary
 @Service
 public class TaskInfoDataImpl implements ITaskInfoData {
+
+    @Autowired
+    private TaskInfoRepository taskInfoRepository;
+
     @Override
     public List<TaskInfo> findByUid(String uid) {
-        return null;
+        return TaskInfoMapper.toDto(taskInfoRepository.findByUid(uid));
     }
 
     @Override
     public Paging<TaskInfo> findByUid(String uid, int page, int size) {
-        return null;
+        Page<TbTaskInfo> paged = taskInfoRepository.findByUid(uid,
+                Pageable.ofSize(size).withPage(page - 1));
+        return new Paging<>(paged.getTotalElements(),
+                TaskInfoMapper.toDto(paged.getContent()));
     }
 
     @Override
@@ -26,36 +52,42 @@ public class TaskInfoDataImpl implements ITaskInfoData {
 
     @Override
     public TaskInfo findById(String s) {
-        return null;
+        return TaskInfoMapper.toDtoFix(taskInfoRepository.findById(s).orElse(null));
     }
 
     @Override
     public TaskInfo save(TaskInfo data) {
-        return null;
+        if (StringUtils.isBlank(data.getId())) {
+            data.setId(UUID.randomUUID().toString());
+            data.setCreateAt(System.currentTimeMillis());
+        }
+        taskInfoRepository.save(TaskInfoMapper.toVoFix(data));
+        return data;
     }
 
     @Override
     public TaskInfo add(TaskInfo data) {
-        return null;
+        return save(data);
     }
 
     @Override
     public void deleteById(String s) {
-
+        taskInfoRepository.deleteById(s);
     }
 
     @Override
     public long count() {
-        return 0;
+        return taskInfoRepository.count();
     }
 
     @Override
     public List<TaskInfo> findAll() {
-        return null;
+        return TaskInfoMapper.toDto(taskInfoRepository.findAll());
     }
 
     @Override
     public Paging<TaskInfo> findAll(int page, int size) {
-        return null;
+        Page<TbTaskInfo> paged = taskInfoRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
+        return new Paging<>(paged.getTotalElements(), TaskInfoMapper.toDto(paged.getContent()));
     }
 }

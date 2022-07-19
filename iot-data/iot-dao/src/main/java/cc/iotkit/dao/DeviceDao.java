@@ -10,7 +10,6 @@
 package cc.iotkit.dao;
 
 import cc.iotkit.data.ICategoryData;
-import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
@@ -23,6 +22,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.clients.elasticsearch7.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -41,8 +41,7 @@ public class DeviceDao {
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @Autowired
-    private IDeviceInfoData deviceInfoData;
-    @Autowired
+    @Qualifier("productDataCache")
     private IProductData productData;
     @Autowired
     private ICategoryData categoryData;
