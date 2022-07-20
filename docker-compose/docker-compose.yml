@@ -1,11 +1,15 @@
-version: '1'
+version: '1.0'
 services:
   redis:
-    image: redis:latest
+    image: redis:5.0.8
     container_name: iotkit-ce-redis
     ports:
       - 6379:6379
+    volumes:
+      - "redis-volume:/data"
     command: redis-server --appendonly yes
+    environment:
+      - TZ=Asia/Shanghai
   elasticsearch:
     image: elasticsearch:7.12.0
     container_name: iotkit-ce-elasticsearch
@@ -17,6 +21,8 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+    volumes:
+      - "elasticsearch-volume:/usr/share/elasticsearch/data"
   ui:
     image: uncleregan/iotkit-ui:0.3.4
     container_name: iotkit-ce-ui
@@ -24,6 +30,8 @@ services:
       - 80:80
     links:
       - iotkit:iotkit
+    volumes:
+      - "iotkit-volume:/usr/share/nginx/html/upload"
   iotkit:
     image: uncleregan/iotkit:0.3.3
     container_name: iotkit-cei
@@ -38,3 +46,7 @@ services:
     depends_on:
       - elasticsearch
       - redis
+volumes:
+  redis-volume:
+  elasticsearch-volume:
+  iotkit-volume:
