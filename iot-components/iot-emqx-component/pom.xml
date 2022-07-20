@@ -48,6 +48,11 @@
             <artifactId>iot-component-base</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-data-service</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -102,6 +107,8 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
                 </configuration>
             </plugin>
         </plugins>
