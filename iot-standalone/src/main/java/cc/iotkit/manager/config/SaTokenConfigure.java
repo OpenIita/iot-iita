@@ -77,7 +77,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
 
         })).addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/test","/put",
+                        "/h2",
                         "/*.png",
                         "/oauth2/**", "/*.html",
                         "/favicon.ico", "/v2/api-docs",
