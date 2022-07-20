@@ -9,46 +9,46 @@ spring:
       max-request-size: 12MB
 
   # <<=======内置H2数据库连接设置开始==========
-  #  jpa:
-  #    show-sql: true
-  #    hibernate:
-  #      ddl-auto: update
-  #    properties:
-  #      hibernate:
-  #        format_sql: true
-  #  datasource:
-  #    url: jdbc:h2:./data/iotkit;MODE=MySQL
-  #    username: sa
-  #    password: 123456
-  #    driverClassName: org.h2.Driver
-  #
-  #  ## 内置h2 web console设置
-  #    platform: h2
-  #  h2:
-  #    console:
-  #      enabled: true
-  #      path: /h2
-  #      settings:
-  #        web-allow-others: true
-  #  =======内置H2数据库连接设置结束==========>>
-
-  # <<==========mysql配置开始==============
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/iotkit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
-    driverClassName: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 123456
-    validationQuery: SELECT 1
-    testOnBorrow: true
   jpa:
-    database: MySQL
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-#    show-sql: true
+    #show-sql: true
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         format_sql: true
+  datasource:
+    url: jdbc:h2:./data/iotkit;MODE=MySQL
+    username: sa
+    password: 123456
+    driverClassName: org.h2.Driver
+
+  ## 内置h2 web console设置
+    platform: h2
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      settings:
+        web-allow-others: true
+  #  =======内置H2数据库连接设置结束==========>>
+
+  # <<==========mysql配置开始==============
+#  datasource:
+#    url: jdbc:mysql://127.0.0.1:3306/iotkit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: 123456
+#    validationQuery: SELECT 1
+#    testOnBorrow: true
+#  jpa:
+#    database: MySQL
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+##    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        format_sql: true
   # ============mysql配置结束============>>
 
   elasticsearch:

@@ -161,7 +161,10 @@ public class DeviceController {
 
     @GetMapping(Constants.API_DEVICE.DETAIL)
     public DeviceInfo getDetail(@PathVariable("deviceId") String deviceId) {
-        return dataOwnerService.checkOwner(deviceInfoData.findByDeviceId(deviceId));
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
+        dataOwnerService.checkOwner(deviceInfo);
+        deviceInfo.setProperty(deviceInfoData.getProperties(deviceId));
+        return deviceInfo;
     }
 
     @GetMapping("/{pk}/{dn}")

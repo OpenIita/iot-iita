@@ -26,3 +26,4 @@ target
 log
 data/elasticsearch
 .init
+*.db

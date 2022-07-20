@@ -7,17 +7,17 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.model;
+package cc.iotkit.temporal.es.document;
 
-import lombok.Data;
-import org.springframework.data.elasticsearch.annotations.Document;
+import cc.iotkit.model.device.message.ThingModelMessage;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-@Data
-@Document(indexName = "role")
-public class Role {
+@Mapper
+public interface ThingModelMessageMapper {
+    ThingModelMessageMapper M = Mappers.getMapper(ThingModelMessageMapper.class);
 
-    private String id;
+    ThingModelMessage toDto(DocThingModelMessage vo);
 
-    private String name;
-
+    DocThingModelMessage toVo(ThingModelMessage dto);
 }

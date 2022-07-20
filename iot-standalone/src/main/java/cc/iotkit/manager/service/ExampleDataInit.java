@@ -10,7 +10,6 @@
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.*;
 import cc.iotkit.data.*;
 import cc.iotkit.model.Id;
 import cc.iotkit.model.OauthClient;
@@ -79,8 +78,6 @@ public class ExampleDataInit {
     @Autowired
     private IVirtualDeviceData virtualDeviceData;
 
-    @Autowired
-    private DeviceDao deviceDao;
 
     @Autowired
     private ElasticsearchRestTemplate restTemplate;

@@ -35,15 +35,11 @@ public class EmbeddedElasticSearchConfig {
 
     public static class ConfigProperty {
 
-        private String dataPath = "./data/elasticsearch";
-
-        private String homePath = "./";
-
-        private int port = 9200;
-
-        private String host = "0.0.0.0";
-
         public Settings.Builder applySetting(Settings.Builder settings) {
+            String dataPath = "./data/elasticsearch";
+            String homePath = "./";
+            int port = 9200;
+            String host = "0.0.0.0";
             return settings.put("network.host", host)
                     .put("http.port", port)
                     .put("path.data", dataPath)

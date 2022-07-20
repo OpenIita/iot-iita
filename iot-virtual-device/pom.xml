@@ -31,11 +31,6 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-dao</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
             <artifactId>iot-component-server</artifactId>
         </dependency>
 

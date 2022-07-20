@@ -1,14 +1,19 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.utils.ReflectUtil;
+import cc.iotkit.data.ICategoryData;
 import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.data.IProductData;
 import cc.iotkit.data.dao.*;
 import cc.iotkit.data.model.*;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.product.Category;
+import cc.iotkit.model.product.Product;
 import cc.iotkit.model.stats.DataItem;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 @Primary
@@ -36,6 +42,12 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     private DeviceTagRepository deviceTagRepository;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    @Qualifier("productDataCache")
+    private IProductData productData;
+    @Autowired
+    @Qualifier("categoryDataCache")
+    private ICategoryData categoryData;
 
     @Override
     public void saveProperties(String deviceId, Map<String, Object> properties) {
@@ -240,7 +252,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
         List<DeviceIdGroup> groups = list.size() == 0 ? new ArrayList<>() :
                 jdbcTemplate.query("SELECT \n" +
                         "a.id,\n" +
-                        "a.`name`, \n" +
+                        "a.name, \n" +
                         "b.device_id as deviceId \n" +
                         "FROM\n" +
                         "device_group a \n" +
@@ -252,9 +264,9 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
                 jdbcTemplate.query("\n" +
                         "SELECT\n" +
                         "a.id,\n" +
-                        "a.`code`,\n" +
-                        "a.`name`,\n" +
-                        "a.`value`\n" +
+                        "a.code,\n" +
+                        "a.name,\n" +
+                        "a.value\n" +
                         "FROM device_tag a " +
                         String.format("WHERE a.device_id IN(%s)", deviceIds), new BeanPropertyRowMapper<>(TbDeviceTag.class));
 
@@ -299,7 +311,39 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
 
     @Override
     public List<DataItem> getDeviceStatsByCategory(String uid) {
-        return null;
+        //先按产品统计设备数量
+        String sql = "SELECT COUNT(*) as value,product_key as name from " +
+                "device_info %s GROUP BY product_key";
+        List<Object> args = new ArrayList<>();
+        if (StringUtils.isNotBlank(uid)) {
+            sql = String.format(sql, "where uid=:uid");
+            args.add(uid);
+        } else {
+            sql = String.format(sql, "");
+        }
+        List<DataItem> stats = new ArrayList<>();
+
+        List<DataItem> rst = jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper<>(DataItem.class),
+                args.toArray());
+        for (DataItem item : rst) {
+            //找到产品对应的品类取出品类名
+            Product product = productData.findById(item.getName());
+            String cateId = product.getCategory();
+            Category category = categoryData.findById(cateId);
+            if (category == null) {
+                continue;
+            }
+            //将数据替换成按品类的数据
+            item.setName(category.getName());
+        }
+
+        //按品类分组求合
+        rst.stream().collect(Collectors.groupingBy(DataItem::getName,
+                Collectors.summarizingLong(item -> (long) item.getValue())))
+                .forEach((key, sum) -> stats.add(new DataItem(key, sum.getSum())));
+
+        return stats;
     }
 
     @Override

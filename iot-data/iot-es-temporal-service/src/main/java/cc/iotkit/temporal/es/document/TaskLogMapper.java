@@ -7,12 +7,17 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.model;
+package cc.iotkit.temporal.es.document;
 
-import lombok.Data;
+import cc.iotkit.model.rule.TaskLog;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-@Data
-public class SendCmd {
+@Mapper
+public interface TaskLogMapper {
+    TaskLogMapper M = Mappers.getMapper(TaskLogMapper.class);
 
+    TaskLog toDto(DocTaskLog vo);
 
+    DocTaskLog toVo(TaskLog dto);
 }

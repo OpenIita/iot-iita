@@ -44,14 +44,14 @@
         </dependency>
 
         <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-dao</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-data-service</artifactId>
         </dependency>
 
     </dependencies>

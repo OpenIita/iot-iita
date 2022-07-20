@@ -13,10 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 
 /**
@@ -26,10 +22,8 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(indexName = "virtual_device_log")
 public class VirtualDeviceLog {
 
-    @Id
     private String id;
 
     /**
@@ -55,6 +49,5 @@ public class VirtualDeviceLog {
     /**
      * 创建时间
      */
-    @Field(type = FieldType.Date)
     private Long logAt = System.currentTimeMillis();
 }

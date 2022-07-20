@@ -40,11 +40,6 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-dao</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
             <artifactId>iot-common</artifactId>
         </dependency>
 

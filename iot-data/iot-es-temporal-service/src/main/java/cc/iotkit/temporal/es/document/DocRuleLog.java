@@ -7,7 +7,7 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.model;
+package cc.iotkit.temporal.es.document;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,29 +15,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.stereotype.Component;
-
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "category")
-public class AppInfo {
-
+@Builder
+@Document(indexName = "rule_log")
+public class DocRuleLog {
     @Id
     private String id;
 
-    private String appName;
+    private String ruleId;
 
-    private String packageName;
+    private String state;
 
-    private String version;
+    private String content;
 
-    private String buildNumber;
+    private Boolean success;
 
-    /**
-     * 安装包下载路径
-     */
-    private String packageUrl;
+    @Field(type = FieldType.Date)
+    private Long logAt;
 }

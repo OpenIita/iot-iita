@@ -1,8 +1,18 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.temporal.es.service;
 
 import cc.iotkit.model.device.message.DeviceProperty;
 import cc.iotkit.temporal.IDevicePropertyData;
-import cc.iotkit.temporal.es.document.DevicePropertyDoc;
+import cc.iotkit.temporal.es.document.DevicePropertyMapper;
+import cc.iotkit.temporal.es.document.DocDeviceProperty;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -33,15 +43,15 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
                 )
                 .withSorts(new FieldSortBuilder("time").order(SortOrder.ASC))
                 .build();
-        SearchHits<DevicePropertyDoc> result = template.search(query, DevicePropertyDoc.class);
+        SearchHits<DocDeviceProperty> result = template.search(query, DocDeviceProperty.class);
         return result.getSearchHits().stream()
-                .map(h -> h.getContent().de())
+                .map(h -> DevicePropertyMapper.M.toDto(h.getContent()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void addProperties(List<DeviceProperty> properties) {
-        template.save(properties.stream().map(DevicePropertyDoc::new)
+        template.save(properties.stream().map(DevicePropertyMapper.M::toVo)
                 .collect(Collectors.toList()));
     }
 

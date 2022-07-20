@@ -11,7 +11,6 @@ package cc.iotkit.comps.service;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.DeviceDao;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.model.device.message.DeviceProperty;
 import cc.iotkit.model.device.message.ThingModelMessage;
@@ -37,8 +36,6 @@ public class DevicePropertyConsumer implements ConsumerHandler<ThingModelMessage
 
     @Autowired
     private MqConsumer<ThingModelMessage> thingModelMessageMqConsumer;
-    @Autowired
-    private DeviceDao deviceDao;
     @Autowired
     private IDevicePropertyData devicePropertyData;
     @Autowired

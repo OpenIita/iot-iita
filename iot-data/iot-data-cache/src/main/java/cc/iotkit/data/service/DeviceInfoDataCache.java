@@ -86,12 +86,18 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
 
     @Override
     public void saveProperties(String deviceId, Map<String, Object> properties) {
-        redisTemplate.opsForValue().set(getPropertyCacheKey(deviceId), JsonUtil.toJsonString(properties));
+        Map<String, Object> old = getProperties(deviceId);
+        old.putAll(properties);
+        redisTemplate.opsForValue().set(getPropertyCacheKey(deviceId), JsonUtil.toJsonString(old));
     }
 
     @Override
     public Map<String, Object> getProperties(String deviceId) {
-        return JsonUtil.parse(redisTemplate.opsForValue().get(getPropertyCacheKey(deviceId)), Map.class);
+        String json = redisTemplate.opsForValue().get(getPropertyCacheKey(deviceId));
+        if (StringUtils.isBlank(json)) {
+            return new HashMap<>();
+        }
+        return JsonUtil.parse(json, Map.class);
     }
 
     @Override

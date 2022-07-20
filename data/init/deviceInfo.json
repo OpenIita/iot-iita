@@ -1294,24 +1294,6 @@
     "createAt": 1650171261224
   },
   {
-    "id": "164951142660200010000000000000034",
-    "deviceId": "164951142660200010000000000000034",
-    "productKey": "KdJYpTp5ywNhmrmC",
-    "deviceName": "001",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "state": {
-      "online": false
-    },
-    "createAt": 1649511426602,
-    "tag": {
-      "aligenie": {
-        "id": "aligenie",
-        "name": "天猫精灵接入",
-        "value": "是"
-      }
-    }
-  },
-  {
     "id": "164785263238900cefafcfeeab0000125",
     "deviceId": "164785263238900cefafcfeeab0000125",
     "productKey": "N523nWsCiG3CAn6X",

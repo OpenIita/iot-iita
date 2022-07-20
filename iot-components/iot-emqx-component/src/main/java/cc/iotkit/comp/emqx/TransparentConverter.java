@@ -10,13 +10,11 @@
 package cc.iotkit.comp.emqx;
 
 
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.comp.utils.SpringUtils;
 import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.dao.ProductCache;
 import cc.iotkit.data.IDeviceInfoData;
-import cc.iotkit.data.IProductData;
 import cc.iotkit.data.IProductModelData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;

@@ -87,12 +87,6 @@
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
-      <artifactId>iot-dao</artifactId>
-      <version>0.4.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>cc.iotkit</groupId>
       <artifactId>iot-common</artifactId>
       <version>0.4.0-SNAPSHOT</version>
       <scope>compile</scope>

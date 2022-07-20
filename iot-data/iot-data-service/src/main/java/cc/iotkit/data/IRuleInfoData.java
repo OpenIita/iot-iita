@@ -2,8 +2,6 @@ package cc.iotkit.data;
 
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.RuleInfo;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

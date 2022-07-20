@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.data.config;
 
 import cc.iotkit.common.Constants;
@@ -34,6 +43,8 @@ public class CacheConfig {
                 Constants.CACHE_DEVICE_INFO, config,
                 Constants.CACHE_PRODUCT, config,
                 Constants.CACHE_OAUTH_CLIENT, config,
+                Constants.CACHE_CATEGORY, config,
+                //统计缓存5分钟
                 Constants.CACHE_DEVICE_STATS, config.entryTtl(Duration.ofMinutes(5))
         );
 

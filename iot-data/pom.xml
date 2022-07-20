@@ -12,7 +12,6 @@
 
     <modules>
         <module>iot-model</module>
-        <module>iot-dao</module>
         <module>iot-data-service</module>
         <module>iot-data-cache</module>
         <module>iot-temporal-service</module>
