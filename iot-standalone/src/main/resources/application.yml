@@ -11,14 +11,14 @@ spring:
   elasticsearch:
     rest:
       #使用内置es的配置
-      uris: http://127.0.0.1:9200
+      uris: http://elasticsearch:9200
       username:
       password:
       connection-timeout: 10s
 
   redis:
     #使用内置redis的配置
-    host: 127.0.0.1
+    host: redis
     port: 6379
     database: 0
     password:
@@ -29,10 +29,10 @@ spring:
 
 #图片存储用的是阿里云oss，如果需要上传产品图片才需要配置
 aliyun:
-  bucketId: iotkit-img
-  endpoint: oss-cn-shenzhen.aliyuncs.com
-  accessKeyId: 填写阿里云accessKeyId
-  accessKeySecret: 填写阿里云accessKeySecret
+  bucketId: zkxf-oss
+  endpoint: oss-cn-chengdu.aliyuncs.com
+  accessKeyId: LTAI4G6MDwgMXiVV2HxKEDPK
+  accessKeySecret: PDoggnBcXSxP3Tu5FseJlNBo3BY2Y5
 
 sa-token:
   # token名称 (同时也是cookie名称)

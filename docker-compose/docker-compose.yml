@@ -1,4 +1,4 @@
-version: '1.0'
+version: '3'
 services:
   redis:
     image: redis:5.0.8
@@ -33,8 +33,8 @@ services:
     volumes:
       - "iotkit-volume:/usr/share/nginx/html/upload"
   iotkit:
-    image: uncleregan/iotkit:0.3.3
-    container_name: iotkit-cei
+    image: uncleregan/iotkit:0.3.4
+    container_name: iotkit-ce
     restart: on-failure
     ports:
       - 8086:8086 # API端口
