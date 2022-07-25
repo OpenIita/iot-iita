@@ -1,0 +1,52 @@
+version: '3'
+services:
+  redis:
+    image: redis:5.0.8
+    container_name: iotkit-ce-redis
+    ports:
+      - 6379:6379
+    volumes:
+      - "redis-volume:/data"
+    command: redis-server --appendonly yes
+    environment:
+      - TZ=Asia/Shanghai
+  elasticsearch:
+    image: elasticsearch:7.12.0
+    container_name: iotkit-ce-elasticsearch
+    environment:
+      ES_JAVA_OPTS: -Djava.net.preferIPv4Stack=true -Xms1g -Xmx1g
+      transport.host: 0.0.0.0
+      discovery.type: single-node
+      bootstrap.memory_lock: "true"
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - "elasticsearch-volume:/usr/share/elasticsearch/data"
+  ui:
+    image: uncleregan/iotkit-ui:0.3.4
+    container_name: iotkit-ce-ui
+    ports:
+      - 80:80
+    links:
+      - iotkit:iotkit
+    volumes:
+      - "iotkit-volume:/usr/share/nginx/html/upload"
+  iotkit:
+    image: uncleregan/iotkit:0.3.4
+    container_name: iotkit-ce
+    restart: on-failure
+    ports:
+      - 8086:8086 # API端口
+      - 1883-1890:1883-1890 # 预留
+      - 8000-8010:8000-8010 # 预留
+    links:
+      - redis:redis
+      - elasticsearch:elasticsearch
+    depends_on:
+      - elasticsearch
+      - redis
+volumes:
+  redis-volume:
+  elasticsearch-volume:
+  iotkit-volume:

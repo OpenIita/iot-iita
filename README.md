@@ -16,7 +16,7 @@
 
 系统包含了品类、物模型、消息转换、通讯组件（mqtt/EMQX通讯组件、小度音箱接入组件、onenet Studio接入组件）、云端低代码设备开发、设备管理、设备分组、规则引擎、第三方平台接入、数据流转、数据可视化、报警中心等模块和智能家居APP（小程序），集成了[Sa-Token](https://gitee.com/dromara/sa-token) 认证框架。
 
- **前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
+**前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
 
  **演示地址：** [演示地址](http://120.76.96.206)，账号：guest1,密码：guest123  (只读权限)
 
@@ -24,8 +24,10 @@
 
  **小度接入：** 小度APP添加设备中搜索 奇特物联
 
+**小度接入：** 小度APP添加设备中搜索 奇特物联
 
- **系统截图** 
+
+**系统截图**
 ![输入图片说明](doc/screenshot.jpg)
 
 
@@ -38,7 +40,7 @@
 
 管理员账号密码：iotkit/iotkitadmin
 
- **注：** 内置es在修改设备组时会报错，此时需要换成外置的es
+**注：** 内置es在修改设备组时会报错，此时需要换成外置的es
 
 
 #### 运行步骤
@@ -47,6 +49,11 @@
 2、clone代码，在idea中导入项目
 
 3、在iot-standalone模块的Application类上右键运行
+
+#### docker运行
+git clone https://gitee.com/iotkit-open-source/iotkit-parent.git && cd iotkit-parent/docker-compose && docker-compose up -d 
+
+
 
 
 
@@ -63,11 +70,11 @@ https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《i
 
 如果我的开源软件应用到您的商业项目中，请务必通知到我，因为得到用户的认可是支撑开源的动力。
 
-交流QQ群: 940575749 
+交流QQ群: 940575749
 
 微信群:
 
- ![输入图片说明](doc/ma.png)
+![输入图片说明](doc/ma.png)
 
 
 ### roadmap
