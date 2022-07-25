@@ -18,9 +18,11 @@
 
 **前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
 
-**演示地址：** [演示地址](http://120.76.96.206)，账号：guest1,密码：guest123  (只读权限)
+ **演示地址：** [演示地址](http://120.76.96.206)，账号：guest1,密码：guest123  (只读权限)
 
-**智能家居小程序：** https://gitee.com/iotkit-open-source/iot-mp-home ，微信搜索小程序： 奇特物联
+ **智能家居小程序：** https://gitee.com/iotkit-open-source/iot-mp-home ，微信搜索小程序： 奇特物联
+
+ **小度接入：** 小度APP添加设备中搜索 奇特物联
 
 **小度接入：** 小度APP添加设备中搜索 奇特物联
 
@@ -53,12 +55,14 @@ git clone https://gitee.com/iotkit-open-source/iotkit-parent.git && cd iotkit-pa
 
 
 
+
+
 #### 技术文档
 
-https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《iot平台技术文档》密码：vdwe
+https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《iot平台技术文档》密码：rf4d
 
-
-**这是我宝贵的技术文档分享，请给本仓库点个star**   :star:  **支持一下，谢谢！**  :star:  :star:  :star:  :star:
+    
+ **这是我宝贵的技术文档分享，请给本仓库点个star**   :star:  **支持一下，谢谢！**  :star:  :star:  :star:  :star: 
 
 
 #### 捐助与支持
