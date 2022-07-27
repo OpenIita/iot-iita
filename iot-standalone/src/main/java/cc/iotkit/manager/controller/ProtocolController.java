@@ -86,6 +86,7 @@ public class ProtocolController {
     @PostMapping("/addComponent")
     public void addComponent(ProtocolComponent component) {
         String id = component.getId();
+        //jar包上传后生成的id
         if (!StringUtils.hasLength(id)) {
             throw new BizException("component id is blank");
         }
@@ -95,7 +96,7 @@ public class ProtocolController {
         }
 
         ProtocolComponent protocolComponent = protocolComponentData.findById(id);
-        if (protocolComponent == null) {
+        if (protocolComponent != null) {
             throw new BizException("component already exists");
         }
         try {
@@ -133,8 +134,7 @@ public class ProtocolController {
     public String getComponentScript(@PathVariable("id") String id) {
         getAndCheckComponent(id);
         try {
-            Path path = componentConfig.getComponentFilePath(id);
-            File file = path.resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile();
+            File file = getComponentScriptFile(id);
             return FileUtils.readFileToString(file, "UTF-8");
         } catch (Throwable e) {
             log.error("read component script file error", e);
@@ -148,15 +148,18 @@ public class ProtocolController {
             @RequestBody String script) {
         getAndCheckComponent(id);
         try {
-            Path path = componentConfig.getComponentFilePath(id);
-            File file = path.resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile();
+            File file = getComponentScriptFile(id);
             script = JsonUtil.parse(script, String.class);
             FileUtils.writeStringToFile(file, script, "UTF-8", false);
-
             componentManager.deRegister(id);
         } catch (Throwable e) {
             throw new BizException("save protocol component script error", e);
         }
+    }
+
+    private File getComponentScriptFile(String id) {
+        Path path = componentConfig.getComponentFilePath(id);
+        return path.resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile();
     }
 
     private ProtocolComponent getAndCheckComponent(@PathVariable("id") String id) {
@@ -304,6 +307,11 @@ public class ProtocolController {
         }
 
         if (ProtocolComponent.STATE_RUNNING.equals(state)) {
+            File scriptFile = getComponentScriptFile(id);
+            if (!scriptFile.exists()) {
+                throw new BizException("请先编写组件脚本");
+            }
+
             componentManager.register(component);
             componentManager.start(component.getId());
             component.setState(ProtocolComponent.STATE_RUNNING);
