@@ -1,0 +1,17 @@
+version: '3.3'
+services:
+  ui:
+    image: uncleregan/iotkit-ui:0.3.4
+    container_name: iotkit-ce-ui
+    ports:
+      - 80:80
+    links:
+      - iotkit:iotkit
+  iotkit:
+    image: iotkits/iotkit:0.4.0
+    container_name: iotkit-cei
+    restart: on-failure
+    ports:
+      - 8086:8086 # API端口
+      - 1883-1890:1883-1890 # 预留
+      - 8000-8010:8000-8010 # 预留

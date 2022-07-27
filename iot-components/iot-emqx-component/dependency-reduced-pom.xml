@@ -50,6 +50,8 @@
         <configuration>
           <source>11</source>
           <target>11</target>
+          <forceJavacCompilerUse>true</forceJavacCompilerUse>
+          <useIncrementalCompilation>false</useIncrementalCompilation>
         </configuration>
       </plugin>
     </plugins>
@@ -94,6 +96,12 @@
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-component-base</artifactId>
+      <version>0.4.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>cc.iotkit</groupId>
+      <artifactId>iot-data-service</artifactId>
       <version>0.4.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
