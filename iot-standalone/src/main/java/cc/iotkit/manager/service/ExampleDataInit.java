@@ -32,7 +32,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Charsets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Service;
 
@@ -40,10 +42,12 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Slf4j
 @Service
-public class ExampleDataInit {
+public class ExampleDataInit implements SmartInitializingSingleton {
 
     @Autowired
     private IOauthClientData oauthClientData;
@@ -52,6 +56,7 @@ public class ExampleDataInit {
     @Autowired
     private IDeviceGroupData deviceGroupData;
     @Autowired
+    @Qualifier("deviceInfoDataCache")
     private IDeviceInfoData deviceInfoData;
     @Autowired
     private IHomeData homeData;
@@ -82,53 +87,63 @@ public class ExampleDataInit {
     @Autowired
     private ElasticsearchRestTemplate restTemplate;
 
-    @PostConstruct
-    public void init() {
-        try {
-            File initFile = new File(".init");
-            if (initFile.exists()) {
-                return;
+
+    @Override
+    public void afterSingletonsInstantiated() {
+        //等redis实例化后再执行
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    File initFile = new File(".init");
+                    if (initFile.exists()) {
+                        return;
+                    }
+
+                    initData("category", categoryData, new TypeReference<List<Category>>() {
+                    });
+                    initData("deviceGroup", deviceGroupData, new TypeReference<List<DeviceGroup>>() {
+                    });
+                    initData("deviceInfo", deviceInfoData, new TypeReference<List<DeviceInfo>>() {
+                    });
+                    initData("home", homeData, new TypeReference<List<Home>>() {
+                    });
+                    initData("oauthClient", oauthClientData, new TypeReference<List<OauthClient>>() {
+                    });
+                    initData("product", productData, new TypeReference<List<Product>>() {
+                    });
+                    initData("productModel", productModelData, new TypeReference<List<ProductModel>>() {
+                    });
+                    initData("protocolComponent", protocolComponentData, new TypeReference<List<ProtocolComponent>>() {
+                    });
+                    initData("protocolConverter", protocolConverterData, new TypeReference<List<ProtocolConverter>>() {
+                    });
+                    initData("ruleInfo", ruleInfoData, new TypeReference<List<RuleInfo>>() {
+                    });
+                    initData("space", spaceData, new TypeReference<List<Space>>() {
+                    });
+                    initData("spaceDevice", spaceDeviceData, new TypeReference<List<SpaceDevice>>() {
+                    });
+                    initData("taskInfo", taskInfoData, new TypeReference<List<TaskInfo>>() {
+                    });
+                    initData("thingModel", thingModelData, new TypeReference<List<ThingModel>>() {
+                    });
+                    initData("userInfo", userInfoData, new TypeReference<List<UserInfo>>() {
+                    });
+                    initData("virtualDevice", virtualDeviceData, new TypeReference<List<VirtualDevice>>() {
+                    });
+
+                    log.info("init data finished.");
+
+                    FileUtils.write(initFile, "", Charsets.UTF_8);
+                } catch (
+                        Throwable e) {
+                    log.error("init error", e);
+                }
             }
+        }, 100);
 
-            initData("category", categoryData, new TypeReference<List<Category>>() {
-            });
-            initData("deviceGroup", deviceGroupData, new TypeReference<List<DeviceGroup>>() {
-            });
-            initData("deviceInfo", deviceInfoData, new TypeReference<List<DeviceInfo>>() {
-            });
-            initData("home", homeData, new TypeReference<List<Home>>() {
-            });
-            initData("oauthClient", oauthClientData, new TypeReference<List<OauthClient>>() {
-            });
-            initData("product", productData, new TypeReference<List<Product>>() {
-            });
-            initData("productModel", productModelData, new TypeReference<List<ProductModel>>() {
-            });
-            initData("protocolComponent", protocolComponentData, new TypeReference<List<ProtocolComponent>>() {
-            });
-            initData("protocolConverter", protocolConverterData, new TypeReference<List<ProtocolConverter>>() {
-            });
-            initData("ruleInfo", ruleInfoData, new TypeReference<List<RuleInfo>>() {
-            });
-            initData("space", spaceData, new TypeReference<List<Space>>() {
-            });
-            initData("spaceDevice", spaceDeviceData, new TypeReference<List<SpaceDevice>>() {
-            });
-            initData("taskInfo", taskInfoData, new TypeReference<List<TaskInfo>>() {
-            });
-            initData("thingModel", thingModelData, new TypeReference<List<ThingModel>>() {
-            });
-            initData("userInfo", userInfoData, new TypeReference<List<UserInfo>>() {
-            });
-            initData("virtualDevice", virtualDeviceData, new TypeReference<List<VirtualDevice>>() {
-            });
-
-            log.info("init data finished.");
-
-            FileUtils.write(initFile, "", Charsets.UTF_8);
-        } catch (Throwable e) {
-            log.error("init error", e);
-        }
     }
 
     private <T> void initData(String name, ICommonData service, TypeReference<T> type) throws IOException {
@@ -139,6 +154,5 @@ public class ExampleDataInit {
             service.add((Id) obj);
         }
     }
-
 
 }

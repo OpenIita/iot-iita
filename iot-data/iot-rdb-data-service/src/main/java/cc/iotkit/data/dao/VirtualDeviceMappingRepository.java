@@ -12,12 +12,14 @@ package cc.iotkit.data.dao;
 import cc.iotkit.data.model.TbVirtualDeviceMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface VirtualDeviceMappingRepository extends JpaRepository<TbVirtualDeviceMapping, String> {
 
     List<TbVirtualDeviceMapping> findByVirtualId(String virtualId);
 
+    @Transactional
     void deleteByVirtualId(String virtualId);
 
 }
