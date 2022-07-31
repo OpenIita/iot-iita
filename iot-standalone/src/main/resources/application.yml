@@ -8,6 +8,7 @@ spring:
       max-file-size: 10MB
       max-request-size: 12MB
 
+  #注： 切换数据库时需要将项目根目录中的.init文件删除再重启
   # <<=======内置H2数据库连接设置开始==========
   jpa:
 #    show-sql: true
