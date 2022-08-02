@@ -39,7 +39,7 @@ public class ReportTest {
             Mqtt.brokerHost = args[0];
         }
 
-        int total = 500;
+        int total = 10;
         if (args.length > 1) {
             total = Integer.parseInt(args[1]);
         }

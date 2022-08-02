@@ -16,7 +16,7 @@ import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;
 import cc.iotkit.comps.config.ComponentConfig;
 import cc.iotkit.comps.service.DeviceBehaviourService;
-import cc.iotkit.dao.ProtocolComponentRepository;
+import cc.iotkit.data.IProtocolComponentData;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -41,14 +41,14 @@ public class BizComponentManager {
     @Autowired
     private ComponentConfig componentConfig;
     @Autowired
-    private ProtocolComponentRepository componentRepository;
+    private IProtocolComponentData protocolComponentData;
     @Autowired
     private DeviceBehaviourService deviceBehaviourService;
 
     @PostConstruct
     public void init() {
         try {
-            List<ProtocolComponent> componentList = componentRepository
+            List<ProtocolComponent> componentList = protocolComponentData
                     .findByStateAndType(ProtocolComponent.STATE_RUNNING, ProtocolComponent.TYPE_BIZ);
             for (ProtocolComponent component : componentList) {
                 register(component);

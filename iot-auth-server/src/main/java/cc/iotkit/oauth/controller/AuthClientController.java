@@ -1,10 +1,19 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.oauth.controller;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.common.utils.ReflectUtil;
-import cc.iotkit.dao.OauthClientCache;
-import cc.iotkit.dao.UserInfoCache;
+import cc.iotkit.data.IOauthClientData;
+import cc.iotkit.data.IUserInfoData;
 import cc.iotkit.model.OauthClient;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.oauth.vo.UserInfoVo;
@@ -16,6 +25,7 @@ import com.ejlchina.okhttps.OkHttps;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,16 +46,18 @@ public class AuthClientController {
     private String serverUrl;
 
     @Autowired
-    private OauthClientCache oauthClientCache;
+    @Qualifier("oauthClientDataCache")
+    private IOauthClientData oauthClientData;
     @Autowired
-    private UserInfoCache userInfoCache;
+    @Qualifier("userInfoDataCache")
+    private IUserInfoData userInfoData;
 
     /**
      * 根据Code码进行登录，获取 Access-Token 和 用户信息
      */
     @RequestMapping("/codeLogin")
     public SaResult codeLogin(String code, String clientId) {
-        OauthClient oauthClient = oauthClientCache.getClient(clientId);
+        OauthClient oauthClient = oauthClientData.findByClientId(clientId);
         if (oauthClient == null) {
             return SaResult.error("clientId does not exist");
         }
@@ -117,7 +129,7 @@ public class AuthClientController {
     }
 
     private UserInfoVo getUserInfo(String uid) {
-        UserInfo userInfo = userInfoCache.getUserInfo(uid);
+        UserInfo userInfo = userInfoData.findById(uid);
         UserInfoVo userVo = new UserInfoVo();
         ReflectUtil.copyNoNulls(userInfo, userVo);
         return userVo;

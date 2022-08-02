@@ -11,25 +11,19 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
-import cc.iotkit.dao.VirtualDeviceLogRepository;
-import cc.iotkit.dao.VirtualDeviceRepository;
+import cc.iotkit.data.IVirtualDeviceData;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.device.VirtualDeviceLog;
-import cc.iotkit.model.rule.TaskLog;
+import cc.iotkit.temporal.IVirtualDeviceLogData;
 import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.virtualdevice.VirtualManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -39,25 +33,22 @@ public class VirtualDeviceController {
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
-    private VirtualDeviceRepository virtualDeviceRepository;
+    private IVirtualDeviceData virtualDeviceData;
     @Autowired
     private VirtualManager virtualManager;
     @Autowired
-    private VirtualDeviceLogRepository virtualDeviceLogRepository;
+    private IVirtualDeviceLogData virtualDeviceLogData;
 
     @PostMapping("/list/{size}/{page}")
     public Paging<VirtualDevice> getDevices(
             @PathVariable("size") int size,
             @PathVariable("page") int page) {
         String uid = AuthUtil.getUserId();
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("createAt")));
-        Page<VirtualDevice> virtualDevices;
         if (AuthUtil.isAdmin()) {
-            virtualDevices = virtualDeviceRepository.findAll(pageable);
+            return virtualDeviceData.findAll(page, size);
         } else {
-            virtualDevices = virtualDeviceRepository.findByUid(uid, pageable);
+            return virtualDeviceData.findByUid(uid, page, size);
         }
-        return new Paging<>(virtualDevices.getTotalElements(), virtualDevices.getContent());
     }
 
     /**
@@ -69,7 +60,7 @@ public class VirtualDeviceController {
         virtualDevice.setUid(AuthUtil.getUserId());
         virtualDevice.setState(VirtualDevice.STATE_STOPPED);
         virtualDevice.setCreateAt(System.currentTimeMillis());
-        virtualDeviceRepository.save(virtualDevice);
+        virtualDeviceData.save(virtualDevice);
     }
 
     /**
@@ -81,7 +72,7 @@ public class VirtualDeviceController {
         ReflectUtil.copyNoNulls(virtualDevice, oldData,
                 "name", "productKey", "type", "trigger", "triggerExpression");
         virtualDevice.setState(VirtualDevice.STATE_STOPPED);
-        virtualDeviceRepository.save(virtualDevice);
+        virtualDeviceData.save(virtualDevice);
     }
 
     /**
@@ -108,7 +99,7 @@ public class VirtualDeviceController {
         } else {
             virtualManager.remove(oldData);
         }
-        virtualDeviceRepository.save(oldData);
+        virtualDeviceData.save(oldData);
     }
 
     /**
@@ -117,7 +108,7 @@ public class VirtualDeviceController {
     @DeleteMapping("/{id}/delete")
     public void delete(@PathVariable("id") String id) {
         checkOwner(id);
-        virtualDeviceRepository.deleteById(id);
+        virtualDeviceData.deleteById(id);
     }
 
     /**
@@ -127,7 +118,7 @@ public class VirtualDeviceController {
     public void saveScript(@PathVariable("id") String id, String script) {
         VirtualDevice old = checkOwner(id);
         old.setScript(script);
-        virtualDeviceRepository.save(old);
+        virtualDeviceData.save(old);
     }
 
     /**
@@ -137,7 +128,7 @@ public class VirtualDeviceController {
     public void saveDevices(@PathVariable("id") String id, @RequestBody List<String> devices) {
         VirtualDevice old = checkOwner(id);
         old.setDevices(devices);
-        virtualDeviceRepository.save(old);
+        virtualDeviceData.save(old);
     }
 
     /**
@@ -158,17 +149,14 @@ public class VirtualDeviceController {
             @PathVariable("size") int size,
             @PathVariable("page") int page
     ) {
-        Page<VirtualDeviceLog> logs = virtualDeviceLogRepository.findByVirtualDeviceId(id,
-                PageRequest.of(page - 1, size, Sort.by(Sort.Order.desc("logAt"))));
-        return new Paging<>(logs.getTotalElements(), logs.getContent());
+        return virtualDeviceLogData.findByVirtualDeviceId(id, page, size);
     }
 
     private VirtualDevice checkOwner(String id) {
-        Optional<VirtualDevice> old = virtualDeviceRepository.findById(id);
-        if (old.isEmpty()) {
+        VirtualDevice oldData = virtualDeviceData.findById(id);
+        if (oldData == null) {
             throw new BizException("record does not exist");
         }
-        VirtualDevice oldData = old.get();
 
         dataOwnerService.checkOwner(oldData);
         return oldData;

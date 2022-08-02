@@ -10,8 +10,9 @@
 package cc.iotkit.ruleengine.rule;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.DeviceCache;
-import cc.iotkit.dao.RuleInfoRepository;
+import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.data.IRuleInfoData;
+import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.ruleengine.action.*;
@@ -23,12 +24,11 @@ import cc.iotkit.ruleengine.listener.Listener;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -44,10 +44,11 @@ public class RuleManager {
     private RuleMessageHandler ruleMessageHandler;
 
     @Autowired
-    private RuleInfoRepository ruleInfoRepository;
+    private IRuleInfoData ruleInfoData;
 
     @Autowired
-    private DeviceCache deviceCache;
+    @Qualifier("deviceInfoDataCache")
+    private IDeviceInfoData deviceInfoData;
 
     @Autowired
     private DeviceActionService deviceActionService;
@@ -61,9 +62,8 @@ public class RuleManager {
     public void initRules() {
         int idx = 0;
         while (true) {
-            Page<RuleInfo> rules = ruleInfoRepository.findAll(PageRequest.of(idx,
-                    1000, Sort.by(Sort.Order.desc("createAt"))));
-            rules.get().forEach(rule -> {
+            Paging<RuleInfo> rules = ruleInfoData.findAll(idx, 1000);
+            rules.getData().forEach(rule -> {
                 try {
                     //不添加停止的规则
                     if (RuleInfo.STATE_STOPPED.equals(rule.getState())) {
@@ -76,7 +76,7 @@ public class RuleManager {
                 }
             });
             idx++;
-            if (rules.getContent().size() == 0) {
+            if (rules.getTotal() == 0) {
                 break;
             }
         }
@@ -126,7 +126,7 @@ public class RuleManager {
     private Filter<?> parseFilter(String type, String config) {
         if (DeviceFilter.TYPE.equals(type)) {
             DeviceFilter filter = parse(config, DeviceFilter.class);
-            filter.setDeviceCache(deviceCache);
+            filter.setDeviceInfoData(deviceInfoData);
             return filter;
         }
         return null;
@@ -140,7 +140,7 @@ public class RuleManager {
         } else if (HttpAction.TYPE.equals(type)) {
             HttpAction httpAction = parse(config, HttpAction.class);
             for (HttpService service : httpAction.getServices()) {
-                service.setDeviceCache(deviceCache);
+                service.setDeviceInfoData(deviceInfoData);
             }
             return httpAction;
         }

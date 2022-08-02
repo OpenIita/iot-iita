@@ -9,7 +9,7 @@
  */
 package cc.iotkit.ruleengine.filter;
 
-import cc.iotkit.dao.DeviceCache;
+import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +25,7 @@ public class DeviceFilter implements Filter<DeviceCondition> {
 
     private List<DeviceCondition> conditions;
 
-    private DeviceCache deviceCache;
+    private IDeviceInfoData deviceInfoData;
 
     @Override
     public String getType() {
@@ -45,7 +45,7 @@ public class DeviceFilter implements Filter<DeviceCondition> {
                 con.setDevice(msg.getDeviceId());
             }
 
-            con.setDeviceCache(deviceCache);
+            con.setDeviceInfoData(deviceInfoData);
             if (!con.matches()) {
                 return false;
             }

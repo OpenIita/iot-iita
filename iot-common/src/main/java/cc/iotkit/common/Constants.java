@@ -15,21 +15,21 @@ public interface Constants {
 
     String ACCOUNT_SECRET = "3n1z33kzvpgz1foijpkepyd3e8tw84us";
 
-    String PRODUCT_CACHE = "product_cache";
+    String CACHE_PRODUCT = "product_cache";
 
-    String DEVICE_CACHE = "device_cache";
+    String CACHE_DEVICE_INFO = "device_info_cache";
 
-    String DEVICE_STATS_CACHE = "device_stats_cache";
+    String CACHE_DEVICE_STATS = "device_stats_cache";
 
-    String CATEGORY_CACHE = "category_cache";
+    String CACHE_CATEGORY = "category_cache";
 
-    String SPACE_CACHE = "space_cache";
+    String CACHE_SPACE = "space_cache";
 
     String THING_MODEL_CACHE = "thing_model_cache";
 
-    String USER_CACHE = "user_info_cache";
+    String CACHE_USER_INFO = "user_info_cache";
 
-    String OAUTH_CLIENT_CACHE = "oauth_client_cache";
+    String CACHE_OAUTH_CLIENT = "oauth_client_cache";
 
     String WECHAT_APP_ID = "wx791cb7bf75950e0c";
 
@@ -37,7 +37,7 @@ public interface Constants {
 
     String APP_DESIGN_CACHE = "app_design_cache";
 
-    String PRODUCT_SCRIPT_CACHE = "product_script_cache";
+    String CACHE_PRODUCT_SCRIPT = "product_script_cache";
 
     /**
      * 管理员角色

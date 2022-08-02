@@ -46,6 +46,9 @@ public class VirtualExecutor implements Job {
 
         try {
             for (DeviceInfo device : devices) {
+                if (device == null) {
+                    continue;
+                }
                 log.info("invoke virtual device report,jobKey:{},deviceId:{}", jobKey, device.getDeviceId());
                 virtualManager.invokeReport(device);
             }

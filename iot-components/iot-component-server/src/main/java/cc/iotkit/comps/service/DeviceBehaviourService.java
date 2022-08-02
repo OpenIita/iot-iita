@@ -16,7 +16,9 @@ import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
-import cc.iotkit.dao.*;
+import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.data.IProductModelData;
+import cc.iotkit.data.IProductData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
@@ -25,28 +27,27 @@ import cc.iotkit.mq.MqProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
 public class DeviceBehaviourService {
 
     @Autowired
-    private ProductRepository productRepository;
+    private IProductModelData productModelData;
     @Autowired
-    private ProductModelRepository productModelRepository;
-    @Autowired
-    private ProductCache productCache;
-    @Autowired
-    private DeviceInfoRepository deviceInfoRepository;
-    @Autowired
-    private DeviceCache deviceCache;
+    @Qualifier("deviceInfoDataCache")
+    private IDeviceInfoData deviceInfoData;
     @Autowired
     private MqProducer<ThingModelMessage> producer;
+    @Autowired
+    @Qualifier("productDataCache")
+    private IProductData productData;
 
     public void register(RegisterInfo info) {
         try {
@@ -80,7 +81,7 @@ public class DeviceBehaviourService {
         if (parentId != null) {
             //透传设备：pk为空、model不为空，使用model查询产品
             if (StringUtils.isBlank(pk) && StringUtils.isNotBlank(model)) {
-                ProductModel productModel = productModelRepository.findByModel(model);
+                ProductModel productModel = productModelData.findByModel(model);
                 if (productModel == null) {
                     throw new BizException("product model does not exist");
                 }
@@ -88,13 +89,12 @@ public class DeviceBehaviourService {
             }
         }
 
-        Optional<Product> optProduct = productRepository.findById(pk);
-        if (optProduct.isEmpty()) {
+        Product product = productData.findById(pk);
+        if (product == null) {
             throw new BizException("Product does not exist");
         }
-        Product product = optProduct.get();
         String uid = product.getUid();
-        DeviceInfo device = deviceInfoRepository.findByProductKeyAndDeviceName(pk, info.getDeviceName());
+        DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(pk, info.getDeviceName());
         boolean reportMsg = false;
 
         if (device != null) {
@@ -130,13 +130,14 @@ public class DeviceBehaviourService {
             device.setParentId(parentId);
             reportMsg = true;
         }
-        deviceInfoRepository.save(device);
+        deviceInfoData.save(device);
 
         //新设备或更换网关需要产生注册消息
         if (reportMsg) {
             log.info("device registered:{}", JsonUtil.toJsonString(device));
             //新注册设备注册消息
             ThingModelMessage modelMessage = new ThingModelMessage(
+                    UUID.randomUUID().toString(),
                     UniqueIdUtil.newRequestId(), "",
                     pk, dn,
                     ThingModelMessage.TYPE_LIFETIME, "register",
@@ -154,7 +155,7 @@ public class DeviceBehaviourService {
                            String deviceName,
                            String productSecret,
                            String deviceSecret) {
-        DeviceInfo deviceInfo = deviceInfoRepository.findByProductKeyAndDeviceName(productKey, deviceName);
+        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
         if (deviceInfo == null) {
             throw new BizException("device does not exist");
         }
@@ -177,20 +178,23 @@ public class DeviceBehaviourService {
     public void deviceStateChange(String productKey,
                                   String deviceName,
                                   boolean online) {
-        DeviceInfo device = deviceInfoRepository.findByProductKeyAndDeviceName(productKey, deviceName);
+        DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
         if (device == null) {
             log.warn(String.format("productKey: %s,device: %s,online: %s", productKey, device, online));
             throw new BizException("device does not exist");
         }
         deviceStateChange(device, online);
 
+        //父设备ID不为空说明是子设备
         if (device.getParentId() != null) {
             return;
         }
 
-        List<DeviceInfo> subDevices = deviceInfoRepository.findByParentId(device.getDeviceId());
-        for (DeviceInfo subDevice : subDevices) {
-            Product product = productCache.findById(subDevice.getProductKey());
+        //否则为父设备，同步透传子设备状态
+        List<String> subDeviceIds = deviceInfoData.findSubDeviceIds(device.getDeviceId());
+        for (String subDeviceId : subDeviceIds) {
+            DeviceInfo subDevice=deviceInfoData.findByDeviceId(subDeviceId);
+            Product product = productData.findById(subDevice.getProductKey());
             Boolean transparent = product.getTransparent();
             //透传设备父设备上线，子设备也上线。非透传设备父设备离线，子设备才离线
             if (transparent != null && transparent || !online) {
@@ -207,10 +211,11 @@ public class DeviceBehaviourService {
             device.getState().setOnline(false);
             device.getState().setOfflineTime(System.currentTimeMillis());
         }
-        deviceInfoRepository.save(device);
+        deviceInfoData.save(device);
 
         //设备状态变更消息
         ThingModelMessage modelMessage = new ThingModelMessage(
+                UUID.randomUUID().toString(),
                 UniqueIdUtil.newRequestId(), "",
                 device.getProductKey(), device.getDeviceName(),
                 ThingModelMessage.TYPE_STATE,
@@ -225,8 +230,8 @@ public class DeviceBehaviourService {
 
     public void reportMessage(ThingModelMessage message) {
         try {
-            DeviceInfo device = deviceCache.getDeviceInfo(message.getProductKey(),
-                    message.getDeviceName());
+            DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(
+                    message.getProductKey(), message.getDeviceName());
             if (device == null) {
                 return;
             }

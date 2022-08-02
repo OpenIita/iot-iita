@@ -15,7 +15,7 @@ this.onReceive=function(method,path,header,params,body){
   var duPayload=body.payload;
   var token=duPayload.accessToken;
   var openUid=duPayload.openUid;
-
+  
   //设备发现
   if(namespace=="DuerOS.ConnectedHome.Discovery" && requestName=="DiscoverAppliancesRequest"){
 	var deviceIds=[];
@@ -46,13 +46,13 @@ this.onReceive=function(method,path,header,params,body){
 		var did=device.deviceId;
 		var pk=device.productKey;
 		var dn=device.deviceName;
-
+		
 		//更新设备openUid
 		rst=apiTool.setOpenUid(token,did,"dueros",openUid);
 		if(!rst || rst.status!=200){
 		  continue;
 		}
-
+		
 		//插座
 		if(pk=="cGCrkK7Ex4FESAwe"){
 		  var powerstate=device.property.powerstate;
@@ -129,11 +129,11 @@ this.onReceive=function(method,path,header,params,body){
 			  }
 			]
 		  });
-
+		  
 		}
 	  }
 	}
-
+	
 	return {
 	  url:"",//不指定直接作为响应返回
 	  header:{
@@ -147,7 +147,7 @@ this.onReceive=function(method,path,header,params,body){
 	var deviceId=appliance.applianceId;
 	var confirmName="UnsupportedOperationError";
 	var rst={status:500};
-
+	
 	//开关
 	if(requestName=="TurnOnRequest"){
 		//开
@@ -158,12 +158,12 @@ this.onReceive=function(method,path,header,params,body){
 	  	confirmName="TurnOffConfirmation";
 		rst=apiTool.setProperties(token,deviceId,{powerstate:0});
 	}
-
+	
 	if(rst.status!=200){
 	  confirmName="UnsupportedOperationError";
 	  apiTool.log("device control failed:"+JSON.stringify(rst));
 	}
-
+	
 	var content={
 	  header: {
 		namespace: "DuerOS.ConnectedHome.Control",
@@ -175,7 +175,7 @@ this.onReceive=function(method,path,header,params,body){
 		"attributes": []
 	  }
 	};
-
+	
 	return {
 	  url:"",
 	  header:{
@@ -218,7 +218,7 @@ this.onReceive=function(method,path,header,params,body){
 		  ]
 		}
 	  }:{};
-
+	  
 	  return {
 		url:"",
 		header:{

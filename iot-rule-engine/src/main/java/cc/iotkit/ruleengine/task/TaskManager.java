@@ -10,10 +10,11 @@
 package cc.iotkit.ruleengine.task;
 
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.dao.TaskInfoRepository;
-import cc.iotkit.dao.TaskLogRepository;
+import cc.iotkit.data.ITaskInfoData;
+import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.rule.TaskLog;
+import cc.iotkit.temporal.ITaskLogData;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
@@ -22,12 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -39,11 +36,11 @@ public class TaskManager implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private TaskInfoRepository taskInfoRepository;
+    private ITaskInfoData taskInfoData;
 
     @Lazy
     @Autowired
-    private TaskLogRepository taskLogRepository;
+    private ITaskLogData taskLogData;
 
     public TaskManager() {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
@@ -53,8 +50,8 @@ public class TaskManager implements ApplicationContextAware {
     public void initTask() {
         int idx = 0;
         while (true) {
-            Page<TaskInfo> tasks = taskInfoRepository.findAll(PageRequest.of(idx, 1000, Sort.by(Sort.Order.desc("createAt"))));
-            tasks.get().forEach(task -> {
+            Paging<TaskInfo> tasks = taskInfoData.findAll(idx, 1000);
+            tasks.getData().forEach(task -> {
                 try {
                     if (!TaskInfo.STATE_RUNNING.equals(task.getState())) {
                         return;
@@ -66,7 +63,7 @@ public class TaskManager implements ApplicationContextAware {
                 }
             });
             idx++;
-            if (tasks.getSize() == 0) {
+            if (tasks.getTotal() == 0) {
                 break;
             }
         }
@@ -148,25 +145,23 @@ public class TaskManager implements ApplicationContextAware {
     }
 
     public TaskInfo updateTaskState(String taskId, String state, String reason) {
-        Optional<TaskInfo> dbTask = taskInfoRepository.findById(taskId);
-        if (!dbTask.isPresent()) {
+        TaskInfo taskInfo = taskInfoData.findById(taskId);
+        if (taskInfo == null) {
             return null;
         }
-        TaskInfo taskInfo = dbTask.get();
         taskInfo.setState(state);
         taskInfo.setReason(reason);
-        taskInfoRepository.save(taskInfo);
+        taskInfoData.save(taskInfo);
         return taskInfo;
     }
 
     public void finishTask(String taskId) {
-        Optional<TaskInfo> dbTask = taskInfoRepository.findById(taskId);
-        if (!dbTask.isPresent()) {
+        TaskInfo taskInfo = taskInfoData.findById(taskId);
+        if (taskInfo == null) {
             return;
         }
-        TaskInfo taskInfo = dbTask.get();
         taskInfo.setState(TaskInfo.STATE_FINISHED);
-        taskInfoRepository.save(taskInfo);
+        taskInfoData.save(taskInfo);
     }
 
     @SneakyThrows
@@ -216,7 +211,7 @@ public class TaskManager implements ApplicationContextAware {
     }
 
     public void addLog(String taskId, boolean success, String content) {
-        taskLogRepository.save(TaskLog.builder()
+        taskLogData.add(TaskLog.builder()
                 .id(UUID.randomUUID().toString())
                 .taskId(taskId)
                 .success(success)

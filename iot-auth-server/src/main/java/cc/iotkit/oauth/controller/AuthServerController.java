@@ -10,7 +10,7 @@
 package cc.iotkit.oauth.controller;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.UserInfoRepository;
+import cc.iotkit.data.IUserInfoData;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.oauth.service.TokenRequestHandler;
 import cc.iotkit.utils.AuthUtil;
@@ -33,7 +33,7 @@ import java.util.Map;
 public class AuthServerController {
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
+    private IUserInfoData userInfoData;
 
     /**
      * 处理所有OAuth相关请求
@@ -56,7 +56,7 @@ public class AuthServerController {
                 // 登录处理函数
                         setDoLoginHandle((name, pwd) -> {
                     try {
-                        UserInfo userInfo = userInfoRepository.findByUid(name);
+                        UserInfo userInfo = userInfoData.findByUid(name);
                         if (userInfo != null) {
                             String secret = userInfo.getSecret();
                             if (AuthUtil.checkPwd(pwd, secret)) {

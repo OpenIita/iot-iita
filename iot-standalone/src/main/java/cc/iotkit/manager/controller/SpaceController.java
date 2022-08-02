@@ -10,8 +10,8 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.dao.HomeRepository;
-import cc.iotkit.dao.SpaceRepository;
+import cc.iotkit.data.IHomeData;
+import cc.iotkit.data.ISpaceData;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.space.Home;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -29,9 +28,9 @@ import java.util.Optional;
 public class SpaceController {
 
     @Autowired
-    private SpaceRepository spaceRepository;
+    private ISpaceData spaceData;
     @Autowired
-    private HomeRepository homeRepository;
+    private IHomeData homeData;
     @Autowired
     private DataOwnerService dataOwnerService;
 
@@ -40,7 +39,7 @@ public class SpaceController {
      */
     @GetMapping("/currentHome")
     public Home getCurrentHome() {
-        return homeRepository.findByUidAndCurrent(AuthUtil.getUserId(), true);
+        return homeData.findByUidAndCurrent(AuthUtil.getUserId(), true);
     }
 
     /**
@@ -48,11 +47,10 @@ public class SpaceController {
      */
     @PostMapping("/saveHome/{id}")
     public void saveHome(@PathVariable("id") String id, Home home) {
-        Optional<Home> optHome = homeRepository.findById(id);
-        if (!optHome.isPresent()) {
+        Home oldHome = homeData.findById(id);
+        if (home==null) {
             throw new BizException("home does not exist");
         }
-        Home oldHome = optHome.get();
         dataOwnerService.checkOwner(oldHome);
         if (StringUtils.isNotBlank(home.getName())) {
             oldHome.setName(home.getName());
@@ -60,7 +58,7 @@ public class SpaceController {
         if (StringUtils.isNotBlank(home.getAddress())) {
             oldHome.setName(home.getAddress());
         }
-        homeRepository.save(oldHome);
+        homeData.save(oldHome);
     }
 
     /**
@@ -68,7 +66,7 @@ public class SpaceController {
      */
     @GetMapping("/spaces/{homeId}")
     public List<Space> getSpaces(@PathVariable("homeId") String homeId) {
-        return spaceRepository.findByUidAndHomeIdOrderByCreateAtDesc(AuthUtil.getUserId(), homeId);
+        return spaceData.findByUidAndHomeIdOrderByCreateAtDesc(AuthUtil.getUserId(), homeId);
     }
 
     /**
@@ -77,11 +75,11 @@ public class SpaceController {
     @PostMapping("/addSpace")
     public void addSpace(String name) {
         String uid = AuthUtil.getUserId();
-        Home currHome = homeRepository.findByUidAndCurrent(uid, true);
+        Home currHome = homeData.findByUidAndCurrent(uid, true);
         if (currHome == null) {
             throw new BizException("current home does not exist");
         }
-        spaceRepository.save(Space.builder()
+        spaceData.save(Space.builder()
                 .homeId(currHome.getId())
                 .name(name)
                 .uid(uid)
@@ -92,24 +90,24 @@ public class SpaceController {
     @DeleteMapping("/delSpace/{id}")
     public void delSpace(@PathVariable("id") String id) {
         checkExistAndOwner(id);
-        spaceRepository.deleteById(id);
+        spaceData.deleteById(id);
     }
 
     @PostMapping("/saveSpace/{id}")
     public void saveSpace(@PathVariable("id") String id, String name) {
         Space oldSpace = checkExistAndOwner(id);
         oldSpace.setName(name);
-        spaceRepository.save(oldSpace);
+        spaceData.save(oldSpace);
     }
 
     private Space checkExistAndOwner(String id) {
-        Optional<Space> optSpace = spaceRepository.findById(id);
-        if (!optSpace.isPresent()) {
+        Space space = spaceData.findById(id);
+        if (space == null) {
             throw new BizException("space does not exist");
         }
 
-        dataOwnerService.checkOwner(optSpace.get());
-        return optSpace.get();
+        dataOwnerService.checkOwner(space);
+        return space;
     }
 
 }

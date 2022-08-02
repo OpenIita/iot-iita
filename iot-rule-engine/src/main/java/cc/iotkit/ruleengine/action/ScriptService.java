@@ -10,7 +10,7 @@
 package cc.iotkit.ruleengine.action;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.DeviceCache;
+import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
@@ -32,7 +32,7 @@ public class ScriptService {
 
     private ScriptObjectMirror scriptObject;
 
-    private DeviceCache deviceCache;
+    private IDeviceInfoData deviceInfoData;
 
     public Map execScript(ThingModelMessage msg) {
         try {
@@ -40,7 +40,7 @@ public class ScriptService {
                 scriptObject = (ScriptObjectMirror) engine.eval("new (function(){" + script + "})()");
             }
             //取设备信息
-            DeviceInfo deviceInfo = deviceCache.get(msg.getDeviceId());
+            DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(msg.getDeviceId());
 
             //执行转换脚本
             ScriptObjectMirror result = (ScriptObjectMirror) engine

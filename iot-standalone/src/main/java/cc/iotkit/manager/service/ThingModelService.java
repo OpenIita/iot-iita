@@ -10,7 +10,7 @@
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.dao.ThingModelRepository;
+import cc.iotkit.data.IThingModelData;
 import cc.iotkit.model.product.ThingModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,11 +22,10 @@ import java.util.Map;
 @Component
 public class ThingModelService {
     @Autowired
-    private ThingModelRepository thingModelRepository;
+    private IThingModelData thingModelData;
 
-    public void parseParams(ThingService service) {
-        ThingModel thingModel = thingModelRepository.findByProductKey(service.getProductKey());
-        thingModel.getModel();
+    public void parseParams(ThingService<Object> service) {
+        ThingModel thingModel = thingModelData.findByProductKey(service.getProductKey());
         ThingModel.Model model = thingModel.getModel();
 
         String type = service.getType();

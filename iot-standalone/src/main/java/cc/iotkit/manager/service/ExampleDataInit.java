@@ -10,104 +10,148 @@
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.*;
+import cc.iotkit.data.*;
+import cc.iotkit.model.Id;
+import cc.iotkit.model.OauthClient;
+import cc.iotkit.model.UserInfo;
+import cc.iotkit.model.device.DeviceGroup;
+import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.device.VirtualDevice;
+import cc.iotkit.model.product.Category;
+import cc.iotkit.model.product.Product;
+import cc.iotkit.model.product.ProductModel;
+import cc.iotkit.model.product.ThingModel;
+import cc.iotkit.model.protocol.ProtocolComponent;
+import cc.iotkit.model.protocol.ProtocolConverter;
+import cc.iotkit.model.rule.RuleInfo;
+import cc.iotkit.model.rule.TaskInfo;
+import cc.iotkit.model.space.Home;
+import cc.iotkit.model.space.Space;
+import cc.iotkit.model.space.SpaceDevice;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Charsets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Slf4j
 @Service
-public class ExampleDataInit {
+public class ExampleDataInit implements SmartInitializingSingleton {
 
     @Autowired
-    private OauthClientRepository oauthClientRepository;
+    private IOauthClientData oauthClientData;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private ICategoryData categoryData;
     @Autowired
-    private DeviceGroupRepository deviceGroupRepository;
+    private IDeviceGroupData deviceGroupData;
     @Autowired
-    private DeviceInfoRepository deviceInfoRepository;
+    @Qualifier("deviceInfoDataCache")
+    private IDeviceInfoData deviceInfoData;
     @Autowired
-    private HomeRepository homeRepository;
+    private IHomeData homeData;
     @Autowired
-    private ProductRepository productRepository;
+    private IProductData productData;
     @Autowired
-    private ProductModelRepository productModelRepository;
+    private IProductModelData productModelData;
     @Autowired
-    private ProtocolComponentRepository protocolComponentRepository;
+    private IProtocolComponentData protocolComponentData;
     @Autowired
-    private ProtocolConverterRepository protocolConverterRepository;
+    private IProtocolConverterData protocolConverterData;
     @Autowired
-    private RuleInfoRepository ruleInfoRepository;
+    private IRuleInfoData ruleInfoData;
     @Autowired
-    private SpaceRepository spaceRepository;
+    private ISpaceData spaceData;
     @Autowired
-    private SpaceDeviceRepository spaceDeviceRepository;
+    private ISpaceDeviceData spaceDeviceData;
     @Autowired
-    private TaskInfoRepository taskInfoRepository;
+    private ITaskInfoData taskInfoData;
     @Autowired
-    private ThingModelRepository thingModelRepository;
+    private IThingModelData thingModelData;
     @Autowired
-    private UserInfoRepository userInfoRepository;
+    private IUserInfoData userInfoData;
     @Autowired
-    private VirtualDeviceRepository virtualDeviceRepository;
+    private IVirtualDeviceData virtualDeviceData;
 
-    @Autowired
-    private DeviceDao deviceDao;
 
     @Autowired
     private ElasticsearchRestTemplate restTemplate;
 
-    @PostConstruct
-    public void init() {
-        try {
-            File initFile = new File(".init");
-            if (initFile.exists()) {
-                return;
+
+    @Override
+    public void afterSingletonsInstantiated() {
+        //等redis实例化后再执行
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    File initFile = new File(".init");
+                    if (initFile.exists()) {
+                        return;
+                    }
+
+                    initData("category", categoryData, new TypeReference<List<Category>>() {
+                    });
+                    initData("deviceGroup", deviceGroupData, new TypeReference<List<DeviceGroup>>() {
+                    });
+                    initData("deviceInfo", deviceInfoData, new TypeReference<List<DeviceInfo>>() {
+                    });
+                    initData("home", homeData, new TypeReference<List<Home>>() {
+                    });
+                    initData("oauthClient", oauthClientData, new TypeReference<List<OauthClient>>() {
+                    });
+                    initData("product", productData, new TypeReference<List<Product>>() {
+                    });
+                    initData("productModel", productModelData, new TypeReference<List<ProductModel>>() {
+                    });
+                    initData("protocolComponent", protocolComponentData, new TypeReference<List<ProtocolComponent>>() {
+                    });
+                    initData("protocolConverter", protocolConverterData, new TypeReference<List<ProtocolConverter>>() {
+                    });
+                    initData("ruleInfo", ruleInfoData, new TypeReference<List<RuleInfo>>() {
+                    });
+                    initData("space", spaceData, new TypeReference<List<Space>>() {
+                    });
+                    initData("spaceDevice", spaceDeviceData, new TypeReference<List<SpaceDevice>>() {
+                    });
+                    initData("taskInfo", taskInfoData, new TypeReference<List<TaskInfo>>() {
+                    });
+                    initData("thingModel", thingModelData, new TypeReference<List<ThingModel>>() {
+                    });
+                    initData("userInfo", userInfoData, new TypeReference<List<UserInfo>>() {
+                    });
+                    initData("virtualDevice", virtualDeviceData, new TypeReference<List<VirtualDevice>>() {
+                    });
+
+                    log.info("init data finished.");
+
+                    FileUtils.write(initFile, "", Charsets.UTF_8);
+                } catch (
+                        Throwable e) {
+                    log.error("init error", e);
+                }
             }
+        }, 100);
 
-            initData("category", categoryRepository);
-            initData("deviceGroup", deviceGroupRepository);
-            initData("deviceInfo", deviceInfoRepository);
-            initData("home", homeRepository);
-            initData("oauthClient", oauthClientRepository);
-            initData("product", productRepository);
-            initData("productModel", productModelRepository);
-            initData("protocolComponent", protocolComponentRepository);
-            initData("protocolConverter", protocolConverterRepository);
-            initData("ruleInfo", ruleInfoRepository);
-            initData("space", spaceRepository);
-            initData("spaceDevice", spaceDeviceRepository);
-            initData("taskInfo", taskInfoRepository);
-            initData("thingModel", thingModelRepository);
-            initData("userInfo", userInfoRepository);
-            initData("virtualDevice", virtualDeviceRepository);
-
-            log.info("init data finished.");
-
-            FileUtils.write(initFile, "", Charsets.UTF_8);
-        } catch (Throwable e) {
-            log.error("init error", e);
-        }
     }
 
-    private <T> void initData(String name, ElasticsearchRepository repository) throws IOException {
+    private <T> void initData(String name, ICommonData service, TypeReference<T> type) throws IOException {
         log.info("init {} data...", name);
         String json = FileUtils.readFileToString(new File("./data/init/" + name + ".json"), Charsets.UTF_8);
-        List<T> list = JsonUtil.parse(json, new TypeReference<>() {
-        });
+        List<T> list = (List<T>) JsonUtil.parse(json, type);
         for (T obj : list) {
-            repository.save(obj);
+            service.add((Id) obj);
         }
     }
 

@@ -10,12 +10,12 @@
 package cc.iotkit.ruleengine.rule;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.dao.RuleLogRepository;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.rule.RuleLog;
 import cc.iotkit.ruleengine.action.Action;
 import cc.iotkit.ruleengine.filter.Filter;
 import cc.iotkit.ruleengine.listener.Listener;
+import cc.iotkit.temporal.IRuleLogData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -34,7 +34,7 @@ public class RuleExecutor {
 
     @Lazy
     @Autowired
-    private RuleLogRepository ruleLogRepository;
+    private IRuleLogData ruleLogData;
 
     public void execute(ThingModelMessage message, Rule rule) {
         if (!doListeners(message, rule)) {
@@ -69,7 +69,7 @@ public class RuleExecutor {
             ruleLog.setContent(e.toString());
         } finally {
             ruleLog.setLogAt(System.currentTimeMillis());
-            ruleLogRepository.save(ruleLog);
+            ruleLogData.add(ruleLog);
         }
     }
 

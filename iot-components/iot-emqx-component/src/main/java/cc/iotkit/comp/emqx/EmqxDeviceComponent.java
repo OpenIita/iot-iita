@@ -18,7 +18,7 @@ import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.utils.SpringUtils;
 import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.dao.DeviceInfoRepository;
+import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import io.netty.handler.codec.mqtt.MqttQoS;
@@ -173,9 +173,9 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
         if (parent == null) {
             return;
         }
-        DeviceInfoRepository deviceInfoRepository = SpringUtils.getBean(DeviceInfoRepository.class);
+        IDeviceInfoData deviceInfoService = SpringUtils.getBean("deviceInfoDataCache");
 
-        DeviceInfo deviceInfo = deviceInfoRepository.findByProductKeyAndDeviceName(state.getProductKey(), state.getDeviceName());
+        DeviceInfo deviceInfo = deviceInfoService.findByProductKeyAndDeviceName(state.getProductKey(), state.getDeviceName());
         if (deviceInfo != null) {
             boolean isOnline = DeviceState.STATE_ONLINE.equals(state.getState());
             deviceInfo.getState().setOnline(isOnline);
@@ -185,7 +185,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
             if (isOnline) {
                 deviceInfo.getState().setOnlineTime(System.currentTimeMillis());
             }
-            deviceInfoRepository.save(deviceInfo);
+            deviceInfoService.save(deviceInfo);
         }
     }
 

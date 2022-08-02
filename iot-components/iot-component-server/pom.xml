@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iot-components</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.3.2-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -79,11 +79,6 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-dao</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
             <artifactId>iot-component-base</artifactId>
         </dependency>
 
@@ -94,7 +89,17 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-device-dao</artifactId>
+            <artifactId>iot-data-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-temporal-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-data-cache</artifactId>
         </dependency>
 
     </dependencies>
