@@ -149,7 +149,7 @@ public class VirtualDeviceController {
             @PathVariable("size") int size,
             @PathVariable("page") int page
     ) {
-        return virtualDeviceLogData.findByVirtualDeviceId(id, page - 1, size);
+        return virtualDeviceLogData.findByVirtualDeviceId(id, page, size);
     }
 
     private VirtualDevice checkOwner(String id) {
