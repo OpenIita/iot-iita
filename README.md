@@ -16,6 +16,13 @@
 
 系统包含了品类、物模型、消息转换、通讯组件（mqtt/EMQX通讯组件、小度音箱接入组件、onenet Studio接入组件）、云端低代码设备开发、设备管理、设备分组、规则引擎、第三方平台接入、数据流转、数据可视化、报警中心等模块和智能家居APP（小程序），集成了[Sa-Token](https://gitee.com/dromara/sa-token) 认证框架。
 
+#### 支持数据库
+
+关系型数据库：理论上支持所有实现了标准SQL的数据库，如： DB2、H2、HSQLDB、MariaDB、Microsoft SQL Server、MySQL、Oracle、Postgres
+
+时序数据库：elasticsearch、TDEngine
+
+
 **前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
 
  **演示地址：** [演示地址](http://120.76.96.206)，账号：guest1,密码：guest123  (只读权限)
@@ -41,7 +48,7 @@
 
 **注：** es版本为7.15.2，mysql版本为8.0+
 
-##### 切换为mysql方法
+##### 切换为mysql方法（其它数据库同理）
 
 1、将iot-rdb-data-service/pom.xml中的mysql驱动注释放开
 
