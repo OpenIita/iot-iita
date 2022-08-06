@@ -49,6 +49,11 @@ public class ThingModelMessage {
     private String deviceName;
 
     /**
+     * 所属用户ID
+     */
+    private String uid;
+
+    /**
      * 消息类型
      * lifetime:生命周期
      * state:状态

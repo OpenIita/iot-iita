@@ -17,13 +17,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
   datasource:
     url: jdbc:h2:./data/iotkit;MODE=MySQL
     username: sa
     password: 123456
     driverClassName: org.h2.Driver
 
-  ## 内置h2 web console设置
+  # 内置h2 web console设置
     platform: h2
   h2:
     console:
@@ -31,7 +32,8 @@ spring:
       path: /h2
       settings:
         web-allow-others: true
-#  =======内置H2数据库连接设置结束==========>>
+  #=======内置H2数据库连接设置结束==========>>
+
 
   # <<==========mysql配置开始==============
 #  datasource:
@@ -52,6 +54,7 @@ spring:
 #        format_sql: true
   # ============mysql配置结束============>>
 
+  #<<================es时序数据配置开始===============
   elasticsearch:
     rest:
       #使用内置es的配置
@@ -60,6 +63,16 @@ spring:
       username:
       password:
       connection-timeout: 10s
+  #================es时序数据配置结束===============>>
+
+  #<<===========tdengine时序数据库配置开始============
+#  td-datasource:
+#    url: jdbc:TAOS-RS://127.0.0.1:6041/iotkit?timezone=UTC-8&charset=UTF-8&locale=en_US.UTF-8
+#    username: root
+#    password: taosdata
+#    driverClassName: com.taosdata.jdbc.rs.RestfulDriver
+  #===========tdengine时序数据库配置开始============>>
+
 
   redis:
     #使用内置redis的配置

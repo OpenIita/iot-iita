@@ -5,18 +5,13 @@
     <parent>
         <artifactId>iotkit-parent</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>iot-standalone</artifactId>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -141,10 +136,17 @@
             <artifactId>iot-rdb-data-service</artifactId>
         </dependency>
 
+        <!--打开注释 启用es数据库-->
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-es-temporal-service</artifactId>
         </dependency>
+
+        <!--打开注释 启用tdengine数据库-->
+        <!--        <dependency>-->
+        <!--            <groupId>cc.iotkit</groupId>-->
+        <!--            <artifactId>iot-td-temporal-service</artifactId>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>cc.iotkit</groupId>

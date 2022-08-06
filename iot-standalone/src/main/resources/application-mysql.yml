@@ -20,7 +20,7 @@ spring:
   jpa:
     database: MySQL
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-#    show-sql: true
+  #    show-sql: true
     hibernate:
       ddl-auto: update
     properties:
@@ -28,16 +28,29 @@ spring:
         format_sql: true
   # ============mysql配置结束============>>
 
+  #<<================es时序数据配置开始===============
   elasticsearch:
     rest:
       #使用内置es的配置
+      #uris: http://elasticsearch:9200
       uris: http://127.0.0.1:9200
       username:
       password:
       connection-timeout: 10s
+  #================es时序数据配置结束===============>>
+
+  #<<===========tdengine时序数据库配置开始============
+#  td-datasource:
+#    url: jdbc:TAOS-RS://127.0.0.1:6041/iotkit?timezone=UTC-8&charset=UTF-8&locale=en_US.UTF-8
+#    username: root
+#    password: taosdata
+#    driverClassName: com.taosdata.jdbc.rs.RestfulDriver
+  #===========tdengine时序数据库配置开始============>>
+
 
   redis:
     #使用内置redis的配置
+    #host: redis
     host: 127.0.0.1
     port: 6379
     database: 0
@@ -49,10 +62,10 @@ spring:
 
 #图片存储用的是阿里云oss，如果需要上传产品图片才需要配置
 aliyun:
-  bucketId: iotkit-img
-  endpoint: oss-cn-shenzhen.aliyuncs.com
-  accessKeyId: 填写阿里云accessKeyId
-  accessKeySecret: 填写阿里云accessKeySecret
+  bucketId:
+  endpoint:
+  accessKeyId:
+  accessKeySecret:
 
 sa-token:
   # token名称 (同时也是cookie名称)

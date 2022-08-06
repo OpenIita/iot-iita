@@ -76,6 +76,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
                     queryBuilder.must(QueryBuilders.termQuery("uid", uid));
         }
 
+        //按小时统计消息数量
         NativeSearchQuery query = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)
                 .withAggregations(AggregationBuilders.dateHistogram("agg")

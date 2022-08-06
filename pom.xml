@@ -14,6 +14,7 @@
         <module>iot-message-bus</module>
         <module>iot-test-tool</module>
         <module>iot-data</module>
+        <module>iot-data/iot-td-temporal-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -24,7 +25,7 @@
 
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>0.4.1-SNAPSHOT</version>
     <name>iotkit-parent</name>
     <description>iotkit parent</description>
     <properties>
@@ -289,6 +290,12 @@
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-es-temporal-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-td-temporal-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -28,6 +28,7 @@ import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
+import cc.iotkit.temporal.IDbStructureData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Charsets;
 import lombok.extern.slf4j.Slf4j;
@@ -35,10 +36,8 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -82,11 +81,8 @@ public class ExampleDataInit implements SmartInitializingSingleton {
     private IUserInfoData userInfoData;
     @Autowired
     private IVirtualDeviceData virtualDeviceData;
-
-
     @Autowired
-    private ElasticsearchRestTemplate restTemplate;
-
+    private IDbStructureData dbStructureData;
 
     @Override
     public void afterSingletonsInstantiated() {
@@ -127,8 +123,13 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                     });
                     initData("taskInfo", taskInfoData, new TypeReference<List<TaskInfo>>() {
                     });
-                    initData("thingModel", thingModelData, new TypeReference<List<ThingModel>>() {
+                    List<ThingModel> thingModels = initData("thingModel", thingModelData, new TypeReference<>() {
                     });
+                    //初始化物模型时序数据结构
+                    for (ThingModel thingModel : thingModels) {
+                        dbStructureData.defineThingModel(thingModel);
+                    }
+
                     initData("userInfo", userInfoData, new TypeReference<List<UserInfo>>() {
                     });
                     initData("virtualDevice", virtualDeviceData, new TypeReference<List<VirtualDevice>>() {
@@ -146,13 +147,14 @@ public class ExampleDataInit implements SmartInitializingSingleton {
 
     }
 
-    private <T> void initData(String name, ICommonData service, TypeReference<T> type) throws IOException {
+    private <T> T initData(String name, ICommonData service, TypeReference<T> type) throws IOException {
         log.info("init {} data...", name);
         String json = FileUtils.readFileToString(new File("./data/init/" + name + ".json"), Charsets.UTF_8);
-        List<T> list = (List<T>) JsonUtil.parse(json, type);
-        for (T obj : list) {
+        List list = (List) JsonUtil.parse(json, type);
+        for (Object obj : list) {
             service.add((Id) obj);
         }
+        return (T) list;
     }
 
 }

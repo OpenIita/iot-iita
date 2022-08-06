@@ -12,7 +12,6 @@ package cc.iotkit.comps.service;
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.data.IDeviceInfoData;
-import cc.iotkit.model.device.message.DeviceProperty;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.mq.ConsumerHandler;
 import cc.iotkit.mq.MqConsumer;
@@ -23,8 +22,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,22 +56,9 @@ public class DevicePropertyConsumer implements ConsumerHandler<ThingModelMessage
         //更新设备当前属性
         updateDeviceCurrentProperties(deviceId, properties);
 
-        //设备属性历史数据存储
-        List<DeviceProperty> batch = new ArrayList<>();
-        for (String key : properties.keySet()) {
-            batch.add(new DeviceProperty(
-                    //防止重复id被覆盖
-                    msg.getMid() + "_" + key,
-                    deviceId,
-                    key,
-                    properties.get(key),
-                    msg.getOccurred()
-            ));
-        }
-
-        //批量保存
+        //保存属性记录
         try {
-            devicePropertyData.addProperties(batch);
+            devicePropertyData.addProperties(deviceId, properties, msg.getOccurred());
         } catch (Throwable e) {
             log.warn("save property data error", e);
         }

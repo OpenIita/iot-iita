@@ -30,7 +30,7 @@ public interface IThingModelMessageData {
                                                       String identifier, int page, int size);
 
     /**
-     * 按用户统计时间段内上报次数
+     * 按用户统计时间段内每小时上报次数
      *
      * @param uid   用户id
      * @param start 开始时间戳

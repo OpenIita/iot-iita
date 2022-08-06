@@ -78,7 +78,7 @@ public class ReportTest {
                                 Request request = new Request();
                                 request.setId(UUID.randomUUID().toString());
                                 Map<String, Object> param = new HashMap<>();
-                                param.put("volt", Math.round(Math.random()*100));
+                                param.put("volt", Math.round(Math.random() * 100));
                                 request.setParams(param);
                                 return request;
                             });

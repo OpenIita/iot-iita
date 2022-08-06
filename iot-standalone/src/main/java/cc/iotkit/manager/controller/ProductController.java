@@ -22,6 +22,7 @@ import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.model.product.ThingModel;
+import cc.iotkit.temporal.IDbStructureData;
 import cc.iotkit.utils.AuthUtil;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.aliyun.oss.OSS;
@@ -55,6 +56,8 @@ public class ProductController {
     private AliyunConfig aliyunConfig;
     @Autowired
     private IProductModelData productModelData;
+    @Autowired
+    private IDbStructureData dbStructureData;
 
 
     private OSS ossClient;
@@ -87,20 +90,36 @@ public class ProductController {
 
     @GetMapping("/thingModel/{productKey}")
     public ThingModel getThingModel(@PathVariable("productKey") String productKey) {
-        productKey = getProduct(productKey).getId();
+        checkProductOwner(productKey);
         return thingModelData.findById(productKey);
     }
 
     @PostMapping("/thingModel/save")
     public void saveThingModel(String productKey, String model) {
-        productKey = getProduct(productKey).getId();
-        thingModelData.save(new ThingModel(productKey, productKey, JsonUtil.parse(model, ThingModel.Model.class)));
+        checkProductOwner(productKey);
+        ThingModel oldData = thingModelData.findByProductKey(productKey);
+        ThingModel thingModel = new ThingModel(productKey, productKey, JsonUtil.parse(model, ThingModel.Model.class));
+        if (oldData == null) {
+            //定义时序数据库物模型数据结构
+            dbStructureData.defineThingModel(thingModel);
+        } else {
+            //更新时序数据库物模型数据结构
+            dbStructureData.undefineThingModel(thingModel);
+        }
+        thingModelData.save(thingModel);
     }
 
     @PostMapping("/thingModel/{productKey}/delete")
     public void deleteThingModel(String productKey) {
-        productKey = getProduct(productKey).getId();
+        checkProductOwner(productKey);
+        ThingModel thingModel = thingModelData.findByProductKey(productKey);
+        //删除时序数据库物模型数据结构
+        dbStructureData.defineThingModel(thingModel);
         thingModelData.deleteById(productKey);
+    }
+
+    private void checkProductOwner(String productKey) {
+        dataOwnerService.checkOwner(productData.findById(productKey));
     }
 
     @GetMapping("/categories")

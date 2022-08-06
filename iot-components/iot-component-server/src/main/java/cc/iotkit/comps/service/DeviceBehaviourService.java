@@ -139,7 +139,7 @@ public class DeviceBehaviourService {
             ThingModelMessage modelMessage = new ThingModelMessage(
                     UUID.randomUUID().toString(),
                     UniqueIdUtil.newRequestId(), "",
-                    pk, dn,
+                    pk, dn, uid,
                     ThingModelMessage.TYPE_LIFETIME, "register",
                     0, new HashMap<>(), System.currentTimeMillis(),
                     System.currentTimeMillis()
@@ -193,7 +193,7 @@ public class DeviceBehaviourService {
         //否则为父设备，同步透传子设备状态
         List<String> subDeviceIds = deviceInfoData.findSubDeviceIds(device.getDeviceId());
         for (String subDeviceId : subDeviceIds) {
-            DeviceInfo subDevice=deviceInfoData.findByDeviceId(subDeviceId);
+            DeviceInfo subDevice = deviceInfoData.findByDeviceId(subDeviceId);
             Product product = productData.findById(subDevice.getProductKey());
             Boolean transparent = product.getTransparent();
             //透传设备父设备上线，子设备也上线。非透传设备父设备离线，子设备才离线
@@ -217,7 +217,7 @@ public class DeviceBehaviourService {
         ThingModelMessage modelMessage = new ThingModelMessage(
                 UUID.randomUUID().toString(),
                 UniqueIdUtil.newRequestId(), "",
-                device.getProductKey(), device.getDeviceName(),
+                device.getProductKey(), device.getDeviceName(), device.getUid(),
                 ThingModelMessage.TYPE_STATE,
                 online ? DeviceState.STATE_ONLINE : DeviceState.STATE_OFFLINE,
                 0,

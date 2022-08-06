@@ -23,7 +23,10 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,9 +53,13 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
     }
 
     @Override
-    public void addProperties(List<DeviceProperty> properties) {
-        template.save(properties.stream().map(DevicePropertyMapper.M::toVo)
-                .collect(Collectors.toList()));
+    public void addProperties(String deviceId, Map<String, Object> properties, long time) {
+        List<DocDeviceProperty> deviceProperties = new ArrayList<>();
+        properties.forEach((key, val) -> deviceProperties.add(
+                new DocDeviceProperty(UUID.randomUUID().toString(), deviceId, key, val, time)
+        ));
+
+        template.save(deviceProperties);
     }
 
 

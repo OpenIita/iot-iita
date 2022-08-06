@@ -13,6 +13,7 @@ package cc.iotkit.temporal;
 import cc.iotkit.model.device.message.DeviceProperty;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 设备属性时序数据接口
@@ -32,8 +33,10 @@ public interface IDevicePropertyData {
     /**
      * 添加多个属性
      *
-     * @param properties 属性列表
+     * @param deviceId   设备ID
+     * @param properties 属性
+     * @param time       属性上报时间
      */
-    void addProperties(List<DeviceProperty> properties);
+    void addProperties(String deviceId, Map<String, Object> properties, long time);
 
 }

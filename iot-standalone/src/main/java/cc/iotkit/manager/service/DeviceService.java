@@ -151,6 +151,7 @@ public class DeviceService {
             deviceComponentManager.send(thingService);
         }
         String mid = thingService.getMid();
+        DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
 
         //保存设备日志
         ThingModelMessage thingModelMessage = ThingModelMessage.builder()
@@ -158,12 +159,14 @@ public class DeviceService {
                 .deviceId(deviceId)
                 .productKey(pk)
                 .deviceName(dn)
+                .uid(device.getUid())
                 .type(type)
                 .identifier(identifier)
                 .data(data)
                 .occurred(System.currentTimeMillis())
                 .time(System.currentTimeMillis())
                 .build();
+
         thingModelMessageData.add(thingModelMessage);
 
         return mid;
