@@ -14,14 +14,41 @@
 此仓库为奇特物联(iotkit)物联网平台开源项目。
 奇特物联是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能, 能帮助你快速搭建自己的物联网相关业务平台。
 
-系统包含了品类、物模型、消息转换、通讯组件（mqtt/EMQX通讯组件、小度音箱接入组件、onenet Studio接入组件）、云端低代码设备开发、设备管理、设备分组、规则引擎、第三方平台接入、数据流转、数据可视化、报警中心等模块和智能家居APP（小程序），集成了[Sa-Token](https://gitee.com/dromara/sa-token) 认证框架。
+系统包含了品类、物模型、消息转换、通讯组件（mqtt/EMQX通讯组件、小度音箱接入组件、onenet Studio接入组件）、云端低代码设备开发、设备管理、设备分组、规则引擎、第三方平台接入、数据流转、数据可视化、报警中心等模块和智能家居APP（小程序）。
 
-#### 支持数据库
+#### 低配服务器万级设备接入能力
+
+服务器配置： 1台2核2G(阿里云突发性能实例)跑主程序、1台2核4G(阿里云突发性能实例)跑TDengine和RocketMq
+
+程序配置：使用内置H2数据库和内置mqtt
+
+设备接入情况：接入4千台网关+8千台子设备，其中4千台子设备每10秒上报一条数据
+
+稳定运行后：设备在线并正常上报和下发、CPU占用未超过50%、界面操作没有卡顿
+
+#### 低学习门槛
+
+1、零配置一键运行，小白也会用
+
+2、低环境要求，不需要额外安装软件
+
+3、平民级代码，没有形式化的分层和过度封装，简单易懂
+
+
+#### 主流数据库支持
 
 关系型数据库：理论上支持所有实现了标准SQL的数据库，如： DB2、H2、HSQLDB、MariaDB、Microsoft SQL Server、MySQL、Oracle、Postgres
 
 时序数据库：elasticsearch、TDEngine
 
+K-V数据库：redis
+
+#### 消息总线支持
+
+Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意消息中间件。
+
+
+#### 系统生态
 
 **前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
 
@@ -39,9 +66,9 @@
 
 #### 软件架构
 软件架构说明
-本系统采用springboot、redis、H2、mysql、elasticsearch、sa-token等框架和第三方软件。
+本系统采用springboot、vertx、redis、H2、mysql、elasticsearch、TDEngine、RocketMq、sa-token等框架和第三方软件，中间件采用模块化无侵入集成非常容易扩展和替换。
 
-默认使用内置的redis、h2数据库、es时序数据库和消息总线以减小启动难度，可实现 **零配置一键启动** ，程序在第一次启动的时候会使用data/init目录的示例数据进行初始化。
+默认使用内置的redis、h2数据库、es时序数据库和vertx消息总线以减小启动难度，可实现 **零配置一键启动** ，程序在第一次启动的时候会使用data/init目录的示例数据进行初始化。
 
 管理员账号密码：iotkit/iotkitadmin
 
@@ -59,6 +86,12 @@
 1、注释掉iot-standalone/pom.xml中的 iot-es-temporal-service，并打开iot-td-temporal-service的注释
 
 2、application.xml中注释掉elasticsearch配置，并打开td-datasource配置
+
+##### 消息总线切换为RocketMq方法(feature分支)
+
+1、注释掉iot-standalone/pom.xml中的 iot-vertx-event-bus，并打开iot-message-rocketmq的注释
+
+2、application.xml中打开rocketmq配置
 
 
 #### 运行步骤
@@ -95,7 +128,7 @@ https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《i
 
 微信群:
 
-![输入图片说明](doc/ma.png)
+![输入图片说明](doc/ma.png)![输入图片说明](doc/ma.png)
 
 
 
@@ -103,6 +136,6 @@ https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《i
 
 绿色:已完成,蓝色:进行中,橙色:规划中
 
-![输入图片说明](https://foruda.gitee.com/images/1659836432117776786/roadmap.png)
+![输入图片说明](https://foruda.gitee.com/images/1659983071329152521/roadmap.png)
 
 
