@@ -76,9 +76,11 @@ public class MqttVerticle extends AbstractVerticle {
             log.info("MQTT client auth,clientId:{},username:{},password:{}",
                     clientId, auth.getUsername(), auth.getPassword());
             try {
-                ReceiveResult result = executor.onReceive(new HashMap<>(), "auth", authJson);
-                //保存设备与连接关系
-                endpointMap.put(getEndpointKey(result), endpoint);
+                executor.onReceive(new HashMap<>(), "auth", authJson, (r) -> {
+                    //保存设备与连接关系
+                    endpointMap.put(getEndpointKey(r), endpoint);
+                });
+
             } catch (Throwable e) {
                 log.error("auth failed", e);
                 endpoint.reject(MqttConnectReturnCode.CONNECTION_REFUSED_NOT_AUTHORIZED);
@@ -90,14 +92,16 @@ public class MqttVerticle extends AbstractVerticle {
             endpoint.accept(false);
             endpoint.closeHandler((v) -> {
                 log.warn("client connection closed,clientId:{}", clientId);
-                ReceiveResult result = executor.onReceive(new HashMap<>(), "disconnect", clientId);
-                //删除设备与连接关系
-                endpointMap.remove(getEndpointKey(result));
+                executor.onReceive(new HashMap<>(), "disconnect", clientId, (r) -> {
+                    //删除设备与连接关系
+                    endpointMap.remove(getEndpointKey(r));
+                });
             }).disconnectMessageHandler(disconnectMessage -> {
                 log.info("Received disconnect from client, reason code = {}", disconnectMessage.code());
-                ReceiveResult result = executor.onReceive(new HashMap<>(), "disconnect", clientId);
-                //删除设备与连接关系
-                endpointMap.remove(getEndpointKey(result));
+                executor.onReceive(new HashMap<>(), "disconnect", clientId, (r) -> {
+                    //删除设备与连接关系
+                    endpointMap.remove(getEndpointKey(r));
+                });
             }).subscribeHandler(subscribe -> {
                 List<MqttSubAckReasonCode> reasonCodes = new ArrayList<>();
                 for (MqttTopicSubscription s : subscribe.topicSubscriptions()) {

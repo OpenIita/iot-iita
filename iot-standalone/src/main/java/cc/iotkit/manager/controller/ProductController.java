@@ -104,7 +104,7 @@ public class ProductController {
             dbStructureData.defineThingModel(thingModel);
         } else {
             //更新时序数据库物模型数据结构
-            dbStructureData.undefineThingModel(thingModel);
+            dbStructureData.updateThingModel(thingModel);
         }
         thingModelData.save(thingModel);
     }

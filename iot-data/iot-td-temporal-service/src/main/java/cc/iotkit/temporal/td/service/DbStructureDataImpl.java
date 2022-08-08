@@ -1,3 +1,12 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.temporal.td.service;
 
 import cc.iotkit.common.utils.JsonUtil;
@@ -50,58 +59,65 @@ public class DbStructureDataImpl implements IDbStructureData {
      * 根据物模型更新超级表结构
      */
     @Override
-    public void undefineThingModel(ThingModel thingModel) {
-        //获取旧字段信息
-        String tbName = Constants.getProductPropertySTableName(thingModel.getProductKey());
-        String sql = TableManager.getDescTableSql(tbName);
-        TdResponse response = tdRestApi.execSql(sql);
-        if (response.getCode() != TdResponse.CODE_SUCCESS) {
-            throw new RuntimeException("get des table error:" + JsonUtil.toJsonString(response));
-        }
-
-        List<TdField> oldFields = FieldParser.parse(response.getData());
-        List<TdField> newFields = FieldParser.parse(thingModel);
-        //对比差异
-
-        //找出新增的字段
-        List<TdField> addFields = newFields.stream().filter((f) -> oldFields.stream()
-                .noneMatch(old -> old.getName().equals(f.getName())))
-                .collect(Collectors.toList());
-        if (addFields.size() > 0) {
-            sql = TableManager.getAddSTableColumnSql(tbName, addFields);
-            response = tdRestApi.execSql(sql);
+    public void updateThingModel(ThingModel thingModel) {
+        try {
+            //获取旧字段信息
+            String tbName = Constants.getProductPropertySTableName(thingModel.getProductKey());
+            String sql = TableManager.getDescTableSql(tbName);
+            TdResponse response = tdRestApi.execSql(sql);
             if (response.getCode() != TdResponse.CODE_SUCCESS) {
-                throw new RuntimeException("add table column error:" + JsonUtil.toJsonString(response));
+                throw new RuntimeException("get des table error:" + JsonUtil.toJsonString(response));
             }
-        }
 
-        //找出修改的字段
-        List<TdField> modifyFields = newFields.stream().filter((f) -> oldFields.stream()
-                .anyMatch(old ->
-                        old.getName().equals(f.getName()) //字段名相同
-                                //字段类型或长度不同
-                                && (old.getType().equals(f.getType()) || old.getLength() != f.getLength())
-                ))
-                .collect(Collectors.toList());
+            List<TdField> oldFields = FieldParser.parse(response.getData());
+            List<TdField> newFields = FieldParser.parse(thingModel);
+            //对比差异
 
-        if (modifyFields.size() > 0) {
-            sql = TableManager.getModifySTableColumnSql(tbName, modifyFields);
-            response = tdRestApi.execSql(sql);
-            if (response.getCode() != TdResponse.CODE_SUCCESS) {
-                throw new RuntimeException("modify table column error:" + JsonUtil.toJsonString(response));
+            //找出新增的字段
+            List<TdField> addFields = newFields.stream().filter((f) -> oldFields.stream()
+                    .noneMatch(old -> old.getName().equals(f.getName())))
+                    .collect(Collectors.toList());
+            if (addFields.size() > 0) {
+                sql = TableManager.getAddSTableColumnSql(tbName, addFields);
+                response = tdRestApi.execSql(sql);
+                if (response.getCode() != TdResponse.CODE_SUCCESS) {
+                    throw new RuntimeException("add table column error:" + JsonUtil.toJsonString(response));
+                }
             }
-        }
 
-        //找出删除的字段
-        List<TdField> dropFields = oldFields.stream().filter((f) -> newFields.stream()
-                .noneMatch(old -> old.getName().equals(f.getName())))
-                .collect(Collectors.toList());
-        if (dropFields.size() > 0) {
-            sql = TableManager.getDropSTableColumnSql(tbName, dropFields);
-            response = tdRestApi.execSql(sql);
-            if (response.getCode() != TdResponse.CODE_SUCCESS) {
-                throw new RuntimeException("drop table column error:" + JsonUtil.toJsonString(response));
+            //找出修改的字段
+            List<TdField> modifyFields = newFields.stream().filter((f) -> oldFields.stream()
+                    .anyMatch(old ->
+                            old.getName().equals(f.getName()) //字段名相同
+                                    //字段类型或长度不同
+                                    && (!old.getType().equals(f.getType()) || old.getLength() != f.getLength())
+                    ))
+                    .collect(Collectors.toList());
+
+            if (modifyFields.size() > 0) {
+                sql = TableManager.getModifySTableColumnSql(tbName, modifyFields);
+                response = tdRestApi.execSql(sql);
+                if (response.getCode() != TdResponse.CODE_SUCCESS) {
+                    throw new RuntimeException("modify table column error:" + JsonUtil.toJsonString(response));
+                }
             }
+
+            //找出删除的字段
+            List<TdField> dropFields = oldFields.stream().filter((f) ->
+                    !"time".equals(f.getName()) &&
+                            !"device_id".equals(f.getName()) && newFields.stream()
+                            //字段名不是time且没有相同字段名的
+                            .noneMatch(n -> n.getName().equals(f.getName())))
+                    .collect(Collectors.toList());
+            if (dropFields.size() > 0) {
+                sql = TableManager.getDropSTableColumnSql(tbName, dropFields);
+                response = tdRestApi.execSql(sql);
+                if (response.getCode() != TdResponse.CODE_SUCCESS) {
+                    throw new RuntimeException("drop table column error:" + JsonUtil.toJsonString(response));
+                }
+            }
+        } catch (Throwable e) {
+            log.error("update thingmodel stable failed", e);
         }
     }
 

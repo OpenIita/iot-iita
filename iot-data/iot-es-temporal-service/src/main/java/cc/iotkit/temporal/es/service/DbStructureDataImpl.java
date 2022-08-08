@@ -12,7 +12,7 @@ public class DbStructureDataImpl implements IDbStructureData {
     }
 
     @Override
-    public void undefineThingModel(ThingModel thingModel) {
+    public void updateThingModel(ThingModel thingModel) {
 
     }
 

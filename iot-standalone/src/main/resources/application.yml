@@ -86,6 +86,12 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+#application.yml中打开注释支持rocketMq作为消息总线，pom.xml中打开注释使用rocketmq消息总线
+#rocketmq:
+#  name-server: 172.16.1.113:9876
+#  producer:
+#        group: iotkit
+
 #图片存储用的是阿里云oss，如果需要上传产品图片才需要配置
 aliyun:
   bucketId:

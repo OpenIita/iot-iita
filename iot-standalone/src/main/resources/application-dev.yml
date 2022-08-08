@@ -55,22 +55,22 @@ spring:
   # ============mysql配置结束============>>
 
   #<<================es时序数据配置开始===============
-  #  elasticsearch:
-  #    rest:
-  #      #使用内置es的配置
-  #      #uris: http://elasticsearch:9200
-  #      uris: http://127.0.0.1:9200
-  #      username:
-  #      password:
-  #      connection-timeout: 10s
+  elasticsearch:
+    rest:
+      #使用内置es的配置
+      #uris: http://elasticsearch:9200
+      uris: http://127.0.0.1:9200
+      username:
+      password:
+      connection-timeout: 10s
   #================es时序数据配置结束===============>>
 
   #<<===========tdengine时序数据库配置开始============
-  td-datasource:
-    url: jdbc:TAOS-RS://127.0.0.1:6041/iotkit?timezone=UTC-8&charset=UTF-8&locale=en_US.UTF-8
-    username: root
-    password: taosdata
-    driverClassName: com.taosdata.jdbc.rs.RestfulDriver
+#  td-datasource:
+#    url: jdbc:TAOS-RS://127.0.0.1:6041/iotkit?timezone=UTC-8&charset=UTF-8&locale=en_US.UTF-8
+#    username: root
+#    password: taosdata
+#    driverClassName: com.taosdata.jdbc.rs.RestfulDriver
   #===========tdengine时序数据库配置开始============>>
 
 
@@ -85,6 +85,12 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+#application.yml中打开注释支持rocketMq作为消息总线，pom.xml中打开注释使用rocketmq消息总线
+#rocketmq:
+#  name-server: 127.0.0.1:9876
+#  producer:
+#        group: iotkit
 
 #图片存储用的是阿里云oss，如果需要上传产品图片才需要配置
 aliyun:

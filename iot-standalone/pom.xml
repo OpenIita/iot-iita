@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iotkit-parent</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.1-SNAPSHOT</version>
+        <version>0.4.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -123,7 +123,19 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-message-bus</artifactId>
+            <artifactId>iot-message-core</artifactId>
+        </dependency>
+
+        <!--内置消息总线-->
+<!--        <dependency>-->
+<!--            <groupId>cc.iotkit</groupId>-->
+<!--            <artifactId>iot-vertx-event-bus</artifactId>-->
+<!--        </dependency>-->
+
+        <!--打开注释使用rocketmq消息总线-->
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-message-rocketmq</artifactId>
         </dependency>
 
         <dependency>
@@ -137,16 +149,16 @@
         </dependency>
 
         <!--打开注释 启用es数据库-->
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-es-temporal-service</artifactId>
-        </dependency>
-
-        <!--打开注释 启用tdengine数据库-->
         <!--        <dependency>-->
         <!--            <groupId>cc.iotkit</groupId>-->
-        <!--            <artifactId>iot-td-temporal-service</artifactId>-->
+        <!--            <artifactId>iot-es-temporal-service</artifactId>-->
         <!--        </dependency>-->
+
+        <!--打开注释 启用tdengine数据库-->
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-td-temporal-service</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>cc.iotkit</groupId>

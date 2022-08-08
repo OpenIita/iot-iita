@@ -36,32 +36,29 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
                                                              String identifier,
                                                              int page, int size) {
         String sql = "select time,mid,product_key,device_name,type,identifier,code,data,report_time " +
-                "from thing_model_message_%s %s order by time desc limit %d offset %d";
+                "from thing_model_message where device_id=? %s order by time desc limit %d offset %d";
 
         //构建动态条件
         List<Object> args = new ArrayList<>();
-        List<String> cons = new ArrayList<>();
+        args.add(deviceId);
+        StringBuilder sbCond = new StringBuilder();
         if (StringUtils.isNotBlank(type)) {
-            cons.add("type=?");
+            sbCond.append(" and type=? ");
             args.add(type);
         }
         if (StringUtils.isNotBlank(identifier)) {
-            cons.add("identifier=?");
+            sbCond.append("and identifier=? ");
             args.add(identifier);
         }
-        String condition = "";
-        if (cons.size() > 0) {
-            condition = "where " + String.join(" and ", cons);
-        }
 
-        sql = String.format(sql, deviceId.toLowerCase(), condition, size, (page - 1) * size);
+        sql = String.format(sql, sbCond.toString(), size, (page - 1) * size);
         List<TbThingModelMessage> ruleLogs = tdTemplate.query(sql,
                 new BeanPropertyRowMapper<>(TbThingModelMessage.class),
                 args.toArray()
         );
 
-        sql = String.format("select count(*) from thing_model_message_%s %s",
-                deviceId.toLowerCase(), condition);
+        sql = String.format("select count(*) from thing_model_message where device_id=? %s",
+                sbCond.toString());
         List<Long> counts = tdTemplate.queryForList(sql, Long.class, args.toArray());
         long count = counts.size() > 0 ? counts.get(0) : 0;
 

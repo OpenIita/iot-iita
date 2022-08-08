@@ -13,9 +13,9 @@ public interface IDbStructureData {
     void defineThingModel(ThingModel thingModel);
 
     /**
-     * 取消物模型定义
+     * 更新物模型定义
      */
-    void undefineThingModel(ThingModel thingModel);
+    void updateThingModel(ThingModel thingModel);
 
     /**
      * 初始化数据库结构
