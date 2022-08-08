@@ -128,8 +128,7 @@ https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《i
 
 微信群:
 
-![输入图片说明](doc/ma.png)![输入图片说明](doc/ma.png)
-
+![输入图片说明](doc/ma.png)
 
 
 ### roadmap
@@ -137,5 +136,6 @@ https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《i
 绿色:已完成,蓝色:进行中,橙色:规划中
 
 ![输入图片说明](https://foruda.gitee.com/images/1659983071329152521/roadmap.png)
+
 
 
