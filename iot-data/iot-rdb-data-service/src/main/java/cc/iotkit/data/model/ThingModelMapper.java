@@ -11,6 +11,7 @@ package cc.iotkit.data.model;
 
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.model.product.ThingModel;
+import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -27,8 +28,13 @@ public interface ThingModelMapper {
     ThingModel toDto(TbThingModel vo);
 
     static ThingModel toDtoFix(TbThingModel vo) {
+        if (vo == null) {
+            return null;
+        }
         ThingModel dto = M.toDto(vo);
-        dto.setModel(JsonUtil.parse(vo.getModel(), ThingModel.Model.class));
+        if (StringUtils.isNotBlank(vo.getModel())) {
+            dto.setModel(JsonUtil.parse(vo.getModel(), ThingModel.Model.class));
+        }
         return dto;
     }
 
