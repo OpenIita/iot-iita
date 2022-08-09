@@ -126,17 +126,17 @@
             <artifactId>iot-message-core</artifactId>
         </dependency>
 
-        <!--内置消息总线-->
-<!--        <dependency>-->
-<!--            <groupId>cc.iotkit</groupId>-->
-<!--            <artifactId>iot-vertx-event-bus</artifactId>-->
-<!--        </dependency>-->
-
-        <!--打开注释使用rocketmq消息总线-->
+        <!--内置vertx消息总线-->
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-message-rocketmq</artifactId>
+            <artifactId>iot-vertx-event-bus</artifactId>
         </dependency>
+
+        <!--打开注释使用rocketmq消息总线-->
+<!--        <dependency>-->
+        <!--            <groupId>cc.iotkit</groupId>-->
+        <!--            <artifactId>iot-message-rocketmq</artifactId>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>cc.iotkit</groupId>
