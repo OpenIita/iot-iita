@@ -67,6 +67,12 @@ aliyun:
   accessKeyId:
   accessKeySecret:
 
+#application.yml中打开注释支持rocketMq作为消息总线，pom.xml中打开注释使用rocketmq消息总线
+#rocketmq:
+#  name-server: 127.0.0.1:9876
+#  producer:
+#        group: iotkit
+
 sa-token:
   # token名称 (同时也是cookie名称)
   token-name: token

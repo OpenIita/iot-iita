@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iot-test-tool</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.1-SNAPSHOT</version>
+        <version>0.4.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -58,7 +58,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>cc.iotkit.simulator.Application</mainClass>
+                                    <mainClass>cc.iotkit.test.mqtt.performance.ReportTest</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

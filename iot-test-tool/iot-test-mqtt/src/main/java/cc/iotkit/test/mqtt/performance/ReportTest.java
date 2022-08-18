@@ -35,6 +35,7 @@ public class ReportTest {
         if (args.length == 0) {
             Mqtt.brokerHost = "127.0.0.1";
 //            Mqtt.brokerHost = "120.76.96.206";
+//            Mqtt.brokerHost = "172.16.1.109";
         } else {
             Mqtt.brokerHost = args[0];
         }
@@ -59,10 +60,6 @@ public class ReportTest {
                 gateway.addSubDevice("cGCrkK7Ex4FESAwe",
                         "TEST_SC_" + StringUtils.leftPad(finalI + "", 6, "0"),
                         "S01");
-
-                gateway.addSubDevice("xpsYHExTKPFaQMS7",
-                        "TEST_LT_" + StringUtils.leftPad(finalI + "", 6, "0"),
-                        "L01");
 
                 gateway.onDeviceOnline((device) -> {
                     String pk = device.getProductKey();
