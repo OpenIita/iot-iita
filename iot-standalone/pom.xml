@@ -133,7 +133,7 @@
         </dependency>
 
         <!--打开注释使用rocketmq消息总线-->
-<!--        <dependency>-->
+        <!--        <dependency>-->
         <!--            <groupId>cc.iotkit</groupId>-->
         <!--            <artifactId>iot-message-rocketmq</artifactId>-->
         <!--        </dependency>-->
@@ -149,16 +149,16 @@
         </dependency>
 
         <!--打开注释 启用es数据库-->
-        <!--        <dependency>-->
-        <!--            <groupId>cc.iotkit</groupId>-->
-        <!--            <artifactId>iot-es-temporal-service</artifactId>-->
-        <!--        </dependency>-->
-
-        <!--打开注释 启用tdengine数据库-->
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-td-temporal-service</artifactId>
+            <artifactId>iot-es-temporal-service</artifactId>
         </dependency>
+
+        <!--打开注释 启用tdengine数据库-->
+        <!--        <dependency>-->
+        <!--            <groupId>cc.iotkit</groupId>-->
+        <!--            <artifactId>iot-td-temporal-service</artifactId>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>cc.iotkit</groupId>
