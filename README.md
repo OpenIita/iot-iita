@@ -101,7 +101,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 3、在iot-standalone模块的Application类上右键运行
 
-4、若出现报错，可能是数据没有初始化完或重复初始化，把项目根目录下.init文件删除后重启
+4、若出现报错，可能是数据没有初始化完或重复初始化，把项目根目录下.init文件和data/iotkit.xx文件删除后重启
 
 
 #### docker运行
