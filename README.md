@@ -81,13 +81,13 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 2、启动时指定active: --spring.profiles.active=mysql
 
-##### 时序数据库切换为TDengein方法(feature分支)
+##### 时序数据库切换为TDengein方法
 
 1、注释掉iot-standalone/pom.xml中的 iot-es-temporal-service，并打开iot-td-temporal-service的注释
 
 2、application.xml中注释掉elasticsearch配置，并打开td-datasource配置
 
-##### 消息总线切换为RocketMq方法(feature分支)
+##### 消息总线切换为RocketMq方法
 
 1、注释掉iot-standalone/pom.xml中的 iot-vertx-event-bus，并打开iot-message-rocketmq的注释
 
@@ -135,7 +135,7 @@ https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《i
 
 绿色:已完成,蓝色:进行中,橙色:规划中
 
-![输入图片说明](https://foruda.gitee.com/images/1659983071329152521/roadmap.png)
+![输入图片说明](https://foruda.gitee.com/images/1660824825052746143/roadmap.png)
 
 
 
