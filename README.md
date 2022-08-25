@@ -108,6 +108,15 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 git clone https://gitee.com/iotkit-open-source/iotkit-parent.git && cd iotkit-parent/docker-compose && docker-compose up -d 
 
 
+#### 服务器部署
+
+启动脚本：
+
+```
+Linux:  java -classpath ".:lib/*" cc.iotkit.Application 
+Windows:  java -classpath ".;lib/*" cc.iotkit.Application 
+```
+
 
 
 
