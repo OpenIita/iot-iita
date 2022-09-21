@@ -48,9 +48,13 @@ public class TaskManager implements ApplicationContextAware {
     }
 
     public void initTask() {
-        int idx = 0;
+        int idx = 1;
         while (true) {
             Paging<TaskInfo> tasks = taskInfoData.findAll(idx, 1000);
+            // 如果记录为空，直接跳出循环
+            if (tasks.getData() == null || tasks.getData().isEmpty()) {
+                break;
+            }
             tasks.getData().forEach(task -> {
                 try {
                     if (!TaskInfo.STATE_RUNNING.equals(task.getState())) {
@@ -63,9 +67,6 @@ public class TaskManager implements ApplicationContextAware {
                 }
             });
             idx++;
-            if (tasks.getTotal() == 0) {
-                break;
-            }
         }
     }
 
