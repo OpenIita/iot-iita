@@ -128,6 +128,12 @@ https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《i
  **这是我宝贵的技术文档分享，请给本仓库点个star**   :star:  **支持一下，谢谢！**  :star:  :star:  :star:  :star: 
 
 
+#### 帮助文档
+
+https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《iot平台帮助文档》密码：cv9v
+
+
+
 #### 捐助与支持
 如果您觉得我的开源软件对你有所帮助请关注、star、fork :kissing_heart: 。
 
