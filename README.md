@@ -130,7 +130,7 @@ https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《i
 
 #### 帮助文档
 
-https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《iot平台帮助文档》密码：cv9v
+https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《iot平台帮助文档》密码：cv9v (注意：不要登录语雀)
 
 
 
