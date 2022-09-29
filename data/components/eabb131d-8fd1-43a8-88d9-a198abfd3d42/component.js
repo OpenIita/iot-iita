@@ -173,6 +173,20 @@ this.onReceive=function(head,type,payload){
   }
 
   //数据上报
+  var reply=
+	  {
+		productKey:pk,
+		deviceName:dn,
+		mid:payload.id,
+		content:{
+		  topic:topic.replace("/s/","/c/")+"_reply",
+		  payload:JSON.stringify({
+			id:payload.id,
+			method: payload.method+"_reply",
+			code:0,
+		  })
+		}
+	  };
   return {
 	type:"report",
 	data:{
@@ -183,6 +197,10 @@ this.onReceive=function(head,type,payload){
 		topic:topic,
 		payload:payload
 	  }
+	},
+	action:{
+	  type:"ack",
+	  content:JSON.stringify(reply)
 	}
   }
 }
