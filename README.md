@@ -112,6 +112,8 @@ git clone https://gitee.com/iotkit-open-source/iotkit-parent.git && cd iotkit-pa
 
 #### 服务器部署
 
+执行maven打包将打包后的iot-standalone.xx.tar上传到服务器，解压后启动。
+
 启动脚本：
 
 ```
