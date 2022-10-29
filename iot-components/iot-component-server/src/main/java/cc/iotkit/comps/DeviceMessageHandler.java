@@ -138,10 +138,8 @@ public class DeviceMessageHandler implements IMessageHandler {
                     return;
                 }
 
-            } catch (BizException e) {
-                throw e;
             } catch (Throwable e) {
-                throw new BizException("receive component message error", e);
+                log.error("receive component message error", e);
             }
             onResult.accept(null);
         });

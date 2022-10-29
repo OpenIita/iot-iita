@@ -48,7 +48,7 @@ function register(payload){
   var dn=arr[1];
   var model=arr[2];
   var pwd=md5("xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU"+auth.clientid);
-  if(pwd!=auth.password){
+  if(pwd.toLocaleLowerCase()!=auth.password.toLocaleLowerCase()){
 	throw new Error("incorrect password");
   }
   return {

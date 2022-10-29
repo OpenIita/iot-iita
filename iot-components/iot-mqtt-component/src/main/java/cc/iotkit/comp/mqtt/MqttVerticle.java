@@ -77,10 +77,14 @@ public class MqttVerticle extends AbstractVerticle {
                     clientId, auth.getUsername(), auth.getPassword());
             try {
                 executor.onReceive(new HashMap<>(), "auth", authJson, (r) -> {
+                    if (r == null) {
+                        //认证失败
+                        endpoint.reject(MqttConnectReturnCode.CONNECTION_REFUSED_NOT_AUTHORIZED);
+                        return;
+                    }
                     //保存设备与连接关系
                     endpointMap.put(getEndpointKey(r), endpoint);
                 });
-
             } catch (Throwable e) {
                 log.error("auth failed", e);
                 endpoint.reject(MqttConnectReturnCode.CONNECTION_REFUSED_NOT_AUTHORIZED);
