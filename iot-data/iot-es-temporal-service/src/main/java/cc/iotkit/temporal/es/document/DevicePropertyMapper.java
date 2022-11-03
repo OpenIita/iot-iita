@@ -18,6 +18,4 @@ public interface DevicePropertyMapper {
     DevicePropertyMapper M = Mappers.getMapper(DevicePropertyMapper.class);
 
     DeviceProperty toDto(DocDeviceProperty vo);
-
-    DocDeviceProperty toVo(DeviceProperty dto);
 }

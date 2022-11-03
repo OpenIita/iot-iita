@@ -39,6 +39,11 @@
             <artifactId>iot-temporal-service</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-data-cache</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
