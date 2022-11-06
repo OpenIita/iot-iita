@@ -47,8 +47,10 @@ public class ProductController {
     @Qualifier("productDataCache")
     private IProductData productData;
     @Autowired
+    @Qualifier("thingModelDataCache")
     private IThingModelData thingModelData;
     @Autowired
+    @Qualifier("categoryDataCache")
     private ICategoryData categoryData;
     @Autowired
     private DataOwnerService dataOwnerService;
@@ -97,7 +99,7 @@ public class ProductController {
     @PostMapping("/thingModel/save")
     public void saveThingModel(String productKey, String model) {
         checkProductOwner(productKey);
-        ThingModel oldData = thingModelData.findByProductKey(productKey);
+        ThingModel oldData = thingModelData.findById(productKey);
         ThingModel thingModel = new ThingModel(productKey, productKey, JsonUtil.parse(model, ThingModel.Model.class));
         if (oldData == null) {
             //定义时序数据库物模型数据结构
@@ -112,7 +114,7 @@ public class ProductController {
     @PostMapping("/thingModel/{productKey}/delete")
     public void deleteThingModel(String productKey) {
         checkProductOwner(productKey);
-        ThingModel thingModel = thingModelData.findByProductKey(productKey);
+        ThingModel thingModel = thingModelData.findById(productKey);
         //删除时序数据库物模型数据结构
         dbStructureData.defineThingModel(thingModel);
         thingModelData.deleteById(productKey);

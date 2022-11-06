@@ -25,7 +25,7 @@ public interface Constants {
 
     String CACHE_SPACE = "space_cache";
 
-    String THING_MODEL_CACHE = "thing_model_cache";
+    String CACHE_THING_MODEL = "thing_model_cache";
 
     String CACHE_USER_INFO = "user_info_cache";
 

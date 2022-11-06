@@ -30,11 +30,6 @@ public class ThingModelDataImpl implements IThingModelData {
     private ThingModelRepository thingModelRepository;
 
     @Override
-    public ThingModel findByProductKey(String productKey) {
-        return ThingModelMapper.toDtoFix(thingModelRepository.findByProductKey(productKey));
-    }
-
-    @Override
     public ThingModel findById(String s) {
         return ThingModelMapper.toDtoFix(thingModelRepository.findById(s).orElse(null));
     }

@@ -77,11 +77,8 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
         if (deviceInfo == null) {
             return null;
         }
-        String pk = deviceInfo.getProductKey().toLowerCase();
-        String index = String.format("device_property_%s_%s", pk, name);
-        if (null == index || StringUtils.isBlank(index)) {
-            return null;
-        }
+        String pk = deviceInfo.getProductKey();
+        String index = String.format("device_property_%s_%s", pk, name).toLowerCase();
         if (!indexSet.contains(index)) {
             IndexCoordinates indexCoordinates = IndexCoordinates.of(index);
             if (!template.indexOps(indexCoordinates).exists()) {
