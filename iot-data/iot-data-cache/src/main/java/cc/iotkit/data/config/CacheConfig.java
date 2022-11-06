@@ -45,6 +45,7 @@ public class CacheConfig {
                 Constants.CACHE_OAUTH_CLIENT, config,
                 Constants.CACHE_CATEGORY, config,
                 Constants.CACHE_THING_MODEL, config,
+                Constants.CACHE_SPACE, config,
                 //统计缓存5分钟
                 Constants.CACHE_DEVICE_STATS, config.entryTtl(Duration.ofMinutes(5))
         );
