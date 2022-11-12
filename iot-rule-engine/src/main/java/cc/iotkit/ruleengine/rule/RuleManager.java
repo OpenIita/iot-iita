@@ -16,9 +16,14 @@ import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.ruleengine.action.*;
+import cc.iotkit.ruleengine.action.kafka.KafkaAction;
+import cc.iotkit.ruleengine.action.kafka.KafkaService;
+import cc.iotkit.ruleengine.action.mqtt.MqttAction;
+import cc.iotkit.ruleengine.action.mqtt.MqttService;
 import cc.iotkit.ruleengine.config.RuleConfiguration;
 import cc.iotkit.ruleengine.filter.DeviceFilter;
 import cc.iotkit.ruleengine.filter.Filter;
+import cc.iotkit.ruleengine.link.LinkFactory;
 import cc.iotkit.ruleengine.listener.DeviceListener;
 import cc.iotkit.ruleengine.listener.Listener;
 import lombok.SneakyThrows;
@@ -90,6 +95,8 @@ public class RuleManager {
 
     public void remove(String ruleId) {
         ruleMessageHandler.removeRule(ruleId);
+        // 移出link连接
+        LinkFactory.ruleClose(ruleId);
     }
 
     public void pause(String ruleId) {
@@ -111,7 +118,7 @@ public class RuleManager {
         }
         List<Action<?>> actions = new ArrayList<>();
         for (RuleAction action : ruleInfo.getActions()) {
-            actions.add(parseAction(action.getType(), action.getConfig()));
+            actions.add(parseAction(ruleInfo.getId(), action.getType(), action.getConfig()));
         }
 
         return new Rule(ruleInfo.getId(), ruleInfo.getName(), listeners, filters, actions);
@@ -133,7 +140,7 @@ public class RuleManager {
         return null;
     }
 
-    private Action<?> parseAction(String type, String config) {
+    private Action<?> parseAction(String ruleId, String type, String config) {
         if (DeviceAction.TYPE.equals(type)) {
             DeviceAction action = parse(config, DeviceAction.class);
             action.setDeviceActionService(deviceActionService);
@@ -144,6 +151,20 @@ public class RuleManager {
                 service.setDeviceInfoData(deviceInfoData);
             }
             return httpAction;
+        } else if (MqttAction.TYPE.equals(type)) {
+            MqttAction mqttAction = parse(config, MqttAction.class);
+            for (MqttService service : mqttAction.getServices()) {
+                service.setDeviceInfoData(deviceInfoData);
+                service.initLink(ruleId);
+            }
+            return mqttAction;
+        } else if (KafkaAction.TYPE.equals(type)) {
+            KafkaAction kafkaAction = parse(config, KafkaAction.class);
+            for (KafkaService service : kafkaAction.getServices()) {
+                service.setDeviceInfoData(deviceInfoData);
+                service.initLink(ruleId);
+            }
+            return kafkaAction;
         }
         return null;
     }
