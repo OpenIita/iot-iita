@@ -2,9 +2,11 @@ package cc.iotkit.ruleengine.link.impl;
 
 import cc.iotkit.common.utils.FIUtil;
 import cc.iotkit.ruleengine.link.BaseSinkLink;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 
@@ -21,6 +23,7 @@ import java.util.function.Consumer;
  * @author huangwenl
  * @date 2022-11-11
  */
+@Slf4j
 public class KafkaLink implements BaseSinkLink {
     public static final String LINK_TYPE = "kafka";
     public static final String TOPIC = "topic";
@@ -60,16 +63,25 @@ public class KafkaLink implements BaseSinkLink {
         FIUtil.isTotF(msg.containsKey(PARTITION)).handler(
                 () -> record.set(KafkaProducerRecord.create((String) msg.get(TOPIC), "", msg.get(PAYLOAD).toString(), (Integer) msg.get(PARTITION))),
                 () -> record.set(KafkaProducerRecord.create((String) msg.get(TOPIC), msg.get(PAYLOAD).toString())));
-        // todo 异步发送(不能确认是否成功)
-        producer.write(record.get());
-        consumer.accept(String.format("kafka,topic[%s],发送成功:%s", msg.get(TOPIC), msg.get(PAYLOAD).toString()));
+        // 同步等待结果
+        try {
+            Future<Void> write = producer.write(record.get());
+            write.toCompletionStage().toCompletableFuture().get();
+            FIUtil.isTotF(write.succeeded()).handler(
+                    () -> consumer.accept(String.format("kafka,topic[%s],发送成功:%s", msg.get(TOPIC), msg.get(PAYLOAD).toString())),
+                    () -> consumer.accept(String.format("kafka,topic[%s],发送失败:%s", msg.get(TOPIC), msg.get(PAYLOAD).toString()))
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            consumer.accept(String.format("kafka,topic[%s],发送异常:%s", msg.get(TOPIC), msg.get(PAYLOAD).toString()));
+        }
+
     }
 
     @Override
     public void close() {
         try {
             producer.close();
-            producer = null;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
