@@ -137,6 +137,11 @@ https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《i
 https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《iot平台帮助文档》密码：cv9v (注意：不要登录语雀)
 
 
+#### 问题列表
+1、连接taosdata报错
+    解决办法：把项目里依赖引入的tdengine版本和自己安装的tdengine的版本保持一致，依赖2.0.40对应tdengine 2.6.x，依赖3.0.0对应 tdengine 3.0.x
+
+
 
 #### 捐助与支持
 如果您觉得我的开源软件对你有所帮助请关注、star、fork :kissing_heart: 。
@@ -146,8 +151,7 @@ https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《i
 交流QQ群: 940575749
 
 微信群:
-
-![输入图片说明](doc/ma.png)
+ ![输入图片说明](doc/ma.png)
    
  
 ### roadmap
