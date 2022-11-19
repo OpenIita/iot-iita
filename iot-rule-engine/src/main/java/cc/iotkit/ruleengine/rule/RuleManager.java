@@ -47,7 +47,7 @@ public class RuleManager {
     private IRuleInfoData ruleInfoData;
 
     @Autowired
-    @Qualifier("deviceInfoDataCache")
+    @Qualifier("deviceInfoPropertyDataCache")
     private IDeviceInfoData deviceInfoData;
 
     @Autowired

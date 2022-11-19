@@ -1,0 +1,166 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
+package cc.iotkit.data.service;
+
+import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.model.Paging;
+import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.stats.DataItem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 包含设备属性的设备信息缓存服务
+ */
+@Service
+@Qualifier("deviceInfoPropertyDataCache")
+public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
+
+    @Autowired
+    @Qualifier("deviceInfoDataCache")
+    private IDeviceInfoData deviceInfoData;
+
+
+    @Override
+    public DeviceInfo findById(String s) {
+        return deviceInfoData.findById(s);
+    }
+
+    @Override
+    public DeviceInfo save(DeviceInfo data) {
+        return deviceInfoData.save(data);
+    }
+
+    @Override
+    public DeviceInfo add(DeviceInfo data) {
+        return deviceInfoData.add(data);
+    }
+
+    @Override
+    public void deleteById(String s) {
+        deviceInfoData.deleteById(s);
+    }
+
+    @Override
+    public long count() {
+        return deviceInfoData.count();
+    }
+
+    @Override
+    public List<DeviceInfo> findAll() {
+        return deviceInfoData.findAll();
+    }
+
+    @Override
+    public Paging<DeviceInfo> findAll(int page, int size) {
+        return deviceInfoData.findAll(page, size);
+    }
+
+    @Override
+    public void saveProperties(String deviceId, Map<String, Object> properties) {
+        deviceInfoData.saveProperties(deviceId, properties);
+    }
+
+    @Override
+    public Map<String, Object> getProperties(String deviceId) {
+        return deviceInfoData.getProperties(deviceId);
+    }
+
+    @Override
+    public DeviceInfo findByDeviceId(String deviceId) {
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
+        deviceInfo.setProperty(getProperties(deviceId));
+        return deviceInfo;
+    }
+
+    @Override
+    public DeviceInfo findByProductKeyAndDeviceName(String productKey, String deviceName) {
+        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
+        if (deviceInfo == null) {
+            return null;
+        }
+        deviceInfo.setProperty(getProperties(deviceInfo.getDeviceId()));
+        return deviceInfo;
+    }
+
+    @Override
+    public List<DeviceInfo> findByParentId(String parentId) {
+        return deviceInfoData.findByParentId(parentId);
+    }
+
+    @Override
+    public List<String> findSubDeviceIds(String parentId) {
+        return deviceInfoData.findSubDeviceIds(parentId);
+    }
+
+    @Override
+    public List<DeviceInfo> findByDeviceName(String deviceName) {
+        return deviceInfoData.findByDeviceName(deviceName);
+    }
+
+    @Override
+    public Paging<DeviceInfo> findByConditions(String uid, String subUid, String productKey, String groupId, String state, String keyword, int page, int size) {
+        return deviceInfoData.findByConditions(uid, subUid, productKey, groupId, state, keyword, page, size);
+    }
+
+    @Override
+    public void updateTag(String deviceId, DeviceInfo.Tag tag) {
+        deviceInfoData.updateTag(deviceId, tag);
+    }
+
+    @Override
+    public List<DataItem> getDeviceStatsByCategory(String uid) {
+        return deviceInfoData.getDeviceStatsByCategory(uid);
+    }
+
+    @Override
+    public long countByGroupId(String groupId) {
+        return deviceInfoData.countByGroupId(groupId);
+    }
+
+    @Override
+    public void addToGroup(String deviceId, DeviceInfo.Group group) {
+        deviceInfoData.addToGroup(deviceId, group);
+    }
+
+    @Override
+    public void updateGroup(String groupId, DeviceInfo.Group group) {
+        deviceInfoData.updateGroup(groupId, group);
+    }
+
+    @Override
+    public void removeGroup(String deviceId, String groupId) {
+        deviceInfoData.removeGroup(deviceId, groupId);
+    }
+
+    @Override
+    public void removeGroup(String groupId) {
+        deviceInfoData.removeGroup(groupId);
+    }
+
+    @Override
+    public List<DeviceInfo> findByUid(String uid) {
+        return deviceInfoData.findByUid(uid);
+    }
+
+    @Override
+    public Paging<DeviceInfo> findByUid(String uid, int page, int size) {
+        return deviceInfoData.findByUid(uid, page, size);
+    }
+
+    @Override
+    public long countByUid(String uid) {
+        return deviceInfoData.countByUid(uid);
+    }
+}
