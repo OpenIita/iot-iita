@@ -71,6 +71,17 @@
             <artifactId>iot-message-core</artifactId>
         </dependency>
 
+        <!--        mqtt-->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-mqtt</artifactId>
+        </dependency>
+
+        <!--        kafka-->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-kafka-client</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
