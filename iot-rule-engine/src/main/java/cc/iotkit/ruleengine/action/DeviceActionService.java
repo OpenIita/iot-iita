@@ -12,6 +12,7 @@ package cc.iotkit.ruleengine.action;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.DeviceComponentManager;
 import cc.iotkit.common.thing.ThingService;
+import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ public class DeviceActionService {
         thingService.setMid(UniqueIdUtil.newRequestId());
         thingService.setProductKey(pkDn[0]);
         thingService.setDeviceName(pkDn[1]);
+        thingService.setType(service.getType());
         thingService.setIdentifier(service.getIdentifier());
         thingService.setParams(service.parseInputData());
         deviceComponentManager.send(thingService);
@@ -44,6 +46,16 @@ public class DeviceActionService {
         private String device;
 
         private String identifier;
+
+        private String type;
+
+        public String getType() {
+            //identifier为set固定为属性设置，其它为服务调用
+            if (ThingModelMessage.ID_PROPERTY_SET.equals(identifier)) {
+                return ThingModelMessage.TYPE_PROPERTY;
+            }
+            return ThingModelMessage.TYPE_SERVICE;
+        }
 
         private List<Parameter> inputData;
 
