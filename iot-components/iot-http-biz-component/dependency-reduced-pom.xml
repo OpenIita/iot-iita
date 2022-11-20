@@ -62,8 +62,4 @@
       <scope>compile</scope>
     </dependency>
   </dependencies>
-  <properties>
-    <maven.compiler.target>8</maven.compiler.target>
-    <maven.compiler.source>8</maven.compiler.source>
-  </properties>
 </project>
