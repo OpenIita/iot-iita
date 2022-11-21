@@ -21,7 +21,7 @@ import java.util.*;
 @Component
 public class RuleMessageHandler implements DeviceMessageHandler {
 
-    private Map<String, List<Rule>> deviceRuleMap = new HashMap<>();
+    private final Map<String, List<Rule>> deviceRuleMap = new HashMap<>();
 
     @Autowired
     private RuleExecutor ruleExecutor;

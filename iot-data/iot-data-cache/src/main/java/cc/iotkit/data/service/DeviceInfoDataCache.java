@@ -103,15 +103,13 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     @Override
     @Cacheable(value = Constants.CACHE_DEVICE_INFO, key = "#root.method.name+#deviceId", unless = "#result == null")
     public DeviceInfo findByDeviceId(String deviceId) {
-        //不需要查数据库，在数据变更时更新到缓存
-        return null;
+        return deviceInfoData.findByDeviceId(deviceId);
     }
 
     @Override
     @Cacheable(value = Constants.CACHE_DEVICE_INFO, key = "#root.method.name+#productKey+#deviceName", unless = "#result == null")
     public DeviceInfo findByProductKeyAndDeviceName(String productKey, String deviceName) {
-        //不需要查数据库，在数据变更时更新到缓存
-        return null;
+        return deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
     }
 
     @Override

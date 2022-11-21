@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -43,15 +46,31 @@ public class Gateway extends Device {
 
     private MqttClient client;
 
+    private boolean isConnecting;
+
     public Gateway(String productKey, String deviceName) {
         super(productKey, deviceName, "GW01");
     }
 
     @SneakyThrows
     public void start() {
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+        executorService.scheduleAtFixedRate(this::connect, 0, 3, TimeUnit.SECONDS);
+    }
+
+    private void connect() {
+        if (client != null && client.isConnected()) {
+            return;
+        }
+
+        if(isConnecting){
+            return;
+        }
+
         String clientId = String.format("%s_%s_%s", productKey, deviceName, getModel());
 
         try {
+            isConnecting = true;
             MqttClientOptions options = new MqttClientOptions();
             options.setUsername(this.deviceName);
             options.setPassword(DigestUtils.md5Hex(Constants.PRODUCT_SECRET + clientId));
@@ -103,11 +122,14 @@ public class Gateway extends Device {
             client.publishHandler(new MessageHandler(client, this, deviceOnlineListener));
 
             client.closeHandler((v) -> {
-                log.info("{} closed", deviceName);
+                log.info("{} closed,reconnecting...", deviceName);
+                client.disconnect();
             });
 
         } catch (Throwable e) {
             log.error("connect mqtt-broker error", e);
+        } finally {
+            isConnecting = false;
         }
     }
 
