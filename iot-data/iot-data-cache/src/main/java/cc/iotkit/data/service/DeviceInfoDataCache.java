@@ -91,6 +91,13 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
         redisTemplate.opsForValue().set(getPropertyCacheKey(deviceId), JsonUtil.toJsonString(old));
     }
 
+    /**
+     * 清除设备属性缓存
+     */
+    private void clearProperties(String deviceId) {
+        redisTemplate.delete(getPropertyCacheKey(deviceId));
+    }
+
     @Override
     public Map<String, Object> getProperties(String deviceId) {
         String json = redisTemplate.opsForValue().get(getPropertyCacheKey(deviceId));
@@ -217,6 +224,8 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
         //清除缓存
         deviceInfoCacheEvict.findByDeviceId(device.getDeviceId());
         deviceInfoCacheEvict.findByProductKeyAndDeviceName(device.getProductKey(), device.getDeviceName());
+        //清除属性缓存
+        clearProperties(device.getDeviceId());
         //更新子设备列表缓存
         putSubDeviceIds(device.getParentId());
     }
