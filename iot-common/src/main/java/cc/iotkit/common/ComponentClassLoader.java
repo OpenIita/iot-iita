@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class ComponentClassLoader {
     private static final Map<String, URLClassLoader> classLoaders = new HashMap<>();
@@ -52,11 +53,19 @@ public class ComponentClassLoader {
             return null;
         }
 
-        return IOUtils.toString(is, StandardCharsets.UTF_8);
+        //多行只取第1行，并处理空格
+        String[] lines = IOUtils.toString(is, StandardCharsets.UTF_8).split("\\s");
+        if (lines.length == 0) {
+            return null;
+        }
+        return lines[0].trim();
     }
 
     public static <T> T getComponent(String name, File jarFile) throws Exception {
         String className = addUrl(name, jarFile);
+        if (StringUtils.isBlank(className)) {
+            throw new RuntimeException("component class does not exist");
+        }
         Class<T> componentClass = findClass(name, className);
         return componentClass.getDeclaredConstructor().newInstance();
     }
