@@ -23,7 +23,6 @@ import cn.dev33.satoken.oauth2.model.ClientTokenModel;
 import cn.dev33.satoken.oauth2.model.RequestAuthModel;
 import cn.dev33.satoken.oauth2.model.SaClientModel;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SaResult;
 
 public class TokenRequestHandler {
 

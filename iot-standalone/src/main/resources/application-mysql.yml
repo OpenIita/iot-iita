@@ -11,7 +11,7 @@ spring:
   #注： 切换数据库时需要将项目根目录中的.init文件删除再重启
   # <<==========mysql配置开始==============
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/iotkit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/iotkit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456

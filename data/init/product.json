@@ -76,16 +76,6 @@
     "createAt": 1652237643216
   },
   {
-    "id": "KdJYpTp5ywNhmrmC",
-    "name": "第三方接入",
-    "category": "",
-    "nodeType": 0,
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
-    "img": "http://iotkit-img.oss-cn-shenzhen.aliyuncs.com/product/KdJYpTp5ywNhmrmC/cover.png?Expires=1968261336&OSSAccessKeyId=LTAI5t8UFEH5eGrBUS5zSiof&Signature=df%2F6JEcxBlXitSNIENPMYJlRE8Y%3D",
-    "transparent": false,
-    "createAt": 1655637610215
-  },
-  {
     "id": "Eit3kmGJtxSHfCKT",
     "name": "燃气表",
     "category": "meter",

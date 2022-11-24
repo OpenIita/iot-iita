@@ -70,6 +70,9 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
      * 填充设备其它信息
      */
     private void fillDeviceInfo(String deviceId, TbDeviceInfo vo, DeviceInfo dto) {
+        if (vo == null || dto == null) {
+            return;
+        }
         //取子关联用户
         dto.setSubUid(deviceSubUserRepository.findByDeviceId(deviceId).stream()
                 .map(TbDeviceSubUser::getUid).collect(Collectors.toList()));
@@ -339,7 +342,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
 
         //按品类分组求合
         rst.stream().collect(Collectors.groupingBy(DataItem::getName,
-                Collectors.summarizingLong(item -> (long) item.getValue())))
+                        Collectors.summarizingLong(item -> (long) item.getValue())))
                 .forEach((key, sum) -> stats.add(new DataItem(key, sum.getSum())));
 
         return stats;

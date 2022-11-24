@@ -36,7 +36,6 @@ public class SaOAuth2TemplateImpl extends SaOAuth2Template {
             return null;
         }
 
-
         return new SaClientModel()
                 .setClientId(client.getClientId())
                 .setClientSecret(client.getClientSecret())
