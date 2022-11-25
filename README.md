@@ -6,7 +6,7 @@
 <p align="center"><img  src="https://img.shields.io/badge/JDK-11+-important.svg">  <img  src="https://img.shields.io/badge/Redis-5.0-important.svg"> <img  src="https://img.shields.io/badge/SpringBoot-2.6.2-blue.svg"> <img  src="https://img.shields.io/badge/Elasticsearch-7.15.2-red.svg">  <img  src="https://img.shields.io/badge/Satoken-1.30.0-yellow.svg"> 
 </p>
 <p align="center"><img  src="https://img.shields.io/badge/License-Apache2.0-lightgrey.svg"> 
-<img  src="https://img.shields.io/badge/Copyright-奇特物联/iotkit-60569f.svg"> <img  src="https://img.shields.io/badge/v0.4.0-60569f.svg">
+<img  src="https://img.shields.io/badge/Copyright-奇特物联/iotkit-60569f.svg"> <img  src="https://img.shields.io/badge/v0.4.2-60569f.svg">
 <img  src="https://img.shields.io/badge/物联网平台-f44e91.svg">
 </p>
 
@@ -151,7 +151,8 @@ https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《i
 交流QQ群: 940575749
 
 微信群:
- ![输入图片说明](doc/ma.png)
+
+![输入图片说明](doc/ma.png)
    
  
 ### roadmap
