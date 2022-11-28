@@ -20,5 +20,7 @@ public class Request {
 
     private String id;
 
+    private String method;
+
     private Object params;
 }

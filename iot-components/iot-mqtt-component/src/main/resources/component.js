@@ -48,7 +48,7 @@ function register(payload){
   var dn=arr[1];
   var model=arr[2];
   var pwd=md5("xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU"+auth.clientid);
-  if(pwd!=auth.password){
+  if(pwd.toLocaleLowerCase()!=auth.password.toLocaleLowerCase()){
 	throw new Error("incorrect password");
   }
   return {
@@ -173,6 +173,30 @@ this.onReceive=function(head,type,payload){
   }
 
   //数据上报
+  var reply=
+      {
+        productKey:pk,
+        deviceName:dn,
+        mid:payload.id,
+        content:{
+          topic:topic.replace("/s/","/c/")+"_reply",
+          payload:JSON.stringify({
+            id:payload.id,
+            method: payload.method+"_reply",
+            code:0,
+          })
+        }
+      };
+
+    var action={};
+    if(!topic.endsWith("_reply")){
+        //需要回复的消息
+        action={
+          type:"ack",
+          content:JSON.stringify(reply)
+        }
+    }
+
   return {
 	type:"report",
 	data:{
@@ -183,7 +207,8 @@ this.onReceive=function(head,type,payload){
 		topic:topic,
 		payload:payload
 	  }
-	}
+	},
+	action:action
   }
 }
 
