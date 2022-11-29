@@ -130,7 +130,7 @@ public class DbStructureDataImpl implements IDbStructureData {
         //创建规则日志超级表
         String sql = TableManager.getCreateSTableSql("rule_log", List.of(
                 new TdField("state1", "NCHAR", 32),
-                new TdField("content", "NCHAR", 255),
+                new TdField("content", "NCHAR", 1024),
                 new TdField("success", "BOOL", -1)
         ), new TdField("rule_id", "NCHAR", 50));
         TdResponse response = tdRestApi.execSql(sql);
@@ -140,7 +140,7 @@ public class DbStructureDataImpl implements IDbStructureData {
 
         //创建规则日志超级表
         sql = TableManager.getCreateSTableSql("task_log", List.of(
-                new TdField("content", "NCHAR", 255),
+                new TdField("content", "NCHAR", 1024),
                 new TdField("success", "BOOL", -1)
         ), new TdField("task_id", "NCHAR", 50));
         response = tdRestApi.execSql(sql);
@@ -157,7 +157,7 @@ public class DbStructureDataImpl implements IDbStructureData {
                 new TdField("type", "NCHAR", 20),
                 new TdField("identifier", "NCHAR", 50),
                 new TdField("code", "INT", -1),
-                new TdField("data", "NCHAR", 255),
+                new TdField("data", "NCHAR", 1024),
                 new TdField("report_time", "BIGINT", -1)
         ), new TdField("device_id", "NCHAR", 50));
         response = tdRestApi.execSql(sql);
@@ -169,7 +169,7 @@ public class DbStructureDataImpl implements IDbStructureData {
         sql = TableManager.getCreateSTableSql("virtual_device_log", List.of(
                 new TdField("virtual_device_name", "NCHAR", 50),
                 new TdField("device_total", "INT", -1),
-                new TdField("result", "NCHAR", 255)
+                new TdField("result", "NCHAR", 1024)
         ), new TdField("virtual_device_id", "NCHAR", 50));
         response = tdRestApi.execSql(sql);
         if (response.getCode() != TdResponse.CODE_SUCCESS) {
