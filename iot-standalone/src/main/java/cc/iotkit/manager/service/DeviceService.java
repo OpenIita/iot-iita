@@ -150,26 +150,7 @@ public class DeviceService {
             //设备指令下发
             deviceComponentManager.send(thingService);
         }
-        String mid = thingService.getMid();
-        DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
-
-        //保存设备日志
-        ThingModelMessage thingModelMessage = ThingModelMessage.builder()
-                .mid(mid)
-                .deviceId(deviceId)
-                .productKey(pk)
-                .deviceName(dn)
-                .uid(device.getUid())
-                .type(type)
-                .identifier(identifier)
-                .data(data)
-                .occurred(System.currentTimeMillis())
-                .time(System.currentTimeMillis())
-                .build();
-
-        thingModelMessageData.add(thingModelMessage);
-
-        return mid;
+        return thingService.getMid();
     }
 
 }

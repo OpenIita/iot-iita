@@ -33,8 +33,8 @@ public class ReportTest {
 
 
         if (args.length == 0) {
-            Mqtt.brokerHost = "127.0.0.1";
-//            Mqtt.brokerHost = "120.76.96.206";
+//            Mqtt.brokerHost = "127.0.0.1";
+            Mqtt.brokerHost = "120.76.96.206";
 //            Mqtt.brokerHost = "172.16.1.109";
         } else {
             Mqtt.brokerHost = args[0];
@@ -74,6 +74,7 @@ public class ReportTest {
                             () -> {
                                 Request request = new Request();
                                 request.setId(UUID.randomUUID().toString());
+                                request.setMethod("thing.event.property.post");
                                 Map<String, Object> param = new HashMap<>();
                                 param.put("volt", Math.round(Math.random() * 100));
                                 request.setParams(param);

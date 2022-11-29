@@ -38,7 +38,8 @@ public class ComponentClassLoader {
             classLoader.close();
         }
 
-        classLoader = URLClassLoader.newInstance(new URL[]{jarPath.toURI().toURL()}, ClassLoader.getSystemClassLoader());
+        classLoader = URLClassLoader.newInstance(new URL[]{jarPath.toURI().toURL()},
+                Thread.currentThread().getContextClassLoader());
         classLoaders.put(name, classLoader);
 
         Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
