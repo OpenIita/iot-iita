@@ -38,6 +38,8 @@ public class ThingModelMessage {
     public static final String ID_CONFIG_GET = "get";
     public static final String ID_CONFIG_SET = "set";
 
+    public static final String ID_DEREGISTER = "deregister";
+
     private String id;
 
     private String mid;

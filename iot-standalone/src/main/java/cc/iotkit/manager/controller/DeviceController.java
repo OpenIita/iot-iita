@@ -200,8 +200,9 @@ public class DeviceController {
 
     @PostMapping("/{deviceId}/unbind")
     public void unbindDevice(@PathVariable("deviceId") String deviceId) {
-        deviceId = getDetail(deviceId).getDeviceId();
-//        deviceService.unbindDevice(deviceId);
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
+        dataOwnerService.checkOwner(deviceInfo);
+        deviceService.unbindDevice(deviceId);
     }
 
     @GetMapping("/{deviceId}/thingModel")

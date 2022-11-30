@@ -126,6 +126,32 @@ public class DeviceService {
     }
 
     /**
+     * 解绑子设备
+     *
+     * @param deviceId 子设备id
+     */
+    public void unbindDevice(String deviceId) {
+        DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
+        DeviceInfo parent = deviceInfoData.findByDeviceId(device.getParentId());
+
+        try {
+            //下发子设备注销给网关
+            send(parent.getDeviceId(), parent.getProductKey(), parent.getDeviceName(),
+                    Map.of(
+                            "productKey", device.getProductKey(),
+                            "deviceName", device.getDeviceName()
+                    ),
+                    ThingModelMessage.TYPE_LIFETIME, ThingModelMessage.ID_DEREGISTER);
+        } catch (Throwable e) {
+            log.error("send {} message error", ThingModelMessage.ID_DEREGISTER, e);
+        }
+
+        //清除设备的父级id，不管是否发送成功都需要清除父级id
+        device.setParentId("");
+        deviceInfoData.save(device);
+    }
+
+    /**
      * 数据下发
      */
     private String send(String deviceId, String pk, String dn,
@@ -138,8 +164,10 @@ public class DeviceService {
                 .identifier(identifier)
                 .params(data)
                 .build();
-        if (!type.equals(ThingModelMessage.TYPE_CONFIG)) {
-            //非配置下发需要做物模型转换
+        if (!ThingModelMessage.TYPE_CONFIG.equals(type)
+                && !ThingModelMessage.TYPE_LIFETIME.equals(type)
+        ) {
+            //非配置且非生命周期下发需要做物模型转换
             thingModelService.parseParams(thingService);
         }
 

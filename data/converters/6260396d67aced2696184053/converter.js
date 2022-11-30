@@ -147,6 +147,10 @@ this.encode = function (service,device) {
 	//设备配置下发
 	method+=identifier;
 	topic="/sys/"+service.productKey+"/"+service.deviceName+"/c/config/"+identifier;
+  }else if(type="lifetime"){
+	//子设备注销下发
+	method+=identifier;
+	topic="/sys/"+service.productKey+"/"+service.deviceName+"/c/deregister";
   }
   
   for(var p in service.params){
