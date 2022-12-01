@@ -17,6 +17,7 @@ import cc.iotkit.data.model.TbVirtualDeviceMapping;
 import cc.iotkit.data.model.VirtualDeviceMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.VirtualDevice;
+import cn.hutool.core.util.IdUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -26,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Primary
@@ -88,7 +88,7 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
     @Transactional
     public VirtualDevice save(VirtualDevice data) {
         if (StringUtils.isBlank(data.getId())) {
-            data.setId(UUID.randomUUID().toString());
+            data.setId(IdUtil.simpleUUID());
             data.setCreateAt(System.currentTimeMillis());
         }
         virtualDeviceRepository.save(VirtualDeviceMapper.M.toVo(data));
@@ -97,7 +97,7 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
         virtualDeviceMappingRepository.deleteByVirtualId(data.getId());
         virtualDeviceMappingRepository.saveAllAndFlush(
                 data.getDevices().stream().map(d -> new TbVirtualDeviceMapping(
-                        UUID.randomUUID().toString(),
+                        IdUtil.simpleUUID(),
                         data.getId(),
                         d
                 )).collect(Collectors.toList())
