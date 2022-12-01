@@ -63,11 +63,11 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
         long count = counts.size() > 0 ? counts.get(0) : 0;
 
         return new Paging<>(count, ruleLogs.stream().map(r ->
-                new ThingModelMessage(r.getTime().toString(), r.getMid(),
-                        deviceId, r.getProductKey(), r.getDeviceName(),
-                        r.getUid(), r.getType(), r.getIdentifier(), r.getCode(),
-                        JsonUtil.parse(r.getData(), Map.class),
-                        r.getTime(), r.getReportTime()))
+                        new ThingModelMessage(r.getTime().toString(), r.getMid(),
+                                deviceId, r.getProductKey(), r.getDeviceName(),
+                                r.getUid(), r.getType(), r.getIdentifier(), r.getCode(),
+                                JsonUtil.parse(r.getData(), Map.class),
+                                r.getTime(), r.getReportTime()))
                 .collect(Collectors.toList()));
     }
 
@@ -108,7 +108,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
 
     @Override
     public long count() {
-        Long c = tdTemplate.queryForObject("select count(*) from thing_model_message", Long.class);
-        return c == null ? 0 : c;
+        List<Long> counts = tdTemplate.queryForList("select count(*) from thing_model_message", Long.class);
+        return counts.size() > 0 ? counts.get(0) : 0;
     }
 }
