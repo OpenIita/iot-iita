@@ -50,7 +50,7 @@ public class VirtualExecutor implements Job {
                     continue;
                 }
                 log.info("invoke virtual device report,jobKey:{},deviceId:{}", jobKey, device.getDeviceId());
-                virtualManager.invokeReport(device);
+                virtualManager.invokeReport(device, virtualDevice.getId());
             }
         } catch (Throwable e) {
             virtualDeviceLog.setResult(e.getMessage());

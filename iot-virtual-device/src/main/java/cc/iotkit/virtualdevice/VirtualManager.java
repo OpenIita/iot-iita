@@ -269,23 +269,15 @@ public class VirtualManager {
     /**
      * 调用脚本中上报方法
      */
-    public void invokeReport(DeviceInfo device) {
+    public void invokeReport(DeviceInfo device, String virtualId) {
         //设备上线
         deviceOnline(device);
 
-        String deviceId = device.getDeviceId();
-        Set<String> virtualIds = deviceIdToVirtualId.get(deviceId);
-        if (virtualIds == null) {
+        Object scriptObj = virtualScripts.get(virtualId);
+        if (scriptObj == null) {
             return;
         }
-
-        for (String virtualId : virtualIds) {
-            Object scriptObj = virtualScripts.get(virtualId);
-            if (scriptObj == null) {
-                continue;
-            }
-            processReport(invokeMethod(scriptObj, "report", device));
-        }
+        processReport(invokeMethod(scriptObj, "report", device));
     }
 
     /**
