@@ -49,7 +49,8 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                                 "/space/device/*",
                                 "/device/*/consumer/*",
                                 "/device/*/service/property/set",
-                                "/device/*/service/*/invoke"
+                                "/device/*/service/*/invoke",
+                                "/user/*/modifyPwd"
                         ).isHit()) {
                     return;
                 }

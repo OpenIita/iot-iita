@@ -41,7 +41,6 @@ public class UserInfoController {
     @Autowired
     private ISpaceData spaceData;
 
-
     /**
      * 平台用户列表
      */
@@ -54,6 +53,7 @@ public class UserInfoController {
     /**
      * 添加平台用户
      */
+    @SaCheckRole("iot_admin")
     @PostMapping("/platform/user/add")
     public void addPlatformUser(@RequestBody UserInfo user) {
         try {
@@ -67,6 +67,24 @@ public class UserInfoController {
             userInfoData.save(user);
         } catch (Throwable e) {
             throw new BizException("add platform user error", e);
+        }
+    }
+
+    /**
+     * 重置平台用户密码
+     */
+    @SaCheckRole("iot_admin")
+    @PostMapping("/platform/user/{uid}/resetPwd")
+    public void resetPlatformUserPwd(@PathVariable("uid") String uid) {
+        try {
+            UserInfo user = userInfoData.findByUid(uid);
+            if (user == null) {
+                throw new BizException("user does not exist");
+            }
+            user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_SYSTEM_USER));
+            userInfoData.save(user);
+        } catch (Throwable e) {
+            throw new BizException("reset pwd failed", e);
         }
     }
 
@@ -132,4 +150,32 @@ public class UserInfoController {
         ReflectUtil.copyNoNulls(user, oldUser);
         userInfoData.save(oldUser);
     }
+
+    /**
+     * 修改密码
+     */
+    @PostMapping("/{uid}/modifyPwd")
+    public void modifyPwd(@PathVariable("uid") String uid, String oldPwd, String newPwd) {
+        UserInfo user = userInfoData.findByUid(uid);
+        if (user == null) {
+            throw new BizException("user does not exist");
+        }
+        if (!AuthUtil.getUserId().equals(user.getId())) {
+            throw new BizException("permission denied");
+        }
+
+        try {
+            if (!AuthUtil.checkPwd(oldPwd, user.getSecret())) {
+                throw new BizException("旧密码不正确");
+            }
+
+            user.setSecret(AuthUtil.enCryptPwd(newPwd));
+            userInfoData.save(user);
+        } catch (BizException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new BizException("modify pwd failed", e);
+        }
+    }
+
 }
