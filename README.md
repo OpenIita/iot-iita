@@ -141,9 +141,9 @@ https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《i
 
 交流QQ群: 940575749
 
-微信群:
+微信群（加我拉进群）:
 
-![输入图片说明](doc/ma.png)   
+![输入图片说明](doc/ma.png) 
    
  
 ### roadmap
