@@ -115,7 +115,7 @@ this.encode = function (service,device) {
 	var rst=component.transparentEncode(service,device);
 	topic="/sys/"+rst.productKey+"/"+rst.deviceName+"/c/service/rawSend";
 	params.model=rst.content.model;
-	params.mac=rst.content.mac;
+	params.deviceName=rst.content.deviceName;
 	params.data=rst.content.data;
 	
 	return {

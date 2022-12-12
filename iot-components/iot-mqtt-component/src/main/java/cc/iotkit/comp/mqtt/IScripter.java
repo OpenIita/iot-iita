@@ -11,8 +11,11 @@ package cc.iotkit.comp.mqtt;
 
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.model.product.ProductModel;
 
 public interface IScripter {
+
+    void setModel(ProductModel model);
 
     void setScript(String script);
 

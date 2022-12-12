@@ -20,6 +20,7 @@ import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.ProductModel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +38,13 @@ public class TransparentConverter {
      * 透传解码
      */
     public ThingModelMessage decode(TransparentMsg msg) {
-        //通过上报消息中的model取得对应的产品
-        String productKey = checkScriptUpdate(msg.getModel());
+        String productKey = msg.getProductKey();
+        productKey = checkScriptUpdate(productKey, msg.getModel());
         msg.setProductKey(productKey);
-        return scripters.get(productKey).decode(msg);
+        ThingModelMessage decodeMsg = scripters.get(productKey).decode(msg);
+        decodeMsg.setProductKey(msg.getProductKey());
+        decodeMsg.setDeviceName(msg.getDeviceName());
+        return decodeMsg;
     }
 
     /**
@@ -48,7 +52,7 @@ public class TransparentConverter {
      */
     public DeviceMessage encode(ThingService<?> service, Device device) {
         String productKey = service.getProductKey();
-        checkScriptUpdate(device.getModel());
+        checkScriptUpdate(productKey, device.getModel());
         TransparentMsg transparentMsg = scripters.get(productKey).encode(service);
         //转换成网关消息
         String deviceName = service.getDeviceName();
@@ -82,8 +86,19 @@ public class TransparentConverter {
     /**
      * 检查产品脚本是否更新
      */
-    private String checkScriptUpdate(String model) {
-        ProductModel productModel = getScript(model);
+    private String checkScriptUpdate(String pk, String model) {
+        ProductModel productModel = null;
+        if (StringUtils.isNotBlank(model)) {
+            productModel = getScript(model);
+        }
+        //指定型号获取不到获取默认型号
+        if (productModel == null && StringUtils.isNotBlank(pk)) {
+            productModel = getScript(ProductModel.getDefaultModel(pk));
+        }
+        if (productModel == null) {
+            throw new RuntimeException("product model script does not exist");
+        }
+
         String productKey = productModel.getProductKey();
         String script = productModel.getScript();
 
@@ -94,9 +109,9 @@ public class TransparentConverter {
 
         String type = productModel.getType();
         if (ProductModel.TYPE_LUA.equals(type)) {
-            scripters.putIfAbsent(productKey, new LuaScripter());
+            scripters.putIfAbsent(productKey, new LuaScripter(productModel));
         } else if (ProductModel.TYPE_JS.equals(type)) {
-            scripters.putIfAbsent(productKey, new JsScripter());
+            scripters.putIfAbsent(productKey, new JsScripter(productModel));
         }
 
         //更新脚本

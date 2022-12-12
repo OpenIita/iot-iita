@@ -11,6 +11,8 @@ package cc.iotkit.comp.mqtt;
 
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.model.product.ProductModel;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.luaj.vm2.LuaTable;
@@ -27,13 +29,20 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@Data
 public class LuaScripter implements IScripter {
+
+    private ProductModel model;
 
     private final LuaScriptEngine engine = (LuaScriptEngine) (
             new ScriptEngineManager().getEngineByName("luaj"));
 
     private LuaValue decoder;
     private LuaValue encoder;
+
+    public LuaScripter(ProductModel model) {
+        this.model = model;
+    }
 
     @Override
     public void setScript(String script) {
@@ -52,14 +61,14 @@ public class LuaScripter implements IScripter {
         try {
             LuaTable table = new LuaTable();
             table.set("model", msg.getModel());
-            table.set("mac", msg.getMac());
+            table.set("deviceName", msg.getDeviceName());
             table.set("data", msg.getData());
             Map result = (Map) parse(decoder.call(table));
             ThingModelMessage modelMessage = new ThingModelMessage();
             BeanUtils.populate(modelMessage, result);
 
             modelMessage.setProductKey(msg.getProductKey());
-            modelMessage.setDeviceName(msg.getMac());
+            modelMessage.setDeviceName(msg.getDeviceName());
             return modelMessage;
         } catch (Throwable e) {
             log.error("execute decode script error", e);
@@ -85,6 +94,9 @@ public class LuaScripter implements IScripter {
             Map map = (Map) parse(result);
             TransparentMsg message = new TransparentMsg();
             BeanUtils.populate(message, map);
+            message.setProductKey(model.getProductKey());
+            message.setModel(model.getModel());
+            message.setDeviceName(service.getDeviceName());
             return message;
         } catch (Throwable e) {
             log.error("execute encode script error", e);

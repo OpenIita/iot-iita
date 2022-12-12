@@ -57,6 +57,7 @@ public class ProductController {
     @Autowired
     private AliyunConfig aliyunConfig;
     @Autowired
+    @Qualifier("productModelDataCache")
     private IProductModelData productModelData;
     @Autowired
     private IDbStructureData dbStructureData;

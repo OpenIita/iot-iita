@@ -46,6 +46,7 @@ public class CacheConfig {
                 Constants.CACHE_CATEGORY, config,
                 Constants.CACHE_THING_MODEL, config,
                 Constants.CACHE_SPACE, config,
+                Constants.CACHE_PRODUCT_SCRIPT, config,
                 //统计缓存5分钟
                 Constants.CACHE_DEVICE_STATS, config.entryTtl(Duration.ofMinutes(5))
         );

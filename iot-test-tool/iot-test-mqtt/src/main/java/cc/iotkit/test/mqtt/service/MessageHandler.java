@@ -58,10 +58,11 @@ public class MessageHandler implements Handler<MqttPublishMessage> {
                 if (response.getCode() == 0) {
                     Map<String, Object> data = response.getData();
                     String productKey = data.get("productKey").toString();
+                    String deviceName = data.get("deviceName").toString();
                     if (StringUtils.isBlank(productKey)) {
+                        deviceOnlineListener.accept(new Device(productKey, deviceName, ""));
                         return;
                     }
-                    String deviceName = data.get("deviceName").toString();
 
                     //订阅子设备消息
                     String subTopic = String.format("/sys/%s/%s/c/#", productKey, deviceName);

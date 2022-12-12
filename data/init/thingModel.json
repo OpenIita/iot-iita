@@ -104,17 +104,19 @@
                   "length": "10240"
                 }
               },
-              "name": "数据"
+              "name": "数据",
+              "required": false
             },
             {
-              "identifier": "mac",
+              "identifier": "deviceName",
               "dataType": {
                 "type": "text",
                 "specs": {
                   "length": "128"
                 }
               },
-              "name": "设备mac"
+              "name": "设备唯一码",
+              "required": false
             },
             {
               "identifier": "model",
@@ -124,7 +126,8 @@
                   "length": "128"
                 }
               },
-              "name": "设备型号"
+              "name": "设备型号",
+              "required": false
             }
           ],
           "outputData": [],
@@ -143,17 +146,19 @@
                   "length": "10240"
                 }
               },
-              "name": "数据"
+              "name": "数据",
+              "required": false
             },
             {
-              "identifier": "mac",
+              "identifier": "deviceName",
               "dataType": {
                 "type": "text",
                 "specs": {
                   "length": "128"
                 }
               },
-              "name": "设备mac"
+              "name": "设备唯一码",
+              "required": false
             },
             {
               "identifier": "model",
@@ -163,7 +168,8 @@
                   "length": "128"
                 }
               },
-              "name": "设备型号"
+              "name": "设备型号",
+              "required": false
             }
           ],
           "name": "透传上报"

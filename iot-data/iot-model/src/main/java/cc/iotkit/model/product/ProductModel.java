@@ -49,4 +49,8 @@ public class ProductModel implements Id<String> {
 
     private Long modifyAt;
 
+    public static String getDefaultModel(String pk) {
+        return pk + "_default";
+    }
+
 }

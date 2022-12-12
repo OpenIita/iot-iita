@@ -23,7 +23,7 @@ public class TransparentMsg {
 
     private String model;
 
-    private String mac;
+    private String deviceName;
 
     private String data;
 
