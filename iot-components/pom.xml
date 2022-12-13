@@ -18,6 +18,7 @@
         <module>iot-emqx-component</module>
         <module>iot-component-base</module>
         <module>iot-http-biz-component</module>
+        <module>iot-component-tcp</module>
 <!--        <module>iot-ctwing-component</module>-->
     </modules>
 
