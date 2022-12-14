@@ -1,4 +1,6 @@
-parser.delimited("\r\n")
-    .handler(function(buffer){
-        parser.result(parser.newBuffer().toString("UTF-8")).complete();
-    });
+this.payloadParser = function (parser) {
+    parser.delimited("\r\n")
+        .handler(function(buffer){
+            parser.result(buffer.toString("UTF-8")).complete();
+        });
+}

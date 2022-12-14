@@ -83,6 +83,9 @@ public class TcpServerVerticle extends AbstractVerticle {
     }
 
 
+    /**
+     * 初始TCP服务
+     */
     private void initTcpServer() {
         int instance = Math.max(2, config.getInstance());
         List<NetServer> instances = new ArrayList<>(instance);
@@ -127,6 +130,9 @@ public class TcpServerVerticle extends AbstractVerticle {
         }
     }
 
+    /**
+     * 保活定时任务
+     */
     public void keepClientTask() {
         scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(2);
 
@@ -236,7 +242,7 @@ public class TcpServerVerticle extends AbstractVerticle {
         }
 
         /**
-         * 递归断开连接
+         * 断开连接,并移除子设备
          */
         private void clientDisconnect(String deviceName) {
             VertxTcpClient remove = clientMap.remove(deviceName);
