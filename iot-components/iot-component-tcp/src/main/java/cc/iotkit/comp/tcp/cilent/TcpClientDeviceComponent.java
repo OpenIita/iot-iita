@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class TcpClientDeviceComponent extends AbstractDeviceComponent {
-
     private Vertx vertx;
     private TcpClientVerticle tcpClientVerticle;
     private String deployedId;

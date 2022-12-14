@@ -20,6 +20,8 @@ import cc.iotkit.ruleengine.action.kafka.KafkaAction;
 import cc.iotkit.ruleengine.action.kafka.KafkaService;
 import cc.iotkit.ruleengine.action.mqtt.MqttAction;
 import cc.iotkit.ruleengine.action.mqtt.MqttService;
+import cc.iotkit.ruleengine.action.tcp.TcpAction;
+import cc.iotkit.ruleengine.action.tcp.TcpService;
 import cc.iotkit.ruleengine.config.RuleConfiguration;
 import cc.iotkit.ruleengine.filter.DeviceFilter;
 import cc.iotkit.ruleengine.filter.Filter;
@@ -165,6 +167,13 @@ public class RuleManager {
                 service.initLink(ruleId);
             }
             return kafkaAction;
+        } else if (TcpAction.TYPE.equals(type)) {
+            TcpAction tcpAction = parse(config, TcpAction.class);
+            for (TcpService service : tcpAction.getServices()) {
+                service.setDeviceInfoData(deviceInfoData);
+                service.initLink(ruleId);
+            }
+            return tcpAction;
         }
         return null;
     }

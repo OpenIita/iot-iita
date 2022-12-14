@@ -34,7 +34,6 @@ public class VertxTcpClient {
     // 是否是服务端的连接客户端
     private final boolean serverClient;
     volatile PayloadParser payloadParser;
-    public volatile NetClient client;
     public NetSocket socket;
     private final List<Runnable> disconnectListener = new CopyOnWriteArrayList<>();
     private IMessageHandler executor;
@@ -125,10 +124,6 @@ public class VertxTcpClient {
     public void shutdown() {
         log.debug("tcp client [{}] disconnect", getId());
         synchronized (this) {
-            if (null != client) {
-                execute(client::close);
-                client = null;
-            }
             if (null != socket) {
                 execute(socket::close);
                 this.socket = null;
@@ -163,15 +158,6 @@ public class VertxTcpClient {
             log.warn("close tcp client error", e);
         }
     }
-
-    public void setClient(NetClient client) {
-        if (this.client != null && this.client != client) {
-            this.client.close();
-        }
-        keepAlive();
-        this.client = client;
-    }
-
     /**
      * 是否有父设备
      */

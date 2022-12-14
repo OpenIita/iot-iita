@@ -19,6 +19,7 @@ public class TcpDeviceComponent extends AbstractDeviceComponent {
 
     private AbstractDeviceComponent tcpVerticle;
 
+    @Override
     public void create(CompConfig config) {
         Map maps = JsonUtil.parse(config.getOther(), Map.class);
         String type = maps.get("type").toString();
@@ -31,9 +32,16 @@ public class TcpDeviceComponent extends AbstractDeviceComponent {
     }
 
     @Override
+    public String getId() {
+        return tcpVerticle.getId();
+    }
+
+    @Override
     public void start() {
+        tcpVerticle.setHandler(getHandler());
         tcpVerticle.start();
     }
+
 
     @Override
     public void stop() {
@@ -49,6 +57,7 @@ public class TcpDeviceComponent extends AbstractDeviceComponent {
     public void onDeviceStateChange(DeviceState state) {
         tcpVerticle.onDeviceStateChange(state);
     }
+
 
 
     @Override

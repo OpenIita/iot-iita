@@ -10,7 +10,7 @@ import reactor.core.publisher.Flux;
 public interface PayloadParser {
 
 
-    PayloadParser init(Object param);
+    PayloadParser init(Object param) throws Exception;
 
     void handle(Buffer buffer);
 

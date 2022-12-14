@@ -21,6 +21,7 @@ public class TcpServerDeviceComponent extends AbstractDeviceComponent {
     private TcpServerVerticle tcpServerVerticle;
     private String deployedId;
 
+    @Override
     public void create(CompConfig config) {
         super.create(config);
         vertx = Vertx.vertx();

@@ -7,6 +7,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.NetClient;
 import io.vertx.core.net.NetClientOptions;
+import io.vertx.core.net.NetSocket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,7 +33,11 @@ public class TcpClientVerticle extends AbstractVerticle {
 
     private VertxTcpClient tcpClient;
 
+    private NetClient netClient;
+
     private Map<String, ClientDevice> deviceMap = new ConcurrentHashMap();
+
+    private boolean stopAction = false;
 
     public TcpClientVerticle(TcpClinetConfig config) {
         this.config = config;
@@ -52,6 +57,7 @@ public class TcpClientVerticle extends AbstractVerticle {
     @Override
     public void stop() {
         if (null != tcpClient) {
+            stopAction = true;
             tcpClient.shutdown();
         }
     }
@@ -74,7 +80,7 @@ public class TcpClientVerticle extends AbstractVerticle {
         if (config.getOptions() == null) {
             NetClientOptions options = new NetClientOptions();
             options.setReconnectAttempts(Integer.MAX_VALUE);
-            options.setReconnectInterval(60000L);
+            options.setReconnectInterval(20000L);
             config.setOptions(options);
         }
         if (config.isSsl()) {
@@ -83,8 +89,7 @@ public class TcpClientVerticle extends AbstractVerticle {
     }
 
     private void initClient() {
-        NetClient netClient = vertx.createNetClient(config.getOptions());
-        tcpClient.setClient(netClient);
+        netClient = vertx.createNetClient(config.getOptions());
         tcpClient.setKeepAliveTimeoutMs(Duration.ofMinutes(10).toMillis());
         tcpClient.onDisconnect(() -> {
             // 所有设备都离线
@@ -93,15 +98,8 @@ public class TcpClientVerticle extends AbstractVerticle {
                 executor.onReceive(null, "disconnect", deviceName);
             }
         });
-        netClient.connect(config.getPort(), config.getHost(), result -> {
-            if (result.succeeded()) {
-                log.debug("connect tcp [{}:{}] success", config.getHost(), config.getPort());
-                tcpClient.setRecordParser(ParserStrategyBuilder.build(config.getParserType(), config.getParserConfiguration()));
-                tcpClient.setSocket(result.result());
-            } else {
-                log.error("connect tcp [{}:{}] error", config.getHost(), config.getPort(), result.cause());
-            }
-        });
+        // 连接
+        toConnection();
         // 设置收到消息处理
         tcpClient.setReceiveHandler(buffer -> {
             try {
@@ -117,6 +115,34 @@ public class TcpClientVerticle extends AbstractVerticle {
                         });
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        });
+    }
+
+    public void toConnection() {
+        netClient.connect(config.getPort(), config.getHost(), result -> {
+            if (result.succeeded()) {
+                log.debug("connect tcp [{}:{}] success", config.getHost(), config.getPort());
+                tcpClient.setRecordParser(ParserStrategyBuilder.build(config.getParserType(), config.getParserConfiguration()));
+                NetSocket socket = result.result();
+                tcpClient.setSocket(socket);
+                socket.closeHandler((nil) -> {
+                    tcpClient.shutdown();
+                    // 重连自动断开重连，收到停止组件不重连
+                    try {
+                        if (!stopAction) {
+                            Thread.sleep(5000L);
+                            toConnection();
+                        }else{
+                            netClient.close();
+                            netClient = null;
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } else {
+                log.error("connect tcp [{}:{}] error", config.getHost(), config.getPort(), result.cause());
             }
         });
     }
