@@ -3,6 +3,7 @@ package cc.iotkit.ruleengine.link;
 import cc.iotkit.common.utils.FIUtil;
 import cc.iotkit.ruleengine.link.impl.KafkaLink;
 import cc.iotkit.ruleengine.link.impl.MqttClientLink;
+import cc.iotkit.ruleengine.link.impl.TcpClientLink;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -132,6 +133,9 @@ public class LinkFactory {
                 break;
             case KafkaLink.LINK_TYPE:
                 link = new KafkaLink();
+                break;
+            case TcpClientLink.LINK_TYPE:
+                link = new TcpClientLink();
                 break;
         }
         if (link != null) {

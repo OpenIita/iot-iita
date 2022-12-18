@@ -71,4 +71,14 @@ public class ComponentClassLoader {
         return componentClass.getDeclaredConstructor().newInstance();
     }
 
+    public static void closeClassLoader(String name)  {
+        try {
+            URLClassLoader classLoader = classLoaders.get(name);
+            if (classLoader != null){
+                classLoader.close();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

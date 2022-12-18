@@ -71,6 +71,7 @@ public class BizComponentManager {
         try {
             componentInstance = ComponentClassLoader.getComponent(component.getId(), file);
         } catch (Throwable e) {
+            ComponentClassLoader.closeClassLoader(component.getId());
             throw new BizException("get component instance error");
         }
         try {

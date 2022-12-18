@@ -10,6 +10,7 @@
 package cc.iotkit.comps;
 
 
+import cc.iotkit.common.ComponentClassLoader;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class ComponentManager {
     public void deRegister(String id) {
         bizComponentManager.deRegister(id);
         deviceComponentManager.deRegister(id);
+        // 手动卸载jar应用，避免重新上传jar被占用
+        ComponentClassLoader.closeClassLoader(id);
     }
 
     public void start(String id) {
