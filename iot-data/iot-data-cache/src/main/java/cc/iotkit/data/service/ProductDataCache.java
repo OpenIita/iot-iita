@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@Qualifier("deviceInfoDataCache")
+@Qualifier("productDataCache")
 public class ProductDataCache implements IProductData {
 
     @Autowired
