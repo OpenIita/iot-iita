@@ -14,7 +14,6 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <hsweb.expands.version>3.0.2</hsweb.expands.version>
     </properties>
     <dependencies>
         <dependency>
