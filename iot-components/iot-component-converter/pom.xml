@@ -33,6 +33,22 @@
             <artifactId>iot-model</artifactId>
         </dependency>
 
+        <!--javascript运行环境-->
+        <dependency>
+            <groupId>org.graalvm.sdk</groupId>
+            <artifactId>graal-sdk</artifactId>
+
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js-scriptengine</artifactId>
+
+        </dependency>
+
     </dependencies>
 
 </project>

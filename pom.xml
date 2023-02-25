@@ -31,6 +31,7 @@
         <java.version>11</java.version>
         <vertx.version>4.2.2</vertx.version>
         <sa-token.version>1.30.0</sa-token.version>
+        <graalvm.version>21.1.0</graalvm.version>
     </properties>
 
     <dependencyManagement>
@@ -326,6 +327,24 @@
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-rdb-data-service</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <!--javascript运行环境-->
+            <dependency>
+                <groupId>org.graalvm.sdk</groupId>
+                <artifactId>graal-sdk</artifactId>
+                <version>${graalvm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.graalvm.js</groupId>
+                <artifactId>js</artifactId>
+                <version>${graalvm.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.graalvm.js</groupId>
+                <artifactId>js-scriptengine</artifactId>
+                <version>${graalvm.version}</version>
             </dependency>
 
         </dependencies>
