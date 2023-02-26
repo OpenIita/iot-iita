@@ -1,5 +1,7 @@
 package cc.iotkit.comps.config;
 
+import cc.iotkit.converter.GraalJsScriptConverter;
+import cc.iotkit.converter.IConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.Data;
@@ -35,5 +37,10 @@ public class ComponentConfig {
         return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 
+
+    @Bean
+    public IConverter scriptConverter(){
+        return new GraalJsScriptConverter();
+    }
 
 }

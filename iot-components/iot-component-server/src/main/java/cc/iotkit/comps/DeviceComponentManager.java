@@ -12,6 +12,7 @@ package cc.iotkit.comps;
 
 import cc.iotkit.common.ComponentClassLoader;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;
@@ -21,8 +22,8 @@ import cc.iotkit.comps.config.ComponentConfig;
 import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.converter.ScriptConverter;
-import cc.iotkit.common.thing.ThingService;
+import cc.iotkit.converter.GraalJsScriptConverter;
+import cc.iotkit.converter.IConverter;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductData;
 import cc.iotkit.data.IProtocolComponentData;
@@ -71,6 +72,12 @@ public class DeviceComponentManager {
     @Autowired
     private DeviceRouter deviceRouter;
 
+    private final IConverter scriptConverter;
+
+    public DeviceComponentManager(IConverter converter) {
+        this.scriptConverter = converter;
+    }
+
     @PostConstruct
     public void init() {
         List<ProtocolComponent> componentList = protocolComponentData.findByStateAndType(
@@ -102,7 +109,6 @@ public class DeviceComponentManager {
         componentInstance.create(new CompConfig(300, component.getConfig()));
 
         try {
-            ScriptConverter scriptConverter = new ScriptConverter();
             Path converterPath = componentConfig.getConverterFilePath(component.getConverter());
             String converterScript = FileUtils.readFileToString(converterPath.
                     resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile(), "UTF-8");
