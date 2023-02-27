@@ -96,6 +96,12 @@
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-data-cache</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-components-engine</artifactId>
+            <version>0.4.2-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 

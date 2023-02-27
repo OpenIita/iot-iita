@@ -21,16 +21,17 @@ import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.converter.IConverter;
+import cc.iotkit.engine.IScriptEngine;
+import cc.iotkit.engine.IScriptException;
+import cc.iotkit.engine.JsNashornScriptEngine;
 import cc.iotkit.model.device.message.ThingModelMessage;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
@@ -38,9 +39,9 @@ import java.util.function.Consumer;
 @Slf4j
 @Data
 public class DeviceMessageHandler implements IMessageHandler {
-    private final NashornScriptEngine engine = (NashornScriptEngine) (new ScriptEngineManager()).getEngineByName("nashorn");
 
-    private final Object scriptObj;
+
+    private final IScriptEngine scriptEngine;
 
     private final IConverter converter;
 
@@ -68,9 +69,9 @@ public class DeviceMessageHandler implements IMessageHandler {
         this.converter = converter;
         this.deviceBehaviourService = deviceBehaviourService;
         this.deviceRouter = deviceRouter;
-
-        engine.put("component", component);
-        scriptObj = engine.eval(String.format("new (function () {\n%s})()", script));
+        this.scriptEngine = new JsNashornScriptEngine();
+        scriptEngine.putScriptEnv("component", component);
+        scriptEngine.setScript(script);
     }
 
     public void onReceive(Map<String, Object> head, String type, String msg) {
@@ -81,22 +82,22 @@ public class DeviceMessageHandler implements IMessageHandler {
     public void onReceive(Map<String, Object> head, String type, String msg, Consumer<ReceiveResult> onResult) {
         executorService.submit(() -> {
             try {
-                ScriptObjectMirror result = (ScriptObjectMirror) invokeMethod("onReceive", head, type, msg);
+                DeviceMsgScriptResult result = invokeMethodWithResult("onReceive", head, type, msg);
                 log.info("onReceive script result:{}", JsonUtil.toJsonString(result));
-                Object rstType = result.get("type");
+                Object rstType = result.getType();
                 if (rstType == null) {
                     onResult.accept(null);
                     return;
                 }
                 //取脚本执行后返回的数据
-                Object data = JsonUtil.toObject((ScriptObjectMirror) result.get("data"));
+                Object data = result.getData();
                 if (!(data instanceof Map)) {
                     throw new BizException("script result data is incorrect");
                 }
 
                 Map<String, Object> dataMap = (Map) data;
                 //获取动作数据
-                Action action = getAction(result.get("action"));
+                Action action = getAction(result.getAction());
 
                 if ("register".equals(rstType)) {
                     //注册数据
@@ -145,7 +146,7 @@ public class DeviceMessageHandler implements IMessageHandler {
         });
     }
 
-    private void doRegister(RegisterInfo reg) throws ScriptException, NoSuchMethodException {
+    private void doRegister(RegisterInfo reg) throws IScriptException {
         try {
             deviceBehaviourService.register(reg);
         } catch (Throwable e) {
@@ -155,7 +156,7 @@ public class DeviceMessageHandler implements IMessageHandler {
         }
     }
 
-    private void doAuth(AuthInfo auth) throws ScriptException, NoSuchMethodException {
+    private void doAuth(AuthInfo auth) throws IScriptException {
         try {
             deviceBehaviourService.deviceAuth(auth.getProductKey(),
                     auth.getDeviceName(),
@@ -168,11 +169,16 @@ public class DeviceMessageHandler implements IMessageHandler {
         }
     }
 
-    private Object invokeMethod(String name, Object... args) throws ScriptException, NoSuchMethodException {
-        if (((ScriptObjectMirror) scriptObj).get(name) != null) {
-            return engine.invokeMethod(scriptObj, name, args);
-        }
-        return null;
+    private void invokeMethod(String name, Object... args) throws IScriptException {
+        scriptEngine.invokeMethod(name, args);
+
+    }
+
+    private DeviceMsgScriptResult invokeMethodWithResult(String name, Object... args) throws InvocationTargetException, IllegalAccessException, IScriptException {
+        Object o = scriptEngine.invokeMethod(name, args);
+        DeviceMsgScriptResult result = new DeviceMsgScriptResult();
+        BeanUtils.copyProperties(result, o);
+        return result;
     }
 
     private void doStateChange(DeviceState state) {
@@ -239,7 +245,8 @@ public class DeviceMessageHandler implements IMessageHandler {
 
     @Override
     public void putScriptEnv(String key, Object value) {
-        engine.put(key, value);
+
+        scriptEngine.putScriptEnv(key, value);
     }
 
     @Data
