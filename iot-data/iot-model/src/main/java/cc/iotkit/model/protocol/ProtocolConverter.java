@@ -29,4 +29,7 @@ public class ProtocolConverter implements Owned<String> {
     private String desc;
 
     private Long createAt;
+
+    // 脚本类型
+    private String type;
 }

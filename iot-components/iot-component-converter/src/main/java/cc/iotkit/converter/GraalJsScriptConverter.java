@@ -14,13 +14,7 @@ import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import java.util.Map;
 import org.graalvm.polyglot.*;
 
 @Slf4j
@@ -30,7 +24,6 @@ public class GraalJsScriptConverter implements IConverter {
 
     private final Context context = Context.newBuilder("js").allowHostAccess(true).build();
 
-    private Object scriptObj;
 
     private Value decoder;
     private Value encoder;
