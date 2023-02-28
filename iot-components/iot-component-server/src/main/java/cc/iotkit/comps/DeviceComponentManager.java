@@ -20,13 +20,11 @@ import cc.iotkit.comp.IDeviceComponent;
 import cc.iotkit.comps.config.CacheKey;
 import cc.iotkit.comps.config.ComponentConfig;
 import cc.iotkit.comps.service.DeviceBehaviourService;
-import cc.iotkit.converter.Device;
-import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.converter.GraalJsScriptConverter;
-import cc.iotkit.converter.IConverter;
+import cc.iotkit.converter.*;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductData;
 import cc.iotkit.data.IProtocolComponentData;
+import cc.iotkit.data.IProtocolConverterData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
@@ -72,10 +70,13 @@ public class DeviceComponentManager {
     @Autowired
     private DeviceRouter deviceRouter;
 
-    private final IConverter scriptConverter;
+    @Autowired
+    private IProtocolConverterData protocolConverterData;
 
-    public DeviceComponentManager(IConverter converter) {
-        this.scriptConverter = converter;
+    private final IScriptConvertFactory scriptConverterFactory;
+
+    public DeviceComponentManager(IScriptConvertFactory scriptConverterFactory) {
+        this.scriptConverterFactory = scriptConverterFactory;
     }
 
     @PostConstruct
@@ -109,13 +110,7 @@ public class DeviceComponentManager {
         componentInstance.create(new CompConfig(300, component.getConfig()));
 
         try {
-            Path converterPath = componentConfig.getConverterFilePath(component.getConverter());
-            String converterScript = FileUtils.readFileToString(converterPath.
-                    resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile(), "UTF-8");
-
-            scriptConverter.setScript(converterScript);
-            scriptConverter.putScriptEnv("component", componentInstance);
-            componentInstance.setConverter(scriptConverter);
+            setScriptConvert(component, componentInstance);
 
             String componentScript = FileUtils.readFileToString(path.
                     resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile(), "UTF-8");
@@ -125,6 +120,21 @@ public class DeviceComponentManager {
         } catch (IOException e) {
             throw new BizException("get device component script error", e);
         }
+    }
+
+    private void setScriptConvert(ProtocolComponent component, IDeviceComponent componentInstance) throws IOException {
+        ProtocolConverter protocolConvert = protocolConverterData.findById(component.getConverter());
+
+        IConverter scriptConverter = scriptConverterFactory.getCovert(protocolConvert.getTyp());
+
+        Path converterPath = componentConfig.getConverterFilePath(component.getConverter());
+        String converterScript = FileUtils.readFileToString(converterPath.
+                resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile(), "UTF-8");
+
+//        scriptConverter.setScript(protocolConvert.getScript());
+        scriptConverter.setScript(converterScript);
+        scriptConverter.putScriptEnv("component", componentInstance);
+        componentInstance.setConverter(scriptConverter);
     }
 
     public void register(String id, IDeviceComponent component) {

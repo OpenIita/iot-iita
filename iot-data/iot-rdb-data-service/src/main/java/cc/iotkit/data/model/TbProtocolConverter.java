@@ -36,4 +36,10 @@ public class TbProtocolConverter {
 
     private Long createAt;
 
+
+    private String typ;
+
+    // 脚本内容
+    private String script;
+
 }

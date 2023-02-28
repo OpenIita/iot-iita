@@ -31,5 +31,8 @@ public class ProtocolConverter implements Owned<String> {
     private Long createAt;
 
     // 脚本类型
-    private String type;
+    private String typ;
+
+    // 脚本内容
+    private String script;
 }

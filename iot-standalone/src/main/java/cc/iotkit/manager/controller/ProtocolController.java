@@ -248,28 +248,40 @@ public class ProtocolController {
     }
 
     @GetMapping("/getConverterScript/{id}")
-    public String getConverterScript(@PathVariable("id") String id) {
-        getAndCheckConverter(id);
-        try {
-            Path path = componentConfig.getConverterFilePath(id);
-            File file = path.resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile();
-            return FileUtils.readFileToString(file, "UTF-8");
-        } catch (Throwable e) {
-            log.error("read converter script file error", e);
-            return "";
+    public ProtocolConverter getConverterScript(@PathVariable("id") String id) {
+        ProtocolConverter converter = getAndCheckConverter(id);
+        String script = converter.getScript();
+        // 如果数据库里不存在,则从文件中读取脚本
+        if(StringUtils.hasText(script)){
+            try {
+                Path path = componentConfig.getConverterFilePath(id);
+                File file = path.resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile();
+                script = FileUtils.readFileToString(file, "UTF-8");
+            } catch (Throwable e) {
+                log.error("read converter script file error", e);
+                script = "";
+            }
+            converter.setScript(script);
         }
+        return converter;
+
     }
 
     @PostMapping("/saveConverterScript/{id}")
     public void saveConverterScript(
             @PathVariable("id") String id,
-            @RequestBody String script) {
+            @RequestBody ProtocolConverter converter) {
         getAndCheckConverter(id);
         try {
+            // 先存文件
             Path path = componentConfig.getConverterFilePath(id);
             File file = path.resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile();
-            script = JsonUtil.parse(script, String.class);
+            String script = converter.getScript();
             FileUtils.writeStringToFile(file, script, "UTF-8", false);
+
+            // 再存数据库
+            protocolConverterData.save(converter);
+
         } catch (Throwable e) {
             throw new BizException("save protocol converter script error", e);
         }
