@@ -45,4 +45,8 @@ public class ProtocolComponent implements Owned<String> {
 
     private Long createAt;
 
+    private String scriptTyp;
+
+    private String script;
+
 }

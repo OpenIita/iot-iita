@@ -36,4 +36,10 @@ public class TbProtocolComponent {
     private String state;
 
     private Long createAt;
+
+    private String scriptTyp;
+
+    @Column(columnDefinition = "text")//设置映射为text类型
+    private String script;
+
 }

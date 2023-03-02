@@ -60,6 +60,7 @@ public class DeviceMessageHandler implements IMessageHandler {
     @SneakyThrows
     public DeviceMessageHandler(DeviceComponentManager deviceComponentManager,
                                 IDeviceComponent component,
+                                IScriptEngine scriptEngine,
                                 String script, IConverter converter,
                                 DeviceBehaviourService deviceBehaviourService,
                                 DeviceRouter deviceRouter
@@ -69,7 +70,7 @@ public class DeviceMessageHandler implements IMessageHandler {
         this.converter = converter;
         this.deviceBehaviourService = deviceBehaviourService;
         this.deviceRouter = deviceRouter;
-        this.scriptEngine = new JsNashornScriptEngine();
+        this.scriptEngine = scriptEngine;
         scriptEngine.putScriptEnv("component", component);
         scriptEngine.setScript(script);
     }

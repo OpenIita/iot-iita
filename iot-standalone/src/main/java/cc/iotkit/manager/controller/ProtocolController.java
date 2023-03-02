@@ -131,26 +131,41 @@ public class ProtocolController {
     }
 
     @GetMapping("/getComponentScript/{id}")
-    public String getComponentScript(@PathVariable("id") String id) {
-        getAndCheckComponent(id);
-        try {
-            File file = getComponentScriptFile(id);
-            return FileUtils.readFileToString(file, "UTF-8");
-        } catch (Throwable e) {
-            log.error("read component script file error", e);
-            return "";
+    public ProtocolComponent getComponentScript(@PathVariable("id") String id) {
+        ProtocolComponent component = getAndCheckComponent(id);
+
+        String script = component.getScript();
+        // 如果数据库里不存在,则从文件中读取脚本
+        if(!StringUtils.hasText(script)){
+            try {
+                File file = getComponentScriptFile(id);
+                script = FileUtils.readFileToString(file, "UTF-8");
+            } catch (Throwable e) {
+                log.error("read converter script file error", e);
+                script = "";
+            }
+            component.setScript(script);
         }
+        return component;
+
     }
 
     @PostMapping("/saveComponentScript/{id}")
     public void saveComponentScript(
             @PathVariable("id") String id,
-            @RequestBody String script) {
-        getAndCheckComponent(id);
+            @RequestBody ProtocolComponent upReq) {
+        ProtocolComponent old = getAndCheckComponent(id);
         try {
+            // 保存到文件
             File file = getComponentScriptFile(id);
-            script = JsonUtil.parse(script, String.class);
+            String script = upReq.getScript();
             FileUtils.writeStringToFile(file, script, "UTF-8", false);
+
+            // 保存到数据库,后续加版本号
+            old.setScript(upReq.getScript());
+            old.setScriptTyp(upReq.getScriptTyp());
+            protocolComponentData.save(old);
+
             componentManager.deRegister(id);
         } catch (Throwable e) {
             throw new BizException("save protocol component script error", e);
@@ -252,7 +267,7 @@ public class ProtocolController {
         ProtocolConverter converter = getAndCheckConverter(id);
         String script = converter.getScript();
         // 如果数据库里不存在,则从文件中读取脚本
-        if(StringUtils.hasText(script)){
+        if(!StringUtils.hasText(script)){
             try {
                 Path path = componentConfig.getConverterFilePath(id);
                 File file = path.resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile();

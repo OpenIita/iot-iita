@@ -1,9 +1,9 @@
 package cc.iotkit.comps.config;
 
-import cc.iotkit.converter.GraalJsScriptConverter;
-import cc.iotkit.converter.IConverter;
 import cc.iotkit.converter.IScriptConvertFactory;
-import cc.iotkit.converter.ScriptConvertFactory;
+import cc.iotkit.converter.DefaultScriptConvertFactory;
+import cc.iotkit.engine.DefaultScriptEngineFactory;
+import cc.iotkit.engine.IScriptEngineFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.Data;
@@ -42,7 +42,11 @@ public class ComponentConfig {
 
     @Bean
     public IScriptConvertFactory scriptConverterFactory(){
-        return new ScriptConvertFactory();
+        return new DefaultScriptConvertFactory();
     }
 
+    @Bean
+    public IScriptEngineFactory scriptEngineFactory(){
+        return new DefaultScriptEngineFactory();
+    }
 }

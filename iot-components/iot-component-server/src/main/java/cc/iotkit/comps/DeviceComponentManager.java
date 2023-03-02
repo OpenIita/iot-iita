@@ -25,6 +25,9 @@ import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductData;
 import cc.iotkit.data.IProtocolComponentData;
 import cc.iotkit.data.IProtocolConverterData;
+import cc.iotkit.engine.IScriptEngine;
+import cc.iotkit.engine.IScriptEngineFactory;
+import cc.iotkit.engine.JsNashornScriptEngine;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
@@ -75,8 +78,14 @@ public class DeviceComponentManager {
 
     private final IScriptConvertFactory scriptConverterFactory;
 
-    public DeviceComponentManager(IScriptConvertFactory scriptConverterFactory) {
+    private final IScriptEngineFactory scriptEngineFactory;
+
+    private  IScriptEngine scriptEngine;
+
+    public DeviceComponentManager(IScriptConvertFactory scriptConverterFactory,
+                                  IScriptEngineFactory scriptEngineFactory ) {
         this.scriptConverterFactory = scriptConverterFactory;
+        this.scriptEngineFactory = scriptEngineFactory;
     }
 
     @PostConstruct
@@ -112,10 +121,11 @@ public class DeviceComponentManager {
         try {
             setScriptConvert(component, componentInstance);
 
+            scriptEngine = scriptEngineFactory.getScriptEngine(component.getScriptTyp());
+
             String componentScript = FileUtils.readFileToString(path.
                     resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile(), "UTF-8");
             componentInstance.setScript(componentScript);
-
             register(id, componentInstance);
         } catch (IOException e) {
             throw new BizException("get device component script error", e);
@@ -126,12 +136,12 @@ public class DeviceComponentManager {
         ProtocolConverter protocolConvert = protocolConverterData.findById(component.getConverter());
 
         IConverter scriptConverter = scriptConverterFactory.getCovert(protocolConvert.getTyp());
-
+        // 从文件方式内容
         Path converterPath = componentConfig.getConverterFilePath(component.getConverter());
         String converterScript = FileUtils.readFileToString(converterPath.
                 resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile(), "UTF-8");
 
-//        scriptConverter.setScript(protocolConvert.getScript());
+//        scriptConverter.setScript(protocolConvert.getScript());  // 从数据库加载,以后可以加版本号
         scriptConverter.setScript(converterScript);
         scriptConverter.putScriptEnv("component", componentInstance);
         componentInstance.setConverter(scriptConverter);
@@ -157,8 +167,12 @@ public class DeviceComponentManager {
         if (component == null) {
             return;
         }
+
+
+
         DeviceMessageHandler messageHandler = new DeviceMessageHandler(
                 this, component,
+                 scriptEngine,
                 component.getScript(), component.getConverter(),
                 deviceBehaviourService, deviceRouter);
         messageHandler.putScriptEnv("apiTool", new ApiTool());

@@ -40,6 +40,7 @@ public class TbProtocolConverter {
     private String typ;
 
     // 脚本内容
+    @Column(columnDefinition = "text")//设置映射为text类型
     private String script;
 
 }
