@@ -145,17 +145,10 @@ https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《i
 
 ![输入图片说明](doc/ma.png) 
 
-或扫码进微信2群
-
-![输入图片说明](doc/ma2.png)
-
-   
  
 ### roadmap
 
 绿色:已完成,蓝色:进行中,橙色:规划中
 
-![输入图片说明](https://foruda.gitee.com/images/1664766764354728297/200418b6_504690.png)
-
-
+![输入图片说明](https://foruda.gitee.com/images/1678275206158613401/8b29adfc_504690.jpeg)
 
