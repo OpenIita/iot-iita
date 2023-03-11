@@ -1,6 +1,9 @@
 package cc.iotkit.engine;
 
 import org.graalvm.polyglot.*;
+
+import java.util.Objects;
+
 public class JsGraalJsScriptEngine implements IScriptEngine{
 
     private final Context context = Context.newBuilder("js").allowHostAccess(true).build();
@@ -20,6 +23,13 @@ public class JsGraalJsScriptEngine implements IScriptEngine{
 
     @Override
     public Object invokeMethod(String methodName, Object... args) throws IScriptException {
-        return jsScript.getMember(methodName).execute(args);
+
+        Value member = jsScript.getMember(methodName);
+        if(Objects.nonNull(member)){
+            Value execute = member.execute(args);
+
+            return execute.as(Object.class);
+        }
+        return null;
     }
 }
