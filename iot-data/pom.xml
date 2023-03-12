@@ -18,6 +18,7 @@
         <module>iot-es-temporal-service</module>
         <module>iot-rdb-data-service</module>
         <module>iot-td-temporal-service</module>
+        <module>iot-ts-temporal-service</module>
     </modules>
 
     <artifactId>iot-data</artifactId>
