@@ -29,7 +29,7 @@ public class FieldParser {
     private static final Map<String, DataType> TYPE_MAPPING = Map.of(
             "int32", SQLDataType.INTEGER,
             "float", SQLDataType.FLOAT,
-            "bool", SQLDataType.BOOLEAN,
+            "bool", SQLDataType.INTEGER,
             "enum", SQLDataType.INTEGER,
             "text", SQLDataType.NVARCHAR,
             "date", SQLDataType.DATE
@@ -42,7 +42,7 @@ public class FieldParser {
     private static final Map<String, DataType> DB2TYPE_MAPPING = Map.of(
             "int",SQLDataType.INTEGER,
             "float",   SQLDataType.FLOAT,
-            "bool", SQLDataType.BOOLEAN,
+            "bool", SQLDataType.INTEGER,
             "char",SQLDataType.NVARCHAR,
             "date",  SQLDataType.DATE,
             "timestamptz", SQLDataType.TIMESTAMPWITHTIMEZONE

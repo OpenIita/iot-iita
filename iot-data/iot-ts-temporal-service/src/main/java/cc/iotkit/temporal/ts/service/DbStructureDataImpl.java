@@ -147,7 +147,7 @@ public class DbStructureDataImpl implements IDbStructureData {
 
         CreateTableColumnStep ruleLogStep = dslBuilder.createTableIfNotExists("rule_log")
                 .column("time", SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false))
-                .column("state1", SQLDataType.INTEGER)
+                .column("state1", SQLDataType.VARCHAR(50))
                 .column("content", SQLDataType.VARCHAR(1024))
                 .column("success", SQLDataType.BOOLEAN)
                 .column("rule_id", SQLDataType.VARCHAR(50).nullable(false));
