@@ -138,6 +138,13 @@ public class DeviceMessageHandler implements IMessageHandler {
                     doAction(action);
                     onResult.accept(new ReceiveResult(message.getProductKey(), message.getDeviceName(), message));
                     return;
+                } else if ("action".equals(rstType)) {
+                    //纯做回复操作
+                    DeviceMessage message = new DeviceMessage();
+                    BeanUtils.populate(message, dataMap);
+                    doAction(action);
+                    onResult.accept(new ReceiveResult(message.getProductKey(), message.getDeviceName(), message));
+                    return;
                 }
 
             } catch (Throwable e) {
