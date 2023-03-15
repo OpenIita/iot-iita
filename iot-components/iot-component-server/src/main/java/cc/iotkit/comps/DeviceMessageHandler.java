@@ -199,6 +199,8 @@ public class DeviceMessageHandler implements IMessageHandler {
             } else {
                 deviceRouter.removeRouter(pk, dn);
             }
+            // 避免已在线多此发送上线消息
+            if (isOnline == deviceBehaviourService.isOnline(pk, dn)) return;
             component.onDeviceStateChange(state);
             deviceBehaviourService.deviceStateChange(pk, dn, isOnline);
         } catch (Throwable e) {

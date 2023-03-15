@@ -175,6 +175,13 @@ public class DeviceBehaviourService {
 
     }
 
+    public boolean isOnline(String productKey,
+                            String deviceName){
+        DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(device.getDeviceId());
+        return deviceInfo.getState().isOnline();
+    }
+
     public void deviceStateChange(String productKey,
                                   String deviceName,
                                   boolean online) {
