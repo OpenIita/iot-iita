@@ -172,16 +172,16 @@ public class DbStructureDataImpl implements IDbStructureData {
 
         CreateTableColumnStep thingModelStep = dslBuilder.createTableIfNotExists("thing_model_message")
                 .column("time", SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false))
-                .column("mid", SQLDataType.NCHAR(50))
-                .column("product_key", SQLDataType.NCHAR(50))
-                .column("device_name", SQLDataType.NCHAR(50))
-                .column("uid", SQLDataType.NCHAR(50))
-                .column("type", SQLDataType.NCHAR(20))
+                .column("mid", SQLDataType.NVARCHAR(50))
+                .column("product_key", SQLDataType.NVARCHAR(50))
+                .column("device_name", SQLDataType.NVARCHAR(50))
+                .column("uid", SQLDataType.NVARCHAR(50))
+                .column("type", SQLDataType.NVARCHAR(20))
                 .column("identifier", SQLDataType.NVARCHAR(50))
                 .column("code", SQLDataType.INTEGER)
                 .column("data", SQLDataType.NVARCHAR(1024))
                 .column("report_time", SQLDataType.NVARCHAR(1024))
-                .column("device_id", SQLDataType.NCHAR(50));
+                .column("device_id", SQLDataType.NVARCHAR(50));
 
         String thingModelsql = thingModelStep.getSQL();
 
@@ -192,10 +192,10 @@ public class DbStructureDataImpl implements IDbStructureData {
         //创建虚拟设备日志表
         CreateTableColumnStep virtualStep = dslBuilder.createTableIfNotExists("virtual_device_log")
                 .column("time", SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false))
-                .column("virtual_device_name", SQLDataType.NCHAR(50))
+                .column("virtual_device_name", SQLDataType.NVARCHAR(50))
                 .column("device_total", SQLDataType.INTEGER)
                 .column("result", SQLDataType.NVARCHAR(1024))
-                .column("virtual_device_id", SQLDataType.NCHAR(50));
+                .column("virtual_device_id", SQLDataType.NVARCHAR(50));
 
         String virtualsql = virtualStep.getSQL();
         System.out.println(virtualsql);
