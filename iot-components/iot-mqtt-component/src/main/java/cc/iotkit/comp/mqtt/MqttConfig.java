@@ -22,4 +22,6 @@ public class MqttConfig {
 
     private boolean ssl;
 
+    private boolean useWebSocket;
+
 }

@@ -63,6 +63,7 @@ public class MqttVerticle extends AbstractVerticle {
                             .setKeyPath(config.getSslKey())
                             .setCertPath(config.getSslCert()));
         }
+        options.setUseWebSocket(config.isUseWebSocket());
 
         mqttServer = MqttServer.create(vertx, options);
         mqttServer.endpointHandler(endpoint -> {
