@@ -88,6 +88,14 @@ public class DeviceController {
         return new InvokeResult(deviceService.invokeService(deviceId, service, args));
     }
 
+    @PostMapping(Constants.API_DEVICE.INVOKE_SERVICE_PROPERTY_GET)
+    public InvokeResult invokeServicePropertySet(@PathVariable("deviceId") String deviceId,
+                                      @RequestBody List<String> propertyNames) {
+        if (StringUtils.isBlank(deviceId)) {
+            throw new RuntimeException("deviceId/service is blank.");
+        }
+        return new InvokeResult(deviceService.getProperty(deviceId, propertyNames, true));
+    }
     @PostMapping(Constants.API_DEVICE.SET_PROPERTIES)
     public InvokeResult setProperty(@PathVariable("deviceId") String deviceId,
                                     @RequestBody Map<String, Object> args) {

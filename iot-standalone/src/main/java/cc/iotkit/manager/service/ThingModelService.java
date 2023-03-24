@@ -11,6 +11,7 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.data.IThingModelData;
+import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.ThingModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,12 @@ public class ThingModelService {
             if (properties == null) {
                 return;
             }
-            params = parseProperties(properties, (Map<?, ?>) service.getParams());
+            if(identifier.equals(ThingModelMessage.ID_PROPERTY_GET)){
+                params = service.getParams();
+            }
+            else {
+                params = parseProperties(properties, (Map<?, ?>) service.getParams());
+            }
         } else if (ThingService.TYPE_SERVICE.equals(type)) {
             //服务调用
             Map<String, ThingModel.Service> services = model.serviceMap();

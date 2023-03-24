@@ -155,6 +155,10 @@ public interface Constants {
          * 设备-服务调用
          */
         String INVOKE_SERVICE = "/{deviceId}/service/{service}/invoke";
+        /**
+         * 设备-属性获取
+         */
+        String INVOKE_SERVICE_PROPERTY_GET = "/{deviceId}/service/property/get";
 
     }
 
