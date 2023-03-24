@@ -51,7 +51,8 @@ public class DeviceActionService {
 
         public String getType() {
             //identifier为set固定为属性设置，其它为服务调用
-            if (ThingModelMessage.ID_PROPERTY_SET.equals(identifier)) {
+            if (ThingModelMessage.ID_PROPERTY_SET.equals(identifier) ||
+                    ThingModelMessage.ID_PROPERTY_GET.equals(identifier)) {
                 return ThingModelMessage.TYPE_PROPERTY;
             }
             return ThingModelMessage.TYPE_SERVICE;
