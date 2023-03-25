@@ -73,7 +73,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
                         new ThingModelMessage(r.getTime().toString(), r.getMid(),
                                 deviceId, r.getProductKey(), r.getDeviceName(),
                                 r.getUid(), r.getType(), r.getIdentifier(), r.getCode(),
-                                JsonUtil.parse(r.getData(), Map.class),
+                                r.getData(),
                                 r.getTime().getTime(), r.getReportTime()))
                 .collect(Collectors.toList()));
     }
