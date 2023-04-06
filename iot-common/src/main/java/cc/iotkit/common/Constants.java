@@ -175,6 +175,11 @@ public interface Constants {
         String RECENT_DEVICES = "/myRecentDevices";
 
         /**
+         * 获取用户当前收藏设备
+         */
+        String GET_COLLECT_DEVICES = "/getCollectDevices";
+
+        /**
          * 我的空间设备列表
          */
         String SPACE_DEVICES = "/myDevices/{spaceId}";
@@ -198,6 +203,11 @@ public interface Constants {
          * 空间修改设备
          */
         String SAVE_DEVICE = "/saveDevice";
+
+        /**
+         * 收藏/取消收藏设备
+         */
+        String COLLECT_DEVICE = "/collectDevice";
 
         /**
          * 获取空间设备信息

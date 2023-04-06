@@ -15,6 +15,7 @@ import cc.iotkit.data.*;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.manager.service.DataOwnerService;
+import cc.iotkit.model.space.Home;
 import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.device.DeviceInfo;
@@ -52,6 +53,8 @@ public class SpaceDeviceController {
     @Qualifier("spaceDataCache")
     private ISpaceData spaceData;
     @Autowired
+    private IHomeData homeData;
+    @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
     private IUserInfoData userInfoData;
@@ -63,6 +66,27 @@ public class SpaceDeviceController {
     public List<SpaceDeviceVo> getMyRecentDevices() {
         List<SpaceDevice> spaceDevices = spaceDeviceData.findByUidOrderByUseAtDesc(AuthUtil.getUserId());
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取用户收藏设备列表
+     */
+    @GetMapping(Constants.API_SPACE.GET_COLLECT_DEVICES)
+    public List<SpaceDeviceVo> getCollectDevices() {
+        Home home=homeData.findByUidAndCurrent(AuthUtil.getUserId(), true);
+        List<SpaceDevice> spaceDevices = spaceDeviceData.findByHomeIdAndCollect(home.getId(),true);
+        return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
+    }
+
+    /**
+     *
+     * 收藏/取消收藏设备
+     */
+    @PostMapping(Constants.API_SPACE.COLLECT_DEVICE)
+    public void collectDevice(SpaceDevice spaceDevice) {
+        SpaceDevice oldSpaceDevice=spaceDeviceData.findByDeviceId(spaceDevice.getDeviceId());
+        oldSpaceDevice.setCollect(spaceDevice.getCollect());
+        spaceDeviceData.save(oldSpaceDevice);
     }
 
     /**
@@ -107,6 +131,7 @@ public class SpaceDeviceController {
                 .online(state != null && state.isOnline())
                 .property(device.getProperty())
                 .uid(sd.getUid())
+                .collect(sd.getCollect())
                 .build();
     }
 
@@ -173,7 +198,7 @@ public class SpaceDeviceController {
         return findDeviceVo;
     }
 
-    /**
+    /**REMOVE_DEVICE
      * 往指定房间中添加设备
      */
     @PostMapping(Constants.API_SPACE.ADD_DEVICE)

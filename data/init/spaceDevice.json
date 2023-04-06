@@ -6,7 +6,8 @@
     "name": "卧室的ZGW01",
     "homeId": "629e18e96b16ad6a3e158645",
     "spaceId": "629e18fee0dc6d4171e1a021",
-    "addAt": 1654609953349
+    "addAt": 1654609953349,
+    "collect":true
   },
   {
     "id": "629f581ee0dc6d4171e1a028",
@@ -16,7 +17,8 @@
     "homeId": "629e18e96b16ad6a3e158645",
     "spaceId": "629e18fee0dc6d4171e1a021",
     "addAt": 1654609950464,
-    "useAt": 1655653227177
+    "useAt": 1655653227177,
+    "collect":true
   },
   {
     "id": "629f581ce0dc6d4171e1a027",
@@ -26,7 +28,8 @@
     "homeId": "629e18e96b16ad6a3e158645",
     "spaceId": "629e18fee0dc6d4171e1a021",
     "addAt": 1654609948550,
-    "useAt": 1655653294372
+    "useAt": 1655653294372,
+    "collect":false
   },
   {
     "id": "629f581ae0dc6d4171e1a026",
@@ -36,7 +39,8 @@
     "homeId": "629e18e96b16ad6a3e158645",
     "spaceId": "629e18fee0dc6d4171e1a021",
     "addAt": 1654609946750,
-    "useAt": 1655653552172
+    "useAt": 1655653552172,
+    "collect":false
   },
   {
     "id":  "629f5818e0dc6d4171e1a025",
@@ -46,7 +50,8 @@
     "homeId": "629e18e96b16ad6a3e158645",
     "spaceId": "629e18fee0dc6d4171e1a021",
     "addAt": 1654609944061,
-    "useAt": 1655653548172
+    "useAt": 1655653548172,
+    "collect":false
   },
   {
     "id": "629f5734e0dc6d4171e1a024",
@@ -56,7 +61,8 @@
     "homeId": "629e18e96b16ad6a3e158645",
     "spaceId": "629e18fee0dc6d4171e1a021",
     "addAt": 1654609716856,
-    "useAt": 1655653590474
+    "useAt": 1655653590474,
+    "collect":false
   },
   {
     "id": "629e1a1de0dc6d4171e1a022",
@@ -66,7 +72,8 @@
     "homeId": "629e18e96b16ad6a3e158645",
     "spaceId": "629e18fee0dc6d4171e1a021",
     "addAt": 1654528541149,
-    "useAt": 1655653255089
+    "useAt": 1655653255089,
+    "collect":false
   },
   {
     "id": "629db2e1e5a005209d182877",
@@ -76,7 +83,8 @@
     "homeId": "6238a49fecf37861bed7ad11",
     "spaceId": "62794a820b0776663635e636",
     "addAt": 1654502113734,
-    "useAt": 1655653724374
+    "useAt": 1655653724374,
+    "collect":false
   },
   {
     "id": "6280d7cd7e234141ee9d1fd2",
@@ -86,7 +94,8 @@
     "homeId": "6238a49fecf37861bed7ad11",
     "spaceId": "62794a5c0b0776663635e633",
     "addAt": 1652611021619,
-    "useAt": 1655181137254
+    "useAt": 1655181137254,
+    "collect":false
   },
   {
     "id": "6280b17d7e234141ee9d1fcf",
@@ -96,6 +105,7 @@
     "homeId": "6238a49fecf37861bed7ad11",
     "spaceId": "62794a5c0b0776663635e633",
     "addAt": 1652601213676,
-    "useAt": 1655189186348
+    "useAt": 1655189186348,
+    "collect":false
   }
 ]
