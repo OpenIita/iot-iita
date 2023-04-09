@@ -78,10 +78,9 @@ public class DeviceMessageHandler implements IMessageHandler {
     public void onReceive(Map<String, Object> head, String type, String msg, Consumer<ReceiveResult> onResult) {
         executorService.submit(() -> {
             try {
-                Map rst = scriptEngine.invokeMethod(new TypeReference<>() {
+                Map<String, Object> rst = scriptEngine.invokeMethod(new TypeReference<>() {
                 }, "onReceive", head, type, msg);
                 Object objType = rst.get("type");
-                log.info("onReceive script result:{}", objType);
                 if (objType == null) {
                     onResult.accept(null);
                     return;
@@ -99,19 +98,15 @@ public class DeviceMessageHandler implements IMessageHandler {
 
                 switch (objType.toString()) {
                     case "register":
-                        if (action != null && Action.TYPE_ACK.equals(action.getType())) {
-                            doAction(action);
-                        } else {
-                            //注册数据
-                            RegisterInfo regInfo = MessageParser.parseRegisterInfo(data);
-                            if (regInfo == null) {
-                                onResult.accept(null);
-                                return;
-                            }
-                            doRegister(regInfo);
-                            doAction(action);
-                            onResult.accept(new ReceiveResult(regInfo.getProductKey(), regInfo.getDeviceName(), regInfo));
+                        //注册数据
+                        RegisterInfo regInfo = MessageParser.parseRegisterInfo(data);
+                        if (regInfo == null) {
+                            onResult.accept(null);
+                            return;
                         }
+                        doRegister(regInfo);
+                        doAction(action);
+                        onResult.accept(new ReceiveResult(regInfo.getProductKey(), regInfo.getDeviceName(), regInfo));
                         return;
                     case "auth":
                         //设备认证

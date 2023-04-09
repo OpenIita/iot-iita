@@ -18,7 +18,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Map;
 
 @Slf4j
 @Data
@@ -30,15 +29,17 @@ public class ScriptService {
 
     private IDeviceInfoData deviceInfoData;
 
-    public Map execScript(ThingModelMessage msg) {
+    public void setScript(String script) {
+        scriptEngine.setScript(script);
+    }
+
+    public <T> T execScript(TypeReference<T> type, ThingModelMessage msg) {
         try {
-            scriptEngine.setScript(script);
             //取设备信息
             DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(msg.getDeviceId());
 
             //执行转换脚本
-            return scriptEngine.invokeMethod(new TypeReference<>() {
-            }, "translate", msg, deviceInfo);
+            return scriptEngine.invokeMethod(type, "translate", msg, deviceInfo);
         } catch (Throwable e) {
             log.error("run script error", e);
             return null;

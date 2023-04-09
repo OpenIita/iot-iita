@@ -63,4 +63,9 @@ public class TbSpaceDevice {
      */
     private Long useAt;
 
+    /**
+     * 是否收藏
+     */
+    private Boolean collect;
+
 }

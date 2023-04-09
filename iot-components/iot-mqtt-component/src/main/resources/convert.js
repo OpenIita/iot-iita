@@ -152,22 +152,43 @@ this.encode = function (service,device) {
         method+=identifier;
         topic="/sys/"+service.productKey+"/"+service.deviceName+"/c/deregister";
     }
-
-    for(var p in service.params){
-        params[p]=service.params[p];
-    }
-
-    return {
-        productKey:service.productKey,
-        deviceName:service.deviceName,
-        mid:deviceMid,
-        content:{
-            topic:topic,
-            payload:JSON.stringify({
-                id:deviceMid,
-                method:method,
-                params:params
-            })
+    if(type=="property" && identifier=="get"  ){
+        var listParams = []
+        for(var p in service.params){
+            listParams.push(service.params[p]);
         }
+        return {
+            productKey:service.productKey,
+            deviceName:service.deviceName,
+            mid:deviceMid,
+            content:{
+                topic:topic,
+                payload:JSON.stringify({
+                    id:deviceMid,
+                    method:method,
+                    params: listParams
+                })
+            }
+        }
+    }else{
+        for(var p in service.params){
+            params[p]=service.params[p];
+        }
+        return {
+            productKey:service.productKey,
+            deviceName:service.deviceName,
+            mid:deviceMid,
+            content:{
+                topic:topic,
+                payload:JSON.stringify({
+                    id:deviceMid,
+                    method:method,
+                    params:params
+                })
+            }
+        }
+
     }
+
+
 };

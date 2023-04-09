@@ -89,4 +89,9 @@ public class SpaceDeviceVo {
      * 品类名
      */
     private String categoryName;
+
+    /**
+     * 是否收藏
+     */
+    private Boolean collect;
 }

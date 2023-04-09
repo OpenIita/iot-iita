@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -66,6 +67,17 @@ public class DeviceService {
 
         return send(deviceId, device.getProductKey(), device.getDeviceName(),
                 args, ThingModelMessage.TYPE_SERVICE, service);
+    }
+
+    /**
+     * 设备属性获取
+     */
+    public String getProperty(String deviceId, List<String> properties,
+                              boolean checkOwner) {
+        DeviceInfo device = getAndCheckDevice(deviceId, checkOwner);
+
+        return send(deviceId, device.getProductKey(), device.getDeviceName(), properties,
+                ThingModelMessage.TYPE_PROPERTY, ThingModelMessage.ID_PROPERTY_GET);
     }
 
     /**

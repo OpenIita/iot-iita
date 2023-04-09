@@ -1,13 +1,22 @@
+/*
+ * +----------------------------------------------------------------------
+ * | Copyright (c) 奇特物联 2021-2022 All rights reserved.
+ * +----------------------------------------------------------------------
+ * | Licensed 未经许可不能去掉「奇特物联」相关版权
+ * +----------------------------------------------------------------------
+ * | Author: xw2sy@163.com
+ * +----------------------------------------------------------------------
+ */
 package cc.iotkit.script;
 
 import cc.iotkit.common.utils.JsonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.extern.slf4j.Slf4j;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Value;
 
-import java.util.Objects;
-
+@Slf4j
 public class JavaScriptEngine implements IScriptEngine {
 
     private final Context context = Context.newBuilder("js").allowHostAccess(HostAccess.ALL).build();
@@ -42,22 +51,22 @@ public class JavaScriptEngine implements IScriptEngine {
     public <T> T invokeMethod(TypeReference<T> type, String methodName, Object... args) {
         Value member = jsScript.getMember("invoke");
 
-        if (Objects.isNull(member)) {
-            return null;
-        }
-
+        StringBuilder sbArgs = new StringBuilder("[");
+        //将入参转成json
         for (int i = 0; i < args.length; i++) {
             args[i] = JsonUtil.toJsonString(args[i]);
+            sbArgs.append(i == args.length - 1 ? "," : "").append(args[i]);
         }
+        sbArgs.append("]");
 
         //通过调用invoke方法将目标方法返回结果转成json
         Value rst = member.execute(methodName, args);
-        if (rst == null) {
-            return null;
-        }
 
         String json = rst.asString();
-        if (json == null) {
+        log.info("invoke script {},args:{}, result:{}", methodName, sbArgs, json);
+
+        //没有返回值
+        if (json == null || "null".equals(json)) {
             return null;
         }
 

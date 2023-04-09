@@ -54,14 +54,15 @@ public class DeviceBehaviourService {
             DeviceInfo deviceInfo = register(null, info);
             //子设备注册
             List<RegisterInfo.SubDevice> subDevices = info.getSubDevices();
-            if (subDevices != null && subDevices.size() != 0) {
-                for (RegisterInfo.SubDevice subDevice : subDevices) {
-                    register(deviceInfo.getDeviceId(),
-                            new RegisterInfo(subDevice.getProductKey(),
-                                    subDevice.getDeviceName(),
-                                    subDevice.getModel(),
-                                    subDevice.getTag(), null));
-                }
+            if (subDevices == null) {
+                return;
+            }
+            for (RegisterInfo.SubDevice subDevice : subDevices) {
+                register(deviceInfo.getDeviceId(),
+                        new RegisterInfo(subDevice.getProductKey(),
+                                subDevice.getDeviceName(),
+                                subDevice.getModel(),
+                                subDevice.getTag(), null));
             }
         } catch (BizException e) {
             log.error("register device error", e);
@@ -173,6 +174,13 @@ public class DeviceBehaviourService {
 //
 //        }
 
+    }
+
+    public boolean isOnline(String productKey,
+                            String deviceName) {
+        DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(device.getDeviceId());
+        return deviceInfo.getState().isOnline();
     }
 
     public void deviceStateChange(String productKey,

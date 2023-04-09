@@ -63,4 +63,9 @@ public class SpaceDevice implements Owned<String> {
      */
     private Long useAt;
 
+    /**
+     * 是否收藏
+     */
+    private Boolean collect;
+
 }

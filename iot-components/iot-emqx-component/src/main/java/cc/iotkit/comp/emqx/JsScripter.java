@@ -14,6 +14,7 @@ import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.script.IScriptEngine;
 import cc.iotkit.script.ScriptEngineFactory;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -40,11 +41,13 @@ public class JsScripter implements IScripter {
 
     @SneakyThrows
     public ThingModelMessage decode(TransparentMsg msg) {
-        return scriptEngine.invokeMethod(ThingModelMessage.class, "decode", msg).get(0);
+        return scriptEngine.invokeMethod(new TypeReference<>() {
+        }, "decode", msg);
     }
 
     @SneakyThrows
     public TransparentMsg encode(ThingService<?> service) {
-        return scriptEngine.invokeMethod(TransparentMsg.class, "encode", service).get(0);
+        return scriptEngine.invokeMethod(new TypeReference<>() {
+        }, "encode", service);
     }
 }

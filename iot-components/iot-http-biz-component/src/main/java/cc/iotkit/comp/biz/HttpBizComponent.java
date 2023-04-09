@@ -14,6 +14,7 @@ import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;
 import cc.iotkit.script.IScriptEngine;
 import cc.iotkit.script.ScriptEngineFactory;
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
@@ -76,13 +77,15 @@ public class HttpBizComponent implements IComponent {
                             String response;
                             try {
                                 HttpContent content =
-                                        scriptEngine.invokeMethod(HttpContent.class,
+                                        scriptEngine.invokeMethod(
+                                                new TypeReference<>() {
+                                                },
                                                 "onReceive",
                                                 httpRequest.method().name(),
                                                 httpRequest.path(),
                                                 httpHeader,
                                                 httpParams,
-                                                body).get(0);
+                                                body);
                                 responseHeader = content.getHeader();
                                 response = content.getContent();
                                 response = response == null ? "" : response;

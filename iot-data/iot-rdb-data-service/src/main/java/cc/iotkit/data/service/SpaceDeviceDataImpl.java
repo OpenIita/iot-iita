@@ -35,6 +35,11 @@ public class SpaceDeviceDataImpl implements ISpaceDeviceData {
     }
 
     @Override
+    public List<SpaceDevice> findByHomeIdAndCollect(String homeId,boolean collect) {
+        return SpaceDeviceMapper.toDto(spaceDeviceRepository.findByHomeIdAndCollect(homeId,collect));
+    }
+
+    @Override
     public List<SpaceDevice> findByUidOrderByAddAtDesc(String uid) {
         return SpaceDeviceMapper.toDto(spaceDeviceRepository.findByUidOrderByAddAtDesc(uid));
     }

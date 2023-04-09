@@ -43,6 +43,27 @@ public class SpaceController {
     }
 
     /**
+     * 取用户所有家庭
+     */
+    @GetMapping("/getUserHomes")
+    public List<Home> getUserHomes() {
+        return homeData.findByUid(AuthUtil.getUserId());
+    }
+
+    /**
+     * 切换用户当前家庭
+     */
+    @PostMapping("/changCurrentHome")
+    public void changCurrentHome(Home home) {
+        Home oldHome=homeData.findByUidAndCurrent(AuthUtil.getUserId(), true);
+        oldHome.setCurrent(false);
+        homeData.save(oldHome);
+        Home newHome=homeData.findById(home.getId());
+        newHome.setCurrent(true);
+        homeData.save(newHome);
+    }
+
+    /**
      * 保存家庭信息
      */
     @PostMapping("/saveHome/{id}")

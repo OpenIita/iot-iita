@@ -24,6 +24,8 @@ public interface SpaceDeviceRepository extends JpaRepository<TbSpaceDevice, Stri
 
     List<TbSpaceDevice> findByUidOrderByUseAtDesc(String uid);
 
+    List<TbSpaceDevice> findByHomeIdAndCollect(String homeId,boolean collect);
+
     List<TbSpaceDevice> findByUidOrderByAddAtDesc(String uid);
 
     List<TbSpaceDevice> findBySpaceIdOrderByAddAtDesc(String spaceId);

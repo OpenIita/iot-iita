@@ -164,6 +164,12 @@
             <artifactId>iot-es-temporal-service</artifactId>
         </dependency>
 
+        <!--打开注释 启用timescale数据库-->
+<!--        <dependency>-->
+<!--            <groupId>cc.iotkit</groupId>-->
+<!--            <artifactId>iot-ts-temporal-service</artifactId>-->
+<!--        </dependency>-->
+
         <!--打开注释 启用tdengine数据库-->
         <!--        <dependency>-->
         <!--            <groupId>cc.iotkit</groupId>-->

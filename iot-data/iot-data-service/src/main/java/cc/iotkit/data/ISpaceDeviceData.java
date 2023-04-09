@@ -17,6 +17,8 @@ public interface ISpaceDeviceData extends IOwnedData<SpaceDevice, String> {
 
     List<SpaceDevice> findByUidOrderByUseAtDesc(String uid);
 
+    List<SpaceDevice> findByHomeIdAndCollect(String homeId,boolean collect);
+
     List<SpaceDevice> findByUidOrderByAddAtDesc(String uid);
 
     List<SpaceDevice> findBySpaceIdOrderByAddAtDesc(String spaceId);

@@ -335,6 +335,11 @@
                 <artifactId>iot-td-temporal-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-ts-temporal-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>

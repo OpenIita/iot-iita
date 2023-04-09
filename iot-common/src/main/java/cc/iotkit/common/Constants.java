@@ -155,6 +155,10 @@ public interface Constants {
          * 设备-服务调用
          */
         String INVOKE_SERVICE = "/{deviceId}/service/{service}/invoke";
+        /**
+         * 设备-属性获取
+         */
+        String INVOKE_SERVICE_PROPERTY_GET = "/{deviceId}/service/property/get";
 
     }
 
@@ -169,6 +173,11 @@ public interface Constants {
          * 最近使用设备列表
          */
         String RECENT_DEVICES = "/myRecentDevices";
+
+        /**
+         * 获取用户当前收藏设备
+         */
+        String GET_COLLECT_DEVICES = "/getCollectDevices";
 
         /**
          * 我的空间设备列表
@@ -194,6 +203,11 @@ public interface Constants {
          * 空间修改设备
          */
         String SAVE_DEVICE = "/saveDevice";
+
+        /**
+         * 收藏/取消收藏设备
+         */
+        String COLLECT_DEVICE = "/collectDevice";
 
         /**
          * 获取空间设备信息
