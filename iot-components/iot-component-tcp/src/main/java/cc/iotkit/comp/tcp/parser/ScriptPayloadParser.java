@@ -1,56 +1,33 @@
 package cc.iotkit.comp.tcp.parser;
 
+import cc.iotkit.script.IScriptEngine;
+import cc.iotkit.script.ScriptEngineFactory;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.parsetools.RecordParser;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
-import javax.script.ScriptEngineManager;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * 固定长度
- *
- * @copy jetLink
- * @author huangwenl
- * @date 2022-10-13
- */
-
-/**
- * <pre>
- * PipePayloadParser parser = new PipePayloadParser();
- * parser.fixed(4)
- *       .handler(buffer -> {
- *            int len = BytesUtils.highBytes2Int(buffer.getBytes());
- *            parser.fixed(len);
- *         })
- *       .handler(buffer -> parser.result(buffer.toString("UTF-8")).complete());
- * </pre>
- */
 @Slf4j
 public class ScriptPayloadParser implements PayloadParser {
 
-
-    private final NashornScriptEngine engine = (NashornScriptEngine) (new ScriptEngineManager())
-            .getEngineByName("nashorn");
+    private final IScriptEngine scriptEngine = ScriptEngineFactory.getScriptEngine("js");
 
     @SneakyThrows
     @Override
     public PayloadParser init(Object param) {
         String script = (String) param;
-        ;
-        ScriptObjectMirror scriptObject = (ScriptObjectMirror) engine.eval("new (function(){" + script + "})()");
+        scriptEngine.setScript(script);
         //执行转换脚本
-        engine.invokeMethod(scriptObject, "payloadParser", this);
+        scriptEngine.invokeMethod("payloadParser", this);
         return this;
     }
 

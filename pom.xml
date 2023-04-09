@@ -14,6 +14,7 @@
         <module>iot-message-bus</module>
         <module>iot-test-tool</module>
         <module>iot-data</module>
+        <module>iot-script-engine</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -24,7 +25,7 @@
 
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
-    <version>0.4.2-SNAPSHOT</version>
+    <version>0.4.3-SNAPSHOT</version>
     <name>iotkit-parent</name>
     <description>iotkit parent</description>
     <properties>
@@ -215,6 +216,24 @@
                 <version>${vertx.version}</version>
             </dependency>
 
+            <!--javascript运行环境-->
+            <dependency>
+                <groupId>org.graalvm.sdk</groupId>
+                <artifactId>graal-sdk</artifactId>
+                <version>${graalvm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.graalvm.js</groupId>
+                <artifactId>js</artifactId>
+                <version>${graalvm.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.graalvm.js</groupId>
+                <artifactId>js-scriptengine</artifactId>
+                <version>${graalvm.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-model</artifactId>
@@ -329,22 +348,10 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!--javascript运行环境-->
             <dependency>
-                <groupId>org.graalvm.sdk</groupId>
-                <artifactId>graal-sdk</artifactId>
-                <version>${graalvm.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.graalvm.js</groupId>
-                <artifactId>js</artifactId>
-                <version>${graalvm.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.graalvm.js</groupId>
-                <artifactId>js-scriptengine</artifactId>
-                <version>${graalvm.version}</version>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-script-engine</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
         </dependencies>

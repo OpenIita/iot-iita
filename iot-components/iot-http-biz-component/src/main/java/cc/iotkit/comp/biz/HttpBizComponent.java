@@ -12,21 +12,18 @@ package cc.iotkit.comp.biz;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;
+import cc.iotkit.script.IScriptEngine;
+import cc.iotkit.script.ScriptEngineFactory;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.util.*;
 
 @Data
@@ -35,7 +32,7 @@ public class HttpBizComponent implements IComponent {
 
     private final Vertx vertx = Vertx.vertx();
 
-    private final NashornScriptEngine engine = (NashornScriptEngine) (new ScriptEngineManager()).getEngineByName("nashorn");
+    private final IScriptEngine scriptEngine = ScriptEngineFactory.getScriptEngine("js");
 
     private Object scriptObj;
 
@@ -53,11 +50,7 @@ public class HttpBizComponent implements IComponent {
     public void create(CompConfig config) {
         this.id = UUID.randomUUID().toString();
         this.httpConfig = JsonUtil.parse(config.getOther(), HttpConfig.class);
-        try {
-            scriptObj = engine.eval(String.format("new (function () {\n%s})()", script));
-        } catch (ScriptException e) {
-            log.error("init script error", e);
-        }
+        scriptEngine.setScript(script);
     }
 
     @Override
@@ -74,41 +67,33 @@ public class HttpBizComponent implements IComponent {
 
                         HttpServerRequest httpRequest = rc.request();
                         String contentType = httpRequest.headers().get("Content-Type");
-                        JsonObject responseHeader = new JsonObject();
+                        Map<String, Object> responseHeader = new HashMap<>();
                         if ("application/json".equals(contentType)) {
                             String bodyStr = rc.getBody().toString();
                             Map body = JsonUtil.parse(bodyStr, Map.class);
                             log.info("request body:{}", bodyStr);
 
-                            String response = "unknown error";
-                            String name = "onReceive";
-                            if (((ScriptObjectMirror) scriptObj).get(name) != null) {
-                                try {
-                                    Object result = engine.invokeMethod(scriptObj,
-                                            name,
-                                            httpRequest.method().name(),
-                                            httpRequest.path(),
-                                            httpHeader,
-                                            httpParams,
-                                            body);
-                                    Object resultObj = JsonUtil.toObject((ScriptObjectMirror) result);
-                                    if (resultObj instanceof Map) {
-                                        JsonObject data = JsonObject.mapFrom(resultObj);
-                                        responseHeader = data.getJsonObject("header");
-                                        response = data.getString("content");
-                                        response = response == null ? "" : response;
-                                    }
-                                } catch (Throwable e) {
-                                    log.error("invokeMethod onReceive error", e);
-                                    response = e.getMessage();
-                                }
-                            } else {
-                                log.error("required [onReceive] method");
+                            String response;
+                            try {
+                                HttpContent content =
+                                        scriptEngine.invokeMethod(HttpContent.class,
+                                                "onReceive",
+                                                httpRequest.method().name(),
+                                                httpRequest.path(),
+                                                httpHeader,
+                                                httpParams,
+                                                body).get(0);
+                                responseHeader = content.getHeader();
+                                response = content.getContent();
+                                response = response == null ? "" : response;
+                            } catch (Throwable e) {
+                                log.error("invokeMethod onReceive error", e);
+                                response = e.getMessage();
                             }
 
                             HttpServerResponse httpServerResponse = rc.response();
                             //设置响应头
-                            responseHeader.getMap().forEach((key, value) -> {
+                            responseHeader.forEach((key, value) -> {
                                 //大写转换
                                 key = key.replaceAll("([A-Z])", "-$1").toLowerCase();
                                 httpServerResponse.putHeader(key, value.toString());
@@ -139,7 +124,7 @@ public class HttpBizComponent implements IComponent {
 
     @Override
     public void putScriptEnv(String key, Object value) {
-        engine.put(key, value);
+        scriptEngine.putScriptEnv(key, value);
     }
 
     @Override

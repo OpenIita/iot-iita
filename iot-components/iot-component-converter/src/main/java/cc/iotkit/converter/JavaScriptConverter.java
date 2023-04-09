@@ -7,45 +7,43 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.comp.mqtt;
+package cc.iotkit.converter;
 
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.model.device.message.ThingModelMessage;
-import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.script.IScriptEngine;
 import cc.iotkit.script.ScriptEngineFactory;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Data
-public class JsScripter implements IScripter {
-
-    private ProductModel model;
-
-    private Object scriptObj;
+public class JavaScriptConverter implements IConverter {
 
     private IScriptEngine scriptEngine = ScriptEngineFactory.getScriptEngine("js");
 
-    public JsScripter(ProductModel model) {
-        this.model = model;
-    }
-
     @SneakyThrows
-    @Override
     public void setScript(String script) {
         scriptEngine.setScript(script);
     }
 
     @SneakyThrows
-    public ThingModelMessage decode(TransparentMsg msg) {
-        return scriptEngine.invokeMethod(ThingModelMessage.class, "decode", msg).get(0);
-
+    public ThingModelMessage decode(DeviceMessage msg) {
+        return scriptEngine.invokeMethod(new TypeReference<>() {
+        }, "decode", msg);
     }
 
     @SneakyThrows
-    public TransparentMsg encode(ThingService<?> service) {
-        return scriptEngine.invokeMethod(TransparentMsg.class, "encode", service).get(0);
+    @Override
+    public DeviceMessage encode(ThingService<?> service, Device device) {
+        return scriptEngine.invokeMethod(new TypeReference<>() {
+        }, "encode", service, device);
+    }
+
+    @Override
+    public void putScriptEnv(String key, Object value) {
+        scriptEngine.putScriptEnv(key, value);
     }
 }

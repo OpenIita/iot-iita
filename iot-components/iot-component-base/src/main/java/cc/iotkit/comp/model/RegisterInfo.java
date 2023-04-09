@@ -13,8 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldNameConstants
 public class RegisterInfo {
 
     private String productKey;
@@ -56,31 +57,11 @@ public class RegisterInfo {
         }
     }
 
-    public static RegisterInfo from(Map map) {
-        RegisterInfo bean = new RegisterInfo();
-        try {
-            BeanUtils.populate(bean, map);
-            List<SubDevice> subDevices = new ArrayList<>();
-            List<Object> sourceSubDevices = (List<Object>) map.get("subDevices");
-            if (sourceSubDevices == null) {
-                return bean;
-            }
-            for (Object sourceSubDevice : sourceSubDevices) {
-                SubDevice subDevice = new SubDevice();
-                BeanUtils.populate(subDevice, (Map<String, ? extends Object>) sourceSubDevice);
-                subDevices.add(subDevice);
-            }
-            bean.setSubDevices(subDevices);
-        } catch (Throwable e) {
-            log.error("parse bean from map error", e);
-            return null;
-        }
-        return bean;
-    }
-
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
+    @FieldNameConstants
     public static class SubDevice {
 
         private String productKey;

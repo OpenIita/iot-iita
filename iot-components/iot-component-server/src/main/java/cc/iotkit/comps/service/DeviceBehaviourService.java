@@ -180,7 +180,7 @@ public class DeviceBehaviourService {
                                   boolean online) {
         DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
         if (device == null) {
-            log.warn(String.format("productKey: %s,device: %s,online: %s", productKey, device, online));
+            log.warn("productKey: {},deviceName:{},online: {}", productKey, deviceName, online);
             throw new BizException("device does not exist");
         }
         deviceStateChange(device, online);
@@ -235,6 +235,7 @@ public class DeviceBehaviourService {
             if (device == null) {
                 return;
             }
+            message.setId(UUID.randomUUID().toString());
             if (message.getOccurred() == null) {
                 message.setOccurred(System.currentTimeMillis());
             }

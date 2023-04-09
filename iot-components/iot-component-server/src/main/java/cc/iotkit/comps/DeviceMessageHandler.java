@@ -9,7 +9,6 @@
  */
 package cc.iotkit.comps;
 
-import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.IDeviceComponent;
@@ -21,17 +20,13 @@ import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.converter.IConverter;
-import cc.iotkit.engine.IScriptEngine;
-import cc.iotkit.engine.IScriptException;
-import cc.iotkit.engine.JsNashornScriptEngine;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.script.IScriptEngine;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
 
-import javax.script.ScriptException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
@@ -83,61 +78,62 @@ public class DeviceMessageHandler implements IMessageHandler {
     public void onReceive(Map<String, Object> head, String type, String msg, Consumer<ReceiveResult> onResult) {
         executorService.submit(() -> {
             try {
-                DeviceMsgScriptResult result = invokeMethodWithResult("onReceive", head, type, msg);
-                log.info("onReceive script result:{}", JsonUtil.toJsonString(result));
-                Object rstType = result.getType();
-                if (rstType == null) {
+                Map rst = scriptEngine.invokeMethod(new TypeReference<>() {
+                }, "onReceive", head, type, msg);
+                Object objType = rst.get("type");
+                log.info("onReceive script result:{}", objType);
+                if (objType == null) {
                     onResult.accept(null);
                     return;
                 }
                 //取脚本执行后返回的数据
-                Object data = result.getData();
-                if (!(data instanceof Map)) {
-                    throw new BizException("script result data is incorrect");
+                Object objData = rst.get("data");
+                if (!(objData instanceof Map)) {
+                    onResult.accept(null);
+                    return;
                 }
+                Map data = (Map) objData;
 
-                Map<String, Object> dataMap = (Map) data;
                 //获取动作数据
-                Action action = getAction(result.getAction());
+                Action action = MessageParser.parse(new Action(), rst.get("action"));
 
-                if ("register".equals(rstType)) {
-                    //注册数据
-                    RegisterInfo regInfo = RegisterInfo.from(dataMap);
-                    if (regInfo == null) {
-                        onResult.accept(null);
+                switch (objType.toString()) {
+                    case "register":
+                        if (action != null && Action.TYPE_ACK.equals(action.getType())) {
+                            doAction(action);
+                        } else {
+                            //注册数据
+                            RegisterInfo regInfo = MessageParser.parseRegisterInfo(data);
+                            if (regInfo == null) {
+                                onResult.accept(null);
+                                return;
+                            }
+                            doRegister(regInfo);
+                            doAction(action);
+                            onResult.accept(new ReceiveResult(regInfo.getProductKey(), regInfo.getDeviceName(), regInfo));
+                        }
                         return;
-                    }
-                    doRegister(regInfo);
-                    doAction(action);
-                    onResult.accept(new ReceiveResult(regInfo.getProductKey(), regInfo.getDeviceName(), regInfo));
-                    return;
-                } else if ("auth".equals(rstType)) {
-                    //设备认证
-                    AuthInfo authInfo = new AuthInfo();
-                    BeanUtils.populate(authInfo, dataMap);
-                    doAuth(authInfo);
-                    doAction(action);
-                    onResult.accept(new ReceiveResult(authInfo.getProductKey(), authInfo.getDeviceName(), authInfo));
-                    return;
-                } else if ("state".equals(rstType)) {
-                    //设备状态变更
-                    DeviceState state = DeviceState.from(dataMap);
-                    if (state == null) {
-                        onResult.accept(null);
+                    case "auth":
+                        //设备认证
+                        AuthInfo authInfo = MessageParser.parse(new AuthInfo(), data);
+                        doAuth(authInfo);
+                        doAction(action);
+                        onResult.accept(new ReceiveResult(authInfo.getProductKey(), authInfo.getDeviceName(), authInfo));
                         return;
-                    }
-                    doStateChange(state);
-                    doAction(action);
-                    onResult.accept(new ReceiveResult(state.getProductKey(), state.getDeviceName(), state));
-                    return;
-                } else if ("report".equals(rstType)) {
-                    //上报数据
-                    DeviceMessage message = new DeviceMessage();
-                    BeanUtils.populate(message, dataMap);
-                    doReport(message);
-                    doAction(action);
-                    onResult.accept(new ReceiveResult(message.getProductKey(), message.getDeviceName(), message));
-                    return;
+                    case "state":
+                        //设备状态变更
+                        DeviceState state = MessageParser.parseDeviceState(data);
+                        doStateChange(state);
+                        doAction(action);
+                        onResult.accept(new ReceiveResult(state.getProductKey(), state.getDeviceName(), state));
+                        return;
+                    case "report":
+                        //上报数据
+                        DeviceMessage message = MessageParser.parse(new DeviceMessage(), data);
+                        doReport(message);
+                        doAction(action);
+                        onResult.accept(new ReceiveResult(message.getProductKey(), message.getDeviceName(), message));
+                        return;
                 }
 
             } catch (Throwable e) {
@@ -147,17 +143,17 @@ public class DeviceMessageHandler implements IMessageHandler {
         });
     }
 
-    private void doRegister(RegisterInfo reg) throws IScriptException {
+    private void doRegister(RegisterInfo reg) {
         try {
             deviceBehaviourService.register(reg);
         } catch (Throwable e) {
             log.error("register error", e);
         } finally {
-            invokeMethod("onRegistered", reg, "false");
+            scriptEngine.invokeMethod("onRegistered", reg, "false");
         }
     }
 
-    private void doAuth(AuthInfo auth) throws IScriptException {
+    private void doAuth(AuthInfo auth) {
         try {
             deviceBehaviourService.deviceAuth(auth.getProductKey(),
                     auth.getDeviceName(),
@@ -166,20 +162,8 @@ public class DeviceMessageHandler implements IMessageHandler {
         } catch (Throwable e) {
             log.error("device auth error", e);
         } finally {
-            invokeMethod("onAuthed", auth, "false");
+            scriptEngine.invokeMethod("onAuthed", auth, "false");
         }
-    }
-
-    private void invokeMethod(String name, Object... args) throws IScriptException {
-        scriptEngine.invokeMethod(name, args);
-
-    }
-
-    private DeviceMsgScriptResult invokeMethodWithResult(String name, Object... args) throws InvocationTargetException, IllegalAccessException, IScriptException {
-        Object o = scriptEngine.invokeMethod(name, args);
-        DeviceMsgScriptResult result = new DeviceMsgScriptResult();
-        BeanUtils.copyProperties(result, o);
-        return result;
     }
 
     private void doStateChange(DeviceState state) {
@@ -215,19 +199,6 @@ public class DeviceMessageHandler implements IMessageHandler {
         }
 
         deviceBehaviourService.reportMessage(thingModelMessage);
-    }
-
-    private Action getAction(Object objAction) {
-        if (!(objAction instanceof Map)) {
-            return null;
-        }
-        Action action = new Action();
-        try {
-            BeanUtils.populate(action, (Map<String, ? extends Object>) objAction);
-        } catch (Throwable e) {
-            log.error("parse action error", e);
-        }
-        return action;
     }
 
     private void doAction(Action action) {

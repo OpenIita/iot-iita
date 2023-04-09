@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iot-components</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.2-SNAPSHOT</version>
+        <version>0.4.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -41,11 +41,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.luaj</groupId>
-            <artifactId>luaj-jse</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-common</artifactId>
         </dependency>
@@ -58,6 +53,11 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-data-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-script-engine</artifactId>
         </dependency>
 
     </dependencies>
@@ -80,7 +80,6 @@
                     <artifactSet>
                         <includes>
                             <include>io.vertx:vertx-core</include>
-                            <include>org.luaj:luaj-jse</include>
                         </includes>
                     </artifactSet>
                 </configuration>

@@ -10,17 +10,13 @@
 package cc.iotkit.comp.emqx;
 
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.ProductModel;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import cc.iotkit.script.IScriptEngine;
+import cc.iotkit.script.ScriptEngineFactory;
 import lombok.Data;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
-
-import javax.script.ScriptEngineManager;
-import java.util.Map;
 
 @Slf4j
 @Data
@@ -28,48 +24,27 @@ public class JsScripter implements IScripter {
 
     private ProductModel model;
 
-    private final NashornScriptEngine engine = (NashornScriptEngine) (new ScriptEngineManager()).getEngineByName("nashorn");
-
     private Object scriptObj;
+
+    private IScriptEngine scriptEngine = ScriptEngineFactory.getScriptEngine("js");
 
     public JsScripter(ProductModel model) {
         this.model = model;
     }
 
+    @SneakyThrows
     @Override
     public void setScript(String script) {
-        try {
-            scriptObj = engine.eval(String.format("new (function () {\n%s})()", script));
-        } catch (Throwable e) {
-            throw new RuntimeException("init script error", e);
-        }
+        scriptEngine.setScript(script);
     }
 
+    @SneakyThrows
     public ThingModelMessage decode(TransparentMsg msg) {
-        try {
-            ScriptObjectMirror result = (ScriptObjectMirror) engine.invokeMethod(scriptObj, "decode", msg);
-            ThingModelMessage message = new ThingModelMessage();
-            BeanUtils.populate(message, result);
-            return message;
-        } catch (Throwable e) {
-            log.error("invoke decode script error", e);
-            return null;
-        }
+        return scriptEngine.invokeMethod(ThingModelMessage.class, "decode", msg).get(0);
     }
 
+    @SneakyThrows
     public TransparentMsg encode(ThingService<?> service) {
-        try {
-            ScriptObjectMirror result = (ScriptObjectMirror) engine.invokeMethod(scriptObj, "encode", service);
-            Map map = (Map) JsonUtil.toObject(result);
-            TransparentMsg message = new TransparentMsg();
-            BeanUtils.populate(message, map);
-            message.setProductKey(model.getProductKey());
-            message.setModel(model.getModel());
-            message.setDeviceName(service.getDeviceName());
-            return message;
-        } catch (Throwable e) {
-            log.error("invoke encode script error", e);
-            return null;
-        }
+        return scriptEngine.invokeMethod(TransparentMsg.class, "encode", service).get(0);
     }
 }

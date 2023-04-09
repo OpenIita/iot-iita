@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iotkit-parent</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.2-SNAPSHOT</version>
+        <version>0.4.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,7 +21,6 @@
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
-            <version>2.3.2</version>
         </dependency>
 
         <dependency>
@@ -32,6 +31,11 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-component-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-script-engine</artifactId>
         </dependency>
 
     </dependencies>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iot-components</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.2-SNAPSHOT</version>
+        <version>0.4.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -56,6 +56,11 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-data-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-script-engine</artifactId>
         </dependency>
 
     </dependencies>

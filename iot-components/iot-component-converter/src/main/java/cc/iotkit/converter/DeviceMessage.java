@@ -9,9 +9,16 @@
  */
 package cc.iotkit.converter;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DeviceMessage {
 
     private String productKey;
@@ -21,4 +28,5 @@ public class DeviceMessage {
     private String mid;
 
     private Object content;
+
 }
