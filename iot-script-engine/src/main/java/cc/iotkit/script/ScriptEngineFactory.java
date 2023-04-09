@@ -6,6 +6,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 public class ScriptEngineFactory {
 
     public static IScriptEngine getScriptEngine(String type) {
+        if (type == null) {
+            type = "js";
+        }
         switch (type) {
             case "python":
             case "lua":
