@@ -60,9 +60,6 @@ function acl(head,type,payload){
         };
     }
 
-    if (/^\/sys\/.+\/.+\/c\/#/i.test(_topic)) {
-	  return subscribe(head,type,payload);
-    }
     if (/^\/sys\/.+\/.+\/s\/.*/i.test(_topic)) {
 	  return subscribe(head,type,payload);
     }
@@ -224,9 +221,6 @@ function subscribe(head,type,payload){
     }
 }
 
-
-
-
 var messageHandler = {
     "/sys/client/connected":connect,
     "/sys/client/disconnected":disconnect,
@@ -240,19 +234,9 @@ var messageHandler = {
 this.onReceive=function(head,type,payload){
     payload=JSON.parse(payload);
 
-    print("======================================================================= ");
-    print("【message from】: " + (isServerId(payload.clientid)?"Server":"Device") );
-    print("onReceive head: "+JSON.stringify(head));
-    print("onReceive type: "+JSON.stringify(type));
-    print("onReceive payload: "+ JSON.stringify(payload));
-    //print("onReceive compMqttClientIdList: "+ component.getCompMqttClientIdList());
-
     var result = {};
     var topic = head.topic;
     if(!topic) {
-
-        print("【result】: " + JSON.stringify(result));
-        print("======================================================================= ");
         return result;
     }
 
@@ -292,8 +276,6 @@ this.onReceive=function(head,type,payload){
         }
 
     }
-    print("【result】: " + JSON.stringify(result));
-    print("======================================================================= ");
     return result;
 
 }
