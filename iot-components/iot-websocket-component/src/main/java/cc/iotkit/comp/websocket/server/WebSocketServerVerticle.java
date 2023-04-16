@@ -6,8 +6,6 @@ import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.model.ReceiveResult;
 import cc.iotkit.comp.websocket.AbstractDeviceVerticle;
 import cc.iotkit.converter.DeviceMessage;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
@@ -29,7 +27,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
 
     private HttpServer httpServer;
 
-    private WebSocketServerConfig webSocketConfig;
+    private final WebSocketServerConfig webSocketConfig;
 
     private final Map<String, ServerWebSocket> wsClients = new ConcurrentHashMap<>();
 
@@ -37,7 +35,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
         this.webSocketConfig = JsonUtil.parse(config, WebSocketServerConfig.class);
     }
 
-    private Map<String, String> tokens=new HashMap<>();
+    private final Map<String, String> tokens=new HashMap<>();
 
     @Override
     public void start() throws Exception {
@@ -77,17 +75,15 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
                     }
                     log.warn("认证失败，拒绝");
                     wsClient.writeTextMessage("auth fail");
-                    return;
                 }else{
                     log.warn("认证失败，拒绝");
                     wsClient.writeTextMessage("auth fail");
-                    return;
                 }
 
             });
             wsClient.closeHandler(c -> {
                 log.warn("client connection closed,deviceKey:{}", deviceKey);
-                executor.onReceive(new HashMap<>(), "disconnect", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
+                executor.onReceive(new HashMap<>(0), "disconnect", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
                     //删除设备与连接关系
                     if(r!=null){
                         wsClients.remove(getDeviceKey(r));

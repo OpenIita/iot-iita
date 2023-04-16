@@ -70,11 +70,13 @@ public class DeviceMessageHandler implements IMessageHandler {
         scriptEngine.setScript(script);
     }
 
+    @Override
     public void onReceive(Map<String, Object> head, String type, String msg) {
         onReceive(head, type, msg, (r) -> {
         });
     }
 
+    @Override
     public void onReceive(Map<String, Object> head, String type, String msg, Consumer<ReceiveResult> onResult) {
         executorService.submit(() -> {
             try {

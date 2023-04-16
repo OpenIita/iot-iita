@@ -34,6 +34,7 @@ public class ReportTest {
 
         if (args.length == 0) {
             Mqtt.brokerHost = "127.0.0.1";
+//            Mqtt.brokerPort = 2883;
 //            Mqtt.brokerHost = "120.76.96.206";
 //            Mqtt.brokerHost = "172.16.1.109";
         } else {

@@ -60,6 +60,12 @@ function acl(head,type,payload){
         };
     }
 
+    // 客户端订阅处理
+    if (/^\/sys\/.+\/.+\/c\/#/i.test(_topic)) {
+	  return subscribe(head,type,payload);
+    }
+
+    // 服务端订阅处理
     if (/^\/sys\/.+\/.+\/s\/.*/i.test(_topic)) {
 	  return subscribe(head,type,payload);
     }
@@ -242,12 +248,9 @@ this.onReceive=function(head,type,payload){
 
     var fun = messageHandler[topic];
 
-
-
     if(fun){
         result = fun(head,type,payload)
-    }
-    else{
+    }else{
         var arr= topic.split('/');
         if(arr.length<6){
             throw new Error("incorrect topic: "+topic)
