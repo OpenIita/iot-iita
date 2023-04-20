@@ -11,6 +11,7 @@ package cc.iotkit.ruleengine.action;
 
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.ruleengine.alert.Alerter;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
@@ -29,7 +30,8 @@ public class AlertService<T extends Alerter> extends ScriptService {
     @SneakyThrows
     public String execute(ThingModelMessage msg) {
         //执行转换脚本
-        Map result = execScript(msg);
+        Map<String, Object> result = execScript(new TypeReference<>() {
+        }, msg);
         if (result == null) {
             log.warn("execScript result is null");
             return "execScript result is null";

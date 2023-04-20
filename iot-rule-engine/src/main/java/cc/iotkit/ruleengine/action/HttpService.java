@@ -11,6 +11,7 @@ package cc.iotkit.ruleengine.action;
 
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
@@ -32,14 +33,12 @@ public class HttpService extends ScriptService {
     @SneakyThrows
     public String execute(ThingModelMessage msg) {
         //执行转换脚本
-        Map result = execScript(msg);
-        if (result == null) {
+        HttpData httpData = execScript(new TypeReference<>() {
+        }, msg);
+        if (httpData == null) {
             log.warn("execScript result is null");
             return "execScript result is null";
         }
-
-        HttpData httpData = new HttpData();
-        BeanUtils.populate(httpData, result);
 
         //组装http请求
         String url = this.url + httpData.getPath();
@@ -57,7 +56,7 @@ public class HttpService extends ScriptService {
                 httpData.getBody().toString());
 
         Request request = builder.method(httpData.getMethod().toUpperCase(), requestBody).build();
-        String requestDataStr = JsonUtil.toJsonString(result);
+        String requestDataStr = JsonUtil.toJsonString(httpData);
         log.info("send http request:{} ,{}", url, requestDataStr);
 
         String responseBody = "";

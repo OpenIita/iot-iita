@@ -11,6 +11,7 @@ package cc.iotkit.comp.emqx;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.ThreadUtil;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IMessageHandler;
@@ -36,9 +37,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 
-public class EmqxDeviceComponent extends AbstractDeviceComponent {
+public class EmqxDeviceComponent extends AbstractDeviceComponent implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(EmqxDeviceComponent.class);
     private Vertx vertx;
@@ -47,12 +50,17 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
     private String deployedId;
     private EmqxConfig mqttConfig;
     private MqttClient client;
+    private boolean mqttConnected = false;
+    private final ScheduledThreadPoolExecutor emqxConnectTask = ThreadUtil.newScheduled(1, "emqx_connect");
 
-    //组件mqtt clientId，默认通过mqtt auth / acl验证。
+    /**
+     * 组件mqtt clientId，默认通过mqtt auth / acl验证。
+     */
     private final Set<String> compMqttClientIdList = new HashSet<>();
 
     private final TransparentConverter transparentConverter = new TransparentConverter();
 
+    @Override
     public void create(CompConfig config) {
         super.create(config);
         vertx = Vertx.vertx();
@@ -64,21 +72,32 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
     public void start() {
         try {
             compMqttClientIdList.add(mqttConfig.getClientId());
-
             authVerticle.setExecutor(getHandler());
             countDownLatch = new CountDownLatch(1);
             Future<String> future = vertx.deployVerticle(authVerticle);
             future.onSuccess((s -> {
                 deployedId = s;
                 countDownLatch.countDown();
-                log.error("start emqx auth component success");
+                log.info("start emqx auth component success");
             }));
             future.onFailure((e) -> {
                 countDownLatch.countDown();
                 log.error("start emqx auth component failed", e);
             });
-
             countDownLatch.await();
+
+            emqxConnectTask.scheduleWithFixedDelay(this, 0, 3, TimeUnit.SECONDS);
+        } catch (Throwable e) {
+            throw new BizException("start emqx auth component error", e);
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            if (mqttConnected) {
+                return;
+            }
 
             MqttClientOptions options = new MqttClientOptions()
                     .setClientId(mqttConfig.getClientId())
@@ -101,14 +120,6 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
                 subscribes.put(topic, 1);
             }
 
-            /*subscribes.put("/sys/+/+/s/#", 1);
-            subscribes.put("/sys/client/connected", 1);
-            subscribes.put("/sys/client/disconnected", 1);
-            subscribes.put("/sys/session/subscribed", 1);
-            subscribes.put("/sys/session/unsubscribed", 1);*/
-
-
-            // handler will be called when we have a message in topic we subscribe for
             client.publishHandler(p -> {
                 log.info("Client received message on [{}] payload [{}] with QoS [{}]", p.topicName(), p.payload().toString(Charset.defaultCharset()), p.qosLevel());
 
@@ -131,6 +142,15 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
             client.connect(mqttConfig.getPort(), mqttConfig.getBroker(), s -> {
                 if (s.succeeded()) {
                     log.info("client connect success.");
+                    mqttConnected = true;
+                    /*
+                     * 订阅主题：
+                     * /sys/+/+/s/#
+                     * /sys/client/connected
+                     * /sys/client/disconnected
+                     * /sys/session/subscribed
+                     * /sys/session/unsubscribed
+                     */
                     client.subscribe(subscribes, e -> {
                         if (e.succeeded()) {
                             log.info("===>subscribe success: {}", e.result());
@@ -140,14 +160,13 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
                     });
 
                 } else {
+                    mqttConnected = false;
                     log.error("client connect fail: ", s.cause());
                 }
-            }).exceptionHandler(event -> {
-                log.error("client fail: ", event.getCause());
-            });
+            }).exceptionHandler(event -> log.error("client fail", event));
 
         } catch (Throwable e) {
-            throw new BizException("start emqx auth component error", e);
+            throw new BizException("start emqx component error", e);
         }
     }
 
@@ -157,9 +176,15 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent {
         authVerticle.stop();
         Future<Void> future = vertx.undeploy(deployedId);
         future.onSuccess(unused -> log.info("stop emqx auth component success"));
+
         client.disconnect()
-                .onSuccess(unused -> log.info("stop emqx component success"))
+                .onSuccess(unused -> {
+                    mqttConnected = false;
+                    log.info("stop emqx component success");
+                })
                 .onFailure(unused -> log.info("stop emqx component failure"));
+
+        emqxConnectTask.shutdown();
     }
 
     @Override

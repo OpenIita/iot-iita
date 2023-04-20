@@ -67,6 +67,10 @@ public class BizComponentManager {
 
         Path path = componentConfig.getComponentFilePath(id);
         File file = path.resolve(component.getJarFile()).toAbsolutePath().toFile();
+        if (!file.exists()) {
+            throw new BizException("jar file:" + file.getAbsolutePath() + " not found");
+        }
+
         IComponent componentInstance;
         try {
             componentInstance = ComponentClassLoader.getComponent(component.getId(), file);

@@ -19,8 +19,8 @@ public class Simulator {
     public static void main(String[] args) throws IOException {
 
         if (args.length == 0) {
-//            Mqtt.brokerHost = "127.0.0.1";
-            Mqtt.brokerHost = "120.76.96.206";
+            Mqtt.brokerHost = "127.0.0.1";
+//            Mqtt.brokerHost = "120.76.96.206";
         } else {
             Mqtt.brokerHost = args[0];
         }
