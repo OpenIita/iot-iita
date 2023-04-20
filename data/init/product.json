@@ -119,5 +119,29 @@
     "nodeType": 1,
     "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
     "createAt": 1649653149339
+  },
+  {
+    "id": "bGdZt8ffBETtsirm",
+    "name": "新风",
+    "category": "FreshAir",
+    "nodeType": 1,
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "createAt": 1649653149339
+  },
+  {
+    "id": "BRD3x4fkKxkaxXFt",
+    "name": "智能电表采集器",
+    "category": "gateway",
+    "nodeType": 0,
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "createAt": 1649653149339
+  },
+  {
+    "id": "PjmkANSTDt85bZPj",
+    "name": "智能电表",
+    "category": "SmartMeter",
+    "nodeType": 1,
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "createAt": 1649653149339
   }
 ]

@@ -982,5 +982,168 @@
         }
       ]
     }
+  },
+  {
+    "id": "a5fnnx3ksu7n2n0f",
+    "productKey": "a5fnnx3ksu7n2n0f",
+    "model": {
+      "properties": [
+        {
+          "identifier": "temp",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "17",
+              "max": "32"
+            }
+          },
+          "name": "温度",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "swing_modes",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "off": "关",
+              "on": "开"
+            }
+          },
+          "name": "扫风开关",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "modes",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "heat": "制热",
+              "off": "关闭",
+              "cool": "制冷",
+              "fan_only": "送风"
+            }
+          },
+          "name": "模式",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "fan_modes",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "high": "高",
+              "medium": "中",
+              "low": "低"
+            }
+          },
+          "name": "风模式",
+          "accessMode": "rw"
+        }
+      ],
+      "services": [
+      ],
+      "events": [
+      ]
+    }
+  },
+  {
+    "id": "BRD3x4fkKxkaxXFt",
+    "productKey": "BRD3x4fkKxkaxXFt",
+    "model": {
+      "properties": [],
+      "services": [
+        {
+          "identifier": "readData",
+          "inputData": [
+            {
+              "identifier": "deviceAddr",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "12"
+                }
+              },
+              "name": "设备地址",
+              "required": false
+            },
+            {
+              "identifier": "dataIdentifier",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "4"
+                }
+              },
+              "name": "数据标识",
+              "required": false
+            }
+          ],
+          "outputData": [],
+          "name": "读数据"
+        },
+        {
+          "identifier": "writeData",
+          "inputData": [
+            {
+              "identifier": "deviceAddr",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "12"
+                }
+              },
+              "name": "设备地址",
+              "required": false
+            },
+            {
+              "identifier": "dataIdentifier",
+              "dataType": {
+                "type": "text",
+                "specs": {
+                  "length": "4"
+                }
+              },
+              "name": "数据标识",
+              "required": false
+            }
+          ],
+          "outputData": [],
+          "name": "写数据"
+        }
+      ],
+      "events": []
+    }
+  },
+  {
+    "id": "PjmkANSTDt85bZPj",
+    "productKey": "PjmkANSTDt85bZPj",
+    "model": {
+      "properties": [
+        {
+          "identifier": "9010",
+          "dataType": {
+            "type": "text",
+            "specs": {
+              "length": "20"
+            }
+          },
+          "name": "(当前)正向有功总电能",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "9410",
+          "dataType": {
+            "type": "text",
+            "specs": {
+              "length": "20"
+            }
+          },
+          "name": "(上月)正向有功总电能",
+          "accessMode": "r"
+        }
+      ],
+      "services": [],
+      "events": []
+    }
   }
 ]

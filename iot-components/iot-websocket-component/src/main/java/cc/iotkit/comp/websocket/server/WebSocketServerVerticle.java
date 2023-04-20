@@ -3,11 +3,8 @@ package cc.iotkit.comp.websocket.server;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.comp.model.ReceiveResult;
 import cc.iotkit.comp.websocket.AbstractDeviceVerticle;
 import cc.iotkit.converter.DeviceMessage;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
@@ -63,7 +60,27 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
             wsClient.textMessageHandler(message -> {
                 HashMap<String,String> msg= JsonUtil.parse(message,HashMap.class);
                 if(wsClients.containsKey(deviceKey)){
-                    executor.onReceive(new HashMap<>(), "", message);
+                    if("ping".equals(msg.get("type"))){
+                        msg.put("type","pong");
+                        wsClient.writeTextMessage(JsonUtil.toJsonString(msg));
+                        return;
+                    }
+                    if("register".equals(msg.get("type"))){
+                        executor.onReceive(new HashMap<>(), "", message,(r) -> {
+                            if (r == null) {
+                                //注册失败
+                                Map<String,String> ret=new HashMap<>();
+                                ret.put("id",msg.get("id"));
+                                ret.put("type",msg.get("type"));
+                                ret.put("result","fail");
+                                wsClient.writeTextMessage(JsonUtil.toJsonString(ret));
+                                return;
+                            }else{
+                                msg.put("type","online");
+                                executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(msg));
+                            }
+                        });
+                    }
                 }else if(msg!=null&&"auth".equals(msg.get("type"))){
                     Set<String> tokenKey=tokens.keySet();
                     for(String key:tokenKey){
@@ -87,15 +104,21 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
             });
             wsClient.closeHandler(c -> {
                 log.warn("client connection closed,deviceKey:{}", deviceKey);
-                executor.onReceive(new HashMap<>(), "disconnect", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
-                    //删除设备与连接关系
-                    if(r!=null){
-                        wsClients.remove(getDeviceKey(r));
-                    }
-                });
+                if(wsClients.containsKey(deviceKey)){
+                    wsClients.remove(deviceKey);
+                    deviceKeyObj.put("type","offline");
+                    executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
+                    });
+                }
             });
             wsClient.exceptionHandler(ex -> {
                 log.warn("webSocket client connection exception,deviceKey:{}", deviceKey);
+                if(wsClients.containsKey(deviceKey)){
+                    wsClients.remove(deviceKey);
+                    deviceKeyObj.put("type","offline");
+                    executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
+                    });
+                }
             });
         }).listen(webSocketConfig.getPort(), server -> {
             if (server.succeeded()) {
@@ -115,14 +138,11 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
         for (String deviceKey : wsClients.keySet()) {
             Map<String,String> deviceKeyObj=new HashMap<>();
             deviceKeyObj.put("deviceKey",deviceKey);
-            executor.onReceive(null, "disconnect", JsonUtil.toJsonString(deviceKeyObj));
+            deviceKeyObj.put("type","offline");
+            executor.onReceive(null, "", JsonUtil.toJsonString(deviceKeyObj));
         }
         tokens.clear();
         httpServer.close(voidAsyncResult -> log.info("close webocket server..."));
-    }
-
-    private String getDeviceKey(ReceiveResult result) {
-        return getDeviceKey(result.getProductKey(), result.getDeviceName());
     }
 
     private String getDeviceKey(String productKey, String deviceName) {
@@ -131,7 +151,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
 
     @Override
     public DeviceMessage send(DeviceMessage message) {
-        ServerWebSocket wsClient = wsClients.get(getDeviceKey(message.getProductKey(), message.getDeviceName()));
+        ServerWebSocket wsClient = wsClients.get(getDeviceKey(message.getProductKey(),message.getDeviceName()));
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
             throw new BizException("message content is not Map");

@@ -150,6 +150,11 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
+    public List<Map<String, Object>> findByProductNodeType(String uid) {
+        return deviceInfoData.findByProductNodeType(uid);
+    }
+
+    @Override
     public List<DeviceInfo> findByUid(String uid) {
         return deviceInfoData.findByUid(uid);
     }

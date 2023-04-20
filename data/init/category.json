@@ -38,5 +38,10 @@
     "id": "SmartPlug",
     "name": "智能插座",
     "createAt": 1645409421118
+  },
+  {
+    "id": "FreshAir",
+    "name": "新风",
+    "createAt": 1681444312184
   }
 ]

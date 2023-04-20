@@ -20,14 +20,16 @@ import cc.iotkit.comp.IDeviceComponent;
 import cc.iotkit.comps.config.CacheKey;
 import cc.iotkit.comps.config.ComponentConfig;
 import cc.iotkit.comps.service.DeviceBehaviourService;
-import cc.iotkit.converter.*;
+import cc.iotkit.converter.Device;
+import cc.iotkit.converter.DeviceMessage;
+import cc.iotkit.converter.IConverter;
+import cc.iotkit.converter.IScriptConvertFactory;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductData;
 import cc.iotkit.data.IProtocolComponentData;
 import cc.iotkit.data.IProtocolConverterData;
 import cc.iotkit.engine.IScriptEngine;
 import cc.iotkit.engine.IScriptEngineFactory;
-import cc.iotkit.engine.JsNashornScriptEngine;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
@@ -119,7 +121,17 @@ public class DeviceComponentManager {
         componentInstance.create(new CompConfig(300, component.getConfig()));
 
         try {
-            setScriptConvert(component, componentInstance);
+            if(component.CONVER_TYPE_STATIC.equals(component.getConverType())){
+                IConverter converterInstance;
+                try {
+                    converterInstance=ComponentClassLoader.getConverter(component.getId(), file);
+                } catch (Throwable e) {
+                    throw new BizException("get device convert instance error", e);
+                }
+                componentInstance.setConverter(converterInstance);
+            }else{
+                setScriptConvert(component, componentInstance);
+            }
 
             scriptEngine = scriptEngineFactory.getScriptEngine(component.getScriptTyp());
 

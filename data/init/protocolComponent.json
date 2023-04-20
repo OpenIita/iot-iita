@@ -8,6 +8,7 @@
     "jarFile": "iot-mqtt-component-0.4.2-SNAPSHOT.jar",
     "config": "{\"port\":1883,\"ssl\":false,\"type\":\"server\"}",
     "converter": "6260396d67aced2696184053",
+    "converType": "custom",
     "state": "running",
     "createAt": 1650473458084
   },
@@ -20,6 +21,7 @@
     "jarFile": "iot-emqx-component-0.4.2-SNAPSHOT.jar",
     "config": "{\"port\":\"1884\",\"ssl\":false,\"type\":\"client\",\"subscribeTopics\":[\"/sys/+/+/s/#\",\"/sys/client/connected\",\"/sys/client/disconnected\",\"/sys/session/subscribed\",\"/sys/session/unsubscribed\"],\"authPort\":\"8088\",\"broker\":\"127.0.0.1\",\"clientId\":\"test\",\"username\":\"test\",\"password\":\"123\"}",
     "converter": "6260396d67aced2696184053",
+    "converType": "custom",
     "state": "stopped",
     "createAt": 1653180468724
   },
@@ -32,6 +34,33 @@
     "jarFile": "iot-http-biz-component-0.4.2-SNAPSHOT.jar",
     "config": "{\"port\":\"8084\"}",
     "converter": "",
+    "converType": "",
+    "state": "stopped",
+    "createAt": 1650685502665
+  },
+  {
+    "id": "2c089bb8-0412-449e-94f1-212d35a50219",
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "name": "WEBSOCKET服务端",
+    "type": "device",
+    "protocol": "websocket",
+    "jarFile": "iot-websocket-component-0.4.2-SNAPSHOT.jar",
+    "config": "{\"port\":\"2454\",\"ssl\":false,\"type\":\"server\",\"ip\":\"\",\"url\":\"\",\"heartBeatTime\":10000,\"heartBeatData\":\"\",\"accessTokens\":[{\"id\":\"b4f02276-13d8-499d-89b3-8acd6330b310\",\"tokenName\":\"tokrn\",\"tokenStr\":\"NxW4nPt2SPnc87pdFXAQmCZY4Kb0nRsPDC6z4Qzpp1AtRWDJxg8iZMqFpcwZ2igi\"}]}",
+    "converter": "d7e84930-5460-4638-aa3f-e0c2015628f4",
+    "converType": "custom",
+    "state": "stopped",
+    "createAt": 1650685502665
+  }
+,
+  {
+    "id": "305a8b86-4566-4f2a-a57f-f84ca47471a1",
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "name": "DLT645电表通讯组件",
+    "type": "device",
+    "protocol": "tcp",
+    "jarFile": "iot-DLT645-component-0.4.2-SNAPSHOT.jar",
+    "config": "{\"port\":2424,\"ssl\":false,\"type\":\"server\",\"parserType\":\"不处理\",\"parserConfiguration\":{\"delimited\":\"\",\"fix\":1,\"script\":\"\"},\"host\":\"127.0.0.1\"}",
+    "converType": "static",
     "state": "stopped",
     "createAt": 1650685502665
   }

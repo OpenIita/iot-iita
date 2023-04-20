@@ -23,18 +23,18 @@ import cc.iotkit.manager.model.query.DeviceQuery;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceService;
-import cc.iotkit.model.device.DeviceConfig;
-import cc.iotkit.model.device.DeviceGroup;
-import cc.iotkit.temporal.IDevicePropertyData;
-import cc.iotkit.temporal.IThingModelMessageData;
-import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.Paging;
+import cc.iotkit.model.device.DeviceConfig;
+import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ThingModel;
+import cc.iotkit.temporal.IDevicePropertyData;
+import cc.iotkit.temporal.IThingModelMessageData;
+import cc.iotkit.utils.AuthUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,7 +129,7 @@ public class DeviceController {
     }
 
     @PostMapping("/create")
-    public void createDevice(String productKey, String deviceName) {
+    public void createDevice(String productKey, String deviceName, String parentId) {
         Product product = productData.findById(productKey);
         if (product == null) {
             throw new BizException("the product does not exist");
@@ -152,7 +152,9 @@ public class DeviceController {
         device.setSecret(secret.toString());
         device.setState(new DeviceInfo.State(false, null, null));
         device.setCreateAt(System.currentTimeMillis());
-
+        if(StringUtils.isNotBlank(parentId)){
+            device.setParentId(parentId);
+        }
         deviceInfoData.save(device);
     }
 
@@ -165,6 +167,15 @@ public class DeviceController {
 
         dataOwnerService.checkOwner(deviceInfo);
         return deviceInfoData.findByParentId(deviceId);
+    }
+
+    @GetMapping("/parentDevices")
+    public List<Map<String, Object>> getParentDevices() {
+        String uid = "";
+        if (!AuthUtil.isAdmin()) {
+             uid = AuthUtil.getUserId();
+        }
+        return deviceInfoData.findByProductNodeType(uid);
     }
 
     @GetMapping(Constants.API_DEVICE.DETAIL)
