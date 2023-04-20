@@ -23,7 +23,7 @@ import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.converter.IConverter;
-import cc.iotkit.converter.IScriptConvertFactory;
+import cc.iotkit.converter.ScriptConvertFactory;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductData;
 import cc.iotkit.data.IProtocolComponentData;
