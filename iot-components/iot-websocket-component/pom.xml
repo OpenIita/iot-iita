@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iot-components</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.3-SNAPSHOT</version>
+        <version>0.4.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,23 +29,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.luaj</groupId>
-            <artifactId>luaj-jse</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-component-base</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-data-service</artifactId>
         </dependency>
 
     </dependencies>

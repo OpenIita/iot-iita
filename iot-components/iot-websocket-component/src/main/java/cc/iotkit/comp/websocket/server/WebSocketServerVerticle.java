@@ -151,7 +151,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
 
     @Override
     public DeviceMessage send(DeviceMessage message) {
-        ServerWebSocket wsClient = wsClients.get(getDeviceKey(message.getProductKey(),message.getDeviceName()));
+        ServerWebSocket wsClient = wsClients.get(message.getDeviceName());
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
             throw new BizException("message content is not Map");
