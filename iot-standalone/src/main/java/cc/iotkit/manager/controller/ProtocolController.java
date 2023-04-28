@@ -10,7 +10,6 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.comps.ComponentManager;
 import cc.iotkit.comps.config.ComponentConfig;
@@ -328,7 +327,7 @@ public class ProtocolController {
     public void changeComponentState(@PathVariable("id") String id,
                                      @PathVariable("state") String state) {
         ProtocolComponent component = getAndCheckComponent(id);
-        if (ProtocolComponent.TYPE_DEVICE.equals(component.getType())) {
+        if (ProtocolComponent.TYPE_DEVICE.equals(component.getType())&&ProtocolComponent.CONVER_TYPE_CUSTOM.equals(component.getConverType())) {
             String converterId = component.getConverter();
             getAndCheckConverter(converterId);
         }

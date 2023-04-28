@@ -33,6 +33,8 @@ public class TbProtocolComponent {
 
     private String converter;
 
+    private String converType;
+
     private String state;
 
     private Long createAt;

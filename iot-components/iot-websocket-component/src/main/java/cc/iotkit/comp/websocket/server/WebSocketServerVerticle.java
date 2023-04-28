@@ -3,7 +3,6 @@ package cc.iotkit.comp.websocket.server;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.comp.model.ReceiveResult;
 import cc.iotkit.comp.websocket.AbstractDeviceVerticle;
 import cc.iotkit.converter.DeviceMessage;
 import io.vertx.core.Future;
@@ -15,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -33,6 +34,8 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
         this.webSocketConfig = JsonUtil.parse(config, WebSocketServerConfig.class);
     }
 
+    private Map<String, String> tokens=new HashMap<>();
+
     @Override
     public void start() throws Exception {
         HttpServerOptions options = new HttpServerOptions()
@@ -46,39 +49,84 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
         httpServer = vertx.createHttpServer(options).webSocketHandler(wsClient -> {
             log.info("webSocket client connect sessionId:{},path={}", wsClient.textHandlerID(), wsClient.path());
             String deviceKey = wsClient.path().replace("/","");
-            if(StringUtils.isBlank(deviceKey)||deviceKey.split("_").length<2){
-                wsClient.reject();
+            if(StringUtils.isBlank(deviceKey)||deviceKey.split("_").length!=2){
                 log.warn("陌生连接，拒绝");
+                wsClient.reject();
                 return;
             }
+            wsClient.writeTextMessage("connect succes! please auth!");
             Map<String,String> deviceKeyObj=new HashMap<>();
             deviceKeyObj.put("deviceKey",deviceKey);
-            executor.onReceive(new HashMap<>(), "auth", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
-                if (r == null) {
-                    //认证失败
+            wsClient.textMessageHandler(message -> {
+                HashMap<String,String> msg= JsonUtil.parse(message,HashMap.class);
+                if(wsClients.containsKey(deviceKey)){
+                    if("ping".equals(msg.get("type"))){
+                        msg.put("type","pong");
+                        wsClient.writeTextMessage(JsonUtil.toJsonString(msg));
+                        return;
+                    }
+                    if("register".equals(msg.get("type"))){
+                        executor.onReceive(new HashMap<>(), "", message,(r) -> {
+                            if (r == null) {
+                                //注册失败
+                                Map<String,String> ret=new HashMap<>();
+                                ret.put("id",msg.get("id"));
+                                ret.put("type",msg.get("type"));
+                                ret.put("result","fail");
+                                wsClient.writeTextMessage(JsonUtil.toJsonString(ret));
+                                return;
+                            }else{
+                                msg.put("type","online");
+                                executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(msg));
+                            }
+                        });
+                    }
+                }else if(msg!=null&&"auth".equals(msg.get("type"))){
+                    Set<String> tokenKey=tokens.keySet();
+                    for(String key:tokenKey){
+                        if(StringUtils.isNotBlank(msg.get(key))&&tokens.get(key).equals(msg.get(key))){
+                            //保存设备与连接关系
+                            log.info("认证通过");
+                            wsClients.put(deviceKey, wsClient);
+                            wsClient.writeTextMessage("auth succes");
+                            return;
+                        }
+                    }
                     log.warn("认证失败，拒绝");
-                    wsClient.reject();
+                    wsClient.writeTextMessage("auth fail");
+                    return;
+                }else{
+                    log.warn("认证失败，拒绝");
+                    wsClient.writeTextMessage("auth fail");
                     return;
                 }
-                //保存设备与连接关系
-                wsClients.put(getDeviceKey(r), wsClient);
-            });
-            wsClient.textMessageHandler(message -> {
-                executor.onReceive(new HashMap<>(), "", message);
+
             });
             wsClient.closeHandler(c -> {
                 log.warn("client connection closed,deviceKey:{}", deviceKey);
-                executor.onReceive(new HashMap<>(), "disconnect", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
-                    //删除设备与连接关系
-                    wsClients.remove(getDeviceKey(r));
-                });
+                if(wsClients.containsKey(deviceKey)){
+                    wsClients.remove(deviceKey);
+                    deviceKeyObj.put("type","offline");
+                    executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
+                    });
+                }
             });
             wsClient.exceptionHandler(ex -> {
                 log.warn("webSocket client connection exception,deviceKey:{}", deviceKey);
+                if(wsClients.containsKey(deviceKey)){
+                    wsClients.remove(deviceKey);
+                    deviceKeyObj.put("type","offline");
+                    executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
+                    });
+                }
             });
         }).listen(webSocketConfig.getPort(), server -> {
             if (server.succeeded()) {
                 log.info("webSocket server is listening on port " + webSocketConfig.getPort());
+                List<WebSocketServerConfig.AccessToken> tokenConfig= webSocketConfig.getAccessTokens();
+                for (WebSocketServerConfig.AccessToken obj:tokenConfig) {
+                    tokens.put(obj.getTokenName(),obj.getTokenStr());
+                }
             } else {
                 log.error("webSocket server on starting the server", server.cause());
             }
@@ -90,13 +138,11 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
         for (String deviceKey : wsClients.keySet()) {
             Map<String,String> deviceKeyObj=new HashMap<>();
             deviceKeyObj.put("deviceKey",deviceKey);
-            executor.onReceive(null, "disconnect", JsonUtil.toJsonString(deviceKeyObj));
+            deviceKeyObj.put("type","offline");
+            executor.onReceive(null, "", JsonUtil.toJsonString(deviceKeyObj));
         }
+        tokens.clear();
         httpServer.close(voidAsyncResult -> log.info("close webocket server..."));
-    }
-
-    private String getDeviceKey(ReceiveResult result) {
-        return getDeviceKey(result.getProductKey(), result.getDeviceName());
     }
 
     private String getDeviceKey(String productKey, String deviceName) {
@@ -105,7 +151,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
 
     @Override
     public DeviceMessage send(DeviceMessage message) {
-        ServerWebSocket wsClient = wsClients.get(getDeviceKey(message.getProductKey(), message.getDeviceName()));
+        ServerWebSocket wsClient = wsClients.get(message.getDeviceName());
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
             throw new BizException("message content is not Map");

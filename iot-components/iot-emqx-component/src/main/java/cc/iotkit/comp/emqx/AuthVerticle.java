@@ -13,6 +13,7 @@ import cc.iotkit.comp.IMessageHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class AuthVerticle extends AbstractVerticle {
 
     private IMessageHandler executor;
 
-    private EmqxConfig config;
+    private final EmqxConfig config;
 
     public void setExecutor(IMessageHandler executor) {
         this.executor = executor;
@@ -38,7 +39,7 @@ public class AuthVerticle extends AbstractVerticle {
     }
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         backendServer = vertx.createHttpServer();
 
         //第一步 声明Router&初始化Router
@@ -54,11 +55,9 @@ public class AuthVerticle extends AbstractVerticle {
                 Map<String, Object> head = new HashMap<>();
                 head.put("topic", "/mqtt/auth");
                 executor.onReceive(head, "auth", json);
-                rc.response().setStatusCode(200)
-                        .end();
+                httpResult(rc.response(), 200);
             } catch (Throwable e) {
-                rc.response().setStatusCode(500)
-                        .end();
+                httpResult(rc.response(), 500);
                 log.error("mqtt auth failed", e);
             }
         });
@@ -69,17 +68,22 @@ public class AuthVerticle extends AbstractVerticle {
                 Map<String, Object> head = new HashMap<>();
                 head.put("topic", "/mqtt/acl");
                 executor.onReceive(head, "acl", json);
-
-                rc.response().setStatusCode(200)
-                        .end();
+                httpResult(rc.response(), 200);
             } catch (Throwable e) {
-                rc.response().setStatusCode(500)
-                        .end();
+                httpResult(rc.response(), 500);
                 log.error("mqtt acl failed", e);
             }
         });
 
         backendServer.requestHandler(backendRouter).listen(config.getAuthPort());
+    }
+
+    private void httpResult(HttpServerResponse response, int code) {
+        response.putHeader("Content-Type", "application/json");
+        response
+                .setStatusCode(code);
+        response
+                .end("{\"result\": \"" + (code == 200 ? "allow" : "deny") + "\"}");
     }
 
     @Override

@@ -9,6 +9,9 @@
  */
 package cc.iotkit.common;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,9 +22,6 @@ import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 
 public class ComponentClassLoader {
     private static final Map<String, URLClassLoader> classLoaders = new HashMap<>();
@@ -69,6 +69,23 @@ public class ComponentClassLoader {
         }
         Class<T> componentClass = findClass(name, className);
         return componentClass.getDeclaredConstructor().newInstance();
+    }
+
+    public static <T> T getConverter(String name, File jarFile) throws Exception {
+        URLClassLoader classLoader = classLoaders.get(name);
+        InputStream is = classLoader.getResourceAsStream("convert.spi");
+        if (is == null) {
+            return null;
+        }
+
+        //多行只取第1行，并处理空格
+        String[] lines = IOUtils.toString(is, StandardCharsets.UTF_8).split("\\s");
+        if (lines.length == 0) {
+            throw new RuntimeException("convert class does not exist");
+        }
+        String className = lines[0].trim();
+        Class<T> converterClass = findClass(name, className);
+        return converterClass.getDeclaredConstructor().newInstance();
     }
 
     public static void closeClassLoader(String name)  {

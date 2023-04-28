@@ -125,6 +125,11 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
+    public List<Map<String, Object>> findByProductNodeType(String uid) {
+        return deviceInfoData.findByProductNodeType(uid);
+    }
+
+    @Override
     public List<String> findSubDeviceIds(String parentId) {
         return deviceInfoData.findSubDeviceIds(parentId);
     }

@@ -38,6 +38,7 @@ public class MqttDeviceComponent extends AbstractDeviceComponent {
     private final Map<String, Device> deviceChildToParent = new HashMap<>();
     private final TransparentConverter transparentConverter = new TransparentConverter();
 
+    @Override
     public void create(CompConfig config) {
         super.create(config);
         vertx = Vertx.vertx();

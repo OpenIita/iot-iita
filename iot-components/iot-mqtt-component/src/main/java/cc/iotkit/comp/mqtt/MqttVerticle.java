@@ -183,6 +183,9 @@ public class MqttVerticle extends AbstractVerticle {
     }
 
     private String getEndpointKey(ReceiveResult result) {
+        if (result == null) {
+            return null;
+        }
         return getEndpointKey(result.getProductKey(), result.getDeviceName());
     }
 

@@ -128,4 +128,10 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
      * @param groupId 分组ID
      */
     void removeGroup(String groupId);
+
+    /**
+     * 获取所有网关类型设备
+     * @return
+     */
+    List<Map<String, Object>> findByProductNodeType(String uid);
 }

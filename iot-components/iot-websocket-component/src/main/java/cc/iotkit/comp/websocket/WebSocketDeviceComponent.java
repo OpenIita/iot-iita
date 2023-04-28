@@ -23,13 +23,13 @@ public class WebSocketDeviceComponent extends AbstractDeviceComponent {
     private CountDownLatch countDownLatch;
     private String deployedId;
     private AbstractDeviceVerticle webSocketVerticle;
-    private String type;
     private final Map<String, Device> deviceChildToParent = new HashMap<>();
 
+    @Override
     public void create(CompConfig config) {
         super.create(config);
         vertx = Vertx.vertx();
-        type= JsonUtil.parse(config.getOther(), Map.class).get("type").toString();
+        String type = JsonUtil.parse(config.getOther(), Map.class).get("type").toString();
         if(AbstractDeviceVerticle.TYPE_CLIENT.equals(type)){
             webSocketVerticle = new WebSocketClientVerticle(config.getOther());
         }else{
@@ -37,6 +37,7 @@ public class WebSocketDeviceComponent extends AbstractDeviceComponent {
         }
     }
 
+    @Override
     public void start() {
         try {
             webSocketVerticle.setExecutor(getHandler());
@@ -57,6 +58,7 @@ public class WebSocketDeviceComponent extends AbstractDeviceComponent {
         }
     }
 
+    @Override
     @SneakyThrows
     public void stop() {
         webSocketVerticle.stop();
@@ -64,6 +66,7 @@ public class WebSocketDeviceComponent extends AbstractDeviceComponent {
         future.onSuccess(unused -> log.info("stop websocket component success"));
     }
 
+    @Override
     public void destroy() {
     }
 

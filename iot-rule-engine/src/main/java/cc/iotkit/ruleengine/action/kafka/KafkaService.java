@@ -6,6 +6,7 @@ import cc.iotkit.ruleengine.action.ScriptService;
 import cc.iotkit.ruleengine.link.LinkFactory;
 import cc.iotkit.ruleengine.link.LinkService;
 import cc.iotkit.ruleengine.link.impl.KafkaLink;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,8 @@ public class KafkaService extends ScriptService implements LinkService {
 
     public String execute(ThingModelMessage msg) {
         //执行转换脚本
-        Map result = execScript(msg);
+        Map<String, Object> result = execScript(new TypeReference<>() {
+        }, msg);
         if (result == null) {
             log.warn("execScript result is null");
             return "execScript result is null";

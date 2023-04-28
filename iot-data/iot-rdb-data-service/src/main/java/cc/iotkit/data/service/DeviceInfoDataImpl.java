@@ -165,6 +165,18 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     }
 
     @Override
+    public List<Map<String, Object>> findByProductNodeType(String uid) {
+        String sql = "SELECT\n" +
+                "a.id,\n" +
+                "a.device_name\n" +
+                "FROM device_info a JOIN product p ON p.node_type=0 AND a.product_key=p.id";
+        if (StringUtils.isNotBlank(uid)) {
+            sql += " WHERE a.uid='"+uid+"'";
+        }
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    @Override
     public Paging<DeviceInfo> findByConditions(String uid, String subUid,
                                                String productKey, String groupId,
                                                String state, String keyword,

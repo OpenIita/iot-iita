@@ -18,26 +18,23 @@ import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.device.VirtualDeviceLog;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.script.IScriptEngine;
+import cc.iotkit.script.ScriptEngineFactory;
 import cc.iotkit.temporal.IVirtualDeviceLogData;
 import cc.iotkit.virtualdevice.trigger.RandomScheduleBuilder;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.annotation.PostConstruct;
-import javax.script.ScriptEngineManager;
 import java.util.*;
 
 @Slf4j
 public class VirtualManager {
-    private final NashornScriptEngine engine = (NashornScriptEngine) (new ScriptEngineManager()).getEngineByName("nashorn");
-
-    private final Map<String, Object> virtualScripts = new HashMap<>();
+    private final Map<String, IScriptEngine> virtualScripts = new HashMap<>();
     private final Map<String, Set<String>> deviceIdToVirtualId = new HashMap<>();
 
     @Autowired
@@ -76,6 +73,7 @@ public class VirtualManager {
     /**
      * 调用虚拟设备下发
      */
+    @SneakyThrows
     public void send(ThingService<?> service) {
         DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(service.getProductKey(), service.getDeviceName());
         String deviceId = deviceInfo.getDeviceId();
@@ -83,10 +81,14 @@ public class VirtualManager {
         //根据设备Id取虚拟设备列表
         Set<String> virtualIds = deviceIdToVirtualId.get(deviceId);
         for (String virtualId : virtualIds) {
-            Object scriptObj = virtualScripts.get(virtualId);
-            Object result = invokeMethod(scriptObj, "receive", service);
-            for (Object value : ((ScriptObjectMirror) result).values()) {
-                processReport(value);
+            IScriptEngine scriptEngine = virtualScripts.get(virtualId);
+            //多条虚拟设备消息
+            List<ThingModelMessage> result = scriptEngine.invokeMethod(
+                    new TypeReference<>() {
+                    },
+                    "receive", service);
+            for (ThingModelMessage msg : result) {
+                processReport(msg);
             }
             log.info("virtual device send result:{}", JsonUtil.toJsonString(result));
         }
@@ -121,10 +123,11 @@ public class VirtualManager {
                 .logAt(System.currentTimeMillis())
                 .build();
         try {
-            Object scriptObj = engine.eval(String.format("new (function () {\n%s})()", virtualDevice.getScript()));
+            IScriptEngine scriptEngine = virtualScripts.get(virtualDevice.getId());
             for (String deviceId : devices) {
                 DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
-                processReport(invokeMethod(scriptObj, "report", device));
+                processReport(scriptEngine.invokeMethod(new TypeReference<>() {
+                }, "report", device));
             }
         } catch (Throwable e) {
             virtualDeviceLog.setResult(e.getMessage());
@@ -161,7 +164,9 @@ public class VirtualManager {
             log.info("adding virtual device job,id:{},name:{}", id, name);
 
             //添加新的脚本对象
-            virtualScripts.put(id, engine.eval(String.format("new (function () {\n%s})()", script)));
+            IScriptEngine scriptEngine = ScriptEngineFactory.getScriptEngine("js");
+            scriptEngine.setScript(script);
+            virtualScripts.put(id, scriptEngine);
             List<DeviceInfo> devices = new ArrayList<>();
             for (String deviceId : virtualDevice.getDevices()) {
                 devices.add(deviceInfoData.findByDeviceId(deviceId));
@@ -240,11 +245,8 @@ public class VirtualManager {
     /**
      * 处理js上报方法返回结果
      */
-    public void processReport(Object sourceMsg) {
+    private void processReport(ThingModelMessage modelMessage) {
         try {
-            ScriptObjectMirror result = (ScriptObjectMirror) sourceMsg;
-            ThingModelMessage modelMessage = new ThingModelMessage();
-            BeanUtils.populate(modelMessage, result);
             deviceBehaviourService.reportMessage(modelMessage);
         } catch (Throwable e) {
             log.error("process js data error", e);
@@ -252,32 +254,19 @@ public class VirtualManager {
     }
 
     /**
-     * 调用js方法
-     */
-    private Object invokeMethod(Object scriptObj, String name, Object... args) {
-        try {
-            if (((ScriptObjectMirror) scriptObj).get(name) != null) {
-                return engine.invokeMethod(scriptObj, name, args);
-            }
-            return null;
-        } catch (Throwable e) {
-            log.error("invoke js method error", e);
-        }
-        return null;
-    }
-
-    /**
      * 调用脚本中上报方法
      */
+    @SneakyThrows
     public void invokeReport(DeviceInfo device, String virtualId) {
         //设备上线
         deviceOnline(device);
 
-        Object scriptObj = virtualScripts.get(virtualId);
-        if (scriptObj == null) {
+        IScriptEngine scriptEngine = virtualScripts.get(virtualId);
+        if (scriptEngine == null) {
             return;
         }
-        processReport(invokeMethod(scriptObj, "report", device));
+        processReport(scriptEngine.invokeMethod(new TypeReference<>() {
+        }, "report", device));
     }
 
     /**

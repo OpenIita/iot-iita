@@ -60,9 +60,12 @@ function acl(head,type,payload){
         };
     }
 
+    // 客户端订阅处理
     if (/^\/sys\/.+\/.+\/c\/#/i.test(_topic)) {
 	  return subscribe(head,type,payload);
     }
+
+    // 服务端订阅处理
     if (/^\/sys\/.+\/.+\/s\/.*/i.test(_topic)) {
 	  return subscribe(head,type,payload);
     }
@@ -224,9 +227,6 @@ function subscribe(head,type,payload){
     }
 }
 
-
-
-
 var messageHandler = {
     "/sys/client/connected":connect,
     "/sys/client/disconnected":disconnect,
@@ -240,30 +240,17 @@ var messageHandler = {
 this.onReceive=function(head,type,payload){
     payload=JSON.parse(payload);
 
-    print("======================================================================= ");
-    print("【message from】: " + (isServerId(payload.clientid)?"Server":"Device") );
-    print("onReceive head: "+JSON.stringify(head));
-    print("onReceive type: "+JSON.stringify(type));
-    print("onReceive payload: "+ JSON.stringify(payload));
-    //print("onReceive compMqttClientIdList: "+ component.getCompMqttClientIdList());
-
     var result = {};
     var topic = head.topic;
     if(!topic) {
-
-        print("【result】: " + JSON.stringify(result));
-        print("======================================================================= ");
         return result;
     }
 
     var fun = messageHandler[topic];
 
-
-
     if(fun){
         result = fun(head,type,payload)
-    }
-    else{
+    }else{
         var arr= topic.split('/');
         if(arr.length<6){
             throw new Error("incorrect topic: "+topic)
@@ -292,8 +279,6 @@ this.onReceive=function(head,type,payload){
         }
 
     }
-    print("【result】: " + JSON.stringify(result));
-    print("======================================================================= ");
     return result;
 
 }

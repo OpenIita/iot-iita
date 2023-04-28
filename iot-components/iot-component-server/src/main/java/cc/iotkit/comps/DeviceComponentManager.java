@@ -20,19 +20,21 @@ import cc.iotkit.comp.IDeviceComponent;
 import cc.iotkit.comps.config.CacheKey;
 import cc.iotkit.comps.config.ComponentConfig;
 import cc.iotkit.comps.service.DeviceBehaviourService;
-import cc.iotkit.converter.*;
+import cc.iotkit.converter.Device;
+import cc.iotkit.converter.DeviceMessage;
+import cc.iotkit.converter.IConverter;
+import cc.iotkit.converter.ScriptConvertFactory;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductData;
 import cc.iotkit.data.IProtocolComponentData;
 import cc.iotkit.data.IProtocolConverterData;
-import cc.iotkit.engine.IScriptEngine;
-import cc.iotkit.engine.IScriptEngineFactory;
-import cc.iotkit.engine.JsNashornScriptEngine;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import cc.iotkit.model.protocol.ProtocolConverter;
+import cc.iotkit.script.IScriptEngine;
+import cc.iotkit.script.ScriptEngineFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,17 +78,7 @@ public class DeviceComponentManager {
     @Autowired
     private IProtocolConverterData protocolConverterData;
 
-    private final IScriptConvertFactory scriptConverterFactory;
-
-    private final IScriptEngineFactory scriptEngineFactory;
-
-    private  IScriptEngine scriptEngine;
-
-    public DeviceComponentManager(IScriptConvertFactory scriptConverterFactory,
-                                  IScriptEngineFactory scriptEngineFactory ) {
-        this.scriptConverterFactory = scriptConverterFactory;
-        this.scriptEngineFactory = scriptEngineFactory;
-    }
+    private IScriptEngine scriptEngine;
 
     @PostConstruct
     public void init() {
@@ -119,9 +111,18 @@ public class DeviceComponentManager {
         componentInstance.create(new CompConfig(300, component.getConfig()));
 
         try {
-            setScriptConvert(component, componentInstance);
-
-            scriptEngine = scriptEngineFactory.getScriptEngine(component.getScriptTyp());
+            if(component.CONVER_TYPE_STATIC.equals(component.getConverType())){
+                IConverter converterInstance;
+                try {
+                    converterInstance=ComponentClassLoader.getConverter(component.getId(), file);
+                } catch (Throwable e) {
+                    throw new BizException("get device convert instance error", e);
+                }
+                componentInstance.setConverter(converterInstance);
+            }else{
+                setScriptConvert(component, componentInstance);
+            }
+            scriptEngine = ScriptEngineFactory.getScriptEngine(component.getScriptTyp());
 
             String componentScript = FileUtils.readFileToString(path.
                     resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile(), "UTF-8");
@@ -135,7 +136,7 @@ public class DeviceComponentManager {
     private void setScriptConvert(ProtocolComponent component, IDeviceComponent componentInstance) throws IOException {
         ProtocolConverter protocolConvert = protocolConverterData.findById(component.getConverter());
 
-        IConverter scriptConverter = scriptConverterFactory.getCovert(protocolConvert.getTyp());
+        IConverter scriptConverter = ScriptConvertFactory.getCovert(protocolConvert.getTyp());
         // 从文件方式内容
         Path converterPath = componentConfig.getConverterFilePath(component.getConverter());
         String converterScript = FileUtils.readFileToString(converterPath.
@@ -169,10 +170,9 @@ public class DeviceComponentManager {
         }
 
 
-
         DeviceMessageHandler messageHandler = new DeviceMessageHandler(
                 this, component,
-                 scriptEngine,
+                scriptEngine,
                 component.getScript(), component.getConverter(),
                 deviceBehaviourService, deviceRouter);
         messageHandler.putScriptEnv("apiTool", new ApiTool());

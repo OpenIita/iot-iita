@@ -38,4 +38,17 @@ public class ReflectUtil {
         BeanUtils.populate(to, map);
         return to;
     }
+
+    public static Map<String, ?> toMap(Object bean) {
+        Map<String, Object> map = new HashMap<>();
+        new BeanMap(bean).forEach((key, value) -> {
+            if (key.equals("class")) {
+                return;
+            }
+            String field = key.toString();
+            map.put(field, value);
+        });
+        return map;
+    }
+
 }

@@ -29,23 +29,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.luaj</groupId>
-            <artifactId>luaj-jse</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-component-base</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-data-service</artifactId>
         </dependency>
 
     </dependencies>

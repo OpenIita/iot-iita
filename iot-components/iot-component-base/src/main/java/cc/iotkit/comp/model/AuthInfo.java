@@ -9,9 +9,17 @@
  */
 package cc.iotkit.comp.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldNameConstants
 public class AuthInfo {
 
     private String productKey;

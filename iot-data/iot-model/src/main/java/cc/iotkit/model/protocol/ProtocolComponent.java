@@ -19,6 +19,14 @@ public class ProtocolComponent implements Owned<String> {
     public static final String STATE_RUNNING = "running";
     public static final String TYPE_DEVICE = "device";
     public static final String TYPE_BIZ = "biz";
+    /**
+     * 转换器类型：静态
+     */
+    public static final String CONVER_TYPE_STATIC = "static";
+    /**
+     * 转换器类型：自定义
+     */
+    public static final String CONVER_TYPE_CUSTOM = "custom";
 
     public static final String SCRIPT_FILE_NAME = "component.js";
 
@@ -40,6 +48,8 @@ public class ProtocolComponent implements Owned<String> {
     private String config;
 
     private String converter;
+
+    private String converType = CONVER_TYPE_CUSTOM;
 
     private String state;
 
