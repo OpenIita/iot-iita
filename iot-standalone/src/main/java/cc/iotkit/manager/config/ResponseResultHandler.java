@@ -42,7 +42,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
                                   ServerHttpRequest request, ServerHttpResponse response) {
         if (body instanceof GlobalExceptionHandler.RequestResult) {
             GlobalExceptionHandler.RequestResult requestResult = (GlobalExceptionHandler.RequestResult) body;
-            return new ApiResponse(Integer.parseInt(requestResult.getCode()), requestResult.getMessage(),
+            return new ApiResponse(requestResult.getCode(), requestResult.getMessage(),
                     "", System.currentTimeMillis());
         } else if (body instanceof SaResult) {
             SaResult result = (SaResult) body;
@@ -63,7 +63,7 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ApiResponse {
-        private int status;
+        private int code;
         private String message;
         private Object data;
         private long timestamp;
