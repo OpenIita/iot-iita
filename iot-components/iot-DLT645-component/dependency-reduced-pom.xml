@@ -3,7 +3,7 @@
   <parent>
     <artifactId>iot-components</artifactId>
     <groupId>cc.iotkit</groupId>
-    <version>0.4.2-SNAPSHOT</version>
+    <version>0.4.3-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>iot-DLT645-component</artifactId>
@@ -58,7 +58,7 @@
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-component-base</artifactId>
-      <version>0.4.2-SNAPSHOT</version>
+      <version>0.4.3-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
