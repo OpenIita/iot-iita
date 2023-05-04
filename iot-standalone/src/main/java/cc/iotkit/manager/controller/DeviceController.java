@@ -10,6 +10,7 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.Constants;
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
 import cc.iotkit.common.utils.ReflectUtil;
@@ -83,7 +84,7 @@ public class DeviceController {
                                       @PathVariable("service") String service,
                                       @RequestBody Map<String, Object> args) {
         if (StringUtils.isBlank(deviceId) || StringUtils.isBlank(service)) {
-            throw new RuntimeException("deviceId/service is blank.");
+            throw new BizException(ErrCode.PARAMS_EXCEPTION);
         }
         return new InvokeResult(deviceService.invokeService(deviceId, service, args));
     }
@@ -92,7 +93,7 @@ public class DeviceController {
     public InvokeResult invokeServicePropertySet(@PathVariable("deviceId") String deviceId,
                                       @RequestBody List<String> propertyNames) {
         if (StringUtils.isBlank(deviceId)) {
-            throw new RuntimeException("deviceId/service is blank.");
+            throw new BizException(ErrCode.PARAMS_EXCEPTION);
         }
         return new InvokeResult(deviceService.getProperty(deviceId, propertyNames, true));
     }
@@ -132,7 +133,7 @@ public class DeviceController {
     public void createDevice(String productKey, String deviceName, String parentId) {
         Product product = productData.findById(productKey);
         if (product == null) {
-            throw new BizException("the product does not exist");
+            throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
 
         //生成设备密钥
@@ -162,7 +163,7 @@ public class DeviceController {
     public List<DeviceInfo> getChildren(@PathVariable("deviceId") String deviceId) {
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
         if (deviceInfo == null) {
-            throw new BizException("device does not exist");
+            throw new BizException(ErrCode.DEVICE_NOT_FOUND);
         }
 
         dataOwnerService.checkOwner(deviceInfo);
@@ -287,7 +288,7 @@ public class DeviceController {
     public void addGroup(DeviceGroup group) {
         group.setUid(AuthUtil.getUserId());
         if (deviceGroupData.findById(group.getId()) != null) {
-            throw new BizException("group id already exists");
+            throw new BizException(ErrCode.GROUP_ALREADY);
         }
         deviceGroupData.save(group);
     }
@@ -299,7 +300,7 @@ public class DeviceController {
     public void saveGroup(DeviceGroup group) {
         DeviceGroup dbGroup = deviceGroupData.findById(group.getId());
         if (dbGroup == null) {
-            throw new BizException("group id does not exists");
+            throw new BizException(ErrCode.GROUP_NOT_FOUND);
         }
         dataOwnerService.checkOwner(dbGroup);
         ReflectUtil.copyNoNulls(group, dbGroup);
@@ -316,7 +317,7 @@ public class DeviceController {
     public void deleteGroup(@PathVariable("id") String id) {
         DeviceGroup group = deviceGroupData.findById(id);
         if (group == null) {
-            throw new BizException("device group does not exist");
+            throw new BizException(ErrCode.GROUP_NOT_FOUND);
         }
         dataOwnerService.checkOwner(group);
         //删除分组
@@ -333,7 +334,7 @@ public class DeviceController {
     public void clearGroup(@PathVariable("id") String id) {
         DeviceGroup group = deviceGroupData.findById(id);
         if (group == null) {
-            throw new BizException("device group does not exist");
+            throw new BizException(ErrCode.GROUP_NOT_FOUND);
         }
         dataOwnerService.checkOwner(group);
 
@@ -352,7 +353,7 @@ public class DeviceController {
     public void addToGroup(@PathVariable("group") String group, @RequestBody List<String> devices) {
         DeviceGroup deviceGroup = deviceGroupData.findById(group);
         if (deviceGroup == null) {
-            throw new BizException("device group does not exists");
+            throw new BizException(ErrCode.GROUP_NOT_FOUND);
         }
         dataOwnerService.checkOwner(deviceGroup);
 
@@ -380,7 +381,7 @@ public class DeviceController {
     public void removeDevices(@PathVariable("group") String group, @RequestBody List<String> devices) {
         DeviceGroup deviceGroup = deviceGroupData.findById(group);
         if (deviceGroup == null) {
-            throw new BizException("device group does not exists");
+            throw new BizException(ErrCode.GROUP_NOT_FOUND);
         }
         dataOwnerService.checkOwner(deviceGroup);
 

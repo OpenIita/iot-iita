@@ -1,6 +1,7 @@
 package cc.iotkit.comp.websocket.server;
 
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.websocket.AbstractDeviceVerticle;
@@ -154,7 +155,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
         ServerWebSocket wsClient = wsClients.get(message.getDeviceName());
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
-            throw new BizException("message content is not Map");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
         String msgStr = JsonUtil.toJsonString(obj);
         log.info("send msg payload:{}", msgStr);

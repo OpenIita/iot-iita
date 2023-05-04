@@ -1,5 +1,7 @@
 package cc.iotkit.comp.DLT645.analysis;
 
+import cc.iotkit.common.enums.ErrCode;
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.comp.DLT645.utils.ByteUtils;
 import lombok.Data;
 
@@ -57,7 +59,7 @@ public class DLT645DataFormat {
     public Object decodeValue(byte[] data, String format, int start, int length) throws RuntimeException {
         // 前面4个字节是DI0～DI3
         if (data.length < length + start) {
-            throw new RuntimeException("数据长度不正确！");
+            throw new BizException(ErrCode.DATA_LENGTH_ERROR);
         }
 
         // 各种XX.XX格式

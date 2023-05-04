@@ -9,6 +9,7 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.IRuleInfoData;
@@ -86,10 +87,10 @@ public class RuleEngineController {
         } else {
             RuleInfo ruleInfo = ruleInfoData.findById(rule.getId());
             if (ruleInfo == null) {
-                throw new BizException("Rule does not exist");
+                throw new BizException(ErrCode.RULE_NOT_FOUND);
             }
             if (RuleInfo.STATE_RUNNING.equals(ruleInfo.getState())) {
-                throw new BizException("Rule is running");
+                throw new BizException(ErrCode.RULE_ALREADY_RUNNING);
             }
 
             dataOwnerService.checkOwner(ruleInfo);
@@ -108,7 +109,7 @@ public class RuleEngineController {
     public void pauseRule(@PathVariable("ruleId") String ruleId) {
         RuleInfo ruleInfo = ruleInfoData.findById(ruleId);
         if (ruleInfo == null) {
-            throw new BizException("Rule does not exist");
+            throw new BizException(ErrCode.RULE_NOT_FOUND);
         }
         dataOwnerService.checkOwner(ruleInfo);
         ruleInfo.setState(RuleInfo.STATE_STOPPED);
@@ -120,7 +121,7 @@ public class RuleEngineController {
     public void resumeRule(@PathVariable("ruleId") String ruleId) {
         RuleInfo ruleInfo = ruleInfoData.findById(ruleId);
         if (ruleInfo == null) {
-            throw new BizException("Rule does not exist");
+            throw new BizException(ErrCode.RULE_NOT_FOUND);
         }
         dataOwnerService.checkOwner(ruleInfo);
         ruleInfo.setState(RuleInfo.STATE_RUNNING);
@@ -132,7 +133,7 @@ public class RuleEngineController {
     public void deleteRule(@PathVariable("ruleId") String ruleId) {
         RuleInfo ruleInfo = ruleInfoData.findById(ruleId);
         if (ruleInfo == null) {
-            throw new BizException("Rule does not exist");
+            throw new BizException(ErrCode.RULE_NOT_FOUND);
         }
         dataOwnerService.checkOwner(ruleInfo);
         ruleInfoData.deleteById(ruleInfo.getId());
@@ -174,7 +175,7 @@ public class RuleEngineController {
         } else {
             TaskInfo oldTask = taskInfoData.findById(taskInfo.getId());
             if (oldTask == null) {
-                throw new BizException("Task does not exist");
+                throw new BizException(ErrCode.TASK_NOT_FOUND);
             }
             taskInfo = ReflectUtil.copyNoNulls(taskInfo, oldTask);
             dataOwnerService.checkOwner(taskInfo);
@@ -187,7 +188,7 @@ public class RuleEngineController {
     public void pauseTask(@PathVariable("taskId") String taskId) {
         TaskInfo taskInfo = taskInfoData.findById(taskId);
         if (taskInfo == null) {
-            throw new BizException("Task does not exist");
+            throw new BizException(ErrCode.TASK_NOT_FOUND);
         }
         dataOwnerService.checkOwner(taskInfo);
         taskManager.pauseTask(taskId, "stop by " + AuthUtil.getUserId());
@@ -197,7 +198,7 @@ public class RuleEngineController {
     public void resumeTask(@PathVariable("taskId") String taskId) {
         TaskInfo taskInfo = taskInfoData.findById(taskId);
         if (taskInfo == null) {
-            throw new BizException("Task does not exist");
+            throw new BizException(ErrCode.TASK_NOT_FOUND);
         }
         dataOwnerService.checkOwner(taskInfo);
         taskManager.resumeTask(taskId, "resume by " + AuthUtil.getUserId());
@@ -207,7 +208,7 @@ public class RuleEngineController {
     public void renewTask(@PathVariable("taskId") String taskId) {
         TaskInfo taskInfo = taskInfoData.findById(taskId);
         if (taskInfo == null) {
-            throw new BizException("Task does not exist");
+            throw new BizException(ErrCode.TASK_NOT_FOUND);
         }
         dataOwnerService.checkOwner(taskInfo);
         try {
@@ -215,7 +216,7 @@ public class RuleEngineController {
             taskManager.updateTaskState(taskId, TaskInfo.STATE_RUNNING, "renew by " + AuthUtil.getUserId());
         } catch (SchedulerException e) {
             log.error("renew task error", e);
-            throw new BizException("renew task error");
+            throw new BizException(ErrCode.RENEW_TASK_ERROR);
         }
     }
 
@@ -224,7 +225,7 @@ public class RuleEngineController {
     public void deleteTask(@PathVariable("taskId") String taskId) {
         TaskInfo taskInfo = taskInfoData.findById(taskId);
         if (taskInfo == null) {
-            throw new BizException("Task does not exist");
+            throw new BizException(ErrCode.TASK_NOT_FOUND);
         }
 
         dataOwnerService.checkOwner(taskInfo);

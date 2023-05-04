@@ -10,19 +10,20 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.Constants;
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.data.*;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.model.space.Home;
-import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
+import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
+import cc.iotkit.utils.AuthUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -150,11 +151,11 @@ public class SpaceDeviceController {
     @GetMapping(Constants.API_SPACE.FIND_DEVICE)
     List<FindDeviceVo> findDevice(String mac) {
         if (StringUtils.isBlank(mac)) {
-            throw new BizException("mac is blank");
+            throw new BizException(ErrCode.DATA_BLANK);
         }
 
         if (mac.trim().length() < 3) {
-            throw new BizException("mac 长度不能小于3");
+            throw new BizException(ErrCode.DATA_LENGTH_ERROR);
         }
 
         List<FindDeviceVo> findDeviceVos = new ArrayList<>();
@@ -206,17 +207,17 @@ public class SpaceDeviceController {
         String deviceId = device.getDeviceId();
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
         if (deviceInfo == null) {
-            throw new BizException("device does not exist");
+            throw new BizException(ErrCode.DEVICE_NOT_FOUND);
         }
         String spaceId = device.getSpaceId();
         Space space = spaceData.findById(spaceId);
         if (space == null) {
-            throw new BizException("space does not exist");
+            throw new BizException(ErrCode.SPACE_NOT_FOUND);
         }
 
         SpaceDevice oldSpaceDevice = spaceDeviceData.findByDeviceId(deviceId);
         if (oldSpaceDevice != null) {
-            throw new BizException("device has been added");
+            throw new BizException(ErrCode.DEVICE_ALREADY);
         }
 
         SpaceDevice spaceDevice = SpaceDevice.builder()
@@ -240,7 +241,7 @@ public class SpaceDeviceController {
         String uid = AuthUtil.getUserId();
         UserInfo userInfo = userInfoData.findById(uid);
         if (userInfo == null) {
-            throw new BizException("user does not exist");
+            throw new BizException(ErrCode.USER_NOT_FOUND);
         }
         if (!subUid.contains(uid)) {
             subUid.add(uid);
@@ -265,7 +266,7 @@ public class SpaceDeviceController {
         String uid = AuthUtil.getUserId();
         SpaceDevice spaceDevice = spaceDeviceData.findByDeviceIdAndUid(deviceId, uid);
         if (spaceDevice == null) {
-            throw new BizException("space device does not exist");
+            throw new BizException(ErrCode.SPACE_DEVICE_NOT_FOUND);
         }
         dataOwnerService.checkOwner(spaceDevice);
 
@@ -273,7 +274,7 @@ public class SpaceDeviceController {
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
         UserInfo userInfo = userInfoData.findById(uid);
         if (userInfo == null) {
-            throw new BizException("user does not exist");
+            throw new BizException(ErrCode.USER_NOT_FOUND);
         }
 
         List<String> platforms = userInfo.getUsePlatforms();
@@ -295,7 +296,7 @@ public class SpaceDeviceController {
         dataOwnerService.checkOwner(spaceDevice);
         SpaceDevice oldData = spaceDeviceData.findById(spaceDevice.getId());
         if (oldData == null) {
-            throw new BizException("space device does not exist");
+            throw new BizException(ErrCode.SPACE_DEVICE_NOT_FOUND);
         }
         oldData.setName(spaceDevice.getName());
         oldData.setSpaceId(spaceDevice.getSpaceId());
@@ -323,7 +324,7 @@ public class SpaceDeviceController {
     public void setOpenUid(String deviceId, String platform, String openUid) {
         SpaceDevice spaceDevice = spaceDeviceData.findByDeviceId(deviceId);
         if (spaceDevice == null) {
-            throw new BizException("space device does not exist");
+            throw new BizException(ErrCode.SPACE_DEVICE_NOT_FOUND);
         }
 
         //只能修改自己的设备

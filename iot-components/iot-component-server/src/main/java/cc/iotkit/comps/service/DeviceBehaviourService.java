@@ -10,6 +10,7 @@
 package cc.iotkit.comps.service;
 
 import cc.iotkit.common.Constants;
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
 import cc.iotkit.common.utils.JsonUtil;
@@ -17,8 +18,8 @@ import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
 import cc.iotkit.data.IDeviceInfoData;
-import cc.iotkit.data.IProductModelData;
 import cc.iotkit.data.IProductData;
+import cc.iotkit.data.IProductModelData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
@@ -69,7 +70,7 @@ public class DeviceBehaviourService {
             throw e;
         } catch (Throwable e) {
             log.error("register device error", e);
-            throw new BizException("register device error", e);
+            throw new BizException(ErrCode.DEVICE_REGISTER_ERROR, e);
         }
     }
 
@@ -84,7 +85,7 @@ public class DeviceBehaviourService {
             if (StringUtils.isBlank(pk) && StringUtils.isNotBlank(model)) {
                 ProductModel productModel = productModelData.findByModel(model);
                 if (productModel == null) {
-                    throw new BizException("product model does not exist");
+                    throw new BizException(ErrCode.PRODUCT_MODEL_NOT_FOUND);
                 }
                 pk = productModel.getProductKey();
             }
@@ -92,7 +93,7 @@ public class DeviceBehaviourService {
 
         Product product = productData.findById(pk);
         if (product == null) {
-            throw new BizException("Product does not exist");
+            throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
         String uid = product.getUid();
         DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(pk, info.getDeviceName());
@@ -158,10 +159,10 @@ public class DeviceBehaviourService {
                            String deviceSecret) {
         DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
         if (deviceInfo == null) {
-            throw new BizException("device does not exist");
+            throw new BizException(ErrCode.DEVICE_NOT_FOUND);
         }
         if (!Constants.PRODUCT_SECRET.equals(productSecret)) {
-            throw new BizException("incorrect productSecret");
+            throw new BizException(ErrCode.PRODUCT_SECRET_ERROR);
         }
 
         //todo 按产品ProductSecret认证，子设备需要父设备认证后可通过验证
@@ -189,7 +190,7 @@ public class DeviceBehaviourService {
         DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
         if (device == null) {
             log.warn("productKey: {},deviceName:{},online: {}", productKey, deviceName, online);
-            throw new BizException("device does not exist");
+            throw new BizException(ErrCode.DEVICE_NOT_FOUND);
         }
         deviceStateChange(device, online);
 

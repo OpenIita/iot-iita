@@ -1,5 +1,6 @@
 package cc.iotkit.comp.websocket.client;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.model.ReceiveResult;
@@ -8,14 +9,14 @@ import cc.iotkit.comp.websocket.AbstractDeviceVerticle;
 import cc.iotkit.converter.DeviceMessage;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpClient;
-import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.WebSocket;
 import io.vertx.core.http.WebSocketConnectOptions;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -96,7 +97,7 @@ public class WebSocketClientVerticle extends AbstractDeviceVerticle {
     public DeviceMessage send(DeviceMessage message) {
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
-            throw new BizException("message content is not Map");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
         String msgStr = JsonUtil.toJsonString(obj);
         log.info("send msg payload:{}", msgStr);

@@ -103,13 +103,13 @@ public class CtwingDeviceComponent extends AbstractDeviceComponent {
     public DeviceMessage send(DeviceMessage message) {
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
-            throw new BizException("message content is not Map");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
         SendContent msg = new SendContent();
         try {
             BeanUtils.populate(msg, (Map<String, ? extends Object>) obj);
         } catch (Throwable e) {
-            throw new BizException("message content is incorrect");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
 
         CreateCommandRequest request = new CreateCommandRequest();
@@ -129,18 +129,18 @@ public class CtwingDeviceComponent extends AbstractDeviceComponent {
         try {
             response = commandClient.CreateCommand(request);
         } catch (Exception e) {
-            throw new RuntimeException("send cmd to ctwing error", e);
+            throw new BizException("send cmd to ctwing error", e);
         }
 
         String body = new String(response.getBody());
         log.info("send ctwing cmd result:{}", body);
         if (response.getStatusCode() != 200) {
-            throw new RuntimeException("send cmd to ctwing error:" + body);
+            throw new BizException("send cmd to ctwing error:" + body);
         }
 
         CtwingCmdRsp cmdRsp = JsonUtil.parse(body, CtwingCmdRsp.class);
         if (cmdRsp.code != 0) {
-            throw new RuntimeException("send cmd to ctwing failed:" + body);
+            throw new BizException("send cmd to ctwing failed:" + body);
         }
 
         return message;

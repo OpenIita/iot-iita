@@ -9,6 +9,7 @@
  */
 package cc.iotkit.comp.mqtt;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.ReceiveResult;
@@ -200,7 +201,7 @@ public class MqttVerticle extends AbstractVerticle {
     public void publish(String productKey, String deviceName, String topic, String msg) {
         MqttEndpoint endpoint = endpointMap.get(getEndpointKey(productKey, deviceName));
         if (endpoint == null) {
-            throw new BizException("endpoint does not exist");
+            throw new BizException(ErrCode.SEND_DESTINATION_NOT_FOUND);
         }
         Future<Integer> result = endpoint.publish(topic, Buffer.buffer(msg),
                 MqttQoS.AT_LEAST_ONCE, false, false);

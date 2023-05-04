@@ -9,7 +9,9 @@
  */
 package cc.iotkit.comp.emqx;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.common.utils.ThreadUtil;
 import cc.iotkit.comp.AbstractDeviceComponent;
@@ -18,7 +20,6 @@ import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.utils.SpringUtils;
 import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
@@ -88,7 +89,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent implements Runn
 
             emqxConnectTask.scheduleWithFixedDelay(this, 0, 3, TimeUnit.SECONDS);
         } catch (Throwable e) {
-            throw new BizException("start emqx auth component error", e);
+            throw new BizException(ErrCode.COMPONENT_START_ERROR, e);
         }
     }
 
@@ -166,7 +167,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent implements Runn
             }).exceptionHandler(event -> log.error("client fail", event));
 
         } catch (Throwable e) {
-            throw new BizException("start emqx component error", e);
+            throw new BizException(ErrCode.COMPONENT_START_ERROR, e);
         }
     }
 
@@ -218,14 +219,14 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent implements Runn
     public DeviceMessage send(DeviceMessage message) {
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
-            throw new BizException("message content is not Map");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
         Message msg = new Message();
         try {
             //obj中的key,如果bean中有这个属性，就把这个key对应的value值赋给msg的属性
             BeanUtils.populate(msg, (Map<String, ? extends Object>) obj);
         } catch (Throwable e) {
-            throw new BizException("message content is incorrect");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
 
         log.info("publish topic:{},payload:{}", msg.getTopic(), msg.getPayload());

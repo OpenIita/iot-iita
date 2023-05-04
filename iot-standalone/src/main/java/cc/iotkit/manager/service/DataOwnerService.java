@@ -9,11 +9,12 @@
  */
 package cc.iotkit.manager.service;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.data.ICommonData;
-import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.Owned;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.utils.AuthUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +61,7 @@ public class DataOwnerService {
             }
         }
 
-        throw new BizException("无权限操作");
+        throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
     }
 
     /**
@@ -88,7 +89,7 @@ public class DataOwnerService {
             return;
         }
 
-        throw new BizException("无权限操作");
+        throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
     }
 
     /**
@@ -105,7 +106,7 @@ public class DataOwnerService {
         }
 
         if (!AuthUtil.hasWriteRole()) {
-            throw new BizException("无权操作");
+            throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
         }
     }
 }

@@ -11,6 +11,7 @@ package cc.iotkit.comps;
 
 
 import cc.iotkit.common.ComponentClassLoader;
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;
@@ -68,7 +69,7 @@ public class BizComponentManager {
         Path path = componentConfig.getComponentFilePath(id);
         File file = path.resolve(component.getJarFile()).toAbsolutePath().toFile();
         if (!file.exists()) {
-            throw new BizException("jar file:" + file.getAbsolutePath() + " not found");
+            throw new BizException(ErrCode.FILE_NOT_FOUND);
         }
 
         IComponent componentInstance;
@@ -76,7 +77,7 @@ public class BizComponentManager {
             componentInstance = ComponentClassLoader.getComponent(component.getId(), file);
         } catch (Throwable e) {
             ComponentClassLoader.closeClassLoader(component.getId());
-            throw new BizException("get component instance error");
+            throw new BizException(ErrCode.GET_COMPONENT_INSTANCE_ERROR,e);
         }
         try {
             String componentScript = FileUtils.readFileToString(path.
@@ -85,7 +86,7 @@ public class BizComponentManager {
             componentInstance.putScriptEnv("deviceBehaviour", deviceBehaviourService);
             componentInstance.putScriptEnv("apiTool", new ApiTool());
         } catch (IOException e) {
-            throw new BizException("get component script error", e);
+            throw new BizException(ErrCode.GET_COMPONENT_SCRIPT_ERROR,e);
         }
         componentInstance.create(new CompConfig(300, component.getConfig()));
 

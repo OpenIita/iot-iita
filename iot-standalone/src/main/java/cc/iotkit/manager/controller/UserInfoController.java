@@ -10,6 +10,7 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.Constants;
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.IHomeData;
@@ -66,7 +67,7 @@ public class UserInfoController {
             user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_SYSTEM_USER));
             userInfoData.save(user);
         } catch (Throwable e) {
-            throw new BizException("add platform user error", e);
+            throw new BizException(ErrCode.ADD_PLATFORM_USER_ERROR, e);
         }
     }
 
@@ -79,12 +80,12 @@ public class UserInfoController {
         try {
             UserInfo user = userInfoData.findByUid(uid);
             if (user == null) {
-                throw new BizException("user does not exist");
+                throw new BizException(ErrCode.USER_NOT_FOUND);
             }
             user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_SYSTEM_USER));
             userInfoData.save(user);
         } catch (Throwable e) {
-            throw new BizException("reset pwd failed", e);
+            throw new BizException(ErrCode.RESET_PWD_ERROR, e);
         }
     }
 
@@ -133,7 +134,7 @@ public class UserInfoController {
     public void deleteClientUser(@PathVariable("id") String id) {
         UserInfo user = userInfoData.findById(id);
         if (user == null) {
-            throw new BizException("user does not exist");
+            throw new BizException(ErrCode.USER_NOT_FOUND);
         }
         userInfoData.deleteById(id);
     }
@@ -145,7 +146,7 @@ public class UserInfoController {
             return;
         }
         if (!AuthUtil.getUserId().equals(oldUser.getOwnerId())) {
-            throw new BizException("无权限操作");
+            throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
         }
         ReflectUtil.copyNoNulls(user, oldUser);
         userInfoData.save(oldUser);
@@ -158,15 +159,15 @@ public class UserInfoController {
     public void modifyPwd(@PathVariable("uid") String uid, String oldPwd, String newPwd) {
         UserInfo user = userInfoData.findByUid(uid);
         if (user == null) {
-            throw new BizException("user does not exist");
+            throw new BizException(ErrCode.USER_NOT_FOUND);
         }
         if (!AuthUtil.getUserId().equals(user.getId())) {
-            throw new BizException("permission denied");
+            throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
         }
 
         try {
             if (!AuthUtil.checkPwd(oldPwd, user.getSecret())) {
-                throw new BizException("旧密码不正确");
+                throw new BizException(ErrCode.PWD_ERROR);
             }
 
             user.setSecret(AuthUtil.enCryptPwd(newPwd));
@@ -174,7 +175,7 @@ public class UserInfoController {
         } catch (BizException e) {
             throw e;
         } catch (Throwable e) {
-            throw new BizException("modify pwd failed", e);
+            throw new BizException(ErrCode.UPDATE_PWD_ERROR, e);
         }
     }
 

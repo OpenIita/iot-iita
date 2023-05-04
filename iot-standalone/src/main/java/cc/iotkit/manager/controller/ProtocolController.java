@@ -9,6 +9,7 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.comps.ComponentManager;
@@ -62,7 +63,7 @@ public class ProtocolController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("id") String id) {
         if (file == null) {
-            throw new BizException("file is null");
+            throw new BizException(ErrCode.PARAMS_EXCEPTION);
         }
         log.info("saving upload jar file:{}", file.getName());
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
@@ -78,7 +79,7 @@ public class ProtocolController {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return id;
         } catch (IOException ex) {
-            throw new BizException("upload jar error", ex);
+            throw new BizException(ErrCode.UPLOAD_FILE_ERROR, ex);
         }
     }
 
@@ -87,23 +88,23 @@ public class ProtocolController {
         String id = component.getId();
         //jar包上传后生成的id
         if (!StringUtils.hasLength(id)) {
-            throw new BizException("component id is blank");
+            throw new BizException(ErrCode.COMPONENT_ID_BLANK);
         }
         Path jarPath = componentConfig.getComponentFilePath(id);
         if (!jarPath.resolve(component.getJarFile()).toFile().exists()) {
-            throw new BizException("component jar file does not exist");
+            throw new BizException(ErrCode.COMPONENT_JAR_NOT_FOUND);
         }
 
         ProtocolComponent protocolComponent = protocolComponentData.findById(id);
         if (protocolComponent != null) {
-            throw new BizException("component already exists");
+            throw new BizException(ErrCode.COMPONENT_ALREADY);
         }
         try {
             component.setCreateAt(System.currentTimeMillis());
             component.setUid(AuthUtil.getUserId());
             protocolComponentData.save(component);
         } catch (Throwable e) {
-            throw new BizException("add protocol component error", e);
+            throw new BizException(ErrCode.ADD_COMPONENT_ERROR, e);
         }
     }
 
@@ -111,11 +112,11 @@ public class ProtocolController {
     public void saveComponent(ProtocolComponent component) {
         String id = component.getId();
         if (!StringUtils.hasLength(id)) {
-            throw new BizException("component id is blank");
+            throw new BizException(ErrCode.COMPONENT_ID_BLANK);
         }
         Path jarPath = componentConfig.getComponentFilePath(id);
         if (!jarPath.resolve(component.getJarFile()).toFile().exists()) {
-            throw new BizException("component jar file does not exist");
+            throw new BizException(ErrCode.COMPONENT_JAR_NOT_FOUND);
         }
 
         ProtocolComponent oldComponent = getAndCheckComponent(id);
@@ -125,7 +126,7 @@ public class ProtocolController {
             componentManager.deRegister(id);
             protocolComponentData.save(component);
         } catch (Throwable e) {
-            throw new BizException("add protocol component error", e);
+            throw new BizException(ErrCode.ADD_COMPONENT_ERROR, e);
         }
     }
 
@@ -167,7 +168,7 @@ public class ProtocolController {
 
             componentManager.deRegister(id);
         } catch (Throwable e) {
-            throw new BizException("save protocol component script error", e);
+            throw new BizException(ErrCode.SAVE_COMPONENT_SCRIPT_ERROR, e);
         }
     }
 
@@ -179,7 +180,7 @@ public class ProtocolController {
     private ProtocolComponent getAndCheckComponent(@PathVariable("id") String id) {
         ProtocolComponent oldComponent = protocolComponentData.findById(id);
         if (oldComponent == null) {
-            throw new BizException("the component does not exists");
+            throw new BizException(ErrCode.COMPONENT_NOT_FOUND);
         }
         dataOwnerService.checkOwner(oldComponent);
         return oldComponent;
@@ -205,7 +206,7 @@ public class ProtocolController {
             }
             protocolComponentData.deleteById(component.getId());
         } catch (Throwable e) {
-            throw new BizException("delete protocol component error", e);
+            throw new BizException(ErrCode.DELETE_COMPONENT_ERROR, e);
         }
     }
 
@@ -236,7 +237,7 @@ public class ProtocolController {
             converter.setUid(AuthUtil.getUserId());
             protocolConverterData.save(converter);
         } catch (Throwable e) {
-            throw new BizException("add protocol converter error", e);
+            throw new BizException(ErrCode.ADD_CONVERT_ERROR, e);
         }
     }
 
@@ -247,14 +248,14 @@ public class ProtocolController {
         try {
             protocolConverterData.save(converter);
         } catch (Throwable e) {
-            throw new BizException("add protocol converter error", e);
+            throw new BizException(ErrCode.ADD_CONVERT_ERROR, e);
         }
     }
 
     private ProtocolConverter getAndCheckConverter(String id) {
         ProtocolConverter converter = protocolConverterData.findById(id);
         if (converter == null) {
-            throw new BizException("the protocol converter does not exists");
+            throw new BizException(ErrCode.CONVERT_NOT_FOUND);
         }
 
         dataOwnerService.checkOwner(converter);
@@ -297,7 +298,7 @@ public class ProtocolController {
             protocolConverterData.save(converter);
 
         } catch (Throwable e) {
-            throw new BizException("save protocol converter script error", e);
+            throw new BizException(ErrCode.SAVE_CONVERT_SCRIPT_ERROR, e);
         }
     }
 
@@ -319,7 +320,7 @@ public class ProtocolController {
             }
             protocolConverterData.deleteById(id);
         } catch (Throwable e) {
-            throw new BizException("delete protocol converter error", e);
+            throw new BizException(ErrCode.DELETE_CONVERT_ERROR, e);
         }
     }
 

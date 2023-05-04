@@ -9,6 +9,7 @@
  */
 package cc.iotkit.temporal.td.service;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.temporal.IDbStructureData;
@@ -49,7 +50,7 @@ public class DbStructureDataImpl implements IDbStructureData {
         //执行sql
         TdResponse response = tdRestApi.execSql(sql);
         if (TdResponse.CODE_SUCCESS != response.getCode()) {
-            throw new RuntimeException(String.format(
+            throw new BizException(String.format(
                     "create td stable failed,code:%s,desc:%s"
                     , response.getCode(), response.getDesc()));
         }
@@ -66,7 +67,7 @@ public class DbStructureDataImpl implements IDbStructureData {
             String sql = TableManager.getDescTableSql(tbName);
             TdResponse response = tdRestApi.execSql(sql);
             if (response.getCode() != TdResponse.CODE_SUCCESS) {
-                throw new RuntimeException("get des table error:" + JsonUtil.toJsonString(response));
+                throw new BizException("get des table error:" + JsonUtil.toJsonString(response));
             }
 
             List<TdField> oldFields = FieldParser.parse(response.getData());
@@ -81,7 +82,7 @@ public class DbStructureDataImpl implements IDbStructureData {
                 sql = TableManager.getAddSTableColumnSql(tbName, addFields);
                 response = tdRestApi.execSql(sql);
                 if (response.getCode() != TdResponse.CODE_SUCCESS) {
-                    throw new RuntimeException("add table column error:" + JsonUtil.toJsonString(response));
+                    throw new BizException("add table column error:" + JsonUtil.toJsonString(response));
                 }
             }
 
@@ -98,7 +99,7 @@ public class DbStructureDataImpl implements IDbStructureData {
                 sql = TableManager.getModifySTableColumnSql(tbName, modifyFields);
                 response = tdRestApi.execSql(sql);
                 if (response.getCode() != TdResponse.CODE_SUCCESS) {
-                    throw new RuntimeException("modify table column error:" + JsonUtil.toJsonString(response));
+                    throw new BizException("modify table column error:" + JsonUtil.toJsonString(response));
                 }
             }
 
@@ -113,7 +114,7 @@ public class DbStructureDataImpl implements IDbStructureData {
                 sql = TableManager.getDropSTableColumnSql(tbName, dropFields);
                 response = tdRestApi.execSql(sql);
                 if (response.getCode() != TdResponse.CODE_SUCCESS) {
-                    throw new RuntimeException("drop table column error:" + JsonUtil.toJsonString(response));
+                    throw new BizException("drop table column error:" + JsonUtil.toJsonString(response));
                 }
             }
         } catch (Throwable e) {
@@ -135,7 +136,7 @@ public class DbStructureDataImpl implements IDbStructureData {
         ), new TdField("rule_id", "NCHAR", 50));
         TdResponse response = tdRestApi.execSql(sql);
         if (response.getCode() != TdResponse.CODE_SUCCESS) {
-            throw new RuntimeException("create stable rule_log error:" + JsonUtil.toJsonString(response));
+            throw new BizException("create stable rule_log error:" + JsonUtil.toJsonString(response));
         }
 
         //创建规则日志超级表
@@ -145,7 +146,7 @@ public class DbStructureDataImpl implements IDbStructureData {
         ), new TdField("task_id", "NCHAR", 50));
         response = tdRestApi.execSql(sql);
         if (response.getCode() != TdResponse.CODE_SUCCESS) {
-            throw new RuntimeException("create stable task_log error:" + JsonUtil.toJsonString(response));
+            throw new BizException("create stable task_log error:" + JsonUtil.toJsonString(response));
         }
 
         //创建物模型消息超级表
@@ -162,7 +163,7 @@ public class DbStructureDataImpl implements IDbStructureData {
         ), new TdField("device_id", "NCHAR", 50));
         response = tdRestApi.execSql(sql);
         if (response.getCode() != TdResponse.CODE_SUCCESS) {
-            throw new RuntimeException("create stable thing_model_message error:" + JsonUtil.toJsonString(response));
+            throw new BizException("create stable thing_model_message error:" + JsonUtil.toJsonString(response));
         }
 
         //创建虚拟设备日志超级表
@@ -173,7 +174,7 @@ public class DbStructureDataImpl implements IDbStructureData {
         ), new TdField("virtual_device_id", "NCHAR", 50));
         response = tdRestApi.execSql(sql);
         if (response.getCode() != TdResponse.CODE_SUCCESS) {
-            throw new RuntimeException("create stable virtual_device_log error:" + JsonUtil.toJsonString(response));
+            throw new BizException("create stable virtual_device_log error:" + JsonUtil.toJsonString(response));
         }
 
     }

@@ -9,6 +9,7 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.data.ICategoryData;
@@ -178,13 +179,13 @@ public class ProductController {
         String productKey = productModel.getProductKey();
         Product product = productData.findById(productKey);
         if (product == null) {
-            throw new BizException("product does not exist");
+            throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
         dataOwnerService.checkOwner(product);
 
         ProductModel oldScript = productModelData.findByModel(model);
         if (oldScript != null && !oldScript.getProductKey().equals(productKey)) {
-            throw new BizException("model already exists");
+            throw new BizException(ErrCode.MODEL_ALREADY);
         }
 
         productModel.setModifyAt(System.currentTimeMillis());

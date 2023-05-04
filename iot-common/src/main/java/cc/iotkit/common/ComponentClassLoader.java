@@ -9,6 +9,8 @@
  */
 package cc.iotkit.common;
 
+import cc.iotkit.common.enums.ErrCode;
+import cc.iotkit.common.exception.BizException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -65,13 +67,13 @@ public class ComponentClassLoader {
     public static <T> T getComponent(String name, File jarFile) throws Exception {
         String className = addUrl(name, jarFile);
         if (StringUtils.isBlank(className)) {
-            throw new RuntimeException("component class does not exist");
+            throw new BizException(ErrCode.GET_SPI_COMPONENT_ERROR);
         }
         Class<T> componentClass = findClass(name, className);
         return componentClass.getDeclaredConstructor().newInstance();
     }
 
-    public static <T> T getConverter(String name, File jarFile) throws Exception {
+    public static <T> T getConverter(String name) throws Exception {
         URLClassLoader classLoader = classLoaders.get(name);
         InputStream is = classLoader.getResourceAsStream("convert.spi");
         if (is == null) {
@@ -81,7 +83,7 @@ public class ComponentClassLoader {
         //多行只取第1行，并处理空格
         String[] lines = IOUtils.toString(is, StandardCharsets.UTF_8).split("\\s");
         if (lines.length == 0) {
-            throw new RuntimeException("convert class does not exist");
+            throw new BizException(ErrCode.GET_SPI_CONVERT_ERROR);
         }
         String className = lines[0].trim();
         Class<T> converterClass = findClass(name, className);

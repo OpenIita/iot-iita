@@ -9,13 +9,14 @@
  */
 package cc.iotkit.comp.mqtt;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -62,7 +63,7 @@ public class MqttDeviceComponent extends AbstractDeviceComponent {
             countDownLatch.await();
             future.succeeded();
         } catch (Throwable e) {
-            throw new BizException("start mqtt component error", e);
+            throw new BizException(ErrCode.COMPONENT_START_ERROR, e);
         }
     }
 
@@ -107,13 +108,13 @@ public class MqttDeviceComponent extends AbstractDeviceComponent {
 
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
-            throw new BizException("message content is not Map");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
         Message msg = new Message();
         try {
             BeanUtils.populate(msg, (Map<String, ? extends Object>) obj);
         } catch (Throwable e) {
-            throw new BizException("message content is incorrect");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
         log.info("publish topic:{},payload:{}", msg.getTopic(), msg.getPayload());
         mqttVerticle.publish(parent.getProductKey(), parent.getDeviceName(),

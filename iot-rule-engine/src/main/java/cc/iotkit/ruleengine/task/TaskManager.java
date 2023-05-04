@@ -9,6 +9,7 @@
  */
 package cc.iotkit.ruleengine.task;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.data.ITaskInfoData;
 import cc.iotkit.model.Paging;
@@ -140,7 +141,7 @@ public class TaskManager implements ApplicationContextAware {
 
     public void renewTask(TaskInfo task) throws SchedulerException {
         if (!TaskInfo.TYPE_DELAY.equals(task.getType())) {
-            throw new BizException("task not support renew");
+            throw new BizException(ErrCode.TASK_NOT_SUPPORT_RENEW);
         }
         saveTask(task);
     }

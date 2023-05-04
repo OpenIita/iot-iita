@@ -9,6 +9,8 @@
  */
 package cc.iotkit.ruleengine.action;
 
+import cc.iotkit.common.enums.ErrCode;
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -68,7 +70,7 @@ public class HttpService extends ScriptService {
             responseBody = body == null ? "" : body.string();
             log.info("send result,code:{},response:{}", responseCode, responseBody);
         } catch (IOException e) {
-            throw new RuntimeException("send request failed", e);
+            throw new BizException(ErrCode.SEND_REQUEST_ERROR, e);
         }
 
         return String.format("send request,url:%s,method:%s,receive response,code:%s,body:%s",

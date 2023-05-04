@@ -1,5 +1,6 @@
 package cc.iotkit.rocketmq;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.mq.MqProducer;
@@ -18,7 +19,7 @@ public class RocketMqProducer<T> implements MqProducer<T> {
             producer.setNamesrvAddr(nameServer);
             producer.start();
         } catch (Throwable e) {
-            throw new BizException("init producer error", e);
+            throw new BizException(ErrCode.INIT_PRODUCER_ERROR, e);
         }
     }
 
@@ -28,7 +29,7 @@ public class RocketMqProducer<T> implements MqProducer<T> {
             producer.send(new Message(topic,
                     JsonUtil.toJsonString(msg).getBytes(StandardCharsets.UTF_8)));
         } catch (Throwable e) {
-            throw new BizException("publish msg error", e);
+            throw new BizException(ErrCode.SEND_MSG_ERROR, e);
         }
     }
 

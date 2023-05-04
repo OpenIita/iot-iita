@@ -10,10 +10,12 @@
 package cc.iotkit.comp.mqtt;
 
 
+import cc.iotkit.common.enums.ErrCode;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.comp.utils.SpringUtils;
 import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductModelData;
 import cc.iotkit.model.device.DeviceInfo;
@@ -96,7 +98,7 @@ public class TransparentConverter {
             productModel = getScript(ProductModel.getDefaultModel(pk));
         }
         if (productModel == null) {
-            throw new RuntimeException("product model script does not exist");
+            throw new BizException(ErrCode.MODEL_SCRIPT_NOT_FOUND);
         }
 
         String productKey = productModel.getProductKey();

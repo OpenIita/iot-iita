@@ -9,6 +9,7 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.IVirtualDeviceData;
@@ -91,7 +92,7 @@ public class VirtualDeviceController {
         VirtualDevice oldData = checkOwner(id);
         if (!VirtualDevice.STATE_RUNNING.equals(state)
                 && !VirtualDevice.STATE_STOPPED.equals(state)) {
-            throw new BizException("state is illegal");
+            throw new BizException(ErrCode.STATE_ERROR);
         }
         oldData.setState(state);
         if (VirtualDevice.STATE_RUNNING.equals(state)) {
@@ -155,7 +156,7 @@ public class VirtualDeviceController {
     private VirtualDevice checkOwner(String id) {
         VirtualDevice oldData = virtualDeviceData.findById(id);
         if (oldData == null) {
-            throw new BizException("record does not exist");
+            throw new BizException(ErrCode.RECORD_NOT_FOUND);
         }
 
         dataOwnerService.checkOwner(oldData);

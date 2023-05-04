@@ -1,5 +1,6 @@
 package cc.iotkit.comp.websocket;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.AbstractDeviceComponent;
@@ -12,6 +13,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -54,7 +56,7 @@ public class WebSocketDeviceComponent extends AbstractDeviceComponent {
             countDownLatch.await();
             future.succeeded();
         } catch (Throwable e) {
-            throw new BizException("start websocket component error", e);
+            throw new BizException(ErrCode.COMPONENT_START_ERROR, e);
         }
     }
 

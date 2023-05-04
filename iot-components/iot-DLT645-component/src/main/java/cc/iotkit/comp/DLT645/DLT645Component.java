@@ -9,6 +9,7 @@
  */
 package cc.iotkit.comp.DLT645;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.AbstractDeviceComponent;
@@ -63,7 +64,7 @@ public class DLT645Component extends AbstractDeviceComponent {
             countDownLatch.await();
             future.succeeded();
         } catch (Throwable e) {
-            throw new BizException("start GLT645 component error", e);
+            throw new BizException(ErrCode.COMPONENT_START_ERROR, e);
         }
     }
 

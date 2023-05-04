@@ -9,13 +9,14 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.data.IHomeData;
 import cc.iotkit.data.ISpaceData;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
+import cc.iotkit.utils.AuthUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -70,7 +71,7 @@ public class SpaceController {
     public void saveHome(@PathVariable("id") String id, Home home) {
         Home oldHome = homeData.findById(id);
         if (home==null) {
-            throw new BizException("home does not exist");
+            throw new BizException(ErrCode.HOME_NOT_FOUND);
         }
         dataOwnerService.checkOwner(oldHome);
         if (StringUtils.isNotBlank(home.getName())) {
@@ -98,7 +99,7 @@ public class SpaceController {
         String uid = AuthUtil.getUserId();
         Home currHome = homeData.findByUidAndCurrent(uid, true);
         if (currHome == null) {
-            throw new BizException("current home does not exist");
+            throw new BizException(ErrCode.CURRENT_HOME_NOT_FOUND);
         }
         spaceData.save(Space.builder()
                 .homeId(currHome.getId())
@@ -124,7 +125,7 @@ public class SpaceController {
     private Space checkExistAndOwner(String id) {
         Space space = spaceData.findById(id);
         if (space == null) {
-            throw new BizException("space does not exist");
+            throw new BizException(ErrCode.SPACE_NOT_FOUND);
         }
 
         dataOwnerService.checkOwner(space);

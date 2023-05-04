@@ -1,5 +1,6 @@
 package cc.iotkit.comp.DLT645.analysis;
 
+import cc.iotkit.common.exception.BizException;
 import lombok.Data;
 
 import java.util.Map;
@@ -64,7 +65,7 @@ public abstract class DLT645Data {
         // 获取字典信息
         DLT645Data dict = dinMap.get(this.getKey());
         if (dict == null) {
-            throw new RuntimeException("DIn info err,please configure：" + this.getKey());
+            throw new BizException("DIn info err,please configure：" + this.getKey());
         }
 
         this.format = dict.format;

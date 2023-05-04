@@ -11,6 +11,7 @@ package cc.iotkit.comps;
 
 
 import cc.iotkit.common.ComponentClassLoader;
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtil;
@@ -106,7 +107,7 @@ public class DeviceComponentManager {
         try {
             componentInstance = ComponentClassLoader.getComponent(component.getId(), file);
         } catch (Throwable e) {
-            throw new BizException("get device component instance error", e);
+            throw new BizException(ErrCode.GET_COMPONENT_INSTANCE_ERROR, e);
         }
         componentInstance.create(new CompConfig(300, component.getConfig()));
 
@@ -114,9 +115,9 @@ public class DeviceComponentManager {
             if(component.CONVER_TYPE_STATIC.equals(component.getConverType())){
                 IConverter converterInstance;
                 try {
-                    converterInstance=ComponentClassLoader.getConverter(component.getId(), file);
+                    converterInstance=ComponentClassLoader.getConverter(component.getId());
                 } catch (Throwable e) {
-                    throw new BizException("get device convert instance error", e);
+                    throw new BizException(ErrCode.GET_SPI_CONVERT_ERROR, e);
                 }
                 componentInstance.setConverter(converterInstance);
             }else{
@@ -129,7 +130,7 @@ public class DeviceComponentManager {
             componentInstance.setScript(componentScript);
             register(id, componentInstance);
         } catch (IOException e) {
-            throw new BizException("get device component script error", e);
+            throw new BizException(ErrCode.GET_COMPONENT_SCRIPT_ERROR, e);
         }
     }
 
@@ -200,7 +201,7 @@ public class DeviceComponentManager {
     public void send(ThingService<?> service) {
         log.info("start exec device service:{}", JsonUtil.toJsonString(service));
         if (components.size() == 0) {
-            throw new BizException("there is no components");
+            throw new BizException(ErrCode.COMPONENT_NOT_FOUND);
         }
 
         DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(service.getProductKey(), service.getDeviceName());
@@ -217,7 +218,7 @@ public class DeviceComponentManager {
 
         IComponent component = deviceRouter.getRouter(linkPk, linkDn);
         if (!(component instanceof IDeviceComponent)) {
-            throw new BizException("send destination does not exist");
+            throw new BizException(ErrCode.SEND_DESTINATION_NOT_FOUND);
         }
         IDeviceComponent deviceComponent = (IDeviceComponent) component;
 
@@ -233,7 +234,7 @@ public class DeviceComponentManager {
         //对下发消息进行编码转换
         DeviceMessage message = deviceComponent.getConverter().encode(service, device);
         if (message == null) {
-            throw new BizException("encode send message failed");
+            throw new BizException(ErrCode.MSG_CONVERT_ERROR);
         }
 
         String sendMid = message.getMid();
