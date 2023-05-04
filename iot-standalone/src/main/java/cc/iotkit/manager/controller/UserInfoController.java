@@ -22,6 +22,7 @@ import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.utils.AuthUtil;
 import cn.dev33.satoken.annotation.SaCheckRole;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+@Api(tags = {"用户"})
 @RestController
 @RequestMapping("/user")
 public class UserInfoController {

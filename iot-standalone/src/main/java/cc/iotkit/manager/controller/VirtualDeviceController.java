@@ -20,12 +20,14 @@ import cc.iotkit.model.device.VirtualDeviceLog;
 import cc.iotkit.temporal.IVirtualDeviceLogData;
 import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.virtualdevice.VirtualManager;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(tags = {"虚拟设备"})
 @Slf4j
 @RestController
 @RequestMapping("/virtual_device")

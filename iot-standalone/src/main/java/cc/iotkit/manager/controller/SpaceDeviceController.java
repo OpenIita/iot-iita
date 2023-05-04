@@ -24,6 +24,7 @@ import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
 import cc.iotkit.utils.AuthUtil;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,6 +36,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
+@Api(tags = {"空间设备"})
 @RestController
 @RequestMapping("/space")
 public class SpaceDeviceController {

@@ -18,12 +18,26 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Slf4j
 @Configuration
 public class SaTokenConfigure implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        List<String> urls = Arrays.asList("/favicon.ico",
+                "h2",
+                "/error",
+                "*.png",
+                "*.js",
+                "/oauth2/**",
+                "*.html",
+                "/favicon.ico",
+                "swagger-resources/**",
+                "/webjars/**", "/v2/**", "/doc.html", "**/swagger-ui.html", "/swagger-ui.html/**");
+
         // 注册注解拦截器
         registry.addInterceptor(new SaAnnotationInterceptor()).addPathPatterns("/**");
         // 注册路由拦截器，自定义认证规则
@@ -81,13 +95,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                     ).check(c -> StpUtil.checkPermission("write"));
 
         })).addPathPatterns("/**")
-                .excludePathPatterns(
-                        "/h2",
-                        "/*.png",
-                        "/oauth2/**", "/*.html",
-                        "/favicon.ico", "/v2/api-docs",
-                        "/webjars/**", "/swagger-resources/**",
-                        "/*.js");
+                .excludePathPatterns(urls);
     }
 
 }

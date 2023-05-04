@@ -22,6 +22,7 @@ import cc.iotkit.model.Paging;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import cc.iotkit.model.protocol.ProtocolConverter;
 import cc.iotkit.utils.AuthUtil;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import java.nio.file.*;
 import java.util.Objects;
 import java.util.UUID;
 
+@Api(tags = {"协议"})
 @Slf4j
 @RestController
 @RequestMapping("/protocol")

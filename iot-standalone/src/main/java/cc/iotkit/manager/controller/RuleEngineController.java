@@ -25,6 +25,7 @@ import cc.iotkit.ruleengine.task.TaskManager;
 import cc.iotkit.temporal.IRuleLogData;
 import cc.iotkit.temporal.ITaskLogData;
 import cc.iotkit.utils.AuthUtil;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.SchedulerException;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Api(tags = {"规则引擎"})
 @Slf4j
 @RestController
 @RequestMapping("/rule_engine")

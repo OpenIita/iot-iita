@@ -17,13 +17,14 @@ import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.utils.AuthUtil;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Api(tags = {"空间"})
 @RestController
 @RequestMapping("/space")
 public class SpaceController {

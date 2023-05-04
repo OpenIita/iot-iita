@@ -15,6 +15,7 @@ import cc.iotkit.data.IProductData;
 import cc.iotkit.manager.model.stats.MainStats;
 import cc.iotkit.temporal.IThingModelMessageData;
 import cc.iotkit.utils.AuthUtil;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Api(tags = {"状态"})
 @Slf4j
 @RestController
 @RequestMapping("/stats")

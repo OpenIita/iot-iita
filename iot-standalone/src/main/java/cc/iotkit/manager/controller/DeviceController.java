@@ -36,6 +36,10 @@ import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.temporal.IDevicePropertyData;
 import cc.iotkit.temporal.IThingModelMessageData;
 import cc.iotkit.utils.AuthUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +48,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Api(tags = {"设备"})
 @Slf4j
 @RestController
 @RequestMapping("/device")
@@ -79,6 +85,12 @@ public class DeviceController {
     @Autowired
     private IDeviceConfigData deviceConfigData;
 
+    @ApiOperation(value = "服务调用", notes = "服务调用", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "deviceId", value = "设备ID", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "service", value = "服务", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "args", value = "参数", dataTypeClass = Map.class),
+    })
     @PostMapping(Constants.API_DEVICE.INVOKE_SERVICE)
     public InvokeResult invokeService(@PathVariable("deviceId") String deviceId,
                                       @PathVariable("service") String service,
@@ -89,20 +101,36 @@ public class DeviceController {
         return new InvokeResult(deviceService.invokeService(deviceId, service, args));
     }
 
+    @ApiOperation(value = "属性获取", notes = "属性获取", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "deviceId", value = "设备ID", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "propertyNames", value = "属性列表", dataTypeClass = ArrayList.class)
+    })
     @PostMapping(Constants.API_DEVICE.INVOKE_SERVICE_PROPERTY_GET)
     public InvokeResult invokeServicePropertySet(@PathVariable("deviceId") String deviceId,
-                                      @RequestBody List<String> propertyNames) {
+                                                 @RequestBody List<String> propertyNames) {
         if (StringUtils.isBlank(deviceId)) {
             throw new BizException(ErrCode.PARAMS_EXCEPTION);
         }
         return new InvokeResult(deviceService.getProperty(deviceId, propertyNames, true));
     }
+
+    @ApiOperation(value = "属性设置", notes = "属性设置", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "deviceId", value = "设备ID", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "args", value = "参数", dataTypeClass = Map.class)
+    })
     @PostMapping(Constants.API_DEVICE.SET_PROPERTIES)
     public InvokeResult setProperty(@PathVariable("deviceId") String deviceId,
                                     @RequestBody Map<String, Object> args) {
         return new InvokeResult(deviceService.setProperty(deviceId, args));
     }
 
+    @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "size", value = "长度", dataTypeClass = Integer.class, paramType = "path"),
+            @ApiImplicitParam(name = "page", value = "页数", dataTypeClass = Integer.class, paramType = "path")
+    })
     @PostMapping("/list/{size}/{page}")
     public Paging<DeviceInfo> getDevices(
             @PathVariable("size") int size,
@@ -129,6 +157,12 @@ public class DeviceController {
                 state, keyword, page, size);
     }
 
+    @ApiOperation(value = "创建设备", notes = "创建设备", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "productKey", value = "产品key", dataTypeClass = String.class, paramType = "form"),
+            @ApiImplicitParam(name = "deviceName", value = "设备名称", dataTypeClass = String.class, paramType = "form"),
+            @ApiImplicitParam(name = "parentId", value = "父设备ID", dataTypeClass = String.class, paramType = "form")
+    })
     @PostMapping("/create")
     public void createDevice(String productKey, String deviceName, String parentId) {
         Product product = productData.findById(productKey);
@@ -153,12 +187,14 @@ public class DeviceController {
         device.setSecret(secret.toString());
         device.setState(new DeviceInfo.State(false, null, null));
         device.setCreateAt(System.currentTimeMillis());
-        if(StringUtils.isNotBlank(parentId)){
+        if (StringUtils.isNotBlank(parentId)) {
             device.setParentId(parentId);
         }
         deviceInfoData.save(device);
     }
 
+    @ApiOperation(value = "获取子设备", notes = "获取子设备", httpMethod = "GET")
+    @ApiImplicitParam(name = "deviceId", value = "设备ID", dataTypeClass = String.class, paramType = "form")
     @GetMapping("/{deviceId}/children")
     public List<DeviceInfo> getChildren(@PathVariable("deviceId") String deviceId) {
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
@@ -174,7 +210,7 @@ public class DeviceController {
     public List<Map<String, Object>> getParentDevices() {
         String uid = "";
         if (!AuthUtil.isAdmin()) {
-             uid = AuthUtil.getUserId();
+            uid = AuthUtil.getUserId();
         }
         return deviceInfoData.findByProductNodeType(uid);
     }
