@@ -1,7 +1,7 @@
 var mid=1;
 
 var gatewayPk="BRD3x4fkKxkaxXFt"
-var smartMeterPk="PjmkANSTDt85bZPj"
+var smartMeterPk="PwMfpXmp4ZWkGahn"
 
 function getMid(){
 	mid++;

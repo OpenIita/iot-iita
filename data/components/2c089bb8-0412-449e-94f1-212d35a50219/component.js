@@ -1,7 +1,5 @@
 var mid=1;
 
-var access_token="";
-
 function getMid(){
 	mid++;
 	if(mid>10000){
@@ -9,58 +7,94 @@ function getMid(){
 	}
 	return mid;
 };
-function getPingData(data){
-	var ping={
-		productKey:"",
-		deviceName:"",
-		content:{
-			id:getMid(),
-			type:data
-		}
-	};
+function getPkDn(deviceKey){
+	var arr=deviceKey.split("_");
 	return {
-		type:"action",
-		data:{
-			productKey:"",
-			deviceName:"",
-			state:""
-		},
-		action:{
-			type:"ack",
-			content:JSON.stringify(ping)
+		pk:arr[1],
+		dn:deviceKey
+	};
+}
+function register(data){
+	var device=getPkDn(data.data.deviceName)
+	var subDevicesList=data.data.subDevices
+	var subDevices=[]
+	if(subDevicesList!=undefined&&subDevicesList.length>0){
+		apiTool.log("device:"+subDevicesList);
+		for (var i = 0; i < subDevicesList.length; i++) {
+			var deviceKey=subDevicesList[i]
+			var subDevice=getPkDn(deviceKey)
+			subDevices.push({
+				productKey:subDevice.pk,
+				deviceName:subDevice.dn,
+				model:''
+			})
 		}
 	}
-};
+
+	var reply=
+		{
+			productKey:device.pk,
+			deviceName:device.dn,
+			mid:"0",
+			content:{
+				id:data.id,
+				type:data.type,
+				result:'success'
+			}
+		};
+	var data={
+		productKey:device.pk,
+		deviceName:device.dn
+	}
+	if(subDevices.length>0){
+		data['subDevices']=subDevices
+	}
+	apiTool.log("subDevices:"+JSON.stringify(data));
+	return {
+		type:"register",
+		data:data,
+		action:{
+			type:"ack",
+			content:JSON.stringify(reply)
+		}
+	};
+}
+
+function online(data){
+	apiTool.log("data:"+JSON.stringify(data));
+	var device=getPkDn(data.data.deviceName)
+	return {
+		type:"state",
+		data:{
+			productKey:device.pk,
+			deviceName:device.dn,
+			state:data.type
+		}
+	};
+}
+
+function offline(data){
+	var device=getPkDn(data.deviceKey)
+	return {
+		type:"state",
+		data:{
+			productKey:device.pk,
+			deviceName:device.dn,
+			state:data.type
+		}
+	};
+}
+
 //必须提供onReceive方法
 this.onReceive=function(head,type,payload){
 	var data=JSON.parse(payload)
-	if(data.type=="auth_required"){
-		var auth={
-			productKey:"",
-			deviceName:"",
-			content:{
-				type:"auth",
-				access_token:access_token
-			}
-		};
-		return {
-			type:"action",
-			data:{
-				productKey:"",
-				deviceName:"",
-				state:""
-			},
-			action:{
-				type:"ack",
-				content:JSON.stringify(auth)
-			}
-		}
-	}else if(data.type=="auth_ok"){
-		return getPingData(data.heartBeatData);
-	}else if(data.type=="pong"){
-		apiTool.log("receive pong!");
-	}else if("ping"==type){
-		return getPingData(data.heartBeatData);
+	if(data.type=="register"){
+		apiTool.log("data:"+payload);
+		return register(data)
+	}else if(data.type=="online"){
+		return online(data);
+	}else if(data.type=="offline"){
+		return offline(data);
 	}
 	return {
 		productKey:"",
@@ -70,3 +104,7 @@ this.onReceive=function(head,type,payload){
 		}
 	}
 };
+
+this.onRegistered=function (data,status) {
+	apiTool.log("onRegistered调用");
+}

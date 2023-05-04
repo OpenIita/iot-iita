@@ -43,5 +43,10 @@
     "id": "FreshAir",
     "name": "新风",
     "createAt": 1681444312184
+  },
+  {
+    "id": "SmartMeter",
+    "name": "智能电表",
+    "createAt": 1681444312184
   }
 ]
