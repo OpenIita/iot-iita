@@ -36,7 +36,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                 "/oauth2/**",
                 "*.html",
                 "/favicon.ico",
-                "swagger-resources/**",
+                "/swagger-resources/**",
                 "/webjars/**", "/v2/**", "/doc.html", "**/swagger-ui.html", "/swagger-ui.html/**");
 
         // 注册注解拦截器
@@ -101,8 +101,10 @@ public class SaTokenConfigure implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 
 }
