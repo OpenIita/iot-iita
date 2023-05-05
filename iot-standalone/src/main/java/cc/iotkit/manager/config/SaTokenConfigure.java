@@ -37,7 +37,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                 "*.html",
                 "/favicon.ico",
                 "/swagger-resources/**",
-                "/webjars/**", "/v2/**", "/doc.html", "**/swagger-ui.html", "/swagger-ui.html/**");
+                "/webjars/**", "/v2/**", "/doc.html", "**/swagger-ui.html", "/swagger-ui.html/**","/swagger-ui/**");
 
         // 注册注解拦截器
         registry.addInterceptor(new SaAnnotationInterceptor()).addPathPatterns("/**");
