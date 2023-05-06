@@ -5,11 +5,14 @@
     <parent>
         <artifactId>iotkit-parent</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.3-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>iot-auth-server</artifactId>
+    <description>
+        此模块为认证服务，提供oauth2认证界面和接口
+    </description>
 
     <dependencies>
 

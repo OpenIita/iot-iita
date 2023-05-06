@@ -5,12 +5,16 @@
     <parent>
         <artifactId>iot-data</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.3-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
-    <version>0.4.3-SNAPSHOT</version>
+    <version>${revision}</version>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>iot-rdb-data-service</artifactId>
+    <description>
+        关系型数据库的数据服务实现模块
+        如：h2、mysql，由jpa兼容不同数据库
+    </description>
 
     <dependencies>
 

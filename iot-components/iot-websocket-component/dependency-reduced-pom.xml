@@ -3,7 +3,7 @@
   <parent>
     <artifactId>iot-components</artifactId>
     <groupId>cc.iotkit</groupId>
-    <version>0.4.3-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>iot-websocket-component</artifactId>
@@ -51,6 +51,12 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.24</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>cc.iotkit</groupId>
+      <artifactId>iot-common-core</artifactId>
+      <version>0.4.3-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

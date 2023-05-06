@@ -5,10 +5,15 @@
     <parent>
         <artifactId>iotkit-parent</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.3-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
+
+    <description>
+        与数据存取相关内容的模块
+        包含：数据接口定义、数据实体类定义、关系型数据库接口实现、NoSQL数据库接口实现、数据缓存服务
+    </description>
 
     <modules>
         <module>iot-model</module>
