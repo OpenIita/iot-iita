@@ -16,12 +16,32 @@ cd ..
 # `pwd` 执行系统命令并获得结果
 DEPLOY_DIR=`pwd`
 
-# 外部配置文件绝对目录,如果是目录需要/结尾，也可以直接指定文件
+# 如果没有指定外部配置文件,则使用默认的配置文件
+while getopts ":c:" opt
+do
+    case $opt in
+
+        c)
+        echo "配置文件路径$OPTARG"
+        USER_ASSIGN_CONFIG=$OPTARG
+        ;;
+        ?)
+        echo "未知参数"
+        exit 1;;
+    esac
+done
+
+
 # 如果指定的是目录,spring则会读取目录中的所有配置文件
-CONF_DIR=$DEPLOY_DIR/config
+if [ -n "$USER_ASSIGN_CONFIG" ]; then
+    CONF_DIR=$USER_ASSIGN_CONFIG
+else
+    CONF_DIR=$DEPLOY_DIR/config
+fi
+
 # SERVER_PORT=`sed '/server.port/!d;s/.*=//' config/application.properties | tr -d '\r'`
 # 获取应用的端口号
-SERVER_PORT=`sed -nr '/port: [0-9]+/ s/.*port: +([0-9]+).*/\1/p' config/application.yml|head -1`
+SERVER_PORT=`sed -nr '/port: [0-9]+/ s/.*port: +([0-9]+).*/\1/p' $CONF_DIR/application.yml|head -1`
 
 PIDS=`ps -f | grep java | grep "$CONF_DIR" |awk '{print $2}'`
 if [ "$1" = "status" ]; then
