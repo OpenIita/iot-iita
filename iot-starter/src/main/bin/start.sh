@@ -17,10 +17,14 @@ cd ..
 DEPLOY_DIR=`pwd`
 
 # 如果没有指定外部配置文件,则使用默认的配置文件
-while getopts ":c:" opt
+while getopts ":c:j:" opt
 do
     case $opt in
-
+        j)
+        # 如果没有指定外部配置文件,则使用默认的配置文件
+        echo "java命令行参数:$OPTARG"
+        JAVA_OPTS=$OPTARG
+        ;;
         c)
         echo "配置文件路径$OPTARG"
         USER_ASSIGN_CONFIG=$OPTARG
@@ -78,7 +82,7 @@ fi
 STDOUT_FILE=$LOGS_DIR/catalina.log
 
 # JVM Configuration
-JAVA_OPTS=" -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true "
+JAVA_OPTS+=" -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true "
 JAVA_DEBUG_OPTS=""
 if [ "$1" = "debug" ]; then
     JAVA_DEBUG_OPTS=" -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n "
