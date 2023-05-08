@@ -19,6 +19,7 @@
         <module>iot-message-core</module>
         <module>iot-vertx-event-bus</module>
         <module>iot-message-rocketmq</module>
+        <module>iot-message-notify</module>
     </modules>
 
     <dependencies>
