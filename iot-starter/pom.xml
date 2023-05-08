@@ -224,10 +224,20 @@
       </plugin>
 
       <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <appendAssemblyId>false</appendAssemblyId>
+          <archive>
+            <manifest>
+              <mainClass>cc.iotkit.Application</mainClass>
+            </manifest>
+          </archive>
           <descriptors>
             <descriptor>${project.parent.basedir}/iot-starter/src/main/resources/assemblies/standalone-package.xml</descriptor>
           </descriptors>
