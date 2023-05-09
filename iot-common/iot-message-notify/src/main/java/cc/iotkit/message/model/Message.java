@@ -11,4 +11,5 @@ import lombok.Data;
 public class Message {
     private String key;
     private String content;
+    private Long channelId;
 }
