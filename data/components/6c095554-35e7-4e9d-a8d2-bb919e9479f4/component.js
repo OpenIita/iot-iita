@@ -249,7 +249,7 @@ this.onReceive=function(head,type,payload){
     var fun = messageHandler[topic];
 
     if(fun){
-        result = fun(head,type,payload)
+        return fun(head,type,payload)
     }else{
         var arr= topic.split('/');
         if(arr.length<6){
@@ -260,23 +260,47 @@ this.onReceive=function(head,type,payload){
 
         //子设备注册
         if(topic.endsWith('/register')){
-            result =  subRegister(topic,{productKey:pk,deviceName:dn}, payload);
+            return subRegister(topic,{productKey:pk,deviceName:dn}, payload);
         }
-        else {
-            //数据上报
-            result = {
-                type: "report",
-                data: {
-                    productKey: pk,
-                    deviceName: dn,
-                    mid: payload.id,
-                    content: {
-                        topic: topic,
-                        payload: payload
-                    }
-                }
+
+      //数据上报
+      var reply=
+      {
+        productKey:pk,
+        deviceName:dn,
+        mid:payload.id,
+        content:{
+          topic:topic.replace("/s/","/c/")+"_reply",
+          payload:JSON.stringify({
+            id:payload.id,
+            method: payload.method+"_reply",
+            code:0,
+          })
+        }
+      };
+
+        var action={};
+        if(!topic.endsWith("_reply")){
+            //需要回复的消息
+            action={
+              type:"ack",
+              content:JSON.stringify(reply)
             }
         }
+
+      return {
+        type:"report",
+        data:{
+          productKey:pk,
+          deviceName:dn,
+          mid:payload.id,
+          content:{
+            topic:topic,
+            payload:payload
+          }
+        },
+        action:action
+      }
 
     }
     return result;
