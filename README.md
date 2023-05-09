@@ -115,22 +115,9 @@ git clone https://gitee.com/iotkit-open-source/iotkit-parent.git && cd iotkit-pa
 执行maven打包在iot-standalone模块中将打包后的iot-standalone.xx.zip上传到服务器，解压后进入bin目录，执行start.sh或start.bat启动。
 
 
-#### 技术文档
+#### 文档
 
-https://ztktkv.yuque.com/books/share/b96f1fee-41d8-4da3-9e22-b73aeb1e29ed?# 《iot平台技术文档》密码：rf4d    (注意：不要登录语雀)
-
-    
- **这是我宝贵的技术文档分享，请给本仓库点个star**   :star:  **支持一下，谢谢！**  :star:  :star:  :star:  :star: 
-
-
-#### 帮助文档
-
-https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《iot平台帮助文档》密码：cv9v (注意：不要登录语雀)
-
-
-#### 问题列表
-1、连接taosdata报错
-    解决办法：把项目里依赖引入的tdengine版本和自己安装的tdengine的版本保持一致，依赖2.0.40对应tdengine 2.6.x，依赖3.0.0对应 tdengine 3.0.x
+http://iotkit-open-source.gitee.io/document/
 
 
 
@@ -141,7 +128,7 @@ https://ztktkv.yuque.com/books/share/f57275e0-9033-4f70-afe4-d39a98f5fff5?# 《i
 
 交流QQ群: 940575749
 
-1群已满加我拉进群:
+微信群(添加我微信备注"进群"):
 
 ![输入图片说明](doc/ma.png) 
 
