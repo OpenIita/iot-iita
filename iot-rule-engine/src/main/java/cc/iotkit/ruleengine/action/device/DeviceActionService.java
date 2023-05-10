@@ -7,7 +7,7 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.ruleengine.action;
+package cc.iotkit.ruleengine.action.device;
 
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.DeviceComponentManager;

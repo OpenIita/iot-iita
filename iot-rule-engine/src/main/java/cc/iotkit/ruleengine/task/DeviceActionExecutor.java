@@ -10,8 +10,8 @@
 package cc.iotkit.ruleengine.task;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.ruleengine.action.DeviceAction;
-import cc.iotkit.ruleengine.action.DeviceActionService;
+import cc.iotkit.ruleengine.action.device.DeviceAction;
+import cc.iotkit.ruleengine.action.device.DeviceActionService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
