@@ -7,10 +7,12 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.ruleengine.action;
+package cc.iotkit.ruleengine.action.device;
 
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.ruleengine.action.Action;
+import cc.iotkit.ruleengine.action.device.DeviceActionService.Service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class DeviceAction implements Action<DeviceActionService.Service> {
+public class DeviceAction implements Action<Service> {
 
     public static final String TYPE = "device";
 

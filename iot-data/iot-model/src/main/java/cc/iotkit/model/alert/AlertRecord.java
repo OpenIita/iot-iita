@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlertConfig implements Owned<String> {
+public class AlertRecord implements Owned<String> {
 
     private String id;
 
@@ -37,33 +37,25 @@ public class AlertConfig implements Owned<String> {
     private String name;
 
     /**
-     * 告警严重度
+     * 告警严重度（1-5）
      */
     private String level;
 
     /**
-     * 关联规则引擎ID
+     * 告警时间
      */
-    private String ruleInfoId;
+    private Long alartTime;
 
     /**
-     * 关联消息转发模板ID
+     * 告警详情
      */
-    private String messageTemplateId;
+    private String details;
 
     /**
-     * 描述
+     * 是否已读
      */
-    private String description;
+    private Boolean read;
 
-    /**
-     * 是否启用
-     */
-    private Boolean enable;
 
-    /**
-     * 创建时间
-     */
-    private Long createAt;
 
 }
