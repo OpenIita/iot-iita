@@ -18,4 +18,5 @@ public class EmailConfig implements Serializable {
     private String to;
     private String title;
     private String content;
+    private Boolean smtpAuth;
 }

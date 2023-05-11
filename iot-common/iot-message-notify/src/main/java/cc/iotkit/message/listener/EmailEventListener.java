@@ -2,10 +2,11 @@ package cc.iotkit.message.listener;
 
 import cc.iotkit.message.model.EmailConfig;
 import cc.iotkit.message.model.Message;
-import cc.iotkit.message.notify.EventListener;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -17,9 +18,11 @@ import java.util.Properties;
  * description:
  **/
 @Slf4j
-public class EmailEventListener implements EventListener {
+@Component
+public class EmailEventListener implements MessageEventListener {
 
     @Override
+    @EventListener(condition = "message.channel()='Email'")
     public void doEvent(Message message) {
         EmailConfig emailConfig = new EmailConfig();
         JavaMailSenderImpl jms = new JavaMailSenderImpl();
@@ -28,10 +31,11 @@ public class EmailEventListener implements EventListener {
         jms.setPassword(emailConfig.getPassWord());
         jms.setDefaultEncoding("utf-8");
         Properties p = new Properties();
-        p.setProperty("mail.smtp.auth", "true");
+        p.setProperty("mail.smtp.auth", String.valueOf(null == emailConfig.getSmtpAuth() || emailConfig.getSmtpAuth()));
         jms.setJavaMailProperties(p);
         MimeMessage mimeMessage = jms.createMimeMessage();
         try {
+            String content = getContent(message);
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
             //收件人
             String[] split = emailConfig.getTo().split(",");
@@ -39,7 +43,7 @@ public class EmailEventListener implements EventListener {
             //标题
             messageHelper.setSubject(emailConfig.getTitle());
             //内容
-            messageHelper.setText(emailConfig.getContent(), true);
+            messageHelper.setText(content, true);
             //发件人
             messageHelper.setFrom(emailConfig.getFrom());
             jms.send(mimeMessage);

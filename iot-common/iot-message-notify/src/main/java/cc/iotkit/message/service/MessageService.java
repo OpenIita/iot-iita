@@ -1,6 +1,10 @@
 package cc.iotkit.message.service;
 
-import cc.iotkit.message.notify.EventManager;
+import cc.iotkit.message.event.MessageEvent;
+import cc.iotkit.message.model.Message;
+import org.springframework.context.ApplicationEventPublisher;
+
+import javax.annotation.Resource;
 
 /**
  * author: 石恒
@@ -8,9 +12,12 @@ import cc.iotkit.message.notify.EventManager;
  * description:
  **/
 public class MessageService {
+    @Resource
+    private ApplicationEventPublisher applicationEventPublisher;
 
-    public static void main(String[] args) {
-        EventManager em = new EventManager();
-        em.notify();
+    public void sendMessage() {
+        Message message = new Message();
+        applicationEventPublisher.publishEvent(new MessageEvent(message));
     }
+
 }

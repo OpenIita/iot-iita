@@ -1,5 +1,6 @@
 package cc.iotkit.message.notify;
 
+import cc.iotkit.message.listener.MessageEventListener;
 import cc.iotkit.message.model.Message;
 
 import java.util.HashMap;
@@ -13,21 +14,21 @@ import java.util.Map;
  **/
 public class EventManager {
 
-    Map<Enum<EventType>, List<EventListener>> listeners = new HashMap<>();
+    Map<Enum<EventType>, List<MessageEventListener>> listeners = new HashMap<>();
 
-    public void subscribe(Enum<EventType> eventType, EventListener listener) {
-        List<EventListener> users = listeners.get(eventType);
+    public void subscribe(Enum<EventType> eventType, MessageEventListener listener) {
+        List<MessageEventListener> users = listeners.get(eventType);
         users.add(listener);
     }
 
-    public void unsubscribe(Enum<EventType> eventType, EventListener listener) {
-        List<EventListener> users = listeners.get(eventType);
+    public void unsubscribe(Enum<EventType> eventType, MessageEventListener listener) {
+        List<MessageEventListener> users = listeners.get(eventType);
         users.remove(listener);
     }
 
     public void notify(Enum<EventType> eventType, Message result) {
-        List<EventListener> users = listeners.get(eventType);
-        for (EventListener listener : users) {
+        List<MessageEventListener> users = listeners.get(eventType);
+        for (MessageEventListener listener : users) {
             listener.doEvent(result);
         }
     }
