@@ -46,7 +46,7 @@ public class AlertConfigDataImpl implements IAlertConfigData {
 
     @Override
     public void deleteById(String s) {
-
+        alertConfigRepository.deleteById(s);
     }
 
     @Override
