@@ -1,8 +1,9 @@
-package cc.iotkit.message.notify;
+package cc.iotkit.message.listener;
 
+import cc.iotkit.message.config.VertxManager;
 import cc.iotkit.message.model.Message;
 import cc.iotkit.message.model.QyWechatMessage;
-import io.vertx.core.Vertx;
+import cc.iotkit.message.notify.EventListener;
 import io.vertx.ext.web.client.WebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,19 +21,14 @@ public class QyWechatEventListener implements EventListener {
 
     @Override
     public void doEvent(Message message) {
-        WebClient client = WebClient.create(Vertx.vertx());
+        WebClient client = WebClient.create(VertxManager.INSTANCE.getVertx());
         String url = String.format(baseUrl, message.getKey());
         QyWechatMessage qyWechatMessage = QyWechatMessage.builder()
                 .msgtype("text")
                 .text(QyWechatMessage.MessageContent.builder().content(message.getContent()).build())
                 .build();
-        client.post(url).sendJson(qyWechatMessage, rs -> {
-            if (rs.succeeded()) {
-                log.info("发送成功.");
-            }
-            if (rs.failed()) {
-                log.info("发送失败.");
-            }
-        });
+        client.post(url).sendJson(qyWechatMessage)
+                .onSuccess(response -> log.info("Received response with status code" + response.statusCode()))
+                .onFailure(err -> log.error("Something went wrong " + err.getMessage()));
     }
 }
