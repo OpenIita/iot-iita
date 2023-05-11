@@ -1,7 +1,6 @@
 package cc.iotkit.model.notify;
 
 import cc.iotkit.model.Id;
-import cc.iotkit.model.Owned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

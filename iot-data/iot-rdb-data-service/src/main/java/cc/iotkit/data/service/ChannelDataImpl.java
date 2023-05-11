@@ -6,6 +6,7 @@ import cc.iotkit.data.model.ChannelMapper;
 import cc.iotkit.data.model.TbChannel;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.notify.Channel;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -28,33 +30,39 @@ public class ChannelDataImpl implements IChannelData {
     private ChannelRepository channelRepository;
 
     @Override
-    public Channel findById(String s) {
-        return null;
+    public Channel findById(String id) {
+        return ChannelMapper.M.toDto(channelRepository.findById(id).orElse(null));
     }
 
     @Override
     public Channel save(Channel data) {
-        return null;
+        if (StringUtils.isBlank(data.getId())) {
+            data.setId(UUID.randomUUID().toString());
+        }
+        channelRepository.save(ChannelMapper.M.toVo(data));
+        return data;
     }
 
     @Override
     public Channel add(Channel data) {
-        return null;
+        data.setCreateAt(System.currentTimeMillis());
+        return save(data);
     }
 
     @Override
-    public void deleteById(String s) {
-
+    public void deleteById(String id) {
+        channelRepository.deleteById(id);
     }
 
     @Override
     public long count() {
-        return 0;
+        return channelRepository.count();
     }
 
     @Override
     public List<Channel> findAll() {
-        return null;
+        return channelRepository.findAll().stream().map(ChannelMapper.M::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override

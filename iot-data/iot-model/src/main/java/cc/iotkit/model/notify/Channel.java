@@ -26,4 +26,5 @@ public class Channel implements Id<String> {
     private String icon;
 
     private Long createAt;
+
 }

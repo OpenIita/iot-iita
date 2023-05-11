@@ -1,7 +1,6 @@
 package cc.iotkit.model.notify;
 
 import cc.iotkit.model.Id;
-import cc.iotkit.model.Owned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +18,12 @@ import lombok.NoArgsConstructor;
 public class ChannelTemplate implements Id<String> {
 
     private String id;
+
+    private String channelConfigId;
+
+    private String title;
+
+    private String content;
+
+    private Long createAt;
 }
