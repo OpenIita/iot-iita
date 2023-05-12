@@ -38,10 +38,8 @@ public class NotifyService {
         return iChannelConfigData.findAll();
     }
 
-    public void addChannelConfig() {
-        ChannelConfig channelConfig = ChannelConfig.builder()
-                .build();
-        iChannelConfigData.add(channelConfig);
+    public ChannelConfig addChannelConfig(ChannelConfig channelConfig) {
+        return iChannelConfigData.add(channelConfig);
     }
 
     public ChannelConfig getChannelConfigById(String id) {
@@ -52,27 +50,30 @@ public class NotifyService {
         return iChannelConfigData.save(channelConfig);
     }
 
-    public void delChannelConfigById(String id) {
+    public Boolean delChannelConfigById(String id) {
         iChannelConfigData.deleteById(id);
+        return Boolean.TRUE;
     }
 
-    public void getChannelTemplateList() {
-
+    public  List<ChannelTemplate> getChannelTemplateList() {
+        List<ChannelTemplate> channelTemplateList = iChannelTemplateData.findAll();
+        return channelTemplateList;
     }
 
-    public void addChannelTemplate() {
-
+    public ChannelTemplate addChannelTemplate(ChannelTemplate channelTemplate) {
+        return iChannelTemplateData.add(channelTemplate);
     }
 
     public ChannelTemplate getChannelTemplateById(String id) {
         return iChannelTemplateData.findById(id);
     }
 
-    public void updateChannelTemplateById(ChannelTemplate channelTemplate) {
-        iChannelTemplateData.save(channelTemplate);
+    public ChannelTemplate updateChannelTemplateById(ChannelTemplate channelTemplate) {
+        return iChannelTemplateData.save(channelTemplate);
     }
 
-    public void delChannelTemplateById(String id) {
+    public Boolean delChannelTemplateById(String id) {
         iChannelTemplateData.deleteById(id);
+        return Boolean.TRUE;
     }
 }
