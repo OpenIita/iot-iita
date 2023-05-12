@@ -31,7 +31,7 @@ public class TbAlertRecord {
     /**
      * 告警时间
      */
-    private Long alartTime;
+    private Long alertTime;
 
     /**
      * 告警详情

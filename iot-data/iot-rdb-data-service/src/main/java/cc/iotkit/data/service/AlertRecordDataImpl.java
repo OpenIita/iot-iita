@@ -70,10 +70,8 @@ public class AlertRecordDataImpl implements IAlertRecordData {
 
   @Override
   public Paging<AlertRecord> selectAlertConfigPage(PageRequest<AlertRecord> request) {
-    Pageable pageable = org.springframework.data.domain.PageRequest.of(request.getPageNo(),
-        request.getPageSize(), Sort.Direction.DESC, "alartTime");
-    Page<TbAlertRecord> alertRecordPage = alertRecordRepository.findAll(
-        Example.of(AlertRecordMapper.M.toVo(request.getData())), pageable);
+   // Pageable pageable = org.springframework.data.domain.PageRequest.of(request.getPageNo(),request.getPageSize(), Sort.Direction.DESC, "alartTime");
+    Page<TbAlertRecord> alertRecordPage = alertRecordRepository.findAll(Pageable.ofSize(request.getPageSize()).withPage(request.getPageNo() - 1));
     return new Paging<>(alertRecordPage.getTotalElements(),
         AlertRecordMapper.toDto(alertRecordPage.getContent()));
   }
