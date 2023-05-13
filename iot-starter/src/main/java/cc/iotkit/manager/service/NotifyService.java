@@ -55,9 +55,8 @@ public class NotifyService {
         return Boolean.TRUE;
     }
 
-    public  List<ChannelTemplate> getChannelTemplateList() {
-        List<ChannelTemplate> channelTemplateList = iChannelTemplateData.findAll();
-        return channelTemplateList;
+    public List<ChannelTemplate> getChannelTemplateList() {
+        return iChannelTemplateData.findAll();
     }
 
     public ChannelTemplate addChannelTemplate(ChannelTemplate channelTemplate) {

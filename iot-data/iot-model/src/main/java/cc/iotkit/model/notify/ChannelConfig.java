@@ -23,7 +23,21 @@ public class ChannelConfig implements Id<String> {
 
     private String title;
 
-    private String param;
+    private ChannelParam param;
 
     private Long createAt;
+
+    @Data
+    public static class ChannelParam {
+        private String userName;
+        private String passWord;
+        private String host;
+        private Integer port;
+        private Boolean mailSmtpAuth;
+        private String from;
+        private String to;
+
+    }
+
+
 }
