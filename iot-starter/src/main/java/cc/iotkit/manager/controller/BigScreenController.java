@@ -12,6 +12,7 @@ import cc.iotkit.model.screen.BigScreenApi;
 import cc.iotkit.screen.BigScreenManager;
 import cc.iotkit.screen.config.BigScreenConfig;
 import cc.iotkit.utils.AuthUtil;
+import cn.hutool.core.util.ZipUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,7 @@ public class BigScreenController {
 
     @Autowired
     private DataOwnerService dataOwnerService;
+
 
     @ApiOperation(value = "上传大屏资源包", httpMethod = "POST")
     @PostMapping("/uploadResourceFile")
@@ -111,8 +113,8 @@ public class BigScreenController {
         screenManager.previewApis(screen,screenApis);
     }
 
-    @ApiOperation(value = "发布接口", httpMethod = "POST")
-    @PostMapping("/publishApis/{id}")
+    @ApiOperation(value = "保存大屏接口", httpMethod = "POST")
+    @PostMapping("/saveScreenApis/{id}")
     public void publishApis(@PathVariable("id") String id,@RequestBody List<BigScreenApi> screenApis) {
         if (!StringUtils.hasLength(id)) {
             throw new BizException(ErrCode.ID_BLANK);
@@ -121,7 +123,7 @@ public class BigScreenController {
             throw new BizException(ErrCode.API_LIST_BLANK);
         }
         BigScreen screen = getAndCheckBigScreen(id);
-//        bigScreenApiData。(screen,screenApis);
+        bigScreenApiData.saveApiList(screen,screenApis);
     }
 
     @ApiOperation(value = "调试模式转换", httpMethod = "POST")
@@ -142,7 +144,7 @@ public class BigScreenController {
             throw new BizException(ErrCode.ID_BLANK);
         }
         Path jarPath = bigScreenConfig.getBigScreenFilePath(id);
-        if (!jarPath.resolve(screen.getResourceFile()).toFile().exists()) {
+        if (!jarPath.resolve("index.html").toFile().exists()) {
             throw new BizException(ErrCode.RESOURCE_FILE_NOT_FOUND);
         }
         BigScreen bigScreen = bigScreenData.findById(id);
@@ -191,6 +193,7 @@ public class BigScreenController {
 
         if (screen.STATE_RUNNING.equals(state)) {//发布状态
             screen.setState(screen.STATE_RUNNING);
+            ZipUtil.unzip(bigScreenConfig.getBigScreenFilePath(screen.getId()).toString()+"/"+screen.getResourceFile());
             screenManager.register(screen);
             screenManager.publish(screen);
         } else {//取消发布

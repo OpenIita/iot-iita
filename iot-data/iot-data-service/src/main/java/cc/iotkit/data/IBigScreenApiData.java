@@ -1,5 +1,6 @@
 package cc.iotkit.data;
 
+import cc.iotkit.model.screen.BigScreen;
 import cc.iotkit.model.screen.BigScreenApi;
 
 import java.util.List;
@@ -11,4 +12,6 @@ import java.util.List;
 public interface IBigScreenApiData extends IOwnedData<BigScreenApi, String>  {
 
     List<BigScreenApi> findByScreenId(String id);
+
+    void saveApiList(BigScreen screen, List<BigScreenApi> screenApis);
 }

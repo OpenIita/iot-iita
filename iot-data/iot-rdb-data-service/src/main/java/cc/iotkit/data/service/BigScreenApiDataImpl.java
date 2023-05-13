@@ -7,6 +7,7 @@ import cc.iotkit.data.model.BigScreenApiMapper;
 import cc.iotkit.data.model.TbBigScreenApi;
 import cc.iotkit.data.model.TbBigScreenApiMapping;
 import cc.iotkit.model.Paging;
+import cc.iotkit.model.screen.BigScreen;
 import cc.iotkit.model.screen.BigScreenApi;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,31 @@ public class BigScreenApiDataImpl implements IBigScreenApiData {
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
                 BigScreenApiMapper.toDto(paged.getContent()));
+    }
+
+    @Override
+    @Transactional
+    public void saveApiList(BigScreen screen, List<BigScreenApi> screenApis) {
+        List<TbBigScreenApiMapping> bigScreenApiMappings = bigScreenApiMappingRepository.findByScreenId(screen.getId());
+        if (bigScreenApiMappings.size() > 0) {
+            bigScreenApiMappings.forEach((bigScreenApiMapping) -> {
+                bigScreenApiRepository.deleteById(bigScreenApiMapping.getApiId());
+            });
+            bigScreenApiMappingRepository.deleteByScreenId(screen.getId());
+        }
+        screenApis.forEach((item) -> {
+            if (StringUtils.isBlank(item.getId())) {
+                item.setId(UUID.randomUUID().toString());
+                item.setCreateAt(System.currentTimeMillis());
+                item.setUid(screen.getUid());
+            }
+            bigScreenApiMappingRepository.save(new TbBigScreenApiMapping(
+                    UUID.randomUUID().toString(),
+                    screen.getId(),
+                    item.getId()
+            ));
+            bigScreenApiRepository.save(BigScreenApiMapper.M.toVo(item));
+        });
     }
 
     @Override

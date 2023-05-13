@@ -33,7 +33,7 @@ public class BigScreenManager {
             return;
         }
         ScreenComponent screenComponent=new ScreenComponent();
-        screenComponent.create(screen.getPort());
+        screenComponent.create(screen.getPort(),screen.getResourceFile().split(".")[0]);
         screens.put(id,screenComponent);
     }
 

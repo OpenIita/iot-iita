@@ -7,7 +7,6 @@ import cc.iotkit.data.dao.BigScreenApiRepository;
 import cc.iotkit.data.dao.BigScreenRepository;
 import cc.iotkit.data.model.BigScreenMapper;
 import cc.iotkit.data.model.TbBigScreen;
-import cc.iotkit.data.model.TbBigScreenApiMapping;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.screen.BigScreen;
 import org.apache.commons.lang3.StringUtils;
@@ -83,28 +82,6 @@ public class BigScreenDataImpl implements IBigScreenData {
         }
         ReflectUtil.copyNoNulls(data, vo);
         bigScreenRepository.save(vo);
-        List<TbBigScreenApiMapping> bigScreenApiMappings = bigScreenApiMappingRepository.findByScreenId(data.getId());
-        if(bigScreenApiMappings.size()>0){
-            bigScreenApiMappings.forEach((bigScreenApiMapping)->{
-                bigScreenApiRepository.deleteById(bigScreenApiMapping.getApiId());
-            });
-            bigScreenApiMappingRepository.deleteByScreenId(data.getId());
-        }
-//        if(data.getBigScreenApis().size()>0){
-//            data.getBigScreenApis().forEach((item) ->{
-//                if (StringUtils.isBlank(item.getId())) {
-//                    item.setId(UUID.randomUUID().toString());
-//                    item.setCreateAt(System.currentTimeMillis());
-//                    item.setUid(data.getUid());
-//                }
-//                bigScreenApiMappingRepository.save(new TbBigScreenApiMapping(
-//                        UUID.randomUUID().toString(),
-//                        data.getId(),
-//                        item.getId()
-//                ));
-//                bigScreenApiRepository.save(BigScreenApiMapper.M.toVo(item));
-//            });
-//        }
         return data;
     }
 

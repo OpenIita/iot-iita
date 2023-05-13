@@ -42,7 +42,7 @@ public class ScreenApiHandle {
 
     /**
      * 每个请求的处理方法要执行对应的请求脚本然后将结果返回给http服务器
-     * 先根据
+     *
      */
     public String httpReq(HttpServerRequest req, HttpServerResponse res) {
         String response="";

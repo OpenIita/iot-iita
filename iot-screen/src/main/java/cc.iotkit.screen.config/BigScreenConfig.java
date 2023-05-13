@@ -14,8 +14,11 @@ import java.nio.file.Paths;
 @Configuration
 @Data
 public class BigScreenConfig {
+
     @Value("${bigScreen.dir:./data/screens}")
     private String bigScreenDir;
+    @Value("${bigScreen.admin:/iotkit/screen}")
+    public String bigScreenAdmin;
 
     public Path getBigScreenFilePath(String bigScreenId) {
         return Paths.get(bigScreenDir, bigScreenId)

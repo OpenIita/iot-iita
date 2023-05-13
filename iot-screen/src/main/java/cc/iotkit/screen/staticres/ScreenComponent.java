@@ -32,9 +32,9 @@ public class ScreenComponent {
         apiHandle.debugMode=state;
     }
 
-    public void create(int port) {
+    public void create(int port,String packageName) {
         vertx = Vertx.vertx();
-        screenVerticle = new ScreenVerticle(port);
+        screenVerticle = new ScreenVerticle(port,packageName);
     }
 
     public void setApiHandle(ScreenApiHandle screenApiHandle) {

@@ -1,8 +1,8 @@
 package cc.iotkit.screen.staticres;
 
 import cc.iotkit.screen.api.ScreenApiHandle;
+import cc.iotkit.screen.config.BigScreenConfig;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -20,10 +20,15 @@ public class ScreenVerticle extends AbstractVerticle {
 
     private int port;
 
+    private String packageName;
+
     private ScreenApiHandle apiHandler;
 
-    public ScreenVerticle(int port) {
+    private BigScreenConfig screenConfig = new BigScreenConfig();
+
+    public ScreenVerticle(int port,String packageName) {
         this.port = port;
+        this.packageName = packageName;
     }
 
     public void setApiHandler(ScreenApiHandle apiHandler) {
@@ -32,31 +37,31 @@ public class ScreenVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-        httpServer=vertx.createHttpServer();
+        httpServer = vertx.createHttpServer();
         Router router = Router.router(vertx);
-        router.route("/iotkit/screen/*").handler(StaticHandler.create("G:/OpenSourceCode/mainCode/iotkit-parent/data/screens/908b89d3-0c2e-4347-a71a-cf356ccc6273"));
-        router.get("/iotkit/screen").handler(ctx -> {
-            ctx.response().sendFile("G:/OpenSourceCode/mainCode/iotkit-parent/data/screens/908b89d3-0c2e-4347-a71a-cf356ccc6273/index.html");
+        router.route(screenConfig.bigScreenAdmin + "/*").handler(StaticHandler.create(screenConfig.getBigScreenFilePath(apiHandler.getScreenId()).toString()+"/"+packageName));
+        router.get(screenConfig.bigScreenAdmin).handler(ctx -> {
+            ctx.response().sendFile(screenConfig.getBigScreenFilePath(apiHandler.getScreenId()).toString() +"/"+packageName+ "/index.html");
         });
         router.get("/*").handler(ctx -> {
-            String res=apiHandler.httpReq(ctx.request(),ctx.response());
+            String res = apiHandler.httpReq(ctx.request(), ctx.response());
             ctx.response().end(res);
         });
         router.post("/*").handler(BodyHandler.create()).handler(ctx -> {
-            String res=apiHandler.httpReq(ctx.request(),ctx.response());
+            String res = apiHandler.httpReq(ctx.request(), ctx.response());
             ctx.response().end(res);
         });
-        httpServer.requestHandler(router).listen(port);
+        httpServer.requestHandler(router).listen(port, (http) -> {
+            if (http.succeeded()) {
+                log.info("screen server create succeed,port:{}", port);
+            } else {
+                log.error("screen server create failed", http.cause());
+            }
+        });
     }
 
     @Override
     public void stop() throws Exception {
-        httpServer.close(voidAsyncResult -> log.info("close httpServer server..."));
-    }
-
-    public static void main(String[] args) {
-        Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(new ScreenVerticle(2222));
-        System.out.println("服务器已启动，请访问 http://localhost:2222");
+        httpServer.close(voidAsyncResult -> log.info("close screen server..."));
     }
 }
