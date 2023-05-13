@@ -90,7 +90,7 @@ public class ProtocolController {
         String id = component.getId();
         //jar包上传后生成的id
         if (!StringUtils.hasLength(id)) {
-            throw new BizException(ErrCode.COMPONENT_ID_BLANK);
+            throw new BizException(ErrCode.ID_BLANK);
         }
         Path jarPath = componentConfig.getComponentFilePath(id);
         if (!jarPath.resolve(component.getJarFile()).toFile().exists()) {
@@ -114,7 +114,7 @@ public class ProtocolController {
     public void saveComponent(ProtocolComponent component) {
         String id = component.getId();
         if (!StringUtils.hasLength(id)) {
-            throw new BizException(ErrCode.COMPONENT_ID_BLANK);
+            throw new BizException(ErrCode.ID_BLANK);
         }
         Path jarPath = componentConfig.getComponentFilePath(id);
         if (!jarPath.resolve(component.getJarFile()).toFile().exists()) {
