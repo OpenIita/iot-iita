@@ -1,3 +1,4 @@
+/*
 package cc.iotkit.message.listener;
 
 import cc.iotkit.message.config.VertxManager;
@@ -8,11 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+*/
 /**
  * author: 石恒
  * date: 2023-05-08 15:09
  * description:
- **/
+ **//*
+
 @Slf4j
 @Component
 public class QyWechatEventListener implements MessageEventListener {
@@ -21,7 +24,7 @@ public class QyWechatEventListener implements MessageEventListener {
 
     @Override
     @EventListener(condition = "message.channel()='QyWechat'")
-    public void doEvent(Message message) {
+    public Boolean doEvent(Message message) {
         WebClient client = WebClient.create(VertxManager.INSTANCE.getVertx());
         String url = String.format(baseUrl, message.getKey());
         QyWechatMessage qyWechatMessage = QyWechatMessage.builder()
@@ -31,5 +34,7 @@ public class QyWechatEventListener implements MessageEventListener {
         client.post(url).sendJson(qyWechatMessage)
                 .onSuccess(response -> log.info("Received response with status code" + response.statusCode()))
                 .onFailure(err -> log.error("Something went wrong " + err.getMessage()));
+        return Boolean.TRUE;
     }
 }
+*/

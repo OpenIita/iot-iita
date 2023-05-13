@@ -1,13 +1,19 @@
 package cc.iotkit.message.listener;
 
-import cc.iotkit.message.model.EmailConfig;
-import cc.iotkit.message.model.Message;
+import cc.iotkit.data.IChannelConfigData;
+import cc.iotkit.data.IChannelTemplateData;
+import cc.iotkit.data.INotifyMessageData;
+import cc.iotkit.message.enums.MessageTypeEnum;
+import cc.iotkit.message.model.MessageSend;
+import cc.iotkit.model.notify.ChannelConfig;
+import cc.iotkit.model.notify.NotifyMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -21,34 +27,66 @@ import java.util.Properties;
 @Component
 public class EmailEventListener implements MessageEventListener {
 
+    @Resource
+    private IChannelConfigData iChannelConfigData;
+    @Resource
+    private IChannelTemplateData iChannelTemplateData;
+
+    @Resource
+    private INotifyMessageData iNotifyMessageData;
+
     @Override
-    @EventListener(condition = "message.channel()='Email'")
-    public void doEvent(Message message) {
-        EmailConfig emailConfig = new EmailConfig();
+    @EventListener(condition = "message.code='Email'")
+    public void doEvent(MessageSend message) {
+
+        ChannelConfig channelConfig = getChannelConfig(message.getChannelTemplate().getChannelConfigId());
+        ChannelConfig.ChannelParam param = channelConfig.getParam();
+
         JavaMailSenderImpl jms = new JavaMailSenderImpl();
-        jms.setHost(emailConfig.getHost());
-        jms.setUsername(emailConfig.getUserName());
-        jms.setPassword(emailConfig.getPassWord());
+        jms.setHost(param.getHost());
+        jms.setUsername(param.getUserName());
+        jms.setPassword(param.getPassWord());
         jms.setDefaultEncoding("utf-8");
         Properties p = new Properties();
-        p.setProperty("mail.smtp.auth", String.valueOf(null == emailConfig.getSmtpAuth() || emailConfig.getSmtpAuth()));
+        p.setProperty("mail.smtp.auth", String.valueOf(null == param.getMailSmtpAuth() || param.getMailSmtpAuth()));
         jms.setJavaMailProperties(p);
         MimeMessage mimeMessage = jms.createMimeMessage();
+
         try {
-            String content = getContent(message);
+            String content = getContent(message.getParam(), message.getChannelTemplate().getContent());
+
+            String notifyMessageId = addNotifyMessage(content, message.getMessageType());
+
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
             //收件人
-            String[] split = emailConfig.getTo().split(",");
+            String[] split = param.getTo().split(",");
             messageHelper.setTo(split);
             //标题
-            messageHelper.setSubject(emailConfig.getTitle());
+            messageHelper.setSubject(channelConfig.getTitle());
             //内容
             messageHelper.setText(content, true);
             //发件人
-            messageHelper.setFrom(emailConfig.getFrom());
+            messageHelper.setFrom(param.getFrom());
             jms.send(mimeMessage);
+
+            iNotifyMessageData.save(NotifyMessage.builder().id(notifyMessageId).status(Boolean.TRUE).build());
         } catch (MessagingException e) {
             log.error("发送邮件失败.", e);
         }
+    }
+
+    @Override
+    public ChannelConfig getChannelConfig(String channelConfigId) {
+        return iChannelConfigData.findById(channelConfigId);
+    }
+
+    @Override
+    public String addNotifyMessage(String content, MessageTypeEnum messageType) {
+        NotifyMessage notifyMessage = iNotifyMessageData.save(NotifyMessage.builder()
+                .content(content)
+                .messageType(messageType.getCode())
+                .status(Boolean.FALSE)
+                .build());
+        return notifyMessage.getId();
     }
 }

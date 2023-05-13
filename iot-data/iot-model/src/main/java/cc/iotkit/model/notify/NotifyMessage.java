@@ -7,26 +7,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * author: 石恒
- * date: 2023-05-11 16:30
- * description:
- **/
+ * @Author: 石恒
+ * @Date: 2023/5/13 15:22
+ * @Description:
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChannelTemplate implements Id<String> {
+public class NotifyMessage implements Id<String> {
 
     private String id;
 
-    private String channelConfigId;
-
-    private String channelCode;
-
-    private String title;
-
     private String content;
 
-    private Long createAt;
+    private String messageType;
 
+    private Boolean status;
+
+    private Long createAt;
 }

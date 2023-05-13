@@ -1,6 +1,6 @@
 package cc.iotkit.message.event;
 
-import cc.iotkit.message.model.Message;
+import cc.iotkit.message.model.MessageSend;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -10,18 +10,18 @@ import org.springframework.context.ApplicationEvent;
  **/
 
 public class MessageEvent extends ApplicationEvent {
-    private Message message;
+    private MessageSend message;
 
-    public MessageEvent(Message message) {
+    public MessageEvent(MessageSend message) {
         super(message);
         this.message = message;
     }
 
-    public Message getMessage() {
+    public MessageSend getMessage() {
         return message;
     }
 
-    public void setMessage(Message message) {
+    public void setMessage(MessageSend message) {
         this.message = message;
     }
 }

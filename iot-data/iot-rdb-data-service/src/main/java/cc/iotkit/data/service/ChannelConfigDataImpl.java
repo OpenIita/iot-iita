@@ -67,10 +67,10 @@ public class ChannelConfigDataImpl implements IChannelConfigData {
 
     @Override
     public Paging<ChannelConfig> findAll(int page, int size) {
-        Page<TbChannelConfig> tbDeviceConfigs = channelConfigRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
+        Page<TbChannelConfig> tbChannelConfigs = channelConfigRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(
-                tbDeviceConfigs.getTotalElements(),
-                tbDeviceConfigs.getContent()
+                tbChannelConfigs.getTotalElements(),
+                tbChannelConfigs.getContent()
                         .stream().map(ChannelConfigMapper.M::toDto)
                         .collect(Collectors.toList())
         );

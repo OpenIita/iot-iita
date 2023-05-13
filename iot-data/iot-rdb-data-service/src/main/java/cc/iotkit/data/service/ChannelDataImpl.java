@@ -67,10 +67,10 @@ public class ChannelDataImpl implements IChannelData {
 
     @Override
     public Paging<Channel> findAll(int page, int size) {
-        Page<TbChannel> tbDeviceConfigs = channelRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
+        Page<TbChannel> tbChannels = channelRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(
-                tbDeviceConfigs.getTotalElements(),
-                tbDeviceConfigs.getContent()
+                tbChannels.getTotalElements(),
+                tbChannels.getContent()
                         .stream().map(ChannelMapper.M::toDto)
                         .collect(Collectors.toList())
         );

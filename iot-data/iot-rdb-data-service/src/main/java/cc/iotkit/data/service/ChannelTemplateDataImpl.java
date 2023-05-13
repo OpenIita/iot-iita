@@ -67,10 +67,10 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData {
 
     @Override
     public Paging<ChannelTemplate> findAll(int page, int size) {
-        Page<TbChannelTemplate> tbDeviceConfigs = channelTemplateRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
+        Page<TbChannelTemplate> tbChannelTemplates = channelTemplateRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(
-                tbDeviceConfigs.getTotalElements(),
-                tbDeviceConfigs.getContent()
+                tbChannelTemplates.getTotalElements(),
+                tbChannelTemplates.getContent()
                         .stream().map(ChannelTemplateMapper.M::toDto)
                         .collect(Collectors.toList())
         );

@@ -1,6 +1,8 @@
 package cc.iotkit.message.listener;
 
-import cc.iotkit.message.model.Message;
+import cc.iotkit.message.enums.MessageTypeEnum;
+import cc.iotkit.message.model.MessageSend;
+import cc.iotkit.model.notify.ChannelConfig;
 
 import java.util.Map;
 
@@ -11,14 +13,16 @@ import java.util.Map;
  **/
 public interface MessageEventListener {
 
-    void doEvent(Message message);
+    void doEvent(MessageSend message);
 
-    default String getContent(Message message) {
-        String content = message.getContent();
-        Map<String, String> param = message.getParam();
+    default String getContent(Map<String, String> param, String content) {
         for (String key : param.keySet()) {
             content = content.replaceAll("${" + key + "}", param.get(key));
         }
         return content;
     }
+
+    ChannelConfig getChannelConfig(String channelConfigId);
+
+    String addNotifyMessage(String content, MessageTypeEnum messageType);
 }

@@ -1,5 +1,6 @@
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.manager.service.NotifyService;
 import cc.iotkit.model.notify.Channel;
@@ -95,6 +96,12 @@ public class NotifyController {
     @PostMapping("/channel/template/delById")
     public Boolean delChannelTemplateById(@RequestBody @Valid Request<String> request) {
         return notifyService.delChannelTemplateById(request.getData());
+    }
+
+    @ApiOperation("消息列表")
+    @PostMapping("/message/getList")
+    public void messageList(@RequestBody @Valid PageRequest<Void> request) {
+        notifyService.getNotifyMessageList(request.getPageNo(), request.getPageSize());
     }
 
 }
