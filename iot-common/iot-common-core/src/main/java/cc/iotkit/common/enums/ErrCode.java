@@ -31,12 +31,11 @@ public enum ErrCode implements IEnum{
     SEND_DESTINATION_NOT_FOUND(00000000, "发送目标不存在"),
     MSG_CONVERT_ERROR(00000000, "消息转换失败"),
     DEVICE_REGISTER_ERROR(00000000, "设备注册失败"),
-    COMPONENT_ID_BLANK(00000000, "通讯组件ID为空"),
     COMPONENT_JAR_NOT_FOUND(00000000, "通讯组件JAR包为空"),
     COMPONENT_ALREADY(00000000, "通讯组件已经存在"),
     SAVE_COMPONENT_SCRIPT_ERROR(00000000, "保存通讯组件脚本失败"),
     SAVE_CONVERT_SCRIPT_ERROR(00000000, "保存转换器脚本失败"),
-    ADD_COMPONENT_ERROR(00000000, "添加通讯组件失败"),
+    ADD_COMPONENT_ERROR(00000000, "保存通讯组件失败"),
     ADD_CONVERT_ERROR(00000000, "添加转换器失败"),
     CONVERT_NOT_FOUND(00000000, "转换器不存在"),
     DELETE_CONVERT_ERROR(00000000, "删除转换器失败"),
@@ -46,10 +45,23 @@ public enum ErrCode implements IEnum{
     INIT_PRODUCER_ERROR(00000000, "初始化MQ生产者失败"),
     SEND_MSG_ERROR(00000000, "发送消息失败"),
 
+    /**
+     * 大屏通用异常段
+     * */
+    RESOURCE_FILE_NOT_FOUND(00000000, "资源包为空"),
+    BIG_SCREEN_NOT_FOUND(00000000, "大屏不存在"),
+    BIG_SCREEN_ALREADY(00000000, "大屏已存在"),
+    ADD_BIG_SCREEN_ERROR(00000000, "保存大屏失败"),
+    DELETE_BIG_SCREEN_ERROR(00000000, "删除大屏资源失败"),
+    SCREEN_API_NOT_FOUND(00000000, "大屏接口不存在"),
+    ADD_SCREEN_API_ERROR(00000000, "添加大屏接口失败"),
+    SCREEN_PUBLISH_ERROR(00000000, "大屏发布失败"),
+    API_LIST_BLANK(00000000, "接口列表为空"),
 
     /**
      * 业务通用异常段
      * */
+    ID_BLANK(00000000, "ID为空"),
     TASK_NOT_SUPPORT_RENEW(00000000, "任务不支持续订"),
     GROUP_ALREADY(00000000, "分组已经存在"),
     GROUP_NOT_FOUND(00000000, "分组不存在"),
