@@ -3,6 +3,7 @@ package cc.iotkit.message.listener;
 import cc.iotkit.message.enums.MessageTypeEnum;
 import cc.iotkit.message.event.MessageEvent;
 import cc.iotkit.model.notify.ChannelConfig;
+import cc.iotkit.model.notify.NotifyMessage;
 
 import java.util.Map;
 
@@ -24,5 +25,5 @@ public interface MessageEventListener {
 
     ChannelConfig getChannelConfig(String channelConfigId);
 
-    String addNotifyMessage(String content, MessageTypeEnum messageType);
+    NotifyMessage addNotifyMessage(String content, MessageTypeEnum messageType);
 }

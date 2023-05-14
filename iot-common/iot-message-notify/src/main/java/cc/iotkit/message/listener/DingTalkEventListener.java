@@ -8,6 +8,7 @@ import cc.iotkit.message.event.MessageEvent;
 import cc.iotkit.message.model.DingTalkMessage;
 import cc.iotkit.message.model.MessageSend;
 import cc.iotkit.model.notify.ChannelConfig;
+import cc.iotkit.model.notify.NotifyMessage;
 import io.vertx.ext.web.client.WebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -52,7 +53,7 @@ public class DingTalkEventListener implements MessageEventListener {
     }
 
     @Override
-    public String addNotifyMessage(String content, MessageTypeEnum messageType) {
+    public NotifyMessage addNotifyMessage(String content, MessageTypeEnum messageType) {
         return null;
     }
 }

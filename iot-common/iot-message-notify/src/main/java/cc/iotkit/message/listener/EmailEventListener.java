@@ -56,7 +56,7 @@ public class EmailEventListener implements MessageEventListener {
         try {
             String content = getContentFormat(message.getParam(), message.getChannelTemplate().getContent());
 
-            String notifyMessageId = addNotifyMessage(content, message.getMessageType());
+            NotifyMessage notifyMessage = addNotifyMessage(content, message.getMessageType());
 
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
             //收件人
@@ -69,8 +69,8 @@ public class EmailEventListener implements MessageEventListener {
             //发件人
             messageHelper.setFrom(param.getFrom());
             jms.send(mimeMessage);
-
-            iNotifyMessageData.save(NotifyMessage.builder().id(notifyMessageId).status(Boolean.TRUE).build());
+            notifyMessage.setStatus(Boolean.TRUE);
+            iNotifyMessageData.save(notifyMessage);
         } catch (MessagingException e) {
             log.error("发送邮件失败.", e);
         }
@@ -82,12 +82,11 @@ public class EmailEventListener implements MessageEventListener {
     }
 
     @Override
-    public String addNotifyMessage(String content, MessageTypeEnum messageType) {
-        NotifyMessage notifyMessage = iNotifyMessageData.save(NotifyMessage.builder()
+    public NotifyMessage addNotifyMessage(String content, MessageTypeEnum messageType) {
+        return iNotifyMessageData.add(NotifyMessage.builder()
                 .content(content)
                 .messageType(messageType.getCode())
                 .status(Boolean.FALSE)
                 .build());
-        return notifyMessage.getId();
     }
 }
