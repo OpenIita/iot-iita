@@ -25,4 +25,6 @@ public class TbNotifyMessage {
     private Boolean status;
 
     private Long createAt;
+
+    private Long updateAt;
 }

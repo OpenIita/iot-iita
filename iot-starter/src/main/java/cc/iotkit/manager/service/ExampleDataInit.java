@@ -18,6 +18,7 @@ import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.notify.Channel;
+import cc.iotkit.model.notify.NotifyMessage;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
@@ -86,6 +87,8 @@ public class ExampleDataInit implements SmartInitializingSingleton {
     private IDbStructureData dbStructureData;
     @Autowired
     private IChannelData iChannelData;
+    @Autowired
+    private INotifyMessageData iNotifyMessageData;
 
     @Override
     public void afterSingletonsInstantiated() {
@@ -138,6 +141,8 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                     initData("virtualDevice", virtualDeviceData, new TypeReference<List<VirtualDevice>>() {
                     });
                     initData("channel", iChannelData, new TypeReference<List<Channel>>() {
+                    });
+                    initData("notifyMessage", iNotifyMessageData, new TypeReference<List<NotifyMessage>>() {
                     });
 
                     log.info("init data finished.");

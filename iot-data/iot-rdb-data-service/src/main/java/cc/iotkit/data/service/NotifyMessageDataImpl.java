@@ -40,13 +40,17 @@ public class NotifyMessageDataImpl implements INotifyMessageData {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
-        notifyMessageRepository.save(NotifyMessageMapper.M.toVo(data));
+        data.setUpdateAt(System.currentTimeMillis());
+        TbNotifyMessage tbNotifyMessage = NotifyMessageMapper.M.toVo(data);
+        notifyMessageRepository.save(tbNotifyMessage);
         return data;
     }
 
     @Override
     public NotifyMessage add(NotifyMessage data) {
-        data.setCreateAt(System.currentTimeMillis());
+        Long current = System.currentTimeMillis();
+        data.setCreateAt(current);
+        data.setUpdateAt(current);
         return save(data);
     }
 
