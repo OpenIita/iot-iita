@@ -3,6 +3,9 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.manager.service.NotifyService;
+import cc.iotkit.message.enums.MessageTypeEnum;
+import cc.iotkit.message.model.Message;
+import cc.iotkit.message.service.MessageService;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.notify.Channel;
 import cc.iotkit.model.notify.ChannelConfig;
@@ -18,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * author: 石恒
@@ -33,6 +38,8 @@ public class NotifyController {
 
     @Resource
     private NotifyService notifyService;
+    @Resource
+    private MessageService messageService;
 
     @ApiOperation("获取通道类型列表")
     @PostMapping("/channel/getList")
@@ -104,6 +111,14 @@ public class NotifyController {
     @PostMapping("/message/getList")
     public Paging<NotifyMessage> messageList(@RequestBody @Valid PageRequest<Void> request) {
         return notifyService.getNotifyMessageList(request.getPageNo(), request.getPageSize());
+    }
+
+    @ApiOperation("测试告警信息发送")
+    @PostMapping("/message/testNotify")
+    public void testNotify() {
+        Map<String, String> param = new HashMap<>();
+        param.put("title", "电磁炉");
+        messageService.sendMessage(Message.builder().messageType(MessageTypeEnum.ALERT).param(param).channelTemplateId("e8697345-15d1-451a-9e6e-dbae16dd0367").build());
     }
 
 }

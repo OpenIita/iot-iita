@@ -2,7 +2,6 @@ package cc.iotkit.message.notify;
 
 import cc.iotkit.message.listener.MessageEventListener;
 import cc.iotkit.message.model.Message;
-import cc.iotkit.message.model.MessageSend;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +28,6 @@ public class EventManager {
 
     public void notify(Enum<EventType> eventType, Message message) {
         List<MessageEventListener> users = listeners.get(eventType);
-        for (MessageEventListener listener : users) {
-            listener.doEvent(MessageSend.builder().build());
-        }
     }
 
 }

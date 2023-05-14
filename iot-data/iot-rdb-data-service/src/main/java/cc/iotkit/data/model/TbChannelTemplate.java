@@ -20,6 +20,8 @@ public class TbChannelTemplate {
 
     private String channelConfigId;
 
+    private String channelCode;
+
     private String title;
 
     private String content;

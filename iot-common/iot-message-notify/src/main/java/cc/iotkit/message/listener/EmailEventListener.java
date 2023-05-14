@@ -4,6 +4,7 @@ import cc.iotkit.data.IChannelConfigData;
 import cc.iotkit.data.IChannelTemplateData;
 import cc.iotkit.data.INotifyMessageData;
 import cc.iotkit.message.enums.MessageTypeEnum;
+import cc.iotkit.message.event.MessageEvent;
 import cc.iotkit.message.model.MessageSend;
 import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.NotifyMessage;
@@ -36,9 +37,9 @@ public class EmailEventListener implements MessageEventListener {
     private INotifyMessageData iNotifyMessageData;
 
     @Override
-    @EventListener(condition = "message.code='Email'")
-    public void doEvent(MessageSend message) {
-
+    @EventListener
+    public void doEvent(MessageEvent messageEvent) {
+        MessageSend message = messageEvent.getMessage();
         ChannelConfig channelConfig = getChannelConfig(message.getChannelTemplate().getChannelConfigId());
         ChannelConfig.ChannelParam param = channelConfig.getParam();
 

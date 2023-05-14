@@ -1,6 +1,7 @@
 package cc.iotkit.message.model;
 
 import cc.iotkit.message.enums.MessageTypeEnum;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
  * description:
  **/
 @Data
+@Builder
 public class Message {
     private MessageTypeEnum messageType;
     private Map<String, String> param;

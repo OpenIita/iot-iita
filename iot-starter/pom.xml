@@ -146,6 +146,12 @@
       <artifactId>iot-message-core</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>cc.iotkit</groupId>
+      <artifactId>iot-message-notify</artifactId>
+      <version>0.4.3-SNAPSHOT</version>
+    </dependency>
+
     <!--内置vertx消息总线-->
     <dependency>
       <groupId>cc.iotkit</groupId>
