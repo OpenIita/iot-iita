@@ -11,6 +11,7 @@ import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.NotifyMessage;
 import io.vertx.ext.web.client.WebClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -31,6 +32,7 @@ public class DingTalkEventListener implements MessageEventListener {
     private IChannelTemplateData iChannelTemplateData;
 
     @Override
+    @EventListener(condition = "#messageEvent.message.code=='DingTalk'")
     public void doEvent(MessageEvent messageEvent) {
         WebClient client = WebClient.create(VertxManager.INSTANCE.getVertx());
         MessageSend message = messageEvent.getMessage();

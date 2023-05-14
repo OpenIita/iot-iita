@@ -37,7 +37,7 @@ public class EmailEventListener implements MessageEventListener {
     private INotifyMessageData iNotifyMessageData;
 
     @Override
-    @EventListener
+    @EventListener(condition = "#messageEvent.message.code=='Email'")
     public void doEvent(MessageEvent messageEvent) {
         MessageSend message = messageEvent.getMessage();
         ChannelConfig channelConfig = getChannelConfig(message.getChannelTemplate().getChannelConfigId());
