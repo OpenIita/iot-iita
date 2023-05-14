@@ -11,7 +11,9 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Request;
+import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.manager.service.AlertService;
+import cc.iotkit.manager.service.WsServerEndpoint;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.alert.AlertConfig;
 import cc.iotkit.model.alert.AlertRecord;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @Api(tags = {"告警中心"})
 @Slf4j
 @RestController
@@ -33,7 +37,6 @@ public class AlertController {
 
     @Autowired
     private AlertService alertService;
-
 
     @ApiOperation("新增告警中心配置")
     @PostMapping("/createAlertConfig")
@@ -66,7 +69,11 @@ public class AlertController {
         return alertService.selectAlertRecordPage(request);
     }
 
-
+    @ApiOperation("查询告警消息websoekct测试")
+    @PostMapping("/sendAertMsgTest")
+    public void sendAertMsgTest(@RequestBody @Valid Request<AlertRecord> request) throws IOException {
+        WsServerEndpoint.sendMessage(JsonUtil.toJsonString(request.getData()));
+    }
 
 
 }
