@@ -53,7 +53,7 @@ public class EmailEventListener implements MessageEventListener {
         MimeMessage mimeMessage = jms.createMimeMessage();
 
         try {
-            String content = getContent(message.getParam(), message.getChannelTemplate().getContent());
+            String content = getContentFormat(message.getParam(), message.getChannelTemplate().getContent());
 
             String notifyMessageId = addNotifyMessage(content, message.getMessageType());
 
@@ -62,7 +62,7 @@ public class EmailEventListener implements MessageEventListener {
             String[] split = param.getTo().split(",");
             messageHelper.setTo(split);
             //标题
-            messageHelper.setSubject(channelConfig.getTitle());
+            messageHelper.setSubject(getContentFormat(message.getParam(), channelConfig.getTitle()));
             //内容
             messageHelper.setText(content, true);
             //发件人

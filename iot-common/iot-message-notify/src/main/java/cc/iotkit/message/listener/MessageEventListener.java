@@ -15,7 +15,7 @@ public interface MessageEventListener {
 
     void doEvent(MessageSend message);
 
-    default String getContent(Map<String, String> param, String content) {
+    default String getContentFormat(Map<String, String> param, String content) {
         for (String key : param.keySet()) {
             content = content.replaceAll("${" + key + "}", param.get(key));
         }

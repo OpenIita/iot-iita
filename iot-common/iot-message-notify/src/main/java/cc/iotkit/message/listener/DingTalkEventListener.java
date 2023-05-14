@@ -40,7 +40,7 @@ public class DingTalkEventListener implements MessageEventListener {
         String url = String.format(baseUrl, param.getDingTalkAccessToken());
         DingTalkMessage qyWechatMessage = DingTalkMessage.builder()
                 .msgtype("text")
-                .text(DingTalkMessage.MessageContent.builder().content(getContent(message.getParam(), message.getChannelTemplate().getContent())).build())
+                .text(DingTalkMessage.MessageContent.builder().content(getContentFormat(message.getParam(), message.getChannelTemplate().getContent())).build())
                 .build();
         client.post(url).sendJson(qyWechatMessage)
                 .onSuccess(response -> log.info("Received response with status code" + response.statusCode()))
