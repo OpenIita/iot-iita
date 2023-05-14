@@ -7,6 +7,7 @@ import cc.iotkit.message.event.MessageEvent;
 import cc.iotkit.message.model.Message;
 import cc.iotkit.message.model.MessageSend;
 import cc.iotkit.model.notify.ChannelTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Objects;
  * date: 2023-05-08 16:02
  * description:
  **/
+@Slf4j
 @Service
 public class MessageService {
     @Resource
@@ -26,7 +28,7 @@ public class MessageService {
     private IChannelTemplateData iChannelTemplateData;
 
     public void sendMessage(Message message) {
-
+        log.info("message->{}",message);
         ChannelTemplate channelTemplate = iChannelTemplateData.findById(message.getChannelTemplateId());
         if (Objects.isNull(channelTemplate)) {
             throw new BizException(ErrCode.RECORD_NOT_FOUND);

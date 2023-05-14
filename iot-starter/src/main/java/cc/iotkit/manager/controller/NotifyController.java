@@ -3,9 +3,11 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.manager.service.NotifyService;
+import cc.iotkit.model.Paging;
 import cc.iotkit.model.notify.Channel;
 import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.ChannelTemplate;
+import cc.iotkit.model.notify.NotifyMessage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -100,8 +102,8 @@ public class NotifyController {
 
     @ApiOperation("消息列表")
     @PostMapping("/message/getList")
-    public void messageList(@RequestBody @Valid PageRequest<Void> request) {
-        notifyService.getNotifyMessageList(request.getPageNo(), request.getPageSize());
+    public Paging<NotifyMessage> messageList(@RequestBody @Valid PageRequest<Void> request) {
+        return notifyService.getNotifyMessageList(request.getPageNo(), request.getPageSize());
     }
 
 }

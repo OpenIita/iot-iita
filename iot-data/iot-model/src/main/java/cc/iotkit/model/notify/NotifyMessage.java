@@ -26,4 +26,6 @@ public class NotifyMessage implements Id<String> {
     private Boolean status;
 
     private Long createAt;
+
+    private Long updateAt;
 }
