@@ -14,7 +14,6 @@
     <modules>
         <module>iot-component-server</module>
         <module>iot-component-converter</module>
-        <module>iot-component-swagger</module>
         <module>iot-mqtt-component</module>
         <module>iot-emqx-component</module>
         <module>iot-component-base</module>

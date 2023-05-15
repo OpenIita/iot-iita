@@ -2,7 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.IChannelTemplateData;
 import cc.iotkit.data.dao.ChannelTemplateRepository;
-import cc.iotkit.data.model.ChannelTemplateMapper;
+import cc.iotkit.data.convert.ChannelTemplateMapper;
 import cc.iotkit.data.model.TbChannelTemplate;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.notify.ChannelTemplate;

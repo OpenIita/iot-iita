@@ -11,7 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.ICategoryData;
 import cc.iotkit.data.dao.CategoryRepository;
-import cc.iotkit.data.model.CategoryMapper;
+import cc.iotkit.data.convert.CategoryMapper;
 import cc.iotkit.data.model.TbCategory;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.Category;

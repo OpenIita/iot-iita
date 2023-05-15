@@ -9,20 +9,13 @@
  */
 package cc.iotkit.manager.controller;
 
-import cc.iotkit.common.Constants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.DeviceUtil;
-import cc.iotkit.common.utils.ReflectUtil;
-import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.data.IDeviceConfigData;
 import cc.iotkit.data.IDeviceGroupData;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductData;
-import cc.iotkit.manager.model.query.DeviceQuery;
-import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.Paging;
@@ -35,7 +28,6 @@ import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.temporal.IDevicePropertyData;
 import cc.iotkit.temporal.IThingModelMessageData;
-import cc.iotkit.utils.AuthUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

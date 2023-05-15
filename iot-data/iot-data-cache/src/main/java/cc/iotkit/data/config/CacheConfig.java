@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.config;
 
-import cc.iotkit.common.Constants;
+import cc.iotkit.common.constant.Constants;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;

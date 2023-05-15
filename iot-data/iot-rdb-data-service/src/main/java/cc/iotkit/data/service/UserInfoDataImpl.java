@@ -12,7 +12,7 @@ package cc.iotkit.data.service;
 import cc.iotkit.data.IUserInfoData;
 import cc.iotkit.data.dao.UserInfoRepository;
 import cc.iotkit.data.model.TbUserInfo;
-import cc.iotkit.data.model.UserInfoMapper;
+import cc.iotkit.data.convert.UserInfoMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.UserInfo;
 import org.apache.commons.lang3.StringUtils;

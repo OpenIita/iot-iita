@@ -14,7 +14,7 @@ import static cc.iotkit.common.enums.ErrCode.DEVICE_OFFLINE;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.DeviceComponentManager;
 import cc.iotkit.data.IDeviceConfigData;
@@ -106,7 +106,7 @@ public class DeviceService {
         DeviceInfo device = getAndCheckDevice(deviceId, checkOwner);
 
         DeviceConfig config = deviceConfigData.findByDeviceId(deviceId);
-        Map data = JsonUtil.parse(config.getConfig(), Map.class);
+        Map data = JsonUtils.parseObject(config.getConfig(), Map.class);
 
         return send(deviceId, device.getProductKey(), device.getDeviceName(), data,
                 ThingModelMessage.TYPE_CONFIG, ThingModelMessage.ID_CONFIG_SET);

@@ -4,6 +4,7 @@ import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.ICategoryData;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.IProductData;
+import cc.iotkit.data.convert.DeviceInfoMapper;
 import cc.iotkit.data.dao.*;
 import cc.iotkit.data.model.*;
 import cc.iotkit.model.Paging;

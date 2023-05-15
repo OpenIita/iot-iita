@@ -1,5 +1,8 @@
 package cc.iotkit.common.api;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
 
 /**
@@ -8,26 +11,38 @@ import java.io.Serializable;
  * @date:created in 2023/5/10 23:15
  * @modificed by:
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class PageRequest<T> extends Request<T> implements Serializable {
-  private Integer pageNo = 1;
-  private Integer pageSize = 20;
 
-  public PageRequest() {
-  }
+  /**
+   * 分页大小
+   */
+  private Integer pageSize;
 
-  public Integer getPageNo() {
-    return this.pageNo;
-  }
+  /**
+   * 当前页数
+   */
+  private Integer pageNum;
 
-  public Integer getPageSize() {
-    return this.pageSize;
-  }
+  /**
+   * 排序列
+   */
+  private String orderByColumn;
 
-  public void setPageNo(Integer pageNo) {
-    this.pageNo = pageNo;
-  }
+  /**
+   * 排序的方向desc或者asc
+   */
+  private String isAsc;
 
-  public void setPageSize(Integer pageSize) {
-    this.pageSize = pageSize;
-  }
+  /**
+   * 当前记录起始索引 默认值
+   */
+  public static final int DEFAULT_PAGE_NUM = 1;
+
+  /**
+   * 每页显示记录数 默认值 默认查全部
+   */
+  public static final int DEFAULT_PAGE_SIZE = Integer.MAX_VALUE;
+
 }

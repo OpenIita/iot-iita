@@ -2,7 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.IProductModelData;
 import cc.iotkit.data.dao.ProductModelRepository;
-import cc.iotkit.data.model.ProductModelMapper;
+import cc.iotkit.data.convert.ProductModelMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.ProductModel;
 import org.apache.commons.lang3.StringUtils;

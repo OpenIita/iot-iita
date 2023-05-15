@@ -9,10 +9,8 @@
  */
 package cc.iotkit.manager.config;
 
+import cc.iotkit.common.api.Response;
 import cn.dev33.satoken.util.SaResult;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -42,30 +40,21 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
                                   ServerHttpRequest request, ServerHttpResponse response) {
         if (body instanceof GlobalExceptionHandler.RequestResult) {
             GlobalExceptionHandler.RequestResult requestResult = (GlobalExceptionHandler.RequestResult) body;
-            return new ApiResponse(requestResult.getCode(), requestResult.getMessage(),
+            return new Response(requestResult.getCode(), requestResult.getMessage(),
                     "", System.currentTimeMillis());
         } else if (body instanceof SaResult) {
             SaResult result = (SaResult) body;
-            return new ApiResponse(result.getCode(), result.getMsg(), result.getData(), System.currentTimeMillis());
+            return new Response(result.getCode(), result.getMsg(), result.getData(), System.currentTimeMillis());
         } else if (body instanceof Map) {
             Map map = (Map) body;
             //spring mvc内部异常
             if (map.containsKey("timestamp") && map.containsKey("status") && map.containsKey("error")) {
-                return new ApiResponse((Integer) map.get("status"), (String) map.get("error"),
+                return new Response((Integer) map.get("status"), (String) map.get("error"),
                         "", System.currentTimeMillis());
             }
         }
 
-        return new ApiResponse(200, "", body, System.currentTimeMillis());
+        return new Response(200, "", body, System.currentTimeMillis());
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ApiResponse {
-        private int code;
-        private String message;
-        private Object data;
-        private long timestamp;
-    }
 }

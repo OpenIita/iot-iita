@@ -11,7 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.IThingModelData;
 import cc.iotkit.data.dao.ThingModelRepository;
-import cc.iotkit.data.model.ThingModelMapper;
+import cc.iotkit.data.convert.ThingModelMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.ThingModel;
 import org.apache.commons.lang3.StringUtils;

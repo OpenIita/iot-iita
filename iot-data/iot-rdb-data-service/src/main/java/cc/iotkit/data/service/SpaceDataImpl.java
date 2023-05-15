@@ -2,7 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.ISpaceData;
 import cc.iotkit.data.dao.SpaceRepository;
-import cc.iotkit.data.model.SpaceMapper;
+import cc.iotkit.data.convert.SpaceMapper;
 import cc.iotkit.data.model.TbSpace;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.space.Space;

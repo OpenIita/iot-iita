@@ -3,25 +3,23 @@ package cc.iotkit.common.enums;
 /**
  * @author ：tfd
  * 异常枚举类
- *
  */
-public enum ErrCode implements IEnum{
+public enum ErrCode implements IEnum {
     /**
      * 系统通用异常段
-     * */
-    PARAMS_EXCEPTION(00000000, "参数异常"),
-    SYSTEM_EXCEPTION(00000000, "系统异常"),
-    UNKNOWN_EXCEPTION(00000000, "未知异常"),
-    SYSTEM_ERROR(00000000, "服务器内部错误"),
-    METHOD_NOT_ALLOWED(00000000, "请求方法不支持"),
-    NOT_FOUND(00000000, "请求资源不存在"),
-    FORBIDDEN(00000000, "请求被拒绝"),
-    UNAUTHORIZED_EXCEPTION(00000000, "未授权访问"),
-
+     */
+    PARAMS_EXCEPTION(10000001, "参数异常"),
+    SYSTEM_EXCEPTION(10000002, "系统异常"),
+    UNKNOWN_EXCEPTION(10000003, "未知异常"),
+    SYSTEM_ERROR(10000004, "服务器内部错误"),
+    METHOD_NOT_ALLOWED(10000005, "请求方法不支持"),
+    NOT_FOUND(10000006, "请求资源不存在"),
+    FORBIDDEN(10000007, "请求被拒绝"),
+    UNAUTHORIZED_EXCEPTION(10000008, "未授权访问"),
 
     /**
      * 组件通用异常段
-     * */
+     */
     GET_COMPONENT_INSTANCE_ERROR(00000000, "获取通讯组件实例失败"),
     GET_COMPONENT_SCRIPT_ERROR(00000000, "获取通讯组件脚本失败"),
     GET_CONVERT_ERROR(00000000, "获取转换器失败"),
@@ -49,7 +47,7 @@ public enum ErrCode implements IEnum{
 
     /**
      * 业务通用异常段
-     * */
+     */
     TASK_NOT_SUPPORT_RENEW(00000000, "任务不支持续订"),
     GROUP_ALREADY(00000000, "分组已经存在"),
     GROUP_NOT_FOUND(00000000, "分组不存在"),

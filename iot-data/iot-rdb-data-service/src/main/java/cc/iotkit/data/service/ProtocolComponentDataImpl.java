@@ -2,7 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.IProtocolComponentData;
 import cc.iotkit.data.dao.ProtocolComponentRepository;
-import cc.iotkit.data.model.ProtocolComponentMapper;
+import cc.iotkit.data.convert.ProtocolComponentMapper;
 import cc.iotkit.data.model.TbProtocolComponent;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.protocol.ProtocolComponent;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

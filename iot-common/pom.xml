@@ -22,13 +22,32 @@
         <module>iot-script-engine</module>
         <module>iot-message-bus</module>
         <module>iot-message-notify</module>
+        <module>iot-common-doc</module>
+        <module>iot-common-excel</module>
+        <module>iot-common-log</module>
+        <module>iot-common-oss</module>
+        <module>iot-common-redis</module>
+        <module>iot-common-security</module>
+        <module>iot-common-tenant</module>
+        <module>iot-common-web</module>
+        <module>iot-common-websocket</module>
     </modules>
 
-
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

@@ -1,6 +1,6 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.Constants;
+import cc.iotkit.common.constant.Constants;
 import cc.iotkit.data.IThingModelData;
 import cc.iotkit.data.cache.ThingModelCacheEvict;
 import cc.iotkit.model.Paging;

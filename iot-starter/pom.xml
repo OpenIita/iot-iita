@@ -123,11 +123,6 @@
 
     <dependency>
       <groupId>cc.iotkit</groupId>
-      <artifactId>iot-auth-server</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>cc.iotkit</groupId>
       <artifactId>iot-virtual-device</artifactId>
     </dependency>
 
@@ -217,8 +212,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.0</version>
         <configuration>
-          <source>11</source>
-          <target>11</target>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>

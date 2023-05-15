@@ -2,11 +2,10 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.IProductData;
 import cc.iotkit.data.dao.ProductRepository;
-import cc.iotkit.data.model.ProductMapper;
+import cc.iotkit.data.convert.ProductMapper;
 import cc.iotkit.data.model.TbProduct;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.Product;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Primary
 @Service

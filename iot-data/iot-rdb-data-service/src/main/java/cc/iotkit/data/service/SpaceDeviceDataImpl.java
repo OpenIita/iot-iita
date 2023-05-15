@@ -11,7 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.ISpaceDeviceData;
 import cc.iotkit.data.dao.SpaceDeviceRepository;
-import cc.iotkit.data.model.SpaceDeviceMapper;
+import cc.iotkit.data.convert.SpaceDeviceMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.space.SpaceDevice;
 import org.apache.commons.lang3.StringUtils;

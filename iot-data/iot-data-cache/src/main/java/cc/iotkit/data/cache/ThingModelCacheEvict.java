@@ -1,6 +1,6 @@
 package cc.iotkit.data.cache;
 
-import cc.iotkit.common.Constants;
+import cc.iotkit.common.constant.Constants;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 

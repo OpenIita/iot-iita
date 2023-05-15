@@ -10,42 +10,54 @@
 package cc.iotkit.common.exception;
 
 import cc.iotkit.common.enums.ErrCode;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-public class BizException extends RuntimeException{
+@EqualsAndHashCode(callSuper = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class BizException extends RuntimeException {
 
-    private int code;
+    /**
+     * 所属模块
+     */
+    private String module;
+
+    /**
+     * 错误码
+     */
+    private String code;
+
+    /**
+     * 错误消息
+     */
     private String message;
-
-    public BizException() {
-    }
 
     public BizException(String message) {
         super(message);
+        this.code = ErrCode.SYSTEM_EXCEPTION.getValue();
     }
 
     /**
      * 统一异常消息处理
      *
-     * @param ErrCode 异常枚举值
+     * @param errCode 异常枚举值
      */
-    public BizException(ErrCode ErrCode) {
-        this.message = ErrCode.getValue();
+    public BizException(ErrCode errCode) {
+        this.message = errCode.getValue();
     }
 
-    public BizException(ErrCode ErrCode, Throwable cause) {
+    public BizException(ErrCode errCode, Throwable cause) {
         super(cause);
-        this.message = ErrCode.getValue();
+        this.message = errCode.getValue();
     }
 
-    /**
-     * 自定义异常消息处理
-     *
-     * @param code
-     * @param message
-     */
-    public BizException(int code, String message) {
-        this.code = code;
+    public BizException(ErrCode errCode, String message) {
         this.message = message;
+        this.code = errCode.getValue();
     }
 
     public BizException(String message, Throwable cause) {
@@ -56,20 +68,4 @@ public class BizException extends RuntimeException{
         super(cause);
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

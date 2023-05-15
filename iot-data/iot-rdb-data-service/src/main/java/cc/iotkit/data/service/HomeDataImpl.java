@@ -2,7 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.IHomeData;
 import cc.iotkit.data.dao.HomeRepository;
-import cc.iotkit.data.model.HomeMapper;
+import cc.iotkit.data.convert.HomeMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.space.Home;
 import org.apache.commons.lang3.StringUtils;

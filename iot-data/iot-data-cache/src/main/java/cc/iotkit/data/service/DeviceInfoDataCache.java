@@ -9,8 +9,8 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.Constants;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.constant.Constants;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.IDeviceInfoData;
 import cc.iotkit.data.cache.DeviceInfoCacheEvict;
 import cc.iotkit.data.cache.DeviceInfoCachePut;
@@ -88,7 +88,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     public void saveProperties(String deviceId, Map<String, Object> properties) {
         Map<String, Object> old = getProperties(deviceId);
         old.putAll(properties);
-        redisTemplate.opsForValue().set(getPropertyCacheKey(deviceId), JsonUtil.toJsonString(old));
+        redisTemplate.opsForValue().set(getPropertyCacheKey(deviceId), JsonUtils.toJsonString(old));
     }
 
     /**
@@ -104,7 +104,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
         if (StringUtils.isBlank(json)) {
             return new HashMap<>();
         }
-        return JsonUtil.parse(json, Map.class);
+        return JsonUtils.parseObject(json, Map.class);
     }
 
     @Override

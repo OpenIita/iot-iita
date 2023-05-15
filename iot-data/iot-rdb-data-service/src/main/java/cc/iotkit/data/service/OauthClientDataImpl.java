@@ -11,7 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.IOauthClientData;
 import cc.iotkit.data.dao.OauthClientRepository;
-import cc.iotkit.data.model.OauthClientMapper;
+import cc.iotkit.data.convert.OauthClientMapper;
 import cc.iotkit.model.OauthClient;
 import cc.iotkit.model.Paging;
 import org.apache.commons.lang3.StringUtils;

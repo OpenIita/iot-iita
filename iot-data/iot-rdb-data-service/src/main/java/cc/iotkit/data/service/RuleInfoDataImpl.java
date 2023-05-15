@@ -11,7 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.IRuleInfoData;
 import cc.iotkit.data.dao.RuleInfoRepository;
-import cc.iotkit.data.model.RuleInfoMapper;
+import cc.iotkit.data.convert.RuleInfoMapper;
 import cc.iotkit.data.model.TbRuleInfo;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.RuleInfo;

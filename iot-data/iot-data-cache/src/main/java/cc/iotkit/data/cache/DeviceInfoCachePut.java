@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.cache;
 
-import cc.iotkit.common.Constants;
+import cc.iotkit.common.constant.Constants;
 import cc.iotkit.model.device.DeviceInfo;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Component;

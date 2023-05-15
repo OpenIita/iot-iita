@@ -2,7 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.IDeviceGroupData;
 import cc.iotkit.data.dao.DeviceGroupRepository;
-import cc.iotkit.data.model.DeviceGroupMapper;
+import cc.iotkit.data.convert.DeviceGroupMapper;
 import cc.iotkit.data.model.TbDeviceGroup;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceGroup;

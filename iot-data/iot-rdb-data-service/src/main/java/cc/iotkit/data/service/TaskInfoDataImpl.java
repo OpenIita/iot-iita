@@ -11,7 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.ITaskInfoData;
 import cc.iotkit.data.dao.TaskInfoRepository;
-import cc.iotkit.data.model.TaskInfoMapper;
+import cc.iotkit.data.convert.TaskInfoMapper;
 import cc.iotkit.data.model.TbTaskInfo;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.TaskInfo;
