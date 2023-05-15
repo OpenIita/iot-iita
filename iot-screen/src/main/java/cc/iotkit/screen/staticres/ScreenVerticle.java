@@ -24,11 +24,12 @@ public class ScreenVerticle extends AbstractVerticle {
 
     private ScreenApiHandle apiHandler;
 
-    private BigScreenConfig screenConfig = new BigScreenConfig();
+    private BigScreenConfig screenConfig;
 
-    public ScreenVerticle(int port,String packageName) {
+    public ScreenVerticle(int port,String packageName, BigScreenConfig screenConfig) {
         this.port = port;
         this.packageName = packageName;
+        this.screenConfig = screenConfig;
     }
 
     public void setApiHandler(ScreenApiHandle apiHandler) {
@@ -39,9 +40,9 @@ public class ScreenVerticle extends AbstractVerticle {
     public void start() throws Exception {
         httpServer = vertx.createHttpServer();
         Router router = Router.router(vertx);
-        router.route(screenConfig.bigScreenAdmin + "/*").handler(StaticHandler.create(screenConfig.getBigScreenFilePath(apiHandler.getScreenId()).toString()+"/"+packageName));
+        router.route(screenConfig.bigScreenAdmin + "/*").handler(StaticHandler.create(screenConfig.getBigScreenDir()+"/"+apiHandler.getScreenId()+"/"+packageName));
         router.get(screenConfig.bigScreenAdmin).handler(ctx -> {
-            ctx.response().sendFile(screenConfig.getBigScreenFilePath(apiHandler.getScreenId()).toString() +"/"+packageName+ "/index.html");
+            ctx.response().sendFile(screenConfig.getBigScreenDir()+"/"+apiHandler.getScreenId() +"/"+packageName+ "/index.html");
         });
         router.get("/*").handler(ctx -> {
             String res = apiHandler.httpReq(ctx.request(), ctx.response());

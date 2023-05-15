@@ -1,9 +1,11 @@
 package cc.iotkit.screen;
 
+import cc.iotkit.comps.ApiTool;
 import cc.iotkit.data.IBigScreenApiData;
 import cc.iotkit.model.screen.BigScreen;
 import cc.iotkit.model.screen.BigScreenApi;
 import cc.iotkit.screen.api.ScreenApiHandle;
+import cc.iotkit.screen.config.BigScreenConfig;
 import cc.iotkit.screen.staticres.ScreenComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class BigScreenManager {
     @Autowired
     private IBigScreenApiData bigScreenApiData;
 
+    @Autowired
+    private BigScreenConfig bigScreenConfig;
+
     private final Map<String, ScreenComponent> screens = new HashMap<>();
     private final Map<String, Boolean> states = new HashMap<>();
 
@@ -33,7 +38,8 @@ public class BigScreenManager {
             return;
         }
         ScreenComponent screenComponent=new ScreenComponent();
-        screenComponent.create(screen.getPort(),screen.getResourceFile().split(".")[0]);
+        String[] pathNames=screen.getResourceFile().split("\\.");
+        screenComponent.create(screen.getPort(),pathNames.length>1?pathNames[0]:"",bigScreenConfig);
         screens.put(id,screenComponent);
     }
 
@@ -43,7 +49,9 @@ public class BigScreenManager {
         if (screenComponent == null) {
             return;
         }
-        screenComponent.setApiHandle(new ScreenApiHandle(id,bigScreenApiData.findByScreenId(id)));
+        ScreenApiHandle screenApiHandle=new ScreenApiHandle(id,bigScreenApiData.findByScreenId(id));
+        screenApiHandle.putScriptEnv("apiTool", new ApiTool());
+        screenComponent.setApiHandle(screenApiHandle);
         screenComponent.publish();
         states.put(id, true);
     }
@@ -54,8 +62,9 @@ public class BigScreenManager {
         if (screenComponent == null) {
             return;
         }
+        screens.remove(id);
+        states.remove(id);
         screenComponent.unpublish();
-        states.put(id, false);
     }
 
     public void previewApis(BigScreen screen,List<BigScreenApi> screenApis) {

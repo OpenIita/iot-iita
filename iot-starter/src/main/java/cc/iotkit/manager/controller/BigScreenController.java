@@ -74,6 +74,7 @@ public class BigScreenController {
             Files.createDirectories(filePath);
             Path targetLocation = filePath.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            ZipUtil.unzip(bigScreenConfig.getBigScreenFilePath(id).toString()+"/"+fileName);
             return id;
         } catch (IOException ex) {
             throw new BizException(ErrCode.UPLOAD_FILE_ERROR, ex);
@@ -143,8 +144,8 @@ public class BigScreenController {
         if (!StringUtils.hasLength(id)) {
             throw new BizException(ErrCode.ID_BLANK);
         }
-        Path jarPath = bigScreenConfig.getBigScreenFilePath(id);
-        if (!jarPath.resolve("index.html").toFile().exists()) {
+        Path resPath = bigScreenConfig.getBigScreenFilePath(id);
+        if (!resPath.resolve(screen.getResourceFile()).toFile().exists()) {
             throw new BizException(ErrCode.RESOURCE_FILE_NOT_FOUND);
         }
         BigScreen bigScreen = bigScreenData.findById(id);
@@ -193,7 +194,6 @@ public class BigScreenController {
 
         if (screen.STATE_RUNNING.equals(state)) {//发布状态
             screen.setState(screen.STATE_RUNNING);
-            ZipUtil.unzip(bigScreenConfig.getBigScreenFilePath(screen.getId()).toString()+"/"+screen.getResourceFile());
             screenManager.register(screen);
             screenManager.publish(screen);
         } else {//取消发布

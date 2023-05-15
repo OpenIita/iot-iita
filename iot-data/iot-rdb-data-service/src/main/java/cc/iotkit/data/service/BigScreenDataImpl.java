@@ -2,8 +2,6 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.IBigScreenData;
-import cc.iotkit.data.dao.BigScreenApiMappingRepository;
-import cc.iotkit.data.dao.BigScreenApiRepository;
 import cc.iotkit.data.dao.BigScreenRepository;
 import cc.iotkit.data.model.BigScreenMapper;
 import cc.iotkit.data.model.TbBigScreen;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,15 +28,6 @@ public class BigScreenDataImpl implements IBigScreenData {
 
     @Autowired
     private BigScreenRepository bigScreenRepository;
-
-    @Autowired
-    private BigScreenApiRepository bigScreenApiRepository;
-
-    @Autowired
-    private BigScreenApiMappingRepository bigScreenApiMappingRepository;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Override
     public List<BigScreen> findByUid(String uid) {

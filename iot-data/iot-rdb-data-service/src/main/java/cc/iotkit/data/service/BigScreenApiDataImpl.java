@@ -72,9 +72,9 @@ public class BigScreenApiDataImpl implements IBigScreenApiData {
         screenApis.forEach((item) -> {
             if (StringUtils.isBlank(item.getId())) {
                 item.setId(UUID.randomUUID().toString());
-                item.setCreateAt(System.currentTimeMillis());
-                item.setUid(screen.getUid());
             }
+            item.setCreateAt(System.currentTimeMillis());
+            item.setUid(screen.getUid());
             bigScreenApiMappingRepository.save(new TbBigScreenApiMapping(
                     UUID.randomUUID().toString(),
                     screen.getId(),

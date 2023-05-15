@@ -29,7 +29,6 @@ import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Slf4j
@@ -50,7 +49,7 @@ public class VirtualManager {
     private IVirtualDeviceLogData virtualDeviceLogData;
 
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         new Timer().schedule(new TimerTask() {
             @Override

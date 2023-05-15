@@ -58,6 +58,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-component-server</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

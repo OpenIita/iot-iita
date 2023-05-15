@@ -40,6 +40,10 @@ public class ScreenApiHandle {
         this.screenApis = screenApis;
     }
 
+    public void putScriptEnv(String key, Object value) {
+        this.scriptEngine.putScriptEnv(key, value);
+    }
+
     /**
      * 每个请求的处理方法要执行对应的请求脚本然后将结果返回给http服务器
      *

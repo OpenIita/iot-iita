@@ -4,6 +4,7 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.model.screen.BigScreenApi;
 import cc.iotkit.screen.api.ScreenApiHandle;
+import cc.iotkit.screen.config.BigScreenConfig;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import lombok.SneakyThrows;
@@ -32,9 +33,9 @@ public class ScreenComponent {
         apiHandle.debugMode=state;
     }
 
-    public void create(int port,String packageName) {
+    public void create(int port, String packageName, BigScreenConfig screenConfig) {
         vertx = Vertx.vertx();
-        screenVerticle = new ScreenVerticle(port,packageName);
+        screenVerticle = new ScreenVerticle(port,packageName,screenConfig);
     }
 
     public void setApiHandle(ScreenApiHandle screenApiHandle) {
