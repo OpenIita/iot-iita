@@ -1,7 +1,7 @@
 package cc.iotkit.message.listener;
 
 import cc.iotkit.data.IChannelConfigData;
-import cc.iotkit.data.IChannelTemplateData;
+import cc.iotkit.data.INotifyMessageData;
 import cc.iotkit.message.config.VertxManager;
 import cc.iotkit.message.enums.MessageTypeEnum;
 import cc.iotkit.message.event.MessageEvent;
@@ -10,11 +10,10 @@ import cc.iotkit.message.model.MessageSend;
 import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.NotifyMessage;
 import io.vertx.ext.web.client.WebClient;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * author: 石恒
@@ -23,13 +22,10 @@ import javax.annotation.Resource;
  **/
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DingTalkEventListener implements MessageEventListener {
-    private String baseUrl = "https://oapi.dingtalk.com/robot/send?access_token=%s";
-
-    @Resource
-    private IChannelConfigData iChannelConfigData;
-    @Resource
-    private IChannelTemplateData iChannelTemplateData;
+    private final IChannelConfigData iChannelConfigData;
+    private final INotifyMessageData iNotifyMessageData;
 
     @Override
     @EventListener(condition = "#messageEvent.message.code=='DingTalk'")
@@ -39,13 +35,20 @@ public class DingTalkEventListener implements MessageEventListener {
         ChannelConfig channelConfig = getChannelConfig(message.getChannelTemplate().getChannelConfigId());
         ChannelConfig.ChannelParam param = channelConfig.getParam();
 
-        String url = String.format(baseUrl, param.getDingTalkAccessToken());
+        String content = getContentFormat(message.getParam(), message.getChannelTemplate().getContent());
+
         DingTalkMessage qyWechatMessage = DingTalkMessage.builder()
                 .msgtype("text")
-                .text(DingTalkMessage.MessageContent.builder().content(getContentFormat(message.getParam(), message.getChannelTemplate().getContent())).build())
+                .text(DingTalkMessage.MessageContent.builder().content(content).build())
                 .build();
-        client.post(url).sendJson(qyWechatMessage)
-                .onSuccess(response -> log.info("Received response with status code" + response.statusCode()))
+        NotifyMessage notifyMessage = addNotifyMessage(content, message.getMessageType());
+
+        client.post(param.getDingTalkWebhook()).sendJson(qyWechatMessage)
+                .onSuccess(response -> {
+                    log.info("Received response with status code" + response.statusCode());
+                    notifyMessage.setStatus(Boolean.TRUE);
+                    iNotifyMessageData.save(notifyMessage);
+                })
                 .onFailure(err -> log.error("Something went wrong " + err.getMessage()));
     }
 
@@ -56,6 +59,10 @@ public class DingTalkEventListener implements MessageEventListener {
 
     @Override
     public NotifyMessage addNotifyMessage(String content, MessageTypeEnum messageType) {
-        return null;
+        return iNotifyMessageData.add(NotifyMessage.builder()
+                .content(content)
+                .messageType(messageType.getCode())
+                .status(Boolean.FALSE)
+                .build());
     }
 }

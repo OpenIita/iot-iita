@@ -1,20 +1,19 @@
 package cc.iotkit.message.listener;
 
 import cc.iotkit.data.IChannelConfigData;
-import cc.iotkit.data.IChannelTemplateData;
 import cc.iotkit.data.INotifyMessageData;
 import cc.iotkit.message.enums.MessageTypeEnum;
 import cc.iotkit.message.event.MessageEvent;
 import cc.iotkit.message.model.MessageSend;
 import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.NotifyMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -26,15 +25,11 @@ import java.util.Properties;
  **/
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class EmailEventListener implements MessageEventListener {
 
-    @Resource
-    private IChannelConfigData iChannelConfigData;
-    @Resource
-    private IChannelTemplateData iChannelTemplateData;
-
-    @Resource
-    private INotifyMessageData iNotifyMessageData;
+    private final IChannelConfigData iChannelConfigData;
+    private final INotifyMessageData iNotifyMessageData;
 
     @Override
     @EventListener(condition = "#messageEvent.message.code=='Email'")

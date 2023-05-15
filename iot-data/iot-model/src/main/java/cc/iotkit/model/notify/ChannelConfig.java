@@ -36,7 +36,8 @@ public class ChannelConfig implements Id<String> {
         private Boolean mailSmtpAuth;
         private String from;
         private String to;
-        private String dingTalkAccessToken;
+        private String dingTalkWebhook;
+        private String qyWechatWebhook;
 
     }
 

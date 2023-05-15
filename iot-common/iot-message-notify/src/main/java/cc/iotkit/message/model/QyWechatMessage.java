@@ -20,7 +20,12 @@ public class QyWechatMessage implements Serializable {
 
     @Data
     @Builder
-    public static class MessageContent{
+    public static class MessageContent {
+
+        /**
+         * 文本内容
+         */
         private String content;
+
     }
 }
