@@ -1,6 +1,7 @@
 package cc.iotkit.model.notify;
 
 import cc.iotkit.model.Id;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class ChannelConfig implements Id<String> {
     private Long createAt;
 
     @Data
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class ChannelParam {
         private String userName;
         private String passWord;
