@@ -1,0 +1,36 @@
+[
+  {
+    "id": "947d22b7-305b-d959-874a-06e277143d44",
+    "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "title": "告警邮件配置",
+    "param": {
+        "userName":"xxx",
+        "passWord":"xxx",
+        "host":"smtp.qq.com",
+        "port":465,
+        "mailSmtpAuth":true,
+        "from":"1111111@qq.com",
+        "to":"abcdef@yeah.net,1211111@qq.com"
+    },
+    "createAt": 1683816661690
+  },
+  {
+    "id": "75f37720-22bb-4f0b-f127-78f2091507a0",
+    "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb832",
+    "title": "告警钉钉配置",
+    "param": {
+        "dingTalkWebhook":"xxxxxxxxxxxxxxxx",
+        "dingTalkSecret":"xxxx"
+    },
+    "createAt": 1683816661690
+  },
+  {
+    "id": "6e5db9b5-a709-723b-665b-bbca5ce6a62c",
+    "channelId": "fa1c5eaa-de6e-48b6-805e-8f091c7bb833",
+    "title": "告警企业微信配置",
+    "param": {
+            "qyWechatWebhook":"xxxxxxxxxxxxxxxx"
+    },
+    "createAt": 1683816661690
+  }
+]

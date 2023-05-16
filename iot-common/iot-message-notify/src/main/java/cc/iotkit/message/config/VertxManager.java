@@ -14,6 +14,10 @@ import io.vertx.core.Vertx;
 public enum VertxManager {
     INSTANCE;
     public Vertx getVertx() {
-        return Vertx.vertx();
+        if (Vertx.currentContext() == null) {
+            return Vertx.vertx();
+        } else {
+            return Vertx.currentContext().owner();
+        }
     }
 }

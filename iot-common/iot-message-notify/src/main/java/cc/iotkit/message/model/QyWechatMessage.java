@@ -16,7 +16,7 @@ public class QyWechatMessage implements Serializable {
 
     private String msgtype;
 
-    private MessageContent text;
+    private MessageContent markdown;
 
     @Data
     @Builder

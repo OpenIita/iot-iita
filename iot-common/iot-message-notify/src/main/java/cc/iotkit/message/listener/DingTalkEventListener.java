@@ -7,13 +7,20 @@ import cc.iotkit.message.enums.MessageTypeEnum;
 import cc.iotkit.message.event.MessageEvent;
 import cc.iotkit.message.model.DingTalkMessage;
 import cc.iotkit.message.model.MessageSend;
+import cc.iotkit.message.util.DingTalkUtil;
 import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.NotifyMessage;
+import com.dingtalk.api.DefaultDingTalkClient;
+import com.dingtalk.api.DingTalkClient;
+import com.dingtalk.api.request.OapiRobotSendRequest;
+import com.dingtalk.api.response.OapiRobotSendResponse;
 import io.vertx.ext.web.client.WebClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 /**
  * author: 石恒
@@ -30,26 +37,29 @@ public class DingTalkEventListener implements MessageEventListener {
     @Override
     @EventListener(condition = "#messageEvent.message.code=='DingTalk'")
     public void doEvent(MessageEvent messageEvent) {
-        WebClient client = WebClient.create(VertxManager.INSTANCE.getVertx());
         MessageSend message = messageEvent.getMessage();
         ChannelConfig channelConfig = getChannelConfig(message.getChannelTemplate().getChannelConfigId());
         ChannelConfig.ChannelParam param = channelConfig.getParam();
-
         String content = getContentFormat(message.getParam(), message.getChannelTemplate().getContent());
+        try {
+            Long timestamp = System.currentTimeMillis();
+            String sign = DingTalkUtil.getSign(param.getDingTalkSecret(), timestamp);
+            String url = param.getDingTalkWebhook() + "&timestamp=" + timestamp + "&sign=" + sign;
+            NotifyMessage notifyMessage = addNotifyMessage(content, message.getMessageType());
+            DingTalkClient client = new DefaultDingTalkClient(url);
+            OapiRobotSendRequest request = new OapiRobotSendRequest();
+            request.setMsgtype("markdown");
+            OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
+            markdown.setTitle(getContentFormat(message.getParam(), channelConfig.getTitle()));
+            markdown.setText(content);
+            request.setMarkdown(markdown);
+            OapiRobotSendResponse response = client.execute(request);
+            notifyMessage.setStatus(Boolean.TRUE);
+            iNotifyMessageData.save(notifyMessage);
+        } catch (Exception e) {
+            log.error("DingTalk send message error " + e);
+        }
 
-        DingTalkMessage qyWechatMessage = DingTalkMessage.builder()
-                .msgtype("text")
-                .text(DingTalkMessage.MessageContent.builder().content(content).build())
-                .build();
-        NotifyMessage notifyMessage = addNotifyMessage(content, message.getMessageType());
-
-        client.post(param.getDingTalkWebhook()).sendJson(qyWechatMessage)
-                .onSuccess(response -> {
-                    log.info("Received response with status code" + response.statusCode());
-                    notifyMessage.setStatus(Boolean.TRUE);
-                    iNotifyMessageData.save(notifyMessage);
-                })
-                .onFailure(err -> log.error("Something went wrong " + err.getMessage()));
     }
 
     @Override

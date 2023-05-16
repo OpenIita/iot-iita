@@ -118,7 +118,7 @@ public class NotifyController {
     public void testNotify() {
         Map<String, String> param = new HashMap<>();
         param.put("title", "电磁炉");
-        messageService.sendMessage(Message.builder().messageType(MessageTypeEnum.ALERT).param(param).channelTemplateId("e8697345-15d1-451a-9e6e-dbae16dd0367").build());
+        messageService.sendMessage(Message.builder().messageType(MessageTypeEnum.ALERT).param(param).channelTemplateId("7fd90ab1-63c8-cd92-2a58-b7bd04f557f1").build());
     }
 
 }

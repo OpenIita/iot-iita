@@ -37,6 +37,7 @@ public class ChannelConfig implements Id<String> {
         private String from;
         private String to;
         private String dingTalkWebhook;
+        private String dingTalkSecret;
         private String qyWechatWebhook;
 
     }

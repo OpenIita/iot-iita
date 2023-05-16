@@ -45,8 +45,8 @@
 
         <dependency>
             <groupId>com.aliyun</groupId>
-            <artifactId>dingtalk</artifactId>
-            <version>1.2.15</version>
+            <artifactId>alibaba-dingtalk-service-sdk</artifactId>
+            <version>2.0.0</version>
         </dependency>
     </dependencies>
 

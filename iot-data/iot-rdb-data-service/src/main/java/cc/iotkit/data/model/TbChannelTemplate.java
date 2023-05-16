@@ -2,6 +2,7 @@ package cc.iotkit.data.model;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -24,6 +25,7 @@ public class TbChannelTemplate {
 
     private String title;
 
+    @Column(columnDefinition ="TEXT")
     private String content;
 
     private Long createAt;
