@@ -13,7 +13,7 @@ import cc.iotkit.common.Constants;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comps.DeviceComponentManager;
-import cc.iotkit.data.IDeviceConfigData;
+import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.model.device.DeviceConfig;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.mq.ConsumerHandler;

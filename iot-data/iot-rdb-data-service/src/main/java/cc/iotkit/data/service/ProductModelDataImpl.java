@@ -1,6 +1,6 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IProductModelData;
+import cc.iotkit.data.manager.IProductModelData;
 import cc.iotkit.data.dao.ProductModelRepository;
 import cc.iotkit.data.convert.ProductModelMapper;
 import cc.iotkit.model.Paging;

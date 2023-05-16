@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IUserInfoData;
+import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.dao.UserInfoRepository;
 import cc.iotkit.data.model.TbUserInfo;
 import cc.iotkit.data.convert.UserInfoMapper;

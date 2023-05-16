@@ -10,7 +10,7 @@
 package cc.iotkit.comps.service;
 
 import cc.iotkit.common.Constants;
-import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.mq.ConsumerHandler;

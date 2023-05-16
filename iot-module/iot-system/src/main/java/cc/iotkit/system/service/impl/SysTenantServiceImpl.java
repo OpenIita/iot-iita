@@ -1,6 +1,17 @@
 package cc.iotkit.system.service.impl;
 
-import cc.iotkit.system.domain.*;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.constant.CacheNames;
+import cc.iotkit.common.constant.Constants;
+import cc.iotkit.common.constant.TenantConstants;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.model.system.*;
+import cc.iotkit.system.domain.SysRoleDept;
+import cc.iotkit.system.domain.SysRoleMenu;
+import cc.iotkit.system.domain.SysUserRole;
 import cc.iotkit.system.domain.bo.SysTenantBo;
 import cc.iotkit.system.domain.vo.SysTenantVo;
 import cc.iotkit.system.mapper.*;
@@ -8,21 +19,7 @@ import cn.dev33.satoken.secure.BCrypt;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.dromara.common.core.constant.CacheNames;
-import org.dromara.common.core.constant.Constants;
-import org.dromara.common.core.constant.TenantConstants;
-import org.dromara.common.core.exception.ServiceException;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.SpringUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.system.domain.*;
-import org.dromara.system.mapper.*;
 import cc.iotkit.system.service.ISysTenantService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -76,9 +73,9 @@ public class SysTenantServiceImpl implements ISysTenantService {
      * 查询租户列表
      */
     @Override
-    public TableDataInfo<SysTenantVo> queryPageList(SysTenantBo bo, PageQuery pageQuery) {
+    public PagedDataVo<SysTenantVo> queryPageList(SysTenantBo bo, PageRequest<?> query) {
         LambdaQueryWrapper<SysTenant> lqw = buildQueryWrapper(bo);
-        Page<SysTenantVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        Page<SysTenantVo> result = baseMapper.selectVoPage(query.build(), lqw);
         return TableDataInfo.build(result);
     }
 
@@ -123,7 +120,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
         add.setTenantId(tenantId);
         boolean flag = baseMapper.insert(add) > 0;
         if (!flag) {
-            throw new ServiceException("创建租户失败");
+            throw new BizException("创建租户失败");
         }
         bo.setId(add.getId());
 
@@ -214,7 +211,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
         // 获取租户套餐
         SysTenantPackage tenantPackage = tenantPackageMapper.selectById(packageId);
         if (ObjectUtil.isNull(tenantPackage)) {
-            throw new ServiceException("套餐不存在");
+            throw new BizException("套餐不存在");
         }
         // 获取套餐菜单id
         List<Long> menuIds = StringUtils.splitTo(tenantPackage.getMenuIds(), Convert::toLong);

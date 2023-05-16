@@ -11,8 +11,8 @@ package cc.iotkit.comps.service;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.data.IDeviceInfoData;
-import cc.iotkit.data.IThingModelData;
+import cc.iotkit.data.manager.IDeviceInfoData;
+import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.ThingModel;

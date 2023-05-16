@@ -1,19 +1,15 @@
 package cc.iotkit.system.service.impl;
 
-import cc.iotkit.system.domain.SysDictData;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.constant.CacheNames;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.redis.utils.CacheUtils;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.model.system.SysDictData;
 import cc.iotkit.system.domain.bo.SysDictDataBo;
 import cc.iotkit.system.domain.vo.SysDictDataVo;
 import cc.iotkit.system.mapper.SysDictDataMapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.dromara.common.core.constant.CacheNames;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.core.exception.ServiceException;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.redis.utils.CacheUtils;
 import cc.iotkit.system.service.ISysDictDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
@@ -33,9 +29,9 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     private final SysDictDataMapper baseMapper;
 
     @Override
-    public TableDataInfo<SysDictDataVo> selectPageDictDataList(SysDictDataBo dictData, PageQuery pageQuery) {
+    public PagedDataVo<SysDictDataVo> selectPageDictDataList(SysDictDataBo dictData, PageRequest<?> query) {
         LambdaQueryWrapper<SysDictData> lqw = buildQueryWrapper(dictData);
-        Page<SysDictDataVo> page = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        Page<SysDictDataVo> page = baseMapper.selectVoPage(query.build(), lqw);
         return TableDataInfo.build(page);
     }
 
@@ -116,7 +112,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
         if (row > 0) {
             return baseMapper.selectDictDataByType(data.getDictType());
         }
-        throw new ServiceException("操作失败");
+        throw new BizException("操作失败");
     }
 
     /**
@@ -133,7 +129,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
         if (row > 0) {
             return baseMapper.selectDictDataByType(data.getDictType());
         }
-        throw new ServiceException("操作失败");
+        throw new BizException("操作失败");
     }
 
 }

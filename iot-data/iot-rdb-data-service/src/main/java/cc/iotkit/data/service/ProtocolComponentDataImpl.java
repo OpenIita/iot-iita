@@ -1,6 +1,6 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IProtocolComponentData;
+import cc.iotkit.data.manager.IProtocolComponentData;
 import cc.iotkit.data.dao.ProtocolComponentRepository;
 import cc.iotkit.data.convert.ProtocolComponentMapper;
 import cc.iotkit.data.model.TbProtocolComponent;

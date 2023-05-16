@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IThingModelData;
+import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.data.dao.ThingModelRepository;
 import cc.iotkit.data.convert.ThingModelMapper;
 import cc.iotkit.model.Paging;

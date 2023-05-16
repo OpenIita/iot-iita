@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.ISpaceDeviceData;
+import cc.iotkit.data.manager.ISpaceDeviceData;
 import cc.iotkit.data.dao.SpaceDeviceRepository;
 import cc.iotkit.data.convert.SpaceDeviceMapper;
 import cc.iotkit.model.Paging;

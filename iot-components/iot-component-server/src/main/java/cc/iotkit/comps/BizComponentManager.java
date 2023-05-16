@@ -17,7 +17,7 @@ import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;
 import cc.iotkit.comps.config.ComponentConfig;
 import cc.iotkit.comps.service.DeviceBehaviourService;
-import cc.iotkit.data.IProtocolComponentData;
+import cc.iotkit.data.manager.IProtocolComponentData;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;

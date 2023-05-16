@@ -1,7 +1,7 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.data.IAlertConfigData;
+import cc.iotkit.data.manager.IAlertConfigData;
 import cc.iotkit.data.dao.AlertConfigRepository;
 import cc.iotkit.data.convert.AlertConfigMapper;
 import cc.iotkit.data.model.TbAlertConfig;

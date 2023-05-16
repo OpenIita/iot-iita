@@ -1,6 +1,6 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IDeviceGroupData;
+import cc.iotkit.data.manager.IDeviceGroupData;
 import cc.iotkit.data.dao.DeviceGroupRepository;
 import cc.iotkit.data.convert.DeviceGroupMapper;
 import cc.iotkit.data.model.TbDeviceGroup;

@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.stats.DataItem;

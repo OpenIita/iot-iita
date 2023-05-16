@@ -1,30 +1,25 @@
 package cc.iotkit.system.service.impl;
 
-import cc.iotkit.system.domain.SysDictData;
-import cc.iotkit.system.domain.SysDictType;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.constant.CacheConstants;
+import cc.iotkit.common.constant.CacheNames;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.redis.utils.CacheUtils;
+import cc.iotkit.common.service.DictService;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.SpringUtils;
+import cc.iotkit.common.utils.StreamUtils;
+import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.model.system.SysDictData;
+import cc.iotkit.model.system.SysDictType;
 import cc.iotkit.system.domain.bo.SysDictTypeBo;
 import cc.iotkit.system.domain.vo.SysDictDataVo;
 import cc.iotkit.system.domain.vo.SysDictTypeVo;
 import cc.iotkit.system.mapper.SysDictDataMapper;
-import cc.iotkit.system.mapper.SysDictTypeMapper;
 import cn.dev33.satoken.context.SaHolder;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.dromara.common.core.constant.CacheConstants;
-import org.dromara.common.core.constant.CacheNames;
-import org.dromara.common.core.exception.ServiceException;
-import org.dromara.common.core.service.DictService;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.SpringUtils;
-import org.dromara.common.core.utils.StreamUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.redis.utils.CacheUtils;
 import cc.iotkit.system.service.ISysDictTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
@@ -51,9 +46,9 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
     private final SysDictDataMapper dictDataMapper;
 
     @Override
-    public TableDataInfo<SysDictTypeVo> selectPageDictTypeList(SysDictTypeBo dictType, PageQuery pageQuery) {
+    public PagedDataVo<SysDictTypeVo> selectPageDictTypeList(SysDictTypeBo dictType, PageRequest<?> pageQuery) {
         LambdaQueryWrapper<SysDictType> lqw = buildQueryWrapper(dictType);
-        Page<SysDictTypeVo> page = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        Page<SysDictTypeVo> page = baseMapper.selectVoPage(query.build(), lqw);
         return TableDataInfo.build(page);
     }
 
@@ -169,7 +164,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
         if (row > 0) {
             return new ArrayList<>();
         }
-        throw new ServiceException("操作失败");
+        throw new BizException("操作失败");
     }
 
     /**
@@ -192,7 +187,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
             CacheUtils.evict(CacheNames.SYS_DICT, oldDict.getDictType());
             return dictDataMapper.selectDictDataByType(dict.getDictType());
         }
-        throw new ServiceException("操作失败");
+        throw new BizException("操作失败");
     }
 
     /**

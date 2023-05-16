@@ -1,5 +1,19 @@
 package cc.iotkit.system.service.impl;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.constant.CacheNames;
+import cc.iotkit.common.constant.UserConstants;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.service.UserService;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StreamUtils;
+import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.model.system.SysDept;
+import cc.iotkit.model.system.SysUser;
+import cc.iotkit.system.domain.SysUserPost;
+import cc.iotkit.system.domain.SysUserRole;
 import cc.iotkit.system.domain.bo.SysUserBo;
 import cc.iotkit.system.domain.vo.SysPostVo;
 import cc.iotkit.system.domain.vo.SysRoleVo;
@@ -8,30 +22,8 @@ import cc.iotkit.system.mapper.*;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.common.core.constant.CacheNames;
-import org.dromara.common.core.constant.UserConstants;
-import org.dromara.common.core.exception.ServiceException;
-import org.dromara.common.core.service.UserService;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StreamUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.mybatis.helper.DataBaseHelper;
-import org.dromara.common.satoken.utils.LoginHelper;
-import cc.iotkit.system.domain.SysDept;
-import cc.iotkit.system.domain.SysUser;
-import cc.iotkit.system.domain.SysUserPost;
-import cc.iotkit.system.domain.SysUserRole;
-import org.dromara.system.mapper.*;
 import cc.iotkit.system.service.ISysUserService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -58,8 +50,8 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     private final SysUserPostMapper userPostMapper;
 
     @Override
-    public TableDataInfo<SysUserVo> selectPageUserList(SysUserBo user, PageQuery pageQuery) {
-        Page<SysUserVo> page = baseMapper.selectPageUserList(pageQuery.build(), this.buildQueryWrapper(user));
+    public PagedDataVo<SysUserVo> selectPageUserList(SysUserBo user, PageRequest<?> query) {
+        Page<SysUserVo> page = baseMapper.selectPageUserList(query.build(), this.buildQueryWrapper(user));
         return TableDataInfo.build(page);
     }
 
@@ -102,14 +94,14 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
      * @return 用户信息集合信息
      */
     @Override
-    public TableDataInfo<SysUserVo> selectAllocatedList(SysUserBo user, PageQuery pageQuery) {
+    public PagedDataVo<SysUserVo> selectAllocatedList(SysUserBo user, PageRequest<?> query) {
         QueryWrapper<SysUser> wrapper = Wrappers.query();
         wrapper.eq("u.del_flag", UserConstants.USER_NORMAL)
             .eq(ObjectUtil.isNotNull(user.getRoleId()), "r.role_id", user.getRoleId())
             .like(StringUtils.isNotBlank(user.getUserName()), "u.user_name", user.getUserName())
             .eq(StringUtils.isNotBlank(user.getStatus()), "u.status", user.getStatus())
             .like(StringUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber());
-        Page<SysUserVo> page = baseMapper.selectAllocatedList(pageQuery.build(), wrapper);
+        Page<SysUserVo> page = baseMapper.selectAllocatedList(query.build(), wrapper);
         return TableDataInfo.build(page);
     }
 
@@ -120,7 +112,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
      * @return 用户信息集合信息
      */
     @Override
-    public TableDataInfo<SysUserVo> selectUnallocatedList(SysUserBo user, PageQuery pageQuery) {
+    public PagedDataVo<SysUserVo> selectUnallocatedList(SysUserBo user, PageRequest<?> query) {
         List<Long> userIds = userRoleMapper.selectUserIdsByRoleId(user.getRoleId());
         QueryWrapper<SysUser> wrapper = Wrappers.query();
         wrapper.eq("u.del_flag", UserConstants.USER_NORMAL)
@@ -128,7 +120,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
             .notIn(CollUtil.isNotEmpty(userIds), "u.user_id", userIds)
             .like(StringUtils.isNotBlank(user.getUserName()), "u.user_name", user.getUserName())
             .like(StringUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber());
-        Page<SysUserVo> page = baseMapper.selectUnallocatedList(pageQuery.build(), wrapper);
+        Page<SysUserVo> page = baseMapper.selectUnallocatedList(query.build(), wrapper);
         return TableDataInfo.build(page);
     }
 
@@ -243,7 +235,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     @Override
     public void checkUserAllowed(Long userId) {
         if (ObjectUtil.isNotNull(userId) && LoginHelper.isSuperAdmin(userId)) {
-            throw new ServiceException("不允许操作超级管理员用户");
+            throw new BizException("不允许操作超级管理员用户");
         }
     }
 
@@ -261,7 +253,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
             return;
         }
         if (ObjectUtil.isNull(baseMapper.selectUserById(userId))) {
-            throw new ServiceException("没有权限访问用户数据！");
+            throw new BizException("没有权限访问用户数据！");
         }
     }
 
@@ -317,7 +309,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
         // 防止错误更新后导致的数据误删除
         int flag = baseMapper.updateById(sysUser);
         if (flag < 1) {
-            throw new ServiceException("修改用户" + user.getUserName() + "信息失败");
+            throw new BizException("修改用户" + user.getUserName() + "信息失败");
         }
         return flag;
     }
@@ -442,7 +434,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
             // 判断是否具有此角色的操作权限
             List<SysRoleVo> roles = roleMapper.selectRoleList(new LambdaQueryWrapper<>());
             if (CollUtil.isEmpty(roles)) {
-                throw new ServiceException("没有权限访问角色的数据");
+                throw new BizException("没有权限访问角色的数据");
             }
             List<Long> roleList = StreamUtils.toList(roles, SysRoleVo::getRoleId);
             if (!LoginHelper.isSuperAdmin(userId)) {
@@ -450,7 +442,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
             }
             List<Long> canDoRoleList = StreamUtils.filter(List.of(roleIds), roleList::contains);
             if (CollUtil.isEmpty(canDoRoleList)) {
-                throw new ServiceException("没有权限访问角色的数据");
+                throw new BizException("没有权限访问角色的数据");
             }
             if (clear) {
                 // 删除用户与角色关联
@@ -483,7 +475,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
         // 防止更新失败导致的数据删除
         int flag = baseMapper.deleteById(userId);
         if (flag < 1) {
-            throw new ServiceException("删除用户失败!");
+            throw new BizException("删除用户失败!");
         }
         return flag;
     }
@@ -509,7 +501,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
         // 防止更新失败导致的数据删除
         int flag = baseMapper.deleteBatchIds(ids);
         if (flag < 1) {
-            throw new ServiceException("删除用户失败!");
+            throw new BizException("删除用户失败!");
         }
         return flag;
     }

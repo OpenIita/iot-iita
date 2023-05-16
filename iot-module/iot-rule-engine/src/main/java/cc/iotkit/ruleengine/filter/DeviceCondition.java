@@ -9,7 +9,7 @@
  */
 package cc.iotkit.ruleengine.filter;
 
-import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.ruleengine.expression.Expression;
 import lombok.Data;

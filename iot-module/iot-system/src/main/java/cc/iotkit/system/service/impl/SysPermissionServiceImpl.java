@@ -1,9 +1,9 @@
 package cc.iotkit.system.service.impl;
 
+import cc.iotkit.common.constant.TenantConstants;
+import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.system.service.ISysMenuService;
 import cc.iotkit.system.service.ISysRoleService;
-import org.dromara.common.core.constant.TenantConstants;
-import org.dromara.common.satoken.utils.LoginHelper;
 import cc.iotkit.system.service.ISysPermissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

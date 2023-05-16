@@ -1,30 +1,24 @@
 package cc.iotkit.system.service.impl;
 
-import cc.iotkit.system.domain.SysOssConfig;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.constant.CacheNames;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.redis.utils.CacheUtils;
+import cc.iotkit.common.redis.utils.RedisUtils;
+import cc.iotkit.common.tenant.core.TenantEntity;
+import cc.iotkit.common.tenant.helper.TenantHelper;
+import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StreamUtils;
+import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.model.system.SysOssConfig;
 import cc.iotkit.system.domain.bo.SysOssConfigBo;
 import cc.iotkit.system.domain.vo.SysOssConfigVo;
-import cc.iotkit.system.mapper.SysOssConfigMapper;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.common.core.constant.CacheNames;
-import org.dromara.common.core.exception.ServiceException;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StreamUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.json.utils.JsonUtils;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.oss.constant.OssConstant;
-import org.dromara.common.redis.utils.CacheUtils;
-import org.dromara.common.redis.utils.RedisUtils;
-import org.dromara.common.tenant.core.TenantEntity;
-import org.dromara.common.tenant.helper.TenantHelper;
 import cc.iotkit.system.service.ISysOssConfigService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,9 +74,9 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
     }
 
     @Override
-    public TableDataInfo<SysOssConfigVo> queryPageList(SysOssConfigBo bo, PageQuery pageQuery) {
+    public PagedDataVo<SysOssConfigVo> queryPageList(SysOssConfigBo bo, PageRequest<?> query) {
         LambdaQueryWrapper<SysOssConfig> lqw = buildQueryWrapper(bo);
-        Page<SysOssConfigVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        Page<SysOssConfigVo> result = baseMapper.selectVoPage(query.build(), lqw);
         return TableDataInfo.build(result);
     }
 
@@ -129,7 +123,7 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
     private void validEntityBeforeSave(SysOssConfig entity) {
         if (StringUtils.isNotEmpty(entity.getConfigKey())
             && !checkConfigKeyUnique(entity)) {
-            throw new ServiceException("操作配置'" + entity.getConfigKey() + "'失败, 配置key已存在!");
+            throw new BizException("操作配置'" + entity.getConfigKey() + "'失败, 配置key已存在!");
         }
     }
 
@@ -137,7 +131,7 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if (isValid) {
             if (CollUtil.containsAny(ids, OssConstant.SYSTEM_DATA_IDS)) {
-                throw new ServiceException("系统内置, 不可删除!");
+                throw new BizException("系统内置, 不可删除!");
             }
         }
         List<SysOssConfig> list = CollUtil.newArrayList();

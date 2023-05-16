@@ -1,21 +1,15 @@
 package cc.iotkit.system.service.impl;
 
-import cc.iotkit.system.domain.SysTenant;
-import cc.iotkit.system.domain.SysTenantPackage;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.model.system.SysTenant;
+import cc.iotkit.model.system.SysTenantPackage;
 import cc.iotkit.system.domain.bo.SysTenantPackageBo;
 import cc.iotkit.system.domain.vo.SysTenantPackageVo;
-import cc.iotkit.system.mapper.SysTenantMapper;
-import cc.iotkit.system.mapper.SysTenantPackageMapper;
 import cn.hutool.core.collection.CollUtil;
-import org.dromara.common.core.constant.TenantConstants;
-import org.dromara.common.core.exception.ServiceException;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import cc.iotkit.system.service.ISysTenantPackageService;
@@ -50,7 +44,7 @@ public class SysTenantPackageServiceImpl implements ISysTenantPackageService {
      * 查询租户套餐列表
      */
     @Override
-    public TableDataInfo<SysTenantPackageVo> queryPageList(SysTenantPackageBo bo, PageQuery pageQuery) {
+    public PagedDataVo<SysTenantPackageVo> queryPageList(SysTenantPackageBo bo, PageRequest<?> query) {
         LambdaQueryWrapper<SysTenantPackage> lqw = buildQueryWrapper(bo);
         Page<SysTenantPackageVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
@@ -138,7 +132,7 @@ public class SysTenantPackageServiceImpl implements ISysTenantPackageService {
         if(isValid){
             boolean exists = tenantMapper.exists(new LambdaQueryWrapper<SysTenant>().in(SysTenant::getPackageId, ids));
             if (exists) {
-                throw new ServiceException("租户套餐已被使用");
+                throw new BizException("租户套餐已被使用");
             }
         }
         return baseMapper.deleteBatchIds(ids) > 0;

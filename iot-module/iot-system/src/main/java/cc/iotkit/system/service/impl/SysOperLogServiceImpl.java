@@ -1,18 +1,15 @@
 package cc.iotkit.system.service.impl;
 
-import cc.iotkit.system.domain.SysOperLog;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.log.event.OperLogEvent;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.common.utils.ip.AddressUtils;
+import cc.iotkit.model.system.SysOperLog;
 import cc.iotkit.system.domain.bo.SysOperLogBo;
 import cc.iotkit.system.domain.vo.SysOperLogVo;
-import cc.iotkit.system.mapper.SysOperLogMapper;
 import cn.hutool.core.util.ArrayUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.core.utils.ip.AddressUtils;
-import org.dromara.common.log.event.OperLogEvent;
 import cc.iotkit.system.service.ISysOperLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -50,7 +47,7 @@ public class SysOperLogServiceImpl implements ISysOperLogService {
     }
 
     @Override
-    public TableDataInfo<SysOperLogVo> selectPageOperLogList(SysOperLogBo operLog, PageQuery pageQuery) {
+    public PagedDataVo<SysOperLogVo> selectPageOperLogList(SysOperLogBo operLog, PageRequest<?> query) {
         Map<String, Object> params = operLog.getParams();
         LambdaQueryWrapper<SysOperLog> lqw = new LambdaQueryWrapper<SysOperLog>()
             .like(StringUtils.isNotBlank(operLog.getTitle()), SysOperLog::getTitle, operLog.getTitle())
@@ -66,7 +63,7 @@ public class SysOperLogServiceImpl implements ISysOperLogService {
             .like(StringUtils.isNotBlank(operLog.getOperName()), SysOperLog::getOperName, operLog.getOperName())
             .between(params.get("beginTime") != null && params.get("endTime") != null,
                 SysOperLog::getOperTime, params.get("beginTime"), params.get("endTime"));
-        if (StringUtils.isBlank(pageQuery.getOrderByColumn())) {
+        if (StringUtils.isBlank(query.getOrderByColumn())) {
             pageQuery.setOrderByColumn("oper_id");
             pageQuery.setIsAsc("desc");
         }

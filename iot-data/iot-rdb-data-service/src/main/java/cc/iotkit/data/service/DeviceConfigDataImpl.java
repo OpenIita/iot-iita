@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IDeviceConfigData;
+import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.data.dao.DeviceConfigRepository;
 import cc.iotkit.data.convert.DeviceConfigMapper;
 import cc.iotkit.data.model.TbDeviceConfig;

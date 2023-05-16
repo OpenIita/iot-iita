@@ -1,21 +1,18 @@
 package cc.iotkit.system.service.impl;
 
-import cc.iotkit.system.domain.SysLogininfor;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.constant.Constants;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.log.event.LogininforEvent;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.ServletUtils;
+import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.common.utils.ip.AddressUtils;
+import cc.iotkit.model.system.SysLogininfor;
 import cc.iotkit.system.domain.bo.SysLogininforBo;
 import cc.iotkit.system.domain.vo.SysLogininforVo;
-import cc.iotkit.system.mapper.SysLogininforMapper;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.dromara.common.core.constant.Constants;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import org.dromara.common.log.event.LogininforEvent;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.core.utils.ServletUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.core.utils.ip.AddressUtils;
 import cc.iotkit.system.service.ISysLogininforService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,7 +90,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
     }
 
     @Override
-    public TableDataInfo<SysLogininforVo> selectPageLogininforList(SysLogininforBo logininfor, PageQuery pageQuery) {
+    public PagedDataVo<SysLogininforVo> selectPageLogininforList(SysLogininforBo logininfor, PageRequest<?> query) {
         Map<String, Object> params = logininfor.getParams();
         LambdaQueryWrapper<SysLogininfor> lqw = new LambdaQueryWrapper<SysLogininfor>()
             .like(StringUtils.isNotBlank(logininfor.getIpaddr()), SysLogininfor::getIpaddr, logininfor.getIpaddr())
@@ -101,7 +98,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
             .like(StringUtils.isNotBlank(logininfor.getUserName()), SysLogininfor::getUserName, logininfor.getUserName())
             .between(params.get("beginTime") != null && params.get("endTime") != null,
                 SysLogininfor::getLoginTime, params.get("beginTime"), params.get("endTime"));
-        if (StringUtils.isBlank(pageQuery.getOrderByColumn())) {
+        if (StringUtils.isBlank(query.getOrderByColumn())) {
             pageQuery.setOrderByColumn("info_id");
             pageQuery.setIsAsc("desc");
         }

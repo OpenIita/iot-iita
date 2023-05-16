@@ -1,9 +1,9 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.utils.ReflectUtil;
-import cc.iotkit.data.ICategoryData;
-import cc.iotkit.data.IDeviceInfoData;
-import cc.iotkit.data.IProductData;
+import cc.iotkit.data.manager.ICategoryData;
+import cc.iotkit.data.manager.IDeviceInfoData;
+import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.convert.DeviceInfoMapper;
 import cc.iotkit.data.dao.*;
 import cc.iotkit.data.model.*;

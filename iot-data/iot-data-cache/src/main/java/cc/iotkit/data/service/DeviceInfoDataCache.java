@@ -11,7 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.cache.DeviceInfoCacheEvict;
 import cc.iotkit.data.cache.DeviceInfoCachePut;
 import cc.iotkit.model.Paging;

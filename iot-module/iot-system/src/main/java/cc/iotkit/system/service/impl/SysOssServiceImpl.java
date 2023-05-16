@@ -1,29 +1,20 @@
 package cc.iotkit.system.service.impl;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.constant.CacheNames;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.service.OssService;
+import cc.iotkit.common.utils.SpringUtils;
+import cc.iotkit.common.utils.StreamUtils;
+import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.common.utils.file.FileUtils;
+import cc.iotkit.model.system.SysOss;
 import cc.iotkit.system.domain.bo.SysOssBo;
 import cc.iotkit.system.domain.vo.SysOssVo;
-import cc.iotkit.system.mapper.SysOssMapper;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.dromara.common.core.constant.CacheNames;
-import org.dromara.common.core.exception.ServiceException;
-import org.dromara.common.core.service.OssService;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.SpringUtils;
-import org.dromara.common.core.utils.StreamUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.core.utils.file.FileUtils;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.oss.core.OssClient;
-import org.dromara.common.oss.entity.UploadResult;
-import org.dromara.common.oss.enumd.AccessPolicyType;
-import org.dromara.common.oss.factory.OssFactory;
-import cc.iotkit.system.domain.SysOss;
 import cc.iotkit.system.service.ISysOssService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -48,9 +39,9 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
     private final SysOssMapper baseMapper;
 
     @Override
-    public TableDataInfo<SysOssVo> queryPageList(SysOssBo bo, PageQuery pageQuery) {
+    public PagedDataVo<SysOssVo> queryPageList(SysOssBo bo, PageRequest<?> query) {
         LambdaQueryWrapper<SysOss> lqw = buildQueryWrapper(bo);
-        Page<SysOssVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        Page<SysOssVo> result = baseMapper.selectVoPage(query.build(), lqw);
         List<SysOssVo> filterResult = StreamUtils.toList(result.getRecords(), this::matchingUrl);
         result.setRecords(filterResult);
         return TableDataInfo.build(result);
@@ -104,7 +95,7 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
     public void download(Long ossId, HttpServletResponse response) throws IOException {
         SysOssVo sysOss = SpringUtils.getAopProxy(this).getById(ossId);
         if (ObjectUtil.isNull(sysOss)) {
-            throw new ServiceException("文件数据不存在!");
+            throw new BizException("文件数据不存在!");
         }
         FileUtils.setAttachmentResponseHeader(response, sysOss.getOriginalName());
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE + "; charset=UTF-8");
@@ -114,7 +105,7 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
             IoUtil.copy(inputStream, response.getOutputStream(), available);
             response.setContentLength(available);
         } catch (Exception e) {
-            throw new ServiceException(e.getMessage());
+            throw new BizException(e.getMessage());
         }
     }
 

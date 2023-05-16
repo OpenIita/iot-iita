@@ -1,33 +1,24 @@
 package cc.iotkit.system.service.impl;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.domain.model.LoginUser;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StreamUtils;
+import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.model.system.SysRole;
+import cc.iotkit.system.domain.SysRoleDept;
+import cc.iotkit.system.domain.SysRoleMenu;
+import cc.iotkit.system.domain.SysUserRole;
 import cc.iotkit.system.domain.bo.SysRoleBo;
 import cc.iotkit.system.domain.vo.SysRoleVo;
-import cc.iotkit.system.mapper.SysRoleDeptMapper;
 import cc.iotkit.system.mapper.SysRoleMapper;
-import cc.iotkit.system.mapper.SysRoleMenuMapper;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.dromara.common.core.constant.UserConstants;
-import org.dromara.common.core.domain.model.LoginUser;
-import org.dromara.common.core.exception.ServiceException;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StreamUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.satoken.utils.LoginHelper;
-import cc.iotkit.system.domain.SysRole;
-import cc.iotkit.system.domain.SysRoleDept;
-import cc.iotkit.system.domain.SysRoleMenu;
-import cc.iotkit.system.domain.SysUserRole;
 import cc.iotkit.system.mapper.SysUserRoleMapper;
 import cc.iotkit.system.service.ISysRoleService;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +42,8 @@ public class SysRoleServiceImpl implements ISysRoleService {
     private final SysRoleDeptMapper roleDeptMapper;
 
     @Override
-    public TableDataInfo<SysRoleVo> selectPageRoleList(SysRoleBo role, PageQuery pageQuery) {
-        Page<SysRoleVo> page = baseMapper.selectPageRoleList(pageQuery.build(), this.buildQueryWrapper(role));
+    public PagedDataVo<SysRoleVo> selectPageRoleList(SysRoleBo role, PageRequest<?> query) {
+        Page<SysRoleVo> page = baseMapper.selectPageRoleList(query.build(), this.buildQueryWrapper(role));
         return TableDataInfo.build(page);
     }
 
@@ -188,7 +179,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public void checkRoleAllowed(Long roleId) {
         if (ObjectUtil.isNotNull(roleId) && LoginHelper.isSuperAdmin(roleId)) {
-            throw new ServiceException("不允许操作超级管理员角色");
+            throw new BizException("不允许操作超级管理员角色");
         }
     }
 
@@ -207,7 +198,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         }
         List<SysRoleVo> roles = this.selectRoleList(new SysRoleBo(roleId));
         if (CollUtil.isEmpty(roles)) {
-            throw new ServiceException("没有权限访问角色数据！");
+            throw new BizException("没有权限访问角色数据！");
         }
 
     }
@@ -361,7 +352,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
             checkRoleDataScope(roleId);
             SysRole role = baseMapper.selectById(roleId);
             if (countUserRoleByRoleId(roleId) > 0) {
-                throw new ServiceException(String.format("%1$s已分配,不能删除", role.getRoleName()));
+                throw new BizException(String.format("%1$s已分配,不能删除", role.getRoleName()));
             }
         }
         List<Long> ids = Arrays.asList(roleIds);

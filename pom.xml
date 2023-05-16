@@ -39,6 +39,7 @@
         <alibaba-ttl.version>2.14.2</alibaba-ttl.version>
         <poi.version>5.2.3</poi.version>
         <easyexcel.version>3.2.1</easyexcel.version>
+        <ip2region.version>2.7.0</ip2region.version>
     </properties>
 
     <dependencyManagement>
@@ -308,6 +309,13 @@
                 </exclusions>
             </dependency>
 
+            <!-- 离线IP地址定位库 ip2region -->
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>ip2region</artifactId>
+                <version>${ip2region.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-model</artifactId>
@@ -466,6 +474,12 @@
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-script-engine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-doc</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

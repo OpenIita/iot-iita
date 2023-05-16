@@ -10,7 +10,7 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.constant.Constants;
-import cc.iotkit.data.IOauthClientData;
+import cc.iotkit.data.manager.IOauthClientData;
 import cc.iotkit.data.cache.OauthClientCacheEvict;
 import cc.iotkit.model.OauthClient;
 import cc.iotkit.model.Paging;

@@ -48,6 +48,11 @@
             <artifactId>iot-model</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-rdb-data-service</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

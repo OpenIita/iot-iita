@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IProtocolConverterData;
+import cc.iotkit.data.manager.IProtocolConverterData;
 import cc.iotkit.data.dao.ProtocolConverterRepository;
 import cc.iotkit.data.convert.ProtocolConverterMapper;
 import cc.iotkit.data.model.TbProtocolConverter;

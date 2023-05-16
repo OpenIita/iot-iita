@@ -9,13 +9,12 @@
  */
 package cc.iotkit.temporal.es.service;
 
-import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
 import cc.iotkit.temporal.IDevicePropertyData;
 import cc.iotkit.temporal.es.document.DevicePropertyMapper;
 import cc.iotkit.temporal.es.document.DocDeviceProperty;
-import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;

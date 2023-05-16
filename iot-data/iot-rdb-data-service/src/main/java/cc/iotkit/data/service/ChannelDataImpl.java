@@ -1,6 +1,6 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IChannelData;
+import cc.iotkit.data.manager.IChannelData;
 import cc.iotkit.data.dao.ChannelRepository;
 import cc.iotkit.data.convert.ChannelMapper;
 import cc.iotkit.data.model.TbChannel;

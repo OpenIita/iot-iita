@@ -2,6 +2,7 @@ package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.system.domain.SysUserRole;
 import cc.iotkit.system.domain.bo.SysRoleBo;
 import cc.iotkit.system.domain.vo.SysRoleVo;
 

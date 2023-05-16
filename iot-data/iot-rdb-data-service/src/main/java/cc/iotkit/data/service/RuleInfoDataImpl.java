@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IRuleInfoData;
+import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.dao.RuleInfoRepository;
 import cc.iotkit.data.convert.RuleInfoMapper;
 import cc.iotkit.data.model.TbRuleInfo;

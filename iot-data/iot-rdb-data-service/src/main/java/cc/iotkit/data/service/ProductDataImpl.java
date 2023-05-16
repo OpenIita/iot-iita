@@ -1,6 +1,6 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IProductData;
+import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.dao.ProductRepository;
 import cc.iotkit.data.convert.ProductMapper;
 import cc.iotkit.data.model.TbProduct;

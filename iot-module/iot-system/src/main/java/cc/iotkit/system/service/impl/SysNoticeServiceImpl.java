@@ -1,19 +1,14 @@
 package cc.iotkit.system.service.impl;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.model.system.SysNotice;
 import cc.iotkit.system.domain.bo.SysNoticeBo;
 import cc.iotkit.system.domain.vo.SysNoticeVo;
 import cc.iotkit.system.domain.vo.SysUserVo;
-import cc.iotkit.system.mapper.SysNoticeMapper;
 import cc.iotkit.system.mapper.SysUserMapper;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import cc.iotkit.system.domain.SysNotice;
 import cc.iotkit.system.service.ISysNoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,9 +29,9 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
     private final SysUserMapper userMapper;
 
     @Override
-    public TableDataInfo<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageQuery pageQuery) {
+    public PagedDataVo<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageRequest<?> query) {
         LambdaQueryWrapper<SysNotice> lqw = buildQueryWrapper(notice);
-        Page<SysNoticeVo> page = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        Page<SysNoticeVo> page = baseMapper.selectVoPage(query.build(), lqw);
         return TableDataInfo.build(page);
     }
 

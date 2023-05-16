@@ -20,7 +20,7 @@ import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.utils.SpringUtils;
 import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import io.netty.handler.codec.mqtt.MqttQoS;

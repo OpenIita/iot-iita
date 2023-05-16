@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IVirtualDeviceData;
+import cc.iotkit.data.manager.IVirtualDeviceData;
 import cc.iotkit.data.dao.VirtualDeviceMappingRepository;
 import cc.iotkit.data.dao.VirtualDeviceRepository;
 import cc.iotkit.data.model.TbVirtualDevice;

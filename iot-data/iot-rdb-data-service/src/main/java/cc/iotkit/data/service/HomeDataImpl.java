@@ -1,6 +1,6 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IHomeData;
+import cc.iotkit.data.manager.IHomeData;
 import cc.iotkit.data.dao.HomeRepository;
 import cc.iotkit.data.convert.HomeMapper;
 import cc.iotkit.model.Paging;

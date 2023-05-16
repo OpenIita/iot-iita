@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.IOauthClientData;
+import cc.iotkit.data.manager.IOauthClientData;
 import cc.iotkit.data.dao.OauthClientRepository;
 import cc.iotkit.data.convert.OauthClientMapper;
 import cc.iotkit.model.OauthClient;

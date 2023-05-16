@@ -10,8 +10,8 @@
 package cc.iotkit.ruleengine.rule;
 
 import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.data.IDeviceInfoData;
-import cc.iotkit.data.IRuleInfoData;
+import cc.iotkit.data.manager.IDeviceInfoData;
+import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;

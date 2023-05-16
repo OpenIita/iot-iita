@@ -1,7 +1,7 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.constant.Constants;
-import cc.iotkit.data.IUserInfoData;
+import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.cache.UserInfoCacheEvict;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.UserInfo;
