@@ -1,9 +1,9 @@
 package cc.iotkit.system.mapper;
 
-import cc.iotkit.system.domain.vo.SysDictDataVo;
+import cc.iotkit.system.dto.vo.SysDictDataVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.dromara.common.core.constant.UserConstants;
-import cc.iotkit.system.domain.SysDictData;
+import cc.iotkit.system.dto.SysDictData;
 import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
 
 import java.util.List;

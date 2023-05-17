@@ -1,13 +1,13 @@
 package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.web.core.BaseController;
-import cc.iotkit.system.domain.bo.SysConfigBo;
-import cc.iotkit.system.domain.vo.SysConfigVo;
+import cc.iotkit.system.dto.bo.SysConfigBo;
+import cc.iotkit.system.dto.vo.SysConfigVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysConfigService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,8 +35,8 @@ public class SysConfigController extends BaseController {
      */
     @SaCheckPermission("system:config:list")
     @PostMapping("/list")
-    public PagedDataVo<SysConfigVo> list(@RequestBody @Validated SysConfigBo config, PageRequest<?> query) {
-        return configService.selectPageConfigList(config, query);
+    public PagedDataVo<SysConfigVo> list(@RequestBody @Validated PageRequest<SysConfigBo> query) {
+        return configService.selectPageConfigList(query);
     }
 
     /**

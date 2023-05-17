@@ -1,8 +1,8 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.service.DeptService;
-import cc.iotkit.system.domain.bo.SysDeptBo;
-import cc.iotkit.system.domain.vo.SysDeptVo;
+import cc.iotkit.system.dto.bo.SysDeptBo;
+import cc.iotkit.system.dto.vo.SysDeptVo;
 import cc.iotkit.system.mapper.SysDeptMapper;
 import cc.iotkit.system.mapper.SysRoleMapper;
 import cc.iotkit.system.mapper.SysUserMapper;

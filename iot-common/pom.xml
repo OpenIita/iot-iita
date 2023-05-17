@@ -27,7 +27,7 @@
         <module>iot-common-log</module>
         <module>iot-common-oss</module>
         <module>iot-common-redis</module>
-        <module>iot-common-security</module>
+        <module>iot-common-satoken</module>
         <module>iot-common-tenant</module>
         <module>iot-common-web</module>
         <module>iot-common-websocket</module>

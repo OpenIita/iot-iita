@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.dao.system;
 
-import cc.iotkit.data.model.system.TbSysOss;
+import cc.iotkit.data.model.TbSysOss;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 

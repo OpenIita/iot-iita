@@ -1,6 +1,6 @@
 package cc.iotkit.system.mapper;
 
-import cc.iotkit.system.domain.vo.SysUserVo;
+import cc.iotkit.system.dto.vo.SysUserVo;
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.dromara.common.mybatis.annotation.DataColumn;
 import org.dromara.common.mybatis.annotation.DataPermission;
 import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
-import cc.iotkit.system.domain.SysUser;
+import cc.iotkit.system.dto.SysUser;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

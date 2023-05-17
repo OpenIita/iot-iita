@@ -1,12 +1,12 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.model.system.SysPost;
-import cc.iotkit.system.domain.bo.SysPostBo;
-import cc.iotkit.system.domain.vo.SysPostVo;
+import cc.iotkit.system.dto.bo.SysPostBo;
+import cc.iotkit.system.dto.vo.SysPostVo;
 import cc.iotkit.system.mapper.SysPostMapper;
 import cn.hutool.core.util.ObjectUtil;
 import cc.iotkit.system.service.ISysPostService;

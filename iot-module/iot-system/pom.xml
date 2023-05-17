@@ -25,7 +25,7 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common-security</artifactId>
+            <artifactId>iot-common-satoken</artifactId>
         </dependency>
 
         <dependency>

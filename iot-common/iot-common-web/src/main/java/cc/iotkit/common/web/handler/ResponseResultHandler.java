@@ -10,8 +10,8 @@
 package cc.iotkit.common.web.handler;
 
 import cc.iotkit.common.api.Response;
-import cc.iotkit.common.web.handler.GlobalExceptionHandler;
-import cn.dev33.satoken.util.SaResult;
+
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -22,7 +22,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @ControllerAdvice

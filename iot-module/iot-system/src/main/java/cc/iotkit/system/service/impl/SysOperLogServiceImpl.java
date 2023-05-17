@@ -1,14 +1,14 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.log.event.OperLogEvent;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.ip.AddressUtils;
 import cc.iotkit.model.system.SysOperLog;
-import cc.iotkit.system.domain.bo.SysOperLogBo;
-import cc.iotkit.system.domain.vo.SysOperLogVo;
+import cc.iotkit.system.dto.bo.SysOperLogBo;
+import cc.iotkit.system.dto.vo.SysOperLogVo;
 import cn.hutool.core.util.ArrayUtil;
 import cc.iotkit.system.service.ISysOperLogService;
 import lombok.RequiredArgsConstructor;

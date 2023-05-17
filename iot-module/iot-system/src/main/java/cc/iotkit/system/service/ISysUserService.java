@@ -1,9 +1,9 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.domain.vo.PagedDataVo;
-import cc.iotkit.system.domain.bo.SysUserBo;
-import cc.iotkit.system.domain.vo.SysUserVo;
+import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.system.dto.bo.SysUserBo;
+import cc.iotkit.system.dto.vo.SysUserVo;
 
 import java.util.List;
 

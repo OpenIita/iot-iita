@@ -2,6 +2,7 @@ package cc.iotkit.model.system;
 
 import cc.iotkit.model.Id;
 import cc.iotkit.model.TenantEntity;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

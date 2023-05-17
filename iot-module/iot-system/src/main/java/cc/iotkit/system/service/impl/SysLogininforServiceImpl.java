@@ -2,15 +2,15 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.Constants;
-import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.log.event.LogininforEvent;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.ServletUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.ip.AddressUtils;
 import cc.iotkit.model.system.SysLogininfor;
-import cc.iotkit.system.domain.bo.SysLogininforBo;
-import cc.iotkit.system.domain.vo.SysLogininforVo;
+import cc.iotkit.system.dto.bo.SysLogininforBo;
+import cc.iotkit.system.dto.vo.SysLogininforVo;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cc.iotkit.system.service.ISysLogininforService;

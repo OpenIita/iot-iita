@@ -1,19 +1,19 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.domain.model.LoginUser;
-import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.undefined.LoginUser;
+import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.model.system.SysRole;
-import cc.iotkit.system.domain.SysRoleDept;
-import cc.iotkit.system.domain.SysRoleMenu;
-import cc.iotkit.system.domain.SysUserRole;
-import cc.iotkit.system.domain.bo.SysRoleBo;
-import cc.iotkit.system.domain.vo.SysRoleVo;
+import cc.iotkit.system.dto.SysRoleDept;
+import cc.iotkit.system.dto.SysRoleMenu;
+import cc.iotkit.system.dto.SysUserRole;
+import cc.iotkit.system.dto.bo.SysRoleBo;
+import cc.iotkit.system.dto.vo.SysRoleVo;
 import cc.iotkit.system.mapper.SysRoleMapper;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;

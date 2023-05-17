@@ -1,9 +1,9 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.model.system.SysMenu;
-import cc.iotkit.system.domain.bo.SysMenuBo;
-import cc.iotkit.system.domain.vo.RouterVo;
-import cc.iotkit.system.domain.vo.SysMenuVo;
+import cc.iotkit.system.dto.bo.SysMenuBo;
+import cc.iotkit.system.dto.vo.RouterVo;
+import cc.iotkit.system.dto.vo.SysMenuVo;
 import cn.hutool.core.lang.tree.Tree;
 
 import java.util.List;

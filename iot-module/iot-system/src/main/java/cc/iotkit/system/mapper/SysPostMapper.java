@@ -1,8 +1,8 @@
 package cc.iotkit.system.mapper;
 
-import cc.iotkit.system.domain.vo.SysPostVo;
+import cc.iotkit.system.dto.vo.SysPostVo;
 import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
-import cc.iotkit.system.domain.SysPost;
+import cc.iotkit.system.dto.SysPost;
 
 import java.util.List;
 

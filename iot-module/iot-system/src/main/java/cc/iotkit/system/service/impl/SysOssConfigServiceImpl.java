@@ -2,19 +2,19 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.CacheNames;
-import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
 import cc.iotkit.common.redis.utils.RedisUtils;
-import cc.iotkit.common.tenant.core.TenantEntity;
+import cc.iotkit.common.tenant.core.TenantDto;
 import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.model.system.SysOssConfig;
-import cc.iotkit.system.domain.bo.SysOssConfigBo;
-import cc.iotkit.system.domain.vo.SysOssConfigVo;
+import cc.iotkit.system.dto.bo.SysOssConfigBo;
+import cc.iotkit.system.dto.vo.SysOssConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
     public void init() {
         List<SysOssConfig> list = TenantHelper.ignore(() ->
             baseMapper.selectList(
-                new LambdaQueryWrapper<SysOssConfig>().orderByAsc(TenantEntity::getTenantId))
+                new LambdaQueryWrapper<SysOssConfig>().orderByAsc(TenantDto::getTenantId))
         );
         Map<String, List<SysOssConfig>> map = StreamUtils.groupByKey(list, SysOssConfig::getTenantId);
         try {

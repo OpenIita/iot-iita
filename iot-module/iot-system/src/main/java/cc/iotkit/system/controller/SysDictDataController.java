@@ -1,12 +1,12 @@
 package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
-import cc.iotkit.system.domain.bo.SysDictDataBo;
-import cc.iotkit.system.domain.vo.SysDictDataVo;
+import cc.iotkit.system.dto.bo.SysDictDataBo;
+import cc.iotkit.system.dto.vo.SysDictDataVo;
 import cc.iotkit.system.service.ISysDictDataService;
 import cc.iotkit.system.service.ISysDictTypeService;
 import cn.dev33.satoken.annotation.SaCheckPermission;

@@ -1,11 +1,11 @@
 package cc.iotkit.system.mapper;
 
-import cc.iotkit.system.domain.vo.SysMenuVo;
+import cc.iotkit.system.dto.vo.SysMenuVo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import org.dromara.common.core.constant.UserConstants;
-import cc.iotkit.system.domain.SysMenu;
+import cc.iotkit.system.dto.SysMenu;
 import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
 import org.apache.ibatis.annotations.Param;
 

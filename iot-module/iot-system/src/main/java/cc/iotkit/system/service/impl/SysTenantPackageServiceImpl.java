@@ -1,14 +1,14 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.model.system.SysTenant;
 import cc.iotkit.model.system.SysTenantPackage;
-import cc.iotkit.system.domain.bo.SysTenantPackageBo;
-import cc.iotkit.system.domain.vo.SysTenantPackageVo;
+import cc.iotkit.system.dto.bo.SysTenantPackageBo;
+import cc.iotkit.system.dto.vo.SysTenantPackageVo;
 import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

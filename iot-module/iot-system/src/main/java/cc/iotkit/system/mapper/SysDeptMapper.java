@@ -1,7 +1,7 @@
 package cc.iotkit.system.mapper;
 
 import cc.iotkit.model.system.SysDept;
-import cc.iotkit.system.domain.vo.SysDeptVo;
+import cc.iotkit.system.dto.vo.SysDeptVo;
 
 import java.util.List;
 

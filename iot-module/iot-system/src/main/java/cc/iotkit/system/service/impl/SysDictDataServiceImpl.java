@@ -2,13 +2,13 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.CacheNames;
-import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.model.system.SysDictData;
-import cc.iotkit.system.domain.bo.SysDictDataBo;
-import cc.iotkit.system.domain.vo.SysDictDataVo;
+import cc.iotkit.system.dto.bo.SysDictDataBo;
+import cc.iotkit.system.dto.vo.SysDictDataVo;
 import cc.iotkit.system.mapper.SysDictDataMapper;
 import cc.iotkit.system.service.ISysDictDataService;
 import lombok.RequiredArgsConstructor;

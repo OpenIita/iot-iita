@@ -1,7 +1,7 @@
 package cc.iotkit.system.service.impl;
 
-import cc.iotkit.system.domain.SysDept;
-import cc.iotkit.system.domain.SysRoleDept;
+import cc.iotkit.system.dto.SysDept;
+import cc.iotkit.system.dto.SysRoleDept;
 import cc.iotkit.system.mapper.SysDeptMapper;
 import cc.iotkit.system.mapper.SysRoleDeptMapper;
 import cn.hutool.core.collection.CollUtil;

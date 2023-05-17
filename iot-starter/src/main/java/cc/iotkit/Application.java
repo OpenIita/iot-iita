@@ -9,8 +9,8 @@
  */
 package cc.iotkit;
 
-import cc.iotkit.manager.config.EmbeddedElasticSearchConfig;
-import cc.iotkit.manager.config.EmbeddedRedisConfig;
+import cc.iotkit.common.config.EmbeddedElasticSearchConfig;
+import cc.iotkit.common.config.EmbeddedRedisConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

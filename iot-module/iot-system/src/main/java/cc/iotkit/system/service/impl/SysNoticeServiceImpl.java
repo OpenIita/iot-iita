@@ -1,12 +1,12 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.domain.vo.PagedDataVo;
+import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.model.system.SysNotice;
-import cc.iotkit.system.domain.bo.SysNoticeBo;
-import cc.iotkit.system.domain.vo.SysNoticeVo;
-import cc.iotkit.system.domain.vo.SysUserVo;
+import cc.iotkit.system.dto.bo.SysNoticeBo;
+import cc.iotkit.system.dto.vo.SysNoticeVo;
+import cc.iotkit.system.dto.vo.SysUserVo;
 import cc.iotkit.system.mapper.SysUserMapper;
 import cn.hutool.core.util.ObjectUtil;
 import cc.iotkit.system.service.ISysNoticeService;

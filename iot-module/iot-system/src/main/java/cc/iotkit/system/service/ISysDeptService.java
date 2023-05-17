@@ -1,8 +1,8 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.model.system.SysDept;
-import cc.iotkit.system.domain.bo.SysDeptBo;
-import cc.iotkit.system.domain.vo.SysDeptVo;
+import cc.iotkit.system.dto.bo.SysDeptBo;
+import cc.iotkit.system.dto.vo.SysDeptVo;
 import cn.hutool.core.lang.tree.Tree;
 
 import java.util.List;
