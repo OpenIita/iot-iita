@@ -21,7 +21,6 @@
         <module>iot-common-core</module>
         <module>iot-script-engine</module>
         <module>iot-message-bus</module>
-        <module>iot-message-notify</module>
         <module>iot-common-doc</module>
         <module>iot-common-excel</module>
         <module>iot-common-log</module>

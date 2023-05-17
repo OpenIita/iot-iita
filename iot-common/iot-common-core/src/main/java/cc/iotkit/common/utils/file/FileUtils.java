@@ -1,10 +1,11 @@
 package cc.iotkit.common.utils.file;
 
 import cn.hutool.core.io.FileUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import javax.servlet.http.HttpServletResponse;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
