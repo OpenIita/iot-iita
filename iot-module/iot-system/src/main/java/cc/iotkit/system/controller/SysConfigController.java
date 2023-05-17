@@ -34,8 +34,8 @@ public class SysConfigController extends BaseController {
      * 获取参数配置列表
      */
     @SaCheckPermission("system:config:list")
-    @GetMapping("/list")
-    public PagedDataVo<SysConfigVo> list(SysConfigBo config, PageRequest<?> query) {
+    @PostMapping("/list")
+    public PagedDataVo<SysConfigVo> list(@RequestBody @Validated SysConfigBo config, PageRequest<?> query) {
         return configService.selectPageConfigList(config, query);
     }
 

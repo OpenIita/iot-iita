@@ -41,7 +41,7 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-model</artifactId>
+             <artifactId>iot-common-model</artifactId>
         </dependency>
 
         <dependency>
@@ -81,12 +81,12 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-rdb-data-service</artifactId>
+            <artifactId>iot-data-serviceImpl-rdb</artifactId>
         </dependency>
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-data-cache</artifactId>
+             <artifactId>iot-data-serviceImpl-cache</artifactId>
         </dependency>
 
         <dependency>

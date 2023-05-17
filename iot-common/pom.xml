@@ -19,6 +19,7 @@
 
     <modules>
         <module>iot-common-core</module>
+        <module>iot-common-dao</module>
         <module>iot-script-engine</module>
         <module>iot-message-bus</module>
         <module>iot-common-doc</module>

@@ -17,7 +17,7 @@
 
     <modules>
         <module>iot-message-core</module>
-        <module>iot-vertx-event-bus</module>
+        <module>iot-message-event-bus</module>
         <module>iot-message-rocketmq</module>
     </modules>
 

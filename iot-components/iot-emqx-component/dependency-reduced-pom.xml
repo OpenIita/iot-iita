@@ -83,7 +83,7 @@
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
-      <artifactId>iot-model</artifactId>
+       <artifactId>iot-common-model</artifactId>
       <version>0.4.3-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>

@@ -35,7 +35,7 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-model</artifactId>
+             <artifactId>iot-common-model</artifactId>
         </dependency>
 
         <dependency>
