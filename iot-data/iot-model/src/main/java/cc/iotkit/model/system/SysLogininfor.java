@@ -14,7 +14,6 @@ import java.util.Date;
  * @date 2023-02-07
  */
 @Data
-@AutoMapper(target = SysLogininfor.class)
 public class SysLogininfor implements Id<Long>,Serializable {
     private static final long serialVersionUID = 1L;
 

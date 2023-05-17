@@ -1,7 +1,9 @@
 package cc.iotkit.model.system;
 
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -13,8 +15,9 @@ import java.io.Serializable;
  * @author 孤舟烟雨
  * @date 2021-08-13
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class SysOssConfig implements Id<Long>,Serializable {
+public class SysOssConfig extends TenantEntity implements Id<Long>, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

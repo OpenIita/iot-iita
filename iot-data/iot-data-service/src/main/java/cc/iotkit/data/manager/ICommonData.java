@@ -40,6 +40,11 @@ public interface ICommonData<T extends Id<ID>, ID> {
     void deleteById(ID id);
 
     /**
+     * 按id批量删除
+     */
+    void deleteByIds(ID[] ids);
+
+    /**
      * 总数统计
      */
     long count();
