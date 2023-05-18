@@ -91,6 +91,12 @@ public class BigScreenController {
         return bigScreenApiData.findByScreenId(screen.getId());
     }
 
+    @ApiOperation(value = "获取默认大屏", httpMethod = "POST")
+    @PostMapping("/getDefaultScreen")
+    public BigScreen getDefaultScreen() {
+        return bigScreenData.findByUidAndIsDefault(AuthUtil.getUserId(), true);
+    }
+
     @ApiOperation(value = "同步资源包接口", httpMethod = "POST")
     @PostMapping("/syncResourceApis/{id}")
     public List<BigScreenApi> syncResourceApis(@PathVariable("id") String id) {
