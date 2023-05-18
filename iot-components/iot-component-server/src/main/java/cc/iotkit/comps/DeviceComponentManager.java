@@ -112,7 +112,7 @@ public class DeviceComponentManager {
         componentInstance.create(new CompConfig(300, component.getConfig()));
 
         try {
-            if(component.CONVER_TYPE_STATIC.equals(component.getConverType())){
+            if(ProtocolComponent.CONVER_TYPE_STATIC.equals(component.getConverType())){
                 IConverter converterInstance;
                 try {
                     converterInstance=ComponentClassLoader.getConverter(component.getId());

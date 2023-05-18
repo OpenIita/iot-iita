@@ -1,14 +1,6 @@
 package cc.iotkit.system.mapper;
 
 import cc.iotkit.system.dto.vo.SysRoleVo;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.dromara.common.mybatis.annotation.DataColumn;
-import org.dromara.common.mybatis.annotation.DataPermission;
-import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
-import cc.iotkit.system.dto.SysRole;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

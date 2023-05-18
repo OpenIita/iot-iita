@@ -5,9 +5,9 @@ import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.undefined.PagedDataVo;
 import cc.iotkit.common.log.event.LogininforEvent;
 import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.common.utils.ServletUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.ip.AddressUtils;
+import cc.iotkit.common.web.utils.UnsignedMathGenerator;
 import cc.iotkit.model.system.SysLogininfor;
 import cc.iotkit.system.dto.bo.SysLogininforBo;
 import cc.iotkit.system.dto.vo.SysLogininforVo;
@@ -48,7 +48,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
     public void recordLogininfor(LogininforEvent logininforEvent) {
         HttpServletRequest request = logininforEvent.getRequest();
         final UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
-        final String ip = ServletUtils.getClientIP(request);
+        final String ip = UnsignedMathGenerator.ServletUtils.getClientIP(request);
 
         String address = AddressUtils.getRealAddressByIP(ip);
         StringBuilder s = new StringBuilder();

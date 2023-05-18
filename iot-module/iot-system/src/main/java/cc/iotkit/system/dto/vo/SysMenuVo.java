@@ -1,10 +1,9 @@
 package cc.iotkit.system.dto.vo;
 
-import cc.iotkit.system.dto.SysMenu;
+import cc.iotkit.model.system.SysMenu;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,8 +18,6 @@ import java.util.List;
 @Data
 @AutoMapper(target = SysMenu.class)
 public class SysMenuVo implements Serializable {
-
-    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

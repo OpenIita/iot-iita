@@ -102,6 +102,11 @@
             <artifactId>iot-script-engine</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-message-core</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

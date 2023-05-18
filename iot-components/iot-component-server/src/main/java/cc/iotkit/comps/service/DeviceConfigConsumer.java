@@ -9,7 +9,7 @@
  */
 package cc.iotkit.comps.service;
 
-import cc.iotkit.common.Constants;
+import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comps.DeviceComponentManager;

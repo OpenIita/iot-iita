@@ -40,6 +40,11 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
             <artifactId>iot-common-satoken</artifactId>
         </dependency>
 

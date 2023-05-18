@@ -1,12 +1,19 @@
-package cc.iotkit.common.utils;
+package cc.iotkit.common.web.utils;
 
+import cc.iotkit.common.utils.StringUtils;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.extra.servlet.JakartaServletUtil;
 import cn.hutool.http.HttpStatus;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -14,8 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 
 /**
@@ -24,7 +29,7 @@ import lombok.NoArgsConstructor;
  * @author ruoyi
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ServletUtils extends JakartaServletUtil {
+public class ServletUtils {
 
     /**
      * 获取String参数
@@ -163,7 +168,7 @@ public class ServletUtils extends JakartaServletUtil {
     }
 
     public static String getClientIP() {
-        return getClientIP(getRequest());
+        return getRequest().getRemoteAddr();
     }
 
     /**

@@ -4,13 +4,13 @@ import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.web.config.properties.XssProperties;
 import cc.iotkit.common.web.filter.RepeatableFilter;
 import cc.iotkit.common.web.filter.XssFilter;
-import jakarta.servlet.DispatcherType;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
+import javax.servlet.DispatcherType;
 import java.util.HashMap;
 import java.util.Map;
 

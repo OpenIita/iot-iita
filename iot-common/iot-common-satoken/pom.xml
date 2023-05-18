@@ -35,6 +35,11 @@
             <artifactId>iot-common-redis</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-web</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

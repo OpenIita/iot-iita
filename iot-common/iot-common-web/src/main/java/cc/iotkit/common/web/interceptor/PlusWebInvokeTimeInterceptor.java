@@ -6,14 +6,15 @@ import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.web.filter.RepeatedlyRequestWrapper;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.map.MapUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.alibaba.ttl.TransmittableThreadLocal;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.util.Map;
 
