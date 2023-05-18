@@ -1,8 +1,8 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IChannelData;
 import cc.iotkit.data.dao.ChannelRepository;
-import cc.iotkit.data.convert.ChannelMapper;
 import cc.iotkit.data.model.TbChannel;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.notify.Channel;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * author: 石恒
@@ -31,7 +30,7 @@ public class ChannelDataImpl implements IChannelData {
 
     @Override
     public Channel findById(String id) {
-        return ChannelMapper.M.toDto(channelRepository.findById(id).orElse(null));
+        return MapstructUtils.convert(channelRepository.findById(id).orElse(null), Channel.class);
     }
 
     @Override
@@ -39,7 +38,9 @@ public class ChannelDataImpl implements IChannelData {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
-        channelRepository.save(ChannelMapper.M.toVo(data));
+        channelRepository.save(
+                MapstructUtils.convert(data, TbChannel.class)
+        );
         return data;
     }
 
@@ -55,14 +56,18 @@ public class ChannelDataImpl implements IChannelData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return channelRepository.count();
     }
 
     @Override
     public List<Channel> findAll() {
-        return channelRepository.findAll().stream().map(ChannelMapper.M::toDto)
-                .collect(Collectors.toList());
+        return MapstructUtils.convert(channelRepository.findAll(), Channel.class);
     }
 
     @Override
@@ -70,9 +75,6 @@ public class ChannelDataImpl implements IChannelData {
         Page<TbChannel> tbDeviceConfigs = channelRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(
                 tbDeviceConfigs.getTotalElements(),
-                tbDeviceConfigs.getContent()
-                        .stream().map(ChannelMapper.M::toDto)
-                        .collect(Collectors.toList())
-        );
+                MapstructUtils.convert(tbDeviceConfigs.getContent(), Channel.class));
     }
 }

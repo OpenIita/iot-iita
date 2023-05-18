@@ -236,6 +236,11 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return deviceInfoData.count();
     }

@@ -55,6 +55,11 @@ public class ProductModelDataCache implements IProductModelData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return productModelData.count();
     }

@@ -1,8 +1,8 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.ISpaceData;
 import cc.iotkit.data.dao.SpaceRepository;
-import cc.iotkit.data.convert.SpaceMapper;
 import cc.iotkit.data.model.TbSpace;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.space.Space;
@@ -25,22 +25,22 @@ public class SpaceDataImpl implements ISpaceData {
 
     @Override
     public List<Space> findByUidOrderByCreateAtDesc(String uid) {
-        return SpaceMapper.toDto(spaceRepository.findByUidOrderByCreateAtDesc(uid));
+        return MapstructUtils.convert(spaceRepository.findByUidOrderByCreateAtDesc(uid), Space.class);
     }
 
     @Override
     public List<Space> findByUidAndHomeIdOrderByCreateAtDesc(String uid, String homeId) {
-        return SpaceMapper.toDto(spaceRepository.findByUidAndHomeIdOrderByCreateAtDesc(uid, homeId));
+        return MapstructUtils.convert(spaceRepository.findByUidAndHomeIdOrderByCreateAtDesc(uid, homeId), Space.class);
     }
 
     @Override
     public List<Space> findByHomeId(String homeId) {
-        return SpaceMapper.toDto(spaceRepository.findByHomeId(homeId));
+        return MapstructUtils.convert(spaceRepository.findByHomeId(homeId), Space.class);
     }
 
     @Override
     public List<Space> findByUid(String uid) {
-        return SpaceMapper.toDto(spaceRepository.findByUid(uid));
+        return MapstructUtils.convert(spaceRepository.findByUid(uid), Space.class);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SpaceDataImpl implements ISpaceData {
         Page<TbSpace> paged = spaceRepository.findByUid(uid,
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                SpaceMapper.toDto(paged.getContent()));
+                MapstructUtils.convert(paged.getContent(), Space.class));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class SpaceDataImpl implements ISpaceData {
 
     @Override
     public Space findById(String s) {
-        return SpaceMapper.M.toDto(spaceRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(spaceRepository.findById(s).orElse(null), Space.class);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SpaceDataImpl implements ISpaceData {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
-        spaceRepository.save(SpaceMapper.M.toVo(data));
+        spaceRepository.save(MapstructUtils.convert(data, TbSpace.class));
         return data;
     }
 
@@ -81,13 +81,18 @@ public class SpaceDataImpl implements ISpaceData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return spaceRepository.count();
     }
 
     @Override
     public List<Space> findAll() {
-        return SpaceMapper.toDto(spaceRepository.findAll());
+        return MapstructUtils.convert(spaceRepository.findAll(), Space.class);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package cc.iotkit.system.dto.vo;
 
-import org.dromara.common.core.utils.StringUtils;
+import cc.iotkit.common.utils.StringUtils;
 import lombok.Data;
 
 /**

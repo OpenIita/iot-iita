@@ -12,7 +12,7 @@ package cc.iotkit.comp.mqtt;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
@@ -43,7 +43,7 @@ public class MqttDeviceComponent extends AbstractDeviceComponent {
     public void create(CompConfig config) {
         super.create(config);
         vertx = Vertx.vertx();
-        MqttConfig mqttConfig = JsonUtil.parse(config.getOther(), MqttConfig.class);
+        MqttConfig mqttConfig = JsonUtils.parseObject(config.getOther(), MqttConfig.class);
         mqttVerticle = new MqttVerticle(mqttConfig);
     }
 

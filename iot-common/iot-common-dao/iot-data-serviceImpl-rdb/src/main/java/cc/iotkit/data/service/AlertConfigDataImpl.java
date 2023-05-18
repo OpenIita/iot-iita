@@ -1,9 +1,9 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IAlertConfigData;
 import cc.iotkit.data.dao.AlertConfigRepository;
-import cc.iotkit.data.convert.AlertConfigMapper;
 import cc.iotkit.data.model.TbAlertConfig;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.alert.AlertConfig;
@@ -35,7 +35,7 @@ public class AlertConfigDataImpl implements IAlertConfigData {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
-        alertConfigRepository.save(AlertConfigMapper.M.toVo(data));
+        alertConfigRepository.save(MapstructUtils.convert(data, TbAlertConfig.class));
         return data;
     }
 
@@ -47,6 +47,11 @@ public class AlertConfigDataImpl implements IAlertConfigData {
     @Override
     public void deleteById(String s) {
         alertConfigRepository.deleteById(s);
+    }
+
+    @Override
+    public void deleteByIds(String[] strings) {
+
     }
 
     @Override
@@ -66,9 +71,7 @@ public class AlertConfigDataImpl implements IAlertConfigData {
 
     @Override
     public Paging<AlertConfig> selectAlertConfigPage(PageRequest<AlertConfig> request) {
-        //Pageable pageable = org.springframework.data.domain.PageRequest.of(request.getPageNo(), request.getPageSize());
-        //Page<TbAlertConfig> alertConfigPage =  alertConfigRepository.findAll(Example.of(AlertConfigMapper.M.toVo(request.getData())), pageable);
-        Page<TbAlertConfig> alertConfigPage =  alertConfigRepository.findAll(Pageable.ofSize(request.getPageSize()).withPage(request.getPageNo() - 1));
-        return new Paging<>(alertConfigPage.getTotalElements(), AlertConfigMapper.toDto(alertConfigPage.getContent()));
+        Page<TbAlertConfig> alertConfigPage = alertConfigRepository.findAll(Pageable.ofSize(request.getPageSize()).withPage(request.getPageNum() - 1));
+        return new Paging<>(alertConfigPage.getTotalElements(), MapstructUtils.convert(alertConfigPage.getContent(), AlertConfig.class));
     }
 }

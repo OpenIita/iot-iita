@@ -9,9 +9,10 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IOauthClientData;
 import cc.iotkit.data.dao.OauthClientRepository;
-import cc.iotkit.data.convert.OauthClientMapper;
+import cc.iotkit.data.model.TbOauthClient;
 import cc.iotkit.model.OauthClient;
 import cc.iotkit.model.Paging;
 import org.apache.commons.lang3.StringUtils;
@@ -32,12 +33,12 @@ public class OauthClientDataImpl implements IOauthClientData {
 
     @Override
     public OauthClient findByClientId(String clientId) {
-        return OauthClientMapper.M.toDto(oauthClientRepository.findByClientId(clientId));
+        return MapstructUtils.convert(oauthClientRepository.findByClientId(clientId), OauthClient.class);
     }
 
     @Override
     public OauthClient findById(String s) {
-        return OauthClientMapper.M.toDto(oauthClientRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(oauthClientRepository.findById(s).orElse(null), OauthClient.class);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class OauthClientDataImpl implements IOauthClientData {
             data.setId(UUID.randomUUID().toString());
             data.setCreateAt(System.currentTimeMillis());
         }
-        oauthClientRepository.save(OauthClientMapper.M.toVo(data));
+        oauthClientRepository.save(MapstructUtils.convert(data, TbOauthClient.class));
         return data;
     }
 
@@ -58,6 +59,11 @@ public class OauthClientDataImpl implements IOauthClientData {
     @Override
     public void deleteById(String s) {
         oauthClientRepository.deleteById(s);
+    }
+
+    @Override
+    public void deleteByIds(String[] strings) {
+
     }
 
     @Override

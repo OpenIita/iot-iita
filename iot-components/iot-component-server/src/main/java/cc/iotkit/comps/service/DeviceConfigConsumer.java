@@ -11,7 +11,7 @@ package cc.iotkit.comps.service;
 
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comps.DeviceComponentManager;
 import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.model.device.DeviceConfig;
@@ -57,7 +57,7 @@ public class DeviceConfigConsumer implements ConsumerHandler<ThingModelMessage> 
                     return;
                 }
 
-                Map config = JsonUtil.parse(deviceConfig.getConfig(), Map.class);
+                Map config = JsonUtils.parseObject(deviceConfig.getConfig(), Map.class);
                 ThingService<Object> service = ThingService.builder()
                         .productKey(msg.getProductKey())
                         .deviceName(msg.getDeviceName())

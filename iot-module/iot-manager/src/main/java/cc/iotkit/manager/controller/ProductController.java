@@ -11,7 +11,7 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.manager.IProductModelData;
@@ -103,7 +103,7 @@ public class ProductController {
     public void saveThingModel(String productKey, String model) {
         checkProductOwner(productKey);
         ThingModel oldData = thingModelData.findById(productKey);
-        ThingModel thingModel = new ThingModel(productKey, productKey, JsonUtil.parse(model, ThingModel.Model.class));
+        ThingModel thingModel = new ThingModel(productKey, productKey, JsonUtils.parseObject(model, ThingModel.Model.class));
         if (oldData == null) {
             //定义时序数据库物模型数据结构
             dbStructureData.defineThingModel(thingModel);

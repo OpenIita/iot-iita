@@ -9,7 +9,7 @@
  */
 package cc.iotkit.ruleengine.rule;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.rule.RuleLog;
 import cc.iotkit.ruleengine.action.Action;
@@ -59,7 +59,7 @@ public class RuleExecutor {
             //执行动作返回执行内容
             List<String> results = doActions(rule, message);
             //保存动作内容和状态
-            ruleLog.setContent(JsonUtil.toJsonString(results));
+            ruleLog.setContent(JsonUtils.toJsonString(results));
             ruleLog.setState(RuleLog.STATE_EXECUTED_ACTION);
             ruleLog.setSuccess(true);
             log.info("rule execution completed,id:{}", rule.getId());

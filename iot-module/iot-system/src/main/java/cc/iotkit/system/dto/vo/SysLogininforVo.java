@@ -1,15 +1,15 @@
 package cc.iotkit.system.dto.vo;
 
 import java.util.Date;
+
+import cc.iotkit.common.excel.annotation.ExcelDictFormat;
+import cc.iotkit.common.excel.convert.ExcelDictConvert;
+import cc.iotkit.model.system.SysLogininfor;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import org.dromara.common.excel.annotation.ExcelDictFormat;
-import org.dromara.common.excel.convert.ExcelDictConvert;
-import cc.iotkit.system.dto.SysLogininfor;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 
@@ -24,8 +24,6 @@ import java.io.Serializable;
 @ExcelIgnoreUnannotated
 @AutoMapper(target = SysLogininfor.class)
 public class SysLogininforVo implements Serializable {
-
-    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

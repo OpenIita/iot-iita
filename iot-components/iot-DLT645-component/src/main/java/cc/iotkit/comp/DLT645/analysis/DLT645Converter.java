@@ -2,7 +2,7 @@ package cc.iotkit.comp.DLT645.analysis;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.DLT645.utils.ByteUtils;
 import cc.iotkit.converter.Device;
@@ -30,7 +30,7 @@ public class DLT645Converter implements IConverter {
     @Override
     public ThingModelMessage decode(DeviceMessage msg) {
         ThingModelMessage tmm = null;
-        ReportData rd=JsonUtil.parse(JsonUtil.toJsonString(msg.getContent()),ReportData.class);
+        ReportData rd=JsonUtils.parseObject(JsonUtils.toJsonString(msg.getContent()),ReportData.class);
         if(ThingModelMessage.TYPE_PROPERTY.equals(rd.type)&&"report".equals(rd.getIdentifier())){
             tmm=ThingModelMessage.builder()
                     .mid(msg.getMid())

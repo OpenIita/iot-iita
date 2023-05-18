@@ -9,7 +9,7 @@
  */
 package cc.iotkit.temporal.ts.service;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.stats.TimeData;
@@ -121,7 +121,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
                         msg.getProductKey(), msg.getDeviceName(),
                         msg.getUid(), msg.getType(),
                         msg.getIdentifier(), msg.getCode(),
-                        msg.getData() == null ? "{}" : JsonUtil.toJsonString(msg.getData()),
+                        msg.getData() == null ? "{}" : JsonUtils.toJsonString(msg.getData()),
                         msg.getTime()).getSQL(ParamType.INLINED);
         tsTemplate.update(sql);
     }

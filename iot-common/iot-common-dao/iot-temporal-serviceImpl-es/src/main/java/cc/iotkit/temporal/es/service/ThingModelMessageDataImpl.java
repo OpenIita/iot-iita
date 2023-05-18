@@ -26,9 +26,9 @@ import org.elasticsearch.search.aggregations.bucket.histogram.ParsedDateHistogra
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.clients.elasticsearch7.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
@@ -46,6 +46,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
     @Autowired
     private ThingModelMessageRepository thingModelMessageRepository;
 
+    @Override
     public Paging<ThingModelMessage> findByTypeAndIdentifier(String deviceId, String type,
                                                              String identifier,
                                                              int page, int size) {

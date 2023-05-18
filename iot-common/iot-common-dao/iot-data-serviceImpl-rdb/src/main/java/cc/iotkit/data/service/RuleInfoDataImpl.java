@@ -11,8 +11,8 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.dao.RuleInfoRepository;
-import cc.iotkit.data.convert.RuleInfoMapper;
 import cc.iotkit.data.model.TbRuleInfo;
+import cc.iotkit.data.service.convert.RuleInfoMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.RuleInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -94,6 +94,11 @@ public class RuleInfoDataImpl implements IRuleInfoData {
     @Override
     public void deleteById(String s) {
         ruleInfoRepository.deleteById(s);
+    }
+
+    @Override
+    public void deleteByIds(String[] strings) {
+
     }
 
     @Override

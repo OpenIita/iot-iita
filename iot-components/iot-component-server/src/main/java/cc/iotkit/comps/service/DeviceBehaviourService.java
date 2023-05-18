@@ -13,7 +13,7 @@ import cc.iotkit.common.Constants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
@@ -136,7 +136,7 @@ public class DeviceBehaviourService {
 
         //新设备或更换网关需要产生注册消息
         if (reportMsg) {
-            log.info("device registered:{}", JsonUtil.toJsonString(device));
+            log.info("device registered:{}", JsonUtils.toJsonString(device));
             //新注册设备注册消息
             ThingModelMessage modelMessage = new ThingModelMessage(
                     UUID.randomUUID().toString(),
@@ -264,7 +264,7 @@ public class DeviceBehaviourService {
      * 提供给js调用的方法
      */
     public void reportMessage(String jsonMsg) {
-        ThingModelMessage message = JsonUtil.parse(jsonMsg, ThingModelMessage.class);
+        ThingModelMessage message = JsonUtils.parseObject(jsonMsg, ThingModelMessage.class);
         reportMessage(message);
     }
 }

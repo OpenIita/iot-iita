@@ -1,15 +1,11 @@
 package cc.iotkit.system.service.impl;
 
-import cc.iotkit.system.dto.SysDept;
+import cc.iotkit.common.utils.StreamUtils;
+import cc.iotkit.model.system.SysDept;
 import cc.iotkit.system.dto.SysRoleDept;
 import cc.iotkit.system.mapper.SysDeptMapper;
-import cc.iotkit.system.mapper.SysRoleDeptMapper;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.dromara.common.mybatis.helper.DataBaseHelper;
-import org.dromara.common.core.utils.StreamUtils;
-import cc.iotkit.system.service.ISysDataScopeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

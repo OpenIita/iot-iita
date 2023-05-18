@@ -15,7 +15,7 @@
  */
 package cc.iotkit.common.redis.manager;
 
-import org.dromara.common.redis.utils.RedisUtils;
+import cc.iotkit.common.redis.utils.RedisUtils;
 import org.redisson.api.RMap;
 import org.redisson.api.RMapCache;
 import org.redisson.spring.cache.CacheConfig;

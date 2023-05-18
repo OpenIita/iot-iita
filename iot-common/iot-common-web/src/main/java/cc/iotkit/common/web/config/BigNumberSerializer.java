@@ -1,4 +1,4 @@
-package cc.iotkit.common.config;
+package cc.iotkit.common.web.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;

@@ -9,9 +9,10 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.ISpaceDeviceData;
 import cc.iotkit.data.dao.SpaceDeviceRepository;
-import cc.iotkit.data.convert.SpaceDeviceMapper;
+import cc.iotkit.data.model.TbSpaceDevice;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.space.SpaceDevice;
 import org.apache.commons.lang3.StringUtils;
@@ -31,42 +32,42 @@ public class SpaceDeviceDataImpl implements ISpaceDeviceData {
 
     @Override
     public List<SpaceDevice> findByUidOrderByUseAtDesc(String uid) {
-        return SpaceDeviceMapper.toDto(spaceDeviceRepository.findByUidOrderByUseAtDesc(uid));
+        return MapstructUtils.convert(spaceDeviceRepository.findByUidOrderByUseAtDesc(uid), SpaceDevice.class);
     }
 
     @Override
-    public List<SpaceDevice> findByHomeIdAndCollect(String homeId,boolean collect) {
-        return SpaceDeviceMapper.toDto(spaceDeviceRepository.findByHomeIdAndCollect(homeId,collect));
+    public List<SpaceDevice> findByHomeIdAndCollect(String homeId, boolean collect) {
+        return MapstructUtils.convert(spaceDeviceRepository.findByHomeIdAndCollect(homeId, collect), SpaceDevice.class);
     }
 
     @Override
     public List<SpaceDevice> findByUidOrderByAddAtDesc(String uid) {
-        return SpaceDeviceMapper.toDto(spaceDeviceRepository.findByUidOrderByAddAtDesc(uid));
+        return MapstructUtils.convert(spaceDeviceRepository.findByUidOrderByAddAtDesc(uid), SpaceDevice.class);
     }
 
     @Override
     public List<SpaceDevice> findBySpaceIdOrderByAddAtDesc(String spaceId) {
-        return SpaceDeviceMapper.toDto(spaceDeviceRepository.findBySpaceIdOrderByAddAtDesc(spaceId));
+        return MapstructUtils.convert(spaceDeviceRepository.findBySpaceIdOrderByAddAtDesc(spaceId), SpaceDevice.class);
     }
 
     @Override
     public List<SpaceDevice> findByUidAndSpaceIdOrderByAddAtDesc(String uid, String spaceId) {
-        return SpaceDeviceMapper.toDto(spaceDeviceRepository.findByUidAndSpaceIdOrderByAddAtDesc(uid, spaceId));
+        return MapstructUtils.convert(spaceDeviceRepository.findByUidAndSpaceIdOrderByAddAtDesc(uid, spaceId), SpaceDevice.class);
     }
 
     @Override
     public SpaceDevice findByDeviceId(String deviceId) {
-        return SpaceDeviceMapper.M.toDto(spaceDeviceRepository.findByDeviceId(deviceId));
+        return MapstructUtils.convert(spaceDeviceRepository.findByDeviceId(deviceId), SpaceDevice.class);
     }
 
     @Override
     public SpaceDevice findByDeviceIdAndUid(String deviceId, String uid) {
-        return SpaceDeviceMapper.M.toDto(spaceDeviceRepository.findByDeviceIdAndUid(deviceId, uid));
+        return MapstructUtils.convert(spaceDeviceRepository.findByDeviceIdAndUid(deviceId, uid), SpaceDevice.class);
     }
 
     @Override
     public List<SpaceDevice> findByUid(String uid) {
-        return SpaceDeviceMapper.toDto(spaceDeviceRepository.findByUid(uid));
+        return MapstructUtils.convert(spaceDeviceRepository.findByUid(uid), SpaceDevice.class);
     }
 
     @Override
@@ -81,7 +82,7 @@ public class SpaceDeviceDataImpl implements ISpaceDeviceData {
 
     @Override
     public SpaceDevice findById(String s) {
-        return SpaceDeviceMapper.M.toDto(spaceDeviceRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(spaceDeviceRepository.findById(s).orElse(null), SpaceDevice.class);
     }
 
     @Override
@@ -90,7 +91,7 @@ public class SpaceDeviceDataImpl implements ISpaceDeviceData {
             data.setId(UUID.randomUUID().toString());
             data.setAddAt(System.currentTimeMillis());
         }
-        spaceDeviceRepository.save(SpaceDeviceMapper.M.toVo(data));
+        spaceDeviceRepository.save(MapstructUtils.convert(data, TbSpaceDevice.class));
         return data;
     }
 
@@ -105,13 +106,18 @@ public class SpaceDeviceDataImpl implements ISpaceDeviceData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return spaceDeviceRepository.count();
     }
 
     @Override
     public List<SpaceDevice> findAll() {
-        return SpaceDeviceMapper.toDto(spaceDeviceRepository.findAll());
+        return MapstructUtils.convert(spaceDeviceRepository.findAll(), SpaceDevice.class);
     }
 
     @Override

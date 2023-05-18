@@ -1,5 +1,7 @@
 package cc.iotkit.common.excel.core;
 
+import cc.iotkit.common.excel.annotation.CellMerge;
+import cc.iotkit.common.utils.ReflectUtils;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.metadata.Head;
@@ -11,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.dromara.common.core.utils.reflect.ReflectUtils;
-import org.dromara.common.excel.annotation.CellMerge;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

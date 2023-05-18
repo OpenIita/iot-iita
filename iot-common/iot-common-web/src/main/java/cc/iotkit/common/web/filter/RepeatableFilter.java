@@ -1,8 +1,8 @@
 package cc.iotkit.common.web.filter;
 
+import cc.iotkit.common.utils.StringUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
-import org.dromara.common.core.utils.StringUtils;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;

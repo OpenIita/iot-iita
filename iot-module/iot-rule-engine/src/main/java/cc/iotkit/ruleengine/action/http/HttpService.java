@@ -11,7 +11,7 @@ package cc.iotkit.ruleengine.action.http;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.ruleengine.action.ScriptService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -59,7 +59,7 @@ public class HttpService extends ScriptService {
                 httpData.getBody().toString());
 
         Request request = builder.method(httpData.getMethod().toUpperCase(), requestBody).build();
-        String requestDataStr = JsonUtil.toJsonString(httpData);
+        String requestDataStr = JsonUtils.toJsonString(httpData);
         log.info("send http request:{} ,{}", url, requestDataStr);
 
         String responseBody = "";

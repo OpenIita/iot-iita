@@ -45,6 +45,11 @@ public class CategoryDataCache implements ICategoryData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return categoryData.count();
     }

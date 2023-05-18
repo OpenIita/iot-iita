@@ -75,6 +75,11 @@ public class SpaceDataCache implements ISpaceData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return spaceData.count();
     }

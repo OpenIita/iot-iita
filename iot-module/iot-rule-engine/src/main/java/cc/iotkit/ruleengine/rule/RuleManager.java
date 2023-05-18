@@ -9,7 +9,7 @@
  */
 package cc.iotkit.ruleengine.rule;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.model.Paging;
@@ -183,7 +183,7 @@ public class RuleManager {
     }
 
     private <T> T parse(String config, Class<T> cls) {
-        return JsonUtil.parse(config, cls);
+        return JsonUtils.parseObject(config, cls);
     }
 
 }

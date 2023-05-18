@@ -11,7 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.data.dao.ThingModelRepository;
-import cc.iotkit.data.convert.ThingModelMapper;
+import cc.iotkit.data.service.convert.ThingModelMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.ThingModel;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +51,11 @@ public class ThingModelDataImpl implements IThingModelData {
     @Override
     public void deleteById(String s) {
         thingModelRepository.deleteById(s);
+    }
+
+    @Override
+    public void deleteByIds(String[] strings) {
+
     }
 
     @Override

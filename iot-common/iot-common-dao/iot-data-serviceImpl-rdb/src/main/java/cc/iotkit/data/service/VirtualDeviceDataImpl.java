@@ -14,7 +14,7 @@ import cc.iotkit.data.dao.VirtualDeviceMappingRepository;
 import cc.iotkit.data.dao.VirtualDeviceRepository;
 import cc.iotkit.data.model.TbVirtualDevice;
 import cc.iotkit.data.model.TbVirtualDeviceMapping;
-import cc.iotkit.data.convert.VirtualDeviceMapper;
+import cc.iotkit.data.service.convert.VirtualDeviceMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.VirtualDevice;
 import cn.hutool.core.util.IdUtil;
@@ -115,6 +115,11 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
     public void deleteById(String s) {
         virtualDeviceRepository.deleteById(s);
         virtualDeviceMappingRepository.deleteByVirtualId(s);
+    }
+
+    @Override
+    public void deleteByIds(String[] strings) {
+
     }
 
     @Override

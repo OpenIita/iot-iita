@@ -10,7 +10,7 @@
 package cc.iotkit.virtualdevice;
 
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IVirtualDeviceData;
@@ -90,7 +90,7 @@ public class VirtualManager {
             for (ThingModelMessage msg : result) {
                 processReport(msg);
             }
-            log.info("virtual device send result:{}", JsonUtil.toJsonString(result));
+            log.info("virtual device send result:{}", JsonUtils.toJsonString(result));
         }
     }
 

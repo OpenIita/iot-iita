@@ -9,9 +9,9 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.dao.CategoryRepository;
-import cc.iotkit.data.convert.CategoryMapper;
 import cc.iotkit.data.model.TbCategory;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.Category;
@@ -32,19 +32,19 @@ public class CategoryDataImpl implements ICategoryData {
 
     @Override
     public Category findById(String s) {
-        return CategoryMapper.M.toDto(categoryRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(categoryRepository.findById(s).orElse(null), Category.class);
     }
 
     @Override
     public Category save(Category data) {
-        TbCategory tb = categoryRepository.save(CategoryMapper.M.toVo(data));
+        TbCategory tb = categoryRepository.save(MapstructUtils.convert(data, TbCategory.class));
         data.setId(tb.getId());
         return data;
     }
 
     @Override
     public Category add(Category data) {
-        TbCategory tb = categoryRepository.save(CategoryMapper.M.toVo(data));
+        TbCategory tb = categoryRepository.save(MapstructUtils.convert(data, TbCategory.class));
         data.setId(tb.getId());
         return data;
     }
@@ -55,6 +55,11 @@ public class CategoryDataImpl implements ICategoryData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return categoryRepository.count();
     }
@@ -62,16 +67,17 @@ public class CategoryDataImpl implements ICategoryData {
     @Override
     public List<Category> findAll() {
         return categoryRepository.findAll().stream()
-                .map(CategoryMapper.M::toDto).collect(Collectors.toList());
+                .map(c -> MapstructUtils.convert(c, Category.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Paging<Category> findAll(int page, int size) {
         return new Paging<>(
                 categoryRepository.count(),
-                categoryRepository.findAll(Pageable.ofSize(size).withPage(page - 1))
-                        .stream().map(CategoryMapper.M::toDto).collect(Collectors.toList())
-        );
+                MapstructUtils.convert(categoryRepository.findAll(
+                        Pageable.ofSize(size).withPage(page - 1)).getContent(),
+                        Category.class));
     }
 
 }

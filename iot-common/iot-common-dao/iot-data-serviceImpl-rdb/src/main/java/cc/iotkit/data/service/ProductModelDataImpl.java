@@ -1,8 +1,9 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProductModelData;
 import cc.iotkit.data.dao.ProductModelRepository;
-import cc.iotkit.data.convert.ProductModelMapper;
+import cc.iotkit.data.model.TbProductModel;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.ProductModel;
 import org.apache.commons.lang3.StringUtils;
@@ -23,17 +24,17 @@ public class ProductModelDataImpl implements IProductModelData {
 
     @Override
     public ProductModel findByModel(String model) {
-        return ProductModelMapper.M.toDto(productModelRepository.findByModel(model));
+        return MapstructUtils.convert(productModelRepository.findByModel(model), ProductModel.class);
     }
 
     @Override
     public List<ProductModel> findByProductKey(String productKey) {
-        return ProductModelMapper.toDto(productModelRepository.findByProductKey(productKey));
+        return MapstructUtils.convert(productModelRepository.findByProductKey(productKey), ProductModel.class);
     }
 
     @Override
     public ProductModel findById(String s) {
-        return ProductModelMapper.M.toDto(productModelRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(productModelRepository.findById(s).orElse(null), ProductModel.class);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class ProductModelDataImpl implements IProductModelData {
             data.setId(UUID.randomUUID().toString());
         }
         data.setModifyAt(System.currentTimeMillis());
-        productModelRepository.save(ProductModelMapper.M.toVo(data));
+        productModelRepository.save(MapstructUtils.convert(data, TbProductModel.class));
         return null;
     }
 
@@ -54,6 +55,11 @@ public class ProductModelDataImpl implements IProductModelData {
     @Override
     public void deleteById(String s) {
         productModelRepository.deleteById(s);
+    }
+
+    @Override
+    public void deleteByIds(String[] strings) {
+
     }
 
     @Override

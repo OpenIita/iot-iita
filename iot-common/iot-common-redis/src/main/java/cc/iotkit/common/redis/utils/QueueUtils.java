@@ -1,6 +1,6 @@
 package cc.iotkit.common.redis.utils;
 
-import org.dromara.common.core.utils.SpringUtils;
+import cc.iotkit.common.utils.SpringUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.redisson.api.*;

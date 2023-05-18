@@ -1,10 +1,10 @@
 package cc.iotkit.common.redis.config;
 
+import cc.iotkit.common.redis.config.properties.RedissonProperties;
+import cc.iotkit.common.redis.handler.KeyPrefixHandler;
+import cc.iotkit.common.redis.manager.PlusSpringCacheManager;
 import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.dromara.common.redis.config.properties.RedissonProperties;
-import org.dromara.common.redis.handler.KeyPrefixHandler;
-import org.dromara.common.redis.manager.PlusSpringCacheManager;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;

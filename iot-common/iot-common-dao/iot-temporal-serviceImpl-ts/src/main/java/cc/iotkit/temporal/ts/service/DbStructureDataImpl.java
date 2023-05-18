@@ -9,7 +9,7 @@
  */
 package cc.iotkit.temporal.ts.service;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.temporal.IDbStructureData;
 import cc.iotkit.temporal.ts.config.Constants;

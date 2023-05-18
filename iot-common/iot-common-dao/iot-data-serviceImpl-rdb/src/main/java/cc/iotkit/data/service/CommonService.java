@@ -47,6 +47,11 @@ public class CommonService<VO extends Id<T>, T> implements ICommonData<VO, T> {
     }
 
     @Override
+    public void deleteByIds(T[] ts) {
+
+    }
+
+    @Override
     public long count() {
         return repository.count();
     }

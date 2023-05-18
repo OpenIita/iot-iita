@@ -92,11 +92,6 @@ public class SysMenu extends BaseEntity implements Id<Long>,Serializable {
     private String icon;
 
     /**
-     * 创建部门
-     */
-    private SysDept createDept;
-
-    /**
      * 备注
      */
     private String remark;

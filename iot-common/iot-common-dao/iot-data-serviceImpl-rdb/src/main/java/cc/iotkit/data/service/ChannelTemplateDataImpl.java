@@ -1,8 +1,8 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IChannelTemplateData;
 import cc.iotkit.data.dao.ChannelTemplateRepository;
-import cc.iotkit.data.convert.ChannelTemplateMapper;
 import cc.iotkit.data.model.TbChannelTemplate;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.notify.ChannelTemplate;
@@ -31,7 +31,7 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData {
 
     @Override
     public ChannelTemplate findById(String id) {
-        return ChannelTemplateMapper.M.toDto(channelTemplateRepository.findById(id).orElse(null));
+        return MapstructUtils.convert(channelTemplateRepository.findById(id).orElse(null), ChannelTemplate.class);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
-        channelTemplateRepository.save(ChannelTemplateMapper.M.toVo(data));
+        channelTemplateRepository.save(MapstructUtils.convert(data, TbChannelTemplate.class));
         return data;
     }
 
@@ -55,13 +55,19 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return channelTemplateRepository.count();
     }
 
     @Override
     public List<ChannelTemplate> findAll() {
-        return channelTemplateRepository.findAll().stream().map(ChannelTemplateMapper.M::toDto)
+        return channelTemplateRepository.findAll().stream()
+                .map(c -> MapstructUtils.convert(c, ChannelTemplate.class))
                 .collect(Collectors.toList());
     }
 
@@ -70,9 +76,6 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData {
         Page<TbChannelTemplate> tbDeviceConfigs = channelTemplateRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(
                 tbDeviceConfigs.getTotalElements(),
-                tbDeviceConfigs.getContent()
-                        .stream().map(ChannelTemplateMapper.M::toDto)
-                        .collect(Collectors.toList())
-        );
+                MapstructUtils.convert(tbDeviceConfigs.getContent(), ChannelTemplate.class));
     }
 }

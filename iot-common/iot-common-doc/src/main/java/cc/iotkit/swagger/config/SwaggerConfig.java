@@ -1,4 +1,4 @@
-package cc.iotkit.common.undefined;
+package cc.iotkit.swagger.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import io.swagger.annotations.Api;

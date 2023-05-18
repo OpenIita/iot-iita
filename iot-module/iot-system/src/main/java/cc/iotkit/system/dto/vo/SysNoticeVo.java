@@ -1,12 +1,9 @@
 package cc.iotkit.system.dto.vo;
 
-import org.dromara.common.translation.annotation.Translation;
-import org.dromara.common.translation.constant.TransConstant;
-import cc.iotkit.system.dto.SysNotice;
+import cc.iotkit.model.system.SysNotice;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,8 +17,6 @@ import java.util.Date;
 @Data
 @AutoMapper(target = SysNotice.class)
 public class SysNoticeVo implements Serializable {
-
-    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -62,7 +57,6 @@ public class SysNoticeVo implements Serializable {
     /**
      * 创建人名称
      */
-    @Translation(type = TransConstant.USER_ID_TO_NAME, mapper = "createBy")
     private String createByName;
 
     /**

@@ -4,9 +4,9 @@ import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
-import cc.iotkit.data.convert.DeviceInfoMapper;
 import cc.iotkit.data.dao.*;
 import cc.iotkit.data.model.*;
+import cc.iotkit.data.service.convert.DeviceInfoMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
@@ -472,6 +472,11 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     @Override
     public void deleteById(String s) {
         deviceInfoRepository.deleteById(s);
+    }
+
+    @Override
+    public void deleteByIds(String[] strings) {
+
     }
 
     @Override

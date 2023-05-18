@@ -12,7 +12,7 @@ package cc.iotkit.comp.emqx;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.ThreadUtil;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
@@ -65,7 +65,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent implements Runn
     public void create(CompConfig config) {
         super.create(config);
         vertx = Vertx.vertx();
-        mqttConfig = JsonUtil.parse(config.getOther(), EmqxConfig.class);
+        mqttConfig = JsonUtils.parseObject(config.getOther(), EmqxConfig.class);
         authVerticle = new AuthVerticle(mqttConfig);
     }
 
@@ -261,7 +261,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent implements Runn
      */
     public Object getCompMqttClientIdList() {
         String[] result = compMqttClientIdList.toArray(new String[0]);
-        return JsonUtil.toJsonString(result);
+        return JsonUtils.toJsonString(result);
     }
 
     @Data

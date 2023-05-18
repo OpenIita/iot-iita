@@ -1,9 +1,9 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IAlertRecordData;
 import cc.iotkit.data.dao.AlertRecordRepository;
-import cc.iotkit.data.convert.AlertRecordMapper;
 import cc.iotkit.data.model.TbAlertRecord;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.alert.AlertRecord;
@@ -20,51 +20,56 @@ import org.springframework.stereotype.Service;
 @Service
 public class AlertRecordDataImpl implements IAlertRecordData {
 
-  @Autowired
-  private AlertRecordRepository alertRecordRepository;
+    @Autowired
+    private AlertRecordRepository alertRecordRepository;
 
 
-  @Override
-  public AlertRecord findById(String s) {
-    return null;
-  }
+    @Override
+    public AlertRecord findById(String s) {
+        return null;
+    }
 
-  @Override
-  public AlertRecord save(AlertRecord data) {
-    return null;
-  }
+    @Override
+    public AlertRecord save(AlertRecord data) {
+        return null;
+    }
 
-  @Override
-  public AlertRecord add(AlertRecord data) {
-    return null;
-  }
+    @Override
+    public AlertRecord add(AlertRecord data) {
+        return null;
+    }
 
-  @Override
-  public void deleteById(String s) {
+    @Override
+    public void deleteById(String s) {
 
-  }
+    }
 
-  @Override
-  public long count() {
-    return 0;
-  }
+    @Override
+    public void deleteByIds(String[] strings) {
 
-  @Override
-  public List<AlertRecord> findAll() {
-    return null;
-  }
+    }
 
-  @Override
-  public Paging<AlertRecord> findAll(int page, int size) {
-    return null;
-  }
+    @Override
+    public long count() {
+        return 0;
+    }
+
+    @Override
+    public List<AlertRecord> findAll() {
+        return null;
+    }
+
+    @Override
+    public Paging<AlertRecord> findAll(int page, int size) {
+        return null;
+    }
 
 
-  @Override
-  public Paging<AlertRecord> selectAlertConfigPage(PageRequest<AlertRecord> request) {
-   // Pageable pageable = org.springframework.data.domain.PageRequest.of(request.getPageNo(),request.getPageSize(), Sort.Direction.DESC, "alartTime");
-    Page<TbAlertRecord> alertRecordPage = alertRecordRepository.findAll(Pageable.ofSize(request.getPageSize()).withPage(request.getPageNo() - 1));
-    return new Paging<>(alertRecordPage.getTotalElements(),
-        AlertRecordMapper.toDto(alertRecordPage.getContent()));
-  }
+    @Override
+    public Paging<AlertRecord> selectAlertConfigPage(PageRequest<AlertRecord> request) {
+        Page<TbAlertRecord> alertRecordPage = alertRecordRepository.findAll(Pageable.ofSize(request.getPageSize())
+                .withPage(request.getPageNum() - 1));
+        return new Paging<>(alertRecordPage.getTotalElements(),
+                MapstructUtils.convert(alertRecordPage.getContent(), AlertRecord.class));
+    }
 }

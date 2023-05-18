@@ -2,7 +2,7 @@ package cc.iotkit.comp.tcp.server;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
@@ -26,7 +26,7 @@ public class TcpServerDeviceComponent extends AbstractDeviceComponent {
     public void create(CompConfig config) {
         super.create(config);
         vertx = Vertx.vertx();
-        TcpServerConfig serverConfig = JsonUtil.parse(config.getOther(), TcpServerConfig.class);
+        TcpServerConfig serverConfig = JsonUtils.parseObject(config.getOther(), TcpServerConfig.class);
         tcpServerVerticle = new TcpServerVerticle(serverConfig);
     }
 

@@ -1,8 +1,8 @@
 package cc.iotkit.common.tenant.core;
 
-import org.dromara.common.core.constant.GlobalConstants;
-import org.dromara.common.redis.utils.RedisUtils;
-import org.dromara.common.satoken.core.dao.PlusSaTokenDao;
+import cc.iotkit.common.constant.GlobalConstants;
+import cc.iotkit.common.redis.utils.RedisUtils;
+import cc.iotkit.common.satoken.core.dao.PlusSaTokenDao;
 
 import java.time.Duration;
 import java.util.List;

@@ -7,7 +7,7 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.common.config;
+package cc.iotkit.config;
 
 import lombok.SneakyThrows;
 import org.elasticsearch.common.settings.Settings;

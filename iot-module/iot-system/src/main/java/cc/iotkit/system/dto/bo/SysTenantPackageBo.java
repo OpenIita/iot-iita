@@ -36,7 +36,7 @@ public class SysTenantPackageBo extends BaseDto {
     /**
      * 关联菜单id
      */
-    @AutoMapping(target = "menuIds", expression = "java(org.dromara.common.core.utils.StringUtils.join(source.getMenuIds(), \",\"))")
+    @AutoMapping(target = "menuIds", expression = "java(cc.iotkit.common.core.utils.StringUtils.join(source.getMenuIds(), \",\"))")
     private Long[] menuIds;
 
     /**

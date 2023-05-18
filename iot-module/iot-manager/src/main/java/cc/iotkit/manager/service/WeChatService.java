@@ -12,7 +12,7 @@ package cc.iotkit.manager.service;
 import cc.iotkit.common.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.CodecUtil;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.manager.utils.WeChatUtil;
 import cc.iotkit.model.UserInfo;
@@ -47,7 +47,7 @@ public class WeChatService {
         if (StringUtils.isEmpty(strUserInfo)) {
             throw new BizException("解密用户信息错误");
         }
-        UserInfo decryptUser = JsonUtil.parse(strUserInfo, UserInfo.class);
+        UserInfo decryptUser = JsonUtils.parseObject(strUserInfo, UserInfo.class);
         if (userInfo == null) {
         } else {
             decryptUser.setId(userInfo.getId());
@@ -69,7 +69,7 @@ public class WeChatService {
         if (StringUtils.isBlank(str)) {
             return null;
         } else {
-            return JsonUtil.parse(str, WxSession.class);
+            return JsonUtils.parseObject(str, WxSession.class);
         }
     }
 

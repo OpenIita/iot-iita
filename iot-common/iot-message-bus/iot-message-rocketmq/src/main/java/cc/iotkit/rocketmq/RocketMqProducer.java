@@ -2,7 +2,7 @@ package cc.iotkit.rocketmq;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.mq.MqProducer;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
@@ -27,7 +27,7 @@ public class RocketMqProducer<T> implements MqProducer<T> {
     public void publish(String topic, T msg) {
         try {
             producer.send(new Message(topic,
-                    JsonUtil.toJsonString(msg).getBytes(StandardCharsets.UTF_8)));
+                    JsonUtils.toJsonString(msg).getBytes(StandardCharsets.UTF_8)));
         } catch (Throwable e) {
             throw new BizException(ErrCode.SEND_MSG_ERROR, e);
         }

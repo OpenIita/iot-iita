@@ -9,7 +9,7 @@
  */
 package cc.iotkit.vertx;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageCodec;
 import io.vertx.core.json.Json;
@@ -39,7 +39,7 @@ public class BeanCodec<T> implements MessageCodec<T, T> {
 
     @Override
     public T transform(T o) {
-        return JsonUtil.parse(JsonUtil.toJsonString(o), beanType);
+        return JsonUtils.parseObject(JsonUtils.toJsonString(o), beanType);
     }
 
     @Override

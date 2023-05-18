@@ -1,19 +1,12 @@
 package cc.iotkit.common.tenant.config;
 
+import cc.iotkit.common.redis.config.RedisConfig;
+import cc.iotkit.common.tenant.core.TenantSaTokenDao;
+import cc.iotkit.common.tenant.manager.TenantSpringCacheManager;
+import cc.iotkit.common.tenant.properties.TenantProperties;
+import cc.iotkit.common.utils.ReflectUtils;
 import cn.dev33.satoken.dao.SaTokenDao;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
-import org.dromara.common.core.utils.reflect.ReflectUtils;
-import org.dromara.common.mybatis.config.MybatisPlusConfig;
-import org.dromara.common.redis.config.RedisConfig;
-import org.dromara.common.redis.config.properties.RedissonProperties;
-import org.dromara.common.tenant.core.TenantSaTokenDao;
-import org.dromara.common.tenant.handle.PlusTenantLineHandler;
-import org.dromara.common.tenant.handle.TenantKeyPrefixHandler;
-import org.dromara.common.tenant.manager.TenantSpringCacheManager;
-import org.dromara.common.tenant.properties.TenantProperties;
 import org.redisson.config.ClusterServersConfig;
 import org.redisson.config.SingleServerConfig;
 import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
@@ -25,7 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 租户配置类
@@ -33,7 +25,7 @@ import java.util.List;
  * @author Lion Li
  */
 @EnableConfigurationProperties(TenantProperties.class)
-@AutoConfiguration(after = {RedisConfig.class, MybatisPlusConfig.class})
+@AutoConfiguration(after = {RedisConfig.class})
 @ConditionalOnProperty(value = "tenant.enable", havingValue = "true")
 public class TenantConfig {
 

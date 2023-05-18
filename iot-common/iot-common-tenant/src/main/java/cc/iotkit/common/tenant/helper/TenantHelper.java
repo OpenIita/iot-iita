@@ -1,19 +1,16 @@
 package cc.iotkit.common.tenant.helper;
 
+import cc.iotkit.common.constant.GlobalConstants;
+import cc.iotkit.common.redis.utils.RedisUtils;
+import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.utils.SpringUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.spring.SpringMVCUtil;
 import cn.hutool.core.convert.Convert;
-import com.alibaba.ttl.TransmittableThreadLocal;
-import com.baomidou.mybatisplus.core.plugins.IgnoreStrategy;
-import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.common.core.constant.GlobalConstants;
-import org.dromara.common.core.utils.SpringUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.redis.utils.RedisUtils;
-import org.dromara.common.satoken.utils.LoginHelper;
 
 import java.util.function.Supplier;
 

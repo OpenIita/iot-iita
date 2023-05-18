@@ -68,6 +68,11 @@ public class ProductDataCache implements IProductData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return productData.count();
     }

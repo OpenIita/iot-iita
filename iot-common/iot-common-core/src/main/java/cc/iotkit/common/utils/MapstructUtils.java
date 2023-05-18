@@ -6,6 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import io.github.linpeilie.Converter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -29,12 +30,8 @@ public class MapstructUtils {
      * @return desc
      */
     public static <T, V> V convert(T source, Class<V> desc) {
-        if (ObjectUtil.isNull(source)) {
-            return null;
-        }
-        if (ObjectUtil.isNull(desc)) {
-            return null;
-        }
+        Assert.notNull(source,"source is null");
+        Assert.notNull(desc,"desc is null");
         return CONVERTER.convert(source, desc);
     }
 

@@ -14,7 +14,7 @@ import cc.iotkit.common.ComponentClassLoader;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;
 import cc.iotkit.comp.IDeviceComponent;
@@ -199,7 +199,7 @@ public class DeviceComponentManager {
     }
 
     public void send(ThingService<?> service) {
-        log.info("start exec device service:{}", JsonUtil.toJsonString(service));
+        log.info("start exec device service:{}", JsonUtils.toJsonString(service));
         if (components.size() == 0) {
             throw new BizException(ErrCode.COMPONENT_NOT_FOUND);
         }

@@ -1,15 +1,11 @@
 package cc.iotkit.common.tenant.handle;
 
+import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.tenant.helper.TenantHelper;
+import cc.iotkit.common.tenant.properties.TenantProperties;
+import cc.iotkit.common.utils.StringUtils;
 import cn.hutool.core.collection.ListUtil;
-import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import lombok.AllArgsConstructor;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.NullValue;
-import net.sf.jsqlparser.expression.StringValue;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.satoken.utils.LoginHelper;
-import org.dromara.common.tenant.helper.TenantHelper;
-import org.dromara.common.tenant.properties.TenantProperties;
 
 import java.util.List;
 

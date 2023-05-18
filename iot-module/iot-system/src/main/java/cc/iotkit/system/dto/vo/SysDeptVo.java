@@ -1,14 +1,13 @@
 package cc.iotkit.system.dto.vo;
 
+import cc.iotkit.common.excel.annotation.ExcelDictFormat;
+import cc.iotkit.common.excel.convert.ExcelDictConvert;
+import cc.iotkit.model.system.SysDept;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import org.dromara.common.excel.annotation.ExcelDictFormat;
-import org.dromara.common.excel.convert.ExcelDictConvert;
-import cc.iotkit.system.dto.SysDept;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -21,8 +20,6 @@ import java.util.Date;
 @ExcelIgnoreUnannotated
 @AutoMapper(target = SysDept.class)
 public class SysDeptVo implements Serializable {
-
-    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

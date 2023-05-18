@@ -1,8 +1,8 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.dao.ProductRepository;
-import cc.iotkit.data.convert.ProductMapper;
 import cc.iotkit.data.model.TbProduct;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.product.Product;
@@ -24,12 +24,12 @@ public class ProductDataImpl implements IProductData {
 
     @Override
     public List<Product> findByCategory(String category) {
-        return ProductMapper.toDto(productRepository.findByCategory(category));
+        return MapstructUtils.convert(productRepository.findByCategory(category), Product.class);
     }
 
     @Override
     public List<Product> findByUid(String uid) {
-        return ProductMapper.toDto(productRepository.findByUid(uid));
+        return MapstructUtils.convert(productRepository.findByUid(uid), Product.class);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ProductDataImpl implements IProductData {
         Page<TbProduct> productPage = productRepository.findByUid(uid,
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(productPage.getTotalElements(),
-                ProductMapper.toDto(productPage.getContent()));
+                MapstructUtils.convert(productPage.getContent(), Product.class));
     }
 
     @Override
@@ -47,12 +47,12 @@ public class ProductDataImpl implements IProductData {
 
     @Override
     public Product findById(String s) {
-        return ProductMapper.M.toDto(productRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(productRepository.findById(s).orElse(null), Product.class);
     }
 
     @Override
     public Product save(Product data) {
-        productRepository.save(ProductMapper.M.toVo(data));
+        productRepository.save(MapstructUtils.convert(data, TbProduct.class));
         return data;
     }
 
@@ -68,13 +68,18 @@ public class ProductDataImpl implements IProductData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return productRepository.count();
     }
 
     @Override
     public List<Product> findAll() {
-        return ProductMapper.toDto(productRepository.findAll());
+        return MapstructUtils.convert(productRepository.findAll(), Product.class);
     }
 
     @Override
@@ -82,6 +87,6 @@ public class ProductDataImpl implements IProductData {
         Page<TbProduct> productPage = productRepository.findAll(
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(productPage.getTotalElements(),
-                ProductMapper.toDto(productPage.getContent()));
+                MapstructUtils.convert(productPage.getContent(), Product.class));
     }
 }

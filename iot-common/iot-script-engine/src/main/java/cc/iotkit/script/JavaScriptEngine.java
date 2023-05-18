@@ -10,7 +10,7 @@
 package cc.iotkit.script;
 
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.graalvm.polyglot.Context;
@@ -55,7 +55,7 @@ public class JavaScriptEngine implements IScriptEngine {
         StringBuilder sbArgs = new StringBuilder("[");
         //将入参转成json
         for (int i = 0; i < args.length; i++) {
-            args[i] = JsonUtil.toJsonString(args[i]);
+            args[i] = JsonUtils.toJsonString(args[i]);
             sbArgs.append(i == args.length - 1 ? "," : "").append(args[i]);
         }
         sbArgs.append("]");
@@ -71,7 +71,7 @@ public class JavaScriptEngine implements IScriptEngine {
             return null;
         }
 
-        return JsonUtil.parse(json, type);
+        return JsonUtils.parseObject(json, type);
     }
 
 }

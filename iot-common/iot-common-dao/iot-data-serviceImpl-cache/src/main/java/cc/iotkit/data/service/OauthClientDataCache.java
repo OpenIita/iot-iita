@@ -60,6 +60,11 @@ public class OauthClientDataCache implements IOauthClientData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return oauthClientData.count();
     }

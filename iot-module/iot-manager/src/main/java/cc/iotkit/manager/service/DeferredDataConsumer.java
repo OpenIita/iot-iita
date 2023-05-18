@@ -80,7 +80,7 @@ public class DeferredDataConsumer implements ConsumerHandler<ThingModelMessage>,
                 delayedPushes.offer(new DelayedPush<>(topic, System.currentTimeMillis(), msg),
                         3, TimeUnit.SECONDS);
             } else {
-                log.info("push {} to {},msg:{}", topic, consumer, JsonUtil.toJsonString(msg));
+                log.info("push {} to {},msg:{}", topic, consumer, JsonUtils.toJsonString(msg));
                 result.getDeferredResult().setResult(msg);
             }
         }

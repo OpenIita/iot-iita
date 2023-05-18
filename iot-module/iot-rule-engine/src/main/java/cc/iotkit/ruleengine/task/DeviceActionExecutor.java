@@ -9,7 +9,7 @@
  */
 package cc.iotkit.ruleengine.task;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.ruleengine.action.device.DeviceAction;
 import cc.iotkit.ruleengine.action.device.DeviceActionService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,11 +47,11 @@ public class DeviceActionExecutor implements ActionExecutor<DeviceAction> {
         Integer code = config.hashCode();
         DeviceAction action = actionMap.get(code);
         if (action == null) {
-            action = JsonUtil.parse(config, DeviceAction.class);
+            action = JsonUtils.parseObject(config, DeviceAction.class);
             actionMap.put(code, action);
         }
 
-        log.info("start device service invoke,{}", JsonUtil.toJsonString(action));
+        log.info("start device service invoke,{}", JsonUtils.toJsonString(action));
         for (DeviceActionService.Service service : action.getServices()) {
             deviceActionService.invoke(service);
         }

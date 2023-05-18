@@ -1,8 +1,8 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IChannelConfigData;
 import cc.iotkit.data.dao.ChannelConfigRepository;
-import cc.iotkit.data.convert.ChannelConfigMapper;
 import cc.iotkit.data.model.TbChannelConfig;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.notify.ChannelConfig;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * author: 石恒
@@ -31,7 +30,7 @@ public class ChannelConfigDataImpl implements IChannelConfigData {
 
     @Override
     public ChannelConfig findById(String id) {
-        return ChannelConfigMapper.M.toDto(channelConfigRepository.findById(id).orElse(null));
+        return MapstructUtils.convert(channelConfigRepository.findById(id).orElse(null), ChannelConfig.class);
     }
 
     @Override
@@ -39,7 +38,7 @@ public class ChannelConfigDataImpl implements IChannelConfigData {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
-        channelConfigRepository.save(ChannelConfigMapper.M.toVo(data));
+        channelConfigRepository.save(MapstructUtils.convert(data, TbChannelConfig.class));
         return data;
     }
 
@@ -55,14 +54,18 @@ public class ChannelConfigDataImpl implements IChannelConfigData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return channelConfigRepository.count();
     }
 
     @Override
     public List<ChannelConfig> findAll() {
-        return channelConfigRepository.findAll().stream().map(ChannelConfigMapper.M::toDto)
-                .collect(Collectors.toList());
+        return MapstructUtils.convert(channelConfigRepository.findAll(), ChannelConfig.class);
     }
 
     @Override
@@ -70,9 +73,6 @@ public class ChannelConfigDataImpl implements IChannelConfigData {
         Page<TbChannelConfig> tbDeviceConfigs = channelConfigRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(
                 tbDeviceConfigs.getTotalElements(),
-                tbDeviceConfigs.getContent()
-                        .stream().map(ChannelConfigMapper.M::toDto)
-                        .collect(Collectors.toList())
-        );
+                MapstructUtils.convert(tbDeviceConfigs.getContent(), ChannelConfig.class));
     }
 }

@@ -1,6 +1,6 @@
 package cc.iotkit.common.redis.handler;
 
-import org.dromara.common.core.utils.StringUtils;
+import cc.iotkit.common.utils.StringUtils;
 import org.redisson.api.NameMapper;
 
 /**

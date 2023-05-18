@@ -9,7 +9,7 @@
  */
 package cc.iotkit.comps;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.IDeviceComponent;
 import cc.iotkit.comp.IMessageHandler;
@@ -204,7 +204,7 @@ public class DeviceMessageHandler implements IMessageHandler {
         }
         try {
             if (Action.TYPE_ACK.equals(action.getType())) {
-                DeviceMessage deviceMessage = JsonUtil.parse(action.getContent(), DeviceMessage.class);
+                DeviceMessage deviceMessage = JsonUtils.parseObject(action.getContent(), DeviceMessage.class);
                 this.getComponent().send(deviceMessage);
             }
         } catch (Throwable e) {

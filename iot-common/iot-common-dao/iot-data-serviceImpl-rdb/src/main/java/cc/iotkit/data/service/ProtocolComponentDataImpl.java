@@ -1,8 +1,8 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProtocolComponentData;
 import cc.iotkit.data.dao.ProtocolComponentRepository;
-import cc.iotkit.data.convert.ProtocolComponentMapper;
 import cc.iotkit.data.model.TbProtocolComponent;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.protocol.ProtocolComponent;
@@ -25,17 +25,17 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
 
     @Override
     public List<ProtocolComponent> findByState(String state) {
-        return ProtocolComponentMapper.toDto(protocolComponentRepository.findByState(state));
+        return MapstructUtils.convert(protocolComponentRepository.findByState(state), ProtocolComponent.class);
     }
 
     @Override
     public List<ProtocolComponent> findByStateAndType(String state, String type) {
-        return ProtocolComponentMapper.toDto(protocolComponentRepository.findByStateAndType(state, type));
+        return MapstructUtils.convert(protocolComponentRepository.findByStateAndType(state, type), ProtocolComponent.class);
     }
 
     @Override
     public List<ProtocolComponent> findByUid(String uid) {
-        return ProtocolComponentMapper.toDto(protocolComponentRepository.findByUid(uid));
+        return MapstructUtils.convert(protocolComponentRepository.findByUid(uid), ProtocolComponent.class);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
         Page<TbProtocolComponent> paged = protocolComponentRepository.findByUid(uid,
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                ProtocolComponentMapper.toDto(paged.getContent()));
+                MapstructUtils.convert(paged.getContent(), ProtocolComponent.class));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
 
     @Override
     public ProtocolComponent findById(String s) {
-        return ProtocolComponentMapper.M.toDto(protocolComponentRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(protocolComponentRepository.findById(s).orElse(null), ProtocolComponent.class);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
             data.setId(UUID.randomUUID().toString());
             data.setCreateAt(System.currentTimeMillis());
         }
-        protocolComponentRepository.save(ProtocolComponentMapper.M.toVo(data));
+        protocolComponentRepository.save(MapstructUtils.convert(data, TbProtocolComponent.class));
         return data;
     }
 
@@ -77,13 +77,18 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return protocolComponentRepository.count();
     }
 
     @Override
     public List<ProtocolComponent> findAll() {
-        return ProtocolComponentMapper.toDto(protocolComponentRepository.findAll());
+        return MapstructUtils.convert(protocolComponentRepository.findAll(), ProtocolComponent.class);
     }
 
     @Override
@@ -91,6 +96,6 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
         Page<TbProtocolComponent> paged = protocolComponentRepository
                 .findAll(Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                ProtocolComponentMapper.toDto(paged.getContent()));
+                MapstructUtils.convert(paged.getContent(), ProtocolComponent.class));
     }
 }

@@ -1,4 +1,4 @@
-package cc.iotkit.common.config;
+package cc.iotkit.common.web.config;
 
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

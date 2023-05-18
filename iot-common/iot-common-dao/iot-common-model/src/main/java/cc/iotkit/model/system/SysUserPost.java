@@ -17,6 +17,7 @@ import lombok.EqualsAndHashCode;
 public class SysUserPost extends BaseEntity implements Id<Long>, Serializable {
     private static final long serialVersionUID = 1L;
 
+    private Long id;
 
     /**
      * 用户ID

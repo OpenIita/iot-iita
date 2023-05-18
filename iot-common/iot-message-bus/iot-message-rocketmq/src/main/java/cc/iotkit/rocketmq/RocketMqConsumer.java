@@ -1,6 +1,6 @@
 package cc.iotkit.rocketmq;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.mq.ConsumerHandler;
 import cc.iotkit.mq.MqConsumer;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class RocketMqConsumer<T> implements MqConsumer<T> {
             consumer.subscribe(topic, "*");
             consumer.registerMessageListener((MessageListenerConcurrently) (messages, context) -> {
                 for (MessageExt message : messages) {
-                    T msg = JsonUtil.parse(new String(message.getBody(), StandardCharsets.UTF_8), msgType);
+                    T msg = JsonUtils.parseObject(new String(message.getBody(), StandardCharsets.UTF_8), msgType);
                     handler.handler(msg);
                 }
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;

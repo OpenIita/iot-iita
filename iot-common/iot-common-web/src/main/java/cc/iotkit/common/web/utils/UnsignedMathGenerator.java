@@ -1,12 +1,10 @@
 package cc.iotkit.common.web.utils;
 
+import cc.iotkit.common.utils.StringUtils;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.math.Calculator;
 import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.RandomUtil;
-import org.dromara.common.core.utils.StringUtils;
-
-import java.io.Serial;
 
 /**
  * 无符号计算生成器
@@ -14,8 +12,6 @@ import java.io.Serial;
  * @author Lion Li
  */
 public class UnsignedMathGenerator implements CodeGenerator {
-
-    @Serial
     private static final long serialVersionUID = -5514819971774091076L;
 
     private static final String OPERATORS = "+-*";

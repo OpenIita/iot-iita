@@ -9,9 +9,9 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProtocolConverterData;
 import cc.iotkit.data.dao.ProtocolConverterRepository;
-import cc.iotkit.data.convert.ProtocolConverterMapper;
 import cc.iotkit.data.model.TbProtocolConverter;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.protocol.ProtocolConverter;
@@ -34,7 +34,7 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
 
     @Override
     public List<ProtocolConverter> findByUid(String uid) {
-        return ProtocolConverterMapper.toDto(protocolConverterRepository.findByUid(uid));
+        return MapstructUtils.convert(protocolConverterRepository.findByUid(uid), ProtocolConverter.class);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
         Page<TbProtocolConverter> paged = protocolConverterRepository
                 .findByUid(uid, Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                ProtocolConverterMapper.toDto(paged.getContent()));
+                MapstructUtils.convert(paged.getContent(), ProtocolConverter.class));
     }
 
     @Override
@@ -52,8 +52,8 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
 
     @Override
     public ProtocolConverter findById(String s) {
-        return ProtocolConverterMapper.M.toDto(
-                protocolConverterRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(
+                protocolConverterRepository.findById(s).orElse(null), ProtocolConverter.class);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
             data.setId(UUID.randomUUID().toString());
             data.setCreateAt(System.currentTimeMillis());
         }
-        protocolConverterRepository.save(ProtocolConverterMapper.M.toVo(data));
+        protocolConverterRepository.save(MapstructUtils.convert(data, TbProtocolConverter.class));
         return data;
     }
 
@@ -77,13 +77,18 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return protocolConverterRepository.count();
     }
 
     @Override
     public List<ProtocolConverter> findAll() {
-        return ProtocolConverterMapper.toDto(protocolConverterRepository.findAll());
+        return MapstructUtils.convert(protocolConverterRepository.findAll(), ProtocolConverter.class);
     }
 
     @Override
@@ -91,6 +96,6 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
         Page<TbProtocolConverter> paged = protocolConverterRepository
                 .findAll(Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                ProtocolConverterMapper.toDto(paged.getContent()));
+                MapstructUtils.convert(paged.getContent(), ProtocolConverter.class));
     }
 }

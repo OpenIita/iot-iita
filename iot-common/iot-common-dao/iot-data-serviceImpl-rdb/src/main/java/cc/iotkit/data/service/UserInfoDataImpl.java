@@ -12,7 +12,7 @@ package cc.iotkit.data.service;
 import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.dao.UserInfoRepository;
 import cc.iotkit.data.model.TbUserInfo;
-import cc.iotkit.data.convert.UserInfoMapper;
+import cc.iotkit.data.service.convert.UserInfoMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.UserInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -70,6 +70,11 @@ public class UserInfoDataImpl implements IUserInfoData {
     @Override
     public void deleteById(String s) {
         userInfoRepository.deleteById(s);
+    }
+
+    @Override
+    public void deleteByIds(String[] strings) {
+
     }
 
     @Override

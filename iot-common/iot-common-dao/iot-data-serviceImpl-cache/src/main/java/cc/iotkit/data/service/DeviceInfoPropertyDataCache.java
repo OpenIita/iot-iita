@@ -53,6 +53,11 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return deviceInfoData.count();
     }

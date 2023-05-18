@@ -61,6 +61,11 @@ public class UserInfoDataCache implements IUserInfoData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return userInfoData.count();
     }

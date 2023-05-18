@@ -315,12 +315,7 @@
                 <version>${ip2region.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                 <artifactId>iot-common-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
+            <!-- iot-common -->
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-common-core</artifactId>
@@ -329,7 +324,7 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-common-log</artifactId>
+                <artifactId>iot-common-doc</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -341,13 +336,19 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-common-web</artifactId>
+                <artifactId>iot-common-log</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-common-security</artifactId>
+                <artifactId>iot-common-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-satoken</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -359,10 +360,85 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-rule-engine</artifactId>
+                <artifactId>iot-common-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-websocket</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--iot-common-dao-->
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-data-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-data-serviceImpl-cache</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-data-serviceImpl-rdb</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-temporal-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-temporal-serviceImpl-es</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-temproal-serviceImpl-td</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--message-bus-->
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-message-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-message-event-bus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-message-rocketmq</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-script-engine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--iot-components-->
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-component-base</artifactId>
@@ -389,96 +465,31 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-package</artifactId>
+                <artifactId>iot-manager</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-auth-server</artifactId>
+                <artifactId>iot-message-notify</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-rule-engine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-system</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-virtual-device</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-message-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-message-event-bus</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-common-redis</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-message-rocketmq</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-data-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-temporal-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-temporal-serviceImpl-es</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-td-temporal-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-ts-temporal-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                 <artifactId>iot-data-serviceImpl-cache</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-data-serviceImpl-rdb</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-script-engine</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-common-doc</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

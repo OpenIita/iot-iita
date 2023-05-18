@@ -2,7 +2,7 @@ package cc.iotkit.comp.websocket;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
@@ -31,7 +31,7 @@ public class WebSocketDeviceComponent extends AbstractDeviceComponent {
     public void create(CompConfig config) {
         super.create(config);
         vertx = Vertx.vertx();
-        String type = JsonUtil.parse(config.getOther(), Map.class).get("type").toString();
+        String type = JsonUtils.parseObject(config.getOther(), Map.class).get("type").toString();
         if(AbstractDeviceVerticle.TYPE_CLIENT.equals(type)){
             webSocketVerticle = new WebSocketClientVerticle(config.getOther());
         }else{

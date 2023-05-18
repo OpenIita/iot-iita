@@ -45,6 +45,11 @@ public class ThingModelDataCache implements IThingModelData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return thingModelData.count();
     }

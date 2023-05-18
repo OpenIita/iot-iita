@@ -9,7 +9,7 @@
  */
 package cc.iotkit.ruleengine.action.device;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.ruleengine.action.Action;
 import cc.iotkit.ruleengine.action.device.DeviceActionService.Service;
@@ -43,7 +43,7 @@ public class DeviceAction implements Action<Service> {
         List<String> results = new ArrayList<>();
         for (DeviceActionService.Service service : services) {
             deviceActionService.invoke(service);
-            results.add(JsonUtil.toJsonString(service));
+            results.add(JsonUtils.toJsonString(service));
         }
         return results;
     }

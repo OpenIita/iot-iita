@@ -1,8 +1,9 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IHomeData;
 import cc.iotkit.data.dao.HomeRepository;
-import cc.iotkit.data.convert.HomeMapper;
+import cc.iotkit.data.model.TbHome;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.space.Home;
 import org.apache.commons.lang3.StringUtils;
@@ -22,17 +23,17 @@ public class HomeDataImpl implements IHomeData {
 
     @Override
     public Home findByUidAndCurrent(String uid, boolean current) {
-        return HomeMapper.M.toDto(homeRepository.findByUidAndCurrent(uid, current));
+        return MapstructUtils.convert(homeRepository.findByUidAndCurrent(uid, current), Home.class);
     }
 
     @Override
     public Home findByUidAndId(String uid, String id) {
-        return HomeMapper.M.toDto(homeRepository.findByUidAndId(uid, id));
+        return MapstructUtils.convert(homeRepository.findByUidAndId(uid, id), Home.class);
     }
 
     @Override
     public List<Home> findByUid(String uid) {
-        return HomeMapper.toDto(homeRepository.findByUid(uid));
+        return MapstructUtils.convert(homeRepository.findByUid(uid), Home.class);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class HomeDataImpl implements IHomeData {
 
     @Override
     public Home findById(String s) {
-        return HomeMapper.M.toDto(homeRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(homeRepository.findById(s).orElse(null), Home.class);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class HomeDataImpl implements IHomeData {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
-        homeRepository.save(HomeMapper.M.toVo(data));
+        homeRepository.save(MapstructUtils.convert(data, TbHome.class));
         return data;
     }
 
@@ -70,13 +71,18 @@ public class HomeDataImpl implements IHomeData {
     }
 
     @Override
+    public void deleteByIds(String[] strings) {
+
+    }
+
+    @Override
     public long count() {
         return homeRepository.count();
     }
 
     @Override
     public List<Home> findAll() {
-        return HomeMapper.toDto(homeRepository.findAll());
+        return MapstructUtils.convert(homeRepository.findAll(), Home.class);
     }
 
     @Override

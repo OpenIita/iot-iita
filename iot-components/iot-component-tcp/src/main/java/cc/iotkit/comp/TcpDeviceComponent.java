@@ -1,7 +1,7 @@
 package cc.iotkit.comp;
 
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.tcp.cilent.TcpClientDeviceComponent;
 import cc.iotkit.comp.tcp.server.TcpServerDeviceComponent;
@@ -21,7 +21,7 @@ public class TcpDeviceComponent extends AbstractDeviceComponent {
 
     @Override
     public void create(CompConfig config) {
-        Map maps = JsonUtil.parse(config.getOther(), Map.class);
+        Map maps = JsonUtils.parseObject(config.getOther(), Map.class);
         String type = maps.get("type").toString();
         if ("server".equals(type)) {
             tcpVerticle = new TcpServerDeviceComponent();

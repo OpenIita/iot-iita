@@ -9,7 +9,7 @@
  */
 package cc.iotkit.temporal.td.dm;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,7 @@ public class TdRestApi {
         log.info("exec td sql:{}", sql);
         HttpRequest request = newApiRequest(sql);
         HttpResponse response = request.execute();
-        return JsonUtil.parse(response.body(), TdResponse.class);
+        return JsonUtils.parseObject(response.body(), TdResponse.class);
     }
 
 

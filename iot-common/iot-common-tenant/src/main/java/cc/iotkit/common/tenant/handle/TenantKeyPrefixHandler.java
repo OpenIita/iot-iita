@@ -1,9 +1,10 @@
 package cc.iotkit.common.tenant.handle;
 
-import org.dromara.common.core.constant.GlobalConstants;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.redis.handler.KeyPrefixHandler;
-import org.dromara.common.tenant.helper.TenantHelper;
+
+import cc.iotkit.common.constant.GlobalConstants;
+import cc.iotkit.common.redis.handler.KeyPrefixHandler;
+import cc.iotkit.common.tenant.helper.TenantHelper;
+import cc.iotkit.common.utils.StringUtils;
 
 /**
  * 多租户redis缓存key前缀处理

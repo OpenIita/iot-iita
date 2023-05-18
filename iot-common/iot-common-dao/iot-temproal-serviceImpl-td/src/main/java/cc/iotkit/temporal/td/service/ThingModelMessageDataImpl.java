@@ -9,7 +9,7 @@
  */
 package cc.iotkit.temporal.td.service;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.stats.TimeData;
@@ -32,6 +32,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
     @Autowired
     private TdTemplate tdTemplate;
 
+    @Override
     public Paging<ThingModelMessage> findByTypeAndIdentifier(String deviceId, String type,
                                                              String identifier,
                                                              int page, int size) {
@@ -66,7 +67,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
                         new ThingModelMessage(r.getTime().toString(), r.getMid(),
                                 deviceId, r.getProductKey(), r.getDeviceName(),
                                 r.getUid(), r.getType(), r.getIdentifier(), r.getCode(),
-                                JsonUtil.parse(r.getData(), Map.class),
+                                JsonUtils.parseObject(r.getData(), Map.class),
                                 r.getTime(), r.getReportTime()))
                 .collect(Collectors.toList()));
     }
@@ -102,7 +103,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
                 msg.getProductKey(), msg.getDeviceName(),
                 msg.getUid(), msg.getType(),
                 msg.getIdentifier(), msg.getCode(),
-                msg.getData() == null ? "{}" : JsonUtil.toJsonString(msg.getData()),
+                msg.getData() == null ? "{}" : JsonUtils.toJsonString(msg.getData()),
                 msg.getTime());
     }
 

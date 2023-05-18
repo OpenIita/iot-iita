@@ -11,8 +11,8 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.manager.ITaskInfoData;
 import cc.iotkit.data.dao.TaskInfoRepository;
-import cc.iotkit.data.convert.TaskInfoMapper;
 import cc.iotkit.data.model.TbTaskInfo;
+import cc.iotkit.data.service.convert.TaskInfoMapper;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.rule.TaskInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -73,6 +73,11 @@ public class TaskInfoDataImpl implements ITaskInfoData {
     @Override
     public void deleteById(String s) {
         taskInfoRepository.deleteById(s);
+    }
+
+    @Override
+    public void deleteByIds(String[] strings) {
+
     }
 
     @Override

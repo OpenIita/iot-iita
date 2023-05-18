@@ -10,7 +10,7 @@
 package cc.iotkit.ruleengine.handler;
 
 import cc.iotkit.common.Constants;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.mq.ConsumerHandler;
 import cc.iotkit.mq.MqConsumer;
@@ -34,7 +34,7 @@ public class RuleDeviceConsumer implements ConsumerHandler<ThingModelMessage> {
     @SneakyThrows
     @Override
     public void handler(ThingModelMessage msg) {
-        log.info("received thing model message:{}", JsonUtil.toJsonString(msg));
+        log.info("received thing model message:{}", JsonUtils.toJsonString(msg));
         try {
             for (DeviceMessageHandler handler : this.handlers) {
                 handler.handle(msg);
