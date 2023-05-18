@@ -9,7 +9,7 @@
  */
 package cc.iotkit.temporal.es.service;
 
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.stats.TimeData;
 import cc.iotkit.temporal.IThingModelMessageData;

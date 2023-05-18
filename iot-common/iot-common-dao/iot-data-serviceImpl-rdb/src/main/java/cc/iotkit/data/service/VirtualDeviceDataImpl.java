@@ -15,7 +15,7 @@ import cc.iotkit.data.dao.VirtualDeviceRepository;
 import cc.iotkit.data.model.TbVirtualDevice;
 import cc.iotkit.data.model.TbVirtualDeviceMapping;
 import cc.iotkit.data.service.convert.VirtualDeviceMapper;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.VirtualDevice;
 import cn.hutool.core.util.IdUtil;
 import org.apache.commons.lang3.StringUtils;

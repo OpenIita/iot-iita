@@ -12,7 +12,7 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.manager.service.AlertService;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.alert.AlertConfig;
 import cc.iotkit.model.alert.AlertRecord;
 import io.swagger.annotations.Api;

@@ -14,7 +14,7 @@ import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.IVirtualDeviceData;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.device.VirtualDeviceLog;
 import cc.iotkit.temporal.IVirtualDeviceLogData;

@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.manager;
 
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.VirtualDevice;
 
 import java.util.List;

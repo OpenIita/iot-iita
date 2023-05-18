@@ -13,7 +13,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProtocolConverterData;
 import cc.iotkit.data.dao.ProtocolConverterRepository;
 import cc.iotkit.data.model.TbProtocolConverter;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.protocol.ProtocolConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

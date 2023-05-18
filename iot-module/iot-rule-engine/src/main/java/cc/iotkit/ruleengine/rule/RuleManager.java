@@ -12,7 +12,7 @@ package cc.iotkit.ruleengine.rule;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IRuleInfoData;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.ruleengine.action.*;

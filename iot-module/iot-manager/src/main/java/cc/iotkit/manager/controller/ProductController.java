@@ -18,7 +18,7 @@ import cc.iotkit.data.manager.IProductModelData;
 import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.manager.config.AliyunConfig;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;

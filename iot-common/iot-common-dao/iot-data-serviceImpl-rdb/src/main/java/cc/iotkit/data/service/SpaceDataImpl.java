@@ -4,7 +4,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.ISpaceData;
 import cc.iotkit.data.dao.SpaceRepository;
 import cc.iotkit.data.model.TbSpace;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.space.Space;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

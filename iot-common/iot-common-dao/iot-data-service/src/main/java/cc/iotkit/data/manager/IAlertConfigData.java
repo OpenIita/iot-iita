@@ -10,7 +10,7 @@
 package cc.iotkit.data.manager;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.alert.AlertConfig;
 
 

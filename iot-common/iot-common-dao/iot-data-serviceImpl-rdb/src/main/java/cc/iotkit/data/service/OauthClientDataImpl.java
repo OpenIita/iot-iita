@@ -14,7 +14,7 @@ import cc.iotkit.data.manager.IOauthClientData;
 import cc.iotkit.data.dao.OauthClientRepository;
 import cc.iotkit.data.model.TbOauthClient;
 import cc.iotkit.model.OauthClient;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;

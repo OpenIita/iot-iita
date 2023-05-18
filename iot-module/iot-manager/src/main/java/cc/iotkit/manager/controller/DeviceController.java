@@ -18,7 +18,7 @@ import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.model.InvokeResult;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.DeviceConfig;
 import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;

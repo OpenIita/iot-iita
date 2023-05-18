@@ -3,7 +3,7 @@ package cc.iotkit.data.service;
 import cc.iotkit.data.dao.system.SysConfigRepository;
 import cc.iotkit.data.model.TbSysConfig;
 import cc.iotkit.data.system.ISysConfigData;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.system.SysConfig;
 import java.util.List;
 

@@ -4,7 +4,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProtocolComponentData;
 import cc.iotkit.data.dao.ProtocolComponentRepository;
 import cc.iotkit.data.model.TbProtocolComponent;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

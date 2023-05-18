@@ -7,7 +7,7 @@ import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.dao.*;
 import cc.iotkit.data.model.*;
 import cc.iotkit.data.service.convert.DeviceInfoMapper;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;

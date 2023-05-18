@@ -12,7 +12,7 @@ package cc.iotkit.data.service;
 import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.data.dao.ThingModelRepository;
 import cc.iotkit.data.service.convert.ThingModelMapper;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.product.ThingModel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

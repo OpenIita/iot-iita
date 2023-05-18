@@ -10,7 +10,7 @@
 package cc.iotkit.data.manager;
 
 import cc.iotkit.model.Id;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 
 import java.util.List;
 

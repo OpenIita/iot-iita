@@ -1,11 +1,8 @@
 package cc.iotkit.data.system;
 
 import cc.iotkit.data.manager.ICommonData;
-import cc.iotkit.model.Paging;
-import cc.iotkit.model.system.SysDictData;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.system.SysDictType;
-
-import java.util.List;
 
 /**
  * 字典类型数据接口

@@ -1,6 +1,6 @@
 package cc.iotkit.temporal;
 
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.RuleLog;
 
 public interface IRuleLogData {

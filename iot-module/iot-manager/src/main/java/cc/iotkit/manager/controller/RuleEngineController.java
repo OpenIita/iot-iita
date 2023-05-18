@@ -15,7 +15,7 @@ import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.manager.ITaskInfoData;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.model.rule.RuleLog;
 import cc.iotkit.model.rule.TaskInfo;

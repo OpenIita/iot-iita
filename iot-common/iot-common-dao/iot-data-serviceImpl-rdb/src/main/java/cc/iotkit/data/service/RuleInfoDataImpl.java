@@ -13,7 +13,7 @@ import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.dao.RuleInfoRepository;
 import cc.iotkit.data.model.TbRuleInfo;
 import cc.iotkit.data.service.convert.RuleInfoMapper;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.RuleInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

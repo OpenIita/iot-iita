@@ -14,7 +14,7 @@ import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.cache.DeviceInfoCacheEvict;
 import cc.iotkit.data.cache.DeviceInfoCachePut;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.stats.DataItem;
 import org.apache.commons.lang3.StringUtils;

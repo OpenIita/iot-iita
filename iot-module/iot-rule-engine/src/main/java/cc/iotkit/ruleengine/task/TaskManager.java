@@ -12,7 +12,7 @@ package cc.iotkit.ruleengine.task;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.data.manager.ITaskInfoData;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.rule.TaskLog;
 import cc.iotkit.temporal.ITaskLogData;

@@ -13,7 +13,7 @@ import cc.iotkit.data.manager.ITaskInfoData;
 import cc.iotkit.data.dao.TaskInfoRepository;
 import cc.iotkit.data.model.TbTaskInfo;
 import cc.iotkit.data.service.convert.TaskInfoMapper;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.TaskInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

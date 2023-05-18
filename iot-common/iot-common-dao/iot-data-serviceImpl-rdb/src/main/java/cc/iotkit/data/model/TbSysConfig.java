@@ -3,12 +3,14 @@ package cc.iotkit.data.model;
 import cc.iotkit.data.model.BaseEntity;
 import cc.iotkit.model.system.SysConfig;
 import io.github.linpeilie.annotations.AutoMapper;
+import javax.persistence.GeneratedValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * 参数配置表 sys_config
@@ -27,6 +29,8 @@ public class TbSysConfig extends BaseEntity {
      * 参数主键
      */
     @Id
+    @GeneratedValue(generator = "SnowflakeIdGenerator")
+    @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     private Long configId;
 
     /**

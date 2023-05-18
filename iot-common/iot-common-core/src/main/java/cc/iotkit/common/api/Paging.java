@@ -7,7 +7,7 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.model;
+package cc.iotkit.common.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

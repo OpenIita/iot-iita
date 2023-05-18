@@ -3,7 +3,7 @@ package cc.iotkit.data.service;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.cache.ProductCacheEvict;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

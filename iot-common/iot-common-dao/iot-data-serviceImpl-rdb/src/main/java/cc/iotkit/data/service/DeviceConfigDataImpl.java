@@ -13,7 +13,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.data.dao.DeviceConfigRepository;
 import cc.iotkit.data.model.TbDeviceConfig;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.DeviceConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

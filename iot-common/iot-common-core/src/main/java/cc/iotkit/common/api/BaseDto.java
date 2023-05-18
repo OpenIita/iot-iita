@@ -15,6 +15,7 @@ public class BaseDto {
     /**
      * 创建部门
      */
+
     private Long createDept;
 
     /**

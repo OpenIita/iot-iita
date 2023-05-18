@@ -1,7 +1,6 @@
 package cc.iotkit.data.system;
 
 import cc.iotkit.data.manager.ICommonData;
-import cc.iotkit.model.Paging;
 import cc.iotkit.model.system.SysConfig;
 
 /**

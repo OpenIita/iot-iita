@@ -9,7 +9,7 @@
  */
 package cc.iotkit.temporal.td.service;
 
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.RuleLog;
 import cc.iotkit.temporal.IRuleLogData;
 import cc.iotkit.temporal.td.dao.TdTemplate;

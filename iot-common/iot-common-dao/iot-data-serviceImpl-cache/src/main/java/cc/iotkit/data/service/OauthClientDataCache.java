@@ -13,7 +13,7 @@ import cc.iotkit.common.constant.Constants;
 import cc.iotkit.data.manager.IOauthClientData;
 import cc.iotkit.data.cache.OauthClientCacheEvict;
 import cc.iotkit.model.OauthClient;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;

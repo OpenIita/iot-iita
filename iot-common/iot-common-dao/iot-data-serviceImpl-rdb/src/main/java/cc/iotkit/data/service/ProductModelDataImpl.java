@@ -4,7 +4,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProductModelData;
 import cc.iotkit.data.dao.ProductModelRepository;
 import cc.iotkit.data.model.TbProductModel;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.product.ProductModel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

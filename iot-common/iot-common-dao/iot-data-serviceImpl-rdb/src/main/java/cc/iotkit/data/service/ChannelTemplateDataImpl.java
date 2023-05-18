@@ -4,7 +4,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IChannelTemplateData;
 import cc.iotkit.data.dao.ChannelTemplateRepository;
 import cc.iotkit.data.model.TbChannelTemplate;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.notify.ChannelTemplate;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;

@@ -10,7 +10,7 @@
 package cc.iotkit.temporal.td.service;
 
 import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.stats.TimeData;
 import cc.iotkit.temporal.IThingModelMessageData;

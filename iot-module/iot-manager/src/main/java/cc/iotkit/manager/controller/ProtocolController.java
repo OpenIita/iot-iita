@@ -18,7 +18,7 @@ import cc.iotkit.data.manager.IProtocolComponentData;
 import cc.iotkit.data.manager.IProtocolConverterData;
 import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import cc.iotkit.model.protocol.ProtocolConverter;
 import cc.iotkit.utils.AuthUtil;

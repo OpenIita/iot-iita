@@ -5,7 +5,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IAlertRecordData;
 import cc.iotkit.data.dao.AlertRecordRepository;
 import cc.iotkit.data.model.TbAlertRecord;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.alert.AlertRecord;
 
 import java.util.List;

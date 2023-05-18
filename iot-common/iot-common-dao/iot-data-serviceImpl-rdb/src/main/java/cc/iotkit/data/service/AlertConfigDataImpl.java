@@ -5,7 +5,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IAlertConfigData;
 import cc.iotkit.data.dao.AlertConfigRepository;
 import cc.iotkit.data.model.TbAlertConfig;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.alert.AlertConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +32,6 @@ public class AlertConfigDataImpl implements IAlertConfigData {
 
     @Override
     public AlertConfig save(AlertConfig data) {
-        if (StringUtils.isBlank(data.getId())) {
-            data.setId(UUID.randomUUID().toString());
-        }
         alertConfigRepository.save(MapstructUtils.convert(data, TbAlertConfig.class));
         return data;
     }

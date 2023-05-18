@@ -11,7 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.manager.ICommonData;
 import cc.iotkit.model.Id;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

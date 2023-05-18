@@ -1,6 +1,6 @@
 package cc.iotkit.data.manager;
 
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.RuleInfo;
 
 import java.util.List;

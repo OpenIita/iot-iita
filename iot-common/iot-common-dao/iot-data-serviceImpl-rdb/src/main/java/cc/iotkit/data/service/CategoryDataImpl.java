@@ -13,7 +13,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.dao.CategoryRepository;
 import cc.iotkit.data.model.TbCategory;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.product.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;

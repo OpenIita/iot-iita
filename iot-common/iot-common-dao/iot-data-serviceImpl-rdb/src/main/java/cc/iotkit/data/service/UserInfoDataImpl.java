@@ -13,7 +13,7 @@ import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.dao.UserInfoRepository;
 import cc.iotkit.data.model.TbUserInfo;
 import cc.iotkit.data.service.convert.UserInfoMapper;
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.UserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
