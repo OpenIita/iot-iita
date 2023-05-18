@@ -2,6 +2,7 @@ package cc.iotkit.data.model;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -22,6 +23,11 @@ public class TbBigScreenApi {
      * 所属性用户id
      */
     private String uid;
+
+    /**
+     * 大屏id
+     */
+    private String screenId;
 
     /**
      * 接口路径
@@ -51,5 +57,6 @@ public class TbBigScreenApi {
     /**
      * 转换脚本
      */
+    @Column(columnDefinition = "text")
     private String script;
 }

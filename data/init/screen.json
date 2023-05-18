@@ -1,0 +1,12 @@
+[
+  {
+    "id": "d0d0daca-8398-4483-9abd-073f96c19f02",
+    "name": "测试1",
+    "resourceFile": "map_demo1.zip",
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "port": 2222,
+    "state": "stopped",
+    "createAt": "1684396797499",
+    "isDefault": true
+  }
+]

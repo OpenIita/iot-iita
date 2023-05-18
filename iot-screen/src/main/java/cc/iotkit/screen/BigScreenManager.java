@@ -2,6 +2,7 @@ package cc.iotkit.screen;
 
 import cc.iotkit.comps.ApiTool;
 import cc.iotkit.data.IBigScreenApiData;
+import cc.iotkit.data.IBigScreenData;
 import cc.iotkit.model.screen.BigScreen;
 import cc.iotkit.model.screen.BigScreenApi;
 import cc.iotkit.screen.api.ScreenApiHandle;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +29,27 @@ public class BigScreenManager {
     private IBigScreenApiData bigScreenApiData;
 
     @Autowired
+    private IBigScreenData bigScreenData;
+
+    @Autowired
     private BigScreenConfig bigScreenConfig;
 
     private final Map<String, ScreenComponent> screens = new HashMap<>();
     private final Map<String, Boolean> states = new HashMap<>();
+
+    @PostConstruct
+    public void init() {
+        List<BigScreen> screenList = bigScreenData.findByState(
+                BigScreen.STATE_RUNNING);
+        for (BigScreen screen : screenList) {
+            try {
+                register(screen);
+                publish(screen);
+            } catch (Throwable e) {
+                log.error("init screen error", e);
+            }
+        }
+    }
 
     public void register(BigScreen screen) {
         String id = screen.getId();

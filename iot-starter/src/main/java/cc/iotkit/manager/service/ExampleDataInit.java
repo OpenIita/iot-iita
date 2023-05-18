@@ -29,6 +29,8 @@ import cc.iotkit.model.protocol.ProtocolComponent;
 import cc.iotkit.model.protocol.ProtocolConverter;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.model.rule.TaskInfo;
+import cc.iotkit.model.screen.BigScreen;
+import cc.iotkit.model.screen.BigScreenApi;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
@@ -95,6 +97,10 @@ public class ExampleDataInit implements SmartInitializingSingleton {
     private IChannelTemplateData iChannelTemplateData;
     @Autowired
     private INotifyMessageData iNotifyMessageData;
+    @Autowired
+    private IBigScreenData iBigScreenData;
+    @Autowired
+    private IBigScreenApiData iBigScreenApiData;
 
     @Override
     public void afterSingletonsInstantiated() {
@@ -153,6 +159,10 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                     initData("channelTemplate", iChannelTemplateData, new TypeReference<List<ChannelTemplate>>() {
                     });
                     initData("notifyMessage", iNotifyMessageData, new TypeReference<List<NotifyMessage>>() {
+                    });
+                    initData("screen", iBigScreenData, new TypeReference<List<BigScreen>>() {
+                    });
+                    initData("screenApi", iBigScreenApiData, new TypeReference<List<BigScreenApi>>() {
                     });
 
                     log.info("init data finished.");

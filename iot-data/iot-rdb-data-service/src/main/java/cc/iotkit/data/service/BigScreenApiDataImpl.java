@@ -1,13 +1,10 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.data.IBigScreenApiData;
-import cc.iotkit.data.dao.BigScreenApiMappingRepository;
 import cc.iotkit.data.dao.BigScreenApiRepository;
 import cc.iotkit.data.model.BigScreenApiMapper;
 import cc.iotkit.data.model.TbBigScreenApi;
-import cc.iotkit.data.model.TbBigScreenApiMapping;
 import cc.iotkit.model.Paging;
-import cc.iotkit.model.screen.BigScreen;
 import cc.iotkit.model.screen.BigScreenApi;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +29,6 @@ public class BigScreenApiDataImpl implements IBigScreenApiData {
     @Autowired
     private BigScreenApiRepository bigScreenApiRepository;
 
-    @Autowired
-    private BigScreenApiMappingRepository bigScreenApiMappingRepository;
-
     @Override
     public List<BigScreenApi> findByUid(String uid) {
         return BigScreenApiMapper.toDto(bigScreenApiRepository.findByUid(uid));
@@ -44,11 +37,16 @@ public class BigScreenApiDataImpl implements IBigScreenApiData {
     @Override
     public List<BigScreenApi> findByScreenId(String id) {
         List<BigScreenApi> screenApis = new ArrayList<>();
-        List<TbBigScreenApiMapping> screenApiMapping = bigScreenApiMappingRepository.findByScreenId(id);
-        if (screenApiMapping.size() > 0) {
-            screenApis = screenApiMapping.stream().map(o -> BigScreenApiMapper.M.toDto(bigScreenApiRepository.findById(o.getApiId()).orElse(null))).collect(Collectors.toList());
+        List<TbBigScreenApi> tScreenApis =bigScreenApiRepository.findByScreenId(id);
+        if (tScreenApis.size() > 0) {
+            screenApis = tScreenApis.stream().map(o -> BigScreenApiMapper.M.toDto(o)).collect(Collectors.toList());
         }
         return screenApis;
+    }
+
+    @Override
+    public void deleteByScreenId(String id) {
+        bigScreenApiRepository.deleteByScreenId(id);
     }
 
     @Override
@@ -57,31 +55,6 @@ public class BigScreenApiDataImpl implements IBigScreenApiData {
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
                 BigScreenApiMapper.toDto(paged.getContent()));
-    }
-
-    @Override
-    @Transactional
-    public void saveApiList(BigScreen screen, List<BigScreenApi> screenApis) {
-        List<TbBigScreenApiMapping> bigScreenApiMappings = bigScreenApiMappingRepository.findByScreenId(screen.getId());
-        if (bigScreenApiMappings.size() > 0) {
-            bigScreenApiMappings.forEach((bigScreenApiMapping) -> {
-                bigScreenApiRepository.deleteById(bigScreenApiMapping.getApiId());
-            });
-            bigScreenApiMappingRepository.deleteByScreenId(screen.getId());
-        }
-        screenApis.forEach((item) -> {
-            if (StringUtils.isBlank(item.getId())) {
-                item.setId(UUID.randomUUID().toString());
-            }
-            item.setCreateAt(System.currentTimeMillis());
-            item.setUid(screen.getUid());
-            bigScreenApiMappingRepository.save(new TbBigScreenApiMapping(
-                    UUID.randomUUID().toString(),
-                    screen.getId(),
-                    item.getId()
-            ));
-            bigScreenApiRepository.save(BigScreenApiMapper.M.toVo(item));
-        });
     }
 
     @Override

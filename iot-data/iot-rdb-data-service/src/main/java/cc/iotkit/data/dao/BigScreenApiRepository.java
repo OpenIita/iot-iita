@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -17,4 +18,9 @@ public interface BigScreenApiRepository extends JpaRepository<TbBigScreenApi, St
     Page<TbBigScreenApi> findByUid(String uid, Pageable pageable);
 
     long countByUid(String uid);
+
+    List<TbBigScreenApi> findByScreenId(String screenId);
+
+    @Transactional
+    void deleteByScreenId(String id);
 }

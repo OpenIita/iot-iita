@@ -1,0 +1,24 @@
+[
+  {
+    "id": "e9d15bb0-6778-4d0d-b37b-b341bdecfab1",
+    "screenId": "d0d0daca-8398-4483-9abd-073f96c19f02",
+    "apiPath": "/test",
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "apiParams": "a=1&b=2",
+    "httpMethod": "GET",
+    "dataSource": "",
+    "createAt": "1684396797499",
+    "script": "this.messageConver = function (head,params) {\n        var a=apiTool.invokeDataService(\"homeDataImpl\",\"findByUid\",\"232f506f-76c0-46eb-890b-15edd1022ba1\");\n    return {                                      \n    content:a.length\n    };\n                };"
+  },
+  {
+    "id": "945a682a-22ba-417b-8647-44cd5c13c62f",
+    "screenId": "d0d0daca-8398-4483-9abd-073f96c19f02",
+    "apiPath": "/test1",
+    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "apiParams": "{\"aaaa\":\"11111\",\"name\":\"test\"}",
+    "httpMethod": "POST",
+    "dataSource": "",
+    "createAt": "1684396797499",
+    "script": "this.messageConver = function (head,params) {\n        var a=apiTool.invokeDataService(\"deviceInfoDataImpl\",\"findByUid\",\"232f506f-76c0-46eb-890b-15edd1022ba1\");\n    return {                                      \n    content:a.length\n    };\n                };"
+  }
+]

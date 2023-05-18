@@ -124,7 +124,12 @@ public class BigScreenController {
             throw new BizException(ErrCode.API_LIST_BLANK);
         }
         BigScreen screen = getAndCheckBigScreen(id);
-        bigScreenApiData.saveApiList(screen,screenApis);
+        bigScreenApiData.deleteByScreenId(screen.getId());
+        for (BigScreenApi screenApi:screenApis){
+            screenApi.setUid(AuthUtil.getUserId());
+            screenApi.setScreenId(screen.getId());
+            bigScreenApiData.save(screenApi);
+        }
     }
 
     @ApiOperation(value = "调试模式转换", httpMethod = "POST")
@@ -193,6 +198,10 @@ public class BigScreenController {
         BigScreen screen = getAndCheckBigScreen(id);
 
         if (screen.STATE_RUNNING.equals(state)) {//发布状态
+            List<BigScreenApi> screenApis=bigScreenApiData.findByScreenId(screen.getId());
+            if(screenApis==null||screenApis.size()==0){
+                throw new BizException(ErrCode.API_LIST_BLANK);
+            }
             screen.setState(screen.STATE_RUNNING);
             screenManager.register(screen);
             screenManager.publish(screen);

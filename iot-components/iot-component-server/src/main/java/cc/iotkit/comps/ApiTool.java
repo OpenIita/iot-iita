@@ -10,6 +10,7 @@
 package cc.iotkit.comps;
 
 import cc.iotkit.common.Constants;
+import cc.iotkit.comp.utils.SpringUtils;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
@@ -23,6 +24,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -211,6 +214,31 @@ public class ApiTool {
 
     public void log(String msg) {
         log.info(msg);
+    }
+
+    //调用数据服务
+    public Object invokeDataService(String className, String methodName, Object... params) {
+        Object ret = null;
+        if(methodName.startsWith("find")||methodName.startsWith("get")||methodName.startsWith("count")){
+            try {
+                Object o = SpringUtils.getBean(className);
+                Class<?>[] parameterTypes = new Class[params.length];
+                for (int i = 0; i < params.length; i++) {
+                    parameterTypes[i] = params[i].getClass();
+                }
+                Method method = o.getClass().getDeclaredMethod(methodName, parameterTypes);
+                ret= method.invoke(o, params);
+            }catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }else{
+            log.error("methodName illegal");
+        }
+        return ret;
     }
 
     @Data

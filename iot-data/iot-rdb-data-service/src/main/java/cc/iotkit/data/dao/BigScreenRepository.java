@@ -18,5 +18,7 @@ public interface BigScreenRepository extends JpaRepository<TbBigScreen, String> 
 
     TbBigScreen findByUidAndIsDefault(String uid, boolean isDefault);
 
+    List<TbBigScreen> findByState(String state);
+
     long countByUid(String uid);
 }

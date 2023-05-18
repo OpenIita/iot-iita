@@ -23,6 +23,11 @@ public class BigScreenApi implements Owned<String> {
     private String uid;
 
     /**
+     * 大屏id
+     */
+    private String screenId;
+
+    /**
      * 接口路径
      */
     private String apiPath;

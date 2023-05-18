@@ -58,6 +58,11 @@ public class BigScreenDataImpl implements IBigScreenData {
     }
 
     @Override
+    public List<BigScreen> findByState(String state) {
+        return BigScreenMapper.toDto(bigScreenRepository.findByState(state));
+    }
+
+    @Override
     @Transactional
     public BigScreen save(BigScreen data) {
         TbBigScreen vo = bigScreenRepository.findById(data.getId()).orElse(null);
