@@ -1,7 +1,7 @@
 package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.web.core.BaseController;
@@ -31,7 +31,7 @@ public class SysNoticeController extends BaseController {
      */
     @SaCheckPermission("system:notice:list")
     @GetMapping("/list")
-    public PagedDataVo<SysNoticeVo> list(SysNoticeBo notice, PageRequest<?> query) {
+    public Paging<SysNoticeVo> list(SysNoticeBo notice, PageRequest<?> query) {
         return noticeService.selectPageNoticeList(notice, query);
     }
 

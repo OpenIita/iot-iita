@@ -1,8 +1,7 @@
 package cc.iotkit.model.system;
 
 import cc.iotkit.model.Id;
-import cc.iotkit.model.TenantEntity;
-import io.github.linpeilie.annotations.AutoMapper;
+import cc.iotkit.model.TenantModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +16,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SysConfig extends TenantEntity implements Id<Long>, Serializable {
+public class SysConfig extends TenantModel implements Id<Long>, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

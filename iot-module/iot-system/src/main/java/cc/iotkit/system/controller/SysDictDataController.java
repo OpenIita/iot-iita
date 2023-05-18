@@ -1,7 +1,7 @@
 package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
@@ -38,7 +38,7 @@ public class SysDictDataController {
      */
     @SaCheckPermission("system:dict:list")
     @GetMapping("/list")
-    public PagedDataVo<SysDictDataVo> list(SysDictDataBo dictData, PageRequest<?> query) {
+    public Paging<SysDictDataVo> list(SysDictDataBo dictData, PageRequest<?> query) {
         return dictDataService.selectPageDictDataList(dictData, query);
     }
 

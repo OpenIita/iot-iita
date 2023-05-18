@@ -1,7 +1,8 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysNoticeBo;
 import cc.iotkit.system.dto.vo.SysNoticeVo;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public interface ISysNoticeService {
 
 
-    PagedDataVo<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageRequest<?> query);
+    Paging<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageRequest<?> query);
 
     /**
      * 查询公告信息

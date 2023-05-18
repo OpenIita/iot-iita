@@ -2,7 +2,7 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.undefined.LoginUser;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.utils.MapstructUtils;
@@ -42,7 +42,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     private final SysRoleDeptMapper roleDeptMapper;
 
     @Override
-    public PagedDataVo<SysRoleVo> selectPageRoleList(SysRoleBo role, PageRequest<?> query) {
+    public Paging<SysRoleVo> selectPageRoleList(SysRoleBo role, PageRequest<?> query) {
         Page<SysRoleVo> page = baseMapper.selectPageRoleList(query.build(), this.buildQueryWrapper(role));
         return TableDataInfo.build(page);
     }

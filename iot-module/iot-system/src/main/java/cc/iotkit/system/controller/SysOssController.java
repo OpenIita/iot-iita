@@ -2,7 +2,7 @@ package cc.iotkit.system.controller;
 
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.validate.QueryGroup;
@@ -43,7 +43,7 @@ public class SysOssController extends BaseController {
      */
     @SaCheckPermission("system:oss:list")
     @GetMapping("/list")
-    public PagedDataVo<SysOssVo> list(@Validated(QueryGroup.class) SysOssBo bo, PageRequest<?> query) {
+    public Paging<SysOssVo> list(@Validated(QueryGroup.class) SysOssBo bo, PageRequest<?> query) {
         return ossService.queryPageList(bo, query);
     }
 

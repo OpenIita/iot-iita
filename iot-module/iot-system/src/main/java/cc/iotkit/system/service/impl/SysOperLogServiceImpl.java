@@ -1,7 +1,7 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.log.event.OperLogEvent;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
@@ -47,7 +47,7 @@ public class SysOperLogServiceImpl implements ISysOperLogService {
     }
 
     @Override
-    public PagedDataVo<SysOperLogVo> selectPageOperLogList(SysOperLogBo operLog, PageRequest<?> query) {
+    public Paging<SysOperLogVo> selectPageOperLogList(SysOperLogBo operLog, PageRequest<?> query) {
         Map<String, Object> params = operLog.getParams();
         LambdaQueryWrapper<SysOperLog> lqw = new LambdaQueryWrapper<SysOperLog>()
             .like(StringUtils.isNotBlank(operLog.getTitle()), SysOperLog::getTitle, operLog.getTitle())

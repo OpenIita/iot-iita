@@ -7,12 +7,12 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.data.dao.system;
+package cc.iotkit.data.dao;
 
-import cc.iotkit.data.model.TbSysTenantPackage;
+import cc.iotkit.data.model.TbSysDictType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-public interface SysTenantPackageRepository extends JpaRepository<TbSysTenantPackage, Long>, QuerydslPredicateExecutor<TbSysTenantPackage> {
+public interface SysDictTypeRepository extends JpaRepository<TbSysDictType, Long>, QuerydslPredicateExecutor<TbSysDictType> {
 
 }

@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysOssBo;
 import cc.iotkit.system.dto.vo.SysOssVo;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface ISysOssService {
 
-    PagedDataVo<SysOssVo> queryPageList(SysOssBo sysOss, PageRequest<?> query);
+    Paging<SysOssVo> queryPageList(SysOssBo sysOss, PageRequest<?> query);
 
     List<SysOssVo> listByIds(Collection<Long> ossIds);
 

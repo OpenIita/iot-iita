@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.SysUserRole;
 import cc.iotkit.system.dto.bo.SysRoleBo;
 import cc.iotkit.system.dto.vo.SysRoleVo;
@@ -17,7 +17,7 @@ import java.util.Set;
 public interface ISysRoleService {
 
 
-    PagedDataVo<SysRoleVo> selectPageRoleList(SysRoleBo role, PageRequest<?> query);
+    Paging<SysRoleVo> selectPageRoleList(SysRoleBo role, PageRequest<?> query);
 
     /**
      * 根据条件分页查询角色数据

@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysConfigBo;
 import cc.iotkit.system.dto.vo.SysConfigVo;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public interface ISysConfigService {
 
 
-    PagedDataVo<SysConfigVo> selectPageConfigList(SysConfigBo config, PageRequest<?> query);
+    Paging<SysConfigVo> selectPageConfigList(PageRequest<SysConfigBo> query);
 
     /**
      * 查询参数配置信息

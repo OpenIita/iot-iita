@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysUserBo;
 import cc.iotkit.system.dto.vo.SysUserVo;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public interface ISysUserService {
 
 
-    PagedDataVo<SysUserVo> selectPageUserList(SysUserBo user, PageRequest<?> query);
+    Paging<SysUserVo> selectPageUserList(SysUserBo user, PageRequest<?> query);
 
     /**
      * 根据条件分页查询用户列表
@@ -31,7 +31,7 @@ public interface ISysUserService {
      * @param user 用户信息
      * @return 用户信息集合信息
      */
-    PagedDataVo<SysUserVo> selectAllocatedList(SysUserBo user, PageRequest<?> query);
+    Paging<SysUserVo> selectAllocatedList(SysUserBo user, PageRequest<?> query);
 
     /**
      * 根据条件分页查询未分配用户角色列表
@@ -39,7 +39,7 @@ public interface ISysUserService {
      * @param user 用户信息
      * @return 用户信息集合信息
      */
-    PagedDataVo<SysUserVo> selectUnallocatedList(SysUserBo user, PageRequest<?> query);
+    Paging<SysUserVo> selectUnallocatedList(SysUserBo user, PageRequest<?> query);
 
     /**
      * 通过用户名查询用户

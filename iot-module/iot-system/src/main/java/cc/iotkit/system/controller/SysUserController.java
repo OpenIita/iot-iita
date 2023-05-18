@@ -2,7 +2,7 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.undefined.LoginUser;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.excel.core.ExcelResult;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
@@ -55,7 +55,7 @@ public class SysUserController extends BaseController {
      */
     @SaCheckPermission("system:user:list")
     @GetMapping("/list")
-    public PagedDataVo<SysUserVo> list(SysUserBo user, PageRequest<?> query) {
+    public Paging<SysUserVo> list(SysUserBo user, PageRequest<?> query) {
         return userService.selectPageUserList(user, query);
     }
 

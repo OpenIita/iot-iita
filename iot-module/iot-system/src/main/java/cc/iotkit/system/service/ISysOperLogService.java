@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysOperLogBo;
 import cc.iotkit.system.dto.vo.SysOperLogVo;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface ISysOperLogService {
 
-    PagedDataVo<SysOperLogVo> selectPageOperLogList(SysOperLogBo operLog, PageRequest<?> query);
+    Paging<SysOperLogVo> selectPageOperLogList(SysOperLogBo operLog, PageRequest<?> query);
 
     /**
      * 新增操作日志

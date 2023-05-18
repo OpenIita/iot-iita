@@ -4,7 +4,7 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.CacheNames;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.constant.TenantConstants;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
@@ -73,7 +73,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
      * 查询租户列表
      */
     @Override
-    public PagedDataVo<SysTenantVo> queryPageList(SysTenantBo bo, PageRequest<?> query) {
+    public Paging<SysTenantVo> queryPageList(SysTenantBo bo, PageRequest<?> query) {
         LambdaQueryWrapper<SysTenant> lqw = buildQueryWrapper(bo);
         Page<SysTenantVo> result = baseMapper.selectVoPage(query.build(), lqw);
         return TableDataInfo.build(result);

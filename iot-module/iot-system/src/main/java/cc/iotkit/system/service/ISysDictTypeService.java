@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysDictTypeBo;
 import cc.iotkit.system.dto.vo.SysDictDataVo;
 import cc.iotkit.system.dto.vo.SysDictTypeVo;
@@ -16,7 +16,7 @@ import java.util.List;
 public interface ISysDictTypeService {
 
 
-    PagedDataVo<SysDictTypeVo> selectPageDictTypeList(SysDictTypeBo dictType, PageRequest<?> query);
+    Paging<SysDictTypeVo> selectPageDictTypeList(SysDictTypeBo dictType, PageRequest<?> query);
 
     /**
      * 根据条件分页查询字典类型

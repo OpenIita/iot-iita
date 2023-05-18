@@ -7,7 +7,7 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.common;
+package cc.iotkit.common.utils;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;

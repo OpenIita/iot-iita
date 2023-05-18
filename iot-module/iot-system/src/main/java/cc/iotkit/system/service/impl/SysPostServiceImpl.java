@@ -1,7 +1,7 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.model.system.SysPost;
@@ -29,7 +29,7 @@ public class SysPostServiceImpl implements ISysPostService {
     private final SysUserPostMapper userPostMapper;
 
     @Override
-    public PagedDataVo<SysPostVo> selectPagePostList(SysPostBo post, PageRequest<?> query) {
+    public Paging<SysPostVo> selectPagePostList(SysPostBo post, PageRequest<?> query) {
         LambdaQueryWrapper<SysPost> lqw = buildQueryWrapper(post);
         Page<SysPostVo> page = baseMapper.selectVoPage(query.build(), lqw);
         return TableDataInfo.build(page);

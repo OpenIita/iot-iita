@@ -1,7 +1,7 @@
 package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
@@ -44,7 +44,7 @@ public class SysRoleController extends BaseController {
      */
     @SaCheckPermission("system:role:list")
     @GetMapping("/list")
-    public PagedDataVo<SysRoleVo> list(SysRoleBo role, PageRequest<?> query) {
+    public Paging<SysRoleVo> list(SysRoleBo role, PageRequest<?> query) {
         return roleService.selectPageRoleList(role, query);
     }
 
@@ -158,7 +158,7 @@ public class SysRoleController extends BaseController {
      */
     @SaCheckPermission("system:role:list")
     @GetMapping("/authUser/allocatedList")
-    public PagedDataVo<SysUserVo> allocatedList(SysUserBo user, PageRequest<?> query) {
+    public Paging<SysUserVo> allocatedList(SysUserBo user, PageRequest<?> query) {
         return userService.selectAllocatedList(user, query);
     }
 
@@ -167,7 +167,7 @@ public class SysRoleController extends BaseController {
      */
     @SaCheckPermission("system:role:list")
     @GetMapping("/authUser/unallocatedList")
-    public PagedDataVo<SysUserVo> unallocatedList(SysUserBo user, PageRequest<?> query) {
+    public Paging<SysUserVo> unallocatedList(SysUserBo user, PageRequest<?> query) {
         return userService.selectUnallocatedList(user, query);
     }
 

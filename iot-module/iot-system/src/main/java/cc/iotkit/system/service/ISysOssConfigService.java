@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysOssConfigBo;
 import cc.iotkit.system.dto.vo.SysOssConfigVo;
 
@@ -29,7 +29,7 @@ public interface ISysOssConfigService {
     /**
      * 查询列表
      */
-    PagedDataVo<SysOssConfigVo> queryPageList(SysOssConfigBo bo, PageRequest<?> query);
+    Paging<SysOssConfigVo> queryPageList(SysOssConfigBo bo, PageRequest<?> query);
 
 
     /**

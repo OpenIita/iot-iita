@@ -1,7 +1,7 @@
 package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
@@ -35,7 +35,7 @@ public class SysPostController extends BaseController {
      */
     @SaCheckPermission("system:post:list")
     @GetMapping("/list")
-    public PagedDataVo<SysPostVo> list(SysPostBo post, PageRequest<?> query) {
+    public Paging<SysPostVo> list(SysPostBo post, PageRequest<?> query) {
         return postService.selectPagePostList(post, query);
     }
 

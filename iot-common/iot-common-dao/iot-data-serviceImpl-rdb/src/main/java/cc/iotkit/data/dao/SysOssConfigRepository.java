@@ -7,7 +7,7 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.data.dao.system;
+package cc.iotkit.data.dao;
 
 import cc.iotkit.data.model.TbSysOssConfig;
 import org.springframework.data.jpa.repository.JpaRepository;

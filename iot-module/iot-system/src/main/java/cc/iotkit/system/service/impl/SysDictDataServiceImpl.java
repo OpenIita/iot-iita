@@ -1,8 +1,9 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.CacheNames;
-import cc.iotkit.common.undefined.PagedDataVo;
+
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
 import cc.iotkit.common.utils.MapstructUtils;
@@ -29,7 +30,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     private final SysDictDataMapper baseMapper;
 
     @Override
-    public PagedDataVo<SysDictDataVo> selectPageDictDataList(SysDictDataBo dictData, PageRequest<?> query) {
+    public Paging<SysDictDataVo> selectPageDictDataList(SysDictDataBo dictData, PageRequest<?> query) {
         LambdaQueryWrapper<SysDictData> lqw = buildQueryWrapper(dictData);
         Page<SysDictDataVo> page = baseMapper.selectVoPage(query.build(), lqw);
         return TableDataInfo.build(page);

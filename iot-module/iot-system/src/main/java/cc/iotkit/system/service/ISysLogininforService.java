@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysLogininforBo;
 import cc.iotkit.system.dto.vo.SysLogininforVo;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public interface ISysLogininforService {
 
 
-    PagedDataVo<SysLogininforVo> selectPageLogininforList(SysLogininforBo logininfor, PageRequest<?> query);
+    Paging<SysLogininforVo> selectPageLogininforList(SysLogininforBo logininfor, PageRequest<?> query);
 
     /**
      * 新增系统登录日志

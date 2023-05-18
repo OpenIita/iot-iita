@@ -1,7 +1,7 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.model.system.SysNotice;
 import cc.iotkit.system.dto.bo.SysNoticeBo;
@@ -29,7 +29,7 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
     private final SysUserMapper userMapper;
 
     @Override
-    public PagedDataVo<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageRequest<?> query) {
+    public Paging<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageRequest<?> query) {
         LambdaQueryWrapper<SysNotice> lqw = buildQueryWrapper(notice);
         Page<SysNoticeVo> page = baseMapper.selectVoPage(query.build(), lqw);
         return TableDataInfo.build(page);

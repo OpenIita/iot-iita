@@ -2,7 +2,7 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.CacheNames;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.service.OssService;
 import cc.iotkit.common.utils.SpringUtils;
@@ -39,7 +39,7 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
     private final SysOssMapper baseMapper;
 
     @Override
-    public PagedDataVo<SysOssVo> queryPageList(SysOssBo bo, PageRequest<?> query) {
+    public Paging<SysOssVo> queryPageList(SysOssBo bo, PageRequest<?> query) {
         LambdaQueryWrapper<SysOss> lqw = buildQueryWrapper(bo);
         Page<SysOssVo> result = baseMapper.selectVoPage(query.build(), lqw);
         List<SysOssVo> filterResult = StreamUtils.toList(result.getRecords(), this::matchingUrl);

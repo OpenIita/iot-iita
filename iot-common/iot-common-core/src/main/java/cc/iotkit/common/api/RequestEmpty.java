@@ -14,9 +14,6 @@ import java.util.UUID;
 @Data
 public class RequestEmpty implements Serializable {
 
-  private String language;
-
-  @Deprecated
   private String requestId;
 
   public static RequestEmpty of() {

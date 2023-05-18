@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysPostBo;
 import cc.iotkit.system.dto.vo.SysPostVo;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public interface ISysPostService {
 
 
-    PagedDataVo<SysPostVo> selectPagePostList(SysPostBo post, PageRequest<?> query);
+    Paging<SysPostVo> selectPagePostList(SysPostBo post, PageRequest<?> query);
 
     /**
      * 查询岗位信息集合

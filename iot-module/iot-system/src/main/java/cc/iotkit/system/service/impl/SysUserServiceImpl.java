@@ -3,7 +3,7 @@ package cc.iotkit.system.service.impl;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.CacheNames;
 import cc.iotkit.common.constant.UserConstants;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.service.UserService;
@@ -50,7 +50,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     private final SysUserPostMapper userPostMapper;
 
     @Override
-    public PagedDataVo<SysUserVo> selectPageUserList(SysUserBo user, PageRequest<?> query) {
+    public Paging<SysUserVo> selectPageUserList(SysUserBo user, PageRequest<?> query) {
         Page<SysUserVo> page = baseMapper.selectPageUserList(query.build(), this.buildQueryWrapper(user));
         return TableDataInfo.build(page);
     }
@@ -94,7 +94,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
      * @return 用户信息集合信息
      */
     @Override
-    public PagedDataVo<SysUserVo> selectAllocatedList(SysUserBo user, PageRequest<?> query) {
+    public Paging<SysUserVo> selectAllocatedList(SysUserBo user, PageRequest<?> query) {
         QueryWrapper<SysUser> wrapper = Wrappers.query();
         wrapper.eq("u.del_flag", UserConstants.USER_NORMAL)
             .eq(ObjectUtil.isNotNull(user.getRoleId()), "r.role_id", user.getRoleId())
@@ -112,7 +112,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
      * @return 用户信息集合信息
      */
     @Override
-    public PagedDataVo<SysUserVo> selectUnallocatedList(SysUserBo user, PageRequest<?> query) {
+    public Paging<SysUserVo> selectUnallocatedList(SysUserBo user, PageRequest<?> query) {
         List<Long> userIds = userRoleMapper.selectUserIdsByRoleId(user.getRoleId());
         QueryWrapper<SysUser> wrapper = Wrappers.query();
         wrapper.eq("u.del_flag", UserConstants.USER_NORMAL)

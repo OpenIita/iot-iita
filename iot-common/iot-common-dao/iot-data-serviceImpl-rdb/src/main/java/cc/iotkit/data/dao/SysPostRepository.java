@@ -7,12 +7,12 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.data.dao.system;
+package cc.iotkit.data.dao;
 
-import cc.iotkit.data.model.TbSysLogininfor;
+import cc.iotkit.data.model.TbSysPost;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-public interface SysLogininforRepository extends JpaRepository<TbSysLogininfor, Long>, QuerydslPredicateExecutor<TbSysLogininfor> {
+public interface SysPostRepository extends JpaRepository<TbSysPost, Long>, QuerydslPredicateExecutor<TbSysPost> {
 
 }

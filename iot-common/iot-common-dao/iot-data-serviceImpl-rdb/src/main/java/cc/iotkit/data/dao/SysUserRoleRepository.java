@@ -7,12 +7,12 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.data.dao.system;
+package cc.iotkit.data.dao;
 
-import cc.iotkit.data.model.TbSysUserPost;
+import cc.iotkit.data.model.TbSysUserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-public interface SysUserPostRepository extends JpaRepository<TbSysUserPost, Long>, QuerydslPredicateExecutor<TbSysUserPost> {
+public interface SysUserRoleRepository extends JpaRepository<TbSysUserRole, Long>, QuerydslPredicateExecutor<TbSysUserRole> {
 
 }

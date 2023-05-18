@@ -3,7 +3,7 @@ package cc.iotkit.system.service.impl;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.CacheConstants;
 import cc.iotkit.common.constant.CacheNames;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
 import cc.iotkit.common.service.DictService;
@@ -46,7 +46,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
     private final SysDictDataMapper dictDataMapper;
 
     @Override
-    public PagedDataVo<SysDictTypeVo> selectPageDictTypeList(SysDictTypeBo dictType, PageRequest<?> pageQuery) {
+    public Paging<SysDictTypeVo> selectPageDictTypeList(SysDictTypeBo dictType, PageRequest<?> pageQuery) {
         LambdaQueryWrapper<SysDictType> lqw = buildQueryWrapper(dictType);
         Page<SysDictTypeVo> page = baseMapper.selectVoPage(query.build(), lqw);
         return TableDataInfo.build(page);

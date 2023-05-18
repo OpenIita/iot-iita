@@ -2,7 +2,7 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.TenantConstants;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
@@ -52,7 +52,7 @@ public class SysTenantController extends BaseController {
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:list")
     @GetMapping("/list")
-    public PagedDataVo<SysTenantVo> list(SysTenantBo bo, PageRequest<?> query) {
+    public Paging<SysTenantVo> list(SysTenantBo bo, PageRequest<?> query) {
         return tenantService.queryPageList(bo, query);
     }
 

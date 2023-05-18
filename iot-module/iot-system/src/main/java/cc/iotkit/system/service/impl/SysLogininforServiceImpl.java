@@ -2,9 +2,10 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.Constants;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.log.event.LogininforEvent;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.ServletUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.ip.AddressUtils;
 import cc.iotkit.common.web.utils.UnsignedMathGenerator;
@@ -90,7 +91,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
     }
 
     @Override
-    public PagedDataVo<SysLogininforVo> selectPageLogininforList(SysLogininforBo logininfor, PageRequest<?> query) {
+    public Paging<SysLogininforVo> selectPageLogininforList(SysLogininforBo logininfor, PageRequest<?> query) {
         Map<String, Object> params = logininfor.getParams();
         LambdaQueryWrapper<SysLogininfor> lqw = new LambdaQueryWrapper<SysLogininfor>()
             .like(StringUtils.isNotBlank(logininfor.getIpaddr()), SysLogininfor::getIpaddr, logininfor.getIpaddr())

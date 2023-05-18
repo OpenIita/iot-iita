@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysTenantPackageBo;
 import cc.iotkit.system.dto.vo.SysTenantPackageVo;
 
@@ -23,7 +23,7 @@ public interface ISysTenantPackageService {
     /**
      * 查询租户套餐列表
      */
-    PagedDataVo<SysTenantPackageVo> queryPageList(SysTenantPackageBo bo, PageRequest<?> query);
+    Paging<SysTenantPackageVo> queryPageList(SysTenantPackageBo bo, PageRequest<?> query);
 
     /**
      * 查询租户套餐已启用列表

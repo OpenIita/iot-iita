@@ -1,7 +1,7 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
@@ -44,7 +44,7 @@ public class SysTenantPackageServiceImpl implements ISysTenantPackageService {
      * 查询租户套餐列表
      */
     @Override
-    public PagedDataVo<SysTenantPackageVo> queryPageList(SysTenantPackageBo bo, PageRequest<?> query) {
+    public Paging<SysTenantPackageVo> queryPageList(SysTenantPackageBo bo, PageRequest<?> query) {
         LambdaQueryWrapper<SysTenantPackage> lqw = buildQueryWrapper(bo);
         Page<SysTenantPackageVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);

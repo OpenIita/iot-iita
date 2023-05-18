@@ -2,21 +2,23 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.CacheNames;
-import cc.iotkit.common.undefined.PagedDataVo;
+
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.service.ConfigService;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.system.ISysConfigData;
+import cc.iotkit.model.system.SysConfig;
 import cc.iotkit.system.dto.bo.SysConfigBo;
 import cc.iotkit.system.dto.vo.SysConfigVo;
-import cc.iotkit.system.mapper.SysConfigMapper;
+
 import cn.hutool.core.util.ObjectUtil;
-import cc.iotkit.system.dto.SysConfig;
 import cc.iotkit.system.service.ISysConfigService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import cc.iotkit.common.api.Paging;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,13 +32,13 @@ import java.util.List;
 @Service
 public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
 
+    @Autowired
+    private ISysConfigData sysConfigData;
+
 
     @Override
-    public PagedDataVo<SysConfigVo> selectPageConfigList(SysConfigBo config, PageRequest<?> query) {
-//        LambdaQueryWrapper<SysConfig> lqw = buildQueryWrapper(config);
-//        Page<SysConfigVo> page = baseMapper.selectVoPage(pageQuery.build(), lqw);
-//        return TableDataInfo.build(page);
-        return new PagedDataVo<SysConfigVo>();
+    public Paging<SysConfigVo> selectPageConfigList(PageRequest<SysConfigBo> query) {
+        return MapstructUtils.convert(sysConfigData.selectPageConfigList(MapstructUtils.convert(query.getData(), SysConfig.class)),SysConfigVo.class);
     }
 
     /**

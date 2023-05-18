@@ -1,7 +1,7 @@
 package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.PagedDataVo;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysDictDataBo;
 import cc.iotkit.system.dto.vo.SysDictDataVo;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public interface ISysDictDataService {
 
 
-    PagedDataVo<SysDictDataVo> selectPageDictDataList(SysDictDataBo dictData, PageRequest<?> query);
+    Paging<SysDictDataVo> selectPageDictDataList(SysDictDataBo dictData, PageRequest<?> query);
 
     /**
      * 根据条件分页查询字典数据

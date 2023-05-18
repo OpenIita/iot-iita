@@ -1,6 +1,7 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.dao.system.SysConfigRepository;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.SysConfigRepository;
 import cc.iotkit.data.model.TbSysConfig;
 import cc.iotkit.data.system.ISysConfigData;
 import cc.iotkit.common.api.Paging;
@@ -19,19 +20,17 @@ public class SysConfigDataImpl implements ISysConfigData {
     @Autowired
     private SysConfigRepository alertConfigRepository;
 
-    @Autowired
-    private Converter converter;
-
 
     @Override
     public SysConfig findById(Long id) {
        TbSysConfig tbSysConfig =  alertConfigRepository.findById(id).orElseThrow();
-        return converter.convert(tbSysConfig,SysConfig.class);
+        return MapstructUtils.convert(tbSysConfig,SysConfig.class);
     }
 
     @Override
     public SysConfig save(SysConfig data) {
-        return null;
+        alertConfigRepository.save(MapstructUtils.convert(data,TbSysConfig.class));
+        return data;
     }
 
     @Override
@@ -61,6 +60,12 @@ public class SysConfigDataImpl implements ISysConfigData {
 
     @Override
     public Paging<SysConfig> findAll(int page, int size) {
+        return null;
+    }
+
+
+    @Override
+    public SysConfig selectPageConfigList(SysConfig query) {
         return null;
     }
 }
