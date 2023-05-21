@@ -80,6 +80,13 @@
                 <include>**/*</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>${project.parent.basedir}/data/screens</directory>
+            <outputDirectory>data/screens</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
 
     </fileSets>
 </assembly>
