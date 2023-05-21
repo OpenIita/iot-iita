@@ -164,8 +164,8 @@ public class DeviceController {
             @ApiImplicitParam(name = "parentId", value = "父设备ID", dataTypeClass = String.class, paramType = "form")
     })
     @PostMapping("/create")
-    public void createDevice(String productKey, String deviceName, String parentId) {
-        Product product = productData.findById(productKey);
+    public void createDevice(DeviceInfo device) {
+        Product product = productData.findById(device.getProductKey());
         if (product == null) {
             throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
@@ -178,17 +178,16 @@ public class DeviceController {
             secret.append(chars.charAt((int) Math.floor(Math.random() * maxPos)));
         }
 
-        DeviceInfo device = new DeviceInfo();
-        device.setId(DeviceUtil.newDeviceId(deviceName));
+        device.setId(DeviceUtil.newDeviceId(device.getDeviceName()));
         device.setUid(product.getUid());
         device.setDeviceId(device.getId());
-        device.setProductKey(productKey);
-        device.setDeviceName(deviceName);
+        device.setProductKey(device.getProductKey());
+        device.setDeviceName(device.getDeviceName());
         device.setSecret(secret.toString());
         device.setState(new DeviceInfo.State(false, null, null));
         device.setCreateAt(System.currentTimeMillis());
-        if (StringUtils.isNotBlank(parentId)) {
-            device.setParentId(parentId);
+        if (StringUtils.isNotBlank(device.getParentId())) {
+            device.setParentId(device.getParentId());
         }
         deviceInfoData.save(device);
     }
