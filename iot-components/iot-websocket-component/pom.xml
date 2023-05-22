@@ -38,6 +38,11 @@
             <artifactId>iot-component-base</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-data-service</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

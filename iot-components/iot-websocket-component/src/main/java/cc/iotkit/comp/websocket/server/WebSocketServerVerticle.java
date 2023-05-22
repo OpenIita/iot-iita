@@ -87,8 +87,8 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
                     for(String key:tokenKey){
                         if(StringUtils.isNotBlank(msg.get(key))&&tokens.get(key).equals(msg.get(key))){
                             //保存设备与连接关系
-                            log.info("认证通过");
                             wsClients.put(deviceKey, wsClient);
+                            log.info("认证通过：{}||||||{}",wsClients.size(),deviceKey);
                             wsClient.writeTextMessage("auth succes");
                             return;
                         }
@@ -153,6 +153,10 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
     @Override
     public DeviceMessage send(DeviceMessage message) {
         ServerWebSocket wsClient = wsClients.get(message.getDeviceName());
+        log.info("DeviceMessage：{}-{}-{}", wsClients.size(),message.getDeviceName(),message.getProductKey());
+        for (String key:wsClients.keySet()) {
+            log.info("key：", key);
+        }
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
             throw new BizException(ErrCode.DATA_FORMAT_ERROR);

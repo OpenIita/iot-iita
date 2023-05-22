@@ -6,15 +6,19 @@ import cc.iotkit.common.utils.JsonUtil;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
+import cc.iotkit.comp.utils.SpringUtils;
 import cc.iotkit.comp.websocket.client.WebSocketClientVerticle;
 import cc.iotkit.comp.websocket.server.WebSocketServerVerticle;
 import cc.iotkit.converter.DeviceMessage;
+import cc.iotkit.data.IDeviceInfoData;
+import cc.iotkit.model.device.DeviceInfo;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -74,26 +78,40 @@ public class WebSocketDeviceComponent extends AbstractDeviceComponent {
 
     @Override
     public void onDeviceStateChange(DeviceState state) {
-        DeviceState.Parent parent = state.getParent();
-        if (parent == null) {
-            return;
-        }
-        Device device = new Device(state.getProductKey(), state.getDeviceName());
+        IDeviceInfoData deviceInfoService = SpringUtils.getBean("deviceInfoDataCache");
+        DeviceInfo parentDevice=deviceInfoService.findByProductKeyAndDeviceName(state.getProductKey(),state.getDeviceName());
+        List<DeviceInfo> childDevices=deviceInfoService.findByParentId(parentDevice.getId());
+        if(childDevices!=null&&childDevices.size()>0){//说明是父设备下面有子设备
+            if (DeviceState.STATE_ONLINE.equals(state.getState())) {
+                //保存子设备所属父设备
+                for (DeviceInfo childDevice:childDevices) {
+                    deviceChildToParent.put(childDevice.getProductKey()+childDevice.getDeviceName(),
+                            new Device(parentDevice.getProductKey(), parentDevice.getDeviceName())
+                    );
+                }
+            } else {
+                //删除关系
+                for (DeviceInfo childDevice:childDevices) {
+                    deviceChildToParent.remove(childDevice.getProductKey()+childDevice.getDeviceName());
+                }
 
-        if (DeviceState.STATE_ONLINE.equals(state.getState())) {
-            //保存子设备所属父设备
-            deviceChildToParent.put(device.toString(),
-                    new Device(parent.getProductKey(), parent.getDeviceName())
-            );
-        } else {
-            //删除关系
-            deviceChildToParent.remove(device.toString());
+            }
         }
-
     }
 
     @Override
     public DeviceMessage send(DeviceMessage message) {
+        Device child = new Device(message.getProductKey(), message.getDeviceName());
+        for (String key:deviceChildToParent.keySet()) {
+            log.info("deviceChildToParent key：", key);
+        }
+        //作为子设备查找父设备
+        Device parent = deviceChildToParent.get(message.getProductKey()+message.getDeviceName());
+        if (parent == null) {
+            parent = child;
+        }
+        message.setProductKey(parent.getProductKey());
+        message.setDeviceName(parent.getDeviceName());
         webSocketVerticle.send(message);
         return message;
     }
