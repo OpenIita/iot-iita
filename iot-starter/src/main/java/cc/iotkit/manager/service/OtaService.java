@@ -3,10 +3,14 @@ package cc.iotkit.manager.service;
 import cc.iotkit.data.IOtaPackageData;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.ota.OtaPackage;
+import cc.iotkit.oss.service.OssTemplate;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.core.util.UuidUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.InputStream;
 
 /**
  * @Author: 石恒
@@ -19,11 +23,17 @@ public class OtaService {
 
     @Resource
     private IOtaPackageData iOtaPackageData;
-   /* @Resource
+    @Resource
     private OssTemplate ossTemplate;
-    private void uploadFile(){
-        ossTemplate.createBucket("oss02");
-    }*/
+    @Value("${oss.region}")
+    private String region;
+
+    public String uploadFile(InputStream inputStream, String suffix) throws Exception {
+        String buckName = "tb3321";
+        String objectName = UuidUtil.getTimeBasedUuid().toString() + suffix;
+        ossTemplate.putObject(buckName, objectName, inputStream);
+        return "https://" + region + "/" + objectName;
+    }
 
     public OtaPackage addOtaPackage(OtaPackage otaPackage) {
         return iOtaPackageData.add(otaPackage);
