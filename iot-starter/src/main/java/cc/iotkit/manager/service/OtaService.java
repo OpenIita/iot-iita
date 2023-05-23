@@ -3,7 +3,6 @@ package cc.iotkit.manager.service;
 import cc.iotkit.data.IOtaPackageData;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.ota.OtaPackage;
-import cc.iotkit.oss.service.OssTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +19,11 @@ public class OtaService {
 
     @Resource
     private IOtaPackageData iOtaPackageData;
-    @Resource
+   /* @Resource
     private OssTemplate ossTemplate;
     private void uploadFile(){
         ossTemplate.createBucket("oss02");
-    }
+    }*/
 
     public OtaPackage addOtaPackage(OtaPackage otaPackage) {
         return iOtaPackageData.add(otaPackage);
