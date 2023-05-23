@@ -29,6 +29,7 @@
         <beanutils.version>1.9.3</beanutils.version>
         <jackson.version>2.13.1</jackson.version>
         <lang3.version>3.7</lang3.version>
+        <aws-java-sdk-s3.version>1.12.400</aws-java-sdk-s3.version>
         <io.version>2.11.0</io.version>
         <codec.version>1.14</codec.version>
         <hutool.version>5.8.18</hutool.version>
@@ -69,6 +70,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-s3</artifactId>
+                <version>${aws-java-sdk-s3.version}</version>
             </dependency>
 
             <dependency>

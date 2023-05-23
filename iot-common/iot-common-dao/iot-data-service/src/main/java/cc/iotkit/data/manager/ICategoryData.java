@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.manager;
 
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.product.Category;
 
 public interface ICategoryData extends ICommonData<Category, String> {

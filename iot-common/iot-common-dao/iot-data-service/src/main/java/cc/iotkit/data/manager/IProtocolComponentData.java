@@ -1,5 +1,6 @@
 package cc.iotkit.data.manager;
 
+import cc.iotkit.data.IOwnedData;
 import cc.iotkit.model.protocol.ProtocolComponent;
 
 import java.util.List;

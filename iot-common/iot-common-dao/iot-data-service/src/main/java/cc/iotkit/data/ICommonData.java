@@ -7,7 +7,7 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.data.manager;
+package cc.iotkit.data;
 
 import cc.iotkit.model.Id;
 import cc.iotkit.common.api.Paging;

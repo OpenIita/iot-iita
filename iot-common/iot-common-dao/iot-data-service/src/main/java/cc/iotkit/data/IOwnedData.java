@@ -7,8 +7,9 @@
  * | Author: xw2sy@163.com
  * +----------------------------------------------------------------------
  */
-package cc.iotkit.data.manager;
+package cc.iotkit.data;
 
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.Owned;
 import cc.iotkit.common.api.Paging;
 

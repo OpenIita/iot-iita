@@ -11,7 +11,7 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.data.manager.ICommonData;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.Owned;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.utils.AuthUtil;

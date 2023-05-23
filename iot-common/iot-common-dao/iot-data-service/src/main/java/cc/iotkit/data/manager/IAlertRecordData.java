@@ -11,10 +11,11 @@ package cc.iotkit.data.manager;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.alert.AlertRecord;
 
 
-public interface IAlertRecordData extends ICommonData<AlertRecord, String>  {
+public interface IAlertRecordData extends ICommonData<AlertRecord, String> {
 
 
   Paging<AlertRecord> selectAlertConfigPage(PageRequest<AlertRecord> request);

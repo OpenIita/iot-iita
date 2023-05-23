@@ -10,6 +10,7 @@
 package cc.iotkit.data.manager;
 
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.device.DeviceGroup;
 
 public interface IDeviceGroupData extends ICommonData<DeviceGroup, String> {

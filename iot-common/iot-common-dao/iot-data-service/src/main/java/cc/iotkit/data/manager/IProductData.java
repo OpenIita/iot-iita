@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.manager;
 
+import cc.iotkit.data.IOwnedData;
 import cc.iotkit.model.product.Product;
 
 import java.util.List;

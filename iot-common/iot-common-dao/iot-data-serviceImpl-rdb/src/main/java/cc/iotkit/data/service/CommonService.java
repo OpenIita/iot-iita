@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.data.manager.ICommonData;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.Id;
 import cc.iotkit.common.api.Paging;
 import org.springframework.data.domain.Page;

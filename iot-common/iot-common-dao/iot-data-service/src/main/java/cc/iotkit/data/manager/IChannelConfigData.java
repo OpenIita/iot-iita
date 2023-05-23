@@ -1,5 +1,6 @@
 package cc.iotkit.data.manager;
 
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.notify.ChannelConfig;
 
 /**
