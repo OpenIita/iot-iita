@@ -195,12 +195,12 @@
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-data-cache</artifactId>
-    </dependency><!--
+    </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-component-oss</artifactId>
       <version>0.4.3-SNAPSHOT</version>
-    </dependency>-->
+    </dependency>
 
     <!--springfox swagger官方Starter-->
     <dependency>
