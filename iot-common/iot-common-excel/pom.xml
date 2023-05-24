@@ -19,8 +19,8 @@
         </dependency>
 
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-web</artifactId>
         </dependency>
 
         <dependency>

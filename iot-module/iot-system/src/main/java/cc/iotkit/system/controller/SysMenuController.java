@@ -7,7 +7,7 @@ import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.web.core.BaseController;
-import cc.iotkit.system.dto.SysMenu;
+import cc.iotkit.model.system.SysMenu;
 import cc.iotkit.system.dto.bo.SysMenuBo;
 import cc.iotkit.system.dto.vo.MenuTreeSelectVo;
 import cc.iotkit.system.dto.vo.RouterVo;

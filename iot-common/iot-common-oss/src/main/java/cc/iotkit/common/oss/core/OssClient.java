@@ -3,6 +3,8 @@ package cc.iotkit.common.oss.core;
 import cc.iotkit.common.oss.constant.OssConstant;
 import cc.iotkit.common.oss.exception.OssException;
 import cc.iotkit.common.oss.properties.OssProperties;
+import cc.iotkit.common.utils.DateUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.IdUtil;
 import com.amazonaws.ClientConfiguration;
@@ -17,8 +19,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
-import org.dromara.common.core.utils.DateUtils;
-import org.dromara.common.core.utils.StringUtils;
 import cc.iotkit.common.oss.entity.UploadResult;
 import cc.iotkit.common.oss.enumd.AccessPolicyType;
 import cc.iotkit.common.oss.enumd.PolicyType;
@@ -47,7 +47,7 @@ public class OssClient {
         this.properties = ossProperties;
         try {
             AwsClientBuilder.EndpointConfiguration endpointConfig =
-                new AwsClientBuilder.EndpointConfiguration(properties.getEndpoint(), properties.getRegion());
+                    new AwsClientBuilder.EndpointConfiguration(properties.getEndpoint(), properties.getRegion());
 
             AWSCredentials credentials = new BasicAWSCredentials(properties.getAccessKey(), properties.getSecretKey());
             AWSCredentialsProvider credentialsProvider = new AWSStaticCredentialsProvider(credentials);
@@ -58,10 +58,10 @@ public class OssClient {
                 clientConfig.setProtocol(Protocol.HTTP);
             }
             AmazonS3ClientBuilder build = AmazonS3Client.builder()
-                .withEndpointConfiguration(endpointConfig)
-                .withClientConfiguration(clientConfig)
-                .withCredentials(credentialsProvider)
-                .disableChunkedEncoding();
+                    .withEndpointConfiguration(endpointConfig)
+                    .withClientConfiguration(clientConfig)
+                    .withCredentials(credentialsProvider)
+                    .disableChunkedEncoding();
             if (!StringUtils.containsAny(properties.getEndpoint(), OssConstant.CLOUD_SERVICE)) {
                 // minio 使用https限制使用域名访问 需要此配置 站点填域名
                 build.enablePathStyleAccess();
@@ -191,9 +191,9 @@ public class OssClient {
      */
     public String getPrivateUrl(String objectKey, Integer second) {
         GeneratePresignedUrlRequest generatePresignedUrlRequest =
-            new GeneratePresignedUrlRequest(properties.getBucketName(), objectKey)
-                .withMethod(HttpMethod.GET)
-                .withExpiration(new Date(System.currentTimeMillis() + 1000L * second));
+                new GeneratePresignedUrlRequest(properties.getBucketName(), objectKey)
+                        .withMethod(HttpMethod.GET)
+                        .withExpiration(new Date(System.currentTimeMillis() + 1000L * second));
         URL url = client.generatePresignedUrl(generatePresignedUrlRequest);
         return url.toString();
     }
@@ -215,13 +215,21 @@ public class OssClient {
     }
 
     private static String getPolicy(String bucketName, PolicyType policyType) {
+        String location = "";
+        switch (policyType) {
+            case WRITE:
+                location = "\"s3:GetBucketLocation\",\n\"s3:ListBucketMultipartUploads\"\n";
+                break;
+            case READ_WRITE:
+                location = "\"s3:GetBucketLocation\",\n\"s3:ListBucket\",\n\"s3:ListBucketMultipartUploads\"\n";
+                break;
+            default:
+                location = "\"s3:GetBucketLocation\"\n";
+        }
+
         StringBuilder builder = new StringBuilder();
         builder.append("{\n\"Statement\": [\n{\n\"Action\": [\n");
-        builder.append(switch (policyType) {
-            case WRITE -> "\"s3:GetBucketLocation\",\n\"s3:ListBucketMultipartUploads\"\n";
-            case READ_WRITE -> "\"s3:GetBucketLocation\",\n\"s3:ListBucket\",\n\"s3:ListBucketMultipartUploads\"\n";
-            default -> "\"s3:GetBucketLocation\"\n";
-        });
+        builder.append(location);
         builder.append("],\n\"Effect\": \"Allow\",\n\"Principal\": \"*\",\n\"Resource\": \"arn:aws:s3:::");
         builder.append(bucketName);
         builder.append("\"\n},\n");
@@ -230,12 +238,19 @@ public class OssClient {
             builder.append(bucketName);
             builder.append("\"\n},\n");
         }
+        String action = "";
+        switch (policyType) {
+            case WRITE:
+                action = "[\n\"s3:AbortMultipartUpload\",\n\"s3:DeleteObject\",\n\"s3:ListMultipartUploadParts\",\n\"s3:PutObject\"\n],\n";
+                break;
+            case READ_WRITE:
+                action = "[\n\"s3:AbortMultipartUpload\",\n\"s3:DeleteObject\",\n\"s3:GetObject\",\n\"s3:ListMultipartUploadParts\",\n\"s3:PutObject\"\n],\n";
+                break;
+            default:
+                action = "\"s3:GetObject\",\n";
+        }
         builder.append("{\n\"Action\": ");
-        builder.append(switch (policyType) {
-            case WRITE -> "[\n\"s3:AbortMultipartUpload\",\n\"s3:DeleteObject\",\n\"s3:ListMultipartUploadParts\",\n\"s3:PutObject\"\n],\n";
-            case READ_WRITE -> "[\n\"s3:AbortMultipartUpload\",\n\"s3:DeleteObject\",\n\"s3:GetObject\",\n\"s3:ListMultipartUploadParts\",\n\"s3:PutObject\"\n],\n";
-            default -> "\"s3:GetObject\",\n";
-        });
+        builder.append(action);
         builder.append("\"Effect\": \"Allow\",\n\"Principal\": \"*\",\n\"Resource\": \"arn:aws:s3:::");
         builder.append(bucketName);
         builder.append("/*\"\n}\n],\n\"Version\": \"2012-10-17\"\n}\n");

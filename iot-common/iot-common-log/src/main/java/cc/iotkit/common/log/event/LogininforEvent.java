@@ -4,7 +4,6 @@ import lombok.Data;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -15,8 +14,6 @@ import java.io.Serializable;
 
 @Data
 public class LogininforEvent implements Serializable {
-
-    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

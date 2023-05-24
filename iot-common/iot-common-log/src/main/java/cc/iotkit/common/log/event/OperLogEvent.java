@@ -2,7 +2,6 @@ package cc.iotkit.common.log.event;
 
 import lombok.Data;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,8 +13,6 @@ import java.util.Date;
 
 @Data
 public class OperLogEvent implements Serializable {
-
-    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

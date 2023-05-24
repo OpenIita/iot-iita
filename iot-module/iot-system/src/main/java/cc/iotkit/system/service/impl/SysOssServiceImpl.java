@@ -1,31 +1,29 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.constant.CacheNames;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.constant.CacheNames;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.service.OssService;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
-import cc.iotkit.common.utils.file.FileUtils;
 import cc.iotkit.model.system.SysOss;
 import cc.iotkit.system.dto.bo.SysOssBo;
 import cc.iotkit.system.dto.vo.SysOssVo;
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cc.iotkit.system.service.ISysOssService;
-import jakarta.servlet.http.HttpServletResponse;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 文件上传 服务层实现
@@ -92,21 +90,7 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
     }
 
     @Override
-    public void download(Long ossId, HttpServletResponse response) throws IOException {
-        SysOssVo sysOss = SpringUtils.getAopProxy(this).getById(ossId);
-        if (ObjectUtil.isNull(sysOss)) {
-            throw new BizException("文件数据不存在!");
-        }
-        FileUtils.setAttachmentResponseHeader(response, sysOss.getOriginalName());
-        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE + "; charset=UTF-8");
-        OssClient storage = OssFactory.instance();
-        try(InputStream inputStream = storage.getObjectContent(sysOss.getUrl())) {
-            int available = inputStream.available();
-            IoUtil.copy(inputStream, response.getOutputStream(), available);
-            response.setContentLength(available);
-        } catch (Exception e) {
-            throw new BizException(e.getMessage());
-        }
+    public void download(Long ossId) throws IOException {
     }
 
     @Override
@@ -118,7 +102,7 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
         try {
             uploadResult = storage.uploadSuffix(file.getBytes(), suffix, file.getContentType());
         } catch (IOException e) {
-            throw new ServiceException(e.getMessage());
+            throw new BizException(e.getMessage());
         }
         // 保存文件信息
         SysOss oss = new SysOss();

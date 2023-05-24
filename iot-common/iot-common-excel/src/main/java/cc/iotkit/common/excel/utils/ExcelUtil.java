@@ -6,7 +6,7 @@ import cc.iotkit.common.excel.core.DefaultExcelListener;
 import cc.iotkit.common.excel.core.ExcelListener;
 import cc.iotkit.common.excel.core.ExcelResult;
 import cc.iotkit.common.utils.StringUtils;
-import cc.iotkit.common.utils.file.FileUtils;
+import cc.iotkit.common.web.utils.ServletUtils;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.IdUtil;
@@ -17,11 +17,11 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.fill.FillWrapper;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -255,7 +255,7 @@ public class ExcelUtil {
      */
     private static void resetResponse(String sheetName, HttpServletResponse response) {
         String filename = encodingFilename(sheetName);
-        FileUtils.setAttachmentResponseHeader(response, filename);
+        ServletUtils.setAttachmentResponseHeader(response, filename);
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8");
     }
 
