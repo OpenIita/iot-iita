@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @Author: 石恒
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.Bean;
  * @Description:
  */
 
+@Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(OssProperties.class)
 public class OssAutoConfiguration {

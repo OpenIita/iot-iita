@@ -2,7 +2,6 @@ package cc.iotkit.oss.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @Author: 石恒
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
  * @Description:
  */
 @Data
-@Configuration
 @ConfigurationProperties(prefix = "oss")
 public class OssProperties {
     /**
