@@ -65,8 +65,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
                         msg.put("type","pong");
                         wsClient.writeTextMessage(JsonUtil.toJsonString(msg));
                         return;
-                    }
-                    if("register".equals(msg.get("type"))){
+                    }else if("register".equals(msg.get("type"))){
                         executor.onReceive(new HashMap<>(), "", message,(r) -> {
                             if (r == null) {
                                 //注册失败
@@ -79,8 +78,11 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
                             }else{
                                 msg.put("type","online");
                                 executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(msg));
+                                return;
                             }
                         });
+                    }else{
+                        executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(msg));
                     }
                 }else if(msg!=null&&"auth".equals(msg.get("type"))){
                     Set<String> tokenKey=tokens.keySet();

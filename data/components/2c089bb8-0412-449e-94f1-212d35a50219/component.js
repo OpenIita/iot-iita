@@ -61,7 +61,6 @@ function register(data){
 }
 
 function online(data){
-	apiTool.log("data:"+JSON.stringify(data));
 	var device=getPkDn(data.data.deviceName)
 	return {
 		type:"state",
@@ -87,6 +86,7 @@ function offline(data){
 
 //必须提供onReceive方法
 this.onReceive=function(head,type,payload){
+  apiTool.log("payload:"+payload);
 	var data=JSON.parse(payload)
 	if(data.type=="register"){
 		apiTool.log("data:"+payload);
@@ -96,13 +96,34 @@ this.onReceive=function(head,type,payload){
 	}else if(data.type=="offline"){
 		return offline(data);
 	}
+var device=getPkDn(data.device_name)
+var reply=
+		{
+			productKey:device.pk,
+			deviceName:device.dn,
+			mid:"0",
+			content:{
+				id:data.id,
+				type:data.type,
+				result:'success'
+			}
+		};
 	return {
-		productKey:"",
-		deviceName:"",
-		mid:0,
-		content:{
+	type:"report",
+	data:{
+	  productKey:device.pk,
+	  deviceName:device.dn,
+	  mid:getMid(),
+	  content:{
+		type:"report",
+		params:data.data
+	  }
+	},
+	action:{
+			type:"ack",
+			content:JSON.stringify(reply)
 		}
-	}
+  }
 };
 
 this.onRegistered=function (data,status) {

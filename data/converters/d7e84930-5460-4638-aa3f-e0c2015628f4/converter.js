@@ -33,18 +33,13 @@ this.decode = function (msg) {
 this.encode = function (service,device) {
 	var type=service.type;
 	var identifier=service.identifier;
-	var entityId=service.deviceName;
 	var deviceMid=getMid();
 	var params={};
-	var target={};
 	if("property"==type&&"set"==identifier){
-		var domain=entityId.split(".")[0];
-		var powerstate=service.params.powerstate==1?"turn_on":"turn_off";
-		params.type="call_service";
-		params.domain=domain;
-		params.service=powerstate;
-		target.entity_id=entityId;
-		params.target=target;
+	   params.id=deviceMid;
+		params.type="control";
+	   params.device_name=service.deviceName;
+		params.data=service.params
 	}
 	return {
 		productKey:service.productKey,
