@@ -96,23 +96,20 @@ public interface ISysDeptService {
      * 新增保存部门信息
      *
      * @param bo 部门信息
-     * @return 结果
      */
-    int insertDept(SysDeptBo bo);
+    void insertDept(SysDeptBo bo);
 
     /**
      * 修改保存部门信息
      *
      * @param bo 部门信息
-     * @return 结果
      */
-    int updateDept(SysDeptBo bo);
+    void updateDept(SysDeptBo bo);
 
     /**
      * 删除部门管理信息
      *
      * @param deptId 部门ID
-     * @return 结果
      */
-    int deleteDeptById(Long deptId);
+    void deleteDeptById(Long deptId);
 }

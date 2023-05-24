@@ -21,6 +21,14 @@ public interface ISysDeptData extends ICommonData<SysDept, Long> {
                                      String status, int page, int size);
 
     /**
+     * 复合备件查询
+     *
+     * @param dept dept
+     * @return list
+     */
+    List<SysDept> findDepts(SysDept dept);
+
+    /**
      * 根据角色ID查询部门树信息
      *
      * @param roleId 角色ID

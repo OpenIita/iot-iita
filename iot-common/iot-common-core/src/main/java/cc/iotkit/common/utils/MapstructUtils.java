@@ -1,5 +1,6 @@
 package cc.iotkit.common.utils;
 
+import cc.iotkit.common.api.Paging;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -8,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +32,8 @@ public class MapstructUtils {
      * @return desc
      */
     public static <T, V> V convert(T source, Class<V> desc) {
-        Assert.notNull(source,"source is null");
-        Assert.notNull(desc,"desc is null");
+        Assert.notNull(source, "source is null");
+        Assert.notNull(desc, "desc is null");
         return CONVERTER.convert(source, desc);
     }
 
@@ -84,6 +86,23 @@ public class MapstructUtils {
             return null;
         }
         return CONVERTER.convert(map, beanClass);
+    }
+
+    /**
+     * 转换分页对象
+     *
+     * @param source 数据来源
+     * @param desc   描述对象 转换后的对象
+     * @return desc
+     */
+    public static <T, V> Paging<V> convert(Paging<T> source, Class<V> desc) {
+        if (ObjectUtil.isNull(source)) {
+            return null;
+        }
+        if (CollUtil.isEmpty(source.getData())) {
+            return new Paging<>(0, new ArrayList<>());
+        }
+        return new Paging<>(source.getTotal(), CONVERTER.convert(source.getData(), desc));
     }
 
 }

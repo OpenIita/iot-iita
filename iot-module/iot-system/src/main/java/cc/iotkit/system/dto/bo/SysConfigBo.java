@@ -24,7 +24,7 @@ public class SysConfigBo extends BaseDto {
      * 参数主键
      */
     @NotNull(message = "参数主键不能为空", groups = {EditGroup.class})
-    private Long configId;
+    private Long id;
 
     /**
      * 参数名称

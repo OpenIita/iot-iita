@@ -2,9 +2,9 @@ package cc.iotkit.system.dto.vo;
 
 import cc.iotkit.common.excel.annotation.ExcelDictFormat;
 import cc.iotkit.common.excel.convert.ExcelDictConvert;
+import cc.iotkit.model.system.SysConfig;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import cc.iotkit.system.dto.SysConfig;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 

@@ -65,7 +65,7 @@ public class SysConfigDataImpl implements ISysConfigData {
 
 
     @Override
-    public SysConfig selectPageConfigList(SysConfig query) {
+    public Paging<SysConfig> findConfigs(SysConfig query) {
         return null;
     }
 }
