@@ -8,28 +8,22 @@ import javax.persistence.Table;
 
 /**
  * @Author: 石恒
- * @Date: 2023/5/19 21:25
+ * @Date: 2023/5/25 23:26
  * @Description:
  */
 @Data
 @Entity
-@Table(name = "ota_package")
-public class TbOtaPackage {
+@Table(name = "ota_device")
+public class TbOtaDevice {
 
     @Id
     private String id;
 
-    private Long size;
-
-    private String sign;
-
-    private String name;
-
-    private String desc;
+    private String deviceId;
 
     private String version;
 
-    private String url;
+    private Integer status;
 
     private Long createAt;
 }

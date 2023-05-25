@@ -75,4 +75,9 @@ public class IOtaPackageDataImpl implements IOtaPackageData {
                         .collect(Collectors.toList())
         );
     }
+
+    @Override
+    public List<OtaPackage> findByVersionGreaterThan(String version) {
+        return iOtaPackageRepository.findByVersionGreaterThan(version);
+    }
 }

@@ -8,28 +8,22 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: 石恒
- * @Date: 2023/5/19 21:13
+ * @Date: 2023/5/25 23:38
  * @Description:
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OtaPackage implements Id<String> {
+public class OtaDevice implements Id<String> {
 
     private String id;
 
-    private Long size;
-
-    private String sign;
-
-    private String name;
-
-    private String desc;
+    private String deviceId;
 
     private String version;
 
-    private String url;
+    private Integer status;
 
     private Long createAt;
 }

@@ -4,6 +4,7 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.manager.service.OtaService;
 import cc.iotkit.model.Paging;
+import cc.iotkit.model.ota.DeviceOta;
 import cc.iotkit.model.ota.OtaPackage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -61,5 +62,12 @@ public class OtaController {
     @PostMapping("/package/getList")
     public Paging<OtaPackage> packageList(@RequestBody @Valid PageRequest<Void> request) {
         return otaService.getOtaPackagePageList(request.getPageNo(), request.getPageSize());
+    }
+
+    @ApiOperation("设备获取升级包")
+    @PostMapping("/device/upgrade")
+    public void deviceUpgrade(@RequestBody Request<DeviceOta> deviceOtaRequest) {
+        DeviceOta deviceOta = deviceOtaRequest.getData();
+        otaService.findByVersionGreaterThan(deviceOta.getCurrentVersion(), deviceOta.getDeviceId());
     }
 }

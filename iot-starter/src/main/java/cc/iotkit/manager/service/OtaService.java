@@ -48,4 +48,8 @@ public class OtaService {
         return Boolean.TRUE;
     }
 
+    public void findByVersionGreaterThan(String version, String deviceId) {
+        iOtaPackageData.findByVersionGreaterThan(version);
+    }
+
 }
