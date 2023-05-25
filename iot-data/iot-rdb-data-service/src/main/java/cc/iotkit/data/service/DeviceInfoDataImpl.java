@@ -189,6 +189,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
                 "a.model,\n" +
                 "a.secret,\n" +
                 "a.parent_id,\n" +
+                "a.longitude,\n" +
+                "a.latitude,\n" +
                 "a.uid,\n" +
                 "a.state,\n" +
                 "a.online_time,\n" +
@@ -246,6 +248,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
                 .model(rs.getString("model"))
                 .secret(rs.getString("secret"))
                 .parentId(rs.getString("parent_id"))
+                .longitude(rs.getString("longitude"))
+                .latitude(rs.getString("latitude"))
                 .uid(rs.getString("uid"))
                 .state(new DeviceInfo.State(
                         "online".equals(rs.getString("state")),

@@ -41,6 +41,16 @@ public class TbProduct {
      */
     private String transparent;
 
+    /**
+     * 是否开启设备定位,true/false
+     */
+    private Boolean isOpenLocate;
+
+    /**
+     * 定位更新方式
+     */
+    private String locateUpdateType;
+
     private Long createAt;
 
 }

@@ -192,6 +192,17 @@ public class DeviceController {
         deviceInfoData.save(device);
     }
 
+    @ApiOperation(value = "保存设备接口", httpMethod = "POST")
+    @PostMapping("/save")
+    public void save(DeviceInfo device) {
+        dataOwnerService.checkOwner(device);
+
+        if (device.getCreateAt() == null) {
+            device.setCreateAt(System.currentTimeMillis());
+        }
+        deviceInfoData.save(device);
+    }
+
     @ApiOperation(value = "获取子设备", notes = "获取子设备", httpMethod = "GET")
     @ApiImplicitParam(name = "deviceId", value = "设备ID", dataTypeClass = String.class, paramType = "form")
     @GetMapping("/{deviceId}/children")

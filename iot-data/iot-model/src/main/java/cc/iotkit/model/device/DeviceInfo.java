@@ -26,10 +26,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class DeviceInfo implements Owned<String> {
 
-    public static final String LOCATE_AUTO = "auto";
-    public static final String LOCATE_DEVICE = "device";
-    public static final String LOCATE_CUSTOM = "custom";
-
     private String id;
 
     private String deviceId;
@@ -59,11 +55,6 @@ public class DeviceInfo implements Owned<String> {
     private String uid;
 
     /**
-     * 设备地址
-     */
-    private String deviceAddress;
-
-    /**
      * 设备经度
      */
     private String longitude;
@@ -72,11 +63,6 @@ public class DeviceInfo implements Owned<String> {
      * 设备纬度
      */
     private String latitude;
-
-    /**
-     * 定位方式
-     */
-    private String locate;
 
     /**
      * 关联子用户ID列表

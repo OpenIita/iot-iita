@@ -29,13 +29,9 @@ public class TbDeviceInfo {
 
     private String state;
 
-    private String deviceAddress;
-
     private String longitude;
 
     private String latitude;
-
-    private String locate;
 
     private Long onlineTime;
 
