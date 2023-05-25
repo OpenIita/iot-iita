@@ -10,11 +10,11 @@ import cc.iotkit.system.dto.bo.SysPostBo;
 import cc.iotkit.system.dto.vo.SysPostVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysPostService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**

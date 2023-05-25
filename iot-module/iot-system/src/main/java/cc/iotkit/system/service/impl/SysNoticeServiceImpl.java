@@ -25,9 +25,6 @@ import java.util.List;
 @Service
 public class SysNoticeServiceImpl implements ISysNoticeService {
 
-    private final SysNoticeMapper baseMapper;
-    private final SysUserMapper userMapper;
-
     @Override
     public Paging<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageRequest<?> query) {
         LambdaQueryWrapper<SysNotice> lqw = buildQueryWrapper(notice);

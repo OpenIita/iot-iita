@@ -27,7 +27,7 @@ public class SysDictDataVo implements Serializable {
      * 字典编码
      */
     @ExcelProperty(value = "字典编码")
-    private Long dictCode;
+    private Long id;
 
     /**
      * 字典排序

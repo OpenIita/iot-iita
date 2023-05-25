@@ -26,7 +26,7 @@ public class SysDictDataBo extends BaseDto {
      * 字典编码
      */
     @NotNull(message = "字典编码不能为空", groups = { EditGroup.class })
-    private Long dictCode;
+    private Long id;
 
     /**
      * 字典排序

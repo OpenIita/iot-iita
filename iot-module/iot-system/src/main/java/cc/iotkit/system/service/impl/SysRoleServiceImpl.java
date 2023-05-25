@@ -36,11 +36,6 @@ import java.util.*;
 @Service
 public class SysRoleServiceImpl implements ISysRoleService {
 
-    private final SysRoleMapper baseMapper;
-    private final SysRoleMenuMapper roleMenuMapper;
-    private final SysUserRoleMapper userRoleMapper;
-    private final SysRoleDeptMapper roleDeptMapper;
-
     @Override
     public Paging<SysRoleVo> selectPageRoleList(SysRoleBo role, PageRequest<?> query) {
         Page<SysRoleVo> page = baseMapper.selectPageRoleList(query.build(), this.buildQueryWrapper(role));

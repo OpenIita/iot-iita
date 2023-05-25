@@ -1,8 +1,7 @@
 package cc.iotkit.common.log.event;
 
+import cn.hutool.http.useragent.UserAgent;
 import lombok.Data;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.Serializable;
 
@@ -37,9 +36,14 @@ public class LogininforEvent implements Serializable {
     private String message;
 
     /**
-     * 请求体
+     * ip
      */
-    private HttpServletRequest request;
+    private String ip;
+
+    /**
+     * user-agent
+     */
+    private UserAgent userAgent;
 
     /**
      * 其他参数

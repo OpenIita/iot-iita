@@ -33,11 +33,6 @@ import java.util.*;
 @Service
 public class SysMenuServiceImpl implements ISysMenuService {
 
-    private final SysMenuMapper baseMapper;
-    private final SysRoleMapper roleMapper;
-    private final SysRoleMenuMapper roleMenuMapper;
-    private final SysTenantPackageMapper tenantPackageMapper;
-
     /**
      * 根据用户查询系统菜单列表
      *

@@ -17,11 +17,11 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysDeptService;
 import cc.iotkit.system.service.ISysRoleService;
 import cc.iotkit.system.service.ISysUserService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**

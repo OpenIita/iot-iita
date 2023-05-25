@@ -15,10 +15,14 @@ import java.util.List;
 public interface ISysDictData extends ICommonData<SysDictData, Long> {
 
     /**
+     * 按条件查询
+     */
+    List<SysDictData> findByConditions(SysDictData query);
+
+    /**
      * 按条件分页查询
      */
-    Paging<SysDictData> findByConditions(String dictType, String dictValue,
-                                         String status, int page, int size);
+    Paging<SysDictData> findByConditions(SysDictData query, int page, int size);
 
     /**
      * 根据字典类型和字典键值查询字典数据信息
@@ -36,5 +40,13 @@ public interface ISysDictData extends ICommonData<SysDictData, Long> {
      * @return 字典数据集合信息
      */
     List<SysDictType> findByDicType(String dictType);
+
+    /**
+     * 根据字典类型查询字典数据数量
+     *
+     * @param dictType 字典类型
+     * @return 字典数据集合信息
+     */
+    long countByDicType(String dictType);
 
 }

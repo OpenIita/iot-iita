@@ -4,13 +4,11 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.CacheNames;
 
-import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.redis.utils.CacheUtils;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.system.ISysDictData;
 import cc.iotkit.model.system.SysDictData;
 import cc.iotkit.system.dto.bo.SysDictDataBo;
 import cc.iotkit.system.dto.vo.SysDictDataVo;
-import cc.iotkit.system.mapper.SysDictDataMapper;
 import cc.iotkit.system.service.ISysDictDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
@@ -27,13 +25,16 @@ import java.util.List;
 @Service
 public class SysDictDataServiceImpl implements ISysDictDataService {
 
-    private final SysDictDataMapper baseMapper;
+    private final ISysDictData sysDictData;
 
     @Override
     public Paging<SysDictDataVo> selectPageDictDataList(SysDictDataBo dictData, PageRequest<?> query) {
-        LambdaQueryWrapper<SysDictData> lqw = buildQueryWrapper(dictData);
-        Page<SysDictDataVo> page = baseMapper.selectVoPage(query.build(), lqw);
-        return TableDataInfo.build(page);
+        return MapstructUtils.convert(
+                sysDictData.findByConditions(
+                        MapstructUtils.convert(dictData, SysDictData.class),
+                        query.getPageNum(),
+                        query.getPageSize()
+                ), SysDictDataVo.class);
     }
 
     /**
@@ -44,18 +45,10 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
      */
     @Override
     public List<SysDictDataVo> selectDictDataList(SysDictDataBo dictData) {
-        LambdaQueryWrapper<SysDictData> lqw = buildQueryWrapper(dictData);
-        return baseMapper.selectVoList(lqw);
-    }
-
-    private LambdaQueryWrapper<SysDictData> buildQueryWrapper(SysDictDataBo bo) {
-        LambdaQueryWrapper<SysDictData> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getDictSort() != null, SysDictData::getDictSort, bo.getDictSort());
-        lqw.like(StringUtils.isNotBlank(bo.getDictLabel()), SysDictData::getDictLabel, bo.getDictLabel());
-        lqw.eq(StringUtils.isNotBlank(bo.getDictType()), SysDictData::getDictType, bo.getDictType());
-        lqw.eq(StringUtils.isNotBlank(bo.getStatus()), SysDictData::getStatus, bo.getStatus());
-        lqw.orderByAsc(SysDictData::getDictSort);
-        return lqw;
+        return MapstructUtils.convert(
+                sysDictData.findByConditions(
+                        MapstructUtils.convert(dictData, SysDictData.class)
+                ), SysDictDataVo.class);
     }
 
     /**
@@ -67,11 +60,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
      */
     @Override
     public String selectDictLabel(String dictType, String dictValue) {
-        return baseMapper.selectOne(new LambdaQueryWrapper<SysDictData>()
-                .select(SysDictData::getDictLabel)
-                .eq(SysDictData::getDictType, dictType)
-                .eq(SysDictData::getDictValue, dictValue))
-            .getDictLabel();
+        return sysDictData.findByDictTypeAndDictValue(dictType, dictValue).getDictLabel();
     }
 
     /**
@@ -82,7 +71,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
      */
     @Override
     public SysDictDataVo selectDictDataById(Long dictCode) {
-        return baseMapper.selectVoById(dictCode);
+        return MapstructUtils.convert(sysDictData.findById(dictCode), SysDictDataVo.class);
     }
 
     /**
@@ -93,9 +82,9 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     @Override
     public void deleteDictDataByIds(Long[] dictCodes) {
         for (Long dictCode : dictCodes) {
-            SysDictData data = baseMapper.selectById(dictCode);
-            baseMapper.deleteById(dictCode);
-            CacheUtils.evict(CacheNames.SYS_DICT, data.getDictType());
+            SysDictData data = sysDictData.findById(dictCode);
+            sysDictData.deleteById(dictCode);
+//            CacheUtils.evict(CacheNames.SYS_DICT, data.getDictType());
         }
     }
 
@@ -109,11 +98,8 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     @Override
     public List<SysDictDataVo> insertDictData(SysDictDataBo bo) {
         SysDictData data = MapstructUtils.convert(bo, SysDictData.class);
-        int row = baseMapper.insert(data);
-        if (row > 0) {
-            return baseMapper.selectDictDataByType(data.getDictType());
-        }
-        throw new BizException("操作失败");
+        sysDictData.save(data);
+        return MapstructUtils.convert(sysDictData.findByDicType(data.getDictType()), SysDictDataVo.class);
     }
 
     /**
@@ -122,15 +108,12 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
      * @param bo 字典数据信息
      * @return 结果
      */
-    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#bo.dictType")
+//    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#bo.dictType")
     @Override
     public List<SysDictDataVo> updateDictData(SysDictDataBo bo) {
         SysDictData data = MapstructUtils.convert(bo, SysDictData.class);
-        int row = baseMapper.updateById(data);
-        if (row > 0) {
-            return baseMapper.selectDictDataByType(data.getDictType());
-        }
-        throw new BizException("操作失败");
+        sysDictData.save(data);
+        return MapstructUtils.convert(sysDictData.findByDicType(data.getDictType()), SysDictDataVo.class);
     }
 
 }

@@ -38,7 +38,7 @@ public interface ISysLogininforService {
      * @param infoIds 需要删除的登录日志ID
      * @return 结果
      */
-    int deleteLogininforByIds(Long[] infoIds);
+    void deleteLogininforByIds(Long[] infoIds);
 
     /**
      * 清空系统登录日志

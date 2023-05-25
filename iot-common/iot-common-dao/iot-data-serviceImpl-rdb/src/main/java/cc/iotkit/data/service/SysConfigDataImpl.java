@@ -8,7 +8,6 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.system.SysConfig;
 import java.util.List;
 
-import io.github.linpeilie.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -66,6 +65,11 @@ public class SysConfigDataImpl implements ISysConfigData {
 
     @Override
     public Paging<SysConfig> findConfigs(SysConfig query) {
+        return null;
+    }
+
+    @Override
+    public SysConfig findByConfigKey(String configKey) {
         return null;
     }
 }

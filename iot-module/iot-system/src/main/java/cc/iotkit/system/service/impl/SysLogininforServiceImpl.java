@@ -1,31 +1,26 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.log.event.LogininforEvent;
 import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.common.utils.ServletUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.ip.AddressUtils;
-import cc.iotkit.common.web.utils.UnsignedMathGenerator;
+import cc.iotkit.data.system.ISysLogininforData;
 import cc.iotkit.model.system.SysLogininfor;
 import cc.iotkit.system.dto.bo.SysLogininforBo;
 import cc.iotkit.system.dto.vo.SysLogininforVo;
-import cn.hutool.http.useragent.UserAgent;
-import cn.hutool.http.useragent.UserAgentUtil;
 import cc.iotkit.system.service.ISysLogininforService;
+import cn.hutool.http.useragent.UserAgent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 系统访问日志情况信息 服务层处理
@@ -37,7 +32,7 @@ import java.util.Map;
 @Service
 public class SysLogininforServiceImpl implements ISysLogininforService {
 
-    private final SysLogininforMapper baseMapper;
+    private final ISysLogininforData sysLogininforData;
 
     /**
      * 记录登录信息
@@ -47,10 +42,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
     @Async
     @EventListener
     public void recordLogininfor(LogininforEvent logininforEvent) {
-        HttpServletRequest request = logininforEvent.getRequest();
-        final UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
-        final String ip = UnsignedMathGenerator.ServletUtils.getClientIP(request);
-
+        String ip = logininforEvent.getIp();
         String address = AddressUtils.getRealAddressByIP(ip);
         StringBuilder s = new StringBuilder();
         s.append(getBlock(ip));
@@ -60,6 +52,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
         s.append(getBlock(logininforEvent.getMessage()));
         // 打印信息到日志
         log.info(s.toString(), logininforEvent.getArgs());
+        UserAgent userAgent = logininforEvent.getUserAgent();
         // 获取客户端操作系统
         String os = userAgent.getOs().getName();
         // 获取客户端浏览器
@@ -92,19 +85,13 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
 
     @Override
     public Paging<SysLogininforVo> selectPageLogininforList(SysLogininforBo logininfor, PageRequest<?> query) {
-        Map<String, Object> params = logininfor.getParams();
-        LambdaQueryWrapper<SysLogininfor> lqw = new LambdaQueryWrapper<SysLogininfor>()
-            .like(StringUtils.isNotBlank(logininfor.getIpaddr()), SysLogininfor::getIpaddr, logininfor.getIpaddr())
-            .eq(StringUtils.isNotBlank(logininfor.getStatus()), SysLogininfor::getStatus, logininfor.getStatus())
-            .like(StringUtils.isNotBlank(logininfor.getUserName()), SysLogininfor::getUserName, logininfor.getUserName())
-            .between(params.get("beginTime") != null && params.get("endTime") != null,
-                SysLogininfor::getLoginTime, params.get("beginTime"), params.get("endTime"));
-        if (StringUtils.isBlank(query.getOrderByColumn())) {
-            pageQuery.setOrderByColumn("info_id");
-            pageQuery.setIsAsc("desc");
-        }
-        Page<SysLogininforVo> page = baseMapper.selectVoPage(pageQuery.build(), lqw);
-        return TableDataInfo.build(page);
+        return MapstructUtils.convert(
+                sysLogininforData.findByConditions(
+                        MapstructUtils.convert(logininfor, SysLogininfor.class),
+                        query.getPageNum(),
+                        query.getPageSize()
+                ), SysLogininforVo.class
+        );
     }
 
     /**
@@ -116,7 +103,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
     public void insertLogininfor(SysLogininforBo bo) {
         SysLogininfor logininfor = MapstructUtils.convert(bo, SysLogininfor.class);
         logininfor.setLoginTime(new Date());
-        baseMapper.insert(logininfor);
+        sysLogininforData.save(logininfor);
     }
 
     /**
@@ -127,14 +114,11 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
      */
     @Override
     public List<SysLogininforVo> selectLogininforList(SysLogininforBo logininfor) {
-        Map<String, Object> params = logininfor.getParams();
-        return baseMapper.selectVoList(new LambdaQueryWrapper<SysLogininfor>()
-            .like(StringUtils.isNotBlank(logininfor.getIpaddr()), SysLogininfor::getIpaddr, logininfor.getIpaddr())
-            .eq(StringUtils.isNotBlank(logininfor.getStatus()), SysLogininfor::getStatus, logininfor.getStatus())
-            .like(StringUtils.isNotBlank(logininfor.getUserName()), SysLogininfor::getUserName, logininfor.getUserName())
-            .between(params.get("beginTime") != null && params.get("endTime") != null,
-                SysLogininfor::getLoginTime, params.get("beginTime"), params.get("endTime"))
-            .orderByDesc(SysLogininfor::getInfoId));
+        return MapstructUtils.convert(
+                sysLogininforData.findByConditions(
+                        MapstructUtils.convert(logininfor, SysLogininfor.class)
+                ), SysLogininforVo.class
+        );
     }
 
     /**
@@ -144,8 +128,8 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
      * @return 结果
      */
     @Override
-    public int deleteLogininforByIds(Long[] infoIds) {
-        return baseMapper.deleteBatchIds(Arrays.asList(infoIds));
+    public void deleteLogininforByIds(Long[] infoIds) {
+        sysLogininforData.deleteByIds(infoIds);
     }
 
     /**
@@ -153,6 +137,6 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
      */
     @Override
     public void cleanLogininfor() {
-        baseMapper.delete(new LambdaQueryWrapper<>());
+        sysLogininforData.deleteAll();
     }
 }

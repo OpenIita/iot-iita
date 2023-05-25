@@ -27,7 +27,7 @@ public class SysDictTypeBo extends BaseDto {
      * 字典主键
      */
     @NotNull(message = "字典主键不能为空", groups = { EditGroup.class })
-    private Long dictId;
+    private Long id;
 
     /**
      * 字典名称

@@ -1,11 +1,5 @@
 package cc.iotkit.system.service.impl;
 
-import cc.iotkit.common.utils.StreamUtils;
-import cc.iotkit.model.system.SysDept;
-import cc.iotkit.system.dto.SysRoleDept;
-import cc.iotkit.system.mapper.SysDeptMapper;
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.convert.Convert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
