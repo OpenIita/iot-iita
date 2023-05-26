@@ -32,7 +32,8 @@ public class FieldParser {
             "bool", SQLDataType.INTEGER,
             "enum", SQLDataType.INTEGER,
             "text", SQLDataType.NVARCHAR,
-            "date", SQLDataType.DATE
+            "date", SQLDataType.DATE,
+            "position", SQLDataType.NVARCHAR
     );
 
     /**

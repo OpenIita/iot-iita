@@ -55,14 +55,20 @@ public class DeviceInfo implements Owned<String> {
     private String uid;
 
     /**
-     * 设备经度
+     * 设备定位对象
      */
-    private String longitude;
+    private Locate locate = new Locate();
 
-    /**
-     * 设备纬度
-     */
-    private String latitude;
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Locate {
+
+        private String longitude;
+
+        private String latitude;
+
+    }
 
     /**
      * 关联子用户ID列表

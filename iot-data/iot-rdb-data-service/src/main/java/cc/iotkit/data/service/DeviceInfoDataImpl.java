@@ -107,6 +107,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     private void parseStateToDto(TbDeviceInfo vo, DeviceInfo dto) {
         dto.setState(new DeviceInfo.State("online".equals(vo.getState()),
                 vo.getOnlineTime(), vo.getOfflineTime()));
+        dto.setLocate(new DeviceInfo.Locate(vo.getLongitude(),vo.getLatitude()));
     }
 
     /**
@@ -117,6 +118,9 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
         vo.setState(state.isOnline() ? "online" : "offline");
         vo.setOfflineTime(state.getOfflineTime());
         vo.setOnlineTime(state.getOnlineTime());
+        DeviceInfo.Locate locate=dto.getLocate();
+        vo.setLongitude(locate.getLongitude());
+        vo.setLatitude(locate.getLatitude());
     }
 
     /**
@@ -248,8 +252,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
                 .model(rs.getString("model"))
                 .secret(rs.getString("secret"))
                 .parentId(rs.getString("parent_id"))
-                .longitude(rs.getString("longitude"))
-                .latitude(rs.getString("latitude"))
+                .locate(new DeviceInfo.Locate(rs.getString("longitude"),rs.getString("latitude")))
                 .uid(rs.getString("uid"))
                 .state(new DeviceInfo.State(
                         "online".equals(rs.getString("state")),

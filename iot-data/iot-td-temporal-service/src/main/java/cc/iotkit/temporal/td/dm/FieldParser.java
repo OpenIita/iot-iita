@@ -26,7 +26,8 @@ public class FieldParser {
             "bool", "TINYINT",
             "enum", "TINYINT",
             "text", "NCHAR",
-            "date", "NCHAR"
+            "date", "NCHAR",
+            "position", "NCHAR"
     );
 
     /**

@@ -20,6 +20,7 @@ import cc.iotkit.mq.ConsumerHandler;
 import cc.iotkit.mq.MqConsumer;
 import cc.iotkit.temporal.IDevicePropertyData;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -72,15 +73,16 @@ public class DevicePropertyConsumer implements ConsumerHandler<ThingModelMessage
         }
 
         //物模型属性
-        Map<String, String> thingModelProperties = thingModel.getModel().
+        Map<String, ThingModel.DataType> thingModelProperties = thingModel.getModel().
                 getProperties().stream().collect(Collectors.toMap(
-                ThingModel.Property::getIdentifier, ThingModel.Property::getName));
+                ThingModel.Property::getIdentifier, ThingModel.Property::getDataType));
 
         Map<String, Object> addProperties = new HashMap<>();
         //删除非属性字段
         properties.forEach((key,val)->{
             if (thingModelProperties.containsKey(key)) {
                 addProperties.put(key,val);
+                handleLocate(deviceInfo,val,thingModelProperties.get(key));
             }
         });
 
@@ -92,6 +94,31 @@ public class DevicePropertyConsumer implements ConsumerHandler<ThingModelMessage
             devicePropertyData.addProperties(deviceId, addProperties, msg.getOccurred());
         } catch (Throwable e) {
             log.warn("save property data error", e);
+        }
+    }
+
+    private  void handleLocate(DeviceInfo deviceInfo,Object data,ThingModel.DataType dataType){
+        if("position".equals(dataType.getType())){//如果是定位属性需要做一些处理
+            Object specs = dataType.getSpecs();
+            String locateType="";
+            if (specs instanceof Map) {
+                Object objlocateType = ((Map<?, ?>) specs).get("locateType");//定位方式
+                if (objlocateType != null) {
+                    locateType = objlocateType.toString();
+                }
+                if(StringUtils.isNotBlank(locateType)){
+                    if("lonLat".equals(locateType)){//经纬度定位格式：经度,纬度
+                        String[] lonLats=data.toString().split(",");
+                        deviceInfo.getLocate().setLongitude(lonLats[0]);
+                        deviceInfo.getLocate().setLatitude(lonLats[1]);
+                        deviceInfoData.save(deviceInfo);
+                    }else if("basestation".equals(locateType)){//基站定位
+
+                    }else if("ipinfo".equals(locateType)){//ip定位
+
+                    }
+                }
+            }
         }
     }
 
