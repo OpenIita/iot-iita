@@ -44,11 +44,6 @@ public class ThingModelDataImpl implements IThingModelData {
     }
 
     @Override
-    public ThingModel add(ThingModel data) {
-        return save(data);
-    }
-
-    @Override
     public void deleteById(String s) {
         thingModelRepository.deleteById(s);
     }

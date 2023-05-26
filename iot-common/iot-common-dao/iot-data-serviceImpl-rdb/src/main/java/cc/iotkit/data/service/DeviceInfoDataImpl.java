@@ -464,12 +464,6 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     }
 
     @Override
-    public DeviceInfo add(DeviceInfo data) {
-        data.setCreateAt(System.currentTimeMillis());
-        return save(data);
-    }
-
-    @Override
     public void deleteById(String s) {
         deviceInfoRepository.deleteById(s);
     }

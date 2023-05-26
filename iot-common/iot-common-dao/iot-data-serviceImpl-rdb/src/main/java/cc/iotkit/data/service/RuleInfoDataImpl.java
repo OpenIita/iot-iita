@@ -87,11 +87,6 @@ public class RuleInfoDataImpl implements IRuleInfoData {
     }
 
     @Override
-    public RuleInfo add(RuleInfo data) {
-        return save(data);
-    }
-
-    @Override
     public void deleteById(String s) {
         ruleInfoRepository.deleteById(s);
     }

@@ -16,6 +16,8 @@ public enum ErrCode implements IEnum {
     NOT_FOUND(10000006, "请求资源不存在"),
     FORBIDDEN(10000007, "请求被拒绝"),
     UNAUTHORIZED_EXCEPTION(10000008, "未授权访问"),
+    UNSUPPORTED_OPERATION_EXCEPTION(10000009, "方法未实现"),
+    DATA_NOT_EXIST(10000010, "数据不存在"),
 
     /**
      * 组件通用异常段

@@ -47,10 +47,6 @@ public class ProductModelDataImpl implements IProductModelData {
         return null;
     }
 
-    @Override
-    public ProductModel add(ProductModel data) {
-        return save(data);
-    }
 
     @Override
     public void deleteById(String s) {

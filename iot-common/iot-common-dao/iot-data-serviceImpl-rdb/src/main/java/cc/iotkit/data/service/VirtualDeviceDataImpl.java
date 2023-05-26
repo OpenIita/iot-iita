@@ -106,11 +106,6 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
     }
 
     @Override
-    public VirtualDevice add(VirtualDevice data) {
-        return save(data);
-    }
-
-    @Override
     @Transactional
     public void deleteById(String s) {
         virtualDeviceRepository.deleteById(s);

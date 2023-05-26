@@ -45,11 +45,6 @@ public class DeviceGroupDataImpl implements IDeviceGroupData {
         return data;
     }
 
-    @Override
-    public DeviceGroup add(DeviceGroup data) {
-        data.setCreateAt(System.currentTimeMillis());
-        return save(data);
-    }
 
     @Override
     public void deleteById(String s) {

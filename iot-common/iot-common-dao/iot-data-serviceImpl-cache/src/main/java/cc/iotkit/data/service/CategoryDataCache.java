@@ -35,11 +35,6 @@ public class CategoryDataCache implements ICategoryData {
     }
 
     @Override
-    public Category add(Category data) {
-        return categoryData.add(data);
-    }
-
-    @Override
     public void deleteById(String s) {
         categoryData.deleteById(s);
     }

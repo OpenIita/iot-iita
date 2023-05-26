@@ -43,13 +43,6 @@ public class CategoryDataImpl implements ICategoryData {
     }
 
     @Override
-    public Category add(Category data) {
-        TbCategory tb = categoryRepository.save(MapstructUtils.convert(data, TbCategory.class));
-        data.setId(tb.getId());
-        return data;
-    }
-
-    @Override
     public void deleteById(String s) {
         categoryRepository.deleteById(s);
     }

@@ -29,7 +29,7 @@ public class BizException extends RuntimeException {
     /**
      * 错误码
      */
-    private String code;
+    private Integer code;
 
     /**
      * 错误消息
@@ -38,7 +38,7 @@ public class BizException extends RuntimeException {
 
     public BizException(String message) {
         super(message);
-        this.code = ErrCode.SYSTEM_EXCEPTION.getValue();
+        this.code = ErrCode.SYSTEM_EXCEPTION.getKey();
     }
 
     /**
@@ -48,6 +48,7 @@ public class BizException extends RuntimeException {
      */
     public BizException(ErrCode errCode) {
         this.message = errCode.getValue();
+        this.code = errCode.getKey();
     }
 
     public BizException(ErrCode errCode, Throwable cause) {
@@ -57,7 +58,7 @@ public class BizException extends RuntimeException {
 
     public BizException(ErrCode errCode, String message) {
         this.message = message;
-        this.code = errCode.getValue();
+        this.code = errCode.getKey();
     }
 
     public BizException(String message, Throwable cause) {

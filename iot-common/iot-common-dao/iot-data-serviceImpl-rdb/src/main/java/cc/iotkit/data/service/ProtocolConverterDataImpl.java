@@ -66,10 +66,6 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
         return data;
     }
 
-    @Override
-    public ProtocolConverter add(ProtocolConverter data) {
-        return save(data);
-    }
 
     @Override
     public void deleteById(String s) {

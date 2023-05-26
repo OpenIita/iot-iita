@@ -1,6 +1,8 @@
 package cc.iotkit.data.system;
 
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.system.SysConfig;
 
@@ -10,9 +12,5 @@ import cc.iotkit.model.system.SysConfig;
  * @author sjg
  */
 public interface ISysConfigData extends ICommonData<SysConfig, Long> {
-
-    Paging<SysConfig> findConfigs(SysConfig query);
-
-    SysConfig findByConfigKey(String configKey);
 
 }

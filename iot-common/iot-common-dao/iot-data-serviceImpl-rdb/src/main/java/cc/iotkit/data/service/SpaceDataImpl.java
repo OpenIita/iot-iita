@@ -71,11 +71,6 @@ public class SpaceDataImpl implements ISpaceData {
     }
 
     @Override
-    public Space add(Space data) {
-        return save(data);
-    }
-
-    @Override
     public void deleteById(String s) {
         spaceRepository.deleteById(s);
     }

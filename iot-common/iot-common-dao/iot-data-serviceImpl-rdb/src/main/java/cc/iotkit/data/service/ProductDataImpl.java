@@ -56,11 +56,6 @@ public class ProductDataImpl implements IProductData {
         return data;
     }
 
-    @Override
-    public Product add(Product data) {
-        data.setCreateAt(System.currentTimeMillis());
-        return save(data);
-    }
 
     @Override
     public void deleteById(String s) {

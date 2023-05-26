@@ -60,10 +60,6 @@ public class HomeDataImpl implements IHomeData {
         return data;
     }
 
-    @Override
-    public Home add(Home data) {
-        return save(data);
-    }
 
     @Override
     public void deleteById(String s) {

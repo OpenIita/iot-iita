@@ -56,10 +56,6 @@ public class DeviceConfigDataImpl implements IDeviceConfigData {
         return data;
     }
 
-    @Override
-    public DeviceConfig add(DeviceConfig data) {
-        return save(data);
-    }
 
     @Override
     public void deleteById(String s) {

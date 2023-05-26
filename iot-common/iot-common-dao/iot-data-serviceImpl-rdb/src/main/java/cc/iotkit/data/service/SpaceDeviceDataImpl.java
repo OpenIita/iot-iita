@@ -96,11 +96,6 @@ public class SpaceDeviceDataImpl implements ISpaceDeviceData {
     }
 
     @Override
-    public SpaceDevice add(SpaceDevice data) {
-        return save(data);
-    }
-
-    @Override
     public void deleteById(String s) {
         spaceDeviceRepository.deleteById(s);
     }

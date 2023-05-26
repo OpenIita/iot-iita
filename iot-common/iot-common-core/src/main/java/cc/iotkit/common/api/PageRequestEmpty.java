@@ -10,6 +10,6 @@ import lombok.Data;
  */
 @Data
 public class PageRequestEmpty {
-  private Integer page = 1;
-  private  Integer size = 20;
+  private Integer pageNum = 1;
+  private  Integer pageSize = 20;
 }

@@ -1,8 +1,8 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.CacheNames;
-
 import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
@@ -14,16 +14,13 @@ import cc.iotkit.data.system.ISysConfigData;
 import cc.iotkit.model.system.SysConfig;
 import cc.iotkit.system.dto.bo.SysConfigBo;
 import cc.iotkit.system.dto.vo.SysConfigVo;
-
-import cn.hutool.core.util.ObjectUtil;
 import cc.iotkit.system.service.ISysConfigService;
+import cn.hutool.core.util.ObjectUtil;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cc.iotkit.common.api.Paging;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 参数配置 服务层实现
@@ -39,8 +36,8 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
 
     @Override
     public Paging<SysConfigVo> selectPageConfigList(PageRequest<SysConfigBo> query) {
-        SysConfig sysConfig = MapstructUtils.convert(query.getData(), SysConfig.class);
-        return MapstructUtils.convert(sysConfigData.findConfigs(sysConfig), SysConfigVo.class);
+        PageRequest<SysConfig> pageRequest = PageRequest.copyPageRequest(query,MapstructUtils.convert(query.getData(), SysConfig.class));
+        return MapstructUtils.convert(sysConfigData.findAll(pageRequest), SysConfigVo.class);
     }
 
     /**
@@ -62,7 +59,9 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      */
     @Override
     public String selectConfigByKey(String configKey) {
-        SysConfig sysConfig = sysConfigData.findByConfigKey(configKey);
+        SysConfig data = new SysConfig();
+        data.setConfigKey(configKey);
+        SysConfig sysConfig = sysConfigData.findOneByCondition(data);
         if (ObjectUtil.isNotNull(sysConfig)) {
             return sysConfig.getConfigValue();
         }
@@ -171,13 +170,13 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      * @param configIds 需要删除的参数ID
      */
     @Override
-    public void deleteConfigByIds(Long[] configIds) {
+    public void deleteConfigByIds(List<Long> configIds) {
         for (Long configId : configIds) {
             SysConfig old = sysConfigData.findById(configId);
             if (StringUtils.equals(UserConstants.YES, old.getConfigType())) {
                 throw new BizException(String.format("内置参数【%1$s】不能删除 ", old.getConfigKey()));
             }
-//            CacheUtils.evict(CacheNames.SYS_CONFIG, config.getConfigKey());
+            CacheUtils.evict(CacheNames.SYS_CONFIG, old.getConfigKey());
         }
         sysConfigData.deleteByIds(configIds);
     }

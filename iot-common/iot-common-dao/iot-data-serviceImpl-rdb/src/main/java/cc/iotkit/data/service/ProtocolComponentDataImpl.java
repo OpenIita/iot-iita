@@ -66,10 +66,6 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
         return data;
     }
 
-    @Override
-    public ProtocolComponent add(ProtocolComponent data) {
-        return save(data);
-    }
 
     @Override
     public void deleteById(String s) {

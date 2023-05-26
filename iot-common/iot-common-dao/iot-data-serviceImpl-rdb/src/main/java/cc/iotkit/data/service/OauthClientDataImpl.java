@@ -52,11 +52,6 @@ public class OauthClientDataImpl implements IOauthClientData {
     }
 
     @Override
-    public OauthClient add(OauthClient data) {
-        return save(data);
-    }
-
-    @Override
     public void deleteById(String s) {
         oauthClientRepository.deleteById(s);
     }

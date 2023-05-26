@@ -43,11 +43,6 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData {
         return data;
     }
 
-    @Override
-    public ChannelTemplate add(ChannelTemplate data) {
-        data.setCreateAt(System.currentTimeMillis());
-        return save(data);
-    }
 
     @Override
     public void deleteById(String id) {

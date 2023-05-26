@@ -44,11 +44,6 @@ public class ChannelDataImpl implements IChannelData {
         return data;
     }
 
-    @Override
-    public Channel add(Channel data) {
-        data.setCreateAt(System.currentTimeMillis());
-        return save(data);
-    }
 
     @Override
     public void deleteById(String id) {

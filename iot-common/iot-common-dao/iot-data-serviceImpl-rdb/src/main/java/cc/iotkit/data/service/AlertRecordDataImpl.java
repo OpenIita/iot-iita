@@ -34,10 +34,6 @@ public class AlertRecordDataImpl implements IAlertRecordData {
         return null;
     }
 
-    @Override
-    public AlertRecord add(AlertRecord data) {
-        return null;
-    }
 
     @Override
     public void deleteById(String s) {

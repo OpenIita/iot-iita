@@ -6,6 +6,7 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
+import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.web.core.BaseController;
@@ -92,7 +93,7 @@ public class SysTenantController extends BaseController {
         if (!tenantService.checkCompanyNameUnique(bo)) {
             fail("新增租户'" + bo.getCompanyName() + "'失败，企业名称已存在");
         }
-        TenantHelper.ignore(() -> tenantService.insertByBo(bo));
+        //TenantHelper.ignore(() -> tenantService.insertByBo(bo));
     }
 
     /**
@@ -168,7 +169,7 @@ public class SysTenantController extends BaseController {
     @Log(title = "租户", businessType = BusinessType.UPDATE)
     @GetMapping("/syncTenantPackage")
     public void syncTenantPackage(@NotBlank(message = "租户ID不能为空") String tenantId, @NotBlank(message = "套餐ID不能为空") String packageId) {
-        TenantHelper.ignore(() -> tenantService.syncTenantPackage(tenantId, packageId));
+        //TenantHelper.ignore(() -> tenantService.syncTenantPackage(tenantId, packageId));
     }
 
 }

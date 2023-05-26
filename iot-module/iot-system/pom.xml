@@ -53,6 +53,17 @@
             <artifactId>iot-data-serviceImpl-rdb</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-doc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-oss</artifactId>
+        </dependency>
+
+
     </dependencies>
 
     <build>

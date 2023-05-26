@@ -63,11 +63,6 @@ public class UserInfoDataImpl implements IUserInfoData {
     }
 
     @Override
-    public UserInfo add(UserInfo data) {
-        return save(data);
-    }
-
-    @Override
     public void deleteById(String s) {
         userInfoRepository.deleteById(s);
     }

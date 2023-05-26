@@ -36,10 +36,6 @@ public class AlertConfigDataImpl implements IAlertConfigData {
         return data;
     }
 
-    @Override
-    public AlertConfig add(AlertConfig data) {
-        return null;
-    }
 
     @Override
     public void deleteById(String s) {

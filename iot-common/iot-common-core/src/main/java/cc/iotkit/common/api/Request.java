@@ -1,5 +1,8 @@
 package cc.iotkit.common.api;
 
+import cc.iotkit.common.utils.SnowflakeIdGeneratorUtil;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,12 +16,15 @@ import java.util.UUID;
  */
 @Data
 public class Request<T> extends RequestEmpty implements Serializable {
-  private  T data;
+
+  @Valid
+  @NotNull
+  private T data;
 
   public static <T> Request<T> of(T data) {
-    Request<T> request = new Request();
+    Request<T> request = new Request<>();
     request.setData(data);
-    request.setRequestId(UUID.randomUUID().toString());
+    request.setRequestId(String.valueOf(SnowflakeIdGeneratorUtil.getInstanceSnowflake().nextId()));
     return request;
   }
 }

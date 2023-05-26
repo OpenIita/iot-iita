@@ -43,12 +43,6 @@ public class ChannelConfigDataImpl implements IChannelConfigData {
     }
 
     @Override
-    public ChannelConfig add(ChannelConfig data) {
-        data.setCreateAt(System.currentTimeMillis());
-        return save(data);
-    }
-
-    @Override
     public void deleteById(String id) {
         channelConfigRepository.deleteById(id);
     }

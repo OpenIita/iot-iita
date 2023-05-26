@@ -66,11 +66,6 @@ public class TaskInfoDataImpl implements ITaskInfoData {
     }
 
     @Override
-    public TaskInfo add(TaskInfo data) {
-        return save(data);
-    }
-
-    @Override
     public void deleteById(String s) {
         taskInfoRepository.deleteById(s);
     }

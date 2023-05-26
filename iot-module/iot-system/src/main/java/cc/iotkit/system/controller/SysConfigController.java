@@ -2,14 +2,19 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.excel.utils.ExcelUtil;
+import cc.iotkit.common.validate.EditGroup;
+import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysConfigBo;
 import cc.iotkit.system.dto.vo.SysConfigVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysConfigService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,106 +31,89 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/config")
+@Api(tags = "参数配置 信息操作处理")
 public class SysConfigController extends BaseController {
 
-    private final ISysConfigService configService;
+  private final ISysConfigService configService;
 
-    /**
-     * 获取参数配置列表
-     */
-    @SaCheckPermission("system:config:list")
-    @PostMapping("/list")
-    public Paging<SysConfigVo> list(@RequestBody @Validated PageRequest<SysConfigBo> query) {
-        return configService.selectPageConfigList(query);
-    }
 
-    /**
-     * 导出参数配置列表
-     */
-    @Log(title = "参数管理", businessType = BusinessType.EXPORT)
-    @SaCheckPermission("system:config:export")
-    @PostMapping("/export")
-    public void export(SysConfigBo config, HttpServletResponse response) {
-        List<SysConfigVo> list = configService.selectConfigList(config);
-        ExcelUtil.exportExcel(list, "参数数据", SysConfigVo.class, response);
-    }
+  @ApiOperation("获取参数配置列表")
+  @SaCheckPermission("system:config:list")
+  @PostMapping("/list")
+  public Paging<SysConfigVo> list(
+      @RequestBody @Validated(QueryGroup.class) PageRequest<SysConfigBo> query) {
+    return configService.selectPageConfigList(query);
+  }
 
-    /**
-     * 根据参数编号获取详细信息
-     *
-     * @param configId 参数ID
-     */
-    @SaCheckPermission("system:config:query")
-    @GetMapping(value = "/{configId}")
-    public SysConfigVo getInfo(@PathVariable Long configId) {
-        return configService.selectConfigById(configId);
-    }
+  @ApiOperation("导出参数配置列表")
+  @Log(title = "参数管理", businessType = BusinessType.EXPORT)
+  @SaCheckPermission("system:config:export")
+  @PostMapping("/export")
+  public void export(@RequestBody @Validated(QueryGroup.class) SysConfigBo config,
+      HttpServletResponse response) {
+    List<SysConfigVo> list = configService.selectConfigList(config);
+    ExcelUtil.exportExcel(list, "参数数据", SysConfigVo.class, response);
+  }
 
-    /**
-     * 根据参数键名查询参数值
-     *
-     * @param configKey 参数Key
-     */
-    @GetMapping(value = "/configKey/{configKey}")
-    public void getConfigKey(@PathVariable String configKey) {
-        configService.selectConfigByKey(configKey);
-    }
 
-    /**
-     * 新增参数配置
-     */
-    @SaCheckPermission("system:config:add")
-    @Log(title = "参数管理", businessType = BusinessType.INSERT)
-    @PostMapping
-    public void add(@Validated @RequestBody SysConfigBo config) {
-        if (!configService.checkConfigKeyUnique(config)) {
-            fail("新增参数'" + config.getConfigName() + "'失败，参数键名已存在");
-        }
-        configService.insertConfig(config);
-    }
+  @ApiOperation("根据参数编号获取详细信息")
+  @SaCheckPermission("system:config:query")
+  @PostMapping(value = "/getInfo")
+  public SysConfigVo getInfo(@RequestBody @Validated Request<Long> request) {
+    return configService.selectConfigById(request.getData());
+  }
 
-    /**
-     * 修改参数配置
-     */
-    @SaCheckPermission("system:config:edit")
-    @Log(title = "参数管理", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public void edit(@Validated @RequestBody SysConfigBo config) {
-        if (!configService.checkConfigKeyUnique(config)) {
-            fail("修改参数'" + config.getConfigName() + "'失败，参数键名已存在");
-        }
-        configService.updateConfig(config);
-    }
 
-    /**
-     * 根据参数键名修改参数配置
-     */
-    @SaCheckPermission("system:config:edit")
-    @Log(title = "参数管理", businessType = BusinessType.UPDATE)
-    @PutMapping("/updateByKey")
-    public void updateByKey(@RequestBody SysConfigBo config) {
-        configService.updateConfig(config);
-    }
+  @ApiOperation("根据参数键名查询参数值")
+  @PostMapping(value = "/getConfigKey")
+  public void getConfigKey(@RequestBody @Validated Request<String> request) {
+    configService.selectConfigByKey(request.getData());
+  }
 
-    /**
-     * 删除参数配置
-     *
-     * @param configIds 参数ID串
-     */
-    @SaCheckPermission("system:config:remove")
-    @Log(title = "参数管理", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{configIds}")
-    public void remove(@PathVariable Long[] configIds) {
-        configService.deleteConfigByIds(configIds);
-    }
 
-    /**
-     * 刷新参数缓存
-     */
-    @SaCheckPermission("system:config:remove")
-    @Log(title = "参数管理", businessType = BusinessType.CLEAN)
-    @DeleteMapping("/refreshCache")
-    public void refreshCache() {
-        configService.resetConfigCache();
+  @ApiOperation("新增参数配置")
+  @SaCheckPermission("system:config:add")
+  @Log(title = "参数管理", businessType = BusinessType.INSERT)
+  @PostMapping(value = "/add")
+  public void add(@RequestBody @Validated(EditGroup.class) Request<SysConfigBo> request) {
+    if (!configService.checkConfigKeyUnique(request.getData())) {
+      fail("新增参数'" + request.getData().getConfigName() + "'失败，参数键名已存在");
     }
+    configService.insertConfig(request.getData());
+  }
+
+  @ApiOperation("修改参数配置")
+  @SaCheckPermission("system:config:edit")
+  @Log(title = "参数管理", businessType = BusinessType.UPDATE)
+  @PostMapping(value = "/edit")
+  public void edit(@RequestBody @Validated(EditGroup.class) Request<SysConfigBo> request) {
+    if (!configService.checkConfigKeyUnique(request.getData())) {
+      fail("修改参数'" + request.getData().getConfigName() + "'失败，参数键名已存在");
+    }
+    configService.updateConfig(request.getData());
+  }
+
+  @ApiOperation("根据参数键名修改参数配置")
+  @SaCheckPermission("system:config:edit")
+  @Log(title = "参数管理", businessType = BusinessType.UPDATE)
+  @PostMapping("/updateByKey")
+  public void updateByKey(@RequestBody @Validated(EditGroup.class) Request<SysConfigBo> request) {
+    configService.updateConfig(request.getData());
+  }
+
+  @ApiOperation("删除参数配置")
+  @SaCheckPermission("system:config:remove")
+  @Log(title = "参数管理", businessType = BusinessType.DELETE)
+  @PostMapping("/remove")
+  public void remove(@RequestBody @Validated Request<List<Long>> request) {
+    configService.deleteConfigByIds(request.getData());
+  }
+
+  @ApiOperation("刷新参数缓存")
+  @SaCheckPermission("system:config:remove")
+  @Log(title = "参数管理", businessType = BusinessType.CLEAN)
+  @PostMapping("/refreshCache")
+  public void refreshCache() {
+    configService.resetConfigCache();
+  }
 }
