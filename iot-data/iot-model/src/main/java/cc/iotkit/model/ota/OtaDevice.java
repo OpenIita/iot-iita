@@ -19,6 +19,8 @@ public class OtaDevice implements Id<String> {
 
     private String id;
 
+    private String deviceName;
+
     private String deviceId;
 
     private String version;

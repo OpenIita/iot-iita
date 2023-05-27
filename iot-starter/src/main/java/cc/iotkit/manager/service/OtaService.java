@@ -1,15 +1,17 @@
 package cc.iotkit.manager.service;
 
+import cc.iotkit.data.IOtaDeviceData;
 import cc.iotkit.data.IOtaPackageData;
+import cc.iotkit.data.service.DeviceInfoDataImpl;
 import cc.iotkit.model.Paging;
 import cc.iotkit.model.ota.OtaPackage;
 import cc.iotkit.oss.service.OssTemplate;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.core.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.InputStream;
 
 /**
@@ -19,12 +21,14 @@ import java.io.InputStream;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OtaService {
 
-    @Resource
-    private IOtaPackageData iOtaPackageData;
-    @Resource
-    private OssTemplate ossTemplate;
+    private final IOtaPackageData iOtaPackageData;
+    private final IOtaDeviceData iOtaDeviceData;
+    private final DeviceInfoDataImpl deviceInfoData;
+    private final OssTemplate ossTemplate;
+
     @Value("${oss.region}")
     private String region;
 
@@ -50,6 +54,9 @@ public class OtaService {
 
     public void findByVersionGreaterThan(String version, String deviceId) {
         iOtaPackageData.findByVersionGreaterThan(version);
+    }
+
+    public void batchOta() {
     }
 
 }

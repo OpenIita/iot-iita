@@ -19,6 +19,8 @@ public class TbOtaDevice {
     @Id
     private String id;
 
+    private String deviceName;
+
     private String deviceId;
 
     private String version;
