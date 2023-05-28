@@ -9,12 +9,12 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.manager.model.stats.MainStats;
 import cc.iotkit.temporal.IThingModelMessageData;
-import cc.iotkit.utils.AuthUtil;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

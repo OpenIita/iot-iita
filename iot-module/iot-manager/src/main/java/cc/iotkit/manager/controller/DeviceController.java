@@ -9,13 +9,21 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.AuthUtil;
+import cc.iotkit.common.utils.DeviceUtil;
+import cc.iotkit.common.utils.ReflectUtil;
+import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comps.service.DeviceBehaviourService;
 import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.data.manager.IDeviceGroupData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
+import cc.iotkit.manager.model.query.DeviceQuery;
+import cc.iotkit.manager.service.DataOwnerService;
+import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.model.InvokeResult;
 import cc.iotkit.common.api.Paging;
@@ -37,6 +45,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.ArrayList;

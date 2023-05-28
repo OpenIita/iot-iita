@@ -9,12 +9,12 @@
  */
 package cc.iotkit.manager.service;
 
-import cc.iotkit.common.Constants;
+import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.common.utils.WeChatUtil;
 import cc.iotkit.data.manager.IUserInfoData;
-import cc.iotkit.manager.utils.WeChatUtil;
 import cc.iotkit.model.UserInfo;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

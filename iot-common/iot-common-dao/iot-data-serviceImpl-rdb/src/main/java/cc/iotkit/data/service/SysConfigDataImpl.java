@@ -1,6 +1,5 @@
 package cc.iotkit.data.service;
 
-import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
@@ -20,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -30,10 +29,10 @@ import org.springframework.stereotype.Service;
 
 @Primary
 @Service
+@RequiredArgsConstructor
 public class SysConfigDataImpl implements ISysConfigData {
 
-    @Autowired
-    private SysConfigRepository alertConfigRepository;
+    private final SysConfigRepository alertConfigRepository;
 
 
     @Override

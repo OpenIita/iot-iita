@@ -11,6 +11,7 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IProductData;
@@ -24,7 +25,6 @@ import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.temporal.IDbStructureData;
-import cc.iotkit.utils.AuthUtil;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
@@ -34,6 +34,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;

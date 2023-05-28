@@ -11,6 +11,7 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.manager.ITaskInfoData;
@@ -24,12 +25,12 @@ import cc.iotkit.ruleengine.rule.RuleManager;
 import cc.iotkit.ruleengine.task.TaskManager;
 import cc.iotkit.temporal.IRuleLogData;
 import cc.iotkit.temporal.ITaskLogData;
-import cc.iotkit.utils.AuthUtil;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;

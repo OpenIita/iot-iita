@@ -11,6 +11,7 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.comps.ComponentManager;
 import cc.iotkit.comps.config.ComponentConfig;
@@ -21,12 +22,12 @@ import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import cc.iotkit.model.protocol.ProtocolConverter;
-import cc.iotkit.utils.AuthUtil;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

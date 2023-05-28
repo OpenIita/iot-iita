@@ -11,10 +11,10 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.Owned;
 import cc.iotkit.model.device.DeviceInfo;
-import cc.iotkit.utils.AuthUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

@@ -40,7 +40,7 @@ public interface ISysNoticeService {
      * @param bo 公告信息
      * @return 结果
      */
-    int insertNotice(SysNoticeBo bo);
+    Long insertNotice(SysNoticeBo bo);
 
     /**
      * 修改公告

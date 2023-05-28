@@ -11,6 +11,7 @@ package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.IVirtualDeviceData;
 import cc.iotkit.manager.service.DataOwnerService;
@@ -18,11 +19,11 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.device.VirtualDeviceLog;
 import cc.iotkit.temporal.IVirtualDeviceLogData;
-import cc.iotkit.utils.AuthUtil;
 import cc.iotkit.virtualdevice.VirtualManager;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 

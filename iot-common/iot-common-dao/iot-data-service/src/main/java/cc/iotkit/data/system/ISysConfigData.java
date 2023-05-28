@@ -1,8 +1,5 @@
 package cc.iotkit.data.system;
 
-import cc.iotkit.common.api.Paging;
-import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.system.SysConfig;
 

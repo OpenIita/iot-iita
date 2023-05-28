@@ -9,9 +9,10 @@
  */
 package cc.iotkit.manager.controller;
 
-import cc.iotkit.common.Constants;
+import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.IHomeData;
 import cc.iotkit.data.manager.ISpaceData;
@@ -20,10 +21,10 @@ import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
-import cc.iotkit.utils.AuthUtil;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;

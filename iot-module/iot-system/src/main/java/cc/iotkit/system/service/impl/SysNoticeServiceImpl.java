@@ -3,11 +3,11 @@ package cc.iotkit.system.service.impl;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.system.ISysNoticeData;
 import cc.iotkit.model.system.SysNotice;
 import cc.iotkit.system.dto.bo.SysNoticeBo;
 import cc.iotkit.system.dto.vo.SysNoticeVo;
 import cc.iotkit.system.dto.vo.SysUserVo;
-import cc.iotkit.system.mapper.SysUserMapper;
 import cn.hutool.core.util.ObjectUtil;
 import cc.iotkit.system.service.ISysNoticeService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class SysNoticeServiceImpl implements ISysNoticeService {
+
+    private ISysNoticeData iSysNoticeData;
 
     @Override
     public Paging<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageRequest<?> query) {
@@ -73,9 +75,10 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      * @return 结果
      */
     @Override
-    public int insertNotice(SysNoticeBo bo) {
+    public Long insertNotice(SysNoticeBo bo) {
         SysNotice notice = MapstructUtils.convert(bo, SysNotice.class);
-        return baseMapper.insert(notice);
+        iSysNoticeData.save(notice);
+        return notice.getId();
     }
 
     /**
