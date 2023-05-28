@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -95,7 +96,7 @@ public class SysDictTypeController extends BaseController {
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictIds}")
-    public void remove(@PathVariable Long[] dictIds) {
+    public void remove(@PathVariable Collection<Long> dictIds) {
         dictTypeService.deleteDictTypeByIds(dictIds);
     }
 

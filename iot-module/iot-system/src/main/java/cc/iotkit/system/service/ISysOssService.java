@@ -26,8 +26,8 @@ public interface ISysOssService {
 
     SysOssVo upload(MultipartFile file);
 
-    void download(Long ossId, HttpServletResponse response) throws IOException;
+    void download(Long ossId) throws IOException;
 
-    Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+    void deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
 }

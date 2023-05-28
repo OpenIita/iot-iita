@@ -1,7 +1,9 @@
 package cc.iotkit.model.system;
 
+import cc.iotkit.model.BaseModel;
 import cc.iotkit.model.Id;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,8 +15,9 @@ import java.util.Date;
  * @author Michelle.Chung
  * @date 2023-02-07
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class SysOperLog implements Id<Long>,Serializable {
+public class SysOperLog extends BaseModel implements Id<Long>, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

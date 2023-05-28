@@ -6,6 +6,7 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysNoticeBo;
 import cc.iotkit.system.dto.vo.SysNoticeVo;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public interface ISysNoticeService {
      * @param bo 公告信息
      * @return 结果
      */
-    int updateNotice(SysNoticeBo bo);
+    void updateNotice(SysNoticeBo bo);
 
     /**
      * 删除公告信息
@@ -56,7 +57,7 @@ public interface ISysNoticeService {
      * @param noticeId 公告ID
      * @return 结果
      */
-    int deleteNoticeById(Long noticeId);
+    void deleteNoticeById(Long noticeId);
 
     /**
      * 批量删除公告信息
@@ -64,5 +65,5 @@ public interface ISysNoticeService {
      * @param noticeIds 需要删除的公告ID
      * @return 结果
      */
-    int deleteNoticeByIds(Long[] noticeIds);
+    void deleteNoticeByIds(Collection<Long> noticeIds);
 }

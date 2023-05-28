@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.data.manager.IOauthClientData;
 import cc.iotkit.data.cache.OauthClientCacheEvict;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -42,6 +44,11 @@ public class OauthClientDataCache implements IOauthClientData {
     }
 
     @Override
+    public List<OauthClient> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public OauthClient save(OauthClient data) {
         OauthClient oauthClient = oauthClientData.save(data);
         //清除缓存
@@ -50,8 +57,8 @@ public class OauthClientDataCache implements IOauthClientData {
     }
 
     @Override
-    public OauthClient add(OauthClient data) {
-        return oauthClientData.add(data);
+    public void batchSave(List<OauthClient> data) {
+
     }
 
     @Override
@@ -60,7 +67,7 @@ public class OauthClientDataCache implements IOauthClientData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
 
@@ -75,7 +82,18 @@ public class OauthClientDataCache implements IOauthClientData {
     }
 
     @Override
-    public Paging<OauthClient> findAll(int page, int size) {
-        return oauthClientData.findAll(page, size);
+    public Paging<OauthClient> findAll(PageRequest<OauthClient> pageRequest) {
+        return oauthClientData.findAll(pageRequest);
     }
+
+    @Override
+    public List<OauthClient> findAllByCondition(OauthClient data) {
+        return null;
+    }
+
+    @Override
+    public OauthClient findOneByCondition(OauthClient data) {
+        return null;
+    }
+
 }

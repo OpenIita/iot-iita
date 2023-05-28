@@ -26,7 +26,7 @@ public class SysTenantPackageVo implements Serializable {
      * 租户套餐id
      */
     @ExcelProperty(value = "租户套餐id")
-    private Long packageId;
+    private Long id;
 
     /**
      * 套餐名称

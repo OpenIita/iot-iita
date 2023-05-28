@@ -1,12 +1,13 @@
 package cc.iotkit.common.api;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SnowflakeIdGeneratorUtil;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.util.Map;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -18,6 +19,9 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PageRequest<T> extends Request<T> implements Serializable {
 
   /**
@@ -71,13 +75,14 @@ public class PageRequest<T> extends Request<T> implements Serializable {
     return pageRequest;
   }
 
-  public static <DTO> PageRequest<DTO> copyPageRequest(PageRequest query,DTO data) {
+  public <DTO> PageRequest<DTO> to(Class<DTO> dtoClass) {
+    DTO dto = MapstructUtils.convert(getData(), dtoClass);
     PageRequest<DTO> pageRequest = new PageRequest<>();
-    pageRequest.setData(data);
-    pageRequest.setPageNum(query.getPageNum());
-    pageRequest.setPageSize(query.getPageSize());
-    pageRequest.setRequestId(query.getRequestId());
-    pageRequest.setSortMap(query.getSortMap());
+    pageRequest.setData(dto);
+    pageRequest.setPageNum(this.getPageNum());
+    pageRequest.setPageSize(this.getPageSize());
+    pageRequest.setRequestId(this.getRequestId());
+    pageRequest.setSortMap(this.getSortMap());
     return pageRequest;
   }
 

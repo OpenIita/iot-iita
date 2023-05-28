@@ -13,7 +13,9 @@ import cc.iotkit.system.service.ISysNoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -25,13 +27,11 @@ import java.util.List;
 @Service
 public class SysNoticeServiceImpl implements ISysNoticeService {
 
-    private ISysNoticeData iSysNoticeData;
+    private ISysNoticeData sysNoticeData;
 
     @Override
     public Paging<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageRequest<?> query) {
-        LambdaQueryWrapper<SysNotice> lqw = buildQueryWrapper(notice);
-        Page<SysNoticeVo> page = baseMapper.selectVoPage(query.build(), lqw);
-        return TableDataInfo.build(page);
+        return new Paging<>();
     }
 
     /**
@@ -42,7 +42,7 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      */
     @Override
     public SysNoticeVo selectNoticeById(Long noticeId) {
-        return baseMapper.selectVoById(noticeId);
+        return sysNoticeData.findById(noticeId).to(SysNoticeVo.class);
     }
 
     /**
@@ -53,19 +53,7 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      */
     @Override
     public List<SysNoticeVo> selectNoticeList(SysNoticeBo notice) {
-        LambdaQueryWrapper<SysNotice> lqw = buildQueryWrapper(notice);
-        return baseMapper.selectVoList(lqw);
-    }
-
-    private LambdaQueryWrapper<SysNotice> buildQueryWrapper(SysNoticeBo bo) {
-        LambdaQueryWrapper<SysNotice> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getNoticeTitle()), SysNotice::getNoticeTitle, bo.getNoticeTitle());
-        lqw.eq(StringUtils.isNotBlank(bo.getNoticeType()), SysNotice::getNoticeType, bo.getNoticeType());
-        if (StringUtils.isNotBlank(bo.getCreateByName())) {
-            SysUserVo sysUser = userMapper.selectUserByUserName(bo.getCreateByName());
-            lqw.eq(SysNotice::getCreateBy, ObjectUtil.isNotNull(sysUser) ? sysUser.getUserId() : null);
-        }
-        return lqw;
+        return new ArrayList<>();
     }
 
     /**
@@ -76,9 +64,7 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      */
     @Override
     public Long insertNotice(SysNoticeBo bo) {
-        SysNotice notice = MapstructUtils.convert(bo, SysNotice.class);
-        iSysNoticeData.save(notice);
-        return notice.getId();
+        return sysNoticeData.save(bo.to(SysNotice.class)).getId();
     }
 
     /**
@@ -88,9 +74,8 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      * @return 结果
      */
     @Override
-    public int updateNotice(SysNoticeBo bo) {
-        SysNotice notice = MapstructUtils.convert(bo, SysNotice.class);
-        return baseMapper.updateById(notice);
+    public void updateNotice(SysNoticeBo bo) {
+        sysNoticeData.save(bo.to(SysNotice.class));
     }
 
     /**
@@ -100,8 +85,8 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      * @return 结果
      */
     @Override
-    public int deleteNoticeById(Long noticeId) {
-        return baseMapper.deleteById(noticeId);
+    public void deleteNoticeById(Long noticeId) {
+        sysNoticeData.deleteById(noticeId);
     }
 
     /**
@@ -111,7 +96,7 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      * @return 结果
      */
     @Override
-    public int deleteNoticeByIds(Long[] noticeIds) {
-        return baseMapper.deleteBatchIds(Arrays.asList(noticeIds));
+    public void deleteNoticeByIds(Collection<Long> noticeIds) {
+        sysNoticeData.deleteByIds(noticeIds);
     }
 }

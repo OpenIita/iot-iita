@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.DeviceInfo;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -38,13 +40,18 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
+    public List<DeviceInfo> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public DeviceInfo save(DeviceInfo data) {
         return deviceInfoData.save(data);
     }
 
     @Override
-    public DeviceInfo add(DeviceInfo data) {
-        return deviceInfoData.add(data);
+    public void batchSave(List<DeviceInfo> data) {
+
     }
 
     @Override
@@ -53,7 +60,7 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
 
@@ -68,8 +75,18 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
-    public Paging<DeviceInfo> findAll(int page, int size) {
-        return deviceInfoData.findAll(page, size);
+    public Paging<DeviceInfo> findAll(PageRequest<DeviceInfo> pageRequest) {
+        return deviceInfoData.findAll(pageRequest);
+    }
+
+    @Override
+    public List<DeviceInfo> findAllByCondition(DeviceInfo data) {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo findOneByCondition(DeviceInfo data) {
+        return null;
     }
 
     @Override

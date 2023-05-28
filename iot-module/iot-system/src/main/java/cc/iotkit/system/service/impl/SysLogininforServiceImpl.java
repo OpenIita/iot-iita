@@ -19,6 +19,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -128,7 +129,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
      * @return 结果
      */
     @Override
-    public void deleteLogininforByIds(Long[] infoIds) {
+    public void deleteLogininforByIds(Collection<Long> infoIds) {
         sysLogininforData.deleteByIds(infoIds);
     }
 

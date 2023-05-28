@@ -1,5 +1,6 @@
 package cc.iotkit.system.dto.vo;
 
+import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.common.excel.annotation.ExcelDictFormat;
 import cc.iotkit.common.excel.convert.ExcelDictConvert;
 import cc.iotkit.model.system.SysOperLog;
@@ -21,7 +22,7 @@ import java.util.Date;
 @Data
 @ExcelIgnoreUnannotated
 @AutoMapper(target = SysOperLog.class)
-public class SysOperLogVo implements Serializable {
+public class SysOperLogVo extends BaseDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

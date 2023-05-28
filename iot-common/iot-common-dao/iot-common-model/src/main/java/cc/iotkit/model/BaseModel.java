@@ -1,5 +1,6 @@
 package cc.iotkit.model;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -40,4 +41,7 @@ public class BaseModel implements Serializable {
      */
     private Date updateTime;
 
+    public <T> T to(Class<T> tClass) {
+        return MapstructUtils.convert(this, tClass);
+    }
 }

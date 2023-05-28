@@ -31,7 +31,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     public Paging<SysDictDataVo> selectPageDictDataList(SysDictDataBo dictData, PageRequest<?> query) {
         return MapstructUtils.convert(
                 sysDictData.findByConditions(
-                        MapstructUtils.convert(dictData, SysDictData.class),
+                        dictData.to(SysDictData.class),
                         query.getPageNum(),
                         query.getPageSize()
                 ), SysDictDataVo.class);

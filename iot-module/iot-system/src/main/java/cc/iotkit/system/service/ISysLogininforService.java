@@ -5,6 +5,7 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysLogininforBo;
 import cc.iotkit.system.dto.vo.SysLogininforVo;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -38,7 +39,7 @@ public interface ISysLogininforService {
      * @param infoIds 需要删除的登录日志ID
      * @return 结果
      */
-    void deleteLogininforByIds(Long[] infoIds);
+    void deleteLogininforByIds(Collection<Long> infoIds);
 
     /**
      * 清空系统登录日志

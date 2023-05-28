@@ -23,10 +23,7 @@ import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -45,7 +42,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
     public Paging<SysDictTypeVo> selectPageDictTypeList(SysDictTypeBo dictType, PageRequest<?> query) {
         return MapstructUtils.convert(
                 sysDictTypeData.findByConditions(
-                        MapstructUtils.convert(dictType, SysDictType.class),
+                        dictType.to(SysDictType.class),
                         query.getPageNum(), query.getPageSize()),
                 SysDictTypeVo.class);
     }
@@ -60,7 +57,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
     public List<SysDictTypeVo> selectDictTypeList(SysDictTypeBo dictType) {
         return MapstructUtils.convert(
                 sysDictTypeData.findByConditions(
-                        MapstructUtils.convert(dictType, SysDictType.class)),
+                        dictType.to(SysDictType.class)),
                 SysDictTypeVo.class);
     }
 
@@ -115,7 +112,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
      * @param dictIds 需要删除的字典ID
      */
     @Override
-    public void deleteDictTypeByIds(Long[] dictIds) {
+    public void deleteDictTypeByIds(Collection<Long> dictIds) {
         for (Long dictId : dictIds) {
             SysDictType dictType = sysDictTypeData.findById(dictId);
             if (sysDictData.countByDicType(dictType.getDictType()) > 0) {

@@ -48,7 +48,7 @@ public interface ISysTenantPackageService {
     /**
      * 修改套餐状态
      */
-    int updatePackageStatus(SysTenantPackageBo bo);
+    void updatePackageStatus(SysTenantPackageBo bo);
 
     /**
      * 校验并批量删除租户套餐信息

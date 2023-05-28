@@ -1,5 +1,6 @@
 package cc.iotkit.system.dto.bo;
 
+import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.common.log.event.OperLogEvent;
 import cc.iotkit.model.system.SysOperLog;
 import io.github.linpeilie.annotations.AutoMapper;
@@ -19,10 +20,10 @@ import java.util.Map;
 
 @Data
 @AutoMappers({
-    @AutoMapper(target = SysOperLog.class, reverseConvertGenerate = false),
-    @AutoMapper(target = OperLogEvent.class)
+        @AutoMapper(target = SysOperLog.class, reverseConvertGenerate = false),
+        @AutoMapper(target = OperLogEvent.class)
 })
-public class SysOperLogBo {
+public class SysOperLogBo extends BaseDto {
 
     /**
      * 日志主键

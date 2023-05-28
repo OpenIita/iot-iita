@@ -27,7 +27,7 @@ public class SysRoleVo implements Serializable {
      * 角色ID
      */
     @ExcelProperty(value = "角色序号")
-    private Long roleId;
+    private Long id;
 
     /**
      * 角色名称

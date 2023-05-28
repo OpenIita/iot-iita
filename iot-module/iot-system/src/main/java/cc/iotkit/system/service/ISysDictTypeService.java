@@ -6,6 +6,7 @@ import cc.iotkit.system.dto.bo.SysDictTypeBo;
 import cc.iotkit.system.dto.vo.SysDictDataVo;
 import cc.iotkit.system.dto.vo.SysDictTypeVo;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -62,7 +63,7 @@ public interface ISysDictTypeService {
      *
      * @param dictIds 需要删除的字典ID
      */
-    void deleteDictTypeByIds(Long[] dictIds);
+    void deleteDictTypeByIds(Collection<Long> dictIds);
 
     /**
      * 重置字典缓存数据

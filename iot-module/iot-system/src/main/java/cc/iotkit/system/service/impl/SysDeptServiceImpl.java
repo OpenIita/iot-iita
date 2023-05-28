@@ -51,7 +51,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
     @Override
     public List<SysDeptVo> selectDeptList(SysDeptBo dept) {
         return MapstructUtils.convert(
-                sysDeptData.findDepts(MapstructUtils.convert(dept, SysDept.class))
+                sysDeptData.findDepts(dept.to(SysDept.class))
                 , SysDeptVo.class);
     }
 
@@ -63,7 +63,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
      */
     @Override
     public List<Tree<Long>> selectDeptTreeList(SysDeptBo bo) {
-        List<SysDept> depts = sysDeptData.findDepts(MapstructUtils.convert(bo, SysDept.class));
+        List<SysDept> depts = sysDeptData.findDepts(bo.to(SysDept.class));
         return buildDeptTreeSelect(depts);
     }
 
