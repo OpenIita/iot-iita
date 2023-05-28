@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
@@ -60,7 +61,11 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
                 int page = 1;
                 Paging<DeviceInfo> paged;
                 List<String> parentIds = new ArrayList<>();
-                while ((paged = deviceInfoData.findAll(page++, 1000)).getData().size() > 0) {
+                PageRequest<DeviceInfo> pageRequest = new PageRequest<>();
+                pageRequest.setPageSize(1000);
+
+                while ((paged = deviceInfoData.findAll(pageRequest)).getData().size() > 0) {
+                    pageRequest.setPageNum(page++);
                     List<DeviceInfo> devices = paged.getData();
                     for (DeviceInfo device : devices) {
                         //装载设备信息缓存
@@ -208,6 +213,11 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
+    public List<DeviceInfo> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public DeviceInfo save(DeviceInfo data) {
         DeviceInfo r = deviceInfoData.save(data);
         //更新设备信息缓存
@@ -218,8 +228,8 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
-    public DeviceInfo add(DeviceInfo data) {
-        return save(data);
+    public void batchSave(List<DeviceInfo> data) {
+
     }
 
     @Override
@@ -236,8 +246,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
-
+    public void deleteByIds(Collection<String> strings) {
     }
 
     @Override
@@ -251,8 +260,18 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
-    public Paging<DeviceInfo> findAll(int page, int size) {
-        return deviceInfoData.findAll(page, size);
+    public Paging<DeviceInfo> findAll(PageRequest<DeviceInfo> pageRequest) {
+        return deviceInfoData.findAll(pageRequest);
+    }
+
+    @Override
+    public List<DeviceInfo> findAllByCondition(DeviceInfo data) {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo findOneByCondition(DeviceInfo data) {
+        return null;
     }
 
     /**

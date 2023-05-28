@@ -1,5 +1,6 @@
 package cc.iotkit.common.api;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import lombok.Data;
 
 import java.util.Date;
@@ -38,4 +39,7 @@ public class BaseDto {
      */
     private Date updateTime;
 
+    public <T> T to(Class<T> tClass) {
+        return MapstructUtils.convert(this, tClass);
+    }
 }

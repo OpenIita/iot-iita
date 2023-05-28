@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.cache.CategoryCacheEvict;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -28,10 +30,20 @@ public class CategoryDataCache implements ICategoryData {
     }
 
     @Override
+    public List<Category> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public Category save(Category data) {
         data = categoryData.save(data);
         categoryCacheEvict.findById(data.getId());
         return data;
+    }
+
+    @Override
+    public void batchSave(List<Category> data) {
+
     }
 
     @Override
@@ -40,7 +52,7 @@ public class CategoryDataCache implements ICategoryData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
 
@@ -55,7 +67,18 @@ public class CategoryDataCache implements ICategoryData {
     }
 
     @Override
-    public Paging<Category> findAll(int page, int size) {
-        return categoryData.findAll(page, size);
+    public Paging<Category> findAll(PageRequest<Category> pageRequest) {
+        return categoryData.findAll(pageRequest);
     }
+
+    @Override
+    public List<Category> findAllByCondition(Category data) {
+        return null;
+    }
+
+    @Override
+    public Category findOneByCondition(Category data) {
+        return null;
+    }
+
 }

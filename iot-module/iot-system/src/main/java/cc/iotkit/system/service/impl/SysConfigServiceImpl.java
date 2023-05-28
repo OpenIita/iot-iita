@@ -16,8 +16,10 @@ import cc.iotkit.system.dto.bo.SysConfigBo;
 import cc.iotkit.system.dto.vo.SysConfigVo;
 import cc.iotkit.system.service.ISysConfigService;
 import cn.hutool.core.util.ObjectUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,8 +38,7 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
 
     @Override
     public Paging<SysConfigVo> selectPageConfigList(PageRequest<SysConfigBo> query) {
-        PageRequest<SysConfig> pageRequest = PageRequest.copyPageRequest(query,MapstructUtils.convert(query.getData(), SysConfig.class));
-        return MapstructUtils.convert(sysConfigData.findAll(pageRequest), SysConfigVo.class);
+        return sysConfigData.findAll(query.to(SysConfig.class)).to(SysConfigVo.class);
     }
 
     /**
@@ -48,7 +49,7 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      */
     @Override
     public SysConfigVo selectConfigById(Long configId) {
-        return MapstructUtils.convert(sysConfigData.findById(configId), SysConfigVo.class);
+        return sysConfigData.findById(configId).to(SysConfigVo.class);
     }
 
     /**
@@ -94,21 +95,8 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      */
     @Override
     public List<SysConfigVo> selectConfigList(SysConfigBo config) {
-//        LambdaQueryWrapper<SysConfig> lqw = buildQueryWrapper(config);
-//        return baseMapper.selectVoList(lqw);
         return new ArrayList<>();
     }
-
-//    private LambdaQueryWrapper<SysConfig> buildQueryWrapper(SysConfigBo bo) {
-//        Map<String, Object> params = bo.getParams();
-//        LambdaQueryWrapper<SysConfig> lqw = Wrappers.lambdaQuery();
-//        lqw.like(StringUtils.isNotBlank(bo.getConfigName()), SysConfig::getConfigName, bo.getConfigName());
-//        lqw.eq(StringUtils.isNotBlank(bo.getConfigType()), SysConfig::getConfigType, bo.getConfigType());
-//        lqw.like(StringUtils.isNotBlank(bo.getConfigKey()), SysConfig::getConfigKey, bo.getConfigKey());
-//        lqw.between(params.get("beginTime") != null && params.get("endTime") != null,
-//            SysConfig::getCreateTime, params.get("beginTime"), params.get("endTime"));
-//        return lqw;
-//    }
 
     /**
      * 新增参数配置
@@ -118,11 +106,6 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      */
     @Override
     public String insertConfig(SysConfigBo bo) {
-//        SysConfig config = MapstructUtils.convert(bo, SysConfig.class);
-//        int row = baseMapper.insert(config);
-//        if (row > 0) {
-//            return config.getConfigValue();
-//        }
         throw new BizException("操作失败");
     }
 
@@ -135,33 +118,18 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
 //    @CachePut(cacheNames = CacheNames.SYS_CONFIG, key = "#bo.configKey")
     @Override
     public String updateConfig(SysConfigBo bo) {
-//        int row = 0;
 //        SysConfig config = MapstructUtils.convert(bo, SysConfig.class);
-//        if (config.getId() != null) {
-//            SysConfig temp = sysConfigData.selectById(config.getConfigId());
-//            if (!StringUtils.equals(temp.getConfigKey(), config.getConfigKey())) {
-//                CacheUtils.evict(CacheNames.SYS_CONFIG, temp.getConfigKey());
+//        if (config.getId() == null) {
+//            SysConfig old = sysConfigData.findByConfigKey(bo.getConfigKey());
+//            if (old == null) {
+//                throw new BizException("操作失败,key不存在");
 //            }
-//            row = baseMapper.updateById(config);
-//        } else {
-//            row = baseMapper.update(config, new LambdaQueryWrapper<SysConfig>()
-//                    .eq(SysConfig::getConfigKey, config.getConfigKey()));
+//            config.setId(old.getId());
 //        }
-//        if (row > 0) {
-//            return config.getConfigValue();
-//        }
-//        throw new BizException("操作失败");
-        SysConfig config = MapstructUtils.convert(bo, SysConfig.class);
-        if (config.getId() == null) {
-            SysConfig old = sysConfigData.findByConfigKey(bo.getConfigKey());
-            if (old == null) {
-                throw new BizException("操作失败,key不存在");
-            }
-            config.setId(old.getId());
-        }
-
-        sysConfigData.save(config);
-        return config.getConfigValue();
+//
+//        sysConfigData.save(config);
+//        return config.getConfigValue();
+        return "";
     }
 
     /**
@@ -197,9 +165,10 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      */
     @Override
     public boolean checkConfigKeyUnique(SysConfigBo config) {
-        long configId = ObjectUtil.isNull(config.getId()) ? -1L : config.getId();
-        SysConfig old = sysConfigData.findByConfigKey(config.getConfigKey());
-        return !ObjectUtil.isNotNull(old) || old.getId() == configId;
+//        long configId = ObjectUtil.isNull(config.getId()) ? -1L : config.getId();
+//        SysConfig old = sysConfigData.findByConfigKey(config.getConfigKey());
+//        return !ObjectUtil.isNotNull(old) || old.getId() == configId;
+        return true;
     }
 
     /**

@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.dao.UserInfoRepository;
 import cc.iotkit.data.model.TbUserInfo;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,6 +55,11 @@ public class UserInfoDataImpl implements IUserInfoData {
     }
 
     @Override
+    public List<UserInfo> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public UserInfo save(UserInfo data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -63,8 +70,18 @@ public class UserInfoDataImpl implements IUserInfoData {
     }
 
     @Override
+    public void batchSave(List<UserInfo> data) {
+
+    }
+
+    @Override
     public void deleteById(String s) {
         userInfoRepository.deleteById(s);
+    }
+
+    @Override
+    public void deleteByIds(Collection<String> strings) {
+
     }
 
     @Override
@@ -80,6 +97,21 @@ public class UserInfoDataImpl implements IUserInfoData {
     @Override
     public List<UserInfo> findAll() {
         return UserInfoMapper.toDto(userInfoRepository.findAll());
+    }
+
+    @Override
+    public Paging<UserInfo> findAll(PageRequest<UserInfo> pageRequest) {
+        return null;
+    }
+
+    @Override
+    public List<UserInfo> findAllByCondition(UserInfo data) {
+        return null;
+    }
+
+    @Override
+    public UserInfo findOneByCondition(UserInfo data) {
+        return null;
     }
 
     @Override

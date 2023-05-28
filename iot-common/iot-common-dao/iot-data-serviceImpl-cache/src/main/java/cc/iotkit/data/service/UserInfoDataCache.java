@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.cache.UserInfoCacheEvict;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -43,6 +45,11 @@ public class UserInfoDataCache implements IUserInfoData {
     }
 
     @Override
+    public List<UserInfo> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public UserInfo save(UserInfo data) {
         UserInfo userInfo = userInfoData.save(data);
         //清除缓存
@@ -51,8 +58,8 @@ public class UserInfoDataCache implements IUserInfoData {
     }
 
     @Override
-    public UserInfo add(UserInfo data) {
-        return userInfoData.add(data);
+    public void batchSave(List<UserInfo> data) {
+
     }
 
     @Override
@@ -61,7 +68,7 @@ public class UserInfoDataCache implements IUserInfoData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
 
@@ -76,7 +83,18 @@ public class UserInfoDataCache implements IUserInfoData {
     }
 
     @Override
-    public Paging<UserInfo> findAll(int page, int size) {
-        return userInfoData.findAll(page, size);
+    public Paging<UserInfo> findAll(PageRequest<UserInfo> pageRequest) {
+        return userInfoData.findAll(pageRequest);
     }
+
+    @Override
+    public List<UserInfo> findAllByCondition(UserInfo data) {
+        return null;
+    }
+
+    @Override
+    public UserInfo findOneByCondition(UserInfo data) {
+        return null;
+    }
+
 }

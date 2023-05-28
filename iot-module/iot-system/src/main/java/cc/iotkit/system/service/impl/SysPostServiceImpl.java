@@ -2,18 +2,17 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.system.ISysPostData;
 import cc.iotkit.model.system.SysPost;
 import cc.iotkit.system.dto.bo.SysPostBo;
 import cc.iotkit.system.dto.vo.SysPostVo;
-import cc.iotkit.system.mapper.SysPostMapper;
-import cn.hutool.core.util.ObjectUtil;
 import cc.iotkit.system.service.ISysPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -25,14 +24,11 @@ import java.util.List;
 @Service
 public class SysPostServiceImpl implements ISysPostService {
 
-    private final SysPostMapper baseMapper;
-    private final SysUserPostMapper userPostMapper;
+    private final ISysPostData sysPostData;
 
     @Override
     public Paging<SysPostVo> selectPagePostList(SysPostBo post, PageRequest<?> query) {
-        LambdaQueryWrapper<SysPost> lqw = buildQueryWrapper(post);
-        Page<SysPostVo> page = baseMapper.selectVoPage(query.build(), lqw);
-        return TableDataInfo.build(page);
+        return new Paging<>();
     }
 
     /**
@@ -43,17 +39,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public List<SysPostVo> selectPostList(SysPostBo post) {
-        LambdaQueryWrapper<SysPost> lqw = buildQueryWrapper(post);
-        return baseMapper.selectVoList(lqw);
-    }
-
-    private LambdaQueryWrapper<SysPost> buildQueryWrapper(SysPostBo bo) {
-        LambdaQueryWrapper<SysPost> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getPostCode()), SysPost::getPostCode, bo.getPostCode());
-        lqw.like(StringUtils.isNotBlank(bo.getPostName()), SysPost::getPostName, bo.getPostName());
-        lqw.eq(StringUtils.isNotBlank(bo.getStatus()), SysPost::getStatus, bo.getStatus());
-        lqw.orderByAsc(SysPost::getPostSort);
-        return lqw;
+        return new ArrayList<>();
     }
 
     /**
@@ -63,7 +49,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public List<SysPostVo> selectPostAll() {
-        return baseMapper.selectVoList(new QueryWrapper<>());
+        return MapstructUtils.convert(sysPostData.findAll(), SysPostVo.class);
     }
 
     /**
@@ -74,7 +60,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public SysPostVo selectPostById(Long postId) {
-        return baseMapper.selectVoById(postId);
+        return sysPostData.findById(postId).to(SysPostVo.class);
     }
 
     /**
@@ -85,7 +71,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public List<Long> selectPostListByUserId(Long userId) {
-        return baseMapper.selectPostListByUserId(userId);
+        return new ArrayList<>();
     }
 
     /**
@@ -96,10 +82,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public boolean checkPostNameUnique(SysPostBo post) {
-        boolean exist = baseMapper.exists(new LambdaQueryWrapper<SysPost>()
-            .eq(SysPost::getPostName, post.getPostName())
-            .ne(ObjectUtil.isNotNull(post.getPostId()), SysPost::getPostId, post.getPostId()));
-        return !exist;
+        return false;
     }
 
     /**
@@ -110,10 +93,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public boolean checkPostCodeUnique(SysPostBo post) {
-        boolean exist = baseMapper.exists(new LambdaQueryWrapper<SysPost>()
-            .eq(SysPost::getPostCode, post.getPostCode())
-            .ne(ObjectUtil.isNotNull(post.getPostId()), SysPost::getPostId, post.getPostId()));
-        return !exist;
+        return false;
     }
 
     /**
@@ -124,7 +104,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public long countUserPostById(Long postId) {
-        return userPostMapper.selectCount(new LambdaQueryWrapper<SysUserPost>().eq(SysUserPost::getPostId, postId));
+        return 0;
     }
 
     /**
@@ -134,8 +114,8 @@ public class SysPostServiceImpl implements ISysPostService {
      * @return 结果
      */
     @Override
-    public int deletePostById(Long postId) {
-        return baseMapper.deleteById(postId);
+    public void deletePostById(Long postId) {
+        sysPostData.deleteById(postId);
     }
 
     /**
@@ -145,14 +125,7 @@ public class SysPostServiceImpl implements ISysPostService {
      * @return 结果
      */
     @Override
-    public int deletePostByIds(Long[] postIds) {
-        for (Long postId : postIds) {
-            SysPost post = baseMapper.selectById(postId);
-            if (countUserPostById(postId) > 0) {
-                throw new BizException(String.format("%1$s已分配,不能删除", post.getPostName()));
-            }
-        }
-        return baseMapper.deleteBatchIds(Arrays.asList(postIds));
+    public void deletePostByIds(Collection<Long> postIds) {
     }
 
     /**
@@ -162,9 +135,8 @@ public class SysPostServiceImpl implements ISysPostService {
      * @return 结果
      */
     @Override
-    public int insertPost(SysPostBo bo) {
-        SysPost post = MapstructUtils.convert(bo, SysPost.class);
-        return baseMapper.insert(post);
+    public void insertPost(SysPostBo bo) {
+        sysPostData.save(bo.to(SysPost.class));
     }
 
     /**
@@ -174,8 +146,7 @@ public class SysPostServiceImpl implements ISysPostService {
      * @return 结果
      */
     @Override
-    public int updatePost(SysPostBo bo) {
-        SysPost post = MapstructUtils.convert(bo, SysPost.class);
-        return baseMapper.updateById(post);
+    public void updatePost(SysPostBo bo) {
+        sysPostData.save(bo.to(SysPost.class));
     }
 }

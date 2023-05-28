@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.data.cache.ThingModelCacheEvict;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -28,6 +30,11 @@ public class ThingModelDataCache implements IThingModelData {
     }
 
     @Override
+    public List<ThingModel> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public ThingModel save(ThingModel data) {
         data = thingModelData.save(data);
         thingModelCacheEvict.findById(data.getId());
@@ -35,8 +42,8 @@ public class ThingModelDataCache implements IThingModelData {
     }
 
     @Override
-    public ThingModel add(ThingModel data) {
-        return thingModelData.add(data);
+    public void batchSave(List<ThingModel> data) {
+
     }
 
     @Override
@@ -45,7 +52,7 @@ public class ThingModelDataCache implements IThingModelData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
 
@@ -60,8 +67,18 @@ public class ThingModelDataCache implements IThingModelData {
     }
 
     @Override
-    public Paging<ThingModel> findAll(int page, int size) {
-        return thingModelData.findAll(page, size);
+    public Paging<ThingModel> findAll(PageRequest<ThingModel> pageRequest) {
+        return thingModelData.findAll(pageRequest);
+    }
+
+    @Override
+    public List<ThingModel> findAllByCondition(ThingModel data) {
+        return null;
+    }
+
+    @Override
+    public ThingModel findOneByCondition(ThingModel data) {
+        return null;
     }
 
 }

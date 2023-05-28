@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.data.manager.ISpaceData;
 import cc.iotkit.data.cache.SpaceCacheEvict;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -58,6 +60,11 @@ public class SpaceDataCache implements ISpaceData {
     }
 
     @Override
+    public List<Space> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public Space save(Space data) {
         data = spaceData.save(data);
         spaceCacheEvict.findById(data.getId());
@@ -65,8 +72,8 @@ public class SpaceDataCache implements ISpaceData {
     }
 
     @Override
-    public Space add(Space data) {
-        return spaceData.add(data);
+    public void batchSave(List<Space> data) {
+
     }
 
     @Override
@@ -75,7 +82,7 @@ public class SpaceDataCache implements ISpaceData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
 
@@ -90,7 +97,18 @@ public class SpaceDataCache implements ISpaceData {
     }
 
     @Override
-    public Paging<Space> findAll(int page, int size) {
-        return spaceData.findAll(page, size);
+    public Paging<Space> findAll(PageRequest<Space> pageRequest) {
+        return spaceData.findAll(pageRequest);
     }
+
+    @Override
+    public List<Space> findAllByCondition(Space data) {
+        return null;
+    }
+
+    @Override
+    public Space findOneByCondition(Space data) {
+        return null;
+    }
+
 }

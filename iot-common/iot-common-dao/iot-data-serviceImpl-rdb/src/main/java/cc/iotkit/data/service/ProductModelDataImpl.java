@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProductModelData;
 import cc.iotkit.data.dao.ProductModelRepository;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +40,11 @@ public class ProductModelDataImpl implements IProductModelData {
     }
 
     @Override
+    public List<ProductModel> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public ProductModel save(ProductModel data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -47,6 +54,11 @@ public class ProductModelDataImpl implements IProductModelData {
         return null;
     }
 
+    @Override
+    public void batchSave(List<ProductModel> data) {
+
+    }
+
 
     @Override
     public void deleteById(String s) {
@@ -54,7 +66,7 @@ public class ProductModelDataImpl implements IProductModelData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
 
@@ -69,7 +81,18 @@ public class ProductModelDataImpl implements IProductModelData {
     }
 
     @Override
-    public Paging<ProductModel> findAll(int page, int size) {
-        return new Paging<>();
+    public Paging<ProductModel> findAll(PageRequest<ProductModel> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<ProductModel> findAllByCondition(ProductModel data) {
+        return null;
+    }
+
+    @Override
+    public ProductModel findOneByCondition(ProductModel data) {
+        return null;
+    }
+
 }

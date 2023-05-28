@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 /**
  * 公告 信息操作处理
  *
@@ -74,7 +76,7 @@ public class SysNoticeController extends BaseController {
     @SaCheckPermission("system:notice:remove")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")
-    public void remove(@PathVariable Long[] noticeIds) {
+    public void remove(@PathVariable Collection<Long> noticeIds) {
         noticeService.deleteNoticeByIds(noticeIds);
     }
 }

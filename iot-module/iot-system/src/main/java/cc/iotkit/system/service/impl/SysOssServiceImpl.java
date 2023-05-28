@@ -11,8 +11,8 @@ import cc.iotkit.common.oss.factory.OssFactory;
 import cc.iotkit.common.service.OssService;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
-import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.system.ISysOssData;
 import cc.iotkit.model.system.SysOss;
 import cc.iotkit.system.dto.bo.SysOssBo;
 import cc.iotkit.system.dto.vo.SysOssVo;
@@ -39,15 +39,11 @@ import java.util.Map;
 @Service
 public class SysOssServiceImpl implements ISysOssService, OssService {
 
-    private final SysOssMapper baseMapper;
+    private final ISysOssData sysOssData;
 
     @Override
     public Paging<SysOssVo> queryPageList(SysOssBo bo, PageRequest<?> query) {
-        LambdaQueryWrapper<SysOss> lqw = buildQueryWrapper(bo);
-        Page<SysOssVo> result = baseMapper.selectVoPage(query.build(), lqw);
-        List<SysOssVo> filterResult = StreamUtils.toList(result.getRecords(), this::matchingUrl);
-        result.setRecords(filterResult);
-        return TableDataInfo.build(result);
+        return new Paging<>();
     }
 
     @Override
@@ -74,24 +70,10 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
         return String.join(StringUtils.SEPARATOR, list);
     }
 
-    private LambdaQueryWrapper<SysOss> buildQueryWrapper(SysOssBo bo) {
-        Map<String, Object> params = bo.getParams();
-        LambdaQueryWrapper<SysOss> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getFileName()), SysOss::getFileName, bo.getFileName());
-        lqw.like(StringUtils.isNotBlank(bo.getOriginalName()), SysOss::getOriginalName, bo.getOriginalName());
-        lqw.eq(StringUtils.isNotBlank(bo.getFileSuffix()), SysOss::getFileSuffix, bo.getFileSuffix());
-        lqw.eq(StringUtils.isNotBlank(bo.getUrl()), SysOss::getUrl, bo.getUrl());
-        lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            SysOss::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
-        lqw.eq(ObjectUtil.isNotNull(bo.getCreateBy()), SysOss::getCreateBy, bo.getCreateBy());
-        lqw.eq(StringUtils.isNotBlank(bo.getService()), SysOss::getService, bo.getService());
-        return lqw;
-    }
-
     @Cacheable(cacheNames = CacheNames.SYS_OSS, key = "#ossId")
     @Override
     public SysOssVo getById(Long ossId) {
-        return baseMapper.selectVoById(ossId);
+        return sysOssData.findById(ossId).to(SysOssVo.class);
     }
 
     @Override
@@ -116,22 +98,22 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
         oss.setFileName(uploadResult.getFilename());
         oss.setOriginalName(originalfileName);
         oss.setService(storage.getConfigKey());
-        baseMapper.insert(oss);
+        sysOssData.save(oss);
         SysOssVo sysOssVo = MapstructUtils.convert(oss, SysOssVo.class);
         return this.matchingUrl(sysOssVo);
     }
 
     @Override
-    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
+    public void deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if (isValid) {
             // 做一些业务上的校验,判断是否需要校验
         }
-        List<SysOss> list = baseMapper.selectBatchIds(ids);
+        List<SysOss> list = sysOssData.findByIds(ids);
         for (SysOss sysOss : list) {
             OssClient storage = OssFactory.instance(sysOss.getService());
             storage.delete(sysOss.getUrl());
         }
-        return baseMapper.deleteBatchIds(ids) > 0;
+        sysOssData.deleteByIds(ids);
     }
 
     /**

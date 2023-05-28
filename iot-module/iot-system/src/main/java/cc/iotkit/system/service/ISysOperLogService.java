@@ -5,6 +5,7 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysOperLogBo;
 import cc.iotkit.system.dto.vo.SysOperLogVo;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public interface ISysOperLogService {
      * @param operIds 需要删除的操作日志ID
      * @return 结果
      */
-    int deleteOperLogByIds(Long[] operIds);
+    void deleteOperLogByIds(Collection<Long> operIds);
 
     /**
      * 查询操作日志详细

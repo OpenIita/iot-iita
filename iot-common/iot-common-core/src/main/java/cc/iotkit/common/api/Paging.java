@@ -9,6 +9,7 @@
  */
 package cc.iotkit.common.api;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,4 +25,7 @@ public class Paging<T> {
 
     private List<T> data;
 
+    public <VO> Paging<VO> to(Class<VO> voClass) {
+        return MapstructUtils.convert(this, voClass);
+    }
 }

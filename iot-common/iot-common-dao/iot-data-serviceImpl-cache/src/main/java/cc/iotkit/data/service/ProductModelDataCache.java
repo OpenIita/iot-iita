@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.data.manager.IProductModelData;
 import cc.iotkit.data.cache.ProductModelCacheEvict;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -38,6 +40,11 @@ public class ProductModelDataCache implements IProductModelData {
     }
 
     @Override
+    public List<ProductModel> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public ProductModel save(ProductModel data) {
         ProductModel productModel = productModelData.save(data);
         productModelCacheEvict.findByModel(data.getModel());
@@ -45,8 +52,8 @@ public class ProductModelDataCache implements IProductModelData {
     }
 
     @Override
-    public ProductModel add(ProductModel data) {
-        return productModelData.add(data);
+    public void batchSave(List<ProductModel> data) {
+
     }
 
     @Override
@@ -55,7 +62,7 @@ public class ProductModelDataCache implements IProductModelData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
 
@@ -70,7 +77,18 @@ public class ProductModelDataCache implements IProductModelData {
     }
 
     @Override
-    public Paging<ProductModel> findAll(int page, int size) {
-        return productModelData.findAll(page, size);
+    public Paging<ProductModel> findAll(PageRequest<ProductModel> pageRequest) {
+        return productModelData.findAll(pageRequest);
     }
+
+    @Override
+    public List<ProductModel> findAllByCondition(ProductModel data) {
+        return null;
+    }
+
+    @Override
+    public ProductModel findOneByCondition(ProductModel data) {
+        return null;
+    }
+
 }
