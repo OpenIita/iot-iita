@@ -27,6 +27,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 
+import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
+
 @Primary
 @Service
 @RequiredArgsConstructor

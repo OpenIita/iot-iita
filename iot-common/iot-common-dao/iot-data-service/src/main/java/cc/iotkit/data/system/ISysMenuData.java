@@ -20,4 +20,6 @@ public interface ISysMenuData extends ICommonData<SysMenu, Long> {
      */
     List<SysMenu> findByUserId(Long userId);
 
+    List<SysMenu> selectMenuList(SysMenu menu, Long userId, boolean isSuperAdmin);
+
 }
