@@ -1,15 +1,12 @@
 package cc.iotkit.data.model;
 
-import cc.iotkit.data.model.BaseEntity;
-import cc.iotkit.model.system.SysDictData;
 import cc.iotkit.model.system.SysMenu;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 菜单权限表 sys_menu
@@ -28,16 +25,21 @@ public class TbSysMenu extends BaseEntity {
      * 菜单ID
      */
     @Id
+    @GeneratedValue(generator = "SnowflakeIdGenerator")
+    @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
+    @Column(name = "menu_id")
     private Long menuId;
 
     /**
      * 父菜单ID
      */
+    @Column(name = "parent_id")
     private Long parentId;
 
     /**
      * 菜单名称
      */
+    @Column(name = "menu_name")
     private String menuName;
 
     /**

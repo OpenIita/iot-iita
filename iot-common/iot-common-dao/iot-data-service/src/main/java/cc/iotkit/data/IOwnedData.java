@@ -9,10 +9,10 @@
  */
 package cc.iotkit.data;
 
-import cc.iotkit.data.ICommonData;
-import cc.iotkit.model.Owned;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.model.Owned;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,13 +23,21 @@ public interface IOwnedData<T extends Owned<ID>, ID> extends ICommonData<T, ID> 
     /**
      * 按所属用户取数据
      */
-    List<T> findByUid(String uid);
+    default List<T> findByUid(String uid) {
+        return Collections.EMPTY_LIST;
 
-    Paging<T> findByUid(String uid, int page, int size);
+    }
+
+    default Paging<T> findByUid(String uid, int page, int size) {
+        return null;
+    }
 
     /**
      * 按所属用户统计总数
      */
-    long countByUid(String uid);
+    default long countByUid(String uid) {
+        return 0L;
+
+    }
 
 }

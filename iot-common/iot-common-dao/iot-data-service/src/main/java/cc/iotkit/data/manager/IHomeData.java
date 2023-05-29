@@ -15,8 +15,14 @@ import cc.iotkit.model.space.Home;
 
 public interface IHomeData extends IOwnedData<Home, String> {
 
-    Home findByUidAndCurrent(String uid, boolean current);
+    default Home findByUidAndCurrent(String uid, boolean current) {
+        return null;
 
-    Home findByUidAndId(String uid, String id);
+    }
+
+    default Home findByUidAndId(String uid, String id) {
+        return null;
+
+    }
 
 }
