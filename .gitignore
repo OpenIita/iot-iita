@@ -26,3 +26,4 @@ target
 data/elasticsearch
 .init
 *.db
+.flattened-pom.xml
