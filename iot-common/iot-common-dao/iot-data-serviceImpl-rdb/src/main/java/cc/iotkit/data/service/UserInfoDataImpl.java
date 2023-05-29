@@ -84,10 +84,6 @@ public class UserInfoDataImpl implements IUserInfoData {
 
     }
 
-    @Override
-    public void deleteByIds(String[] strings) {
-
-    }
 
     @Override
     public long count() {
@@ -114,10 +110,5 @@ public class UserInfoDataImpl implements IUserInfoData {
         return null;
     }
 
-    @Override
-    public Paging<UserInfo> findAll(int page, int size) {
-        Page<TbUserInfo> paged = userInfoRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(paged.getTotalElements(),
-                UserInfoMapper.toDto(paged.getContent()));
-    }
+
 }

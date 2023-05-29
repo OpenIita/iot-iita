@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.dao.RuleInfoRepository;
 import cc.iotkit.data.model.TbRuleInfo;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -77,6 +79,11 @@ public class RuleInfoDataImpl implements IRuleInfoData {
     }
 
     @Override
+    public List<RuleInfo> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public RuleInfo save(RuleInfo data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -87,14 +94,21 @@ public class RuleInfoDataImpl implements IRuleInfoData {
     }
 
     @Override
+    public void batchSave(List<RuleInfo> data) {
+
+    }
+
+    @Override
     public void deleteById(String s) {
         ruleInfoRepository.deleteById(s);
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
+
 
     @Override
     public long count() {
@@ -107,10 +121,19 @@ public class RuleInfoDataImpl implements IRuleInfoData {
     }
 
     @Override
-    public Paging<RuleInfo> findAll(int page, int size) {
-        Page<TbRuleInfo> paged = ruleInfoRepository.
-                findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(paged.getTotalElements(),
-                RuleInfoMapper.toDto(paged.getContent()));
+    public Paging<RuleInfo> findAll(PageRequest<RuleInfo> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<RuleInfo> findAllByCondition(RuleInfo data) {
+        return null;
+    }
+
+    @Override
+    public RuleInfo findOneByCondition(RuleInfo data) {
+        return null;
+    }
+
+
 }

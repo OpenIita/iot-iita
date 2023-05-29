@@ -15,6 +15,7 @@ import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysConfig;
 import cn.hutool.core.collection.CollUtil;
 import com.querydsl.core.types.Predicate;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,9 +23,7 @@ import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
+
 import org.springframework.stereotype.Service;
 
 import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
@@ -39,14 +38,14 @@ public class SysConfigDataImpl implements ISysConfigData {
 
     @Override
     public SysConfig findById(Long id) {
-       TbSysConfig tbSysConfig =  alertConfigRepository.findById(id).orElseThrow(() ->
-           new BizException(ErrCode.DATA_NOT_EXIST));
-        return MapstructUtils.convert(tbSysConfig,SysConfig.class);
+        TbSysConfig tbSysConfig = alertConfigRepository.findById(id).orElseThrow(() ->
+                new BizException(ErrCode.DATA_NOT_EXIST));
+        return MapstructUtils.convert(tbSysConfig, SysConfig.class);
     }
 
     @Override
     public SysConfig save(SysConfig data) {
-        alertConfigRepository.save(MapstructUtils.convert(data,TbSysConfig.class));
+        alertConfigRepository.save(MapstructUtils.convert(data, TbSysConfig.class));
         return data;
     }
 
@@ -84,26 +83,17 @@ public class SysConfigDataImpl implements ISysConfigData {
     public Paging<SysConfig> findAll(PageRequest<SysConfig> pageRequest) {
         SysConfig query = pageRequest.getData();
         Predicate predicate = PredicateBuilder.instance(tbSysConfig.configId.isNotNull())
-            .and(StringUtils.isNotEmpty(query.getConfigKey()),() -> tbSysConfig.configKey.eq(query.getConfigKey()))
+                .and(StringUtils.isNotEmpty(query.getConfigKey()), () -> tbSysConfig.configKey.eq(query.getConfigKey()))
 
-            .build();
+                .build();
 
-        List<Order> orders = new ArrayList<>();
-        Map<String,String> sortMap = pageRequest.getSortMap();
-        if (CollUtil.isNotEmpty(sortMap)){
-            sortMap.forEach((k,v) -> {
-                orders.add(new Order(Direction.ASC, k));
-            });
-        }
         // TODO: 2023/5/26 抽成通用工具类方法
 
-
-        alertConfigRepository.findAll(predicate,PageBuilder.toPageable(pageRequest, Sort.by(orders)));
-
-
+        alertConfigRepository.findAll(predicate, PageBuilder.toPageable(pageRequest));
 
         throw new BizException(ErrCode.UNSUPPORTED_OPERATION_EXCEPTION);
     }
+
 
     @Override
     public List<SysConfig> findAllByCondition(SysConfig data) {

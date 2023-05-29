@@ -29,7 +29,7 @@ public class SysRoleBo extends BaseDto {
      * 角色ID
      */
     @NotNull(message = "角色ID不能为空", groups = { EditGroup.class })
-    private Long id;
+    private Long roleId;
 
     /**
      * 角色名称

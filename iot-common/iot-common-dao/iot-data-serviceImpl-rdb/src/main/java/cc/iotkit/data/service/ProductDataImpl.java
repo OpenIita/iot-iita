@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.dao.ProductRepository;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Primary
@@ -51,9 +53,19 @@ public class ProductDataImpl implements IProductData {
     }
 
     @Override
+    public List<Product> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public Product save(Product data) {
         productRepository.save(MapstructUtils.convert(data, TbProduct.class));
         return data;
+    }
+
+    @Override
+    public void batchSave(List<Product> data) {
+
     }
 
 
@@ -63,9 +75,11 @@ public class ProductDataImpl implements IProductData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
+
 
     @Override
     public long count() {
@@ -78,10 +92,19 @@ public class ProductDataImpl implements IProductData {
     }
 
     @Override
-    public Paging<Product> findAll(int page, int size) {
-        Page<TbProduct> productPage = productRepository.findAll(
-                Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(productPage.getTotalElements(),
-                MapstructUtils.convert(productPage.getContent(), Product.class));
+    public Paging<Product> findAll(PageRequest<Product> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<Product> findAllByCondition(Product data) {
+        return null;
+    }
+
+    @Override
+    public Product findOneByCondition(Product data) {
+        return null;
+    }
+
+
 }

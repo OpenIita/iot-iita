@@ -9,6 +9,7 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.AuthUtil;
@@ -214,9 +215,8 @@ public class ProtocolController {
 
     @PostMapping("/components/{size}/{page}")
     public Paging<ProtocolComponent> getComponents(
-            @PathVariable("size") int size,
-            @PathVariable("page") int page) {
-        Paging<ProtocolComponent> components = protocolComponentData.findAll(page, size);
+            PageRequest<ProtocolComponent> query ) {
+        Paging<ProtocolComponent> components = protocolComponentData.findAll(query);
         components.getData().forEach(c -> c.setState(
                 componentManager.isRunning(c.getId()) ?
                         ProtocolComponent.STATE_RUNNING : ProtocolComponent.STATE_STOPPED
@@ -224,11 +224,9 @@ public class ProtocolController {
         return components;
     }
 
-    @PostMapping("/converters/{size}/{page}")
-    public Paging<ProtocolConverter> getConverters(
-            @PathVariable("size") int size,
-            @PathVariable("page") int page) {
-        return protocolConverterData.findAll(page, size);
+    @PostMapping("/converters/list")
+    public Paging<ProtocolConverter> getConverters(PageRequest<ProtocolConverter> query) {
+        return protocolConverterData.findAll(query);
     }
 
     @PostMapping("/addConverter")

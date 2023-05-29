@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.data.manager.ITaskInfoData;
 import cc.iotkit.data.dao.TaskInfoRepository;
 import cc.iotkit.data.model.TbTaskInfo;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,6 +58,11 @@ public class TaskInfoDataImpl implements ITaskInfoData {
     }
 
     @Override
+    public List<TaskInfo> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public TaskInfo save(TaskInfo data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -66,14 +73,21 @@ public class TaskInfoDataImpl implements ITaskInfoData {
     }
 
     @Override
+    public void batchSave(List<TaskInfo> data) {
+
+    }
+
+    @Override
     public void deleteById(String s) {
         taskInfoRepository.deleteById(s);
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
+
 
     @Override
     public long count() {
@@ -86,8 +100,20 @@ public class TaskInfoDataImpl implements ITaskInfoData {
     }
 
     @Override
-    public Paging<TaskInfo> findAll(int page, int size) {
-        Page<TbTaskInfo> paged = taskInfoRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(paged.getTotalElements(), TaskInfoMapper.toDto(paged.getContent()));
+    public Paging<TaskInfo> findAll(PageRequest<TaskInfo> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<TaskInfo> findAllByCondition(TaskInfo data) {
+        return null;
+    }
+
+    @Override
+    public TaskInfo findOneByCondition(TaskInfo data) {
+        return null;
+    }
+
+
+
 }

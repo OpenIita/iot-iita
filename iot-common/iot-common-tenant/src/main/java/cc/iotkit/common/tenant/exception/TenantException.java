@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class TenantException extends BizException {
 
-    public TenantException(String code, String message) {
+    public TenantException(Integer code, String message) {
         super("tenant", code, message);
     }
 }

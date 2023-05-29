@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IHomeData;
 import cc.iotkit.data.dao.HomeRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,12 +54,22 @@ public class HomeDataImpl implements IHomeData {
     }
 
     @Override
+    public List<Home> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public Home save(Home data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
         homeRepository.save(MapstructUtils.convert(data, TbHome.class));
         return data;
+    }
+
+    @Override
+    public void batchSave(List<Home> data) {
+
     }
 
 
@@ -67,9 +79,11 @@ public class HomeDataImpl implements IHomeData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
+
 
     @Override
     public long count() {
@@ -82,7 +96,19 @@ public class HomeDataImpl implements IHomeData {
     }
 
     @Override
-    public Paging<Home> findAll(int page, int size) {
-        return new Paging<>();
+    public Paging<Home> findAll(PageRequest<Home> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<Home> findAllByCondition(Home data) {
+        return null;
+    }
+
+    @Override
+    public Home findOneByCondition(Home data) {
+        return null;
+    }
+
+
 }

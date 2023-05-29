@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IChannelData;
 import cc.iotkit.data.dao.ChannelRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +36,11 @@ public class ChannelDataImpl implements IChannelData {
     }
 
     @Override
+    public List<Channel> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public Channel save(Channel data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -44,6 +51,11 @@ public class ChannelDataImpl implements IChannelData {
         return data;
     }
 
+    @Override
+    public void batchSave(List<Channel> data) {
+
+    }
+
 
     @Override
     public void deleteById(String id) {
@@ -51,9 +63,10 @@ public class ChannelDataImpl implements IChannelData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
 
     @Override
     public long count() {
@@ -66,10 +79,19 @@ public class ChannelDataImpl implements IChannelData {
     }
 
     @Override
-    public Paging<Channel> findAll(int page, int size) {
-        Page<TbChannel> tbDeviceConfigs = channelRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(
-                tbDeviceConfigs.getTotalElements(),
-                MapstructUtils.convert(tbDeviceConfigs.getContent(), Channel.class));
+    public Paging<Channel> findAll(PageRequest<Channel> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<Channel> findAllByCondition(Channel data) {
+        return null;
+    }
+
+    @Override
+    public Channel findOneByCondition(Channel data) {
+        return null;
+    }
+
+
 }

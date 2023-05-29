@@ -10,6 +10,8 @@
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.data.ICommonData;
+import cc.iotkit.data.manager.*;
 import cc.iotkit.model.Id;
 import cc.iotkit.model.OauthClient;
 import cc.iotkit.model.UserInfo;
@@ -156,7 +158,7 @@ public class ExampleDataInit implements SmartInitializingSingleton {
         String json = FileUtils.readFileToString(new File("./data/init/" + name + ".json"), Charsets.UTF_8);
         List list = (List) JsonUtils.parseObject(json, type);
         for (Object obj : list) {
-            service.add((Id) obj);
+            service.save((Id) obj);
         }
         return (T) list;
     }

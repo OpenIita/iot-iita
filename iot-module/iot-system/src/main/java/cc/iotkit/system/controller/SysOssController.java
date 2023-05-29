@@ -87,7 +87,7 @@ public class SysOssController extends BaseController {
     @SaCheckPermission("system:oss:download")
     @GetMapping("/download/{ossId}")
     public void download(@PathVariable Long ossId, HttpServletResponse response) throws IOException {
-        ossService.download(ossId, response);
+        ossService.download(ossId);
     }
 
     /**

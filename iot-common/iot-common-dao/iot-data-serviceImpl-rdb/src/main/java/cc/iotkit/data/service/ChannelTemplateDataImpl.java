@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IChannelTemplateData;
 import cc.iotkit.data.dao.ChannelTemplateRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,12 +37,22 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData {
     }
 
     @Override
+    public List<ChannelTemplate> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public ChannelTemplate save(ChannelTemplate data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
         channelTemplateRepository.save(MapstructUtils.convert(data, TbChannelTemplate.class));
         return data;
+    }
+
+    @Override
+    public void batchSave(List<ChannelTemplate> data) {
+
     }
 
 
@@ -50,9 +62,11 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
+
 
     @Override
     public long count() {
@@ -67,10 +81,19 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData {
     }
 
     @Override
-    public Paging<ChannelTemplate> findAll(int page, int size) {
-        Page<TbChannelTemplate> tbDeviceConfigs = channelTemplateRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(
-                tbDeviceConfigs.getTotalElements(),
-                MapstructUtils.convert(tbDeviceConfigs.getContent(), ChannelTemplate.class));
+    public Paging<ChannelTemplate> findAll(PageRequest<ChannelTemplate> pageRequest) {
+       return null;
     }
+
+    @Override
+    public List<ChannelTemplate> findAllByCondition(ChannelTemplate data) {
+        return null;
+    }
+
+    @Override
+    public ChannelTemplate findOneByCondition(ChannelTemplate data) {
+        return null;
+    }
+
+
 }

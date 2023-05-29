@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProtocolConverterData;
 import cc.iotkit.data.dao.ProtocolConverterRepository;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,6 +59,11 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
     }
 
     @Override
+    public List<ProtocolConverter> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public ProtocolConverter save(ProtocolConverter data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -66,6 +73,11 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
         return data;
     }
 
+    @Override
+    public void batchSave(List<ProtocolConverter> data) {
+
+    }
+
 
     @Override
     public void deleteById(String s) {
@@ -73,9 +85,10 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
 
     @Override
     public long count() {
@@ -88,10 +101,19 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
     }
 
     @Override
-    public Paging<ProtocolConverter> findAll(int page, int size) {
-        Page<TbProtocolConverter> paged = protocolConverterRepository
-                .findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(paged.getTotalElements(),
-                MapstructUtils.convert(paged.getContent(), ProtocolConverter.class));
+    public Paging<ProtocolConverter> findAll(PageRequest<ProtocolConverter> pageRequest) {
+        return null;
     }
+
+
+    @Override
+    public List<ProtocolConverter> findAllByCondition(ProtocolConverter data) {
+        return null;
+    }
+
+    @Override
+    public ProtocolConverter findOneByCondition(ProtocolConverter data) {
+        return null;
+    }
+
 }

@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IDeviceGroupData;
 import cc.iotkit.data.dao.DeviceGroupRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,12 +39,22 @@ public class DeviceGroupDataImpl implements IDeviceGroupData {
     }
 
     @Override
+    public List<DeviceGroup> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public DeviceGroup save(DeviceGroup data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
         deviceGroupRepository.save(MapstructUtils.convert(data, TbDeviceGroup.class));
         return data;
+    }
+
+    @Override
+    public void batchSave(List<DeviceGroup> data) {
+
     }
 
 
@@ -52,9 +64,10 @@ public class DeviceGroupDataImpl implements IDeviceGroupData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
 
     @Override
     public long count() {
@@ -67,8 +80,19 @@ public class DeviceGroupDataImpl implements IDeviceGroupData {
     }
 
     @Override
-    public Paging<DeviceGroup> findAll(int page, int size) {
-        Page<TbDeviceGroup> groups = deviceGroupRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(groups.getTotalElements(), MapstructUtils.convert(groups.getContent(), DeviceGroup.class));
+    public Paging<DeviceGroup> findAll(PageRequest<DeviceGroup> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<DeviceGroup> findAllByCondition(DeviceGroup data) {
+        return null;
+    }
+
+    @Override
+    public DeviceGroup findOneByCondition(DeviceGroup data) {
+        return null;
+    }
+
+
 }

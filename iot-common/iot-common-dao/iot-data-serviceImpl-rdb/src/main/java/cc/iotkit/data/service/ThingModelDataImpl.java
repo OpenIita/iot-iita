@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.data.dao.ThingModelRepository;
 import cc.iotkit.data.service.convert.ThingModelMapper;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +37,11 @@ public class ThingModelDataImpl implements IThingModelData {
     }
 
     @Override
+    public List<ThingModel> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public ThingModel save(ThingModel data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -44,14 +51,20 @@ public class ThingModelDataImpl implements IThingModelData {
     }
 
     @Override
+    public void batchSave(List<ThingModel> data) {
+
+    }
+
+    @Override
     public void deleteById(String s) {
         thingModelRepository.deleteById(s);
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
 
     @Override
     public long count() {
@@ -64,7 +77,19 @@ public class ThingModelDataImpl implements IThingModelData {
     }
 
     @Override
-    public Paging<ThingModel> findAll(int page, int size) {
+    public Paging<ThingModel> findAll(PageRequest<ThingModel> pageRequest) {
         return null;
     }
+
+    @Override
+    public List<ThingModel> findAllByCondition(ThingModel data) {
+        return null;
+    }
+
+    @Override
+    public ThingModel findOneByCondition(ThingModel data) {
+        return null;
+    }
+
+
 }

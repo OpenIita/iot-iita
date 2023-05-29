@@ -8,6 +8,7 @@ import cc.iotkit.data.model.TbAlertRecord;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.alert.AlertRecord;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,18 @@ public class AlertRecordDataImpl implements IAlertRecordData {
     }
 
     @Override
+    public List<AlertRecord> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public AlertRecord save(AlertRecord data) {
         return null;
+    }
+
+    @Override
+    public void batchSave(List<AlertRecord> data) {
+
     }
 
 
@@ -41,9 +52,10 @@ public class AlertRecordDataImpl implements IAlertRecordData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
 
     @Override
     public long count() {
@@ -56,9 +68,20 @@ public class AlertRecordDataImpl implements IAlertRecordData {
     }
 
     @Override
-    public Paging<AlertRecord> findAll(int page, int size) {
+    public Paging<AlertRecord> findAll(PageRequest<AlertRecord> pageRequest) {
         return null;
     }
+
+    @Override
+    public List<AlertRecord> findAllByCondition(AlertRecord data) {
+        return null;
+    }
+
+    @Override
+    public AlertRecord findOneByCondition(AlertRecord data) {
+        return null;
+    }
+
 
 
     @Override

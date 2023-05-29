@@ -118,7 +118,7 @@ public interface ISysRoleService {
      * @param bo 角色信息
      * @return 结果
      */
-    void updateRole(SysRoleBo bo);
+    int updateRole(SysRoleBo bo);
 
     /**
      * 修改角色状态
