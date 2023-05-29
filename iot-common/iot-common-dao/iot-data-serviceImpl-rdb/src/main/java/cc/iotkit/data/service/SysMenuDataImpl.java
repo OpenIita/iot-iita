@@ -2,15 +2,18 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.SysMenuRepository;
+import cc.iotkit.data.model.QTbSysMenu;
 import cc.iotkit.data.model.TbSysMenu;
 import cc.iotkit.data.system.ISysMenuData;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysMenu;
+import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +22,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static cc.iotkit.data.model.QTbSysMenu.tbSysMenu;
 import static cc.iotkit.data.model.QTbSysRole.tbSysRole;
+import static cc.iotkit.data.model.QTbSysUser.tbSysUser;
 import static cc.iotkit.data.model.QTbSysRoleMenu.tbSysRoleMenu;
 import static cc.iotkit.data.model.QTbSysUserRole.tbSysUserRole;
 
@@ -102,11 +107,6 @@ public class SysMenuDataImpl implements ISysMenuData {
     }
 
     @Override
-    public List<SysMenu> findByUserId(Long userId) {
-        return null;
-    }
-
-    @Override
     public List<SysMenu> selectMenuList(SysMenu menu, Long userId, boolean isSuperAdmin) {
 
         PredicateBuilder predicateBuilder = PredicateBuilder.instance()
@@ -137,5 +137,81 @@ public class SysMenuDataImpl implements ISysMenuData {
         }
         return MapstructUtils.convert(tbSysMenuList, SysMenu.class);
 
+    }
+
+    @Override
+    public List<String> selectMenuPermsByUserId(Long userId) {
+        return jpaQueryFactory.select(Projections.bean(String.class, tbSysMenu.perms.countDistinct()))
+                .from(tbSysMenu)
+                .leftJoin(tbSysRoleMenu).on(tbSysMenu.menuId.eq(tbSysRoleMenu.menuId))
+                .leftJoin(tbSysUserRole).on(tbSysRoleMenu.roleId.eq(tbSysUserRole.roleId))
+                .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.roleId))
+                .where(PredicateBuilder.instance()
+                        .and(tbSysMenu.status.eq("0"))
+                        .and(tbSysRole.status.eq("0"))
+                        .and(tbSysUserRole.userId.eq(userId))
+                        .build()).fetch();
+    }
+
+    @Override
+    public List<String> selectMenuPermsByRoleId(Long roleId) {
+        return jpaQueryFactory.select(Projections.bean(String.class, tbSysMenu.perms.countDistinct()))
+                .from(tbSysMenu)
+                .leftJoin(tbSysRoleMenu).on(tbSysMenu.menuId.eq(tbSysRoleMenu.menuId))
+                .where(PredicateBuilder.instance()
+                        .and(tbSysMenu.status.eq("0"))
+                        .and(tbSysRoleMenu.roleId.eq(roleId))
+                        .build()).fetch();
+    }
+
+    @Override
+    public List<SysMenu> selectMenuTreeAll() {
+        return jpaQueryFactory.select(Projections.bean(SysMenu.class, tbSysMenu.perms.countDistinct()))
+                .from(tbSysMenu)
+                .where(PredicateBuilder.instance()
+                        .and(tbSysMenu.menuType.in(UserConstants.TYPE_DIR, UserConstants.TYPE_MENU))
+                        .and(tbSysMenu.status.eq(UserConstants.MENU_NORMAL))
+                        .build())
+                .orderBy(tbSysMenu.parentId.asc(), tbSysMenu.orderNum.asc()).fetch();
+    }
+
+    @Override
+    public List<SysMenu> selectMenuTreeByUserId(Long userId) {
+        return jpaQueryFactory.select(Projections.bean(SysMenu.class, tbSysMenu.menuId.countDistinct().as(tbSysMenu.menuId),
+                        tbSysMenu.parentId, tbSysMenu.menuName, tbSysMenu.path, tbSysMenu.component, tbSysMenu.queryParam,
+                        tbSysMenu.visible, tbSysMenu.status, tbSysMenu.perms, tbSysMenu.isFrame, tbSysMenu.isCache, tbSysMenu.menuType,
+                        tbSysMenu.icon, tbSysMenu.orderNum, tbSysMenu.createTime))
+                .from(tbSysMenu)
+                .leftJoin(tbSysRoleMenu).on(tbSysMenu.menuId.eq(tbSysRoleMenu.menuId))
+                .leftJoin(tbSysUserRole).on(tbSysRoleMenu.roleId.eq(tbSysUserRole.roleId))
+                .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.roleId))
+                .leftJoin(tbSysUser).on(tbSysUserRole.userId.eq(tbSysUser.userId))
+                .where(PredicateBuilder.instance()
+                        .and(tbSysUser.userId.eq(userId))
+                        .and(tbSysMenu.menuType.in("M", "C"))
+                        .and(tbSysMenu.status.eq("0"))
+                        .and(tbSysRole.status.eq("0"))
+                        .build())
+                .orderBy(tbSysMenu.parentId.asc(), tbSysMenu.orderNum.asc()).fetch();
+    }
+
+    @Override
+    public boolean hasChildByMenuId(Long menuId) {
+        TbSysMenu tbSysMenu = jpaQueryFactory.select(QTbSysMenu.tbSysMenu).from(QTbSysMenu.tbSysMenu).where(PredicateBuilder.instance()
+                .and(QTbSysMenu.tbSysMenu.parentId.eq(menuId))
+                .build()).fetchOne();
+        return Objects.nonNull(tbSysMenu);
+    }
+
+    @Override
+    public boolean checkMenuNameUnique(SysMenu menu) {
+        TbSysMenu tbSysMenu = jpaQueryFactory.select(QTbSysMenu.tbSysMenu).from(QTbSysMenu.tbSysMenu)
+                .where(
+                        PredicateBuilder.instance()
+                                .and(QTbSysMenu.tbSysMenu.menuName.eq(menu.getMenuName()))
+                                .and(QTbSysMenu.tbSysMenu.parentId.eq(menu.getParentId()))
+                                .and(ObjectUtil.isNotNull(menu.getId()), () -> QTbSysMenu.tbSysMenu.menuId.ne(menu.getId()))
+                                .build()).fetchOne();
+        return Objects.isNull(tbSysMenu);
     }
 }

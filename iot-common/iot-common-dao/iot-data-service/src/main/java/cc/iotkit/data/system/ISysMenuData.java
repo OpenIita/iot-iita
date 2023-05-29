@@ -18,8 +18,29 @@ public interface ISysMenuData extends ICommonData<SysMenu, Long> {
      * @param userId 用户ID
      * @return 菜单列表
      */
-    List<SysMenu> findByUserId(Long userId);
-
     List<SysMenu> selectMenuList(SysMenu menu, Long userId, boolean isSuperAdmin);
+
+    List<String> selectMenuPermsByUserId(Long userId);
+
+    List<String> selectMenuPermsByRoleId(Long roleId);
+
+    /**
+     * 根据用户ID查询菜单
+     *
+     * @return 菜单列表
+     */
+    List<SysMenu> selectMenuTreeAll();
+
+    /**
+     * 根据用户ID查询菜单
+     *
+     * @param userId 用户ID
+     * @return 菜单列表
+     */
+    List<SysMenu> selectMenuTreeByUserId(Long userId);
+
+    boolean hasChildByMenuId(Long menuId);
+
+    boolean checkMenuNameUnique(SysMenu menu);
 
 }
