@@ -2,6 +2,7 @@ package cc.iotkit.common.api;
 
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SnowflakeIdGeneratorUtil;
+import cn.hutool.core.collection.CollUtil;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -85,6 +86,8 @@ public class PageRequest<T> extends Request<T> implements Serializable {
     pageRequest.setSortMap(this.getSortMap());
     return pageRequest;
   }
+
+
 
 
 }

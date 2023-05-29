@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.dao.CategoryRepository;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,10 +38,20 @@ public class CategoryDataImpl implements ICategoryData {
     }
 
     @Override
+    public List<Category> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public Category save(Category data) {
         TbCategory tb = categoryRepository.save(MapstructUtils.convert(data, TbCategory.class));
         data.setId(tb.getId());
         return data;
+    }
+
+    @Override
+    public void batchSave(List<Category> data) {
+
     }
 
     @Override
@@ -48,9 +60,11 @@ public class CategoryDataImpl implements ICategoryData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
+
 
     @Override
     public long count() {
@@ -65,12 +79,20 @@ public class CategoryDataImpl implements ICategoryData {
     }
 
     @Override
-    public Paging<Category> findAll(int page, int size) {
-        return new Paging<>(
-                categoryRepository.count(),
-                MapstructUtils.convert(categoryRepository.findAll(
-                        Pageable.ofSize(size).withPage(page - 1)).getContent(),
-                        Category.class));
+    public Paging<Category> findAll(PageRequest<Category> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<Category> findAllByCondition(Category data) {
+        return null;
+    }
+
+    @Override
+    public Category findOneByCondition(Category data) {
+        return null;
+    }
+
+
 
 }

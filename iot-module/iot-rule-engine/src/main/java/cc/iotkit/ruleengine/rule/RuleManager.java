@@ -73,12 +73,8 @@ public class RuleManager {
     public void initRules() {
         int idx = 1;
         while (true) {
-            Paging<RuleInfo> rules = ruleInfoData.findAll(idx, 1000);
-            // 如果记录为空，直接跳出循环
-            if (rules.getData() == null || rules.getData().isEmpty()) {
-                break;
-            }
-            rules.getData().forEach(rule -> {
+            List<RuleInfo> rules = ruleInfoData.findAll();
+            rules.forEach(rule -> {
                 try {
                     //不添加停止的规则
                     if (RuleInfo.STATE_STOPPED.equals(rule.getState())) {

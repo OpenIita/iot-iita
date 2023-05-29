@@ -16,6 +16,7 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.rule.TaskLog;
 import cc.iotkit.temporal.ITaskLogData;
+import cn.hutool.core.collection.CollectionUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
@@ -25,7 +26,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Lazy;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -51,12 +54,12 @@ public class TaskManager implements ApplicationContextAware {
     public void initTask() {
         int idx = 1;
         while (true) {
-            Paging<TaskInfo> tasks = taskInfoData.findAll(idx, 1000);
+            List<TaskInfo> tasks = taskInfoData.findAll();
             // 如果记录为空，直接跳出循环
-            if (tasks.getData() == null || tasks.getData().isEmpty()) {
+            if (CollectionUtil.isEmpty(tasks)) {
                 break;
             }
-            tasks.getData().forEach(task -> {
+            tasks.forEach(task -> {
                 try {
                     if (!TaskInfo.STATE_RUNNING.equals(task.getState())) {
                         return;

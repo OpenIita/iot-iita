@@ -177,7 +177,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void insertRole(SysRoleBo bo) {
         SysRole role = sysRoleData.save(bo.to(SysRole.class));
-        bo.setId(role.getId());
+        bo.setRoleId(role.getId());
         insertRoleMenu(bo);
     }
 
@@ -189,8 +189,12 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateRole(SysRoleBo bo) {
-        sysRoleData.save(bo.to(SysRole.class));
+    public int updateRole(SysRoleBo bo) {
+        SysRole role = sysRoleData.save(bo.to(SysRole.class));
+        if(ObjectUtil.isNull(role)){
+           return 0;
+        }
+        return 1;
     }
 
     /**

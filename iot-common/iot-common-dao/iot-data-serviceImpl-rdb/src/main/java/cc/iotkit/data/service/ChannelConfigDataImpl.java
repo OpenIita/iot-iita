@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IChannelConfigData;
 import cc.iotkit.data.dao.ChannelConfigRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +36,11 @@ public class ChannelConfigDataImpl implements IChannelConfigData {
     }
 
     @Override
+    public List<ChannelConfig> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public ChannelConfig save(ChannelConfig data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -43,14 +50,20 @@ public class ChannelConfigDataImpl implements IChannelConfigData {
     }
 
     @Override
+    public void batchSave(List<ChannelConfig> data) {
+
+    }
+
+    @Override
     public void deleteById(String id) {
         channelConfigRepository.deleteById(id);
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
 
     @Override
     public long count() {
@@ -63,10 +76,19 @@ public class ChannelConfigDataImpl implements IChannelConfigData {
     }
 
     @Override
-    public Paging<ChannelConfig> findAll(int page, int size) {
-        Page<TbChannelConfig> tbDeviceConfigs = channelConfigRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(
-                tbDeviceConfigs.getTotalElements(),
-                MapstructUtils.convert(tbDeviceConfigs.getContent(), ChannelConfig.class));
+    public Paging<ChannelConfig> findAll(PageRequest<ChannelConfig> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<ChannelConfig> findAllByCondition(ChannelConfig data) {
+        return null;
+    }
+
+    @Override
+    public ChannelConfig findOneByCondition(ChannelConfig data) {
+        return null;
+    }
+
+
 }

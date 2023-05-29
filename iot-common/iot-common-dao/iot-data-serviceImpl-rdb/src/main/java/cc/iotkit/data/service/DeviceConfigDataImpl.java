@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.data.dao.DeviceConfigRepository;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,12 +50,22 @@ public class DeviceConfigDataImpl implements IDeviceConfigData {
     }
 
     @Override
+    public List<DeviceConfig> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public DeviceConfig save(DeviceConfig data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
         deviceConfigRepository.save(MapstructUtils.convert(data, TbDeviceConfig.class));
         return data;
+    }
+
+    @Override
+    public void batchSave(List<DeviceConfig> data) {
+
     }
 
 
@@ -63,9 +75,10 @@ public class DeviceConfigDataImpl implements IDeviceConfigData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
 
     @Override
     public long count() {
@@ -78,10 +91,19 @@ public class DeviceConfigDataImpl implements IDeviceConfigData {
     }
 
     @Override
-    public Paging<DeviceConfig> findAll(int page, int size) {
-        Page<TbDeviceConfig> tbDeviceConfigs = deviceConfigRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(
-                tbDeviceConfigs.getTotalElements(),
-                MapstructUtils.convert(tbDeviceConfigs.getContent(), DeviceConfig.class));
+    public Paging<DeviceConfig> findAll(PageRequest<DeviceConfig> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<DeviceConfig> findAllByCondition(DeviceConfig data) {
+        return null;
+    }
+
+    @Override
+    public DeviceConfig findOneByCondition(DeviceConfig data) {
+        return null;
+    }
+
+
 }

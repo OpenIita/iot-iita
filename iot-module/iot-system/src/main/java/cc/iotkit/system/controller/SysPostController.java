@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -99,7 +100,7 @@ public class SysPostController extends BaseController {
     @SaCheckPermission("system:post:remove")
     @Log(title = "岗位管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{postIds}")
-    public void remove(@PathVariable Long[] postIds) {
+    public void remove(@PathVariable Collection postIds) {
         postService.deletePostByIds(postIds);
     }
 

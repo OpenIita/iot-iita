@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,9 +32,19 @@ public class AlertConfigDataImpl implements IAlertConfigData {
     }
 
     @Override
+    public List<AlertConfig> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public AlertConfig save(AlertConfig data) {
         alertConfigRepository.save(MapstructUtils.convert(data, TbAlertConfig.class));
         return data;
+    }
+
+    @Override
+    public void batchSave(List<AlertConfig> data) {
+
     }
 
 
@@ -43,9 +54,11 @@ public class AlertConfigDataImpl implements IAlertConfigData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
+
 
     @Override
     public long count() {
@@ -58,9 +71,20 @@ public class AlertConfigDataImpl implements IAlertConfigData {
     }
 
     @Override
-    public Paging<AlertConfig> findAll(int page, int size) {
+    public Paging<AlertConfig> findAll(PageRequest<AlertConfig> pageRequest) {
         return null;
     }
+
+    @Override
+    public List<AlertConfig> findAllByCondition(AlertConfig data) {
+        return null;
+    }
+
+    @Override
+    public AlertConfig findOneByCondition(AlertConfig data) {
+        return null;
+    }
+
 
     @Override
     public Paging<AlertConfig> selectAlertConfigPage(PageRequest<AlertConfig> request) {

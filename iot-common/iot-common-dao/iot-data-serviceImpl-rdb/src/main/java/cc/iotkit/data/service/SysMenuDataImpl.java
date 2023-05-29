@@ -110,35 +110,9 @@ public class SysMenuDataImpl implements ISysMenuData {
 
         PredicateBuilder predicateBuilder = PredicateBuilder.instance(tbSysMenu.menuId.isNotNull());
 
-
-        // 管理员显示所有菜单信息
-        if (isSuperAdmin) {
-            predicateBuilder
-                    .and(StringUtils.isNotBlank(menu.getMenuName()), () -> tbSysMenu.menuName.like(menu.getMenuName()))
-                    .and(StringUtils.isNotBlank(menu.getVisible()), () -> tbSysMenu.visible.eq(menu.getVisible()))
-                    .and(StringUtils.isNotBlank(menu.getStatus()), () -> tbSysMenu.status.eq(menu.getStatus()));
-
-            menuList = baseMapper.selectVoList(new LambdaQueryWrapper<SysMenu>()
-                    .like(StringUtils.isNotBlank(menu.getMenuName()), SysMenu::getMenuName, menu.getMenuName())
-                    .eq(StringUtils.isNotBlank(menu.getVisible()), SysMenu::getVisible, menu.getVisible())
-                    .eq(StringUtils.isNotBlank(menu.getStatus()), SysMenu::getStatus, menu.getStatus())
-                    .orderByAsc(SysMenu::getParentId)
-                    .orderByAsc(SysMenu::getOrderNum));
-        } else {
-            predicateBuilder.and(tbSysMenu.menuId.eq(userId));
-            BooleanBuilder builder = new BooleanBuilder();
-            QueryWrapper<SysMenu> wrapper = Wrappers.query();
-            wrapper.eq("sur.user_id", userId)
-                    .like(StringUtils.isNotBlank(menu.getMenuName()), "m.menu_name", menu.getMenuName())
-                    .eq(StringUtils.isNotBlank(menu.getVisible()), "m.visible", menu.getVisible())
-                    .eq(StringUtils.isNotBlank(menu.getStatus()), "m.status", menu.getStatus())
-                    .orderByAsc("m.parent_id")
-                    .orderByAsc("m.order_num");
-            menuList = baseMapper.selectMenuListByUserId(wrapper);
-        }
         Predicate predicate = predicateBuilder.build();
         sysMenuRepository.findAll(predicate);
 
-        return menuList;
+        return null;
     }
 }

@@ -1,20 +1,28 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProtocolComponentData;
 import cc.iotkit.data.dao.ProtocolComponentRepository;
 import cc.iotkit.data.model.TbProtocolComponent;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.util.PageBuilder;
+import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.protocol.ProtocolComponent;
+import com.querydsl.core.types.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
+import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
 
 @Primary
 @Service
@@ -57,6 +65,11 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
     }
 
     @Override
+    public List<ProtocolComponent> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public ProtocolComponent save(ProtocolComponent data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -66,6 +79,11 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
         return data;
     }
 
+    @Override
+    public void batchSave(List<ProtocolComponent> data) {
+
+    }
+
 
     @Override
     public void deleteById(String s) {
@@ -73,9 +91,11 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
+
 
     @Override
     public long count() {
@@ -88,10 +108,23 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
     }
 
     @Override
-    public Paging<ProtocolComponent> findAll(int page, int size) {
-        Page<TbProtocolComponent> paged = protocolComponentRepository
-                .findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(paged.getTotalElements(),
-                MapstructUtils.convert(paged.getContent(), ProtocolComponent.class));
+    public Paging<ProtocolComponent> findAll(PageRequest<ProtocolComponent> pageRequest) {
+        ProtocolComponent query = pageRequest.getData();
+        Predicate predicate = PredicateBuilder.instance()
+                .build();
+        Page<TbProtocolComponent> all = protocolComponentRepository.findAll(predicate, PageBuilder.toPageable(pageRequest));
+        return new Paging<>(all.getTotalElements(), MapstructUtils.convert(all.getContent(), ProtocolComponent.class));
     }
+
+    @Override
+    public List<ProtocolComponent> findAllByCondition(ProtocolComponent data) {
+        return null;
+    }
+
+    @Override
+    public ProtocolComponent findOneByCondition(ProtocolComponent data) {
+        return null;
+    }
+
+
 }

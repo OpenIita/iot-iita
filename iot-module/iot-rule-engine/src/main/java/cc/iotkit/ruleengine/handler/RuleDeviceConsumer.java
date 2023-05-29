@@ -9,7 +9,8 @@
  */
 package cc.iotkit.ruleengine.handler;
 
-import cc.iotkit.common.Constants;
+
+import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.mq.ConsumerHandler;

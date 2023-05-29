@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
@@ -430,6 +431,11 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     }
 
     @Override
+    public List<DeviceInfo> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public DeviceInfo save(DeviceInfo data) {
         TbDeviceInfo vo = deviceInfoRepository.findByDeviceId(data.getDeviceId());
@@ -464,14 +470,21 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     }
 
     @Override
+    public void batchSave(List<DeviceInfo> data) {
+
+    }
+
+    @Override
     public void deleteById(String s) {
         deviceInfoRepository.deleteById(s);
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
+
 
     @Override
     public long count() {
@@ -484,9 +497,20 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     }
 
     @Override
-    public Paging<DeviceInfo> findAll(int page, int size) {
-        Page<TbDeviceInfo> paged = deviceInfoRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(paged.getTotalElements(), parseVoToDto(paged.getContent()));
+    public Paging<DeviceInfo> findAll(PageRequest<DeviceInfo> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<DeviceInfo> findAllByCondition(DeviceInfo data) {
+        return null;
+    }
+
+    @Override
+    public DeviceInfo findOneByCondition(DeviceInfo data) {
+        return null;
+    }
+
+
 
 }

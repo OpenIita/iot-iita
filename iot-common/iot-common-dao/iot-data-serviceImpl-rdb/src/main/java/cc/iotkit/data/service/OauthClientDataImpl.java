@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IOauthClientData;
 import cc.iotkit.data.dao.OauthClientRepository;
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +44,11 @@ public class OauthClientDataImpl implements IOauthClientData {
     }
 
     @Override
+    public List<OauthClient> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public OauthClient save(OauthClient data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -52,14 +59,20 @@ public class OauthClientDataImpl implements IOauthClientData {
     }
 
     @Override
+    public void batchSave(List<OauthClient> data) {
+
+    }
+
+    @Override
     public void deleteById(String s) {
         oauthClientRepository.deleteById(s);
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
 
     @Override
     public long count() {
@@ -72,7 +85,19 @@ public class OauthClientDataImpl implements IOauthClientData {
     }
 
     @Override
-    public Paging<OauthClient> findAll(int page, int size) {
-        return new Paging<>();
+    public Paging<OauthClient> findAll(PageRequest<OauthClient> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<OauthClient> findAllByCondition(OauthClient data) {
+        return null;
+    }
+
+    @Override
+    public OauthClient findOneByCondition(OauthClient data) {
+        return null;
+    }
+
+
 }

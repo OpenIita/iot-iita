@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.ISpaceData;
 import cc.iotkit.data.dao.SpaceRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,6 +64,11 @@ public class SpaceDataImpl implements ISpaceData {
     }
 
     @Override
+    public List<Space> findByIds(Collection<String> id) {
+        return null;
+    }
+
+    @Override
     public Space save(Space data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
@@ -71,14 +78,21 @@ public class SpaceDataImpl implements ISpaceData {
     }
 
     @Override
+    public void batchSave(List<Space> data) {
+
+    }
+
+    @Override
     public void deleteById(String s) {
         spaceRepository.deleteById(s);
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
+
 
     @Override
     public long count() {
@@ -91,7 +105,19 @@ public class SpaceDataImpl implements ISpaceData {
     }
 
     @Override
-    public Paging<Space> findAll(int page, int size) {
-        return new Paging<>();
+    public Paging<Space> findAll(PageRequest<Space> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<Space> findAllByCondition(Space data) {
+        return null;
+    }
+
+    @Override
+    public Space findOneByCondition(Space data) {
+        return null;
+    }
+
+
 }

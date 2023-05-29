@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.data.manager.IVirtualDeviceData;
 import cc.iotkit.data.dao.VirtualDeviceMappingRepository;
 import cc.iotkit.data.dao.VirtualDeviceRepository;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,6 +81,11 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
         return dto;
     }
 
+    @Override
+    public List<VirtualDevice> findByIds(Collection<String> id) {
+        return null;
+    }
+
     private List<String> getVirtualDeviceIds(String virtualId) {
         List<TbVirtualDeviceMapping> deviceMappings = virtualDeviceMappingRepository.findByVirtualId(virtualId);
         return deviceMappings.stream().map(TbVirtualDeviceMapping::getDeviceId).collect(Collectors.toList());
@@ -106,6 +113,11 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
     }
 
     @Override
+    public void batchSave(List<VirtualDevice> data) {
+
+    }
+
+    @Override
     @Transactional
     public void deleteById(String s) {
         virtualDeviceRepository.deleteById(s);
@@ -113,9 +125,10 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
     }
 
     @Override
-    public void deleteByIds(String[] strings) {
+    public void deleteByIds(Collection<String> strings) {
 
     }
+
 
     @Override
     public long count() {
@@ -128,8 +141,19 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
     }
 
     @Override
-    public Paging<VirtualDevice> findAll(int page, int size) {
-        Page<TbVirtualDevice> paged = virtualDeviceRepository.findAll(Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(paged.getTotalElements(), VirtualDeviceMapper.toDto(paged.getContent()));
+    public Paging<VirtualDevice> findAll(PageRequest<VirtualDevice> pageRequest) {
+        return null;
     }
+
+    @Override
+    public List<VirtualDevice> findAllByCondition(VirtualDevice data) {
+        return null;
+    }
+
+    @Override
+    public VirtualDevice findOneByCondition(VirtualDevice data) {
+        return null;
+    }
+
+
 }

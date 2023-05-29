@@ -13,12 +13,13 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.ThreadUtil;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.DeviceState;
-import cc.iotkit.comp.utils.SpringUtils;
+
 import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
