@@ -1,15 +1,9 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.constant.UserConstants;
-import cc.iotkit.common.enums.ErrCode;
-import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.SysRoleRepository;
-import cc.iotkit.data.model.TbSysMenu;
-import cc.iotkit.data.model.TbSysRole;
 import cc.iotkit.data.system.ISysRoleData;
 import cc.iotkit.data.util.PredicateBuilder;
-import cc.iotkit.model.system.SysMenu;
 import cc.iotkit.model.system.SysRole;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -30,7 +24,7 @@ import static cc.iotkit.data.model.QTbSysRoleMenu.tbSysRoleMenu;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class ISysRoleDataImpl implements ISysRoleData {
+public class SysRoleDataImpl implements ISysRoleData {
 
     private final SysRoleRepository sysRoleRepository;
 
