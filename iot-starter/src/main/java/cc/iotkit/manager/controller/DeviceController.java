@@ -194,7 +194,7 @@ public class DeviceController {
 
     @ApiOperation(value = "保存设备接口", httpMethod = "POST")
     @PostMapping("/save")
-    public void save(DeviceInfo device) {
+    public void save(@RequestBody DeviceInfo device) {
         dataOwnerService.checkOwner(device);
 
         if (device.getCreateAt() == null) {
