@@ -1,5 +1,7 @@
 package cc.iotkit.system.service.impl;
 
+import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.TreeBuildUtils;
 import cc.iotkit.data.system.ISysMenuData;
@@ -43,12 +45,16 @@ public class SysMenuServiceImpl implements ISysMenuService {
     /**
      * 查询系统菜单列表
      *
-     * @param menu 菜单信息
+     * @param bo     菜单信息
+     * @param userId 用户信息
      * @return 菜单列表
      */
     @Override
-    public List<SysMenuVo> selectMenuList(SysMenuBo menu, Long userId) {
-        return new ArrayList<>();
+    public List<SysMenuVo> selectMenuList(SysMenuBo bo, Long userId) {
+        boolean superAdmin = LoginHelper.isSuperAdmin(userId);
+        SysMenu sysMenu = MapstructUtils.convert(bo, SysMenu.class);
+        List<SysMenu> sysMenuList = sysMenuData.selectMenuList(sysMenu, userId, superAdmin);
+        return MapstructUtils.convert(sysMenuList, SysMenuVo.class);
     }
 
     /**
