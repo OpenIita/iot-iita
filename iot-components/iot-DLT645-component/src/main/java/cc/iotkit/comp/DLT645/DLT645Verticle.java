@@ -1,7 +1,7 @@
 package cc.iotkit.comp.DLT645;
 
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.DLT645.analysis.*;
 import cc.iotkit.comp.DLT645.utils.ByteUtils;
 import cc.iotkit.comp.DLT645.utils.ContainerUtils;
@@ -118,7 +118,7 @@ public class DLT645Verticle extends AbstractVerticle {
                     unPack.put("funCode",funCode.getCode());
                     unPack.put("identify",dataEntity.getKey());//数据标识
                     unPack.put("data",dataEntity.getValue()+dataEntity.getUnit());//数据+单位
-                    executor.onReceive(new HashMap<>(), "dlt", JsonUtil.toJsonString(unPack));
+                    executor.onReceive(new HashMap<>(), "dlt", JsonUtils.toJsonString(unPack));
                 }
             });
             socket.closeHandler(res->{

@@ -1,7 +1,8 @@
 package cc.iotkit.comp.websocket;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
@@ -12,6 +13,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -29,7 +31,7 @@ public class WebSocketDeviceComponent extends AbstractDeviceComponent {
     public void create(CompConfig config) {
         super.create(config);
         vertx = Vertx.vertx();
-        String type = JsonUtil.parse(config.getOther(), Map.class).get("type").toString();
+        String type = JsonUtils.parseObject(config.getOther(), Map.class).get("type").toString();
         if(AbstractDeviceVerticle.TYPE_CLIENT.equals(type)){
             webSocketVerticle = new WebSocketClientVerticle(config.getOther());
         }else{
@@ -54,7 +56,7 @@ public class WebSocketDeviceComponent extends AbstractDeviceComponent {
             countDownLatch.await();
             future.succeeded();
         } catch (Throwable e) {
-            throw new BizException("start websocket component error", e);
+            throw new BizException(ErrCode.COMPONENT_START_ERROR, e);
         }
     }
 

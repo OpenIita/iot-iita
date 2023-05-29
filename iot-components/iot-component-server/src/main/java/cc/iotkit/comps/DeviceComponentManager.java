@@ -10,10 +10,11 @@
 package cc.iotkit.comps;
 
 
-import cc.iotkit.common.ComponentClassLoader;
+import cc.iotkit.common.utils.ComponentClassLoader;
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;
 import cc.iotkit.comp.IDeviceComponent;
@@ -24,10 +25,10 @@ import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.converter.IConverter;
 import cc.iotkit.converter.ScriptConvertFactory;
-import cc.iotkit.data.IDeviceInfoData;
-import cc.iotkit.data.IProductData;
-import cc.iotkit.data.IProtocolComponentData;
-import cc.iotkit.data.IProtocolConverterData;
+import cc.iotkit.data.manager.IDeviceInfoData;
+import cc.iotkit.data.manager.IProductData;
+import cc.iotkit.data.manager.IProtocolComponentData;
+import cc.iotkit.data.manager.IProtocolConverterData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
@@ -106,17 +107,17 @@ public class DeviceComponentManager {
         try {
             componentInstance = ComponentClassLoader.getComponent(component.getId(), file);
         } catch (Throwable e) {
-            throw new BizException("get device component instance error", e);
+            throw new BizException(ErrCode.GET_COMPONENT_INSTANCE_ERROR, e);
         }
         componentInstance.create(new CompConfig(300, component.getConfig()));
 
         try {
-            if(component.CONVER_TYPE_STATIC.equals(component.getConverType())){
+            if(ProtocolComponent.CONVER_TYPE_STATIC.equals(component.getConverType())){
                 IConverter converterInstance;
                 try {
-                    converterInstance=ComponentClassLoader.getConverter(component.getId(), file);
+                    converterInstance=ComponentClassLoader.getConverter(component.getId());
                 } catch (Throwable e) {
-                    throw new BizException("get device convert instance error", e);
+                    throw new BizException(ErrCode.GET_SPI_CONVERT_ERROR, e);
                 }
                 componentInstance.setConverter(converterInstance);
             }else{
@@ -129,7 +130,7 @@ public class DeviceComponentManager {
             componentInstance.setScript(componentScript);
             register(id, componentInstance);
         } catch (IOException e) {
-            throw new BizException("get device component script error", e);
+            throw new BizException(ErrCode.GET_COMPONENT_SCRIPT_ERROR, e);
         }
     }
 
@@ -198,9 +199,9 @@ public class DeviceComponentManager {
     }
 
     public void send(ThingService<?> service) {
-        log.info("start exec device service:{}", JsonUtil.toJsonString(service));
+        log.info("start exec device service:{}", JsonUtils.toJsonString(service));
         if (components.size() == 0) {
-            throw new BizException("there is no components");
+            throw new BizException(ErrCode.COMPONENT_NOT_FOUND);
         }
 
         DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(service.getProductKey(), service.getDeviceName());
@@ -217,7 +218,7 @@ public class DeviceComponentManager {
 
         IComponent component = deviceRouter.getRouter(linkPk, linkDn);
         if (!(component instanceof IDeviceComponent)) {
-            throw new BizException("send destination does not exist");
+            throw new BizException(ErrCode.SEND_DESTINATION_NOT_FOUND);
         }
         IDeviceComponent deviceComponent = (IDeviceComponent) component;
 
@@ -233,7 +234,7 @@ public class DeviceComponentManager {
         //对下发消息进行编码转换
         DeviceMessage message = deviceComponent.getConverter().encode(service, device);
         if (message == null) {
-            throw new BizException("encode send message failed");
+            throw new BizException(ErrCode.MSG_CONVERT_ERROR);
         }
 
         String sendMid = message.getMid();

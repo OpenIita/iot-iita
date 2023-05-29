@@ -11,7 +11,7 @@ package cc.iotkit.comp.http;
 
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.CodecUtil;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.converter.DeviceMessage;
@@ -47,7 +47,7 @@ public class CtwingDeviceComponent extends AbstractDeviceComponent {
     @Override
     public void create(CompConfig config) {
         super.create(config);
-        this.ctwingConfig = JsonUtil.parse(config.getOther(), CtwingConfig.class);
+        this.ctwingConfig = JsonUtils.parseObject(config.getOther(), CtwingConfig.class);
         commandClient = AepDeviceCommandClient.newClient()
                 .appKey(ctwingConfig.getAppKey())
                 .appSecret(ctwingConfig.getAppSecret())
@@ -63,9 +63,9 @@ public class CtwingDeviceComponent extends AbstractDeviceComponent {
                 .handler(rc -> {
                     try {
                         Map<String, Object> httpHeader = ProtocolUtil.getData(rc.request().headers());
-                        log.info("request header:{}", JsonUtil.toJsonString(httpHeader));
+                        log.info("request header:{}", JsonUtils.toJsonString(httpHeader));
                         Map<String, List<Object>> httpParams = ProtocolUtil.getListData(rc.request().params());
-                        log.info("request params:{}", JsonUtil.toJsonString(httpParams));
+                        log.info("request params:{}", JsonUtils.toJsonString(httpParams));
 
                         HttpServerRequest httpRequest = rc.request();
                         String contentType = httpRequest.headers().get("Content-Type");
@@ -73,7 +73,7 @@ public class CtwingDeviceComponent extends AbstractDeviceComponent {
                         int responseCode = 500;
                         if ("application/json".equals(contentType)) {
                             requestBody = rc.getBody().toString();
-                            EncodedMessage msg = JsonUtil.parse(requestBody, EncodedMessage.class);
+                            EncodedMessage msg = JsonUtils.parseObject(requestBody, EncodedMessage.class);
                             String content = CodecUtil.aesDecrypt(ctwingConfig.getEncryptToken(), msg.getEnc_msg());
                             log.info("decrypt msg:{}", content);
                             getHandler().onReceive(httpHeader, "", content);
@@ -103,13 +103,13 @@ public class CtwingDeviceComponent extends AbstractDeviceComponent {
     public DeviceMessage send(DeviceMessage message) {
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
-            throw new BizException("message content is not Map");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
         SendContent msg = new SendContent();
         try {
             BeanUtils.populate(msg, (Map<String, ? extends Object>) obj);
         } catch (Throwable e) {
-            throw new BizException("message content is incorrect");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
 
         CreateCommandRequest request = new CreateCommandRequest();
@@ -129,18 +129,18 @@ public class CtwingDeviceComponent extends AbstractDeviceComponent {
         try {
             response = commandClient.CreateCommand(request);
         } catch (Exception e) {
-            throw new RuntimeException("send cmd to ctwing error", e);
+            throw new BizException("send cmd to ctwing error", e);
         }
 
         String body = new String(response.getBody());
         log.info("send ctwing cmd result:{}", body);
         if (response.getStatusCode() != 200) {
-            throw new RuntimeException("send cmd to ctwing error:" + body);
+            throw new BizException("send cmd to ctwing error:" + body);
         }
 
-        CtwingCmdRsp cmdRsp = JsonUtil.parse(body, CtwingCmdRsp.class);
+        CtwingCmdRsp cmdRsp = JsonUtils.parseObject(body, CtwingCmdRsp.class);
         if (cmdRsp.code != 0) {
-            throw new RuntimeException("send cmd to ctwing failed:" + body);
+            throw new BizException("send cmd to ctwing failed:" + body);
         }
 
         return message;

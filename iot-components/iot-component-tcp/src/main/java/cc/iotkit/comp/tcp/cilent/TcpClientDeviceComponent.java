@@ -1,7 +1,8 @@
 package cc.iotkit.comp.tcp.cilent;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.model.DeviceState;
@@ -24,7 +25,7 @@ public class TcpClientDeviceComponent extends AbstractDeviceComponent {
     public void create(CompConfig config) {
         super.create(config);
         vertx = Vertx.vertx();
-        TcpClinetConfig tcpClinetConfig = JsonUtil.parse(config.getOther(), TcpClinetConfig.class);
+        TcpClinetConfig tcpClinetConfig = JsonUtils.parseObject(config.getOther(), TcpClinetConfig.class);
         tcpClientVerticle = new TcpClientVerticle(tcpClinetConfig);
     }
 
@@ -43,7 +44,7 @@ public class TcpClientDeviceComponent extends AbstractDeviceComponent {
                     }));
             future.succeeded();
         } catch (Throwable e) {
-            throw new BizException("start client component error", e);
+            throw new BizException(ErrCode.COMPONENT_START_ERROR, e);
         }
 
     }

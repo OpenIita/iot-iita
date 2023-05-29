@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iot-components</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.3-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -59,7 +59,7 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common</artifactId>
+            <artifactId>iot-common-core</artifactId>
         </dependency>
 
         <dependency>
@@ -69,7 +69,7 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-model</artifactId>
+             <artifactId>iot-common-model</artifactId>
         </dependency>
 
         <dependency>
@@ -94,7 +94,7 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-data-cache</artifactId>
+             <artifactId>iot-data-serviceImpl-cache</artifactId>
         </dependency>
 
         <dependency>
@@ -102,6 +102,24 @@
             <artifactId>iot-script-engine</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-message-core</artifactId>
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

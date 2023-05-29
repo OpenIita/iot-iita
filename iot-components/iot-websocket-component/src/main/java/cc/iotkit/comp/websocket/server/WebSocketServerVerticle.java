@@ -1,8 +1,9 @@
 package cc.iotkit.comp.websocket.server;
 
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.websocket.AbstractDeviceVerticle;
 import cc.iotkit.converter.DeviceMessage;
 import io.vertx.core.Future;
@@ -31,7 +32,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
     private final Map<String, ServerWebSocket> wsClients = new ConcurrentHashMap<>();
 
     public WebSocketServerVerticle(String config) {
-        this.webSocketConfig = JsonUtil.parse(config, WebSocketServerConfig.class);
+        this.webSocketConfig = JsonUtils.parseObject(config, WebSocketServerConfig.class);
     }
 
     private Map<String, String> tokens=new HashMap<>();
@@ -58,11 +59,11 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
             Map<String,String> deviceKeyObj=new HashMap<>();
             deviceKeyObj.put("deviceKey",deviceKey);
             wsClient.textMessageHandler(message -> {
-                HashMap<String,String> msg= JsonUtil.parse(message,HashMap.class);
+                HashMap<String,String> msg= JsonUtils.parseObject(message,HashMap.class);
                 if(wsClients.containsKey(deviceKey)){
                     if("ping".equals(msg.get("type"))){
                         msg.put("type","pong");
-                        wsClient.writeTextMessage(JsonUtil.toJsonString(msg));
+                        wsClient.writeTextMessage(JsonUtils.toJsonString(msg));
                         return;
                     }
                     if("register".equals(msg.get("type"))){
@@ -73,11 +74,11 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
                                 ret.put("id",msg.get("id"));
                                 ret.put("type",msg.get("type"));
                                 ret.put("result","fail");
-                                wsClient.writeTextMessage(JsonUtil.toJsonString(ret));
+                                wsClient.writeTextMessage(JsonUtils.toJsonString(ret));
                                 return;
                             }else{
                                 msg.put("type","online");
-                                executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(msg));
+                                executor.onReceive(new HashMap<>(), "", JsonUtils.toJsonString(msg));
                             }
                         });
                     }
@@ -107,7 +108,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
                 if(wsClients.containsKey(deviceKey)){
                     wsClients.remove(deviceKey);
                     deviceKeyObj.put("type","offline");
-                    executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
+                    executor.onReceive(new HashMap<>(), "", JsonUtils.toJsonString(deviceKeyObj), (r) -> {
                     });
                 }
             });
@@ -116,7 +117,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
                 if(wsClients.containsKey(deviceKey)){
                     wsClients.remove(deviceKey);
                     deviceKeyObj.put("type","offline");
-                    executor.onReceive(new HashMap<>(), "", JsonUtil.toJsonString(deviceKeyObj), (r) -> {
+                    executor.onReceive(new HashMap<>(), "", JsonUtils.toJsonString(deviceKeyObj), (r) -> {
                     });
                 }
             });
@@ -139,7 +140,7 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
             Map<String,String> deviceKeyObj=new HashMap<>();
             deviceKeyObj.put("deviceKey",deviceKey);
             deviceKeyObj.put("type","offline");
-            executor.onReceive(null, "", JsonUtil.toJsonString(deviceKeyObj));
+            executor.onReceive(null, "", JsonUtils.toJsonString(deviceKeyObj));
         }
         tokens.clear();
         httpServer.close(voidAsyncResult -> log.info("close webocket server..."));
@@ -154,9 +155,9 @@ public class WebSocketServerVerticle extends AbstractDeviceVerticle {
         ServerWebSocket wsClient = wsClients.get(message.getDeviceName());
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
-            throw new BizException("message content is not Map");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
-        String msgStr = JsonUtil.toJsonString(obj);
+        String msgStr = JsonUtils.toJsonString(obj);
         log.info("send msg payload:{}", msgStr);
         Future<Void> result = wsClient.writeTextMessage(msgStr);
         result.onFailure(e -> log.error("webSocket server send msg failed", e));

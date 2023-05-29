@@ -9,10 +9,10 @@
  */
 package cc.iotkit.comps.service;
 
-import cc.iotkit.common.Constants;
-import cc.iotkit.common.utils.JsonUtil;
-import cc.iotkit.data.IDeviceInfoData;
-import cc.iotkit.data.IThingModelData;
+import cc.iotkit.common.constant.Constants;
+import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.data.manager.IDeviceInfoData;
+import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.ThingModel;
@@ -100,7 +100,7 @@ public class DevicePropertyConsumer implements ConsumerHandler<ThingModelMessage
      */
     private void updateDeviceCurrentProperties(String deviceId, Map<String, Object> properties) {
         try {
-            log.info("save device property,deviceId:{},property:{}", deviceId, JsonUtil.toJsonString(properties));
+            log.info("save device property,deviceId:{},property:{}", deviceId, JsonUtils.toJsonString(properties));
             deviceInfoData.saveProperties(deviceId, properties);
         } catch (Throwable e) {
             log.error("save device current properties error", e);

@@ -2,53 +2,53 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>iotkit-parent</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.3-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
 
     <artifactId>iot-common</artifactId>
+    <description>
+        技术组件，也分成两类：
+        1. 框架组件：脚本引擎、通讯总线等等的拓展
+        2. 业务组件：物模型、鉴权、工具
+    </description>
 
-    <dependencies>
+    <modules>
+        <module>iot-common-core</module>
+        <module>iot-common-dao</module>
+        <module>iot-script-engine</module>
+        <module>iot-message-bus</module>
+        <module>iot-common-doc</module>
+        <module>iot-common-excel</module>
+        <module>iot-common-log</module>
+        <module>iot-common-oss</module>
+        <module>iot-common-redis</module>
+        <module>iot-common-satoken</module>
+        <module>iot-common-tenant</module>
+        <module>iot-common-web</module>
+        <module>iot-common-websocket</module>
+    </modules>
 
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -10,7 +10,7 @@
 package cc.iotkit.comps;
 
 
-import cc.iotkit.common.ComponentClassLoader;
+import cc.iotkit.common.utils.ComponentClassLoader;
 import cc.iotkit.model.protocol.ProtocolComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

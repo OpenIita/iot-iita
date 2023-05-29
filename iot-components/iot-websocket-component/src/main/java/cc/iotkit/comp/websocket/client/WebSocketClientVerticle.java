@@ -1,21 +1,22 @@
 package cc.iotkit.comp.websocket.client;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.model.ReceiveResult;
 import cc.iotkit.comp.model.RegisterInfo;
 import cc.iotkit.comp.websocket.AbstractDeviceVerticle;
 import cc.iotkit.converter.DeviceMessage;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpClient;
-import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.WebSocket;
 import io.vertx.core.http.WebSocketConnectOptions;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -36,7 +37,7 @@ public class WebSocketClientVerticle extends AbstractDeviceVerticle {
     }
 
     public WebSocketClientVerticle(String config) {
-        this.webSocketConfig = JsonUtil.parse(config, WebSocketClientConfig.class);
+        this.webSocketConfig = JsonUtils.parseObject(config, WebSocketClientConfig.class);
     }
 
     public void start() {
@@ -75,7 +76,7 @@ public class WebSocketClientVerticle extends AbstractDeviceVerticle {
                     if (webSocketClient.isClosed()) {
                         vertx.cancelTimer(timerID);
                     }
-                    executor.onReceive(new HashMap<>(), "ping", JsonUtil.toJsonString(webSocketConfig));
+                    executor.onReceive(new HashMap<>(), "ping", JsonUtils.toJsonString(webSocketConfig));
                 });
             }
         }).onFailure(e -> {
@@ -96,9 +97,9 @@ public class WebSocketClientVerticle extends AbstractDeviceVerticle {
     public DeviceMessage send(DeviceMessage message) {
         Object obj = message.getContent();
         if (!(obj instanceof Map)) {
-            throw new BizException("message content is not Map");
+            throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
-        String msgStr = JsonUtil.toJsonString(obj);
+        String msgStr = JsonUtils.toJsonString(obj);
         log.info("send msg payload:{}", msgStr);
         Future<Void> result = webSocketClient.writeTextMessage(msgStr);
         result.onFailure(e -> log.error("webSocket client send msg failed", e));

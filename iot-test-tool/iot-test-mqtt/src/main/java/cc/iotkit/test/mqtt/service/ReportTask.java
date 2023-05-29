@@ -9,7 +9,7 @@
  */
 package cc.iotkit.test.mqtt.service;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.test.mqtt.model.Request;
 import io.netty.handler.codec.mqtt.MqttQoS;
 import io.vertx.core.buffer.Buffer;
@@ -51,7 +51,7 @@ public class ReportTask {
                 if (!client.isConnected()) {
                     return;
                 }
-                String msg = JsonUtil.toJsonString(request);
+                String msg = JsonUtils.toJsonString(request);
                 log.info("send msg,topic:{},payload:{}", topic, msg);
                 client.publish(topic, Buffer.buffer(msg), MqttQoS.AT_LEAST_ONCE, false, false);
 

@@ -10,7 +10,7 @@
 package cc.iotkit.test.mqtt.service;
 
 import cc.iotkit.common.Constants;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.test.mqtt.config.Mqtt;
 import cc.iotkit.test.mqtt.model.Request;
 import io.netty.handler.codec.mqtt.MqttQoS;
@@ -102,7 +102,7 @@ public class Gateway extends Device {
 //                String configGetTopic = String.format("/sys/%s/%s/s/config/get", productKey, deviceName);
 //                Request configRequest = new Request();
 //                configRequest.setId(UUID.randomUUID().toString());
-//                String configPayload = JsonUtil.toJsonString(configRequest);
+//                String configPayload = JsonUtils.toJsonString(configRequest);
 //                client.publish(configGetTopic, Buffer.buffer(configPayload), MqttQoS.AT_LEAST_ONCE, false, false);
 //                log.info("publish message,topic:{},payload:{}", configGetTopic, configPayload);
 
@@ -113,7 +113,7 @@ public class Gateway extends Device {
                     request.setId(UUID.randomUUID().toString());
                     request.setParams(subDevice);
                     String registerTopic = String.format("/sys/%s/%s/s/register", productKey, deviceName);
-                    String payload = JsonUtil.toJsonString(request);
+                    String payload = JsonUtils.toJsonString(request);
                     client.publish(registerTopic, Buffer.buffer(payload), MqttQoS.AT_LEAST_ONCE, false, false);
                     log.info("publish message,topic:{},payload:{}", registerTopic, payload);
                 }

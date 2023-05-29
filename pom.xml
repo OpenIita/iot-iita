@@ -2,46 +2,54 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
-    <modules>
-        <module>iot-rule-engine</module>
-        <module>iot-common</module>
-        <module>iot-standalone</module>
-        <module>iot-components</module>
-        <module>iot-package</module>
-        <module>iot-auth-server</module>
-        <module>iot-virtual-device</module>
-        <module>iot-message-bus</module>
-        <module>iot-test-tool</module>
-        <module>iot-data</module>
-        <module>iot-script-engine</module>
-    </modules>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
 
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
-    <version>0.4.3-SNAPSHOT</version>
-    <name>iotkit-parent</name>
-    <description>iotkit parent</description>
+    <version>${revision}</version>
+    <name>${project.artifactId}</name>
+    <description>奇特物联是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能, 能帮助你快速搭建自己的物联网相关业务平台。</description>
+    <url>https://gitee.com/iotkit-open-source/iotkit-parent</url>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>iot-common</module>
+        <module>iot-components</module>
+        <module>iot-module</module>
+        <module>iot-starter</module>
+        <module>iot-test-tool</module>
+    </modules>
+
     <properties>
+        <revision>0.4.5-SNAPSHOT</revision>
         <java.version>11</java.version>
+        <spring-boot.version>2.7.11</spring-boot.version>
         <vertx.version>4.2.2</vertx.version>
-        <sa-token.version>1.30.0</sa-token.version>
+        <satoken.version>1.34.0</satoken.version>
         <graalvm.version>21.1.0</graalvm.version>
+        <beanutils.version>1.9.3</beanutils.version>
+        <jackson.version>2.13.1</jackson.version>
+        <lang3.version>3.7</lang3.version>
+        <aws-java-sdk-s3.version>1.12.400</aws-java-sdk-s3.version>
+        <io.version>2.11.0</io.version>
+        <codec.version>1.14</codec.version>
+        <hutool.version>5.8.18</hutool.version>
+        <redisson.version>3.20.1</redisson.version>
+        <lock4j.version>2.2.4</lock4j.version>
+        <mapstruct-plus.version>1.2.1</mapstruct-plus.version>
+        <alibaba-ttl.version>2.14.2</alibaba-ttl.version>
+        <poi.version>5.2.3</poi.version>
+        <easyexcel.version>3.2.1</easyexcel.version>
+        <ip2region.version>2.7.0</ip2region.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
 
+            <!-- SpringBoot的依赖配置-->
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2021.0.0</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -49,37 +57,65 @@
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
-                <version>1.9.3</version>
+                <version>${beanutils.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>2.13.1</version>
+                <version>${jackson.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.7</version>
+                <version>${lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-s3</artifactId>
+                <version>${aws-java-sdk-s3.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.11.0</version>
+                <version>${io.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>1.14</version>
+                <version>${codec.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${alibaba-ttl.version}</version>
+            </dependency>
+
+            <!-- hutool 的依赖配置-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-bom</artifactId>
+                <version>${hutool.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--redisson-->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.24</version>
+                <version>1.18.26</version>
             </dependency>
 
             <dependency>
@@ -94,22 +130,40 @@
                 <version>1.57</version>
             </dependency>
 
+            <!-- Sa-Token 权限认证, 在线文档：http://sa-token.dev33.cn/ -->
             <dependency>
                 <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-oauth2</artifactId>
-                <version>${sa-token.version}</version>
+                <artifactId>sa-token-spring-boot3-starter</artifactId>
+                <version>${satoken.version}</version>
+            </dependency>
+            <!-- Sa-Token 整合 jwt -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-jwt</artifactId>
+                <version>${satoken.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>cn.hutool</groupId>
+                        <artifactId>hutool-all</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-core</artifactId>
+                <version>${satoken.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-spring-boot-starter</artifactId>
-                <version>${sa-token.version}</version>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>6.0.0</version>
             </dependency>
 
             <dependency>
-                <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-dao-redis-jackson</artifactId>
-                <version>${sa-token.version}</version>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>3.0.2</version>
             </dependency>
 
             <dependency>
@@ -178,13 +232,6 @@
                 <version>3.1.1</version>
             </dependency>
 
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-bom</artifactId>
-                <version>5.8.2</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
 
             <dependency>
                 <groupId>io.vertx</groupId>
@@ -235,23 +282,176 @@
             </dependency>
 
             <dependency>
+                <groupId>io.github.linpeilie</groupId>
+                <artifactId>mapstruct-plus-spring-boot-starter</artifactId>
+                <version>${mapstruct-plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>lock4j-redisson-spring-boot-starter</artifactId>
+                <version>${lock4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.poi</groupId>
+                        <artifactId>poi-ooxml-schemas</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- 离线IP地址定位库 ip2region -->
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>ip2region</artifactId>
+                <version>${ip2region.version}</version>
+            </dependency>
+
+            <!-- iot-common -->
+            <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-model</artifactId>
+                <artifactId>iot-common-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-common</artifactId>
+                <artifactId>iot-common-doc</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-rule-engine</artifactId>
+                <artifactId>iot-common-oss</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-excel</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-log</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-satoken</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-tenant</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-websocket</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--iot-common-dao-->
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-data-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-data-serviceImpl-cache</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-data-serviceImpl-rdb</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-temporal-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-temporal-serviceImpl-es</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-temproal-serviceImpl-td</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--message-bus-->
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-message-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-message-event-bus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-message-rocketmq</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-script-engine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--iot-components-->
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-component-base</artifactId>
@@ -278,84 +478,31 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-package</artifactId>
+                <artifactId>iot-manager</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-auth-server</artifactId>
+                <artifactId>iot-message-notify</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-rule-engine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-system</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-virtual-device</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-message-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-vertx-event-bus</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-message-rocketmq</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-data-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-temporal-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-es-temporal-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-td-temporal-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-ts-temporal-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-data-cache</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-rdb-data-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-script-engine</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

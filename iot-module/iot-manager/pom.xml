@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>iot-module</artifactId>
+        <groupId>cc.iotkit</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>iot-manager</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>it.ozimov</groupId>
+            <artifactId>embedded-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-simple</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+             <artifactId>iot-common-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-rule-engine</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-component-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-component-converter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-virtual-device</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-message-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-temporal-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-data-serviceImpl-rdb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+             <artifactId>iot-data-serviceImpl-cache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-doc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-satoken</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,5 +1,7 @@
 package cc.iotkit.comp.DLT645.analysis;
 
+import cc.iotkit.common.enums.ErrCode;
+import cc.iotkit.common.exception.BizException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,7 +37,7 @@ public class DLT645V1997Data extends DLT645Data {
     @Override
     public void setDIn(byte[] value) {
         if (value.length < 2) {
-            throw new RuntimeException("数据长度小于2字节!");
+            throw new BizException(ErrCode.DATA_LENGTH_ERROR);
         }
 
         // DI值

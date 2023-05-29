@@ -9,7 +9,7 @@
  */
 package cc.iotkit.comp.biz;
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;
 import cc.iotkit.script.IScriptEngine;
@@ -50,7 +50,7 @@ public class HttpBizComponent implements IComponent {
     @Override
     public void create(CompConfig config) {
         this.id = UUID.randomUUID().toString();
-        this.httpConfig = JsonUtil.parse(config.getOther(), HttpConfig.class);
+        this.httpConfig = JsonUtils.parseObject(config.getOther(), HttpConfig.class);
         scriptEngine.setScript(script);
     }
 
@@ -62,16 +62,16 @@ public class HttpBizComponent implements IComponent {
                 .handler(rc -> {
                     try {
                         Map<String, Object> httpHeader = getData(rc.request().headers());
-                        log.info("request header:{}", JsonUtil.toJsonString(httpHeader));
+                        log.info("request header:{}", JsonUtils.toJsonString(httpHeader));
                         Map<String, List<Object>> httpParams = getListData(rc.request().params());
-                        log.info("request params:{}", JsonUtil.toJsonString(httpParams));
+                        log.info("request params:{}", JsonUtils.toJsonString(httpParams));
 
                         HttpServerRequest httpRequest = rc.request();
                         String contentType = httpRequest.headers().get("Content-Type");
                         Map<String, Object> responseHeader = new HashMap<>();
                         if ("application/json".equals(contentType)) {
                             String bodyStr = rc.getBody().toString();
-                            Map body = JsonUtil.parse(bodyStr, Map.class);
+                            Map body = JsonUtils.parseObject(bodyStr, Map.class);
                             log.info("request body:{}", bodyStr);
 
                             String response;

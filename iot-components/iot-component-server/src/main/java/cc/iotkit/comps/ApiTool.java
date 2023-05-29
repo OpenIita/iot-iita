@@ -9,7 +9,7 @@
  */
 package cc.iotkit.comps;
 
-import cc.iotkit.common.Constants;
+import cc.iotkit.common.constant.Constants;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;

@@ -10,7 +10,7 @@
 package cc.iotkit.test.mqtt.service;
 
 
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.test.mqtt.model.Request;
 import cc.iotkit.test.mqtt.model.Response;
 import io.netty.handler.codec.mqtt.MqttQoS;
@@ -53,7 +53,7 @@ public class MessageHandler implements Handler<MqttPublishMessage> {
             log.info("received msg,topic:{},payload:{}", topic, payload);
 
             if (topic.endsWith("register_reply")) {
-                Response response = JsonUtil.parse(payload, Response.class);
+                Response response = JsonUtils.parseObject(payload, Response.class);
                 //子设备注册成功
                 if (response.getCode() == 0) {
                     Map<String, Object> data = response.getData();
@@ -78,18 +78,18 @@ public class MessageHandler implements Handler<MqttPublishMessage> {
             if (topic.endsWith("_reply")) {
                 return;
             }
-            Request request = JsonUtil.parse(payload, Request.class);
+            Request request = JsonUtils.parseObject(payload, Request.class);
 
             Response response = new Response(request.getId(), 0, new HashMap<>());
             client.publish(topic.replace("/c/", "/s/") + "_reply",
-                    Buffer.buffer(JsonUtil.toJsonString(response)), MqttQoS.AT_LEAST_ONCE, false, false);
+                    Buffer.buffer(JsonUtils.toJsonString(response)), MqttQoS.AT_LEAST_ONCE, false, false);
 
             //属性设置后上报属性
             String setTopic = "/c/service/property/set";
             if (topic.endsWith(setTopic)) {
                 request.setId(UUID.randomUUID().toString());
                 client.publish(topic.replace(setTopic, "/s/event/property/post"),
-                        Buffer.buffer(JsonUtil.toJsonString(request)), MqttQoS.AT_LEAST_ONCE, false, false);
+                        Buffer.buffer(JsonUtils.toJsonString(request)), MqttQoS.AT_LEAST_ONCE, false, false);
             }
         } catch (Throwable e) {
             log.info("receive msg error", e);

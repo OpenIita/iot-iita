@@ -9,8 +9,9 @@
  */
 package cc.iotkit.comp.DLT645;
 
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.converter.DeviceMessage;
@@ -42,7 +43,7 @@ public class DLT645Component extends AbstractDeviceComponent {
         super.create(config);
         vertx = Vertx.vertx();
         this.id = UUID.randomUUID().toString();
-        DLT645Config DLT645Config = JsonUtil.parse(config.getOther(), DLT645Config.class);
+        DLT645Config DLT645Config = JsonUtils.parseObject(config.getOther(), DLT645Config.class);
         DLT645Verticle = new DLT645Verticle(DLT645Config);
     }
 
@@ -63,7 +64,7 @@ public class DLT645Component extends AbstractDeviceComponent {
             countDownLatch.await();
             future.succeeded();
         } catch (Throwable e) {
-            throw new BizException("start GLT645 component error", e);
+            throw new BizException(ErrCode.COMPONENT_START_ERROR, e);
         }
     }
 

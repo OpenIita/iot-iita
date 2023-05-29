@@ -1,7 +1,8 @@
 package cc.iotkit.comp.DLT645.analysis;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
-import cc.iotkit.common.utils.JsonUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.DLT645.utils.ByteUtils;
 import cc.iotkit.converter.Device;
@@ -29,7 +30,7 @@ public class DLT645Converter implements IConverter {
     @Override
     public ThingModelMessage decode(DeviceMessage msg) {
         ThingModelMessage tmm = null;
-        ReportData rd=JsonUtil.parse(JsonUtil.toJsonString(msg.getContent()),ReportData.class);
+        ReportData rd=JsonUtils.parseObject(JsonUtils.toJsonString(msg.getContent()),ReportData.class);
         if(ThingModelMessage.TYPE_PROPERTY.equals(rd.type)&&"report".equals(rd.getIdentifier())){
             tmm=ThingModelMessage.builder()
                     .mid(msg.getMid())
@@ -83,7 +84,7 @@ public class DLT645Converter implements IConverter {
         // 根据对象名获取对象格式信息，这个格式信息，记录在CSV文件中
         DLT645Data dataEntity = DLT645Analysis.inst().getTemplateByDIn().get(dataIdentifier);
         if (dataEntity == null) {
-            throw new RuntimeException("CSV模板文件中未定义对象:" + dataIdentifier + " ，你需要在模板中添加该对象信息");
+            throw new BizException("CSV模板文件中未定义对象:" + dataIdentifier + " ，你需要在模板中添加该对象信息");
         }
         byte byFun = Byte.decode(String.valueOf(DLT645FunCode.getCodev1997(funCode)));
 

@@ -1,0 +1,292 @@
+package cc.iotkit.system.service.impl;
+
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.data.system.ISysRoleData;
+import cc.iotkit.model.system.SysRole;
+import cc.iotkit.system.dto.SysUserRole;
+import cc.iotkit.system.dto.bo.SysRoleBo;
+import cc.iotkit.system.dto.vo.SysRoleVo;
+import cc.iotkit.system.service.ISysRoleService;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * 角色 业务层处理
+ *
+ * @author Lion Li
+ */
+@RequiredArgsConstructor
+@Service
+public class SysRoleServiceImpl implements ISysRoleService {
+
+    private final ISysRoleData sysRoleData;
+
+    @Override
+    public Paging<SysRoleVo> selectPageRoleList(SysRoleBo role, PageRequest<?> query) {
+        return new Paging<>();
+    }
+
+    /**
+     * 根据条件分页查询角色数据
+     *
+     * @param role 角色信息
+     * @return 角色数据集合信息
+     */
+    @Override
+    public List<SysRoleVo> selectRoleList(SysRoleBo role) {
+        return new ArrayList<>();
+    }
+
+    /**
+     * 根据用户ID查询角色
+     *
+     * @param userId 用户ID
+     * @return 角色列表
+     */
+    @Override
+    public List<SysRoleVo> selectRolesByUserId(Long userId) {
+        return new ArrayList<>();
+    }
+
+    /**
+     * 根据用户ID查询权限
+     *
+     * @param userId 用户ID
+     * @return 权限列表
+     */
+    @Override
+    public Set<String> selectRolePermissionByUserId(Long userId) {
+        return new HashSet<>();
+    }
+
+    /**
+     * 查询所有角色
+     *
+     * @return 角色列表
+     */
+    @Override
+    public List<SysRoleVo> selectRoleAll() {
+        return this.selectRoleList(new SysRoleBo());
+    }
+
+    /**
+     * 根据用户ID获取角色选择框列表
+     *
+     * @param userId 用户ID
+     * @return 选中角色ID列表
+     */
+    @Override
+    public List<Long> selectRoleListByUserId(Long userId) {
+        return new ArrayList<>();
+    }
+
+    /**
+     * 通过角色ID查询角色
+     *
+     * @param roleId 角色ID
+     * @return 角色对象信息
+     */
+    @Override
+    public SysRoleVo selectRoleById(Long roleId) {
+        return sysRoleData.findById(roleId).to(SysRoleVo.class);
+    }
+
+    /**
+     * 校验角色名称是否唯一
+     *
+     * @param role 角色信息
+     * @return 结果
+     */
+    @Override
+    public boolean checkRoleNameUnique(SysRoleBo role) {
+        return false;
+    }
+
+    /**
+     * 校验角色权限是否唯一
+     *
+     * @param role 角色信息
+     * @return 结果
+     */
+    @Override
+    public boolean checkRoleKeyUnique(SysRoleBo role) {
+        return false;
+    }
+
+    /**
+     * 校验角色是否允许操作
+     *
+     * @param roleId 角色ID
+     */
+    @Override
+    public void checkRoleAllowed(Long roleId) {
+        if (ObjectUtil.isNotNull(roleId) && LoginHelper.isSuperAdmin(roleId)) {
+            throw new BizException("不允许操作超级管理员角色");
+        }
+    }
+
+    /**
+     * 校验角色是否有数据权限
+     *
+     * @param roleId 角色id
+     */
+    @Override
+    public void checkRoleDataScope(Long roleId) {
+        if (ObjectUtil.isNull(roleId)) {
+            return;
+        }
+        if (LoginHelper.isSuperAdmin()) {
+            return;
+        }
+        List<SysRoleVo> roles = this.selectRoleList(new SysRoleBo(roleId));
+        if (CollUtil.isEmpty(roles)) {
+            throw new BizException("没有权限访问角色数据！");
+        }
+
+    }
+
+    /**
+     * 通过角色ID查询角色使用数量
+     *
+     * @param roleId 角色ID
+     * @return 结果
+     */
+    @Override
+    public long countUserRoleByRoleId(Long roleId) {
+        return 0;
+    }
+
+    /**
+     * 新增保存角色信息
+     *
+     * @param bo 角色信息
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void insertRole(SysRoleBo bo) {
+        SysRole role = sysRoleData.save(bo.to(SysRole.class));
+        bo.setId(role.getId());
+        insertRoleMenu(bo);
+    }
+
+    /**
+     * 修改保存角色信息
+     *
+     * @param bo 角色信息
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateRole(SysRoleBo bo) {
+        sysRoleData.save(bo.to(SysRole.class));
+    }
+
+    /**
+     * 修改角色状态
+     *
+     * @param roleId 角色ID
+     * @param status 角色状态
+     * @return 结果
+     */
+    @Override
+    public void updateRoleStatus(Long roleId, String status) {
+    }
+
+    /**
+     * 修改数据权限信息
+     *
+     * @param bo 角色信息
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void authDataScope(SysRoleBo bo) {
+    }
+
+    /**
+     * 新增角色菜单信息
+     *
+     * @param role 角色对象
+     */
+    private void insertRoleMenu(SysRoleBo role) {
+    }
+
+    /**
+     * 新增角色部门信息(数据权限)
+     *
+     * @param role 角色对象
+     */
+    private void insertRoleDept(SysRoleBo role) {
+
+    }
+
+    /**
+     * 通过角色ID删除角色
+     *
+     * @param roleId 角色ID
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteRoleById(Long roleId) {
+    }
+
+    /**
+     * 批量删除角色信息
+     *
+     * @param roleIds 需要删除的角色ID
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteRoleByIds(Long[] roleIds) {
+    }
+
+    /**
+     * 取消授权用户角色
+     *
+     * @param userRole 用户和角色关联信息
+     * @return 结果
+     */
+    @Override
+    public void deleteAuthUser(SysUserRole userRole) {
+    }
+
+    /**
+     * 批量取消授权用户角色
+     *
+     * @param roleId  角色ID
+     * @param userIds 需要取消授权的用户数据ID
+     * @return 结果
+     */
+    @Override
+    public void deleteAuthUsers(Long roleId, Long[] userIds) {
+    }
+
+    /**
+     * 批量选择授权用户角色
+     *
+     * @param roleId  角色ID
+     * @param userIds 需要授权的用户数据ID
+     * @return 结果
+     */
+    @Override
+    public void insertAuthUsers(Long roleId, Long[] userIds) {
+    }
+
+    @Override
+    public void cleanOnlineUserByRole(Long roleId) {
+    }
+}
