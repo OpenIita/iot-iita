@@ -9,7 +9,7 @@ import cc.iotkit.generator.domain.GenTable;
 import cc.iotkit.generator.domain.GenTableColumn;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.RegExUtils;
+import cn.hutool.core.util.ReUtil;
 
 
 
@@ -202,7 +202,7 @@ public class GenUtils {
      * @return 替换后的名字
      */
     public static String replaceText(String text) {
-        return RegExUtils.replaceAll(text, "(?:表|若依)", "");
+        return ReUtil.replaceAll(text, "(?:表|若依)", "");
     }
 
     /**
