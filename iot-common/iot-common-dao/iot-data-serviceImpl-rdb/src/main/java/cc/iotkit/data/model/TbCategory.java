@@ -9,9 +9,11 @@
  */
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Data
@@ -19,11 +21,14 @@ import javax.persistence.Table;
 @Table(name = "category")
 public class TbCategory {
 
-    @javax.persistence.Id
+    @ApiModelProperty(value = "分类id")
+    @Id
     private String id;
 
+    @ApiModelProperty(value = "分类名称")
     private String name;
 
+    @ApiModelProperty(value = "分类描述")
     private Long createAt;
 
 

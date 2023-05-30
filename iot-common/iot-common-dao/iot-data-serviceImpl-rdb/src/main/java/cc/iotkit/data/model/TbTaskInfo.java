@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -22,13 +23,16 @@ import javax.persistence.Table;
 public class TbTaskInfo {
 
     @Id
+    @ApiModelProperty(value = "主键")
     private String id;
 
+    @ApiModelProperty(value = "任务名称")
     private String name;
 
     /**
      * 任务类型
      */
+    @ApiModelProperty(value = "任务类型")
     private String type;
 
     /**
@@ -36,35 +40,42 @@ public class TbTaskInfo {
      * 定时器使用cron表达式
      * 延时器使用延时时长（秒）
      */
+    @ApiModelProperty(value = "表达式")
     private String expression;
 
     /**
      * 描述
      */
     @Column(name = "[desc]")
+    @ApiModelProperty(value = "描述")
     private String desc;
 
     /**
      * 任务输出
      */
     @Column(columnDefinition = "text")
+    @ApiModelProperty(value = "任务输出")
     private String actions;
 
     /**
      * 任务状态
      */
+    @ApiModelProperty(value = "任务状态")
     private String state;
 
     /**
      * 创建者
      */
+    @ApiModelProperty(value = "创建者")
     private String uid;
 
+    @ApiModelProperty(value = "创建时间")
     private Long createAt;
 
     /**
      * 操作备注
      */
+    @ApiModelProperty(value = "操作备注")
     private String reason;
 
 }

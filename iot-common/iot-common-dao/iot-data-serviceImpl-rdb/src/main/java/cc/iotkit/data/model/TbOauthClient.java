@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -21,16 +22,22 @@ import javax.persistence.Table;
 public class TbOauthClient {
 
     @Id
+    @ApiModelProperty(value = "id")
     private String id;
 
+    @ApiModelProperty(value = "客户端id")
     private String clientId;
 
+    @ApiModelProperty(value = "客户端名称")
     private String name;
 
+    @ApiModelProperty(value = "客户端密钥")
     private String clientSecret;
 
+    @ApiModelProperty(value = "允许访问的url")
     private String allowUrl;
 
+    @ApiModelProperty(value = "创建时间")
     private Long createAt;
 
 }

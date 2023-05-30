@@ -41,6 +41,7 @@
         <easyexcel.version>3.2.1</easyexcel.version>
         <velocity.version>2.3</velocity.version>
         <ip2region.version>2.7.0</ip2region.version>
+        <jap-comment.version>1.0.0</jap-comment.version>
     </properties>
 
     <dependencyManagement>
@@ -511,6 +512,11 @@
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.biyanwen</groupId>
+                <artifactId>jpa-comment-spring-boot-starter</artifactId>
+                <version>${jap-comment.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

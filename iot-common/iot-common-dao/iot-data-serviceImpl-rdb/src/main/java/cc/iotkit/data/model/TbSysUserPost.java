@@ -1,6 +1,7 @@
 package cc.iotkit.data.model;
 
 import cc.iotkit.data.model.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -24,11 +25,13 @@ public class TbSysUserPost extends BaseEntity {
     /**
      * 用户ID
      */
+    @ApiModelProperty(value = "用户ID")
     private Long userId;
 
     /**
      * 岗位ID
      */
+    @ApiModelProperty(value = "岗位ID")
     private Long postId;
 
 }

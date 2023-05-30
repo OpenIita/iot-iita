@@ -9,6 +9,8 @@
  */
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -18,31 +20,38 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "device_group")
+@ApiModel(value = "设备组")
 public class TbDeviceGroup {
 
     @Id
+    @ApiModelProperty(value = "设备组id")
     private String id;
 
+    @ApiModelProperty(value = "设备组名称")
     private String name;
 
     /**
      * 所属用户
      */
+    @ApiModelProperty(value = "所属用户")
     private String uid;
 
     /**
      * 分组说明
      */
+    @ApiModelProperty(value = "分组说明")
     private String remark;
 
     /**
      * 设备数量
      */
+    @ApiModelProperty(value = "设备数量")
     private int deviceQty;
 
     /**
      * 创建时间
      */
+    @ApiModelProperty(value = "创建时间")
     private long createAt;
 
 }

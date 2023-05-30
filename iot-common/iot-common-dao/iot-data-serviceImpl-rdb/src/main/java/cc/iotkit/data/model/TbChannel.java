@@ -1,5 +1,6 @@
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -16,13 +17,18 @@ import javax.persistence.Table;
 @Table(name = "channel")
 public class TbChannel {
     @Id
+    @ApiModelProperty(value = "通道id")
     private String id;
 
+    @ApiModelProperty(value = "通道名称")
     private String code;
 
+    @ApiModelProperty(value = "标题")
     private String title;
 
+    @ApiModelProperty(value = "图标")
     private String icon;
 
+    @ApiModelProperty(value = "创建时间")
     private Long createAt;
 }

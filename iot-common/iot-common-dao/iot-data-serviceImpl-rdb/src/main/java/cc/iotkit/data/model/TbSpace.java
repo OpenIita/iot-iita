@@ -9,6 +9,8 @@
  */
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -17,32 +19,39 @@ import javax.persistence.Table;
 
 @Data
 @Entity
+@ApiModel(value = "空间")
 @Table(name = "space")
 public class TbSpace {
 
     @Id
+    @ApiModelProperty(value = "空间id")
     private String id;
 
     /**
      * 关联家庭id
      */
+    @ApiModelProperty(value = "关联家庭id")
     private String homeId;
 
     /**
      * 关联用户id
      */
+    @ApiModelProperty(value = "关联用户id")
     private String uid;
 
     /**
      * 空间名称
      */
+    @ApiModelProperty(value = "空间名称")
     private String name;
 
     /**
      * 设备数量
      */
+    @ApiModelProperty(value = "设备数量")
     private Integer deviceNum;
 
+    @ApiModelProperty(value = "创建时间")
     private Long createAt;
 
 }
