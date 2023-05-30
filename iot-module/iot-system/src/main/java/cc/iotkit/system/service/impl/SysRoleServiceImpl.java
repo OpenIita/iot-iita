@@ -4,7 +4,12 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.system.ISysRoleData;
+import cc.iotkit.data.system.ISysRoleDeptData;
+import cc.iotkit.data.system.ISysRoleMenuData;
+import cc.iotkit.data.system.ISysUserRoleData;
 import cc.iotkit.model.system.SysRole;
 import cc.iotkit.system.dto.SysUserRole;
 import cc.iotkit.system.dto.bo.SysRoleBo;
@@ -16,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +34,10 @@ import java.util.Set;
 @Service
 public class SysRoleServiceImpl implements ISysRoleService {
 
-    private final ISysRoleData sysRoleData;
+    private final ISysRoleData iSysRoleData;
+    private final ISysRoleMenuData iSysRoleMenuData;
+    private final ISysUserRoleData iSysUserRoleData;
+    private final ISysRoleDeptData iSysRoleDeptData;
 
     @Override
     public Paging<SysRoleVo> selectPageRoleList(SysRoleBo role, PageRequest<?> query) {
@@ -45,8 +52,14 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public List<SysRoleVo> selectRoleList(SysRoleBo role) {
-        return new ArrayList<>();
+        List<SysRole> sysRoles = getSysRoles(role);
+        return MapstructUtils.convert(sysRoles, SysRoleVo.class);
     }
+
+    private List<SysRole> getSysRoles(SysRoleBo role) {
+        return iSysRoleData.selectRoleList(MapstructUtils.convert(role, SysRole.class));
+    }
+
 
     /**
      * 根据用户ID查询角色
@@ -56,7 +69,17 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public List<SysRoleVo> selectRolesByUserId(Long userId) {
-        return new ArrayList<>();
+        List<SysRole> sysRoles = iSysRoleData.selectRolePermissionByUserId(userId);
+        List<SysRole> roles = getSysRoles(new SysRoleBo());
+        for (SysRole role : roles) {
+            for (SysRole sysRole : sysRoles) {
+                if (role.getId().longValue() == sysRole.getId().longValue()) {
+                    role.setFlag(true);
+                    break;
+                }
+            }
+        }
+        return MapstructUtils.convert(roles, SysRoleVo.class);
     }
 
     /**
@@ -67,7 +90,14 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public Set<String> selectRolePermissionByUserId(Long userId) {
-        return new HashSet<>();
+        List<SysRole> perms = iSysRoleData.selectRolePermissionByUserId(userId);
+        Set<String> permsSet = new HashSet<>();
+        for (SysRole perm : perms) {
+            if (ObjectUtil.isNotNull(perm)) {
+                permsSet.addAll(StringUtils.splitList(perm.getRoleKey().trim()));
+            }
+        }
+        return permsSet;
     }
 
     /**
@@ -88,7 +118,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public List<Long> selectRoleListByUserId(Long userId) {
-        return new ArrayList<>();
+        return iSysRoleData.selectRoleListByUserId(userId);
     }
 
     /**
@@ -99,7 +129,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public SysRoleVo selectRoleById(Long roleId) {
-        return sysRoleData.findById(roleId).to(SysRoleVo.class);
+        return iSysRoleData.findById(roleId).to(SysRoleVo.class);
     }
 
     /**
@@ -110,7 +140,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public boolean checkRoleNameUnique(SysRoleBo role) {
-        return false;
+        return iSysRoleData.checkRoleNameUnique(MapstructUtils.convert(role, SysRole.class));
     }
 
     /**
@@ -121,7 +151,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public boolean checkRoleKeyUnique(SysRoleBo role) {
-        return false;
+        return iSysRoleData.checkRoleKeyUnique(MapstructUtils.convert(role, SysRole.class));
     }
 
     /**
@@ -176,7 +206,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertRole(SysRoleBo bo) {
-        SysRole role = sysRoleData.save(bo.to(SysRole.class));
+        SysRole role = iSysRoleData.save(bo.to(SysRole.class));
         bo.setRoleId(role.getId());
         insertRoleMenu(bo);
     }
@@ -190,9 +220,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateRole(SysRoleBo bo) {
-        SysRole role = sysRoleData.save(bo.to(SysRole.class));
-        if(ObjectUtil.isNull(role)){
-           return 0;
+        SysRole role = iSysRoleData.save(bo.to(SysRole.class));
+        if (ObjectUtil.isNull(role)) {
+            return 0;
         }
         return 1;
     }
@@ -206,6 +236,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public void updateRoleStatus(Long roleId, String status) {
+        SysRole sysRole = new SysRole();
+        sysRole.setId(roleId);
+        sysRole.setStatus(status);
+        iSysRoleData.updateById(sysRole);
+
     }
 
     /**
@@ -217,6 +252,13 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void authDataScope(SysRoleBo bo) {
+        // 修改角色信息
+        iSysRoleData.updateById(MapstructUtils.convert(bo, SysRole.class));
+        // 删除角色与部门关联
+        iSysRoleDeptData.delete(bo.getRoleId());
+        // 新增角色和部门信息（数据权限）
+        insertRoleDept(bo);
+
     }
 
     /**

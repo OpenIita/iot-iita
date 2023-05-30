@@ -9,6 +9,7 @@ import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.TreeBuildUtils;
 import cc.iotkit.data.system.ISysMenuData;
 import cc.iotkit.data.system.ISysRoleData;
+import cc.iotkit.data.system.ISysRoleMenuData;
 import cc.iotkit.model.system.SysMenu;
 import cc.iotkit.model.system.SysRole;
 import cc.iotkit.system.dto.bo.SysMenuBo;
@@ -34,6 +35,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
 
     private final ISysMenuData sysMenuData;
     private final ISysRoleData sysRoleData;
+    private final ISysRoleMenuData iSysRoleMenuData;
 
     /**
      * 根据用户查询系统菜单列表
@@ -124,17 +126,6 @@ public class SysMenuServiceImpl implements ISysMenuService {
     public List<Long> selectMenuListByRoleId(Long roleId) {
         SysRole role = sysRoleData.findById(roleId);
         return sysRoleData.selectMenuListByRoleId(roleId, role.getMenuCheckStrictly());
-    }
-
-    /**
-     * 根据租户套餐ID查询菜单树信息
-     *
-     * @param packageId 租户套餐ID
-     * @return 选中菜单列表
-     */
-    @Override
-    public List<Long> selectMenuListByPackageId(Long packageId) {
-        return new ArrayList<>();
     }
 
     /**
@@ -324,7 +315,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     @Override
     public boolean checkMenuExistRole(Long menuId) {
-        return false;
+        return iSysRoleMenuData.checkMenuExistRole(menuId);
     }
 
     /**

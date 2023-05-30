@@ -43,4 +43,5 @@ public interface ISysMenuData extends ICommonData<SysMenu, Long> {
 
     boolean checkMenuNameUnique(SysMenu menu);
 
+
 }
