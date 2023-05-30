@@ -10,38 +10,30 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.enums.ErrCode;
-import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.satoken.utils.AuthUtil;
-import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.data.manager.ICategoryData;
-import cc.iotkit.data.manager.IProductData;
-import cc.iotkit.data.manager.IProductModelData;
-import cc.iotkit.data.manager.IThingModelData;
-import cc.iotkit.manager.config.AliyunConfig;
-import cc.iotkit.manager.service.DataOwnerService;
+import cc.iotkit.common.api.Request;
+import cc.iotkit.common.log.annotation.Log;
+import cc.iotkit.common.log.enums.BusinessType;
+import cc.iotkit.common.validate.AddGroup;
+import cc.iotkit.manager.dto.bo.category.CategoryBo;
+import cc.iotkit.manager.dto.bo.product.ProductBo;
+import cc.iotkit.manager.dto.bo.productmodel.ProductModelBo;
+import cc.iotkit.manager.dto.bo.thingmodel.ThingModelBo;
+import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
+import cc.iotkit.manager.dto.vo.category.CategoryVo;
+import cc.iotkit.manager.dto.vo.product.ProductVo;
+import cc.iotkit.manager.dto.vo.productmodel.ProductModelVo;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.model.alert.AlertConfig;
-import cc.iotkit.model.product.Category;
-import cc.iotkit.model.product.Product;
-import cc.iotkit.model.product.ProductModel;
-import cc.iotkit.model.product.ThingModel;
-import cc.iotkit.temporal.IDbStructureData;
+import cc.iotkit.manager.service.IProductService;
 import cn.dev33.satoken.annotation.SaCheckRole;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.model.PutObjectResult;
 import io.swagger.annotations.Api;
-import lombok.SneakyThrows;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 @Api(tags = {"产品"})
@@ -50,150 +42,102 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
-    @Autowired
-    @Qualifier("productDataCache")
-    private IProductData productData;
-    @Autowired
-    @Qualifier("thingModelDataCache")
-    private IThingModelData thingModelData;
-    @Autowired
-    @Qualifier("categoryDataCache")
-    private ICategoryData categoryData;
-    @Autowired
-    private DataOwnerService dataOwnerService;
-    @Autowired
-    private AliyunConfig aliyunConfig;
-    @Autowired
-    @Qualifier("productModelDataCache")
-    private IProductModelData productModelData;
-    @Autowired
-    private IDbStructureData dbStructureData;
 
 
-    private OSS ossClient;
+    @Autowired
+    private IProductService productService;
 
     @PostMapping("/list")
-    public Paging<Product> getProducts(
-            PageRequest<Product> request) {
-        if (!AuthUtil.isAdmin()) {
-            return productData.findByUid(AuthUtil.getUserId(), request.getPageNum(), request.getPageSize());
-        }
-
-        return productData.findAll(request);
+    public Paging<ProductVo> getProducts(@Validated @RequestBody
+            PageRequest<ProductBo> request) {
+        return productService.selectPageList(request);
     }
 
-    @PostMapping("/save")
-    public void save(Product product) {
-        dataOwnerService.checkOwnerSave(productData, product);
+    @ApiOperation("新建")
+    @PostMapping(value = "/add")
+    @Log(title = "产品", businessType = BusinessType.INSERT)
+    public ProductVo create(@Validated(AddGroup.class) @RequestBody Request<ProductBo> request) {
 
-        if (product.getCreateAt() == null) {
-            product.setCreateAt(System.currentTimeMillis());
-        }
-        productData.save(product);
+        return productService.addEntity(request.getData());
+
     }
 
-    @GetMapping("/{productKey}")
-    public Product getProduct(@PathVariable("productKey") String productKey) {
-        return dataOwnerService.checkOwner(productData.findById(productKey));
+    @ApiOperation(value = "编辑产品")
+    @PostMapping("/edit")
+    @Log(title = "产品", businessType = BusinessType.UPDATE)
+    public boolean edit(@RequestBody @Validated ProductBo productBo) {
+        return productService.updateEntity(productBo);
     }
 
-    @GetMapping("/thingModel/{productKey}")
-    public ThingModel getThingModel(@PathVariable("productKey") String productKey) {
-        checkProductOwner(productKey);
-        return thingModelData.findById(productKey);
+
+    @ApiOperation("查看详情")
+    @PostMapping(value = "/getDetail")
+    public ProductVo getDetail(@RequestParam  @Validated Request<String> request) {
+        ProductVo dto = productService.getDetail(request.getData());
+        return dto;
+    }
+    @GetMapping("/getThingModelByProductKey")
+    @ApiOperation("查看物模型")
+    public ThingModelVo getThingModelByProductKey(@RequestParam  @Validated Request<String> request) {
+
+        return productService.getThingModelByProductKey(request.getData());
+
     }
 
+    @ApiOperation("保存物模型")
     @PostMapping("/thingModel/save")
-    public void saveThingModel(String productKey, String model) {
-        checkProductOwner(productKey);
-        ThingModel oldData = thingModelData.findById(productKey);
-        ThingModel thingModel = new ThingModel(productKey, productKey, JsonUtils.parseObject(model, ThingModel.Model.class));
-        if (oldData == null) {
-            //定义时序数据库物模型数据结构
-            dbStructureData.defineThingModel(thingModel);
-        } else {
-            //更新时序数据库物模型数据结构
-            dbStructureData.updateThingModel(thingModel);
-        }
-        thingModelData.save(thingModel);
+    public boolean saveThingModel(@Validated @RequestBody Request<ThingModelBo> request) {
+
+        return productService.saveThingModel(request.getData());
+
+
     }
 
-    @PostMapping("/thingModel/{productKey}/delete")
-    public void deleteThingModel(String productKey) {
-        checkProductOwner(productKey);
-        ThingModel thingModel = thingModelData.findById(productKey);
-        //删除时序数据库物模型数据结构
-        dbStructureData.defineThingModel(thingModel);
-        thingModelData.deleteById(productKey);
+    @PostMapping("/thingModel/delete")
+    @ApiOperation("删除物模型")
+    @Log(title = "物模型", businessType = BusinessType.DELETE)
+    public boolean deleteThingModel(@Validated @RequestBody Request<String> productKey) {
+       return productService.deleteThingModel(productKey.getData());
     }
 
-    private void checkProductOwner(String productKey) {
-        dataOwnerService.checkOwner(productData.findById(productKey));
-    }
 
-    @GetMapping("/categories")
-    public List<Category> getCategories() {
-        return categoryData.findAll();
+    @PostMapping("/category/list")
+    @ApiOperation("产品品类展示")
+    public Paging<CategoryVo> getCategories(@Validated @RequestBody PageRequest<CategoryBo> request) {
+        return productService.selectCategoryPageList(request);
     }
 
     @SaCheckRole("iot_admin")
-    @PostMapping("/saveCategory")
-    public void saveCategory(Category cate) {
-        cate.setCreateAt(System.currentTimeMillis());
-        categoryData.save(cate);
+    @ApiOperation("品类编辑")
+    @PostMapping("/category/edit")
+    public boolean saveCategory(@Validated @RequestBody CategoryBo req) {
+
+        return productService.editCategory(req);
     }
 
     @SaCheckRole("iot_admin")
-    @PostMapping("/delCategory")
-    public void delCategory(String id) {
-        categoryData.deleteById(id);
+    @PostMapping("/category/delete")
+    @ApiOperation("删除品类")
+    public boolean delCategory(@Validated @RequestBody Request<String> req) {
+        return productService.deleteCategory(req.getData());
+
     }
 
-    @SneakyThrows
     @PostMapping("/uploadImg/{productKey}")
     public String uploadImg(@PathVariable("productKey") String productKey,
                             @RequestParam("file") MultipartFile file) {
-        productKey = getProduct(productKey).getId();
-
-        String fileName = file.getOriginalFilename();
-        String end = fileName.substring(fileName.lastIndexOf("."));
-        if (ossClient == null) {
-            // 创建OSSClient实例。
-            ossClient = new OSSClientBuilder().build(aliyunConfig.getEndpoint(),
-                    aliyunConfig.getAccessKeyId(), aliyunConfig.getAccessKeySecret());
-        }
-
-        fileName = "product/" + productKey + "/cover" + end;
-        String bucket = aliyunConfig.getBucketId();
-        // 填写Bucket名称和Object完整路径。Object完整路径中不能包含Bucket名称。
-        PutObjectResult result = ossClient.putObject(bucket, fileName,
-                file.getInputStream());
-        return ossClient.generatePresignedUrl(bucket, fileName,
-                new Date(new Date().getTime() + 3600L * 1000 * 24 * 365 * 10)).toString();
+       return productService.uploadImg(productKey,file);
     }
 
-    @GetMapping("/{productKey}/models")
-    public List<ProductModel> getModels(@PathVariable("productKey") String productKey) {
-        dataOwnerService.checkOwner(productData, productKey);
-        return productModelData.findByProductKey(productKey);
+    @PostMapping("/getModelsByProductKey")
+    @ApiModelProperty("获取产品型号")
+    public List<ProductModelVo> getModels(String productKey) {
+        return productService.getModels(productKey);
     }
 
-    @PostMapping("/saveProductModel")
-    public void saveProductModel(ProductModel productModel) {
-        String model = productModel.getModel();
-        String productKey = productModel.getProductKey();
-        Product product = productData.findById(productKey);
-        if (product == null) {
-            throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(product);
-
-        ProductModel oldScript = productModelData.findByModel(model);
-        if (oldScript != null && !oldScript.getProductKey().equals(productKey)) {
-            throw new BizException(ErrCode.MODEL_ALREADY);
-        }
-
-        productModel.setModifyAt(System.currentTimeMillis());
-        productModelData.save(productModel);
+    @PostMapping("/productModel/edit")
+    @ApiOperation("编辑产品型号")
+    public boolean saveProductModel(ProductModelBo productModel) {
+        return productService.editProductModel(productModel);
     }
 }

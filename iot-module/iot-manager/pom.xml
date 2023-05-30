@@ -112,6 +112,10 @@
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-common-excel</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-log</artifactId>
+        </dependency>
 
     </dependencies>
 
