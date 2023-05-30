@@ -9,6 +9,7 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.AuthUtil;
@@ -20,6 +21,7 @@ import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.manager.config.AliyunConfig;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.model.alert.AlertConfig;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
@@ -34,9 +36,11 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -68,15 +72,14 @@ public class ProductController {
 
     private OSS ossClient;
 
-    @PostMapping("/list/{size}/{page}")
+    @PostMapping("/list")
     public Paging<Product> getProducts(
-            @PathVariable("size") int size,
-            @PathVariable("page") int page) {
+            PageRequest<Product> request) {
         if (!AuthUtil.isAdmin()) {
-            return productData.findByUid(AuthUtil.getUserId(), page, size);
+            return productData.findByUid(AuthUtil.getUserId(), request.getPageNum(), request.getPageSize());
         }
 
-        return productData.findAll(page, size);
+        return productData.findAll(request);
     }
 
     @PostMapping("/save")
