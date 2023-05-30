@@ -1,5 +1,6 @@
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,6 +26,7 @@ public class BaseEntity {
     /**
      * 创建部门
      */
+    @ApiModelProperty(value = "创建部门")
     private Long createDept;
 
     /**
@@ -32,6 +34,7 @@ public class BaseEntity {
      */
     @CreatedBy
     @Column(name = "create_by", updatable = false)
+    @ApiModelProperty(value = "创建者")
     private Long createBy;
 
     /**
@@ -39,6 +42,7 @@ public class BaseEntity {
      */
     @CreatedDate
     @Column(name = "create_time", updatable = false)
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
     /**
@@ -46,6 +50,7 @@ public class BaseEntity {
      */
     @LastModifiedBy
     @Column(name = "update_by")
+    @ApiModelProperty(value = "更新者")
     private Long updateBy;
 
     /**
@@ -53,6 +58,7 @@ public class BaseEntity {
      */
     @LastModifiedDate
     @Column(name = "update_time")
+    @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
 }

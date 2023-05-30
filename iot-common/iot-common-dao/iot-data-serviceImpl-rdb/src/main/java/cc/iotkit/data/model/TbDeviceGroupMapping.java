@@ -1,5 +1,6 @@
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,10 +17,13 @@ import javax.persistence.Table;
 public class TbDeviceGroupMapping {
 
     @Id
+    @ApiModelProperty(value = "设备组映射id")
     private String id;
 
+    @ApiModelProperty(value = "设备id")
     private String deviceId;
 
+    @ApiModelProperty(value = "设备组id")
     private String groupId;
 
 }

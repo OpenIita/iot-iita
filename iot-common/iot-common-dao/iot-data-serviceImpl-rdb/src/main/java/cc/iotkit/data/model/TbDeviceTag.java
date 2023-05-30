@@ -9,6 +9,8 @@
  */
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,26 +26,32 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table(name = "device_tag")
+@ApiModel(value = "设备标签")
 public class TbDeviceTag {
 
     @Id
+    @ApiModelProperty(value = "id")
     private String id;
 
+    @ApiModelProperty(value = "设备id")
     private String deviceId;
 
     /**
      * 标签码
      */
+    @ApiModelProperty(value = "标签码")
     private String code;
 
     /**
      * 标签名称
      */
+    @ApiModelProperty(value = "标签名称")
     private String name;
 
     /**
      * 标签值
      */
+    @ApiModelProperty(value = "标签值")
     private String value;
 
 }

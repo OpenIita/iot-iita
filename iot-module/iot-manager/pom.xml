@@ -108,6 +108,11 @@
             <artifactId>iot-common-satoken</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-excel</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

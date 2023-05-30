@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeviceIdGroup {
 
+    @ApiModelProperty(value = "设备组id")
     private String id;
+    @ApiModelProperty(value = "设备id")
     private String deviceId;
+    @ApiModelProperty(value = "组名称")
     private String name;
 
 }

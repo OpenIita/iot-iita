@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,8 +28,10 @@ public class TbVirtualDeviceMapping {
     @Id
     private String id;
 
+    @ApiModelProperty(value = "虚拟设备ID")
     private String virtualId;
 
+    @ApiModelProperty(value = "设备ID")
     private String deviceId;
 
 }

@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -22,10 +23,13 @@ import javax.persistence.Table;
 public class TbThingModel {
 
     @Id
+    @ApiModelProperty(value = "主键")
     private String id;
 
+    @ApiModelProperty(value = "产品key")
     private String productKey;
 
+    @ApiModelProperty(value = "模型内容")
     @Column(columnDefinition = "text")
     private String model;
 

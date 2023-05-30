@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -9,30 +11,42 @@ import javax.persistence.Table;
 
 @Data
 @Entity
+@ApiModel(value = "产品型号")
 @Table(name = "product_model")
 public class TbProductModel {
 
     @Id
+    @ApiModelProperty(value = "型号id")
     private String id;
 
     /**
      * 型号在所有产品中唯一
      */
+    @ApiModelProperty(value = "型号")
     private String model;
+
+    @ApiModelProperty(value = "名称")
 
     private String name;
 
+    @ApiModelProperty(value = "产品Key")
+
     private String productKey;
 
+    @ApiModelProperty(value = "脚本类型")
     private String type;
 
     @Column(columnDefinition = "text")
+    @ApiModelProperty(value = "脚本内容")
+
     private String script;
 
     /**
      * 脚本状态，只有发布状态才生效
      */
-    private String state;
+    @ApiModelProperty(value = "脚本状态")
 
+    private String state;
+    @ApiModelProperty(value = "修改时间")
     private Long modifyAt;
 }

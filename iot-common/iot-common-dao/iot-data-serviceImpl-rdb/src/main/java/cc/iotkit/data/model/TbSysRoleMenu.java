@@ -1,5 +1,6 @@
 package cc.iotkit.data.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -18,16 +19,19 @@ import javax.persistence.Table;
 public class TbSysRoleMenu {
 
     @Id
+    @ApiModelProperty(value = "主键")
     private Long id;
 
     /**
      * 角色ID
      */
+    @ApiModelProperty(value = "角色ID")
     private Long roleId;
 
     /**
      * 菜单ID
      */
+    @ApiModelProperty(value = "菜单ID")
     private Long menuId;
 
 }
