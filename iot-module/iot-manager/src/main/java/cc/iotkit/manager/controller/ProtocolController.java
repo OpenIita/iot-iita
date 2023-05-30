@@ -32,6 +32,7 @@ import cc.iotkit.model.protocol.ProtocolComponent;
 import cc.iotkit.model.protocol.ProtocolConverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -65,13 +66,13 @@ public class ProtocolController {
 
     @ApiOperation("添加组件")
     @PostMapping("/addComponent")
-    public boolean addComponent(ProtocolComponentBo component) {
+    public boolean addComponent(@RequestBody @Validated ProtocolComponentBo component) {
         return protocolService.addComponent(component);
     }
 
     @ApiOperation("修改组件")
     @PostMapping("/editComponent")
-    public String saveComponent(ProtocolComponentBo component) {
+    public String saveComponent(@RequestBody @Validated ProtocolComponentBo component) {
        return protocolService.saveComponent(component);
     }
 
@@ -85,7 +86,7 @@ public class ProtocolController {
 
     @ApiOperation("保存组件脚本")
     @PostMapping("/saveComponentScript")
-    public boolean saveComponentScript(
+    public boolean saveComponentScript(@Validated
             @RequestBody ProtocolComponentBo upReq) {
         return protocolService.saveComponentScript(upReq);
     }
@@ -111,14 +112,14 @@ public class ProtocolController {
     }
 
     @ApiOperation("新增转换脚本")
-    @PostMapping("/addConverter")
+    @PostMapping("/converter/add")
     public boolean addConverter(@Validated @RequestBody ProtocolConverterBo converter) {
         return protocolService.addConverter(converter);
 
     }
 
     @ApiOperation("修改转换脚本")
-    @PostMapping("/editConverter")
+    @PostMapping("/converter/edit")
     public boolean editConverter(ProtocolConverterBo req) {
         return protocolService.editConverter(req);
     }
@@ -126,7 +127,7 @@ public class ProtocolController {
 
 
     @ApiOperation("获取转换脚本详情")
-    @PostMapping("/getConverterScript/{id}")
+    @PostMapping("/getConverterScript")
     public ProtocolConverterVo getConverter(@RequestBody Request<String> req) {
         String id = req.getData();
 
@@ -134,20 +135,23 @@ public class ProtocolController {
 
     }
 
-    @PostMapping("/saveConverterScript")
+    @PostMapping("/converterScript/edit")
+    @ApiOperation("保存转换脚本")
     public boolean saveConverterScript(
             @Validated @RequestBody ProtocolConverterBo req) {
 
         return protocolService.saveConverterScript(req);
     }
 
-    @PostMapping("/deleteConverter")
+    @PostMapping("/converter/delete")
+    @ApiOperation("删除转换脚本")
     public boolean deleteConverter(@RequestBody @Validated Request<String> req) {
         String id = req.getData();
        return protocolService.deleteConverter(id);
     }
 
-    @PostMapping("/component/{id}/state/{state}")
+    @PostMapping("/component/changeState}")
+    @ApiOperation("组件启用/禁用")
     public boolean changeComponentState(@RequestBody @Validated ChangeStateBo req) {
        return protocolService.changeComponentState(req);
     }
