@@ -39,6 +39,7 @@
         <alibaba-ttl.version>2.14.2</alibaba-ttl.version>
         <poi.version>5.2.3</poi.version>
         <easyexcel.version>3.2.1</easyexcel.version>
+        <velocity.version>2.3</velocity.version>
         <ip2region.version>2.7.0</ip2region.version>
     </properties>
 
@@ -505,7 +506,12 @@
                 <artifactId>iot-virtual-device</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <!-- velocity代码生成使用模板 -->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity-engine-core</artifactId>
+                <version>${velocity.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>

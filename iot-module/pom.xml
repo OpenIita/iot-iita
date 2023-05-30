@@ -16,6 +16,7 @@
         <module>iot-manager</module>
         <module>iot-rule-engine</module>
         <module>iot-message-notify</module>
+        <module>iot-generator</module>
     </modules>
 
 
