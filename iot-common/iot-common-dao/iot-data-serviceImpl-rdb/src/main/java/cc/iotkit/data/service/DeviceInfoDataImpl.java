@@ -153,7 +153,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
 
     @Override
     public List<DeviceInfo> findByParentId(String parentId) {
-        return parseVoToDto(deviceInfoRepository.findByParentId(parentId));
+        return parseVoToDto(deviceInfoRepository.findByParentId(parentId ));
     }
 
     @Override

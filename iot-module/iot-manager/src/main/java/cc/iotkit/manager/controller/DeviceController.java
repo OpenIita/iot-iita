@@ -9,24 +9,24 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.AuthUtil;
-import cc.iotkit.common.utils.DeviceUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.common.utils.UniqueIdUtil;
-import cc.iotkit.comps.service.DeviceBehaviourService;
-import cc.iotkit.data.manager.IDeviceConfigData;
-import cc.iotkit.data.manager.IDeviceGroupData;
-import cc.iotkit.data.manager.IDeviceInfoData;
-import cc.iotkit.data.manager.IProductData;
+import cc.iotkit.manager.dto.bo.device.*;
+import cc.iotkit.manager.dto.bo.deviceconfig.DeviceConfigAddBo;
+import cc.iotkit.manager.dto.bo.devicegroup.DeviceAddGroupBo;
+import cc.iotkit.manager.dto.bo.devicegroup.DeviceGroupBo;
+import cc.iotkit.manager.dto.bo.thingmodel.ThingModelMessageBo;
+import cc.iotkit.manager.dto.vo.deviceconfig.DeviceConfigVo;
+import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
+import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
-import cc.iotkit.manager.model.query.DeviceQuery;
-import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.manager.service.DeferredDataConsumer;
-import cc.iotkit.manager.service.DeviceService;
-import cc.iotkit.manager.service.IProductService;
+import cc.iotkit.manager.service.*;
 import cc.iotkit.model.InvokeResult;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.DeviceConfig;
@@ -34,19 +34,11 @@ import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
 import cc.iotkit.model.device.message.ThingModelMessage;
-import cc.iotkit.model.product.Product;
-import cc.iotkit.model.product.ThingModel;
-import cc.iotkit.temporal.IDevicePropertyData;
-import cc.iotkit.temporal.IThingModelMessageData;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
@@ -63,32 +55,12 @@ public class DeviceController {
 
     @Autowired
     IProductService productService;
+
     @Autowired
     private DeviceService deviceService;
     @Autowired
-    @Qualifier("deviceInfoDataCache")
-    private IDeviceInfoData deviceInfoData;
-    @Autowired
-    @Qualifier("productDataCache")
-    private IProductData productData;
-    @Autowired
-    private DataOwnerService dataOwnerService;
-    @Autowired
-    private ProductController productController;
-    @Lazy
-    @Autowired
-    private IThingModelMessageData thingModelMessageData;
-    @Lazy
-    @Autowired
-    private IDevicePropertyData devicePropertyData;
-    @Autowired
-    private DeviceBehaviourService behaviourService;
-    @Autowired
-    DeferredDataConsumer deferredDataConsumer;
-    @Autowired
-    private IDeviceGroupData deviceGroupData;
-    @Autowired
-    private IDeviceConfigData deviceConfigData;
+    private IDeviceService deviceServiceImpl;
+
 
     @ApiOperation(value = "服务调用", notes = "服务调用", httpMethod = "POST")
     @ApiImplicitParams({
@@ -132,349 +104,195 @@ public class DeviceController {
     }
 
     @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "size", value = "长度", dataTypeClass = Integer.class, paramType = "path"),
-            @ApiImplicitParam(name = "page", value = "页数", dataTypeClass = Integer.class, paramType = "path")
-    })
-    @PostMapping("/list/{size}/{page}")
-    public Paging<DeviceInfo> getDevices(
-            @PathVariable("size") int size,
-            @PathVariable("page") int page,
-            @RequestBody DeviceQuery query) {
-        String uid = "";
-        String subUid = "";
-        if (!AuthUtil.isAdmin()) {
-            //客户端用户使用绑定子用户查询
-            if (AuthUtil.isClientUser()) {
-                subUid = AuthUtil.getUserId();
-            } else {
-                uid = AuthUtil.getUserId();
-            }
-        }
+    @PostMapping("/list")
+    public Paging<DeviceInfo> getDevices(@Validated @RequestBody PageRequest<DeviceQueryBo> pageRequest) {
 
-        String pk = query.getProductKey();
-        //关键字查询
-        String keyword = query.getKeyword();
-        String group = query.getGroup();
-        String state = query.getState();
-
-        return deviceInfoData.findByConditions(uid, subUid, pk, group,
-                state, keyword, page, size);
+        return deviceServiceImpl.getDevices(pageRequest);
     }
 
-    @ApiOperation(value = "创建设备", notes = "创建设备", httpMethod = "POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "productKey", value = "产品key", dataTypeClass = String.class, paramType = "form"),
-            @ApiImplicitParam(name = "deviceName", value = "设备名称", dataTypeClass = String.class, paramType = "form"),
-            @ApiImplicitParam(name = "parentId", value = "父设备ID", dataTypeClass = String.class, paramType = "form")
-    })
-    @PostMapping("/create")
-    public void createDevice(String productKey, String deviceName, String parentId) {
-        Product product = productData.findById(productKey);
-        if (product == null) {
-            throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
-        }
-
-        //生成设备密钥
-        String chars = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";
-        int maxPos = chars.length();
-        StringBuilder secret = new StringBuilder();
-        for (var i = 0; i < 16; i++) {
-            secret.append(chars.charAt((int) Math.floor(Math.random() * maxPos)));
-        }
-
-        DeviceInfo device = new DeviceInfo();
-        device.setId(DeviceUtil.newDeviceId(deviceName));
-        device.setUid(product.getUid());
-        device.setDeviceId(device.getId());
-        device.setProductKey(productKey);
-        device.setDeviceName(deviceName);
-        device.setSecret(secret.toString());
-        device.setState(new DeviceInfo.State(false, null, null));
-        device.setCreateAt(System.currentTimeMillis());
-        if (StringUtils.isNotBlank(parentId)) {
-            device.setParentId(parentId);
-        }
-        deviceInfoData.save(device);
+    @ApiOperation(value = "创建设备")
+    @PostMapping("/add")
+    public boolean createDevice(@RequestBody @Validated Request<DeviceInfoBo> bo) {
+        return deviceServiceImpl.addDevice(bo.getData());
     }
 
     @ApiOperation(value = "获取子设备", notes = "获取子设备", httpMethod = "GET")
     @ApiImplicitParam(name = "deviceId", value = "设备ID", dataTypeClass = String.class, paramType = "form")
-    @GetMapping("/{deviceId}/children")
-    public List<DeviceInfo> getChildren(@PathVariable("deviceId") String deviceId) {
-        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
-        if (deviceInfo == null) {
-            throw new BizException(ErrCode.DEVICE_NOT_FOUND);
-        }
+    @PostMapping("/children/list")
+    public List<DeviceInfoVo> getChildren(@Validated @RequestBody PageRequest<String> request) {
+        String deviceId = request.getData();
 
-        dataOwnerService.checkOwner(deviceInfo);
-        return deviceInfoData.findByParentId(deviceId);
+        return deviceServiceImpl.selectChildrenPageList(deviceId);
     }
 
-    @GetMapping("/parentDevices")
+    @ApiOperation("获取网关")
+    @PostMapping("/parentDevices")
     public List<Map<String, Object>> getParentDevices() {
-        String uid = "";
-        if (!AuthUtil.isAdmin()) {
-            uid = AuthUtil.getUserId();
-        }
-        return deviceInfoData.findByProductNodeType(uid);
+        return deviceServiceImpl.getParentDevices();
     }
 
-    @GetMapping(Constants.API_DEVICE.DETAIL)
+    @ApiOperation("获取设备详情")
+    @PostMapping(Constants.API_DEVICE.DETAIL)
     public DeviceInfo getDetail(@PathVariable("deviceId") String deviceId) {
-        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
-        dataOwnerService.checkOwner(deviceInfo);
-        deviceInfo.setProperty(deviceInfoData.getProperties(deviceId));
-        return deviceInfo;
+        return deviceServiceImpl.getDetail(deviceId);
     }
 
-    @GetMapping("/{pk}/{dn}")
+    @ApiOperation("获取设备详情")
+    @PostMapping("/{pk}/{dn}")
     public DeviceInfo getByPkDn(@PathVariable("pk") String pk,
                                 @PathVariable("dn") String dn) {
-        return dataOwnerService.checkOwner(
-                deviceInfoData.findByProductKeyAndDeviceName(pk, dn));
+        return deviceServiceImpl.getByPkDn(pk, dn);
     }
 
-    @PostMapping("/{deviceId}/delete")
-    public void deleteDevice(@PathVariable("deviceId") String deviceId) {
-        deviceId = getDetail(deviceId).getDeviceId();
-        deviceInfoData.deleteById(deviceId);
+    @ApiOperation("删除设备")
+    @PostMapping("/delete")
+    public boolean deleteDevice(@Validated @RequestBody Request<String> request) {
+        return deviceServiceImpl.deleteDevice(request.getData());
     }
 
-    @PostMapping("/{deviceId}/logs/{size}/{page}")
-    public Paging<ThingModelMessage> logs(
-            @PathVariable("deviceId") String deviceId,
-            @PathVariable("size") int size,
-            @PathVariable("page") int page,
-            String type, String identifier) {
-        return thingModelMessageData.findByTypeAndIdentifier(deviceId, type, identifier, page, size);
+    @ApiOperation("设备物模型日志")
+    @PostMapping("/deviceLogs/list")
+    public Paging<ThingModelMessage> logs(@Validated @RequestBody PageRequest<DeviceLogQueryBo> request) {
+        return deviceServiceImpl.logs(request);
     }
 
-    @GetMapping("/{deviceId}/property/{name}/{start}/{end}")
-    public List<DeviceProperty> getPropertyHistory(
-            @PathVariable("deviceId") String deviceId,
-            @PathVariable("name") String name,
-            @PathVariable("start") long start,
-            @PathVariable("end") long end) {
-        return devicePropertyData.findDevicePropertyHistory(deviceId, name, start, end);
+    @ApiOperation("设备属性日志")
+    @PostMapping("/deviceProperty/log/list")
+    public List<DeviceProperty> getPropertyHistory(@Validated @RequestBody
+                                                   Request<DevicePropertyLogQueryBo> query) {
+        DevicePropertyLogQueryBo data = query.getData();
+        String deviceId = data.getDeviceId();
+        String name = data.getName();
+        long start = data.getStart();
+        long end = data.getEnd();
+        return deviceServiceImpl.getPropertyHistory(deviceId, name, start, end);
     }
 
-    @PostMapping("/{deviceId}/unbind")
-    public void unbindDevice(@PathVariable("deviceId") String deviceId) {
-        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
-        dataOwnerService.checkOwner(deviceInfo);
-        deviceService.unbindDevice(deviceId);
+    @ApiOperation("设备解绑")
+    @PostMapping("/unbind")
+    public boolean unbindDevice(@Validated @RequestBody Request<String> request) {
+        return deviceServiceImpl.unbindDevice(request.getData());
     }
 
-    @GetMapping("/{deviceId}/thingModel")
-    public ThingModelVo getThingModel(@PathVariable("deviceId") String deviceId) {
+    @ApiOperation("获取设备物模型")
+    @PostMapping("/getThingModel")
+    public ThingModelVo getThingModel(@Validated @RequestBody Request<String> request) {
+        String deviceId = request.getData();
         DeviceInfo deviceInfo = getDetail(deviceId);
         return productService.getThingModelByProductKey(deviceInfo.getProductKey());
     }
 
-    @PostMapping("/{deviceId}/tag/add")
-    public void addTag(@PathVariable("deviceId") String deviceId,
-                       DeviceInfo.Tag tag) {
-        DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
-        dataOwnerService.checkOwner(device);
-        deviceInfoData.updateTag(deviceId, tag);
+    @PostMapping("/tag/add")
+    public boolean addTag(@Validated @RequestBody Request<DeviceTagAddBo> bo) {
+        return deviceServiceImpl.addTag(bo.getData());
     }
 
-    @PostMapping("/{deviceId}/simulateSend")
-    public void simulateSend(
-            @PathVariable("deviceId") String deviceId,
-            @RequestBody ThingModelMessage message) {
-        DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
-        dataOwnerService.checkOwner(device);
-
-        message.setMid(UniqueIdUtil.newRequestId());
-        message.setOccurred(System.currentTimeMillis());
-        message.setTime(System.currentTimeMillis());
-        behaviourService.reportMessage(message);
+    @ApiOperation("模拟设备上报")
+    @PostMapping("/simulateSend")
+    public boolean simulateSend(
+            @Validated @RequestBody Request<ThingModelMessageBo> bo) {
+        ThingModelMessage message = bo.getData().to(ThingModelMessage.class);
+        return deviceServiceImpl.simulateSend(message);
     }
 
     /**
      * 消费设备信息消息（实时推送设备信息）
      */
-    @GetMapping("/{deviceId}/consumer/{clientId}")
+    @PostMapping("/{deviceId}/consumer/{clientId}")
     public DeferredResult<ThingModelMessage> consumerDeviceInfo(
             @PathVariable("deviceId") String deviceId,
             @PathVariable("clientId") String clientId
     ) {
-        String uid = AuthUtil.getUserId();
-        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
-        dataOwnerService.checkOwner(deviceInfo);
 
-        //按用户+客户端ID订阅
-        return deferredDataConsumer.newConsumer(uid + clientId,
-                Constants.HTTP_CONSUMER_DEVICE_INFO_TOPIC + deviceId);
+        return deviceServiceImpl.addConsumer(deviceId, clientId);
+
     }
 
     /**
      * 获取分组列表
      */
-    @PostMapping("/groups/{size}/{page}")
-    public Paging<DeviceGroup> getDevices(
-            @PathVariable("size") int size,
-            @PathVariable("page") int page,
-            String name
-    ) {
-        return deviceGroupData.findByNameLike(name, page, size);
+    @PostMapping("/groups/list")
+    public Paging<DeviceGroupVo> getDeviceGroups(
+            @Validated @RequestBody PageRequest<DeviceGroupBo> pageRequest) {
+        return deviceServiceImpl.selectGroupPageList(pageRequest);
     }
 
     /**
      * 添加设备分组
      */
+    @ApiOperation(value = "添加设备分组")
     @PostMapping("/group/add")
-    public void addGroup(DeviceGroup group) {
-        group.setUid(AuthUtil.getUserId());
-        if (deviceGroupData.findById(group.getId()) != null) {
-            throw new BizException(ErrCode.GROUP_ALREADY);
-        }
-        deviceGroupData.save(group);
+    public boolean addGroup(@Validated @RequestBody Request<DeviceGroupBo> group) {
+        return deviceServiceImpl.addGroup(group.getData().to(DeviceGroup.class));
     }
 
     /**
      * 修改设备分组
      */
-    @PostMapping("/group/save")
-    public void saveGroup(DeviceGroup group) {
-        DeviceGroup dbGroup = deviceGroupData.findById(group.getId());
-        if (dbGroup == null) {
-            throw new BizException(ErrCode.GROUP_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(dbGroup);
-        ReflectUtil.copyNoNulls(group, dbGroup);
+    @ApiOperation(value = "修改设备分组")
+    @PostMapping("/group/edit")
+    public boolean editGroup(@RequestBody @Validated Request<DeviceGroupBo> bo) {
+        return deviceServiceImpl.updateGroup(bo.getData());
 
-        deviceGroupData.save(dbGroup);
-        //更新设备中的组信息
-        deviceInfoData.updateGroup(dbGroup.getId(), new DeviceInfo.Group(dbGroup.getId(), dbGroup.getName()));
     }
 
     /**
      * 删除分组
      */
-    @DeleteMapping("/group/delete/{id}")
-    public void deleteGroup(@PathVariable("id") String id) {
-        DeviceGroup group = deviceGroupData.findById(id);
-        if (group == null) {
-            throw new BizException(ErrCode.GROUP_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(group);
-        //删除分组
-        deviceGroupData.deleteById(id);
-
-        //移除设备信息中的分组
-        deviceInfoData.removeGroup(group.getId());
+    @ApiOperation(value = "删除分组")
+    @DeleteMapping("/group/delete")
+    public boolean deleteGroup(@Validated @RequestBody Request<String> request) {
+        String id = request.getData();
+        return deviceServiceImpl.deleteGroup(id);
     }
 
     /**
      * 清空组下所有设备
      */
-    @PostMapping("/group/clear/{id}")
-    public void clearGroup(@PathVariable("id") String id) {
-        DeviceGroup group = deviceGroupData.findById(id);
-        if (group == null) {
-            throw new BizException(ErrCode.GROUP_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(group);
-
-        //设备数量清零
-        group.setDeviceQty(0);
-        deviceGroupData.save(group);
-
-        //移除设备信息中的分组
-        deviceInfoData.removeGroup(group.getId());
+    @ApiOperation(value = "清空组下所有设备")
+    @PostMapping("/group/clear")
+    public boolean clearGroup(@Validated @RequestBody Request<String> request) {
+        String id = request.getData();
+        return deviceServiceImpl.clearGroup(id);
     }
 
     /**
      * 添加设备到组
      */
-    @PostMapping("/group/addDevices/{group}")
-    public void addToGroup(@PathVariable("group") String group, @RequestBody List<String> devices) {
-        DeviceGroup deviceGroup = deviceGroupData.findById(group);
-        if (deviceGroup == null) {
-            throw new BizException(ErrCode.GROUP_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(deviceGroup);
-
-        for (String device : devices) {
-            DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(device);
-            if (deviceInfo == null) {
-                continue;
-            }
-
-            dataOwnerService.checkOwner(deviceInfo);
-            //添加设备到组
-            deviceInfoData.addToGroup(device, new DeviceInfo.Group(group, deviceGroup.getName()));
-        }
-        //统计组下设备数量
-        long qty = deviceInfoData.countByGroupId(group);
-        //更新组信息
-        deviceGroup.setDeviceQty((int) qty);
-        deviceGroupData.save(deviceGroup);
+    @ApiOperation(value = "添加设备到组")
+    @PostMapping("/group/addDevices")
+    public boolean addToGroup(@Validated @RequestBody Request<DeviceAddGroupBo> bo) {
+        return deviceServiceImpl.addDevice2Group(bo.getData());
     }
 
     /**
      * 将设备从组中移除
      */
-    @PostMapping("/group/removeDevices/{group}")
-    public void removeDevices(@PathVariable("group") String group, @RequestBody List<String> devices) {
-        DeviceGroup deviceGroup = deviceGroupData.findById(group);
-        if (deviceGroup == null) {
-            throw new BizException(ErrCode.GROUP_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(deviceGroup);
-
-        for (String device : devices) {
-            DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(device);
-            if (deviceInfo == null) {
-                continue;
-            }
-
-            dataOwnerService.checkOwner(deviceInfo);
-            //删除设备所在组
-            deviceInfoData.removeGroup(device, group);
-        }
-        //统计组下设备数量
-        long qty = deviceInfoData.countByGroupId(group);
-        //更新组信息
-        deviceGroup.setDeviceQty((int) qty);
-        deviceGroupData.save(deviceGroup);
+    @ApiOperation(value = "将设备从组中移除")
+    @PostMapping("/group/removeDevices")
+    public boolean removeDevices(@Validated @RequestBody Request<DeviceAddGroupBo> bo) {
+        DeviceAddGroupBo data = bo.getData();
+       return deviceServiceImpl.removeDevices(data.getGroup(), data.getDevices());
     }
 
     /**
      * 保存设备配置
      */
-    @PostMapping("/config/{deviceId}/save")
-    public void saveConfig(@PathVariable("deviceId") String deviceId, String config) {
-        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
-        dataOwnerService.checkOwner(deviceInfo);
-
-        DeviceConfig deviceConfig = deviceConfigData.findByDeviceId(deviceId);
-        if (deviceConfig == null) {
-            deviceConfig = DeviceConfig.builder()
-                    .deviceId(deviceId)
-                    .deviceName(deviceInfo.getDeviceName())
-                    .productKey(deviceInfo.getProductKey())
-                    .config(config)
-                    .createAt(System.currentTimeMillis())
-                    .build();
-        } else {
-            deviceConfig.setConfig(config);
-        }
-
-        deviceConfigData.save(deviceConfig);
+    @ApiOperation(value = "保存设备配置")
+    @PostMapping("/config/save")
+    public boolean saveConfig(@Validated @RequestBody Request<DeviceConfigAddBo> request) {
+        DeviceConfig data = request.getData().to(DeviceConfig.class);
+        return deviceServiceImpl.saveConfig(data);
     }
 
     /**
      * 获取设备配置
      */
-    @GetMapping("/config/{deviceId}/get")
-    public DeviceConfig getConfig(@PathVariable("deviceId") String deviceId) {
-        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
-        dataOwnerService.checkOwner(deviceInfo);
-        return deviceConfigData.findByDeviceId(deviceId);
+    @ApiOperation(value = "获取设备配置")
+    @PostMapping("/config/get")
+    public DeviceConfigVo getConfig(@Validated @RequestBody Request<String> request) {
+        String deviceId = request.getData();
+        return deviceServiceImpl.getConfig(deviceId);
     }
 
     /**

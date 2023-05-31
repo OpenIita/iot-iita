@@ -1,0 +1,74 @@
+package cc.iotkit.manager.service;
+
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
+import cc.iotkit.manager.dto.bo.device.DeviceInfoBo;
+import cc.iotkit.manager.dto.bo.device.DeviceLogQueryBo;
+import cc.iotkit.manager.dto.bo.device.DeviceQueryBo;
+import cc.iotkit.manager.dto.bo.device.DeviceTagAddBo;
+import cc.iotkit.manager.dto.bo.devicegroup.DeviceAddGroupBo;
+import cc.iotkit.manager.dto.bo.devicegroup.DeviceGroupBo;
+import cc.iotkit.manager.dto.vo.deviceconfig.DeviceConfigVo;
+import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
+import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoVo;
+import cc.iotkit.model.device.DeviceConfig;
+import cc.iotkit.model.device.DeviceGroup;
+import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.device.message.DeviceProperty;
+import cc.iotkit.model.device.message.ThingModelMessage;
+import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Author: jay
+ * @Date: 2023/5/31 11:05
+ * @Version: V1.0
+ * @Description: 设备服务接口
+ */
+public interface IDeviceService {
+    Paging<DeviceInfo> getDevices(PageRequest<DeviceQueryBo> pageRequest);
+
+    boolean addDevice(DeviceInfoBo data);
+
+    List<DeviceInfoVo> selectChildrenPageList(String deviceId);
+
+    List<Map<String, Object>> getParentDevices();
+
+    DeviceInfo getDetail(String deviceId);
+
+    DeviceInfo getByPkDn(String pk, String dn);
+
+    boolean deleteDevice(String data);
+
+    Paging<ThingModelMessage> logs(PageRequest<DeviceLogQueryBo> request);
+
+    List<DeviceProperty> getPropertyHistory(String deviceId, String name, long start, long end);
+
+    boolean unbindDevice(String data);
+
+    boolean addTag(DeviceTagAddBo bo);
+
+    boolean simulateSend(ThingModelMessage message);
+
+    DeferredResult  addConsumer(String deviceId, String clientId);
+
+    Paging<DeviceGroupVo> selectGroupPageList(PageRequest<DeviceGroupBo> pageRequest);
+
+    boolean addGroup(DeviceGroup group);
+
+    boolean updateGroup(DeviceGroupBo data);
+
+    boolean deleteGroup(String id);
+
+    boolean clearGroup(String id);
+
+    boolean addDevice2Group(DeviceAddGroupBo data);
+
+    boolean removeDevices(String group, List<String> devices);
+
+    boolean saveConfig(DeviceConfig data);
+
+    DeviceConfigVo getConfig(String deviceId);
+}
