@@ -1,18 +1,31 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.SysUserRoleRepository;
+import cc.iotkit.data.model.TbSysUserRole;
 import cc.iotkit.data.system.ISysUserRoleData;
+import cc.iotkit.data.util.PredicateBuilder;
+import cc.iotkit.model.system.SysUserRole;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+import java.util.Objects;
+
+import static cc.iotkit.data.model.QTbSysRole.tbSysRole;
+import static cc.iotkit.data.model.QTbSysRoleMenu.tbSysRoleMenu;
 import static cc.iotkit.data.model.QTbSysUserRole.tbSysUserRole;
 
 /**
  * @Author：tfd
  * @Date：2023/5/30 16:36
  */
+@RequiredArgsConstructor
 public class SysUserRoleDataImpl implements ISysUserRoleData {
     @Autowired
-    private SysUserRoleRepository sysUserRoleRepository;
+    private final SysUserRoleRepository sysUserRoleRepository;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public int deleteByUserId(Long userId) {
@@ -22,5 +35,18 @@ public class SysUserRoleDataImpl implements ISysUserRoleData {
     @Override
     public long countUserRoleByRoleId(Long roleId) {
         return sysUserRoleRepository.count(tbSysUserRole.roleId.eq(roleId));
+    }
+
+    @Override
+    public long insertBatch(List<SysUserRole> list) {
+        return jpaQueryFactory.insert(tbSysRole).values(List.of(Objects.requireNonNull(MapstructUtils.convert(list, TbSysUserRole.class)))).execute();
+    }
+
+    @Override
+    public long delete(Long roleId, List<Long> userIds) {
+        return jpaQueryFactory.delete(tbSysUserRole).where(PredicateBuilder.instance()
+                .and(tbSysUserRole.roleId.eq(roleId))
+                .and(tbSysUserRole.userId.in(userIds))
+                .build()).execute();
     }
 }

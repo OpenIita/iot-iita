@@ -57,13 +57,15 @@ public interface ICommonData<T extends Id<ID>, ID> {
     /**
      * 按id删除
      */
-    default void deleteById(ID id) {
+    default long deleteById(ID id) {
+        return 0L;
     }
 
     /**
      * 按id批量删除
      */
-    default void deleteByIds(Collection<ID> ids) {
+    default int deleteByIds(Collection<ID> ids) {
+        return 0;
     }
 
     /**
