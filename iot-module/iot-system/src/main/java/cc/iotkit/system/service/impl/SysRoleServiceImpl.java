@@ -11,6 +11,7 @@ import cc.iotkit.data.system.ISysRoleDeptData;
 import cc.iotkit.data.system.ISysRoleMenuData;
 import cc.iotkit.data.system.ISysUserRoleData;
 import cc.iotkit.model.system.SysRole;
+import cc.iotkit.system.dto.SysRoleDept;
 import cc.iotkit.system.dto.SysUserRole;
 import cc.iotkit.system.dto.bo.SysRoleBo;
 import cc.iotkit.system.dto.vo.SysRoleVo;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -194,7 +196,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public long countUserRoleByRoleId(Long roleId) {
-        return 0;
+        return iSysUserRoleData.countUserRoleByRoleId(roleId);
     }
 
     /**
@@ -275,7 +277,19 @@ public class SysRoleServiceImpl implements ISysRoleService {
      * @param role 角色对象
      */
     private void insertRoleDept(SysRoleBo role) {
-
+       /* int rows = 1;
+        // 新增角色与部门（数据权限）管理
+        List<SysRoleDept> list = new ArrayList();
+        for (Long deptId : role.getDeptIds()) {
+            SysRoleDept rd = new SysRoleDept();
+            rd.setRoleId(role.getRoleId());
+            rd.setDeptId(deptId);
+            list.add(rd);
+        }
+        if (list.size() > 0) {
+            rows = roleDeptMapper.insertBatch(list) ? list.size() : 0;
+        }
+        return rows;*/
     }
 
     /**
