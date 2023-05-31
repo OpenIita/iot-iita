@@ -16,4 +16,12 @@ public interface ISysUserRoleData extends ICommonData<SysUserRole, Long> {
      * @return 数量
      */
     int deleteByUserId(Long userId);
+
+    /**
+     * 通过角色ID查询角色使用数量
+     *
+     * @param roleId 角色ID
+     * @return 结果
+     */
+    long countUserRoleByRoleId(Long roleId);
 }
