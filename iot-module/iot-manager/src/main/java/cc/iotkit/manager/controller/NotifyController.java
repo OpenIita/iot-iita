@@ -8,13 +8,14 @@ import cc.iotkit.model.notify.ChannelTemplate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
+
 import java.util.List;
 
 /**
@@ -45,25 +46,25 @@ public class NotifyController {
 
     @ApiOperation("新增通道配置")
     @PostMapping("/channel/config/add")
-    public ChannelConfig addChannelConfig(@RequestBody @Valid Request<ChannelConfig> request) {
+    public ChannelConfig addChannelConfig(@RequestBody @Validated Request<ChannelConfig> request) {
         return notifyService.addChannelConfig(request.getData());
     }
 
     @ApiOperation("根据ID获取通道配置")
     @PostMapping("/channel/config/getById")
-    public ChannelConfig getChannelConfigById(@RequestBody @Valid Request<String> request) {
+    public ChannelConfig getChannelConfigById(@RequestBody @Validated Request<String> request) {
         return notifyService.getChannelConfigById(request.getData());
     }
 
     @ApiOperation("修改通道配置")
     @PostMapping("/channel/config/updateById")
-    public ChannelConfig updateChannelConfigById(@RequestBody @Valid Request<ChannelConfig> request) {
+    public ChannelConfig updateChannelConfigById(@RequestBody @Validated Request<ChannelConfig> request) {
         return notifyService.updateChannelConfigById(request.getData());
     }
 
     @ApiOperation("删除通道配置")
     @PostMapping("/channel/config/delById")
-    public Boolean delChannelConfigById(@RequestBody @Valid Request<String> request) {
+    public Boolean delChannelConfigById(@RequestBody @Validated Request<String> request) {
         return notifyService.delChannelConfigById(request.getData());
     }
 
@@ -75,25 +76,25 @@ public class NotifyController {
 
     @ApiOperation("新增通道模板")
     @PostMapping("/channel/template/add")
-    public ChannelTemplate addChannelTemplate(@RequestBody @Valid Request<ChannelTemplate> request) {
+    public ChannelTemplate addChannelTemplate(@RequestBody @Validated Request<ChannelTemplate> request) {
         return notifyService.addChannelTemplate(request.getData());
     }
 
     @ApiOperation("根据ID获取通道模板")
     @PostMapping("/channel/template/getById")
-    public ChannelTemplate getChannelTemplateById(@RequestBody @Valid Request<String> request) {
+    public ChannelTemplate getChannelTemplateById(@RequestBody @Validated Request<String> request) {
         return notifyService.getChannelTemplateById(request.getData());
     }
 
     @ApiOperation("修改通道模板")
     @PostMapping("/channel/template/updateById")
-    public ChannelTemplate updateChannelTemplateById(@RequestBody @Valid Request<ChannelTemplate> request) {
+    public ChannelTemplate updateChannelTemplateById(@RequestBody @Validated Request<ChannelTemplate> request) {
         return notifyService.updateChannelTemplateById(request.getData());
     }
 
     @ApiOperation("删除通道模板")
     @PostMapping("/channel/template/delById")
-    public Boolean delChannelTemplateById(@RequestBody @Valid Request<String> request) {
+    public Boolean delChannelTemplateById(@RequestBody @Validated Request<String> request) {
         return notifyService.delChannelTemplateById(request.getData());
     }
 
