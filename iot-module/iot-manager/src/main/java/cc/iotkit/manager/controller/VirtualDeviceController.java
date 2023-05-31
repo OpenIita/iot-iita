@@ -9,6 +9,7 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.AuthUtil;
@@ -18,6 +19,7 @@ import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.device.VirtualDeviceLog;
+import cc.iotkit.model.product.Product;
 import cc.iotkit.temporal.IVirtualDeviceLogData;
 import cc.iotkit.virtualdevice.VirtualManager;
 import io.swagger.annotations.Api;
@@ -44,13 +46,12 @@ public class VirtualDeviceController {
 
     @PostMapping("/list/{size}/{page}")
     public Paging<VirtualDevice> getDevices(
-            @PathVariable("size") int size,
-            @PathVariable("page") int page) {
+            PageRequest<VirtualDevice> pageRequest) {
         String uid = AuthUtil.getUserId();
         if (AuthUtil.isAdmin()) {
-            return virtualDeviceData.findAll(page, size);
+            return virtualDeviceData.findAll(pageRequest);
         } else {
-            return virtualDeviceData.findByUid(uid, page, size);
+            return virtualDeviceData.findByUid(uid, pageRequest.getPageNum(), pageRequest.getPageNum());
         }
     }
 
