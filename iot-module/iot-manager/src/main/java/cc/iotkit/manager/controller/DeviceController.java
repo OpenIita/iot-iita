@@ -21,10 +21,12 @@ import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.data.manager.IDeviceGroupData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
+import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.model.query.DeviceQuery;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceService;
+import cc.iotkit.manager.service.IProductService;
 import cc.iotkit.model.InvokeResult;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.DeviceConfig;
@@ -58,6 +60,9 @@ import java.util.Map;
 @RequestMapping("/device")
 public class DeviceController {
 
+
+    @Autowired
+    IProductService productService;
     @Autowired
     private DeviceService deviceService;
     @Autowired
@@ -262,9 +267,9 @@ public class DeviceController {
     }
 
     @GetMapping("/{deviceId}/thingModel")
-    public ThingModel getThingModel(@PathVariable("deviceId") String deviceId) {
+    public ThingModelVo getThingModel(@PathVariable("deviceId") String deviceId) {
         DeviceInfo deviceInfo = getDetail(deviceId);
-        return productController.getThingModel(deviceInfo.getProductKey());
+        return productService.getThingModelByProductKey(deviceInfo.getProductKey());
     }
 
     @PostMapping("/{deviceId}/tag/add")

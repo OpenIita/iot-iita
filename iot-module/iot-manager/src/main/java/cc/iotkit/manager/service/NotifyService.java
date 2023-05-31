@@ -39,7 +39,7 @@ public class NotifyService {
     }
 
     public ChannelConfig addChannelConfig(ChannelConfig channelConfig) {
-        return iChannelConfigData.add(channelConfig);
+        return iChannelConfigData.save(channelConfig);
     }
 
     public ChannelConfig getChannelConfigById(String id) {
@@ -61,7 +61,7 @@ public class NotifyService {
     }
 
     public ChannelTemplate addChannelTemplate(ChannelTemplate channelTemplate) {
-        return iChannelTemplateData.add(channelTemplate);
+        return iChannelTemplateData.save(channelTemplate);
     }
 
     public ChannelTemplate getChannelTemplateById(String id) {
