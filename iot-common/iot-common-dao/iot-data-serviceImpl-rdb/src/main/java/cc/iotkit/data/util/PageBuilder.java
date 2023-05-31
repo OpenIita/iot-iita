@@ -2,8 +2,13 @@ package cc.iotkit.data.util;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.PageRequestEmpty;
+import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.model.TbSysConfig;
+import cc.iotkit.model.product.Product;
 import cc.iotkit.model.system.SysConfig;
 import cn.hutool.core.collection.CollUtil;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -59,4 +64,8 @@ public class PageBuilder {
     return orders;
   }
 
+  public static Paging<SysConfig> toPaging(Page all, Class clz) {
+    return new Paging<>(all.getTotalElements(),
+            MapstructUtils.convert(all.getContent(), clz));
+  }
 }

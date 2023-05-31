@@ -15,10 +15,13 @@ import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysConfig;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
@@ -46,7 +49,9 @@ public class SysConfigDataImpl implements ISysConfigData {
 
     @Override
     public List<SysConfig> findByIds(Collection<Long> id) {
-        throw new BizException(ErrCode.UNSUPPORTED_OPERATION_EXCEPTION);
+        Iterable<TbSysConfig> allById = alertConfigRepository.findAllById(id);
+        Iterator<TbSysConfig> iterator = allById.iterator();
+        return MapstructUtils.convert(IteratorUtils.toList(iterator), SysConfig.class);
     }
 
     @Override
@@ -84,19 +89,35 @@ public class SysConfigDataImpl implements ISysConfigData {
 
         // TODO: 2023/5/26 抽成通用工具类方法
 
-        alertConfigRepository.findAll(predicate, PageBuilder.toPageable(pageRequest));
+        Page<TbSysConfig> all = alertConfigRepository.findAll(predicate, PageBuilder.toPageable(pageRequest));
+        return PageBuilder.toPaging(all, SysConfig.class);
 
-        throw new BizException(ErrCode.UNSUPPORTED_OPERATION_EXCEPTION);
+
     }
 
 
     @Override
     public List<SysConfig> findAllByCondition(SysConfig data) {
-        throw new BizException(ErrCode.UNSUPPORTED_OPERATION_EXCEPTION);
+        Predicate predicate = PredicateBuilder.instance()
+                .and(StringUtils.isNotEmpty(data.getConfigKey()), () -> tbSysConfig.configKey.eq(data.getConfigKey()))
+                .build();
+        Iterator<TbSysConfig> iterator = alertConfigRepository.findAll(predicate).iterator();
+        return MapstructUtils.convert(IteratorUtils.toList(iterator), SysConfig.class);
     }
 
     @Override
     public SysConfig findOneByCondition(SysConfig data) {
-        throw new BizException(ErrCode.UNSUPPORTED_OPERATION_EXCEPTION);
+        Predicate predicate = PredicateBuilder.instance()
+                .and(StringUtils.isNotEmpty(data.getConfigKey()), () -> tbSysConfig.configKey.eq(data.getConfigKey()))
+                .build();
+        TbSysConfig tbSysConfig = alertConfigRepository.findOne(predicate).orElseThrow(() -> new BizException(ErrCode.DATA_NOT_EXIST));
+        return MapstructUtils.convert(tbSysConfig, SysConfig.class);
+    }
+
+    @Override
+    public SysConfig findByConfigKey(String configKey) {
+        TbSysConfig tbSysConfig = alertConfigRepository.findByConfigKey(configKey).orElseThrow(() ->
+                new BizException(ErrCode.DATA_NOT_EXIST));
+        return MapstructUtils.convert(tbSysConfig, SysConfig.class);
     }
 }

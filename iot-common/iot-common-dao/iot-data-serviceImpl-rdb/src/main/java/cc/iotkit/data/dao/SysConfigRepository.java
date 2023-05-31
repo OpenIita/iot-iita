@@ -13,6 +13,9 @@ import cc.iotkit.data.model.TbSysConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
+import java.util.Optional;
+
 public interface SysConfigRepository extends JpaRepository<TbSysConfig, Long>, QuerydslPredicateExecutor<TbSysConfig> {
 
+    Optional<TbSysConfig> findByConfigKey(String configKey);
 }

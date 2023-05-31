@@ -79,7 +79,7 @@ public class SysConfigController extends BaseController {
     if (!configService.checkConfigKeyUnique(request.getData())) {
       fail("新增参数'" + request.getData().getConfigName() + "'失败，参数键名已存在");
     }
-    configService.insertConfig(request.getData());
+     configService.insertConfig(request.getData());
   }
 
   @ApiOperation("修改参数配置")
