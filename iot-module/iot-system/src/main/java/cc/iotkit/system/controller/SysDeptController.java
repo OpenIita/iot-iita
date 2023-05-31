@@ -7,9 +7,9 @@ import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysDeptBo;
 import cc.iotkit.system.dto.vo.SysDeptVo;
+import cc.iotkit.system.service.ISysDeptService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.convert.Convert;
-import cc.iotkit.system.service.ISysDeptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +47,7 @@ public class SysDeptController extends BaseController {
     @GetMapping("/list/exclude/{deptId}")
     public List<SysDeptVo> excludeChild(@PathVariable(value = "deptId", required = false) Long deptId) {
         List<SysDeptVo> depts = deptService.selectDeptList(new SysDeptBo());
-        depts.removeIf(d -> d.getDeptId().equals(deptId)
+        depts.removeIf(d -> d.getId().equals(deptId)
                 || StringUtils.splitList(d.getAncestors()).contains(Convert.toStr(deptId)));
         return depts;
     }

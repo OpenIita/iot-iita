@@ -24,7 +24,7 @@ public class SysUserVo implements Serializable {
     /**
      * 用户ID
      */
-    private Long userId;
+    private Long id;
 
     /**
      * 租户ID

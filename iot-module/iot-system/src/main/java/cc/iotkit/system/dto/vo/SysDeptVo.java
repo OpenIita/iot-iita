@@ -26,7 +26,7 @@ public class SysDeptVo implements Serializable {
      * 部门id
      */
     @ExcelProperty(value = "部门id")
-    private Long deptId;
+    private Long id;
 
     /**
      * 父部门id

@@ -15,7 +15,7 @@ import java.util.List;
 public interface ISysUserService {
 
 
-    Paging<SysUserVo> selectPageUserList(SysUserBo user, PageRequest<?> query);
+    Paging<SysUserVo> selectPageUserList(PageRequest<SysUserBo> query);
 
     /**
      * 根据条件分页查询用户列表
@@ -108,9 +108,9 @@ public interface ISysUserService {
     /**
      * 校验用户是否允许操作
      *
-     * @param userId 用户ID
+     * @param user 用户信息
      */
-    void checkUserAllowed(Long userId);
+    void checkUserAllowed(SysUserBo user);
 
     /**
      * 校验用户是否有数据权限
@@ -200,6 +200,6 @@ public interface ISysUserService {
      * @param userIds 需要删除的用户ID
      * @return 结果
      */
-    int deleteUserByIds(Long[] userIds);
+    void deleteUserByIds(Long[] userIds);
 
 }

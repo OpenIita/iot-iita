@@ -27,7 +27,7 @@ public class SysRoleVo implements Serializable {
      * 角色ID
      */
     @ExcelProperty(value = "角色序号")
-    private Long roleId;
+    private Long id;
 
     /**
      * 角色名称
@@ -91,7 +91,7 @@ public class SysRoleVo implements Serializable {
     private boolean flag = false;
 
     public boolean isSuperAdmin() {
-        return UserConstants.SUPER_ADMIN_ID.equals(this.roleId);
+        return UserConstants.SUPER_ADMIN_ID.equals(this.id);
     }
 
 }

@@ -3,7 +3,6 @@ package cc.iotkit.data.service;
 import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.SysRoleRepository;
-import cc.iotkit.data.model.QTbSysRole;
 import cc.iotkit.data.model.TbSysRole;
 import cc.iotkit.data.system.ISysRoleData;
 import cc.iotkit.data.util.PredicateBuilder;
@@ -80,10 +79,10 @@ public class SysRoleDataImpl implements ISysRoleData {
 
     @Override
     public List<Long> selectRoleListByUserId(Long userId) {
-        return jpaQueryFactory.select(tbSysRole.roleId).from(tbSysRole)
-                .leftJoin(tbSysUserRole).on(tbSysUserRole.roleId.eq(tbSysRole.roleId))
-                .leftJoin(tbSysUser).on(tbSysUser.userId.eq(tbSysUserRole.userId))
-                .where(PredicateBuilder.instance().and(tbSysUser.userId.eq(userId)).build()).fetch();
+        return jpaQueryFactory.select(tbSysRole.id).from(tbSysRole)
+                .leftJoin(tbSysUserRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
+                .leftJoin(tbSysUser).on(tbSysUser.id.eq(tbSysUserRole.userId))
+                .where(PredicateBuilder.instance().and(tbSysUser.id.eq(userId)).build()).fetch();
 
     }
 
@@ -92,7 +91,7 @@ public class SysRoleDataImpl implements ISysRoleData {
         final TbSysRole tbSysRoleRes = jpaQueryFactory.select(tbSysRole).from(tbSysRole)
                 .where(PredicateBuilder.instance()
                         .and(tbSysRole.roleName.eq(role.getRoleName()))
-                        .and(Objects.nonNull(role.getId()), () -> tbSysRole.roleId.eq(role.getId()))
+                        .and(Objects.nonNull(role.getId()), () -> tbSysRole.id.eq(role.getId()))
                         .build()).fetchOne();
         return Objects.isNull(tbSysRoleRes);
     }
@@ -102,7 +101,7 @@ public class SysRoleDataImpl implements ISysRoleData {
         final TbSysRole tbSysRoleRes = jpaQueryFactory.select(tbSysRole).from(tbSysRole)
                 .where(PredicateBuilder.instance()
                         .and(tbSysRole.roleKey.eq(role.getRoleKey()))
-                        .and(Objects.nonNull(role.getId()), () -> tbSysRole.roleId.eq(role.getId()))
+                        .and(Objects.nonNull(role.getId()), () -> tbSysRole.id.eq(role.getId()))
                         .build()).fetchOne();
         return Objects.isNull(tbSysRoleRes);
     }
@@ -110,7 +109,7 @@ public class SysRoleDataImpl implements ISysRoleData {
     @Override
     public int updateById(SysRole role) {
         long execute = jpaQueryFactory.update(tbSysRole)
-                .where(PredicateBuilder.instance().and(tbSysRole.roleId.eq(role.getId())).build()).execute();
+                .where(PredicateBuilder.instance().and(tbSysRole.id.eq(role.getId())).build()).execute();
         return Integer.parseInt(execute + "");
     }
 
@@ -120,13 +119,13 @@ public class SysRoleDataImpl implements ISysRoleData {
     }
 
     private List<SysRole> buildQueryTitle(Predicate predicate) {
-        return jpaQueryFactory.select(Projections.bean(SysRole.class, tbSysRole.roleId.countDistinct(), tbSysRole.roleName,
+        return jpaQueryFactory.select(Projections.bean(SysRole.class, tbSysRole.id.countDistinct(), tbSysRole.roleName,
                         tbSysRole.roleKey, tbSysRole.roleSort, tbSysRole.menuCheckStrictly, tbSysRole.deptCheckStrictly,
                         tbSysRole.status, tbSysRole.delFlag, tbSysRole.createTime, tbSysRole.remark))
                 .from(tbSysRole)
-                .leftJoin(tbSysUserRole).on(tbSysUserRole.roleId.eq(tbSysRole.roleId))
-                .leftJoin(tbSysUser).on(tbSysUser.userId.eq(tbSysUserRole.userId))
-                .leftJoin(tbSysDept).on(tbSysUser.deptId.eq(tbSysDept.deptId))
+                .leftJoin(tbSysUserRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
+                .leftJoin(tbSysUser).on(tbSysUser.id.eq(tbSysUserRole.userId))
+                .leftJoin(tbSysDept).on(tbSysUser.deptId.eq(tbSysDept.id))
                 .where(predicate)
                 .orderBy(tbSysRole.roleSort.asc(), tbSysRole.createTime.asc()).fetch();
     }
@@ -134,7 +133,7 @@ public class SysRoleDataImpl implements ISysRoleData {
     private Predicate buildQueryWrapper(SysRole role) {
         return PredicateBuilder.instance()
                 .and(tbSysRole.delFlag.eq(UserConstants.ROLE_NORMAL))
-                .and(Objects.nonNull(role.getId()), () -> tbSysRole.roleId.eq(role.getId()))
+                .and(Objects.nonNull(role.getId()), () -> tbSysRole.id.eq(role.getId()))
                 .and(StringUtils.isNotBlank(role.getRoleName()), () -> tbSysRole.roleName.like(role.getRoleName()))
                 .and(StringUtils.isNotBlank(role.getStatus()), () -> tbSysRole.roleName.eq(role.getStatus()))
                 .and(StringUtils.isNotBlank(role.getRoleKey()), () -> tbSysRole.roleKey.like(role.getRoleKey()))

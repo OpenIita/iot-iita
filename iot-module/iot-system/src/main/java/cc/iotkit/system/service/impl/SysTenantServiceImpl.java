@@ -2,11 +2,16 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.constant.CacheNames;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.data.system.ISysTenantData;
+import cc.iotkit.data.system.ISysUserData;
 import cc.iotkit.system.dto.bo.SysTenantBo;
 import cc.iotkit.system.dto.vo.SysTenantVo;
 import cc.iotkit.system.service.ISysTenantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -23,14 +28,20 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     private final ISysTenantData sysTenantData;
 
+    private final ISysUserData sysUserData;
+
     @Override
     public SysTenantVo queryById(Long id) {
         return null;
     }
 
+    /**
+     * 基于租户ID查询租户
+     */
+    @Cacheable(cacheNames = CacheNames.SYS_TENANT, key = "#tenantId")
     @Override
     public SysTenantVo queryByTenantId(String tenantId) {
-        return null;
+        return MapstructUtils.convert(sysTenantData.findById(Long.valueOf(tenantId)),SysTenantVo.class);
     }
 
     @Override
@@ -75,7 +86,14 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public boolean checkAccountBalance(String tenantId) {
-        return false;
+        SysTenantVo tenant = SpringUtils.getAopProxy(this).queryByTenantId(tenantId);
+        // 如果余额为-1代表不限制
+        if (tenant.getAccountCount() == -1) {
+            return true;
+        }
+        Long userNumber = sysUserData.count();
+        // 如果余额大于0代表还有可用名额
+        return tenant.getAccountCount() - userNumber > 0;
     }
 
     @Override

@@ -13,18 +13,13 @@ import cc.iotkit.data.system.ISysConfigData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysConfig;
-import cn.hutool.core.collection.CollUtil;
 import com.querydsl.core.types.Predicate;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
-
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.List;
 
 import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
 

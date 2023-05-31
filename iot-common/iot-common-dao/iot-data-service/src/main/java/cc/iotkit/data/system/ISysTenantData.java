@@ -1,9 +1,13 @@
 package cc.iotkit.data.system;
 
+import cc.iotkit.data.ICommonData;
+import cc.iotkit.model.system.SysUser;
+
 /**
- * 操作日志数据接口
+ * 租户数据接口
  *
- * @author sjg
+ * @author tfd
  */
-public interface ISysTenantData {
+public interface ISysTenantData  extends ICommonData<SysUser, Long> {
+
 }

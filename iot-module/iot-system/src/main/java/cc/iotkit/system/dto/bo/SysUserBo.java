@@ -1,7 +1,7 @@
 package cc.iotkit.system.dto.bo;
 
-import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.api.BaseDto;
+import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.model.system.SysUser;
 import io.github.linpeilie.annotations.AutoMapper;
 import jakarta.validation.constraints.Email;
@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * 用户信息业务对象 sys_user
@@ -18,7 +17,6 @@ import lombok.NoArgsConstructor;
  */
 
 @Data
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = SysUser.class, reverseConvertGenerate = false)
 public class SysUserBo extends BaseDto {
@@ -26,7 +24,7 @@ public class SysUserBo extends BaseDto {
     /**
      * 用户ID
      */
-    private Long userId;
+    private Long id;
 
     /**
      * 部门ID
@@ -99,12 +97,12 @@ public class SysUserBo extends BaseDto {
      */
     private Long roleId;
 
-    public SysUserBo(Long userId) {
-        this.userId = userId;
+    public SysUserBo(Long id) {
+        this.id = id;
     }
 
     public boolean isSuperAdmin() {
-        return UserConstants.SUPER_ADMIN_ID.equals(this.userId);
+        return UserConstants.SUPER_ADMIN_ID.equals(this.id);
     }
 
 }

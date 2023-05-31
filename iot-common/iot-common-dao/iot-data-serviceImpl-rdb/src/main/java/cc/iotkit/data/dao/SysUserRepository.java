@@ -9,11 +9,10 @@
  */
 package cc.iotkit.data.dao;
 
-import cc.iotkit.data.model.TbSysDept;
 import cc.iotkit.data.model.TbSysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-public interface SysUserRepository extends JpaRepository<TbSysUser, Long>, QuerydslPredicateExecutor<TbSysDept> {
+public interface SysUserRepository extends JpaRepository<TbSysUser, Long>, QuerydslPredicateExecutor<TbSysUser> {
 
 }

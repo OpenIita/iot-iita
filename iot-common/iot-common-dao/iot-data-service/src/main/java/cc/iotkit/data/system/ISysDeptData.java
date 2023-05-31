@@ -1,8 +1,8 @@
 package cc.iotkit.data.system;
 
 
-import cc.iotkit.data.ICommonData;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.system.SysDept;
 
 import java.util.List;
@@ -43,5 +43,13 @@ public interface ISysDeptData extends ICommonData<SysDept, Long> {
      * @return 子部门数
      */
     long countByParentId(Long parentId);
+
+    /**
+     * 根据ID查询所有子部门数（所有状态）
+     *
+     * @param deptId 部门ID
+     * @return 部门列表
+     */
+    List<SysDept> findByDeptId(Long deptId);
 
 }

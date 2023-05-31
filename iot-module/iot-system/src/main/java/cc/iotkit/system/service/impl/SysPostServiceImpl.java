@@ -71,7 +71,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public List<Long> selectPostListByUserId(Long userId) {
-        return new ArrayList<>();
+        return sysPostData.selectPostListByUserId(userId);
     }
 
     /**

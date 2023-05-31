@@ -12,11 +12,11 @@ import cc.iotkit.system.dto.vo.AvatarVo;
 import cc.iotkit.system.dto.vo.ProfileVo;
 import cc.iotkit.system.dto.vo.SysOssVo;
 import cc.iotkit.system.dto.vo.SysUserVo;
+import cc.iotkit.system.service.ISysOssService;
+import cc.iotkit.system.service.ISysUserService;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.io.FileUtil;
-import cc.iotkit.system.service.ISysOssService;
-import cc.iotkit.system.service.ISysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -65,7 +65,7 @@ public class SysProfileController extends BaseController {
         if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user)) {
             fail("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
-        user.setUserId(LoginHelper.getUserId());
+        user.setId(LoginHelper.getUserId());
         if (userService.updateUserProfile(user) > 0) {
             return;
         }
@@ -90,7 +90,7 @@ public class SysProfileController extends BaseController {
             fail("新密码不能与旧密码相同");
         }
 
-        if (userService.resetUserPwd(user.getUserId(), BCrypt.hashpw(newPassword)) > 0) {
+        if (userService.resetUserPwd(user.getId(), BCrypt.hashpw(newPassword)) > 0) {
             return;
         }
         fail("修改密码异常，请联系管理员");

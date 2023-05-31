@@ -15,4 +15,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 public interface SysUserPostRepository extends JpaRepository<TbSysUserPost, Long>, QuerydslPredicateExecutor<TbSysUserPost> {
 
+    int deleteAllByUserId(Long userId);
 }

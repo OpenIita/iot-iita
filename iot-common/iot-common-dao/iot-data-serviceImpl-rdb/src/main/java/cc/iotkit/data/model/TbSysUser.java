@@ -1,12 +1,13 @@
 package cc.iotkit.data.model;
 
-import cc.iotkit.data.model.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
@@ -28,8 +29,10 @@ public class TbSysUser extends BaseEntity {
      * 用户ID
      */
     @Id
+    @GeneratedValue(generator = "SnowflakeIdGenerator")
+    @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "用户ID")
-    private Long userId;
+    private Long id;
 
     /**
      * 租户编号
@@ -121,8 +124,8 @@ public class TbSysUser extends BaseEntity {
     @ApiModelProperty(value = "备注")
     private String remark;
 
-    public TbSysUser(Long userId) {
-        this.userId = userId;
+    public TbSysUser(Long id) {
+        this.id = id;
     }
 
 }

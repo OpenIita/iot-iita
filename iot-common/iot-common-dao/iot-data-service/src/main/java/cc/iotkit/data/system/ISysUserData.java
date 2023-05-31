@@ -4,7 +4,7 @@ import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.system.SysUser;
 
 /**
- * 操作日志数据接口
+ * 用户数据接口
  *
  * @author sjg
  */
@@ -17,5 +17,11 @@ public interface ISysUserData extends ICommonData<SysUser, Long> {
      * @return 数量
      */
     long countByDeptId(Long deptId);
-    
+
+
+    boolean checkUserNameUnique(SysUser to);
+
+    boolean checkPhoneUnique(SysUser to);
+
+    boolean checkEmailUnique(SysUser to);
 }

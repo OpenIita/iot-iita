@@ -2,13 +2,28 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.constant.UserConstants;
+import cc.iotkit.common.enums.ErrCode;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.service.UserService;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StreamUtils;
+import cc.iotkit.data.system.*;
+import cc.iotkit.model.system.SysRole;
+import cc.iotkit.model.system.SysUser;
+import cc.iotkit.model.system.SysUserPost;
+import cc.iotkit.model.system.SysUserRole;
 import cc.iotkit.system.dto.bo.SysUserBo;
 import cc.iotkit.system.dto.vo.SysUserVo;
 import cc.iotkit.system.service.ISysUserService;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,10 +32,29 @@ import java.util.List;
  *
  * @author Lion Li
  */
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SysUserServiceImpl implements ISysUserService, UserService {
+
+    @Autowired
+    private ISysUserData sysUserData;
+
+    @Autowired
+    private ISysDeptData sysDeptData;
+
+    @Autowired
+    private ISysRoleData sysRoleData;
+
+    @Autowired
+    private ISysPostData sysPostData;
+
+    @Autowired
+    private ISysUserRoleData sysUserRoleData;
+
+    @Autowired
+    private ISysUserPostData sysUserPostData;
+
+
 
     @Override
     public String selectUserNameById(Long userId) {
@@ -28,13 +62,13 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     }
 
     @Override
-    public Paging<SysUserVo> selectPageUserList(SysUserBo user, PageRequest<?> query) {
-        return null;
+    public Paging<SysUserVo> selectPageUserList(PageRequest<SysUserBo> query) {
+        return sysUserData.findAll(query.to(SysUser.class)).to(SysUserVo.class);
     }
 
     @Override
     public List<SysUserVo> selectUserList(SysUserBo user) {
-        return null;
+        return MapstructUtils.convert(sysUserData.findAllByCondition(user.to(SysUser.class)),SysUserVo.class);
     }
 
     @Override
@@ -59,7 +93,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public SysUserVo selectUserById(Long userId) {
-        return null;
+        return MapstructUtils.convert(sysUserData.findById(userId),SysUserVo.class);
     }
 
     @Override
@@ -74,32 +108,121 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public boolean checkUserNameUnique(SysUserBo user) {
-        return false;
+        boolean exist = sysUserData.checkUserNameUnique(user.to(SysUser.class));
+        return !exist;
     }
 
     @Override
     public boolean checkPhoneUnique(SysUserBo user) {
-        return false;
+        boolean exist = sysUserData.checkPhoneUnique(user.to(SysUser.class));
+        return !exist;
     }
 
     @Override
     public boolean checkEmailUnique(SysUserBo user) {
-        return false;
+        boolean exist = sysUserData.checkEmailUnique(user.to(SysUser.class));
+        return !exist;
     }
 
     @Override
-    public void checkUserAllowed(Long userId) {
-
+    public void checkUserAllowed(SysUserBo user) {
+        if (ObjectUtil.isNotNull(user.getId()) && user.isSuperAdmin()) {
+            throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
+        }
     }
 
     @Override
     public void checkUserDataScope(Long userId) {
-
+        if (!LoginHelper.isSuperAdmin()) {
+            SysUser user = new SysUser();
+            user.setId(userId);
+            List<SysUser> users = sysUserData.findAllByCondition(user);
+            if (CollUtil.isEmpty(users)) {
+                throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
+            }
+        }
     }
 
     @Override
     public int insertUser(SysUserBo user) {
-        return 0;
+        // 新增用户信息
+        int rows=sysUserData.save(user.to(SysUser.class))!=null?1:0;
+        // 新增用户岗位关联
+        insertUserPost(user,false);
+        // 新增用户与角色管理
+        insertUserRole(user, false);
+        return rows;
+    }
+
+    /**
+     * 新增用户角色信息
+     *
+     * @param user  用户对象
+     * @param clear 清除已存在的关联数据
+     */
+    private void insertUserRole(SysUserBo user, boolean clear) {
+        this.insertUserRole(user.getId(), user.getRoleIds(), clear);
+    }
+
+    /**
+     * 新增用户岗位信息
+     *
+     * @param user  用户对象
+     * @param clear 清除已存在的关联数据
+     */
+    private void insertUserPost(SysUserBo user, boolean clear) {
+        Long[] posts = user.getPostIds();
+        if (ArrayUtil.isNotEmpty(posts)) {
+            if (clear) {
+                // 删除用户与岗位关联
+                sysUserPostData.deleteByUserId(user.getId());
+            }
+            // 新增用户与岗位管理
+            List<SysUserPost> list = StreamUtils.toList(List.of(posts), postId -> {
+                SysUserPost up = new SysUserPost();
+                up.setUserId(user.getId());
+                up.setPostId(postId);
+                return up;
+            });
+            sysUserPostData.batchSave(list);
+        }
+    }
+
+    /**
+     * 新增用户角色信息
+     *
+     * @param userId  用户ID
+     * @param roleIds 角色组
+     * @param clear   清除已存在的关联数据
+     */
+    private void insertUserRole(Long userId, Long[] roleIds, boolean clear) {
+        if (ArrayUtil.isNotEmpty(roleIds)) {
+            // 判断是否具有此角色的操作权限
+            List<SysRole> roles = sysRoleData.selectRoleList(new SysRole());
+            if (CollUtil.isEmpty(roles)) {
+                throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
+            }
+            List<Long> roleList = StreamUtils.toList(roles, SysRole::getId);
+            if (!LoginHelper.isSuperAdmin(userId)) {
+                roleList.remove(UserConstants.SUPER_ADMIN_ID);
+            }
+            List<Long> canDoRoleList = StreamUtils.filter(List.of(roleIds), roleList::contains);
+            if (CollUtil.isEmpty(canDoRoleList)) {
+                throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
+            }
+            if (clear) {
+                // 删除用户与角色关联
+                sysUserRoleData.deleteByUserId(userId);
+            }
+            // 新增用户与角色管理
+            List<SysUserRole> list = StreamUtils.toList(canDoRoleList, roleId -> {
+                SysUserRole ur = new SysUserRole();
+                ur.setUserId(userId);
+                ur.setRoleId(roleId);
+                return ur;
+            });
+            sysUserRoleData.batchSave(list);
+        }
     }
 
     @Override
@@ -108,18 +231,33 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateUser(SysUserBo user) {
-        return 0;
+        // 新增用户与角色管理
+        insertUserRole(user, true);
+        // 新增用户与岗位管理
+        insertUserPost(user, true);
+        SysUser sysUser = MapstructUtils.convert(user, SysUser.class);
+        // 防止错误更新后导致的数据误删除
+        SysUser ret = sysUserData.save(sysUser);
+        if (ret==null) {
+            throw new BizException("修改用户" + user.getUserName() + "信息失败");
+        }
+        return ret==null?1:0;
+
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insertUserAuth(Long userId, Long[] roleIds) {
-
+        insertUserRole(userId, roleIds, true);
     }
 
     @Override
     public int updateUserStatus(Long userId, String status) {
-        return 0;
+        SysUser user=sysUserData.findById(userId);
+        user.setStatus(status);
+        return sysUserData.save(user)!=null?1:0;
     }
 
     @Override
@@ -134,7 +272,9 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public int resetUserPwd(Long userId, String password) {
-        return 0;
+        SysUser user=sysUserData.findById(userId);
+        user.setPassword(password);
+        return sysUserData.save(user)!=null?1:0;
     }
 
     @Override
@@ -143,7 +283,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     }
 
     @Override
-    public int deleteUserByIds(Long[] userIds) {
-        return 0;
+    public void deleteUserByIds(Long[] userIds) {
+        sysUserData.deleteByIds(List.of(userIds));
     }
 }

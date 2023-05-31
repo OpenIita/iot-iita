@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 
 import static cc.iotkit.data.model.QTbSysMenu.tbSysMenu;
 import static cc.iotkit.data.model.QTbSysRole.tbSysRole;
-import static cc.iotkit.data.model.QTbSysUser.tbSysUser;
 import static cc.iotkit.data.model.QTbSysRoleMenu.tbSysRoleMenu;
+import static cc.iotkit.data.model.QTbSysUser.tbSysUser;
 import static cc.iotkit.data.model.QTbSysUserRole.tbSysUserRole;
 
 
@@ -128,7 +128,7 @@ public class SysMenuDataImpl implements ISysMenuData {
                     .from(tbSysMenu)
                     .leftJoin(tbSysRoleMenu).on(tbSysMenu.menuId.eq(tbSysRoleMenu.menuId))
                     .leftJoin(tbSysUserRole).on(tbSysRoleMenu.roleId.eq(tbSysUserRole.roleId))
-                    .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.roleId))
+                    .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
                     .where(predicateBuilder
                             .and(tbSysUserRole.userId.eq(userId))
                             .build())
@@ -145,7 +145,7 @@ public class SysMenuDataImpl implements ISysMenuData {
                 .from(tbSysMenu)
                 .leftJoin(tbSysRoleMenu).on(tbSysMenu.menuId.eq(tbSysRoleMenu.menuId))
                 .leftJoin(tbSysUserRole).on(tbSysRoleMenu.roleId.eq(tbSysUserRole.roleId))
-                .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.roleId))
+                .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
                 .where(PredicateBuilder.instance()
                         .and(tbSysMenu.status.eq("0"))
                         .and(tbSysRole.status.eq("0"))
@@ -184,10 +184,10 @@ public class SysMenuDataImpl implements ISysMenuData {
                 .from(tbSysMenu)
                 .leftJoin(tbSysRoleMenu).on(tbSysMenu.menuId.eq(tbSysRoleMenu.menuId))
                 .leftJoin(tbSysUserRole).on(tbSysRoleMenu.roleId.eq(tbSysUserRole.roleId))
-                .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.roleId))
-                .leftJoin(tbSysUser).on(tbSysUserRole.userId.eq(tbSysUser.userId))
+                .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
+                .leftJoin(tbSysUser).on(tbSysUserRole.userId.eq(tbSysUser.id))
                 .where(PredicateBuilder.instance()
-                        .and(tbSysUser.userId.eq(userId))
+                        .and(tbSysUser.id.eq(userId))
                         .and(tbSysMenu.menuType.in("M", "C"))
                         .and(tbSysMenu.status.eq("0"))
                         .and(tbSysRole.status.eq("0"))

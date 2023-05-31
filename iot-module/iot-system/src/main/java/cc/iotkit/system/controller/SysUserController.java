@@ -1,7 +1,6 @@
 package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.undefined.LoginUser;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.excel.core.ExcelResult;
 import cc.iotkit.common.excel.utils.ExcelUtil;
@@ -9,21 +8,25 @@ import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.tenant.helper.TenantHelper;
+import cc.iotkit.common.undefined.LoginUser;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysDeptBo;
 import cc.iotkit.system.dto.bo.SysUserBo;
 import cc.iotkit.system.dto.vo.*;
+import cc.iotkit.system.listener.SysUserImportListener;
 import cc.iotkit.system.service.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import cc.iotkit.system.listener.SysUserImportListener;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +45,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/user")
+@Api(tags = "用户信息")
 public class SysUserController extends BaseController {
 
     private final ISysUserService userService;
@@ -50,22 +54,19 @@ public class SysUserController extends BaseController {
     private final ISysDeptService deptService;
     private final ISysTenantService tenantService;
 
-    /**
-     * 获取用户列表
-     */
+    @ApiOperation("获取用户列表")
     @SaCheckPermission("system:user:list")
-    @GetMapping("/list")
-    public Paging<SysUserVo> list(SysUserBo user, PageRequest<?> query) {
-        return userService.selectPageUserList(user, query);
+    @PostMapping("/list")
+    public Paging<SysUserVo> list(@RequestBody @Validated(QueryGroup.class) PageRequest<SysUserBo> query) {
+        return userService.selectPageUserList(query);
     }
 
-    /**
-     * 导出用户列表
-     */
+    @ApiOperation("导出用户列表")
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:user:export")
     @PostMapping("/export")
-    public void export(SysUserBo user, HttpServletResponse response) {
+    public void export(@RequestBody @Validated(QueryGroup.class) SysUserBo user,
+                       HttpServletResponse response) {
         List<SysUserVo> list = userService.selectUserList(user);
         List<SysUserExportVo> listVo = MapstructUtils.convert(list, SysUserExportVo.class);
         ExcelUtil.exportExcel(listVo, "用户数据", SysUserExportVo.class, response);
@@ -77,6 +78,7 @@ public class SysUserController extends BaseController {
      * @param file          导入文件
      * @param updateSupport 是否更新已存在数据
      */
+    @ApiOperation("导入数据")
     @Log(title = "用户管理", businessType = BusinessType.IMPORT)
     @SaCheckPermission("system:user:import")
     @PostMapping(value = "/importData", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -88,6 +90,7 @@ public class SysUserController extends BaseController {
     /**
      * 获取导入模板
      */
+    @ApiOperation("获取导入模板")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) {
         ExcelUtil.exportExcel(new ArrayList<>(), "用户数据", SysUserImportVo.class, response);
@@ -98,7 +101,8 @@ public class SysUserController extends BaseController {
      *
      * @return 用户信息
      */
-    @GetMapping("/getInfo")
+    @ApiOperation("获取用户信息")
+    @PostMapping("/getInfo")
     public UserInfoVo getInfo() {
         UserInfoVo userInfoVo = new UserInfoVo();
         LoginUser loginUser = LoginHelper.getLoginUser();
@@ -118,8 +122,9 @@ public class SysUserController extends BaseController {
      *
      * @param userId 用户ID
      */
+    @ApiOperation("根据用户编号获取详细信息")
     @SaCheckPermission("system:user:query")
-    @GetMapping(value = {"/", "/{userId}"})
+    @PostMapping(value = {"/", "/{userId}"})
     public SysUserInfoVo getInfo(@PathVariable(value = "userId", required = false) Long userId) {
         userService.checkUserDataScope(userId);
         SysUserInfoVo userInfoVo = new SysUserInfoVo();
@@ -129,7 +134,7 @@ public class SysUserController extends BaseController {
         if (ObjectUtil.isNotNull(userId)) {
             SysUserVo sysUser = userService.selectUserById(userId);
             userInfoVo.setUser(sysUser);
-            userInfoVo.setRoleIds(StreamUtils.toList(sysUser.getRoles(), SysRoleVo::getRoleId));
+            userInfoVo.setRoleIds(StreamUtils.toList(sysUser.getRoles(), SysRoleVo::getId));
             userInfoVo.setPostIds(postService.selectPostListByUserId(userId));
         }
         return userInfoVo;
@@ -138,6 +143,7 @@ public class SysUserController extends BaseController {
     /**
      * 新增用户
      */
+    @ApiOperation("新增用户")
     @SaCheckPermission("system:user:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -161,12 +167,13 @@ public class SysUserController extends BaseController {
     /**
      * 修改用户
      */
+    @ApiOperation("修改用户")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public void edit(@Validated @RequestBody SysUserBo user) {
-        userService.checkUserAllowed(user.getUserId());
-        userService.checkUserDataScope(user.getUserId());
+        userService.checkUserAllowed(user);
+        userService.checkUserDataScope(user.getId());
         if (!userService.checkUserNameUnique(user)) {
             fail("修改用户'" + user.getUserName() + "'失败，登录账号已存在");
         } else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
@@ -182,6 +189,7 @@ public class SysUserController extends BaseController {
      *
      * @param userIds 角色ID串
      */
+    @ApiOperation("删除用户")
     @SaCheckPermission("system:user:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
@@ -195,26 +203,28 @@ public class SysUserController extends BaseController {
     /**
      * 重置密码
      */
+    @ApiOperation("重置密码")
     @SaCheckPermission("system:user:resetPwd")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/resetPwd")
     public void resetPwd(@RequestBody SysUserBo user) {
-        userService.checkUserAllowed(user.getUserId());
-        userService.checkUserDataScope(user.getUserId());
+        userService.checkUserAllowed(user);
+        userService.checkUserDataScope(user.getId());
         user.setPassword(BCrypt.hashpw(user.getPassword()));
-        userService.resetUserPwd(user.getUserId(), user.getPassword());
+        userService.resetUserPwd(user.getId(), user.getPassword());
     }
 
     /**
      * 状态修改
      */
+    @ApiOperation("状态修改")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
     public void changeStatus(@RequestBody SysUserBo user) {
-        userService.checkUserAllowed(user.getUserId());
-        userService.checkUserDataScope(user.getUserId());
-        userService.updateUserStatus(user.getUserId(), user.getStatus());
+        userService.checkUserAllowed(user);
+        userService.checkUserDataScope(user.getId());
+        userService.updateUserStatus(user.getId(), user.getStatus());
     }
 
     /**
@@ -222,6 +232,7 @@ public class SysUserController extends BaseController {
      *
      * @param userId 用户ID
      */
+    @ApiOperation("根据用户编号获取授权角色")
     @SaCheckPermission("system:user:query")
     @GetMapping("/authRole/{userId}")
     public SysUserInfoVo authRole(@PathVariable Long userId) {
@@ -239,6 +250,7 @@ public class SysUserController extends BaseController {
      * @param userId  用户Id
      * @param roleIds 角色ID串
      */
+    @ApiOperation("用户授权角色")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
     @PutMapping("/authRole")
@@ -250,6 +262,7 @@ public class SysUserController extends BaseController {
     /**
      * 获取部门树列表
      */
+    @ApiOperation("获取部门树列表")
     @SaCheckPermission("system:user:list")
     @GetMapping("/deptTree")
     public List<Tree<Long>> deptTree(SysDeptBo dept) {

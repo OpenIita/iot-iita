@@ -9,13 +9,13 @@ import cc.iotkit.common.utils.ValidatorUtils;
 import cc.iotkit.system.dto.bo.SysUserBo;
 import cc.iotkit.system.dto.vo.SysUserImportVo;
 import cc.iotkit.system.dto.vo.SysUserVo;
+import cc.iotkit.system.service.ISysConfigService;
 import cc.iotkit.system.service.ISysUserService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
-import cc.iotkit.system.service.ISysConfigService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -63,12 +63,12 @@ public class SysUserImportListener extends AnalysisEventListener<SysUserImportVo
                 successNum++;
                 successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getUserName()).append(" 导入成功");
             } else if (isUpdateSupport) {
-                Long userId = sysUser.getUserId();
+                Long userId = sysUser.getId();
                 SysUserBo user = BeanUtil.toBean(userVo, SysUserBo.class);
-                user.setUserId(userId);
+                user.setId(userId);
                 ValidatorUtils.validate(user);
-                userService.checkUserAllowed(user.getUserId());
-                userService.checkUserDataScope(user.getUserId());
+                userService.checkUserAllowed(user);
+                userService.checkUserDataScope(user.getId());
                 user.setUpdateBy(operUserId);
                 userService.updateUser(user);
                 successNum++;
