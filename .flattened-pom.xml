@@ -17,26 +17,30 @@
     <module>iot-test-tool</module>
   </modules>
   <properties>
-    <codec.version>1.14</codec.version>
-    <java.version>11</java.version>
     <easyexcel.version>3.2.1</easyexcel.version>
-    <io.version>2.11.0</io.version>
     <graalvm.version>21.1.0</graalvm.version>
     <vertx.version>4.2.2</vertx.version>
     <hutool.version>5.8.18</hutool.version>
     <jackson.version>2.13.1</jackson.version>
     <spring-boot.version>2.7.11</spring-boot.version>
-    <revision>0.4.5-SNAPSHOT</revision>
-    <mapstruct-plus.version>1.2.1</mapstruct-plus.version>
     <poi.version>5.2.3</poi.version>
-    <ip2region.version>2.7.0</ip2region.version>
-    <satoken.version>1.34.0</satoken.version>
+    <mapstruct-plus.version>1.2.1</mapstruct-plus.version>
     <lang3.version>3.7</lang3.version>
     <aws-java-sdk-s3.version>1.12.400</aws-java-sdk-s3.version>
-    <redisson.version>3.20.1</redisson.version>
     <alibaba-ttl.version>2.14.2</alibaba-ttl.version>
-    <beanutils.version>1.9.3</beanutils.version>
     <lock4j.version>2.2.4</lock4j.version>
+    <codec.version>1.14</codec.version>
+    <java.version>11</java.version>
+    <jap-comment.version>1.0.0</jap-comment.version>
+    <validateion.version>1.1.0.Final</validateion.version>
+    <io.version>2.11.0</io.version>
+    <knife4j.version>2.0.5</knife4j.version>
+    <revision>0.4.5-SNAPSHOT</revision>
+    <ip2region.version>2.7.0</ip2region.version>
+    <satoken.version>1.34.0</satoken.version>
+    <redisson.version>3.20.1</redisson.version>
+    <beanutils.version>1.9.3</beanutils.version>
+    <velocity.version>2.3</velocity.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -120,8 +124,8 @@
         <version>${satoken.version}</version>
         <exclusions>
           <exclusion>
-            <artifactId>hutool-all</artifactId>
             <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -262,8 +266,8 @@
         <version>${easyexcel.version}</version>
         <exclusions>
           <exclusion>
-            <artifactId>poi-ooxml-schemas</artifactId>
             <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -421,6 +425,26 @@
         <groupId>cc.iotkit</groupId>
         <artifactId>iot-virtual-device</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.velocity</groupId>
+        <artifactId>velocity-engine-core</artifactId>
+        <version>${velocity.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.biyanwen</groupId>
+        <artifactId>jpa-comment-spring-boot-starter</artifactId>
+        <version>${jap-comment.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.xiaoymin</groupId>
+        <artifactId>knife4j-spring-boot-starter</artifactId>
+        <version>${knife4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>${validateion.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

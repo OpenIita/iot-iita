@@ -2,7 +2,7 @@ package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.system.dto.SysUserRole;
+import cc.iotkit.model.system.SysUserRole;
 import cc.iotkit.system.dto.bo.SysRoleBo;
 import cc.iotkit.system.dto.vo.SysRoleVo;
 
@@ -110,7 +110,7 @@ public interface ISysRoleService {
      * @param bo 角色信息
      * @return 结果
      */
-    void insertRole(SysRoleBo bo);
+    int insertRole(SysRoleBo bo);
 
     /**
      * 修改保存角色信息
@@ -135,7 +135,7 @@ public interface ISysRoleService {
      * @param bo 角色信息
      * @return 结果
      */
-    void authDataScope(SysRoleBo bo);
+    int authDataScope(SysRoleBo bo);
 
     /**
      * 通过角色ID删除角色
@@ -143,7 +143,7 @@ public interface ISysRoleService {
      * @param roleId 角色ID
      * @return 结果
      */
-    void deleteRoleById(Long roleId);
+    int deleteRoleById(Long roleId);
 
     /**
      * 批量删除角色信息
@@ -151,7 +151,7 @@ public interface ISysRoleService {
      * @param roleIds 需要删除的角色ID
      * @return 结果
      */
-    void deleteRoleByIds(Long[] roleIds);
+    int deleteRoleByIds(Long[] roleIds);
 
     /**
      * 取消授权用户角色
@@ -159,7 +159,7 @@ public interface ISysRoleService {
      * @param userRole 用户和角色关联信息
      * @return 结果
      */
-    void deleteAuthUser(SysUserRole userRole);
+    int deleteAuthUser(SysUserRole userRole);
 
     /**
      * 批量取消授权用户角色
@@ -168,7 +168,7 @@ public interface ISysRoleService {
      * @param userIds 需要取消授权的用户数据ID
      * @return 结果
      */
-    void deleteAuthUsers(Long roleId, Long[] userIds);
+    int deleteAuthUsers(Long roleId, Long[] userIds);
 
     /**
      * 批量选择授权用户角色
@@ -177,7 +177,7 @@ public interface ISysRoleService {
      * @param userIds 需要删除的用户数据ID
      * @return 结果
      */
-    void insertAuthUsers(Long roleId, Long[] userIds);
+    int insertAuthUsers(Long roleId, Long[] userIds);
 
     void cleanOnlineUserByRole(Long roleId);
 }

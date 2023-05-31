@@ -26,8 +26,8 @@
       <version>3.0.0</version>
       <exclusions>
         <exclusion>
-          <artifactId>swagger-models</artifactId>
           <groupId>io.swagger</groupId>
+          <artifactId>swagger-models</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
