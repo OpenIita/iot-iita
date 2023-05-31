@@ -1,7 +1,5 @@
 package cc.iotkit.data.model;
 
-import cc.iotkit.data.model.BaseEntity;
-import cc.iotkit.model.system.SysDictData;
 import cc.iotkit.model.system.SysLogininfor;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
@@ -28,7 +26,7 @@ public class TbSysLogininfor extends BaseEntity {
      */
     @Id
     @ApiModelProperty(value = "ID")
-    private Long infoId;
+    private Long id;
 
     /**
      * 租户编号

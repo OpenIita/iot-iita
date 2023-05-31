@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface ISysOperLogService {
 
-    Paging<SysOperLogVo> selectPageOperLogList(SysOperLogBo operLog, PageRequest<?> query);
+    Paging<SysOperLogVo> selectPageOperLogList(PageRequest<?> query);
 
     /**
      * 新增操作日志

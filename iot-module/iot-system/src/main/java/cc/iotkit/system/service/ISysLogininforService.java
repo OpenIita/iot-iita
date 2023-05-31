@@ -16,7 +16,7 @@ import java.util.List;
 public interface ISysLogininforService {
 
 
-    Paging<SysLogininforVo> selectPageLogininforList(SysLogininforBo logininfor, PageRequest<?> query);
+    Paging<SysLogininforVo> selectPageLogininforList(PageRequest<?> query);
 
     /**
      * 新增系统登录日志

@@ -1,7 +1,7 @@
 package cc.iotkit.data.system;
 
-import cc.iotkit.data.ICommonData;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.system.SysOperLog;
 
 /**
@@ -23,4 +23,6 @@ public interface ISysOperLogData extends ICommonData<SysOperLog, Long> {
      * @param tenantId 租户id
      */
     void deleteByTenantId(String tenantId);
+
+    void deleteAll();
 }

@@ -1,13 +1,14 @@
 package cc.iotkit.data.model;
 
-import cc.iotkit.model.system.SysLogininfor;
 import cc.iotkit.model.system.SysOperLog;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -30,8 +31,10 @@ public class TbSysOperLog implements Serializable {
      * 日志主键
      */
     @Id
+    @GeneratedValue(generator = "SnowflakeIdGenerator")
+    @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "日志主键")
-    private Long operId;
+    private Long id;
 
     /**
      * 租户编号

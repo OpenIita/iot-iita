@@ -4,20 +4,20 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.log.event.OperLogEvent;
 import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.ip.AddressUtils;
 import cc.iotkit.data.system.ISysOperLogData;
 import cc.iotkit.model.system.SysOperLog;
 import cc.iotkit.system.dto.bo.SysOperLogBo;
 import cc.iotkit.system.dto.vo.SysOperLogVo;
-import cn.hutool.core.util.ArrayUtil;
 import cc.iotkit.system.service.ISysOperLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 操作日志 服务层处理
@@ -45,8 +45,8 @@ public class SysOperLogServiceImpl implements ISysOperLogService {
     }
 
     @Override
-    public Paging<SysOperLogVo> selectPageOperLogList(SysOperLogBo operLog, PageRequest<?> query) {
-        return new Paging<>();
+    public Paging<SysOperLogVo> selectPageOperLogList(PageRequest<?> query) {
+        return sysOperLogData.findAll(query.to(SysOperLog.class)).to(SysOperLogVo.class);
     }
 
     /**
@@ -68,7 +68,7 @@ public class SysOperLogServiceImpl implements ISysOperLogService {
      */
     @Override
     public List<SysOperLogVo> selectOperLogList(SysOperLogBo operLog) {
-        return new ArrayList<>();
+        return MapstructUtils.convert(sysOperLogData.findAllByCondition(operLog.to(SysOperLog.class)),SysOperLogVo.class);
     }
 
     /**
@@ -98,5 +98,6 @@ public class SysOperLogServiceImpl implements ISysOperLogService {
      */
     @Override
     public void cleanOperLog() {
+        sysOperLogData.deleteAll();
     }
 }

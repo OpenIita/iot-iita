@@ -28,7 +28,7 @@ public class SysOperLogBo extends BaseDto {
     /**
      * 日志主键
      */
-    private Long operId;
+    private Long id;
 
     /**
      * 租户编号

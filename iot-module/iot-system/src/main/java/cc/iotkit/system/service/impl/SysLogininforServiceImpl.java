@@ -85,14 +85,8 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
     }
 
     @Override
-    public Paging<SysLogininforVo> selectPageLogininforList(SysLogininforBo logininfor, PageRequest<?> query) {
-        return MapstructUtils.convert(
-                sysLogininforData.findByConditions(
-                        MapstructUtils.convert(logininfor, SysLogininfor.class),
-                        query.getPageNum(),
-                        query.getPageSize()
-                ), SysLogininforVo.class
-        );
+    public Paging<SysLogininforVo> selectPageLogininforList(PageRequest<?> query) {
+        return null;
     }
 
     /**
