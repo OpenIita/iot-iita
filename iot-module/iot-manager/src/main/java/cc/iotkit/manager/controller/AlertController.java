@@ -19,12 +19,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+
 
 @Api(tags = {"告警中心"})
 @Slf4j
@@ -38,32 +39,32 @@ public class AlertController {
 
     @ApiOperation("新增告警中心配置")
     @PostMapping("/createAlertConfig")
-    public AlertConfig createAlertConfig(@RequestBody @Valid Request<AlertConfig> request) {
+    public AlertConfig createAlertConfig(@RequestBody @Validated Request<AlertConfig> request) {
         return alertService.createAlertConfig(request);
     }
 
     @ApiOperation("编辑告警中心配置")
     @PostMapping("/updateAlertConfig")
-    public AlertConfig updateAlertConfig(@RequestBody @Valid Request<AlertConfig> request) {
+    public AlertConfig updateAlertConfig(@RequestBody @Validated Request<AlertConfig> request) {
         return alertService.updateAlertConfig(request);
     }
 
     @ApiOperation("删除告警中心配置")
     @PostMapping("/deleteAlertConfigById")
-    public Boolean deleteAlertConfigById(@RequestBody @Valid Request<String> request) {
+    public Boolean deleteAlertConfigById(@RequestBody @Validated Request<String> request) {
         return alertService.deleteAlertConfigById(request);
     }
 
     @ApiOperation("查询告警中心配置分页")
     @PostMapping("/selectAlertConfigPage")
-    public Paging<AlertConfig> selectAlertConfigPage(@RequestBody @Valid PageRequest<AlertConfig> request) {
+    public Paging<AlertConfig> selectAlertConfigPage(@RequestBody @Validated PageRequest<AlertConfig> request) {
         return alertService.selectAlertConfigPage(request);
     }
 
 
     @ApiOperation("查询告警消息分页")
     @PostMapping("/selectAlertRecordPage")
-    public Paging<AlertRecord> selectAlertRecordPage(@RequestBody @Valid PageRequest<AlertRecord> request) {
+    public Paging<AlertRecord> selectAlertRecordPage(@RequestBody @Validated PageRequest<AlertRecord> request) {
         return alertService.selectAlertRecordPage(request);
     }
 

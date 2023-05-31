@@ -1,6 +1,7 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
@@ -9,6 +10,7 @@ import cc.iotkit.data.dao.*;
 import cc.iotkit.data.model.*;
 import cc.iotkit.data.service.convert.DeviceInfoMapper;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
@@ -498,7 +500,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
 
     @Override
     public Paging<DeviceInfo> findAll(PageRequest<DeviceInfo> pageRequest) {
-        return null;
+        Page<TbDeviceInfo> ret = deviceInfoRepository.findAll(PageBuilder.toPageable(pageRequest));
+        return new Paging<>(ret.getTotalElements(), MapstructUtils.convert(ret.getContent(), DeviceInfo.class));
     }
 
     @Override

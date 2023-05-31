@@ -63,6 +63,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
                 List<String> parentIds = new ArrayList<>();
                 PageRequest<DeviceInfo> pageRequest = new PageRequest<>();
                 pageRequest.setPageSize(1000);
+                pageRequest.setPageNum(page);
 
                 while ((paged = deviceInfoData.findAll(pageRequest)).getData().size() > 0) {
                     pageRequest.setPageNum(page++);

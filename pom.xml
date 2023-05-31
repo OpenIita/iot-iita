@@ -42,6 +42,8 @@
         <velocity.version>2.3</velocity.version>
         <ip2region.version>2.7.0</ip2region.version>
         <jap-comment.version>1.0.0</jap-comment.version>
+        <knife4j.version>2.0.5</knife4j.version>
+        <validateion.version>1.1.0.Final</validateion.version>
     </properties>
 
     <dependencyManagement>
@@ -517,6 +519,16 @@
                 <groupId>com.github.biyanwen</groupId>
                 <artifactId>jpa-comment-spring-boot-starter</artifactId>
                 <version>${jap-comment.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validateion.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -87,7 +87,11 @@ public class PageRequest<T> extends Request<T> implements Serializable {
     return pageRequest;
   }
 
+  public Integer getPageSize() {
+    return pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
+  }
 
-
-
+  public Integer getPageNum() {
+    return pageNum == null ? DEFAULT_PAGE_NUM : pageNum;
+  }
 }
