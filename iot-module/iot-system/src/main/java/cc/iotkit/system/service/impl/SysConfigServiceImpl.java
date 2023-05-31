@@ -7,6 +7,7 @@ import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
 import cc.iotkit.common.service.ConfigService;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.system.ISysConfigData;
@@ -93,7 +94,9 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      */
     @Override
     public List<SysConfigVo> selectConfigList(SysConfigBo config) {
-        return new ArrayList<>();
+
+        List<SysConfig> allByCondition = sysConfigData.findAllByCondition(MapstructUtils.convert(config, SysConfig.class));
+        return MapstructUtils.convert(allByCondition, SysConfigVo.class);
     }
 
     /**
@@ -104,7 +107,9 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      */
     @Override
     public String insertConfig(SysConfigBo bo) {
-        throw new BizException("操作失败");
+        SysConfig to = bo.to(SysConfig.class);
+        sysConfigData.save(to);
+        return String.valueOf(to.getId());
     }
 
     /**
@@ -116,18 +121,17 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
 //    @CachePut(cacheNames = CacheNames.SYS_CONFIG, key = "#bo.configKey")
     @Override
     public String updateConfig(SysConfigBo bo) {
-//        SysConfig config = MapstructUtils.convert(bo, SysConfig.class);
-//        if (config.getId() == null) {
-//            SysConfig old = sysConfigData.findByConfigKey(bo.getConfigKey());
-//            if (old == null) {
-//                throw new BizException("操作失败,key不存在");
-//            }
-//            config.setId(old.getId());
-//        }
-//
-//        sysConfigData.save(config);
-//        return config.getConfigValue();
-        return "";
+        SysConfig config = MapstructUtils.convert(bo, SysConfig.class);
+        if (config.getId() == null) {
+            SysConfig old = sysConfigData.findByConfigKey(config.getConfigKey());
+            if (old == null) {
+                throw new BizException("操作失败,key不存在");
+            }
+            config.setId(old.getId());
+        }
+
+        sysConfigData.save(config);
+        return config.getConfigValue();
     }
 
     /**

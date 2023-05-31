@@ -10,4 +10,5 @@ import cc.iotkit.model.system.SysConfig;
  */
 public interface ISysConfigData extends ICommonData<SysConfig, Long> {
 
+    SysConfig findByConfigKey(String configKey);
 }
