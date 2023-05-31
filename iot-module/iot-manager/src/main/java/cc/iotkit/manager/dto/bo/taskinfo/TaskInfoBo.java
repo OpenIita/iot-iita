@@ -3,14 +3,13 @@ package cc.iotkit.manager.dto.bo.taskinfo;
 import cc.iotkit.model.rule.TaskInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Size;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.math.BigDecimal;
