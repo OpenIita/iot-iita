@@ -197,9 +197,8 @@ public class SysMenuDataImpl implements ISysMenuData {
 
     @Override
     public boolean hasChildByMenuId(Long menuId) {
-        TbSysMenu tbSysMenu = jpaQueryFactory.select(QTbSysMenu.tbSysMenu).from(QTbSysMenu.tbSysMenu).where(PredicateBuilder.instance()
-                .and(QTbSysMenu.tbSysMenu.parentId.eq(menuId))
-                .build()).fetchOne();
+        TbSysMenu tbSysMenu = jpaQueryFactory.select(QTbSysMenu.tbSysMenu).from(QTbSysMenu.tbSysMenu)
+                .where(QTbSysMenu.tbSysMenu.parentId.eq(menuId)).fetchOne();
         return Objects.nonNull(tbSysMenu);
     }
 
