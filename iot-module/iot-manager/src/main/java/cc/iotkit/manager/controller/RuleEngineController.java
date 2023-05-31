@@ -9,14 +9,25 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.manager.ITaskInfoData;
+import cc.iotkit.manager.dto.bo.ruleinfo.RuleInfoBo;
+import cc.iotkit.manager.dto.bo.ruleinfo.RuleLogBo;
+import cc.iotkit.manager.dto.bo.taskinfo.TaskInfoBo;
+import cc.iotkit.manager.dto.bo.taskinfo.TaskLogBo;
+import cc.iotkit.manager.dto.vo.ruleinfo.RuleInfoVo;
+import cc.iotkit.manager.dto.vo.ruleinfo.RuleLogVo;
+import cc.iotkit.manager.dto.vo.taskinfo.TaskInfoVo;
+import cc.iotkit.manager.dto.vo.taskinfo.TaskLogVo;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.manager.service.IRuleEngineService;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.model.rule.RuleLog;
 import cc.iotkit.model.rule.TaskInfo;
@@ -26,10 +37,13 @@ import cc.iotkit.ruleengine.task.TaskManager;
 import cc.iotkit.temporal.IRuleLogData;
 import cc.iotkit.temporal.ITaskLogData;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,214 +56,115 @@ import java.util.UUID;
 public class RuleEngineController {
 
     @Autowired
-    private ITaskInfoData taskInfoData;
+    IRuleEngineService ruleEngineService;
 
-    @Autowired
-    private IRuleInfoData ruleInfoData;
-
-    @Autowired
-    private IRuleLogData ruleLogData;
-
-    @Autowired
-    private DataOwnerService dataOwnerService;
-
-    @Autowired
-    private TaskManager taskManager;
-
-    @Autowired
-    private RuleManager ruleManager;
-
-    @Autowired
-    private ITaskLogData taskLogData;
-
-    @PostMapping("/rules/{type}/{size}/{page}")
-    public Paging<RuleInfo> rules(
-            @PathVariable("type") String type,
-            @PathVariable("size") int size,
-            @PathVariable("page") int page
+    @ApiOperation("规则列表")
+    @PostMapping("/list")
+    public Paging<RuleInfoVo> rules(
+            @Validated @RequestBody
+            PageRequest<RuleInfoBo> request
     ) {
-        RuleInfo ruleInfo = new RuleInfo();
-        ruleInfo.setType(type);
-        if (AuthUtil.isAdmin()) {
-            return ruleInfoData.findByType(type, page, size);
-        } else {
-            return ruleInfoData.findByUidAndType(AuthUtil.getUserId(), type, page, size);
-        }
+        return ruleEngineService.selectPageList(request);
     }
 
-    @PostMapping("/rule/save")
-    public void saveRule(@RequestBody RuleInfo rule) {
-        if (StringUtils.isBlank(rule.getId())) {
-            rule.setId(UUID.randomUUID().toString());
-            rule.setState(RuleInfo.STATE_STOPPED);
-            rule.setCreateAt(System.currentTimeMillis());
-            rule.setUid(AuthUtil.getUserId());
-            ruleInfoData.save(rule);
-            ruleManager.add(rule);
-        } else {
-            RuleInfo ruleInfo = ruleInfoData.findById(rule.getId());
-            if (ruleInfo == null) {
-                throw new BizException(ErrCode.RULE_NOT_FOUND);
-            }
-            if (RuleInfo.STATE_RUNNING.equals(ruleInfo.getState())) {
-                throw new BizException(ErrCode.RULE_ALREADY_RUNNING);
-            }
+    @ApiOperation("规则编辑")
+    @PostMapping("/edit")
+    public boolean saveRule(@RequestBody @Validated  RuleInfoBo ruleInfoBo) {
+        return ruleEngineService.saveRule(ruleInfoBo);
 
-            dataOwnerService.checkOwner(ruleInfo);
-
-            ruleInfo.setListeners(rule.getListeners());
-            ruleInfo.setFilters(rule.getFilters());
-            ruleInfo.setActions(rule.getActions());
-            ruleInfo.setName(rule.getName());
-            ruleInfo.setDesc(rule.getDesc());
-
-            ruleInfoData.save(ruleInfo);
-        }
     }
 
-    @PostMapping("/rule/{ruleId}/pause")
-    public void pauseRule(@PathVariable("ruleId") String ruleId) {
-        RuleInfo ruleInfo = ruleInfoData.findById(ruleId);
-        if (ruleInfo == null) {
-            throw new BizException(ErrCode.RULE_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(ruleInfo);
-        ruleInfo.setState(RuleInfo.STATE_STOPPED);
-        ruleInfoData.save(ruleInfo);
-        ruleManager.pause(ruleInfo.getId());
+    @ApiOperation("暂停规则")
+    @PostMapping("/pause")
+    public boolean pauseRule(@Validated @RequestBody Request<String> request) {
+        String ruleId = request.getData();
+        return ruleEngineService.pauseRule(ruleId);
     }
 
-    @PostMapping("/rule/{ruleId}/resume")
-    public void resumeRule(@PathVariable("ruleId") String ruleId) {
-        RuleInfo ruleInfo = ruleInfoData.findById(ruleId);
-        if (ruleInfo == null) {
-            throw new BizException(ErrCode.RULE_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(ruleInfo);
-        ruleInfo.setState(RuleInfo.STATE_RUNNING);
-        ruleInfoData.save(ruleInfo);
-        ruleManager.resume(ruleInfo);
+    @ApiOperation("恢复规则")
+    @PostMapping("/resume")
+    public boolean resumeRule(@Validated @RequestBody Request<String> request) {
+        String ruleId = request.getData();
+        return ruleEngineService.resumeRule(ruleId);
+
     }
 
-    @DeleteMapping("/rule/{ruleId}/delete")
-    public void deleteRule(@PathVariable("ruleId") String ruleId) {
-        RuleInfo ruleInfo = ruleInfoData.findById(ruleId);
-        if (ruleInfo == null) {
-            throw new BizException(ErrCode.RULE_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(ruleInfo);
-        ruleInfoData.deleteById(ruleInfo.getId());
-        ruleManager.remove(ruleInfo.getId());
-        ruleLogData.deleteByRuleId(ruleId);
+    @ApiOperation("删除规则")
+    @DeleteMapping("/delete")
+    public boolean deleteRule(@Validated @RequestBody Request<String> request) {
+        String ruleId = request.getData();
+        return ruleEngineService.deleteRule(ruleId);
     }
 
-    @PostMapping("/rule/{ruleId}/logs/{size}/{page}")
-    public Paging<RuleLog> getRuleLogs(
-            @PathVariable("ruleId") String ruleId,
-            @PathVariable("size") int size,
-            @PathVariable("page") int page
+    @ApiOperation("规则日志")
+    @PostMapping("/ruleLog/list")
+    public Paging<RuleLogVo> getRuleLogs(
+           @Validated @RequestBody PageRequest<RuleLogBo> request
     ) {
-        RuleLog ruleLog = new RuleLog();
-        ruleLog.setRuleId(ruleId);
-        return ruleLogData.findByRuleId(ruleId, page, size);
+        return ruleEngineService.selectRuleLogPageList(request);
     }
 
-    @DeleteMapping("/rule/{ruleId}/logs/clear")
-    public void clearRuleLogs(@PathVariable("ruleId") String ruleId) {
-        ruleLogData.deleteByRuleId(ruleId);
+    @ApiOperation("清理日志")
+    @DeleteMapping("/ruleLog//clear")
+    public boolean clearRuleLogs(@Validated @RequestBody Request<String> request) {
+        String ruleId = request.getData();
+        return ruleEngineService.clearRuleLogs(ruleId);
+
     }
 
-    @PostMapping("/tasks")
-    public List<TaskInfo> tasks() {
-        if (AuthUtil.isAdmin()) {
-            return taskInfoData.findAll();
-        }
-        return taskInfoData.findByUid(AuthUtil.getUserId());
+    @ApiOperation("定时任务列表")
+    @PostMapping("/tasks/list")
+    public Paging<TaskInfoVo> tasks(@Validated @RequestBody PageRequest<TaskInfoBo> request) {
+        return ruleEngineService.selectTaskPageList(request);
     }
 
-    @PostMapping("/saveTask")
-    public void saveTask(@RequestBody TaskInfo taskInfo) {
-        if (StringUtils.isBlank(taskInfo.getId())) {
-            taskInfo.setId(UUID.randomUUID().toString());
-            taskInfo.setUid(AuthUtil.getUserId());
-            taskInfo.setCreateAt(System.currentTimeMillis());
-            taskInfo.setState(TaskInfo.STATE_STOP);
-        } else {
-            TaskInfo oldTask = taskInfoData.findById(taskInfo.getId());
-            if (oldTask == null) {
-                throw new BizException(ErrCode.TASK_NOT_FOUND);
-            }
-            taskInfo = ReflectUtil.copyNoNulls(taskInfo, oldTask);
-            dataOwnerService.checkOwner(taskInfo);
-        }
-
-        taskInfoData.save(taskInfo);
+    @ApiOperation("定时任务编辑")
+    @PostMapping("/task/save")
+    public boolean saveTask(@Validated @RequestBody TaskInfoBo taskInfo) {
+       return ruleEngineService.saveTask(taskInfo);
     }
 
-    @PostMapping("/task/{taskId}/pause")
-    public void pauseTask(@PathVariable("taskId") String taskId) {
-        TaskInfo taskInfo = taskInfoData.findById(taskId);
-        if (taskInfo == null) {
-            throw new BizException(ErrCode.TASK_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(taskInfo);
-        taskManager.pauseTask(taskId, "stop by " + AuthUtil.getUserId());
+    @ApiOperation("停止定时任务")
+    @PostMapping("/task/pause")
+    public boolean pauseTask(@Validated @RequestBody Request<String> request) {
+        String taskId = request.getData();
+        return ruleEngineService.pauseTask(taskId);
+
+
     }
 
-    @PostMapping("/task/{taskId}/resume")
-    public void resumeTask(@PathVariable("taskId") String taskId) {
-        TaskInfo taskInfo = taskInfoData.findById(taskId);
-        if (taskInfo == null) {
-            throw new BizException(ErrCode.TASK_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(taskInfo);
-        taskManager.resumeTask(taskId, "resume by " + AuthUtil.getUserId());
+    @ApiOperation("恢复定时任务")
+    @PostMapping("/task/resume")
+    public boolean resumeTask(@Validated @RequestBody Request<String> request) {
+        return ruleEngineService.resumeTask(request.getData());
     }
 
-    @PostMapping("/task/{taskId}/renew")
-    public void renewTask(@PathVariable("taskId") String taskId) {
-        TaskInfo taskInfo = taskInfoData.findById(taskId);
-        if (taskInfo == null) {
-            throw new BizException(ErrCode.TASK_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(taskInfo);
-        try {
-            taskManager.renewTask(taskInfo);
-            taskManager.updateTaskState(taskId, TaskInfo.STATE_RUNNING, "renew by " + AuthUtil.getUserId());
-        } catch (SchedulerException e) {
-            log.error("renew task error", e);
-            throw new BizException(ErrCode.RENEW_TASK_ERROR);
-        }
+    @PostMapping("/task/renew")
+    public boolean renewTask(@Validated @RequestBody Request<String> request) {
+        String taskId = request.getData();
+       return ruleEngineService.renewTask(taskId);
+
     }
 
 
-    @DeleteMapping("/task/{taskId}/delete")
-    public void deleteTask(@PathVariable("taskId") String taskId) {
-        TaskInfo taskInfo = taskInfoData.findById(taskId);
-        if (taskInfo == null) {
-            throw new BizException(ErrCode.TASK_NOT_FOUND);
-        }
+    @DeleteMapping("/task/delete")
+    public boolean deleteTask(@Validated @RequestBody Request<String> request) {
+        String taskId = request.getData();
+        return ruleEngineService.deleteTask(taskId);
 
-        dataOwnerService.checkOwner(taskInfo);
-        taskManager.deleteTask(taskId, "delete by " + AuthUtil.getUserId());
-        taskInfoData.deleteById(taskId);
-        taskLogData.deleteByTaskId(taskId);
     }
 
-    @PostMapping("/task/{taskId}/logs/{size}/{page}")
-    public Paging<TaskLog> getTaskLogs(
-            @PathVariable("taskId") String taskId,
-            @PathVariable("size") int size,
-            @PathVariable("page") int page
+    @PostMapping("/taskLogs/list")
+    public Paging<TaskLogVo> getTaskLogs(
+            @Validated @RequestBody PageRequest<TaskLogBo> request
     ) {
-        TaskLog taskLog = new TaskLog();
-        taskLog.setTaskId(taskId);
-        return taskLogData.findByTaskId(taskId, page, size);
+        return ruleEngineService.selectTaskLogPageList(request);
+
     }
 
-    @DeleteMapping("/task/{taskId}/logs/clear")
-    public void clearTaskLogs(@PathVariable("taskId") String taskId) {
-        taskLogData.deleteByTaskId(taskId);
+    @DeleteMapping("/taskLogs/clear")
+    public boolean clearTaskLogs( @Validated @RequestBody PageRequest<String> request) {
+       return ruleEngineService.clearTaskLogs(request.getData());
     }
 
 }
