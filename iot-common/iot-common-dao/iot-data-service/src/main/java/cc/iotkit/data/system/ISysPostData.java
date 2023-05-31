@@ -12,4 +12,10 @@ import java.util.List;
  */
 public interface ISysPostData extends ICommonData<SysPost, Long> {
     List<Long> selectPostListByUserId(Long userId);
+
+    List<SysPost> selectPostList(SysPost post);
+
+    boolean checkPostNameUnique(SysPost post);
+
+    boolean checkPostCodeUnique(SysPost post);
 }

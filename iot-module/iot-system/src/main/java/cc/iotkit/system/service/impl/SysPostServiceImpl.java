@@ -11,7 +11,6 @@ import cc.iotkit.system.service.ISysPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class SysPostServiceImpl implements ISysPostService {
 
     @Override
     public Paging<SysPostVo> selectPagePostList(SysPostBo post, PageRequest<?> query) {
-        return new Paging<>();
+        return sysPostData.findAll(query.to(SysPost.class)).to(SysPostVo.class);
     }
 
     /**
@@ -39,7 +38,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public List<SysPostVo> selectPostList(SysPostBo post) {
-        return new ArrayList<>();
+        return MapstructUtils.convert(sysPostData.selectPostList(post.to(SysPost.class)),SysPostVo.class);
     }
 
     /**
@@ -82,7 +81,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public boolean checkPostNameUnique(SysPostBo post) {
-        return false;
+        return sysPostData.checkPostNameUnique(post.to(SysPost.class));
     }
 
     /**
@@ -93,7 +92,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public boolean checkPostCodeUnique(SysPostBo post) {
-        return false;
+        return sysPostData.checkPostCodeUnique(post.to(SysPost.class));
     }
 
     /**
@@ -126,6 +125,7 @@ public class SysPostServiceImpl implements ISysPostService {
      */
     @Override
     public void deletePostByIds(Collection<Long> postIds) {
+        sysPostData.deleteByIds(postIds);
     }
 
     /**
