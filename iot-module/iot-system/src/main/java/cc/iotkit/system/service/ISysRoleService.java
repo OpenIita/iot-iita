@@ -2,7 +2,7 @@ package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.system.dto.SysUserRole;
+import cc.iotkit.model.system.SysUserRole;
 import cc.iotkit.system.dto.bo.SysRoleBo;
 import cc.iotkit.system.dto.vo.SysRoleVo;
 
@@ -110,7 +110,7 @@ public interface ISysRoleService {
      * @param bo 角色信息
      * @return 结果
      */
-    void insertRole(SysRoleBo bo);
+    int insertRole(SysRoleBo bo);
 
     /**
      * 修改保存角色信息
@@ -135,7 +135,7 @@ public interface ISysRoleService {
      * @param bo 角色信息
      * @return 结果
      */
-    void authDataScope(SysRoleBo bo);
+    int authDataScope(SysRoleBo bo);
 
     /**
      * 通过角色ID删除角色

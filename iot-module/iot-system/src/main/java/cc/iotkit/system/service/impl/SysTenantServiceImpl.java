@@ -7,6 +7,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.data.system.ISysTenantData;
 import cc.iotkit.data.system.ISysUserData;
+import cc.iotkit.model.system.SysTenant;
 import cc.iotkit.system.dto.bo.SysTenantBo;
 import cc.iotkit.system.dto.vo.SysTenantVo;
 import cc.iotkit.system.service.ISysTenantService;
@@ -32,7 +33,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public SysTenantVo queryById(Long id) {
-        return null;
+        return sysTenantData.findById(id).to(SysTenantVo.class);
     }
 
     /**
@@ -51,7 +52,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public List<SysTenantVo> queryList(SysTenantBo bo) {
-        return null;
+        return MapstructUtils.convert(sysTenantData.findAllByCondition(bo.to(SysTenant.class)),SysTenantVo.class);
     }
 
     @Override

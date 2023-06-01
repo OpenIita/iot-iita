@@ -140,4 +140,9 @@ public class SysRoleDataImpl implements ISysRoleData {
                 .build();
 
     }
+
+    @Override
+    public void deleteById(Long id) {
+        jpaQueryFactory.delete(tbSysRole).where(tbSysRole.id.eq(id)).execute();
+    }
 }

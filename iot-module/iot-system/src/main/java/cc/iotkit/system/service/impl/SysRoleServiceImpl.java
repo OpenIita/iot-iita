@@ -4,34 +4,39 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.undefined.LoginUser;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.system.ISysRoleData;
 import cc.iotkit.data.system.ISysRoleDeptData;
 import cc.iotkit.data.system.ISysRoleMenuData;
 import cc.iotkit.data.system.ISysUserRoleData;
 import cc.iotkit.model.system.SysRole;
-import cc.iotkit.system.dto.SysUserRole;
+import cc.iotkit.model.system.SysRoleDept;
+import cc.iotkit.model.system.SysRoleMenu;
+import cc.iotkit.model.system.SysUserRole;
 import cc.iotkit.system.dto.bo.SysRoleBo;
 import cc.iotkit.system.dto.vo.SysRoleVo;
 import cc.iotkit.system.service.ISysRoleService;
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 角色 业务层处理
  *
  * @author Lion Li
  */
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class SysRoleServiceImpl implements ISysRoleService {
 
     private final ISysRoleData iSysRoleData;
@@ -194,7 +199,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public long countUserRoleByRoleId(Long roleId) {
-        return 0;
+        return iSysUserRoleData.countUserRoleByRoleId(roleId);
     }
 
     /**
@@ -205,10 +210,10 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertRole(SysRoleBo bo) {
+    public int insertRole(SysRoleBo bo) {
         SysRole role = iSysRoleData.save(bo.to(SysRole.class));
         bo.setRoleId(role.getId());
-        insertRoleMenu(bo);
+        return insertRoleMenu(bo);
     }
 
     /**
@@ -220,11 +225,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateRole(SysRoleBo bo) {
-        SysRole role = iSysRoleData.save(bo.to(SysRole.class));
-        if (ObjectUtil.isNull(role)) {
-            return 0;
-        }
-        return 1;
+        // 修改角色信息
+        iSysRoleData.updateById(bo.to(SysRole.class));
+        // 删除角色与菜单关联
+        iSysRoleMenuData.deleteByRoleId(List.of(bo.getRoleId()));
+        return insertRoleMenu(bo);
     }
 
     /**
@@ -232,7 +237,6 @@ public class SysRoleServiceImpl implements ISysRoleService {
      *
      * @param roleId 角色ID
      * @param status 角色状态
-     * @return 结果
      */
     @Override
     public void updateRoleStatus(Long roleId, String status) {
@@ -251,13 +255,13 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void authDataScope(SysRoleBo bo) {
+    public int authDataScope(SysRoleBo bo) {
         // 修改角色信息
         iSysRoleData.updateById(MapstructUtils.convert(bo, SysRole.class));
         // 删除角色与部门关联
-        iSysRoleDeptData.delete(bo.getRoleId());
+        iSysRoleDeptData.deleteByRoleId(List.of(bo.getRoleId()));
         // 新增角色和部门信息（数据权限）
-        insertRoleDept(bo);
+        return insertRoleDept(bo);
 
     }
 
@@ -266,7 +270,20 @@ public class SysRoleServiceImpl implements ISysRoleService {
      *
      * @param role 角色对象
      */
-    private void insertRoleMenu(SysRoleBo role) {
+    private int insertRoleMenu(SysRoleBo role) {
+        long rows = 1;
+        // 新增用户与角色管理
+        List<SysRoleMenu> list = new ArrayList<>();
+        for (Long menuId : role.getMenuIds()) {
+            SysRoleMenu rm = new SysRoleMenu();
+            rm.setRoleId(role.getRoleId());
+            rm.setMenuId(menuId);
+            list.add(rm);
+        }
+        if (list.size() > 0) {
+            rows = iSysRoleMenuData.insertBatch(list);
+        }
+        return Integer.parseInt(rows + "");
     }
 
     /**
@@ -274,19 +291,35 @@ public class SysRoleServiceImpl implements ISysRoleService {
      *
      * @param role 角色对象
      */
-    private void insertRoleDept(SysRoleBo role) {
-
+    private int insertRoleDept(SysRoleBo role) {
+        long rows = 1;
+        // 新增角色与部门（数据权限）管理
+        List<SysRoleDept> list = new ArrayList<>();
+        for (Long deptId : role.getDeptIds()) {
+            SysRoleDept rd = new SysRoleDept();
+            rd.setRoleId(role.getRoleId());
+            rd.setDeptId(deptId);
+            list.add(rd);
+        }
+        if (list.size() > 0) {
+            rows = iSysRoleDeptData.insertBatch(list);
+        }
+        return Integer.parseInt(rows + "");
     }
 
     /**
      * 通过角色ID删除角色
      *
      * @param roleId 角色ID
-     * @return 结果
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteRoleById(Long roleId) {
+        // 删除角色与菜单关联
+        iSysRoleMenuData.deleteByRoleId(List.of(roleId));
+        // 删除角色与部门关联
+        iSysRoleDeptData.deleteByRoleId(List.of(roleId));
+        iSysRoleData.deleteById(roleId);
     }
 
     /**
@@ -298,6 +331,20 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteRoleByIds(Long[] roleIds) {
+        for (Long roleId : roleIds) {
+            checkRoleAllowed(roleId);
+            checkRoleDataScope(roleId);
+            SysRole role = iSysRoleData.findById(roleId);
+            if (countUserRoleByRoleId(roleId) > 0) {
+                throw new ServiceException(String.format("%1$s已分配,不能删除", role.getRoleName()));
+            }
+        }
+        List<Long> ids = Arrays.asList(roleIds);
+        // 删除角色与菜单关联
+        iSysRoleMenuData.deleteByRoleId(ids);
+        // 删除角色与部门关联
+        iSysRoleDeptData.deleteByRoleId(ids);
+        iSysRoleData.deleteByIds(ids);
     }
 
     /**
@@ -308,6 +355,10 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public void deleteAuthUser(SysUserRole userRole) {
+        long rows = iSysUserRoleData.delete(userRole.getRoleId(), List.of(userRole.getUserId()));
+        if (rows > 0) {
+            cleanOnlineUserByRole(userRole.getRoleId());
+        }
     }
 
     /**
@@ -319,6 +370,10 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public void deleteAuthUsers(Long roleId, Long[] userIds) {
+        long rows = iSysUserRoleData.delete(roleId, Arrays.asList(userIds));
+        if (rows > 0) {
+            cleanOnlineUserByRole(roleId);
+        }
     }
 
     /**
@@ -330,9 +385,42 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public void insertAuthUsers(Long roleId, Long[] userIds) {
+        // 新增用户与角色管理
+        long rows = 1;
+        List<SysUserRole> list = StreamUtils.toList(List.of(userIds), userId -> {
+            SysUserRole ur = new SysUserRole();
+            ur.setUserId(userId);
+            ur.setRoleId(roleId);
+            return ur;
+        });
+        if (CollUtil.isNotEmpty(list)) {
+            rows = iSysUserRoleData.insertBatch(list);
+        }
+        if (rows > 0) {
+            cleanOnlineUserByRole(roleId);
+        }
     }
 
     @Override
     public void cleanOnlineUserByRole(Long roleId) {
+        List<String> keys = StpUtil.searchTokenValue("", 0, -1, false);
+        if (CollUtil.isEmpty(keys)) {
+            return;
+        }
+        // 角色关联的在线用户量过大会导致redis阻塞卡顿 谨慎操作
+        keys.parallelStream().forEach(key -> {
+            String token = StringUtils.substringAfterLast(key, ":");
+            // 如果已经过期则跳过
+            if (StpUtil.stpLogic.getTokenActivityTimeoutByToken(token) < -1) {
+                return;
+            }
+            LoginUser loginUser = LoginHelper.getLoginUser(token);
+            if (loginUser.getRoles().stream().anyMatch(r -> r.getRoleId().equals(roleId))) {
+                try {
+                    StpUtil.logoutByTokenValue(token);
+                } catch (NotLoginException ignored) {
+                }
+            }
+        });
     }
 }

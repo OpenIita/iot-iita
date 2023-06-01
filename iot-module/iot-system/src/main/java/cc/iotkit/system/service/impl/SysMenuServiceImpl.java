@@ -322,7 +322,6 @@ public class SysMenuServiceImpl implements ISysMenuService {
      * 新增保存菜单信息
      *
      * @param bo 菜单信息
-     * @return 结果
      */
     @Override
     public void insertMenu(SysMenuBo bo) {
@@ -333,7 +332,6 @@ public class SysMenuServiceImpl implements ISysMenuService {
      * 修改保存菜单信息
      *
      * @param bo 菜单信息
-     * @return 结果
      */
     @Override
     public void updateMenu(SysMenuBo bo) {
@@ -344,7 +342,6 @@ public class SysMenuServiceImpl implements ISysMenuService {
      * 删除菜单管理信息
      *
      * @param menuId 菜单ID
-     * @return 结果
      */
     @Override
     public void deleteMenuById(Long menuId) {
@@ -354,7 +351,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
     /**
      * 校验菜单名称是否唯一
      *
-     * @param menu 菜单信息
+     * @param bo 菜单信息
      * @return 结果
      */
     @Override

@@ -3,6 +3,8 @@ package cc.iotkit.data.system;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.system.SysUserRole;
 
+import java.util.List;
+
 /**
  * 用户角色数据接口
  *
@@ -24,4 +26,8 @@ public interface ISysUserRoleData extends ICommonData<SysUserRole, Long> {
      * @return 结果
      */
     long countUserRoleByRoleId(Long roleId);
+
+    long delete(Long roleId, List<Long> userIds);
+
+    long insertBatch(List<SysUserRole> list);
 }
