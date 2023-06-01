@@ -40,8 +40,7 @@ public class SysConfigController extends BaseController {
   @ApiOperation("获取参数配置列表")
   @SaCheckPermission("system:config:list")
   @PostMapping("/list")
-  public Paging<SysConfigVo> list(
-      @RequestBody @Validated(QueryGroup.class) PageRequest<SysConfigBo> query) {
+  public Paging<SysConfigVo> list(@RequestBody @Validated(QueryGroup.class) PageRequest<SysConfigBo> query) {
     return configService.selectPageConfigList(query);
   }
 
@@ -49,9 +48,9 @@ public class SysConfigController extends BaseController {
   @Log(title = "参数管理", businessType = BusinessType.EXPORT)
   @SaCheckPermission("system:config:export")
   @PostMapping("/export")
-  public void export(@RequestBody @Validated(QueryGroup.class) SysConfigBo config,
+  public void export(@RequestBody @Validated(QueryGroup.class) Request<SysConfigBo> request,
       HttpServletResponse response) {
-    List<SysConfigVo> list = configService.selectConfigList(config);
+    List<SysConfigVo> list = configService.selectConfigList(request.getData());
     ExcelUtil.exportExcel(list, "参数数据", SysConfigVo.class, response);
   }
 
