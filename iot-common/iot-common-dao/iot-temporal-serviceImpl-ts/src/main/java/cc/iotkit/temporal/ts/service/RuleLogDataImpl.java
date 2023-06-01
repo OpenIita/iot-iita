@@ -9,11 +9,10 @@
  */
 package cc.iotkit.temporal.ts.service;
 
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.RuleLog;
 import cc.iotkit.temporal.IRuleLogData;
 import cc.iotkit.temporal.ts.dao.TsTemplate;
-//import cc.iotkit.temporal.ts.dm.TableManager;
 import cc.iotkit.temporal.ts.dm.TableManager;
 import cc.iotkit.temporal.ts.model.TsRuleLog;
 import org.jooq.*;
@@ -26,7 +25,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.jooq.impl.DSL.*;
+import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.table;
+
+//import cc.iotkit.temporal.ts.dm.TableManager;
 
 @Service
 public class RuleLogDataImpl implements IRuleLogData {

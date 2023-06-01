@@ -94,17 +94,13 @@ public class SysConfigDataImpl implements ISysConfigData, IJPACommData<SysConfig
     @Override
     public Paging<SysConfig> findAll(PageRequest<SysConfig> pageRequest) {
         SysConfig query = pageRequest.getData();
-        Predicate predicate = PredicateBuilder.instance(tbSysConfig.configId.isNotNull())
-                .and(StringUtils.isNotEmpty(query.getConfigKey()), () -> tbSysConfig.configKey.eq(query.getConfigKey()))
-
+        Predicate predicate = PredicateBuilder.instance()
+                .and(StringUtils.isNotEmpty(query.getConfigName()), () -> tbSysConfig.configName.like(query.getConfigName()))
+                .and(StringUtils.isNotEmpty(query.getConfigType()), () -> tbSysConfig.configType.eq(query.getConfigType()))
+                .and(StringUtils.isNotEmpty(query.getConfigKey()), () -> tbSysConfig.configKey.like(query.getConfigKey()))
                 .build();
-
-        // TODO: 2023/5/26 抽成通用工具类方法
-
         Page<TbSysConfig> all = baseRepository.findAll(predicate, PageBuilder.toPageable(pageRequest));
         return PageBuilder.toPaging(all, SysConfig.class);
-
-
     }
 
 
