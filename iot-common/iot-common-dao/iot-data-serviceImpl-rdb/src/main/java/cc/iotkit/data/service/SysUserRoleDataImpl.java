@@ -25,7 +25,7 @@ import static cc.iotkit.data.model.QTbSysUserRole.tbSysUserRole;
  */
 @RequiredArgsConstructor
 public class SysUserRoleDataImpl implements ISysUserRoleData, IJPACommData<SysUserRole, Long> {
-    @Autowired
+
     private final SysUserRoleRepository sysUserRoleRepository;
     private final JPAQueryFactory jpaQueryFactory;
 
