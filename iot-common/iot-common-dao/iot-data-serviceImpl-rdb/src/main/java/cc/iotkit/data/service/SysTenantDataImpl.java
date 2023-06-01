@@ -46,15 +46,13 @@ public class SysTenantDataImpl implements ISysTenantData {
     }
 
     @Override
-    public long deleteById(Long aLong) {
+    public void deleteById(Long aLong) {
 
-        return 0;
     }
 
     @Override
-    public int deleteByIds(Collection<Long> longs) {
+    public void deleteByIds(Collection<Long> longs) {
 
-        return 0;
     }
 
     @Override
