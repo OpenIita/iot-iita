@@ -9,6 +9,8 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.product.Category;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -19,6 +21,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "category")
+@AutoMapper(target = Category.class)
 public class TbCategory {
 
     @ApiModelProperty(value = "分类id")

@@ -9,6 +9,8 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.OauthClient;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -19,6 +21,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "oauth_client")
+@AutoMapper(target = OauthClient.class)
 public class TbOauthClient {
 
     @Id

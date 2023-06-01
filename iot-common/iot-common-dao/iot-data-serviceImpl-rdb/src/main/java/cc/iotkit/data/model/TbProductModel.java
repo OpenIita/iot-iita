@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.product.ProductModel;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,6 +15,7 @@ import javax.persistence.Table;
 @Entity
 @ApiModel(value = "产品型号")
 @Table(name = "product_model")
+@AutoMapper(target = ProductModel.class)
 public class TbProductModel {
 
     @Id

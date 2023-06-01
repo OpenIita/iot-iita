@@ -1,5 +1,6 @@
 package cc.iotkit.data.model;
 
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "sys_user_role")
+@AutoMapper(target = cc.iotkit.model.system.SysUserRole.class)
 public class TbSysUserRole extends BaseEntity {
 
     @Id

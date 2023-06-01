@@ -9,6 +9,8 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.protocol.ProtocolConverter;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -20,6 +22,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "protocol_converter")
+@AutoMapper(target = ProtocolConverter.class)
 public class TbProtocolConverter {
 
     @Id

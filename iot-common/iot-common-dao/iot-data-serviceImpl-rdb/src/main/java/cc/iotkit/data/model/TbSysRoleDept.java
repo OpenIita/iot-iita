@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.system.SysRoleDept;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -18,6 +20,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "sys_role_dept")
+@AutoMapper(target = SysRoleDept.class)
 public class TbSysRoleDept {
 
     @Id

@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.system.SysUser;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +25,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "sys_user")
+@AutoMapper(target = SysUser.class)
 public class TbSysUser extends BaseEntity {
 
     /**

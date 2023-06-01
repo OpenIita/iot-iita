@@ -9,6 +9,9 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.rule.RuleInfo;
+import cc.iotkit.model.rule.RuleLog;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,6 +25,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "rule_info")
 @ApiModel(value = "规则")
+@AutoMapper(target = RuleInfo.class)
 public class TbRuleInfo {
 
     @Id

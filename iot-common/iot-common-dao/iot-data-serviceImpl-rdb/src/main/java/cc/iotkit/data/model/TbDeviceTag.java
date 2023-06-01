@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.model;
 
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

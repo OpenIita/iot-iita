@@ -1,5 +1,6 @@
 package cc.iotkit.data.model;
 
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "sys_user_post")
+@AutoMapper(target = cc.iotkit.model.system.SysUserPost.class)
 public class TbSysUserPost extends BaseEntity {
 
     @Id

@@ -9,6 +9,8 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.rule.TaskInfo;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -20,6 +22,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "task_info")
+@AutoMapper(target = TaskInfo.class)
 public class TbTaskInfo {
 
     @Id

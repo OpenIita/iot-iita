@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.UserInfo;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -10,6 +12,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "user_info")
+@AutoMapper(target = UserInfo.class)
 public class TbUserInfo {
 
     @Id

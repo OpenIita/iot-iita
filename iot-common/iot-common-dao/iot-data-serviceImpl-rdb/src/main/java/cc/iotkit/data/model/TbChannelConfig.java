@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.notify.ChannelConfig;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "channel_config")
 @ApiModel(value = "通道配置")
+@AutoMapper(target= ChannelConfig.class)
 public class TbChannelConfig {
     @Id
     @ApiModelProperty(value = "通道配置id")

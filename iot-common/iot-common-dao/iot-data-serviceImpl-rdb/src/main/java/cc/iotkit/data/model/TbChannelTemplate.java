@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.notify.ChannelTemplate;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "channel_template")
 @ApiModel(value = "通道模板")
+@AutoMapper(target= ChannelTemplate.class)
 public class TbChannelTemplate {
     @Id
     @ApiModelProperty(value = "通道模板id")

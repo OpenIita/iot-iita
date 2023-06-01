@@ -1,6 +1,8 @@
 package cc.iotkit.data.model;
 
 import cc.iotkit.data.model.BaseEntity;
+import cc.iotkit.model.system.SysTenant;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +21,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "sys_tenant")
+@AutoMapper(target = SysTenant.class)
 public class TbSysTenant extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.space.Home;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,6 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "home")
 @ApiModel(value = "家庭信息")
+@AutoMapper(target = Home.class)
 public class TbHome {
 
     @Id

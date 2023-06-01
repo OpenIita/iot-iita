@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.model;
 
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,6 +22,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "device_sub_user")
 @ApiModel(value = "设备用户映射")
+
 public class TbDeviceSubUser {
 
     @Id

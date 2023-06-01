@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.device.DeviceInfo;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,6 +13,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "device_info")
 @ApiModel(value = "设备信息")
+@AutoMapper(target = DeviceInfo.class)
 public class TbDeviceInfo {
 
     @javax.persistence.Id

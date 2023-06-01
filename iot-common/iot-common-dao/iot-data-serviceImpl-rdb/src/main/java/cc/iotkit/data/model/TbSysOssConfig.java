@@ -1,6 +1,8 @@
 package cc.iotkit.data.model;
 
 import cc.iotkit.data.model.BaseEntity;
+import cc.iotkit.model.system.SysOssConfig;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,6 +22,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sys_oss_config")
 @ApiModel(value = "对象存储配置对象")
+@AutoMapper(target = SysOssConfig.class)
 public class TbSysOssConfig extends BaseEntity {
 
     /**

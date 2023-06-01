@@ -4,12 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import cc.iotkit.model.alert.AlertConfig;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "alert_config")
+@AutoMapper(target = AlertConfig.class)
 public class TbAlertConfig {
 
     @Id
