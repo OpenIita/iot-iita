@@ -35,12 +35,11 @@ import java.util.*;
  *
  * @author Lion Li
  */
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class SysRoleServiceImpl implements ISysRoleService {
 
     private final ISysRoleData iSysRoleData;
-
     private final ISysRoleMenuData iSysRoleMenuData;
     private final ISysUserRoleData iSysUserRoleData;
     private final ISysRoleDeptData iSysRoleDeptData;
@@ -238,7 +237,6 @@ public class SysRoleServiceImpl implements ISysRoleService {
      *
      * @param roleId 角色ID
      * @param status 角色状态
-     * @return 结果
      */
     @Override
     public void updateRoleStatus(Long roleId, String status) {
@@ -296,7 +294,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     private int insertRoleDept(SysRoleBo role) {
         long rows = 1;
         // 新增角色与部门（数据权限）管理
-        List<SysRoleDept> list = new ArrayList<SysRoleDept>();
+        List<SysRoleDept> list = new ArrayList<>();
         for (Long deptId : role.getDeptIds()) {
             SysRoleDept rd = new SysRoleDept();
             rd.setRoleId(role.getRoleId());
@@ -313,17 +311,15 @@ public class SysRoleServiceImpl implements ISysRoleService {
      * 通过角色ID删除角色
      *
      * @param roleId 角色ID
-     * @return 结果
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int deleteRoleById(Long roleId) {
+    public void deleteRoleById(Long roleId) {
         // 删除角色与菜单关联
         iSysRoleMenuData.deleteByRoleId(List.of(roleId));
         // 删除角色与部门关联
         iSysRoleDeptData.deleteByRoleId(List.of(roleId));
-        long num = iSysRoleData.deleteById(roleId);
-        return Integer.parseInt(num + "");
+        iSysRoleData.deleteById(roleId);
     }
 
     /**
@@ -334,7 +330,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int deleteRoleByIds(Long[] roleIds) {
+    public void deleteRoleByIds(Long[] roleIds) {
         for (Long roleId : roleIds) {
             checkRoleAllowed(roleId);
             checkRoleDataScope(roleId);
@@ -348,7 +344,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         iSysRoleMenuData.deleteByRoleId(ids);
         // 删除角色与部门关联
         iSysRoleDeptData.deleteByRoleId(ids);
-        return iSysRoleData.deleteByIds(ids);
+        iSysRoleData.deleteByIds(ids);
     }
 
     /**
@@ -358,12 +354,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
      * @return 结果
      */
     @Override
-    public int deleteAuthUser(SysUserRole userRole) {
+    public void deleteAuthUser(SysUserRole userRole) {
         long rows = iSysUserRoleData.delete(userRole.getRoleId(), List.of(userRole.getUserId()));
         if (rows > 0) {
             cleanOnlineUserByRole(userRole.getRoleId());
         }
-        return Integer.parseInt(rows + "");
     }
 
     /**
@@ -374,12 +369,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
      * @return 结果
      */
     @Override
-    public int deleteAuthUsers(Long roleId, Long[] userIds) {
+    public void deleteAuthUsers(Long roleId, Long[] userIds) {
         long rows = iSysUserRoleData.delete(roleId, Arrays.asList(userIds));
         if (rows > 0) {
             cleanOnlineUserByRole(roleId);
         }
-        return Integer.parseInt(rows + "");
     }
 
     /**
@@ -390,7 +384,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      * @return 结果
      */
     @Override
-    public int insertAuthUsers(Long roleId, Long[] userIds) {
+    public void insertAuthUsers(Long roleId, Long[] userIds) {
         // 新增用户与角色管理
         long rows = 1;
         List<SysUserRole> list = StreamUtils.toList(List.of(userIds), userId -> {
@@ -405,7 +399,6 @@ public class SysRoleServiceImpl implements ISysRoleService {
         if (rows > 0) {
             cleanOnlineUserByRole(roleId);
         }
-        return Integer.parseInt(rows + "");
     }
 
     @Override
