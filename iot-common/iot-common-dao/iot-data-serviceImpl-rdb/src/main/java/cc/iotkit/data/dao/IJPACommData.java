@@ -83,7 +83,7 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
         Example example = genExample(pageRequest.getData());
 
         Page<T> all = getBaseRepository().findAll(example, PageBuilder.toPageable(pageRequest));
-        return (Paging<T>) PageBuilder.toPaging(all);
+        return  PageBuilder.toPaging(all);
     }
 
     /**
