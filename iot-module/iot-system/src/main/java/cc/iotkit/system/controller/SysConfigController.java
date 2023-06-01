@@ -3,21 +3,24 @@ package cc.iotkit.system.controller;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
+import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
-import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysConfigBo;
 import cc.iotkit.system.dto.vo.SysConfigVo;
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysConfigService;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -48,9 +51,9 @@ public class SysConfigController extends BaseController {
   @Log(title = "参数管理", businessType = BusinessType.EXPORT)
   @SaCheckPermission("system:config:export")
   @PostMapping("/export")
-  public void export(@RequestBody @Validated(QueryGroup.class) Request<SysConfigBo> request,
+  public void export(@RequestBody @Validated(QueryGroup.class) Request<SysConfigBo> config,
       HttpServletResponse response) {
-    List<SysConfigVo> list = configService.selectConfigList(request.getData());
+    List<SysConfigVo> list = configService.selectConfigList(config.getData());
     ExcelUtil.exportExcel(list, "参数数据", SysConfigVo.class, response);
   }
 
