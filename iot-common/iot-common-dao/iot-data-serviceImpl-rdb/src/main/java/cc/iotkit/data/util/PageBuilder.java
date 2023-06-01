@@ -68,4 +68,8 @@ public class PageBuilder {
     return new Paging<>(all.getTotalElements(),
             MapstructUtils.convert(all.getContent(), clz));
   }
+
+  public static Paging<SysConfig> toPaging(Page all) {
+    return new Paging<>(all.getTotalElements(), all.getContent());
+  }
 }

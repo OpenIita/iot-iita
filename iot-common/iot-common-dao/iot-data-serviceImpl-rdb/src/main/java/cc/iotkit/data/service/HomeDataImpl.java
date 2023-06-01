@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IHomeData;
 import cc.iotkit.data.dao.HomeRepository;
 import cc.iotkit.data.model.TbHome;
@@ -10,6 +11,7 @@ import cc.iotkit.model.space.Home;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -18,10 +20,16 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class HomeDataImpl implements IHomeData {
+public class HomeDataImpl implements IHomeData, IJPACommData<Home, String> {
 
     @Autowired
     private HomeRepository homeRepository;
+
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return homeRepository;
+    }
 
     @Override
     public Home findByUidAndCurrent(String uid, boolean current) {
@@ -53,10 +61,6 @@ public class HomeDataImpl implements IHomeData {
         return MapstructUtils.convert(homeRepository.findById(s).orElse(null), Home.class);
     }
 
-    @Override
-    public List<Home> findByIds(Collection<String> id) {
-        return null;
-    }
 
     @Override
     public Home save(Home data) {

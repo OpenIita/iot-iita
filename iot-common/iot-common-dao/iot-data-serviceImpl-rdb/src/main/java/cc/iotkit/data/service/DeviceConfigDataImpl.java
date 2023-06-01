@@ -11,16 +11,19 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.data.dao.DeviceConfigRepository;
 import cc.iotkit.data.model.TbDeviceConfig;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.DeviceConfig;
+import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -29,7 +32,7 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class DeviceConfigDataImpl implements IDeviceConfigData {
+public class DeviceConfigDataImpl implements IDeviceConfigData, IJPACommData<DeviceConfig, String> {
 
     @Autowired
     private DeviceConfigRepository deviceConfigRepository;
@@ -45,13 +48,19 @@ public class DeviceConfigDataImpl implements IDeviceConfigData {
     }
 
     @Override
+    public JpaRepository getBaseRepository() {
+        return deviceConfigRepository;
+    }
+
+    @Override
     public DeviceConfig findById(String s) {
         return MapstructUtils.convert(deviceConfigRepository.findById(s).orElse(null), DeviceConfig.class);
     }
 
     @Override
-    public List<DeviceConfig> findByIds(Collection<String> id) {
-        return null;
+    public List<DeviceConfig> findByIds(Collection<String> ids) {
+        List<TbDeviceConfig> allById = deviceConfigRepository.findAllById(ids);
+        return MapstructUtils.convert(allById, DeviceConfig.class);
     }
 
     @Override
@@ -65,7 +74,7 @@ public class DeviceConfigDataImpl implements IDeviceConfigData {
 
     @Override
     public void batchSave(List<DeviceConfig> data) {
-
+        deviceConfigRepository.saveAll(IteratorUtils.toList(data.iterator()));
     }
 
 
@@ -75,8 +84,8 @@ public class DeviceConfigDataImpl implements IDeviceConfigData {
     }
 
     @Override
-    public void deleteByIds(Collection<String> strings) {
-
+    public void deleteByIds(Collection<String> ids) {
+        deviceConfigRepository.deleteAllById(ids);
     }
 
 
@@ -90,20 +99,8 @@ public class DeviceConfigDataImpl implements IDeviceConfigData {
         return MapstructUtils.convert(deviceConfigRepository.findAll(), DeviceConfig.class);
     }
 
-    @Override
-    public Paging<DeviceConfig> findAll(PageRequest<DeviceConfig> pageRequest) {
-        return null;
-    }
 
-    @Override
-    public List<DeviceConfig> findAllByCondition(DeviceConfig data) {
-        return null;
-    }
 
-    @Override
-    public DeviceConfig findOneByCondition(DeviceConfig data) {
-        return null;
-    }
 
 
 }
