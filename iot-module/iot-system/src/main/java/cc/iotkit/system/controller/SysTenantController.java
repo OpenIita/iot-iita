@@ -1,8 +1,8 @@
 package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.constant.TenantConstants;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.constant.TenantConstants;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
@@ -12,23 +12,18 @@ import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysTenantBo;
 import cc.iotkit.system.dto.vo.SysTenantVo;
+import cc.iotkit.system.service.ISysTenantService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.lock.annotation.Lock4j;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import cc.iotkit.system.service.ISysTenantService;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -42,6 +37,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/system/tenant")
+@Api(tags = "租户管理")
 public class SysTenantController extends BaseController {
 
     private final ISysTenantService tenantService;
@@ -49,9 +45,10 @@ public class SysTenantController extends BaseController {
     /**
      * 查询租户列表
      */
+    @ApiOperation("查询租户列表")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:list")
-    @GetMapping("/list")
+    @PostMapping("/list")
     public Paging<SysTenantVo> list(SysTenantBo bo, PageRequest<?> query) {
         return tenantService.queryPageList(bo, query);
     }
@@ -59,6 +56,7 @@ public class SysTenantController extends BaseController {
     /**
      * 导出租户列表
      */
+    @ApiOperation("导出租户列表")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:export")
     @Log(title = "租户", businessType = BusinessType.EXPORT)
@@ -73,6 +71,7 @@ public class SysTenantController extends BaseController {
      *
      * @param id 主键
      */
+    @ApiOperation("获取租户详细信息")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:query")
     @GetMapping("/{id}")
