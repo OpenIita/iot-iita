@@ -2,6 +2,7 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.excel.core.ExcelResult;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
@@ -12,6 +13,7 @@ import cc.iotkit.common.undefined.LoginUser;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysDeptBo;
@@ -65,8 +67,9 @@ public class SysUserController extends BaseController {
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:user:export")
     @PostMapping("/export")
-    public void export(@RequestBody @Validated(QueryGroup.class) SysUserBo user,
+    public void export(@RequestBody @Validated(QueryGroup.class) Request<SysUserBo> req,
                        HttpServletResponse response) {
+        SysUserBo user=req.getData();
         List<SysUserVo> list = userService.selectUserList(user);
         List<SysUserExportVo> listVo = MapstructUtils.convert(list, SysUserExportVo.class);
         ExcelUtil.exportExcel(listVo, "用户数据", SysUserExportVo.class, response);
@@ -147,7 +150,8 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public void add(@Validated @RequestBody SysUserBo user) {
+    public void add(@Validated(EditGroup.class) @RequestBody Request<SysUserBo> reqUser) {
+        SysUserBo user=reqUser.getData();
         if (!userService.checkUserNameUnique(user)) {
             fail("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
         } else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
@@ -171,7 +175,8 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public void edit(@Validated @RequestBody SysUserBo user) {
+    public void edit(@Validated(EditGroup.class) @RequestBody Request<SysUserBo> reqUser) {
+        SysUserBo user=reqUser.getData();
         userService.checkUserAllowed(user);
         userService.checkUserDataScope(user.getId());
         if (!userService.checkUserNameUnique(user)) {
@@ -207,7 +212,8 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:resetPwd")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/resetPwd")
-    public void resetPwd(@RequestBody SysUserBo user) {
+    public void resetPwd(@RequestBody @Validated(EditGroup.class)Request<SysUserBo> reqUser) {
+        SysUserBo user=reqUser.getData();
         userService.checkUserAllowed(user);
         userService.checkUserDataScope(user.getId());
         user.setPassword(BCrypt.hashpw(user.getPassword()));
@@ -221,7 +227,8 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
-    public void changeStatus(@RequestBody SysUserBo user) {
+    public void changeStatus(@RequestBody @Validated(EditGroup.class)Request<SysUserBo> reqUser) {
+        SysUserBo user=reqUser.getData();
         userService.checkUserAllowed(user);
         userService.checkUserDataScope(user.getId());
         userService.updateUserStatus(user.getId(), user.getStatus());
@@ -247,14 +254,15 @@ public class SysUserController extends BaseController {
     /**
      * 用户授权角色
      *
-     * @param userId  用户Id
+     * @param reqUserId  用户Id
      * @param roleIds 角色ID串
      */
     @ApiOperation("用户授权角色")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
     @PutMapping("/authRole")
-    public void insertAuthRole(Long userId, Long[] roleIds) {
+    public void insertAuthRole(Request<Long> reqUserId, Long[] roleIds) {
+        Long userId=reqUserId.getData();
         userService.checkUserDataScope(userId);
         userService.insertUserAuth(userId, roleIds);
     }
@@ -265,7 +273,8 @@ public class SysUserController extends BaseController {
     @ApiOperation("获取部门树列表")
     @SaCheckPermission("system:user:list")
     @GetMapping("/deptTree")
-    public List<Tree<Long>> deptTree(SysDeptBo dept) {
+    public List<Tree<Long>> deptTree(@RequestBody @Validated(QueryGroup.class) Request<SysDeptBo> reqDept) {
+        SysDeptBo dept=reqDept.getData();
         return deptService.selectDeptTreeList(dept);
     }
 

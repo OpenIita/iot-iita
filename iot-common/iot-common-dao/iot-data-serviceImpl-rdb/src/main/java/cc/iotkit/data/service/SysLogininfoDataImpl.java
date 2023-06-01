@@ -1,16 +1,15 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysLogininforRepository;
-import cc.iotkit.data.model.TbSysConfig;
 import cc.iotkit.data.model.TbSysLogininfor;
 import cc.iotkit.data.system.ISysLogininforData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
-import cc.iotkit.model.system.SysConfig;
 import cc.iotkit.model.system.SysLogininfor;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 
 import static cc.iotkit.data.model.QTbSysLogininfor.tbSysLogininfor;
@@ -48,6 +46,11 @@ public class SysLogininfoDataImpl implements ISysLogininforData, IJPACommData<Sy
     @Override
     public Class getJpaRepositoryClass() {
         return TbSysLogininfor.class;
+    }
+
+    @Override
+    public Paging<SysLogininfor> findAll(PageRequest<SysLogininfor> pageRequest) {
+        return PageBuilder.toPaging(logininfoRepository.findAll(genPredicate(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
     }
 
     @Override
@@ -81,10 +84,4 @@ public class SysLogininfoDataImpl implements ISysLogininforData, IJPACommData<Sy
         logininfoRepository.deleteAll();
     }
 
-
-
-    @Override
-    public void deleteByIds(Collection<Long> longs) {
-        logininfoRepository.deleteAllByIdInBatch(longs);
-    }
 }

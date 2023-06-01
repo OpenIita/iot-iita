@@ -6,7 +6,6 @@ import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.web.core.BaseController;
-
 import cc.iotkit.model.system.SysUserRole;
 import cc.iotkit.system.dto.bo.SysDeptBo;
 import cc.iotkit.system.dto.bo.SysRoleBo;
@@ -14,10 +13,10 @@ import cc.iotkit.system.dto.bo.SysUserBo;
 import cc.iotkit.system.dto.vo.DeptTreeSelectVo;
 import cc.iotkit.system.dto.vo.SysRoleVo;
 import cc.iotkit.system.dto.vo.SysUserVo;
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysDeptService;
 import cc.iotkit.system.service.ISysRoleService;
 import cc.iotkit.system.service.ISysUserService;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +44,8 @@ public class SysRoleController extends BaseController {
      */
     @SaCheckPermission("system:role:list")
     @GetMapping("/list")
-    public Paging<SysRoleVo> list(SysRoleBo role, PageRequest<?> query) {
-        return roleService.selectPageRoleList(role, query);
+    public Paging<SysRoleVo> list(PageRequest<SysRoleBo> query) {
+        return roleService.selectPageRoleList(query);
     }
 
     /**

@@ -1,13 +1,17 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysPostRepository;
 import cc.iotkit.data.model.TbSysPost;
 import cc.iotkit.data.system.ISysPostData;
+import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysPost;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +19,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,8 +51,8 @@ public class SysPostDataImpl implements ISysPostData, IJPACommData<SysPost, Long
     }
 
     @Override
-    public List<SysPost> findAll() {
-        return MapstructUtils.convert(postRepository.findAll(),SysPost.class);
+    public Paging<SysPost> findAll(PageRequest<SysPost> pageRequest) {
+        return PageBuilder.toPaging(postRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
     }
 
     @Override
@@ -65,10 +68,7 @@ public class SysPostDataImpl implements ISysPostData, IJPACommData<SysPost, Long
 
     @Override
     public List<SysPost> selectPostList(SysPost post) {
-        List<TbSysPost> ret=jpaQueryFactory.selectFrom(tbSysPost).where(PredicateBuilder.instance()
-                .and(StringUtils.isNotBlank(post.getPostCode()),()->tbSysPost.postCode.like(post.getPostCode()))
-                .and(StringUtils.isNotBlank(post.getPostName()),()->tbSysPost.postName.like(post.getPostName()))
-                .and(StringUtils.isNotBlank(post.getStatus()),()->tbSysPost.status.eq(post.getStatus())).build())
+        List<TbSysPost> ret=jpaQueryFactory.selectFrom(tbSysPost).where(buildQueryCondition(post))
                 .orderBy(tbSysPost.postSort.asc()).fetch();
         return MapstructUtils.convert(ret,SysPost.class);
     }
@@ -93,21 +93,10 @@ public class SysPostDataImpl implements ISysPostData, IJPACommData<SysPost, Long
         return Objects.isNull(ret);
     }
 
-
-
-    @Override
-    public SysPost findById(Long aLong) {
-        return MapstructUtils.convert(postRepository.findById(aLong),SysPost.class);
-    }
-
-    @Override
-    public SysPost save(SysPost data) {
-        postRepository.save(data.to(TbSysPost.class));
-        return data;
-    }
-
-    @Override
-    public void deleteByIds(Collection<Long> longs) {
-        postRepository.deleteAllByIdInBatch(longs);
+    private Predicate buildQueryCondition(SysPost post) {
+        return PredicateBuilder.instance()
+                .and(StringUtils.isNotBlank(post.getPostCode()),()->tbSysPost.postCode.like(post.getPostCode()))
+                .and(StringUtils.isNotBlank(post.getPostName()),()->tbSysPost.postName.like(post.getPostName()))
+                .and(StringUtils.isNotBlank(post.getStatus()),()->tbSysPost.status.eq(post.getStatus())).build();
     }
 }

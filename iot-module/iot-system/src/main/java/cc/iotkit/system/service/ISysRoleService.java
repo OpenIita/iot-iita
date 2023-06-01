@@ -17,7 +17,7 @@ import java.util.Set;
 public interface ISysRoleService {
 
 
-    Paging<SysRoleVo> selectPageRoleList(SysRoleBo role, PageRequest<?> query);
+    Paging<SysRoleVo> selectPageRoleList(PageRequest<SysRoleBo> query);
 
     /**
      * 根据条件分页查询角色数据

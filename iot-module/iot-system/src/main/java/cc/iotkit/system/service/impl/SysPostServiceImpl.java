@@ -26,7 +26,7 @@ public class SysPostServiceImpl implements ISysPostService {
     private final ISysPostData sysPostData;
 
     @Override
-    public Paging<SysPostVo> selectPagePostList(SysPostBo post, PageRequest<?> query) {
+    public Paging<SysPostVo> selectPagePostList(PageRequest<SysPostBo> query) {
         return sysPostData.findAll(query.to(SysPost.class)).to(SysPostVo.class);
     }
 

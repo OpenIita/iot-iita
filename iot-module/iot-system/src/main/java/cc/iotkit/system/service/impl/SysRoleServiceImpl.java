@@ -45,8 +45,8 @@ public class SysRoleServiceImpl implements ISysRoleService {
     private final ISysRoleDeptData iSysRoleDeptData;
 
     @Override
-    public Paging<SysRoleVo> selectPageRoleList(SysRoleBo role, PageRequest<?> query) {
-        return new Paging<>();
+    public Paging<SysRoleVo> selectPageRoleList(PageRequest<SysRoleBo> query) {
+        return iSysRoleData.findAll(query.to(SysRole.class)).to(SysRoleVo.class);
     }
 
     /**

@@ -1,11 +1,14 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysRoleRepository;
 import cc.iotkit.data.model.TbSysRole;
 import cc.iotkit.data.system.ISysRoleData;
+import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysRole;
 import com.querydsl.core.types.Predicate;
@@ -123,6 +126,11 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
         long execute = jpaQueryFactory.update(tbSysRole)
                 .where(PredicateBuilder.instance().and(tbSysRole.id.eq(role.getId())).build()).execute();
         return Integer.parseInt(execute + "");
+    }
+
+    @Override
+    public Paging<SysRole> findAll(PageRequest<SysRole> pageRequest) {
+        return PageBuilder.toPaging(sysRoleRepository.findAll(buildQueryWrapper(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
     }
 
     @Override

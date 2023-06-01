@@ -16,7 +16,7 @@ import java.util.List;
 public interface ISysPostService {
 
 
-    Paging<SysPostVo> selectPagePostList(SysPostBo post, PageRequest<?> query);
+    Paging<SysPostVo> selectPagePostList(PageRequest<SysPostBo> query);
 
     /**
      * 查询岗位信息集合

@@ -2,9 +2,12 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
+import cc.iotkit.common.validate.EditGroup;
+import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysPostBo;
 import cc.iotkit.system.dto.vo.SysPostVo;
@@ -40,8 +43,8 @@ public class SysPostController extends BaseController {
     @ApiOperation("获取岗位列表")
     @SaCheckPermission("system:post:list")
     @PostMapping("/list")
-    public Paging<SysPostVo> list(SysPostBo post, PageRequest<?> query) {
-        return postService.selectPagePostList(post, query);
+    public Paging<SysPostVo> list(@RequestBody @Validated(QueryGroup.class) PageRequest<SysPostBo> query) {
+        return postService.selectPagePostList(query);
     }
 
     /**
@@ -51,8 +54,8 @@ public class SysPostController extends BaseController {
     @Log(title = "岗位管理", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:post:export")
     @PostMapping("/export")
-    public void export(SysPostBo post, HttpServletResponse response) {
-        List<SysPostVo> list = postService.selectPostList(post);
+    public void export(@RequestBody @Validated(QueryGroup.class) Request<SysPostBo> post, HttpServletResponse response) {
+        List<SysPostVo> list = postService.selectPostList(post.getData());
         ExcelUtil.exportExcel(list, "岗位数据", SysPostVo.class, response);
     }
 
@@ -64,8 +67,8 @@ public class SysPostController extends BaseController {
     @ApiOperation("根据岗位编号获取详细信息")
     @SaCheckPermission("system:post:query")
     @PostMapping(value = "/{postId}")
-    public SysPostVo getInfo(@PathVariable Long postId) {
-        return postService.selectPostById(postId);
+    public SysPostVo getInfo(@PathVariable Request<Long> postId) {
+        return postService.selectPostById(postId.getData());
     }
 
     /**
@@ -75,13 +78,13 @@ public class SysPostController extends BaseController {
     @SaCheckPermission("system:post:add")
     @Log(title = "岗位管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public void add(@Validated @RequestBody SysPostBo post) {
-        if (!postService.checkPostNameUnique(post)) {
-            fail("新增岗位'" + post.getPostName() + "'失败，岗位名称已存在");
-        } else if (!postService.checkPostCodeUnique(post)) {
-            fail("新增岗位'" + post.getPostName() + "'失败，岗位编码已存在");
+    public void add(@RequestBody @Validated(EditGroup.class)Request<SysPostBo> post) {
+        if (!postService.checkPostNameUnique(post.getData())) {
+            fail("新增岗位'" + post.getData().getPostName() + "'失败，岗位名称已存在");
+        } else if (!postService.checkPostCodeUnique(post.getData())) {
+            fail("新增岗位'" + post.getData().getPostName() + "'失败，岗位编码已存在");
         }
-        postService.insertPost(post);
+        postService.insertPost(post.getData());
     }
 
     /**
@@ -91,13 +94,13 @@ public class SysPostController extends BaseController {
     @SaCheckPermission("system:post:edit")
     @Log(title = "岗位管理", businessType = BusinessType.UPDATE)
     @PostMapping
-    public void edit(@Validated @RequestBody SysPostBo post) {
-        if (!postService.checkPostNameUnique(post)) {
-            fail("修改岗位'" + post.getPostName() + "'失败，岗位名称已存在");
-        } else if (!postService.checkPostCodeUnique(post)) {
-            fail("修改岗位'" + post.getPostName() + "'失败，岗位编码已存在");
+    public void edit(@RequestBody @Validated(EditGroup.class) Request<SysPostBo> post) {
+        if (!postService.checkPostNameUnique(post.getData())) {
+            fail("修改岗位'" + post.getData().getPostName() + "'失败，岗位名称已存在");
+        } else if (!postService.checkPostCodeUnique(post.getData())) {
+            fail("修改岗位'" + post.getData().getPostName() + "'失败，岗位编码已存在");
         }
-        postService.updatePost(post);
+        postService.updatePost(post.getData());
     }
 
     /**
@@ -109,8 +112,8 @@ public class SysPostController extends BaseController {
     @SaCheckPermission("system:post:remove")
     @Log(title = "岗位管理", businessType = BusinessType.DELETE)
     @PostMapping("/{postIds}")
-    public void remove(@PathVariable Collection postIds) {
-        postService.deletePostByIds(postIds);
+    public void remove(@PathVariable @Validated(EditGroup.class) Request<Collection> postIds) {
+        postService.deletePostByIds(postIds.getData());
     }
 
     /**
