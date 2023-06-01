@@ -10,6 +10,7 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.dao.RuleInfoRepository;
 import cc.iotkit.data.model.TbRuleInfo;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -29,10 +31,20 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class RuleInfoDataImpl implements IRuleInfoData {
+public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, String> {
 
     @Autowired
     private RuleInfoRepository ruleInfoRepository;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return ruleInfoRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbRuleInfo.class;
+    }
 
     @Override
     public List<RuleInfo> findByUidAndType(String uid, String type) {
@@ -73,6 +85,7 @@ public class RuleInfoDataImpl implements IRuleInfoData {
         return ruleInfoRepository.countByUid(uid);
     }
 
+
     @Override
     public RuleInfo findById(String s) {
         return RuleInfoMapper.toDtoFix(ruleInfoRepository.findById(s).orElse(null));
@@ -91,48 +104,6 @@ public class RuleInfoDataImpl implements IRuleInfoData {
         }
         ruleInfoRepository.save(RuleInfoMapper.toVoFix(data));
         return data;
-    }
-
-    @Override
-    public void batchSave(List<RuleInfo> data) {
-
-    }
-
-    @Override
-    public void deleteById(String s) {
-        ruleInfoRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-
-
-    @Override
-    public long count() {
-        return ruleInfoRepository.count();
-    }
-
-    @Override
-    public List<RuleInfo> findAll() {
-        return RuleInfoMapper.toDto(ruleInfoRepository.findAll());
-    }
-
-    @Override
-    public Paging<RuleInfo> findAll(PageRequest<RuleInfo> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<RuleInfo> findAllByCondition(RuleInfo data) {
-        return null;
-    }
-
-    @Override
-    public RuleInfo findOneByCondition(RuleInfo data) {
-        return null;
     }
 
 

@@ -32,6 +32,11 @@ public class HomeDataImpl implements IHomeData, IJPACommData<Home, String> {
     }
 
     @Override
+    public Class getJpaRepositoryClass() {
+        return TbHome.class;
+    }
+
+    @Override
     public Home findByUidAndCurrent(String uid, boolean current) {
         return MapstructUtils.convert(homeRepository.findByUidAndCurrent(uid, current), Home.class);
     }
@@ -46,10 +51,6 @@ public class HomeDataImpl implements IHomeData, IJPACommData<Home, String> {
         return MapstructUtils.convert(homeRepository.findByUid(uid), Home.class);
     }
 
-    @Override
-    public Paging<Home> findByUid(String uid, int page, int size) {
-        return null;
-    }
 
     @Override
     public long countByUid(String uid) {
@@ -71,48 +72,7 @@ public class HomeDataImpl implements IHomeData, IJPACommData<Home, String> {
         return data;
     }
 
-    @Override
-    public void batchSave(List<Home> data) {
 
-    }
-
-
-    @Override
-    public void deleteById(String s) {
-        homeRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-
-
-    @Override
-    public long count() {
-        return homeRepository.count();
-    }
-
-    @Override
-    public List<Home> findAll() {
-        return MapstructUtils.convert(homeRepository.findAll(), Home.class);
-    }
-
-    @Override
-    public Paging<Home> findAll(PageRequest<Home> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<Home> findAllByCondition(Home data) {
-        return null;
-    }
-
-    @Override
-    public Home findOneByCondition(Home data) {
-        return null;
-    }
 
 
 }

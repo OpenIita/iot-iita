@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Primary
 @Service
-public class DeviceInfoDataImpl implements IDeviceInfoData {
+public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceInfo, String> {
 
     @Autowired
     private DeviceInfoRepository deviceInfoRepository;
@@ -51,6 +52,16 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     @Autowired
     @Qualifier("categoryDataCache")
     private ICategoryData categoryData;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return deviceInfoRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbDeviceInfo.class;
+    }
 
     @Override
     public void saveProperties(String deviceId, Map<String, Object> properties) {
@@ -425,6 +436,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData {
     public long countByUid(String uid) {
         return 0;
     }
+
+
 
     @Override
     public DeviceInfo findById(String s) {

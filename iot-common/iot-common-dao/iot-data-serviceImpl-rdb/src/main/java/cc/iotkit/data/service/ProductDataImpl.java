@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.dao.ProductRepository;
 import cc.iotkit.data.model.TbProduct;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -18,11 +20,20 @@ import java.util.List;
 
 @Primary
 @Service
-public class ProductDataImpl implements IProductData {
+public class ProductDataImpl implements IProductData, IJPACommData<Product, String> {
 
     @Autowired
     private ProductRepository productRepository;
 
+    @Override
+    public JpaRepository getBaseRepository() {
+        return productRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbProduct.class;
+    }
 
     @Override
     public List<Product> findByCategory(String category) {
@@ -47,63 +58,17 @@ public class ProductDataImpl implements IProductData {
         return productRepository.countByUid(uid);
     }
 
+
     @Override
     public Product findById(String s) {
         return MapstructUtils.convert(productRepository.findById(s).orElse(null), Product.class);
     }
 
-    @Override
-    public List<Product> findByIds(Collection<String> id) {
-        return null;
-    }
 
     @Override
     public Product save(Product data) {
         productRepository.save(MapstructUtils.convert(data, TbProduct.class));
         return data;
-    }
-
-    @Override
-    public void batchSave(List<Product> data) {
-
-    }
-
-
-    @Override
-    public void deleteById(String s) {
-        productRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-
-
-    @Override
-    public long count() {
-        return productRepository.count();
-    }
-
-    @Override
-    public List<Product> findAll() {
-        return MapstructUtils.convert(productRepository.findAll(), Product.class);
-    }
-
-    @Override
-    public Paging<Product> findAll(PageRequest<Product> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<Product> findAllByCondition(Product data) {
-        return null;
-    }
-
-    @Override
-    public Product findOneByCondition(Product data) {
-        return null;
     }
 
 

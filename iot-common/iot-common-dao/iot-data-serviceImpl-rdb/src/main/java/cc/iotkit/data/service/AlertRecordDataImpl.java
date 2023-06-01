@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IAlertRecordData;
 import cc.iotkit.data.dao.AlertRecordRepository;
 import cc.iotkit.data.model.TbAlertRecord;
@@ -15,73 +16,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 @Primary
 @Service
-public class AlertRecordDataImpl implements IAlertRecordData {
+public class AlertRecordDataImpl implements IAlertRecordData, IJPACommData<AlertRecord, String> {
 
     @Autowired
     private AlertRecordRepository alertRecordRepository;
 
 
     @Override
-    public AlertRecord findById(String s) {
-        return null;
+    public JpaRepository getBaseRepository() {
+        return alertRecordRepository;
     }
 
     @Override
-    public List<AlertRecord> findByIds(Collection<String> id) {
-        return null;
+    public Class getJpaRepositoryClass() {
+        return TbAlertRecord.class;
     }
-
-    @Override
-    public AlertRecord save(AlertRecord data) {
-        return null;
-    }
-
-    @Override
-    public void batchSave(List<AlertRecord> data) {
-
-    }
-
-
-    @Override
-    public void deleteById(String s) {
-
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-
-    @Override
-    public long count() {
-        return 0;
-    }
-
-    @Override
-    public List<AlertRecord> findAll() {
-        return null;
-    }
-
-    @Override
-    public Paging<AlertRecord> findAll(PageRequest<AlertRecord> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<AlertRecord> findAllByCondition(AlertRecord data) {
-        return null;
-    }
-
-    @Override
-    public AlertRecord findOneByCondition(AlertRecord data) {
-        return null;
-    }
-
 
 
     @Override

@@ -11,6 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.ISpaceDeviceData;
 import cc.iotkit.data.dao.SpaceDeviceRepository;
 import cc.iotkit.data.model.TbSpaceDevice;
@@ -19,6 +20,7 @@ import cc.iotkit.model.space.SpaceDevice;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -27,10 +29,21 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class SpaceDeviceDataImpl implements ISpaceDeviceData {
+public class SpaceDeviceDataImpl implements ISpaceDeviceData, IJPACommData<SpaceDevice, String> {
 
     @Autowired
     private SpaceDeviceRepository spaceDeviceRepository;
+
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return spaceDeviceRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbSpaceDevice.class;
+    }
 
     @Override
     public List<SpaceDevice> findByUidOrderByUseAtDesc(String uid) {
@@ -82,15 +95,14 @@ public class SpaceDeviceDataImpl implements ISpaceDeviceData {
         return 0;
     }
 
+
+
     @Override
     public SpaceDevice findById(String s) {
         return MapstructUtils.convert(spaceDeviceRepository.findById(s).orElse(null), SpaceDevice.class);
     }
 
-    @Override
-    public List<SpaceDevice> findByIds(Collection<String> id) {
-        return null;
-    }
+
 
     @Override
     public SpaceDevice save(SpaceDevice data) {
@@ -102,46 +114,13 @@ public class SpaceDeviceDataImpl implements ISpaceDeviceData {
         return data;
     }
 
-    @Override
-    public void batchSave(List<SpaceDevice> data) {
-
-    }
-
-    @Override
-    public void deleteById(String s) {
-        spaceDeviceRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-
-    @Override
-    public long count() {
-        return spaceDeviceRepository.count();
-    }
 
     @Override
     public List<SpaceDevice> findAll() {
         return MapstructUtils.convert(spaceDeviceRepository.findAll(), SpaceDevice.class);
     }
 
-    @Override
-    public Paging<SpaceDevice> findAll(PageRequest<SpaceDevice> pageRequest) {
-        return null;
-    }
 
-    @Override
-    public List<SpaceDevice> findAllByCondition(SpaceDevice data) {
-        return null;
-    }
-
-    @Override
-    public SpaceDevice findOneByCondition(SpaceDevice data) {
-        return null;
-    }
 
 
 }

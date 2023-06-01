@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IProtocolComponentData;
 import cc.iotkit.data.dao.ProtocolComponentRepository;
 import cc.iotkit.data.model.TbProtocolComponent;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -26,10 +28,20 @@ import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
 
 @Primary
 @Service
-public class ProtocolComponentDataImpl implements IProtocolComponentData {
+public class ProtocolComponentDataImpl implements IProtocolComponentData, IJPACommData<ProtocolComponent, String> {
 
     @Autowired
     private ProtocolComponentRepository protocolComponentRepository;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return protocolComponentRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbProtocolComponent.class;
+    }
 
     @Override
     public List<ProtocolComponent> findByState(String state) {
@@ -80,26 +92,8 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
     }
 
     @Override
-    public void batchSave(List<ProtocolComponent> data) {
-
-    }
-
-
-    @Override
     public void deleteById(String s) {
         protocolComponentRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-
-
-    @Override
-    public long count() {
-        return protocolComponentRepository.count();
     }
 
     @Override
@@ -116,15 +110,7 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData {
         return new Paging<>(all.getTotalElements(), MapstructUtils.convert(all.getContent(), ProtocolComponent.class));
     }
 
-    @Override
-    public List<ProtocolComponent> findAllByCondition(ProtocolComponent data) {
-        return null;
-    }
 
-    @Override
-    public ProtocolComponent findOneByCondition(ProtocolComponent data) {
-        return null;
-    }
 
 
 }

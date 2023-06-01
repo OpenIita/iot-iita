@@ -11,6 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IProtocolConverterData;
 import cc.iotkit.data.dao.ProtocolConverterRepository;
 import cc.iotkit.data.model.TbProtocolConverter;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -29,10 +31,20 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class ProtocolConverterDataImpl implements IProtocolConverterData {
+public class ProtocolConverterDataImpl implements IProtocolConverterData, IJPACommData<ProtocolConverter, String> {
 
     @Autowired
     private ProtocolConverterRepository protocolConverterRepository;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return protocolConverterRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbProtocolConverter.class;
+    }
 
     @Override
     public List<ProtocolConverter> findByUid(String uid) {
@@ -51,6 +63,8 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
     public long countByUid(String uid) {
         return protocolConverterRepository.countByUid(uid);
     }
+
+
 
     @Override
     public ProtocolConverter findById(String s) {
@@ -73,47 +87,5 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData {
         return data;
     }
 
-    @Override
-    public void batchSave(List<ProtocolConverter> data) {
-
-    }
-
-
-    @Override
-    public void deleteById(String s) {
-        protocolConverterRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-
-    @Override
-    public long count() {
-        return protocolConverterRepository.count();
-    }
-
-    @Override
-    public List<ProtocolConverter> findAll() {
-        return MapstructUtils.convert(protocolConverterRepository.findAll(), ProtocolConverter.class);
-    }
-
-    @Override
-    public Paging<ProtocolConverter> findAll(PageRequest<ProtocolConverter> pageRequest) {
-        return null;
-    }
-
-
-    @Override
-    public List<ProtocolConverter> findAllByCondition(ProtocolConverter data) {
-        return null;
-    }
-
-    @Override
-    public ProtocolConverter findOneByCondition(ProtocolConverter data) {
-        return null;
-    }
 
 }

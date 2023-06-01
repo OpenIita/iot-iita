@@ -11,6 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IOauthClientData;
 import cc.iotkit.data.dao.OauthClientRepository;
 import cc.iotkit.data.model.TbOauthClient;
@@ -19,6 +20,7 @@ import cc.iotkit.common.api.Paging;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class OauthClientDataImpl implements IOauthClientData {
+public class OauthClientDataImpl implements IOauthClientData, IJPACommData<OauthClient, String> {
 
     @Autowired
     private OauthClientRepository oauthClientRepository;
@@ -39,14 +41,20 @@ public class OauthClientDataImpl implements IOauthClientData {
     }
 
     @Override
+    public JpaRepository getBaseRepository() {
+        return oauthClientRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbOauthClient.class;
+    }
+
+    @Override
     public OauthClient findById(String s) {
         return MapstructUtils.convert(oauthClientRepository.findById(s).orElse(null), OauthClient.class);
     }
 
-    @Override
-    public List<OauthClient> findByIds(Collection<String> id) {
-        return null;
-    }
 
     @Override
     public OauthClient save(OauthClient data) {
@@ -58,46 +66,8 @@ public class OauthClientDataImpl implements IOauthClientData {
         return data;
     }
 
-    @Override
-    public void batchSave(List<OauthClient> data) {
-
-    }
-
-    @Override
-    public void deleteById(String s) {
-        oauthClientRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
 
 
-    @Override
-    public long count() {
-        return oauthClientRepository.count();
-    }
-
-    @Override
-    public List<OauthClient> findAll() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public Paging<OauthClient> findAll(PageRequest<OauthClient> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<OauthClient> findAllByCondition(OauthClient data) {
-        return null;
-    }
-
-    @Override
-    public OauthClient findOneByCondition(OauthClient data) {
-        return null;
-    }
 
 
 }

@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IProductModelData;
 import cc.iotkit.data.dao.ProductModelRepository;
 import cc.iotkit.data.model.TbProductModel;
@@ -10,6 +11,7 @@ import cc.iotkit.model.product.ProductModel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,10 +21,21 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class ProductModelDataImpl implements IProductModelData {
+public class ProductModelDataImpl implements IProductModelData, IJPACommData<ProductModel, String> {
 
     @Autowired
     private ProductModelRepository productModelRepository;
+
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return productModelRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbProductModel.class;
+    }
 
     @Override
     public ProductModel findByModel(String model) {
@@ -54,45 +67,6 @@ public class ProductModelDataImpl implements IProductModelData {
         return null;
     }
 
-    @Override
-    public void batchSave(List<ProductModel> data) {
 
-    }
-
-
-    @Override
-    public void deleteById(String s) {
-        productModelRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-    @Override
-    public long count() {
-        return productModelRepository.count();
-    }
-
-    @Override
-    public List<ProductModel> findAll() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public Paging<ProductModel> findAll(PageRequest<ProductModel> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<ProductModel> findAllByCondition(ProductModel data) {
-        return null;
-    }
-
-    @Override
-    public ProductModel findOneByCondition(ProductModel data) {
-        return null;
-    }
 
 }

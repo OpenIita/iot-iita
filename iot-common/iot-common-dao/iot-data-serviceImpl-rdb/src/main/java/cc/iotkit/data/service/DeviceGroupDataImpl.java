@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IDeviceGroupData;
 import cc.iotkit.data.dao.DeviceGroupRepository;
 import cc.iotkit.data.model.TbDeviceGroup;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -20,10 +22,20 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class DeviceGroupDataImpl implements IDeviceGroupData {
+public class DeviceGroupDataImpl implements IDeviceGroupData, IJPACommData<DeviceGroup, String> {
 
     @Autowired
     private DeviceGroupRepository deviceGroupRepository;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return deviceGroupRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbDeviceGroup.class;
+    }
 
     @Override
     public Paging<DeviceGroup> findByNameLike(String name, int page, int size) {
@@ -33,14 +45,10 @@ public class DeviceGroupDataImpl implements IDeviceGroupData {
                 MapstructUtils.convert(groups.getContent(), DeviceGroup.class));
     }
 
+
     @Override
     public DeviceGroup findById(String s) {
         return MapstructUtils.convert(deviceGroupRepository.findById(s).orElse(null), DeviceGroup.class);
-    }
-
-    @Override
-    public List<DeviceGroup> findByIds(Collection<String> id) {
-        return null;
     }
 
     @Override
@@ -52,46 +60,10 @@ public class DeviceGroupDataImpl implements IDeviceGroupData {
         return data;
     }
 
-    @Override
-    public void batchSave(List<DeviceGroup> data) {
-
-    }
-
-
-    @Override
-    public void deleteById(String s) {
-        deviceGroupRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-
-    @Override
-    public long count() {
-        return deviceGroupRepository.count();
-    }
 
     @Override
     public List<DeviceGroup> findAll() {
         return MapstructUtils.convert(deviceGroupRepository.findAll(), DeviceGroup.class);
-    }
-
-    @Override
-    public Paging<DeviceGroup> findAll(PageRequest<DeviceGroup> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<DeviceGroup> findAllByCondition(DeviceGroup data) {
-        return null;
-    }
-
-    @Override
-    public DeviceGroup findOneByCondition(DeviceGroup data) {
-        return null;
     }
 
 

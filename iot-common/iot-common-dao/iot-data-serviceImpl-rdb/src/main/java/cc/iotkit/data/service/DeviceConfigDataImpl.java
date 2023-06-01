@@ -53,15 +53,10 @@ public class DeviceConfigDataImpl implements IDeviceConfigData, IJPACommData<Dev
     }
 
     @Override
-    public DeviceConfig findById(String s) {
-        return MapstructUtils.convert(deviceConfigRepository.findById(s).orElse(null), DeviceConfig.class);
+    public Class getJpaRepositoryClass() {
+        return TbDeviceConfig.class;
     }
 
-    @Override
-    public List<DeviceConfig> findByIds(Collection<String> ids) {
-        List<TbDeviceConfig> allById = deviceConfigRepository.findAllById(ids);
-        return MapstructUtils.convert(allById, DeviceConfig.class);
-    }
 
     @Override
     public DeviceConfig save(DeviceConfig data) {
@@ -72,32 +67,6 @@ public class DeviceConfigDataImpl implements IDeviceConfigData, IJPACommData<Dev
         return data;
     }
 
-    @Override
-    public void batchSave(List<DeviceConfig> data) {
-        deviceConfigRepository.saveAll(IteratorUtils.toList(data.iterator()));
-    }
-
-
-    @Override
-    public void deleteById(String s) {
-        deviceConfigRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> ids) {
-        deviceConfigRepository.deleteAllById(ids);
-    }
-
-
-    @Override
-    public long count() {
-        return deviceConfigRepository.count();
-    }
-
-    @Override
-    public List<DeviceConfig> findAll() {
-        return MapstructUtils.convert(deviceConfigRepository.findAll(), DeviceConfig.class);
-    }
 
 
 

@@ -7,6 +7,7 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysConfigRepository;
 import cc.iotkit.data.model.TbSysConfig;
 import cc.iotkit.data.system.ISysConfigData;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections.IteratorUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -29,27 +31,37 @@ import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class SysConfigDataImpl implements ISysConfigData {
+public class SysConfigDataImpl implements ISysConfigData, IJPACommData<SysConfig, Long> {
 
-    private final SysConfigRepository alertConfigRepository;
+    private final SysConfigRepository baseRepository;
 
 
     @Override
+    public JpaRepository getBaseRepository() {
+        return baseRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbSysConfig.class;
+    }
+
+    @Override
     public SysConfig findById(Long id) {
-        TbSysConfig tbSysConfig = alertConfigRepository.findById(id).orElseThrow(() ->
+        TbSysConfig tbSysConfig = baseRepository.findById(id).orElseThrow(() ->
                 new BizException(ErrCode.DATA_NOT_EXIST));
         return MapstructUtils.convert(tbSysConfig, SysConfig.class);
     }
 
     @Override
     public SysConfig save(SysConfig data) {
-        alertConfigRepository.save(MapstructUtils.convert(data, TbSysConfig.class));
+        baseRepository.save(MapstructUtils.convert(data, TbSysConfig.class));
         return data;
     }
 
     @Override
     public List<SysConfig> findByIds(Collection<Long> id) {
-        Iterable<TbSysConfig> allById = alertConfigRepository.findAllById(id);
+        Iterable<TbSysConfig> allById = baseRepository.findAllById(id);
         Iterator<TbSysConfig> iterator = allById.iterator();
         return MapstructUtils.convert(IteratorUtils.toList(iterator), SysConfig.class);
     }
@@ -89,7 +101,7 @@ public class SysConfigDataImpl implements ISysConfigData {
 
         // TODO: 2023/5/26 抽成通用工具类方法
 
-        Page<TbSysConfig> all = alertConfigRepository.findAll(predicate, PageBuilder.toPageable(pageRequest));
+        Page<TbSysConfig> all = baseRepository.findAll(predicate, PageBuilder.toPageable(pageRequest));
         return PageBuilder.toPaging(all, SysConfig.class);
 
 
@@ -101,7 +113,7 @@ public class SysConfigDataImpl implements ISysConfigData {
         Predicate predicate = PredicateBuilder.instance()
                 .and(StringUtils.isNotEmpty(data.getConfigKey()), () -> tbSysConfig.configKey.eq(data.getConfigKey()))
                 .build();
-        Iterator<TbSysConfig> iterator = alertConfigRepository.findAll(predicate).iterator();
+        Iterator<TbSysConfig> iterator = baseRepository.findAll(predicate).iterator();
         return MapstructUtils.convert(IteratorUtils.toList(iterator), SysConfig.class);
     }
 
@@ -110,13 +122,13 @@ public class SysConfigDataImpl implements ISysConfigData {
         Predicate predicate = PredicateBuilder.instance()
                 .and(StringUtils.isNotEmpty(data.getConfigKey()), () -> tbSysConfig.configKey.eq(data.getConfigKey()))
                 .build();
-        TbSysConfig tbSysConfig = alertConfigRepository.findOne(predicate).orElseThrow(() -> new BizException(ErrCode.DATA_NOT_EXIST));
+        TbSysConfig tbSysConfig = baseRepository.findOne(predicate).orElseThrow(() -> new BizException(ErrCode.DATA_NOT_EXIST));
         return MapstructUtils.convert(tbSysConfig, SysConfig.class);
     }
 
     @Override
     public SysConfig findByConfigKey(String configKey) {
-        TbSysConfig tbSysConfig = alertConfigRepository.findByConfigKey(configKey).orElseThrow(() ->
+        TbSysConfig tbSysConfig = baseRepository.findByConfigKey(configKey).orElseThrow(() ->
                 new BizException(ErrCode.DATA_NOT_EXIST));
         return MapstructUtils.convert(tbSysConfig, SysConfig.class);
     }

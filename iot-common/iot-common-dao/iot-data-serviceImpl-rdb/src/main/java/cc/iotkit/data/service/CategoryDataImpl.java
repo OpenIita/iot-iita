@@ -11,6 +11,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.dao.CategoryRepository;
 import cc.iotkit.data.model.TbCategory;
@@ -19,6 +20,7 @@ import cc.iotkit.model.product.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -27,10 +29,20 @@ import java.util.stream.Collectors;
 
 @Primary
 @Service
-public class CategoryDataImpl implements ICategoryData {
+public class CategoryDataImpl implements ICategoryData, IJPACommData<Category, String> {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return categoryRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbCategory.class;
+    }
 
     @Override
     public Category findById(String s) {
@@ -49,20 +61,7 @@ public class CategoryDataImpl implements ICategoryData {
         return data;
     }
 
-    @Override
-    public void batchSave(List<Category> data) {
 
-    }
-
-    @Override
-    public void deleteById(String s) {
-        categoryRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
 
 
 
@@ -76,21 +75,6 @@ public class CategoryDataImpl implements ICategoryData {
         return categoryRepository.findAll().stream()
                 .map(c -> MapstructUtils.convert(c, Category.class))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public Paging<Category> findAll(PageRequest<Category> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<Category> findAllByCondition(Category data) {
-        return null;
-    }
-
-    @Override
-    public Category findOneByCondition(Category data) {
-        return null;
     }
 
 

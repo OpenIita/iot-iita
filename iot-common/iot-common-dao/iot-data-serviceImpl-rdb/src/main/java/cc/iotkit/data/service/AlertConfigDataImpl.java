@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IAlertConfigData;
 import cc.iotkit.data.dao.AlertConfigRepository;
 import cc.iotkit.data.model.TbAlertConfig;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -20,70 +22,27 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class AlertConfigDataImpl implements IAlertConfigData {
+public class AlertConfigDataImpl implements IAlertConfigData, IJPACommData<AlertConfig, String> {
 
     @Autowired
     private AlertConfigRepository alertConfigRepository;
 
 
     @Override
-    public AlertConfig findById(String s) {
-        return null;
+    public JpaRepository getBaseRepository() {
+        return alertConfigRepository;
     }
 
     @Override
-    public List<AlertConfig> findByIds(Collection<String> id) {
-        return null;
-    }
-
-    @Override
-    public AlertConfig save(AlertConfig data) {
-        alertConfigRepository.save(MapstructUtils.convert(data, TbAlertConfig.class));
-        return data;
-    }
-
-    @Override
-    public void batchSave(List<AlertConfig> data) {
-
-    }
-
-
-    @Override
-    public void deleteById(String s) {
-        alertConfigRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
+    public Class getJpaRepositoryClass() {
+        return TbAlertConfig.class;
     }
 
 
 
-    @Override
-    public long count() {
-        return 0;
-    }
 
-    @Override
-    public List<AlertConfig> findAll() {
-        return null;
-    }
 
-    @Override
-    public Paging<AlertConfig> findAll(PageRequest<AlertConfig> pageRequest) {
-        return null;
-    }
 
-    @Override
-    public List<AlertConfig> findAllByCondition(AlertConfig data) {
-        return null;
-    }
-
-    @Override
-    public AlertConfig findOneByCondition(AlertConfig data) {
-        return null;
-    }
 
 
     @Override

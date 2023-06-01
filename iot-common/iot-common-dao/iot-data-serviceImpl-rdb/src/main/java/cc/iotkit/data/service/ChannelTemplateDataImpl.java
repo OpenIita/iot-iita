@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IChannelTemplateData;
 import cc.iotkit.data.dao.ChannelTemplateRepository;
 import cc.iotkit.data.model.TbChannelTemplate;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,10 +28,20 @@ import java.util.stream.Collectors;
  **/
 @Primary
 @Service
-public class ChannelTemplateDataImpl implements IChannelTemplateData {
+public class ChannelTemplateDataImpl implements IChannelTemplateData, IJPACommData<ChannelTemplate, String> {
 
     @Resource
     private ChannelTemplateRepository channelTemplateRepository;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return channelTemplateRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbChannelTemplate.class;
+    }
 
     @Override
     public ChannelTemplate findById(String id) {

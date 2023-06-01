@@ -2,6 +2,7 @@ package cc.iotkit.data.dao;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
@@ -23,16 +24,22 @@ import java.util.Optional;
  * @Version: V1.0
  * @Description: 基础数据操作接口
  */
-public  interface IJPACommData<T extends Id<ID>, ID> extends ICommonData<T , ID> {
+public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID> {
 
 
     JpaRepository getBaseRepository();
 
+    Class getJpaRepositoryClass();
 
-    @Override
+
+
+
+
     default T findById(ID id) {
         return  (T)getBaseRepository().findById(id).orElse(null);
     }
+
+
 
     @Override
     default List<T> findByIds(Collection<ID> id) {
@@ -42,13 +49,13 @@ public  interface IJPACommData<T extends Id<ID>, ID> extends ICommonData<T , ID>
 
     @Override
     default T save(T data) {
-        Object o = getBaseRepository().save(data);
+        Object o = getBaseRepository().save(MapstructUtils.convert(data, getJpaRepositoryClass()));
         return (T) o;
     }
 
     @Override
     default void batchSave(List<T> data) {
-        getBaseRepository().saveAll(data);
+        getBaseRepository().saveAll(MapstructUtils.convert(data, getJpaRepositoryClass()));
     }
 
     @Override
@@ -103,7 +110,7 @@ public  interface IJPACommData<T extends Id<ID>, ID> extends ICommonData<T , ID>
 
 
     default Example genExample(T data) {
-        return Example.of(data);
+        return Example.of(MapstructUtils.convert(data, getJpaRepositoryClass()));
     }
 
 
