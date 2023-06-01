@@ -10,6 +10,7 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.ITaskInfoData;
 import cc.iotkit.data.dao.TaskInfoRepository;
 import cc.iotkit.data.model.TbTaskInfo;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -29,7 +31,7 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class TaskInfoDataImpl implements ITaskInfoData {
+public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, String> {
 
     @Autowired
     private TaskInfoRepository taskInfoRepository;
@@ -53,14 +55,21 @@ public class TaskInfoDataImpl implements ITaskInfoData {
     }
 
     @Override
+    public JpaRepository getBaseRepository() {
+        return taskInfoRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbTaskInfo.class;
+    }
+
+    @Override
     public TaskInfo findById(String s) {
         return TaskInfoMapper.toDtoFix(taskInfoRepository.findById(s).orElse(null));
     }
 
-    @Override
-    public List<TaskInfo> findByIds(Collection<String> id) {
-        return null;
-    }
+
 
     @Override
     public TaskInfo save(TaskInfo data) {
@@ -72,47 +81,7 @@ public class TaskInfoDataImpl implements ITaskInfoData {
         return data;
     }
 
-    @Override
-    public void batchSave(List<TaskInfo> data) {
 
-    }
-
-    @Override
-    public void deleteById(String s) {
-        taskInfoRepository.deleteById(s);
-    }
-
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-
-
-    @Override
-    public long count() {
-        return taskInfoRepository.count();
-    }
-
-    @Override
-    public List<TaskInfo> findAll() {
-        return TaskInfoMapper.toDto(taskInfoRepository.findAll());
-    }
-
-    @Override
-    public Paging<TaskInfo> findAll(PageRequest<TaskInfo> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<TaskInfo> findAllByCondition(TaskInfo data) {
-        return null;
-    }
-
-    @Override
-    public TaskInfo findOneByCondition(TaskInfo data) {
-        return null;
-    }
 
 
 

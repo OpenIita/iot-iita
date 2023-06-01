@@ -66,30 +66,7 @@ public class SysConfigDataImpl implements ISysConfigData, IJPACommData<SysConfig
         return MapstructUtils.convert(IteratorUtils.toList(iterator), SysConfig.class);
     }
 
-    @Override
-    public void batchSave(List<SysConfig> data) {
-        throw new BizException(ErrCode.UNSUPPORTED_OPERATION_EXCEPTION);
-    }
 
-    @Override
-    public void deleteById(Long aLong) {
-        throw new BizException(ErrCode.UNSUPPORTED_OPERATION_EXCEPTION);
-    }
-
-    @Override
-    public void deleteByIds(Collection<Long> longs) {
-        throw new BizException(ErrCode.UNSUPPORTED_OPERATION_EXCEPTION);
-    }
-
-    @Override
-    public long count() {
-        throw new BizException(ErrCode.UNSUPPORTED_OPERATION_EXCEPTION);
-    }
-
-    @Override
-    public List<SysConfig> findAll() {
-        throw new BizException(ErrCode.UNSUPPORTED_OPERATION_EXCEPTION);
-    }
 
     @Override
     public Paging<SysConfig> findAll(PageRequest<SysConfig> pageRequest) {

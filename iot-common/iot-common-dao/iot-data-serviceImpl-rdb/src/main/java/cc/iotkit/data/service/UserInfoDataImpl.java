@@ -10,6 +10,7 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.dao.UserInfoRepository;
 import cc.iotkit.data.model.TbUserInfo;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -29,7 +31,7 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class UserInfoDataImpl implements IUserInfoData {
+public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, String> {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -47,6 +49,16 @@ public class UserInfoDataImpl implements IUserInfoData {
     @Override
     public List<UserInfo> findByTypeAndOwnerId(int type, String ownerId) {
         return UserInfoMapper.toDto(userInfoRepository.findByTypeAndOwnerId(type, ownerId));
+    }
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return userInfoRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbUserInfo.class;
     }
 
     @Override
@@ -69,46 +81,20 @@ public class UserInfoDataImpl implements IUserInfoData {
         return data;
     }
 
-    @Override
-    public void batchSave(List<UserInfo> data) {
-
-    }
 
     @Override
     public void deleteById(String s) {
         userInfoRepository.deleteById(s);
     }
 
-    @Override
-    public void deleteByIds(Collection<String> strings) {
 
-    }
-
-
-    @Override
-    public long count() {
-        return userInfoRepository.count();
-    }
 
     @Override
     public List<UserInfo> findAll() {
         return UserInfoMapper.toDto(userInfoRepository.findAll());
     }
 
-    @Override
-    public Paging<UserInfo> findAll(PageRequest<UserInfo> pageRequest) {
-        return null;
-    }
 
-    @Override
-    public List<UserInfo> findAllByCondition(UserInfo data) {
-        return null;
-    }
-
-    @Override
-    public UserInfo findOneByCondition(UserInfo data) {
-        return null;
-    }
 
 
 }

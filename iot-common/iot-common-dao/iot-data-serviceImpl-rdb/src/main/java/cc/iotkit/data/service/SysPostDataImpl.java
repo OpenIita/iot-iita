@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysPostRepository;
 import cc.iotkit.data.model.TbSysPost;
 import cc.iotkit.data.system.ISysPostData;
@@ -11,6 +12,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -28,12 +30,22 @@ import static cc.iotkit.data.model.QTbSysUserPost.tbSysUserPost;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class SysPostDataImpl implements ISysPostData {
+public class SysPostDataImpl implements ISysPostData, IJPACommData<SysPost, Long> {
 
     private SysPostRepository postRepository;
 
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return postRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbSysPost.class;
+    }
 
     @Override
     public List<SysPost> findAll() {
@@ -80,6 +92,8 @@ public class SysPostDataImpl implements ISysPostData {
                         .build()).fetchOne();
         return Objects.isNull(ret);
     }
+
+
 
     @Override
     public SysPost findById(Long aLong) {

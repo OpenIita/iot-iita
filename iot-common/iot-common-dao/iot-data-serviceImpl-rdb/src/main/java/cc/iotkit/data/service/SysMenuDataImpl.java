@@ -7,6 +7,7 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysMenuRepository;
 import cc.iotkit.data.model.QTbSysMenu;
 import cc.iotkit.data.model.TbSysMenu;
@@ -18,6 +19,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -40,11 +42,21 @@ import static cc.iotkit.data.model.QTbSysUserRole.tbSysUserRole;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class SysMenuDataImpl implements ISysMenuData {
+public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long> {
 
     private final SysMenuRepository sysMenuRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return sysMenuRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbSysMenu.class;
+    }
 
     @Override
     public SysMenu findById(Long id) {
@@ -81,30 +93,7 @@ public class SysMenuDataImpl implements ISysMenuData {
         sysMenuRepository.deleteAllByIdInBatch(ids);
     }
 
-    @Override
-    public long count() {
-        return 0;
-    }
 
-    @Override
-    public List<SysMenu> findAll() {
-        return null;
-    }
-
-    @Override
-    public Paging<SysMenu> findAll(PageRequest<SysMenu> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<SysMenu> findAllByCondition(SysMenu data) {
-        return null;
-    }
-
-    @Override
-    public SysMenu findOneByCondition(SysMenu data) {
-        return null;
-    }
 
     @Override
     public List<SysMenu> selectMenuList(SysMenu menu, Long userId, boolean isSuperAdmin) {

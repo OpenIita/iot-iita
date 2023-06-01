@@ -4,7 +4,9 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysDeptRepository;
+import cc.iotkit.data.model.TbSysDept;
 import cc.iotkit.data.system.ISysDeptData;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysDept;
@@ -13,6 +15,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,17 +31,24 @@ import static cc.iotkit.data.model.QTbSysDept.tbSysDept;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class SysDeptDataImpl implements ISysDeptData {
+public class SysDeptDataImpl implements ISysDeptData, IJPACommData<SysDept, Long> {
 
     @Autowired
     private SysDeptRepository deptRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
 
+
     @Override
-    public Paging<SysDept> findByConditions(Long parentId, String deptName, String status, int page, int size) {
-        return null;
+    public JpaRepository getBaseRepository() {
+        return deptRepository;
     }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbSysDept.class;
+    }
+
 
     @Override
     public List<SysDept> findDepts(SysDept dept) {

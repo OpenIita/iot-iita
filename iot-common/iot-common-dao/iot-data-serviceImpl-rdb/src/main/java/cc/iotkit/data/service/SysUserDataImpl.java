@@ -6,6 +6,7 @@ import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysUserRepository;
 import cc.iotkit.data.model.TbSysUser;
 import cc.iotkit.data.system.ISysDeptData;
@@ -18,6 +19,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -35,13 +37,25 @@ import static cc.iotkit.data.model.QTbSysUser.tbSysUser;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class SysUserDataImpl implements ISysUserData {
+public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long> {
 
     private SysUserRepository userRepository;
 
     private ISysDeptData sysDeptData;
 
     private JPAQueryFactory jpaQueryFactory;
+
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return userRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbSysUser.class;
+    }
+
 
     @Override
     public long countByDeptId(Long aLong) {
@@ -78,50 +92,26 @@ public class SysUserDataImpl implements ISysUserData {
         return Objects.isNull(ret);
     }
 
+
     @Override
     public SysUser findById(Long aLong) {
         return MapstructUtils.convert(userRepository.findById(aLong),SysUser.class);
     }
 
-    @Override
-    public List<SysUser> findByIds(Collection<Long> collection) {
-        return null;
-    }
+
 
     @Override
     public SysUser save(SysUser sysUser) {
         return MapstructUtils.convert(userRepository.save(MapstructUtils.convert(sysUser,TbSysUser.class)),SysUser.class);
     }
 
-    @Override
-    public void batchSave(List<SysUser> list) {
-
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-
-    }
 
     @Override
     public void deleteByIds(Collection<Long> collection) {
         userRepository.deleteAllByIdInBatch(collection);
     }
 
-    @Override
-    public long count() {
-        return userRepository.count();
-    }
 
-    @Override
-    public List<SysUser> findAll() {
-        return null;
-    }
-
-    @Override
-    public Paging<SysUser> findAll(PageRequest<SysUser> pageRequest) {
-        return null;
-    }
 
     @Override
     public List<SysUser> findAllByCondition(SysUser user) {
@@ -145,8 +135,4 @@ public class SysUserDataImpl implements ISysUserData {
         return MapstructUtils.convert(users, SysUser.class);
     }
 
-    @Override
-    public SysUser findOneByCondition(SysUser sysUser) {
-        return null;
-    }
 }

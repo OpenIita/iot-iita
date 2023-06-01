@@ -14,11 +14,8 @@ import java.util.List;
  */
 public interface ISysDeptData extends ICommonData<SysDept, Long> {
 
-    /**
-     * 按条件分页查询
-     */
-    Paging<SysDept> findByConditions(Long parentId, String deptName,
-                                     String status, int page, int size);
+
+
 
     /**
      * 复合备件查询

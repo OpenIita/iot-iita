@@ -3,6 +3,7 @@ package cc.iotkit.data.service;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysOperLogRepository;
 import cc.iotkit.data.model.TbSysOperLog;
 import cc.iotkit.data.system.ISysOperLogData;
@@ -12,6 +13,7 @@ import cn.hutool.core.util.ArrayUtil;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -27,12 +29,22 @@ import static cc.iotkit.data.model.QTbSysOperLog.tbSysOperLog;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class SysOperLogDataImpl implements ISysOperLogData {
+public class SysOperLogDataImpl implements ISysOperLogData, IJPACommData<SysOperLog, Long> {
 
     private SysOperLogRepository operLogRepository;
 
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return operLogRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbSysOperLog.class;
+    }
 
     @Override
     public Paging<SysOperLog> findByConditions(String tenantId, String title, Integer businessType, Integer status, int page, int size) {
@@ -48,6 +60,7 @@ public class SysOperLogDataImpl implements ISysOperLogData {
     public void deleteAll() {
         operLogRepository.deleteAll();
     }
+
 
     @Override
     public void deleteByIds(Collection<Long> longs) {

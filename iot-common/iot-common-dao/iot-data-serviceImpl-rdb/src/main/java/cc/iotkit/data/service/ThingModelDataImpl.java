@@ -10,14 +10,17 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.data.dao.ThingModelRepository;
+import cc.iotkit.data.model.TbThingModel;
 import cc.iotkit.data.service.convert.ThingModelMapper;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.product.ThingModel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -26,20 +29,26 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class ThingModelDataImpl implements IThingModelData {
+public class ThingModelDataImpl implements IThingModelData, IJPACommData<ThingModel, String> {
 
     @Autowired
     private ThingModelRepository thingModelRepository;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return thingModelRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbThingModel.class;
+    }
 
     @Override
     public ThingModel findById(String s) {
         return ThingModelMapper.toDtoFix(thingModelRepository.findById(s).orElse(null));
     }
 
-    @Override
-    public List<ThingModel> findByIds(Collection<String> id) {
-        return null;
-    }
 
     @Override
     public ThingModel save(ThingModel data) {
@@ -50,46 +59,14 @@ public class ThingModelDataImpl implements IThingModelData {
         return data;
     }
 
-    @Override
-    public void batchSave(List<ThingModel> data) {
 
-    }
 
     @Override
     public void deleteById(String s) {
         thingModelRepository.deleteById(s);
     }
 
-    @Override
-    public void deleteByIds(Collection<String> strings) {
 
-    }
-
-
-    @Override
-    public long count() {
-        return 0;
-    }
-
-    @Override
-    public List<ThingModel> findAll() {
-        return null;
-    }
-
-    @Override
-    public Paging<ThingModel> findAll(PageRequest<ThingModel> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<ThingModel> findAllByCondition(ThingModel data) {
-        return null;
-    }
-
-    @Override
-    public ThingModel findOneByCondition(ThingModel data) {
-        return null;
-    }
 
 
 }

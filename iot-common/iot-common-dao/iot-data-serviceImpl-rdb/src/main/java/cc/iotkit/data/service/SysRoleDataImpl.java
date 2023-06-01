@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysRoleRepository;
 import cc.iotkit.data.model.TbSysRole;
 import cc.iotkit.data.system.ISysRoleData;
@@ -13,6 +14,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,11 +35,21 @@ import static cc.iotkit.data.model.QTbSysUserRole.tbSysUserRole;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class SysRoleDataImpl implements ISysRoleData {
+public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long> {
 
     private final SysRoleRepository sysRoleRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return sysRoleRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbSysRole.class;
+    }
 
     @Override
     public SysRole findById(Long id) {

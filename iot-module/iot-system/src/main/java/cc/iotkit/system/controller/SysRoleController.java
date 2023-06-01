@@ -6,7 +6,8 @@ import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.web.core.BaseController;
-import cc.iotkit.system.dto.SysUserRole;
+
+import cc.iotkit.model.system.SysUserRole;
 import cc.iotkit.system.dto.bo.SysDeptBo;
 import cc.iotkit.system.dto.bo.SysRoleBo;
 import cc.iotkit.system.dto.bo.SysUserBo;

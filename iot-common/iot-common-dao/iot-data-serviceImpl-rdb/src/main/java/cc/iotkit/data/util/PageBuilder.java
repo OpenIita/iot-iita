@@ -8,6 +8,7 @@ import cc.iotkit.data.model.TbSysConfig;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.system.SysConfig;
 import cn.hutool.core.collection.CollUtil;
+import com.querydsl.core.types.OrderSpecifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -64,12 +65,16 @@ public class PageBuilder {
     return orders;
   }
 
-  public static Paging<SysConfig> toPaging(Page all, Class clz) {
+  public static Paging toPaging(Page all, Class clz) {
     return new Paging<>(all.getTotalElements(),
             MapstructUtils.convert(all.getContent(), clz));
   }
 
-  public static Paging<SysConfig> toPaging(Page all) {
+  public static Paging<?> toPaging(Page all) {
     return new Paging<>(all.getTotalElements(), all.getContent());
+  }
+
+  public static Pageable buildPageable(int page, int size) {
+    return org.springframework.data.domain.PageRequest.of(page, size);
   }
 }

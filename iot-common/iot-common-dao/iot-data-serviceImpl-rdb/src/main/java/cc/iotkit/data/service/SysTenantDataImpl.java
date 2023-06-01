@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysTenantRepository;
 import cc.iotkit.data.model.TbSysTenant;
 import cc.iotkit.data.system.ISysTenantData;
@@ -10,6 +11,7 @@ import cc.iotkit.model.system.SysTenant;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -24,36 +26,27 @@ import static cc.iotkit.data.model.QTbSysTenant.tbSysTenant;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class SysTenantDataImpl implements ISysTenantData {
+public class SysTenantDataImpl implements ISysTenantData, IJPACommData<SysTenant, Long> {
 
-    private SysTenantRepository sysTenantRepository;
+    private final SysTenantRepository sysTenantRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return sysTenantRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbSysTenant.class;
+    }
 
     @Override
     public SysTenant findById(Long aLong) {
         return MapstructUtils.convert(sysTenantRepository.findById(aLong),SysTenant.class);
     }
 
-    @Override
-    public SysTenant save(SysTenant data) {
-        return null;
-    }
-
-    @Override
-    public void batchSave(List<SysTenant> data) {
-
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-
-    }
-
-    @Override
-    public void deleteByIds(Collection<Long> longs) {
-
-    }
 
     @Override
     public List<SysTenant> findAllByCondition(SysTenant data) {

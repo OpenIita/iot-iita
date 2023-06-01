@@ -25,80 +25,53 @@ public interface ICommonData<T extends Id<ID>, ID> {
     /**
      * 通过ID取数据
      */
-    default T findById(ID id) {
-        return null;
-
-    }
+     T findById(ID id);
 
     /**
      * 通过ID取数据
      */
-    default List<T> findByIds(Collection<ID> id) {
-        return Collections.EMPTY_LIST;
-
-    }
+     List<T> findByIds(Collection<ID> id);
 
 
     /**
      * 保存数据，id不为空更新，否则添加
      */
-    default T save(T data) {
-        return data;
-
-    }
+     T save(T data) ;
 
 
     /**
      * 批量保存数据
      */
-    default void batchSave(List<T> data) {
-    }
-
+     void batchSave(List<T> data) ;
     /**
      * 按id删除
      */
-    default void deleteById(ID id) {
-    }
-
+     void deleteById(ID id) ;
     /**
      * 按id批量删除
      */
-    default void deleteByIds(Collection<ID> ids) {
-    }
-
+     void deleteByIds(Collection<ID> ids) ;
     /**
      * 总数统计
      */
-    default long count() {
-        return 0L;
-    }
-
+     long count();
     /**
      * 取所有数据
      */
-    default List<T> findAll() {
-        return null;
-    }
+     List<T> findAll() ;
 
     /**
      * 分页获取所有信息
      */
-    default Paging<T> findAll(PageRequest<T> pageRequest) {
-        return null;
-    }
+     Paging<T> findAll(PageRequest<T> pageRequest) ;
 
     /**
      * 按条件查询多个结果
      */
-    default List<T> findAllByCondition(T data) {
-        return Collections.EMPTY_LIST;
-
-    }
+     List<T> findAllByCondition(T data);
 
     /**
      * 按条件查询单个结果
      */
-    default T findOneByCondition(T data) {
-        return data;
-    }
+     T findOneByCondition(T data);
 }

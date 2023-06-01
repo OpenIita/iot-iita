@@ -1,6 +1,7 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysUserRoleRepository;
 import cc.iotkit.data.model.TbSysUserRole;
 import cc.iotkit.data.system.ISysUserRoleData;
@@ -9,6 +10,7 @@ import cc.iotkit.model.system.SysUserRole;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,10 +24,20 @@ import static cc.iotkit.data.model.QTbSysUserRole.tbSysUserRole;
  * @Date：2023/5/30 16:36
  */
 @RequiredArgsConstructor
-public class SysUserRoleDataImpl implements ISysUserRoleData {
+public class SysUserRoleDataImpl implements ISysUserRoleData, IJPACommData<SysUserRole, Long> {
     @Autowired
     private final SysUserRoleRepository sysUserRoleRepository;
     private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return sysUserRoleRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbSysUserRole.class;
+    }
 
     @Override
     public int deleteByUserId(Long userId) {
@@ -49,4 +61,5 @@ public class SysUserRoleDataImpl implements ISysUserRoleData {
                 .and(tbSysUserRole.userId.in(userIds))
                 .build()).execute();
     }
+
 }

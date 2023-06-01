@@ -10,6 +10,7 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IVirtualDeviceData;
 import cc.iotkit.data.dao.VirtualDeviceMappingRepository;
 import cc.iotkit.data.dao.VirtualDeviceRepository;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,13 +35,24 @@ import java.util.stream.Collectors;
 
 @Primary
 @Service
-public class VirtualDeviceDataImpl implements IVirtualDeviceData {
+public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<VirtualDevice, String> {
 
     @Autowired
     private VirtualDeviceRepository virtualDeviceRepository;
 
     @Autowired
     private VirtualDeviceMappingRepository virtualDeviceMappingRepository;
+
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return virtualDeviceRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return TbVirtualDevice.class;
+    }
 
     @Override
     public List<VirtualDevice> findByUid(String uid) {
@@ -81,10 +94,6 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
         return dto;
     }
 
-    @Override
-    public List<VirtualDevice> findByIds(Collection<String> id) {
-        return null;
-    }
 
     private List<String> getVirtualDeviceIds(String virtualId) {
         List<TbVirtualDeviceMapping> deviceMappings = virtualDeviceMappingRepository.findByVirtualId(virtualId);
@@ -112,10 +121,6 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
         return data;
     }
 
-    @Override
-    public void batchSave(List<VirtualDevice> data) {
-
-    }
 
     @Override
     @Transactional
@@ -124,36 +129,12 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData {
         virtualDeviceMappingRepository.deleteByVirtualId(s);
     }
 
-    @Override
-    public void deleteByIds(Collection<String> strings) {
-
-    }
-
-
-    @Override
-    public long count() {
-        return virtualDeviceRepository.count();
-    }
 
     @Override
     public List<VirtualDevice> findAll() {
         return VirtualDeviceMapper.toDto(virtualDeviceRepository.findAll());
     }
 
-    @Override
-    public Paging<VirtualDevice> findAll(PageRequest<VirtualDevice> pageRequest) {
-        return null;
-    }
-
-    @Override
-    public List<VirtualDevice> findAllByCondition(VirtualDevice data) {
-        return null;
-    }
-
-    @Override
-    public VirtualDevice findOneByCondition(VirtualDevice data) {
-        return null;
-    }
 
 
 }
