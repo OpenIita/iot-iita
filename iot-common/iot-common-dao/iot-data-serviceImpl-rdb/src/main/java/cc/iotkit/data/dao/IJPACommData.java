@@ -74,8 +74,8 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
     }
 
     @Override
-    default List findAll() {
-        return getBaseRepository().findAll();
+    default List<T> findAll() {
+        return MapstructUtils.convert(getBaseRepository().findAll(), getJpaRepositoryClass());
     }
 
     @Override
