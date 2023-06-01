@@ -2,14 +2,15 @@ package cc.iotkit.swagger.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
 import springfox.documentation.builders.*;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,53 +20,29 @@ import java.util.List;
  * @Date: 2023/5/4 20:12
  * @Description:
  */
-@Configuration
-@EnableSwagger2
-@EnableKnife4j
+@Component
+@EnableSwagger2WebMvc
+
 public class SwaggerConfig {
 
-    @Bean
-    public Docket createApi() {
+    @Value("${spring.application.name:Swagger API}")
+    private String applicationName;
+
+    @Bean(value = "defaultApi2")
+    public Docket defaultApi2() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .groupName(applicationName)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
-                .build()
-                .globalRequestParameters(getGlobalRequestParameters())
-                .globalResponses(HttpMethod.GET, getGlobalResponseMessage())
-                .globalResponses(HttpMethod.POST, getGlobalResponseMessage());
-    }
-
-    @Bean
-    public ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("奇特物联")
-                .description("奇特物联")
-                .contact(new Contact("奇特物联-开源", "https://gitee.com/iotkit-open-source/iotkit-parent.git", "user@iotkit.com"))
-                .version("1.0")
                 .build();
     }
 
-    /**
-     * 添加head参数配置
-     */
-    private List<RequestParameter> getGlobalRequestParameters() {
-        List<RequestParameter> parameters = new ArrayList<>();
-        parameters.add(new RequestParameterBuilder()
-                .name("token")
-                .description("令牌")
-                .required(false)
-                .in(ParameterType.HEADER)
-                .build());
-        return parameters;
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title(applicationName)
+                .description("Swagger API Doc")
+                .build();
     }
-    private List<Response> getGlobalResponseMessage() {
-        List<Response> responseList = new ArrayList<>();
-        responseList.add(new ResponseBuilder().code("404").description("找不到资源").build());
-        return responseList;
-    }
-
 }
-
-

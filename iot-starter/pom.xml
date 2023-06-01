@@ -136,7 +136,19 @@
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-message-event-bus</artifactId>
     </dependency>
+    <dependency>
+      <groupId>cc.iotkit</groupId>
+      <artifactId>iot-common-doc</artifactId>
+    </dependency>
 
+    <dependency>
+      <groupId>cc.iotkit</groupId>
+      <artifactId>iot-manager</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>cc.iotkit</groupId>
+      <artifactId>iot-system</artifactId>
+    </dependency>
     <!--打开注释使用rocketmq消息总线-->
     <!--        <dependency>-->
     <!--            <groupId>cc.iotkit</groupId>-->
