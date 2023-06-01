@@ -77,7 +77,7 @@ public class SysConfigDataImpl implements ISysConfigData, IJPACommData<SysConfig
                 .and(StringUtils.isNotEmpty(query.getConfigKey()), () -> tbSysConfig.configKey.like(query.getConfigKey()))
                 .build();
         Page<TbSysConfig> all = baseRepository.findAll(predicate, PageBuilder.toPageable(pageRequest));
-        return PageBuilder.toPaging(all, SysConfig.class);
+        return  PageBuilder.toPaging(all, SysConfig.class);
     }
 
 

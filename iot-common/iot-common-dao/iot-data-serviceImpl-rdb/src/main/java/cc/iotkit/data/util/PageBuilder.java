@@ -65,12 +65,12 @@ public class PageBuilder {
     return orders;
   }
 
-  public static Paging toPaging(Page all, Class clz) {
+  public static <T> Paging<T> toPaging(Page all, Class clz) {
     return new Paging<>(all.getTotalElements(),
             MapstructUtils.convert(all.getContent(), clz));
   }
 
-  public static Paging<?> toPaging(Page all) {
+  public static <T> Paging<T> toPaging(Page all) {
     return new Paging<>(all.getTotalElements(), all.getContent());
   }
 
