@@ -17,6 +17,7 @@ import cc.iotkit.data.model.TbTaskInfo;
 import cc.iotkit.data.service.convert.TaskInfoMapper;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.TaskInfo;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -31,6 +32,7 @@ import java.util.UUID;
 
 @Primary
 @Service
+@RequiredArgsConstructor
 public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, String> {
 
     @Autowired

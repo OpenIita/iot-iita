@@ -17,6 +17,7 @@ import cc.iotkit.data.model.TbUserInfo;
 import cc.iotkit.data.service.convert.UserInfoMapper;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.UserInfo;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -31,6 +32,7 @@ import java.util.UUID;
 
 @Primary
 @Service
+@RequiredArgsConstructor
 public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, String> {
 
     @Autowired

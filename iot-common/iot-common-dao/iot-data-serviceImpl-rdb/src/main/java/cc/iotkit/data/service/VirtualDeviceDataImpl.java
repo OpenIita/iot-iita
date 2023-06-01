@@ -20,6 +20,7 @@ import cc.iotkit.data.service.convert.VirtualDeviceMapper;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.VirtualDevice;
 import cn.hutool.core.util.IdUtil;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -35,13 +36,14 @@ import java.util.stream.Collectors;
 
 @Primary
 @Service
+@RequiredArgsConstructor
 public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<VirtualDevice, String> {
 
-    @Autowired
-    private VirtualDeviceRepository virtualDeviceRepository;
 
-    @Autowired
-    private VirtualDeviceMappingRepository virtualDeviceMappingRepository;
+    private final VirtualDeviceRepository virtualDeviceRepository;
+
+
+    private final VirtualDeviceMappingRepository virtualDeviceMappingRepository;
 
 
     @Override

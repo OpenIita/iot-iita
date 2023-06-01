@@ -93,7 +93,7 @@ public class SysPostController extends BaseController {
     @ApiOperation("修改岗位")
     @SaCheckPermission("system:post:edit")
     @Log(title = "岗位管理", businessType = BusinessType.UPDATE)
-    @PostMapping
+    @PostMapping("/edit")
     public void edit(@RequestBody @Validated(EditGroup.class) Request<SysPostBo> post) {
         if (!postService.checkPostNameUnique(post.getData())) {
             fail("修改岗位'" + post.getData().getPostName() + "'失败，岗位名称已存在");

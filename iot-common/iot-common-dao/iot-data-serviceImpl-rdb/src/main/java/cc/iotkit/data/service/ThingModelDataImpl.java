@@ -17,6 +17,7 @@ import cc.iotkit.data.model.TbThingModel;
 import cc.iotkit.data.service.convert.ThingModelMapper;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.product.ThingModel;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -29,6 +30,7 @@ import java.util.UUID;
 
 @Primary
 @Service
+@RequiredArgsConstructor
 public class ThingModelDataImpl implements IThingModelData, IJPACommData<ThingModel, String> {
 
     @Autowired

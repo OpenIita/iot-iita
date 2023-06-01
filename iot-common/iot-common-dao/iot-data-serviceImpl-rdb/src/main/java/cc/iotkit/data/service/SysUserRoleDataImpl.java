@@ -10,7 +10,9 @@ import cc.iotkit.model.system.SysUserRole;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,6 +25,8 @@ import static cc.iotkit.data.model.QTbSysUserRole.tbSysUserRole;
  * @Author：tfd
  * @Date：2023/5/30 16:36
  */
+@Primary
+@Service
 @RequiredArgsConstructor
 public class SysUserRoleDataImpl implements ISysUserRoleData, IJPACommData<SysUserRole, Long> {
 
