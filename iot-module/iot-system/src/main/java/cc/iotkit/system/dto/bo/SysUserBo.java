@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 用户信息业务对象 sys_user
@@ -17,6 +18,8 @@ import lombok.EqualsAndHashCode;
  */
 
 @Data
+@NoArgsConstructor
+
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = SysUser.class, reverseConvertGenerate = false)
 public class SysUserBo extends BaseDto {
