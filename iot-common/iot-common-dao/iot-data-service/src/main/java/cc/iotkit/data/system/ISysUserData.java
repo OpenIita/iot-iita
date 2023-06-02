@@ -24,4 +24,16 @@ public interface ISysUserData extends ICommonData<SysUser, Long> {
     boolean checkPhoneUnique(SysUser to);
 
     boolean checkEmailUnique(SysUser to);
+
+    SysUser selectByPhonenumber(String phonenumber);
+
+    SysUser selectTenantUserByPhonenumber(String phonenumber, String tenantId);
+
+    SysUser selectTenantUserByEmail(String email, String tenantId);
+
+    SysUser selectUserByEmail(String email);
+
+    SysUser selectTenantUserByUserName(String username, String tenantId);
+
+    SysUser selectUserByUserName(String username);
 }
