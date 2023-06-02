@@ -3,10 +3,12 @@
   <parent>
     <artifactId>iot-components</artifactId>
     <groupId>cc.iotkit</groupId>
-    <version>${revision}</version>
+    <version>0.4.5-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
+  <groupId>cc.iotkit</groupId>
   <artifactId>iot-component-tcp</artifactId>
+  <version>0.4.5-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
@@ -31,8 +33,8 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>11</source>
-          <target>11</target>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
           <forceJavacCompilerUse>true</forceJavacCompilerUse>
           <useIncrementalCompilation>false</useIncrementalCompilation>
         </configuration>
@@ -55,54 +57,44 @@
     <dependency>
       <groupId>io.projectreactor</groupId>
       <artifactId>reactor-core</artifactId>
-      <version>3.4.13</version>
+      <version>3.4.29</version>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-core</artifactId>
-      <version>4.2.2</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.24</version>
+      <version>1.18.26</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.32</version>
+      <version>1.7.36</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-common-core</artifactId>
-      <version>0.4.3-SNAPSHOT</version>
+      <version>0.4.5-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-component-base</artifactId>
-      <version>0.4.3-SNAPSHOT</version>
+      <version>0.4.5-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-data-service</artifactId>
-      <version>0.4.3-SNAPSHOT</version>
+      <version>0.4.5-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-script-engine</artifactId>
-      <version>0.4.3-SNAPSHOT</version>
+      <version>0.4.5-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
-  <properties>
-    <maven.compiler.target>11</maven.compiler.target>
-    <maven.compiler.source>11</maven.compiler.source>
-  </properties>
 </project>
