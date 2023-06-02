@@ -35,7 +35,7 @@ import static cc.iotkit.data.model.QTbSysUserPost.tbSysUserPost;
 @RequiredArgsConstructor
 public class SysPostDataImpl implements ISysPostData, IJPACommData<SysPost, Long> {
 
-    private SysPostRepository postRepository;
+    private final SysPostRepository postRepository;
 
 
     private final JPAQueryFactory jpaQueryFactory;

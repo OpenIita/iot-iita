@@ -40,11 +40,11 @@ import static cc.iotkit.data.model.QTbSysUser.tbSysUser;
 @RequiredArgsConstructor
 public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long> {
 
-    private SysUserRepository userRepository;
+    private final SysUserRepository userRepository;
 
-    private ISysDeptData sysDeptData;
+    private final ISysDeptData sysDeptData;
 
-    private JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
 
     @Override

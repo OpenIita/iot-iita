@@ -33,7 +33,7 @@ import static cc.iotkit.data.model.QTbSysOssConfig.tbSysOssConfig;
 @RequiredArgsConstructor
 public class SysOssConfigDataImpl implements ISysOssConfigData, IJPACommData<SysOssConfig, Long> {
 
-    private SysOssConfigRepository operLogRepository;
+    private final SysOssConfigRepository operLogRepository;
 
 
     private final JPAQueryFactory jpaQueryFactory;

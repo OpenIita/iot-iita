@@ -32,7 +32,7 @@ import static cc.iotkit.data.model.QTbSysLogininfor.tbSysLogininfor;
 @RequiredArgsConstructor
 public class SysLogininfoDataImpl implements ISysLogininforData, IJPACommData<SysLogininfor, Long> {
 
-    private SysLogininforRepository logininfoRepository;
+    private final SysLogininforRepository logininfoRepository;
 
 
     private final JPAQueryFactory jpaQueryFactory;

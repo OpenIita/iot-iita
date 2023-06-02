@@ -25,7 +25,7 @@ import java.util.List;
 public class SysUserPostDataImpl implements ISysUserPostData, IJPACommData<SysUserPost, Long> {
 
 
-    private SysUserPostRepository sysUserPostRepository;
+    private final SysUserPostRepository sysUserPostRepository;
 
     @Override
     public int deleteByUserId(Long userId) {

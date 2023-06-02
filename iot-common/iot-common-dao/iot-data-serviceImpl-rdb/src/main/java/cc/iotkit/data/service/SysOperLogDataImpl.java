@@ -33,7 +33,7 @@ import static cc.iotkit.data.model.QTbSysOperLog.tbSysOperLog;
 @RequiredArgsConstructor
 public class SysOperLogDataImpl implements ISysOperLogData, IJPACommData<SysOperLog, Long> {
 
-    private SysOperLogRepository operLogRepository;
+    private final SysOperLogRepository operLogRepository;
 
 
     private final JPAQueryFactory jpaQueryFactory;
