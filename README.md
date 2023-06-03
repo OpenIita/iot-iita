@@ -52,7 +52,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 **前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
 
- **演示地址：** [演示地址](http://120.76.96.206)，账号：guest1,密码：guest123  (只读权限)
+ **演示地址：** [演示地址](http://159.75.222.119:16808)，账号：guest1,密码：guest123  (只读权限)
 
  **边缘设备：** https://gitee.com/iotkit-open-source/iot-edge-device
 
