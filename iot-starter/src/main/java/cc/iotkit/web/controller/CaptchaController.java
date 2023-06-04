@@ -19,7 +19,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -45,7 +44,7 @@ public class CaptchaController {
 
     private final CaptchaProperties captchaProperties;
 //    private final SmsProperties smsProperties;
-    private final MailProperties mailProperties;
+//    private final MailProperties mailProperties;
 
     /**
      * 短信验证码
