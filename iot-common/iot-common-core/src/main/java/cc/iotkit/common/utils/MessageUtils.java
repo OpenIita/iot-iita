@@ -23,6 +23,12 @@ public class MessageUtils {
      * @return 获取国际化翻译值
      */
     public static String message(String code, Object... args) {
-        return MESSAGE_SOURCE.getMessage(code, args, LocaleContextHolder.getLocale());
+//        TODO: 国际化
+        try{
+            return MESSAGE_SOURCE.getMessage(code, args, LocaleContextHolder.getLocale());
+        } catch (Exception e) {
+            return code;
+        }
+
     }
 }

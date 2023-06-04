@@ -48,10 +48,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
+            <groupId>io.github.linpeilie</groupId>
+            <artifactId>mapstruct-plus-spring-boot-starter</artifactId>
         </dependency>
-
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-http</artifactId>

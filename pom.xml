@@ -35,7 +35,7 @@
         <hutool.version>5.8.18</hutool.version>
         <redisson.version>3.20.1</redisson.version>
         <lock4j.version>2.2.4</lock4j.version>
-        <mapstruct-plus.version>1.2.1</mapstruct-plus.version>
+        <mapstruct-plus.version>1.2.5</mapstruct-plus.version>
         <alibaba-ttl.version>2.14.2</alibaba-ttl.version>
         <poi.version>5.2.3</poi.version>
         <easyexcel.version>3.2.1</easyexcel.version>
@@ -44,6 +44,8 @@
         <jap-comment.version>1.0.0</jap-comment.version>
         <knife4j.version>2.0.9</knife4j.version>
         <validateion.version>1.1.0.Final</validateion.version>
+        <lombok.version>1.18.26</lombok.version>
+
     </properties>
 
     <dependencyManagement>
@@ -119,7 +121,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.26</version>
+                <version>${lombok.version}</version>
             </dependency>
 
             <dependency>
@@ -285,6 +287,11 @@
                 <version>${graalvm.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.github.linpeilie</groupId>
+                <artifactId>mapstruct-plus</artifactId>
+                <version>${mapstruct-plus.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.github.linpeilie</groupId>
                 <artifactId>mapstruct-plus-spring-boot-starter</artifactId>
