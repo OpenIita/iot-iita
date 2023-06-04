@@ -1,6 +1,6 @@
 FROM openjdk:11-jre-slim
 WORKDIR /app
-ADD iot-standalone/target/iot-standalone-0.4.1-SNAPSHOT.tar /app
+ADD iot-starter/target/iot-starter-0.4.3-SNAPSHOT.jar /app
 ADD data/init /app/data/init
 ADD data/components /app/data/components
 ADD data/converters /app/data/converters
