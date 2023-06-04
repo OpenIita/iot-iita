@@ -21,6 +21,8 @@ import cc.iotkit.web.service.SysRegisterService;
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.collection.CollUtil;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +38,7 @@ import java.util.List;
  *
  * @author Lion Li
  */
+@Api(tags = "认证")
 @SaIgnore
 @Validated
 @RequiredArgsConstructor
@@ -54,6 +57,7 @@ public class AuthController {
      * @param body 登录信息
      * @return 结果
      */
+    @ApiOperation("登录")
     @PostMapping("/login")
     public LoginVo login(@Validated @RequestBody LoginBody body) {
         LoginVo loginVo = new LoginVo();
@@ -72,6 +76,7 @@ public class AuthController {
      * @param body 登录信息
      * @return 结果
      */
+    @ApiOperation("短信登录")
     @PostMapping("/smsLogin")
     public LoginVo smsLogin(@Validated @RequestBody SmsLoginBody body) {
         LoginVo loginVo = new LoginVo();
@@ -87,6 +92,7 @@ public class AuthController {
      * @param body 登录信息
      * @return 结果
      */
+    @ApiOperation("邮件登录")
     @PostMapping("/emailLogin")
     public LoginVo emailLogin(@Validated @RequestBody EmailLoginBody body) {
         LoginVo loginVo = new LoginVo();
@@ -102,6 +108,7 @@ public class AuthController {
      * @param xcxCode 小程序code
      * @return 结果
      */
+    @ApiOperation("小程序登录")
     @PostMapping("/xcxLogin")
     public LoginVo xcxLogin(@NotBlank(message = "{xcx.code.not.blank}") String xcxCode) {
         LoginVo loginVo = new LoginVo();
@@ -114,6 +121,7 @@ public class AuthController {
     /**
      * 退出登录
      */
+    @ApiOperation("退出登录")
     @PostMapping("/logout")
     public void logout() {
         loginService.logout();
@@ -123,6 +131,7 @@ public class AuthController {
     /**
      * 用户注册
      */
+    @ApiOperation("用户注册")
     @PostMapping("/register")
     public void register(@Validated @RequestBody RegisterBody user) {
         if (!configService.selectRegisterEnabled(user.getTenantId())) {
@@ -137,6 +146,7 @@ public class AuthController {
      *
      * @return 租户列表
      */
+    @ApiOperation("登录页面租户下拉框")
     @GetMapping("/tenant/list")
     public LoginTenantVo tenantList(HttpServletRequest request) throws Exception {
         List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());

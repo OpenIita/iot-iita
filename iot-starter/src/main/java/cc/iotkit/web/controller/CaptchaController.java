@@ -15,6 +15,8 @@ import cn.hutool.captcha.AbstractCaptcha;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +42,7 @@ import java.util.Map;
 @Validated
 @RequiredArgsConstructor
 @RestController
+@Api(tags = "验证码")
 public class CaptchaController {
 
     private final CaptchaProperties captchaProperties;
@@ -97,6 +100,7 @@ public class CaptchaController {
     /**
      * 生成验证码
      */
+    @ApiOperation(value = "生成验证码")
     @GetMapping("/code")
     public CaptchaVo getCode() {
         CaptchaVo captchaVo = new CaptchaVo();
