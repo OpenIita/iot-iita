@@ -9,6 +9,8 @@
  */
 package cc.iotkit.temporal.es.document;
 
+import cc.iotkit.model.device.message.ThingModelMessage;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +25,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @AllArgsConstructor
 @Builder
 @Document(indexName = "thing_model_message")
+@AutoMapper(target = ThingModelMessage.class)
 public class DocThingModelMessage {
 
     @Id

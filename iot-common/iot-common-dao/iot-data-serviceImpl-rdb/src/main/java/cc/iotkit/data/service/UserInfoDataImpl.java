@@ -9,25 +9,22 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.dao.UserInfoRepository;
 import cc.iotkit.data.model.TbUserInfo;
-import cc.iotkit.data.service.convert.UserInfoMapper;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Primary
@@ -40,17 +37,17 @@ public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, S
 
     @Override
     public UserInfo findByUid(String uid) {
-        return UserInfoMapper.toDtoFix(userInfoRepository.findByUid(uid));
+        return MapstructUtils.convert(userInfoRepository.findByUid(uid), UserInfo.class);
     }
 
     @Override
     public List<UserInfo> findByType(int type) {
-        return UserInfoMapper.toDto(userInfoRepository.findByType(type));
+        return MapstructUtils.convert(userInfoRepository.findByType(type), UserInfo.class);
     }
 
     @Override
     public List<UserInfo> findByTypeAndOwnerId(int type, String ownerId) {
-        return UserInfoMapper.toDto(userInfoRepository.findByTypeAndOwnerId(type, ownerId));
+        return MapstructUtils.convert(userInfoRepository.findByTypeAndOwnerId(type, ownerId), UserInfo.class);
     }
 
     @Override
@@ -65,7 +62,7 @@ public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, S
 
     @Override
     public UserInfo findById(String s) {
-        return UserInfoMapper.toDtoFix(userInfoRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(userInfoRepository.findById(s).orElse(null), UserInfo.class);
     }
 
     @Override
@@ -79,7 +76,7 @@ public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, S
             data.setId(UUID.randomUUID().toString());
             data.setCreateAt(System.currentTimeMillis());
         }
-        userInfoRepository.save(UserInfoMapper.toVoFix(data));
+        userInfoRepository.save(MapstructUtils.convert(data, TbUserInfo.class));
         return data;
     }
 
@@ -93,7 +90,7 @@ public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, S
 
     @Override
     public List<UserInfo> findAll() {
-        return UserInfoMapper.toDto(userInfoRepository.findAll());
+        return MapstructUtils.convert(userInfoRepository.findAll(), UserInfo.class);
     }
 
 

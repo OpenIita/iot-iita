@@ -10,16 +10,17 @@
 package cc.iotkit.temporal.es.service;
 
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.model.device.VirtualDeviceLog;
 import cc.iotkit.temporal.IVirtualDeviceLogData;
 import cc.iotkit.temporal.es.dao.VirtualDeviceLogRepository;
 import cc.iotkit.temporal.es.document.DocVirtualDeviceLog;
-import cc.iotkit.temporal.es.document.VirtualDeviceLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,12 +35,14 @@ public class VirtualDeviceLogDataImpl implements IVirtualDeviceLogData {
                 .findByVirtualDeviceId(virtualDeviceId,
                         Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(), paged.getContent().stream()
-                .map(VirtualDeviceLogMapper.M::toDto)
+                .map(o -> {
+                    return MapstructUtils.convert(o, VirtualDeviceLog.class);
+                })
                 .collect(Collectors.toList()));
     }
 
     @Override
     public void add(VirtualDeviceLog log) {
-        virtualDeviceLogRepository.save(VirtualDeviceLogMapper.M.toVo(log));
+        virtualDeviceLogRepository.save(MapstructUtils.convert(log, DocVirtualDeviceLog.class));
     }
 }

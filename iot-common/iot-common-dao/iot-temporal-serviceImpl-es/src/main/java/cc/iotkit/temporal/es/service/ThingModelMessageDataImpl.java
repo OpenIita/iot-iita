@@ -10,12 +10,12 @@
 package cc.iotkit.temporal.es.service;
 
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.stats.TimeData;
 import cc.iotkit.temporal.IThingModelMessageData;
 import cc.iotkit.temporal.es.dao.ThingModelMessageRepository;
 import cc.iotkit.temporal.es.document.DocThingModelMessage;
-import cc.iotkit.temporal.es.document.ThingModelMessageMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -63,7 +63,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
                 .build();
         SearchHits<DocThingModelMessage> result = template.search(query, DocThingModelMessage.class);
         return new Paging<>(result.getTotalHits(), result.getSearchHits().stream()
-                .map(m -> ThingModelMessageMapper.M.toDto(m.getContent()))
+                .map(m -> MapstructUtils.convert(m.getContent(), ThingModelMessage.class))
                 .collect(Collectors.toList()));
     }
 
@@ -102,7 +102,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
 
     @Override
     public void add(ThingModelMessage msg) {
-        thingModelMessageRepository.save(ThingModelMessageMapper.M.toVo(msg));
+        thingModelMessageRepository.save(MapstructUtils.convert(msg, DocThingModelMessage.class));
     }
 
     @Override

@@ -9,12 +9,11 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.ITaskInfoData;
 import cc.iotkit.data.dao.TaskInfoRepository;
 import cc.iotkit.data.model.TbTaskInfo;
-import cc.iotkit.data.service.convert.TaskInfoMapper;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.TaskInfo;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +38,7 @@ public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, S
 
     @Override
     public List<TaskInfo> findByUid(String uid) {
-        return TaskInfoMapper.toDto(taskInfoRepository.findByUid(uid));
+        return MapstructUtils.convert(taskInfoRepository.findByUid(uid), TaskInfo.class);
     }
 
     @Override
@@ -48,7 +46,7 @@ public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, S
         Page<TbTaskInfo> paged = taskInfoRepository.findByUid(uid,
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                TaskInfoMapper.toDto(paged.getContent()));
+                MapstructUtils.convert(paged.getContent(), TaskInfo.class));
     }
 
     @Override
@@ -68,7 +66,7 @@ public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, S
 
     @Override
     public TaskInfo findById(String s) {
-        return TaskInfoMapper.toDtoFix(taskInfoRepository.findById(s).orElse(null));
+        return  MapstructUtils.convert(taskInfoRepository.findById(s).orElse(null), TaskInfo.class);
     }
 
 
@@ -79,7 +77,7 @@ public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, S
             data.setId(UUID.randomUUID().toString());
             data.setCreateAt(System.currentTimeMillis());
         }
-        taskInfoRepository.save(TaskInfoMapper.toVoFix(data));
+        taskInfoRepository.save(MapstructUtils.convert(data, TbTaskInfo.class));
         return data;
     }
 

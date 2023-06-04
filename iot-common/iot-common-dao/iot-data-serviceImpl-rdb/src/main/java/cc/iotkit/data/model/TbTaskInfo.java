@@ -11,6 +11,8 @@ package cc.iotkit.data.model;
 
 import cc.iotkit.model.rule.TaskInfo;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.github.linpeilie.annotations.AutoMapping;
+import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -58,6 +60,9 @@ public class TbTaskInfo {
      */
     @Column(columnDefinition = "text")
     @ApiModelProperty(value = "任务输出")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
+
     private String actions;
 
     /**

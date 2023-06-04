@@ -10,11 +10,11 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.data.dao.ThingModelRepository;
 import cc.iotkit.data.model.TbThingModel;
-import cc.iotkit.data.service.convert.ThingModelMapper;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.product.ThingModel;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ public class ThingModelDataImpl implements IThingModelData, IJPACommData<ThingMo
 
     @Override
     public ThingModel findById(String s) {
-        return ThingModelMapper.toDtoFix(thingModelRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(thingModelRepository.findById(s).orElse(null),ThingModel.class);
     }
 
 
@@ -57,7 +57,7 @@ public class ThingModelDataImpl implements IThingModelData, IJPACommData<ThingMo
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
-        thingModelRepository.save(ThingModelMapper.toVoFix(data));
+        thingModelRepository.save(MapstructUtils.convert(data, TbThingModel.class));
         return data;
     }
 

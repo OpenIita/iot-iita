@@ -2,6 +2,8 @@ package cc.iotkit.data.model;
 
 import cc.iotkit.model.device.DeviceInfo;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.github.linpeilie.annotations.AutoMapping;
+import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -41,6 +43,8 @@ public class TbDeviceInfo {
     private String uid;
 
     @ApiModelProperty(value = "设备状态")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
     private String state;
 
     @ApiModelProperty(value = "设备在线时间")

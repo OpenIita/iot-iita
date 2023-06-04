@@ -9,6 +9,8 @@
  */
 package cc.iotkit.temporal.es.document;
 
+import cc.iotkit.model.rule.RuleLog;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +25,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @AllArgsConstructor
 @Builder
 @Document(indexName = "rule_log")
+@AutoMapper(target = RuleLog.class)
 public class DocRuleLog {
     @Id
     private String id;

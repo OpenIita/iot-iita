@@ -2,6 +2,8 @@ package cc.iotkit.data.model;
 
 import cc.iotkit.model.UserInfo;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.github.linpeilie.annotations.AutoMapping;
+import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -78,12 +80,17 @@ public class TbUserInfo {
      * 角色
      */
     @ApiModelProperty(value="角色")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
     private String roles;
 
     /**
      * 权限
      */
     @ApiModelProperty(value="权限")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
+
     private String permissions;
 
     /**
@@ -91,6 +98,8 @@ public class TbUserInfo {
      * 见:Constants.THIRD_PLATFORM
      */
     @ApiModelProperty(value="用户使用的平台")
+    @ReverseAutoMapping(ignore = true)
+    @AutoMapping(ignore = true)
     private String usePlatforms;
 
     @ApiModelProperty(value="创建时间")

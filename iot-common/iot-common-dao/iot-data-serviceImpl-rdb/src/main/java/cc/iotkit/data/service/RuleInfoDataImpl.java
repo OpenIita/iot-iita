@@ -9,12 +9,11 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.dao.RuleInfoRepository;
 import cc.iotkit.data.model.TbRuleInfo;
-import cc.iotkit.data.service.convert.RuleInfoMapper;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.RuleInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +47,7 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
 
     @Override
     public List<RuleInfo> findByUidAndType(String uid, String type) {
-        return RuleInfoMapper.toDto(ruleInfoRepository.findByUidAndType(uid, type));
+        return MapstructUtils.convert(ruleInfoRepository.findByUidAndType(uid, type), RuleInfo.class);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
         Page<TbRuleInfo> paged = ruleInfoRepository.findByUidAndType(uid, type,
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                RuleInfoMapper.toDto(paged.getContent()));
+                MapstructUtils.convert(paged.getContent(), RuleInfo.class));
     }
 
     @Override
@@ -64,12 +63,12 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
         Page<TbRuleInfo> paged = ruleInfoRepository.findByType(type,
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                RuleInfoMapper.toDto(paged.getContent()));
+                MapstructUtils.convert(paged.getContent(), RuleInfo.class));
     }
 
     @Override
     public List<RuleInfo> findByUid(String uid) {
-        return RuleInfoMapper.toDto(ruleInfoRepository.findByUid(uid));
+        return MapstructUtils.convert(ruleInfoRepository.findByUid(uid), RuleInfo.class);
     }
 
     @Override
@@ -77,7 +76,7 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
         Page<TbRuleInfo> paged = ruleInfoRepository.findByUid(uid,
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                RuleInfoMapper.toDto(paged.getContent()));
+                MapstructUtils.convert(paged.getContent(), RuleInfo.class));
     }
 
     @Override
@@ -88,7 +87,7 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
 
     @Override
     public RuleInfo findById(String s) {
-        return RuleInfoMapper.toDtoFix(ruleInfoRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(ruleInfoRepository.findById(s).orElse(null), RuleInfo.class);
     }
 
     @Override
@@ -102,7 +101,7 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
             data.setId(UUID.randomUUID().toString());
             data.setCreateAt(System.currentTimeMillis());
         }
-        ruleInfoRepository.save(RuleInfoMapper.toVoFix(data));
+        ruleInfoRepository.save(MapstructUtils.convert(data, TbRuleInfo.class));
         return data;
     }
 

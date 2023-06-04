@@ -16,7 +16,7 @@ import cc.iotkit.data.dao.VirtualDeviceMappingRepository;
 import cc.iotkit.data.dao.VirtualDeviceRepository;
 import cc.iotkit.data.model.TbVirtualDevice;
 import cc.iotkit.data.model.TbVirtualDeviceMapping;
-import cc.iotkit.data.service.convert.VirtualDeviceMapper;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.VirtualDevice;
 import cn.hutool.core.util.IdUtil;
@@ -58,7 +58,7 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
 
     @Override
     public List<VirtualDevice> findByUid(String uid) {
-        return VirtualDeviceMapper.toDto(virtualDeviceRepository.findByUid(uid));
+        return MapstructUtils.convert(virtualDeviceRepository.findByUid(uid), VirtualDevice.class);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
         Page<TbVirtualDevice> paged = virtualDeviceRepository.findByUid(uid,
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                VirtualDeviceMapper.toDto(paged.getContent()));
+                MapstructUtils.convert(paged.getContent(), VirtualDevice.class));
     }
 
     @Override
@@ -81,8 +81,8 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
 
     @Override
     public List<VirtualDevice> findByTriggerAndState(String trigger, String state) {
-        List<VirtualDevice> list = VirtualDeviceMapper.toDto(virtualDeviceRepository
-                .findByTriggerAndState(trigger, state));
+        List<VirtualDevice> list = MapstructUtils.convert(virtualDeviceRepository
+                .findByTriggerAndState(trigger, state), VirtualDevice.class);
         for (VirtualDevice virtualDevice : list) {
             virtualDevice.setDevices(getVirtualDeviceIds(virtualDevice.getId()));
         }
@@ -91,7 +91,7 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
 
     @Override
     public VirtualDevice findById(String s) {
-        VirtualDevice dto = VirtualDeviceMapper.M.toDto(virtualDeviceRepository.findById(s).orElse(null));
+        VirtualDevice dto = MapstructUtils.convert(virtualDeviceRepository.findById(s).orElse(null),VirtualDevice.class);
         dto.setDevices(getVirtualDeviceIds(s));
         return dto;
     }
@@ -109,7 +109,7 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
             data.setId(IdUtil.simpleUUID());
             data.setCreateAt(System.currentTimeMillis());
         }
-        virtualDeviceRepository.save(VirtualDeviceMapper.M.toVo(data));
+        virtualDeviceRepository.save(MapstructUtils.convert(data, TbVirtualDevice.class));
 
         //删除旧的添加新的关联设备记录
         virtualDeviceMappingRepository.deleteByVirtualId(data.getId());
@@ -134,7 +134,7 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
 
     @Override
     public List<VirtualDevice> findAll() {
-        return VirtualDeviceMapper.toDto(virtualDeviceRepository.findAll());
+        return MapstructUtils.convert(virtualDeviceRepository.findAll(), VirtualDevice.class);
     }
 
 

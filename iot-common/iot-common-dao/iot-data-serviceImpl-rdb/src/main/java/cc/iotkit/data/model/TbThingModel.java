@@ -11,6 +11,8 @@ package cc.iotkit.data.model;
 
 import cc.iotkit.model.product.ThingModel;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.github.linpeilie.annotations.AutoMapping;
+import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -34,6 +36,9 @@ public class TbThingModel {
 
     @ApiModelProperty(value = "模型内容")
     @Column(columnDefinition = "text")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
+
     private String model;
 
 }

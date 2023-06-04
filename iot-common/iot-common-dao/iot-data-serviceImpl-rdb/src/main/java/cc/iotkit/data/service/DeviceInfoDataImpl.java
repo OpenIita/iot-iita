@@ -8,7 +8,6 @@ import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.dao.*;
 import cc.iotkit.data.model.*;
-import cc.iotkit.data.service.convert.DeviceInfoMapper;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.model.device.DeviceInfo;
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -75,8 +73,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
     @Override
     public DeviceInfo findByDeviceId(String deviceId) {
         TbDeviceInfo tbDeviceInfo = deviceInfoRepository.findByDeviceId(deviceId);
-        DeviceInfo dto = DeviceInfoMapper.M.toDto(tbDeviceInfo);
 
+        DeviceInfo dto = MapstructUtils.convert(tbDeviceInfo, DeviceInfo.class);
         fillDeviceInfo(deviceId, tbDeviceInfo, dto);
         return dto;
     }
@@ -141,7 +139,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
         if (vo == null) {
             return null;
         }
-        DeviceInfo dto = DeviceInfoMapper.M.toDto(vo);
+        DeviceInfo dto = MapstructUtils.convert(vo, DeviceInfo.class);
+
         fillDeviceInfo(vo.getDeviceId(), vo, dto);
         return dto;
     }
@@ -151,7 +150,9 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
      */
     private List<DeviceInfo> parseVoToDto(List<TbDeviceInfo> vos) {
         return vos.stream().map(d -> {
-            DeviceInfo dto = DeviceInfoMapper.M.toDto(d);
+
+            DeviceInfo dto = MapstructUtils.convert(d, DeviceInfo.class);
+
             fillDeviceInfo(d.getDeviceId(), d, dto);
             return dto;
         }).collect(Collectors.toList());
@@ -441,8 +442,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
 
     @Override
     public DeviceInfo findById(String s) {
-        return DeviceInfoMapper.M.toDto(
-                deviceInfoRepository.findById(s).orElse(null));
+        return MapstructUtils.convert(
+                deviceInfoRepository.findById(s).orElse(null), DeviceInfo.class);
     }
 
     @Override

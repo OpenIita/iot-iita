@@ -12,6 +12,8 @@ package cc.iotkit.data.model;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.model.rule.RuleLog;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.github.linpeilie.annotations.AutoMapping;
+import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -40,14 +42,23 @@ public class TbRuleInfo {
 
     @Column(columnDefinition = "text")
     @ApiModelProperty(value = "监听器")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
+
     private String listeners;
 
     @Column(columnDefinition = "text")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
+
     @ApiModelProperty(value = "过滤器")
     private String filters;
 
     @Column(columnDefinition = "text")
     @ApiModelProperty(value = "动作")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
+
     private String actions;
 
     @ApiModelProperty(value = "用户id")

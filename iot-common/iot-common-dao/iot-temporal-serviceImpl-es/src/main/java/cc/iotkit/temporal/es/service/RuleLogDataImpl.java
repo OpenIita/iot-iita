@@ -10,11 +10,11 @@
 package cc.iotkit.temporal.es.service;
 
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.model.rule.RuleLog;
 import cc.iotkit.temporal.IRuleLogData;
 import cc.iotkit.temporal.es.dao.RuleLogRepository;
 import cc.iotkit.temporal.es.document.DocRuleLog;
-import cc.iotkit.temporal.es.document.RuleLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,12 +37,14 @@ public class RuleLogDataImpl implements IRuleLogData {
     public Paging<RuleLog> findByRuleId(String ruleId, int page, int size) {
         Page<DocRuleLog> paged = ruleLogRepository.findByRuleId(ruleId, Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                paged.getContent().stream().map(RuleLogMapper.M::toDto)
+                paged.getContent().stream().map(o->{
+                    return MapstructUtils.convert(o, RuleLog.class);
+                        })
                         .collect(Collectors.toList()));
     }
 
     @Override
     public void add(RuleLog log) {
-        ruleLogRepository.save(RuleLogMapper.M.toVo(log));
+        ruleLogRepository.save(MapstructUtils.convert(log, DocRuleLog.class));
     }
 }

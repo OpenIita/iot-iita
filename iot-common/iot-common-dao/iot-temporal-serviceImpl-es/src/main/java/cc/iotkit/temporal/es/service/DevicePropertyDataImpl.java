@@ -9,11 +9,11 @@
  */
 package cc.iotkit.temporal.es.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
 import cc.iotkit.temporal.IDevicePropertyData;
-import cc.iotkit.temporal.es.document.DevicePropertyMapper;
 import cc.iotkit.temporal.es.document.DocDeviceProperty;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.FieldSortBuilder;
@@ -56,7 +56,7 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
                 .build();
         SearchHits<DocDeviceProperty> result = template.search(query, DocDeviceProperty.class, IndexCoordinates.of(index));
         return result.getSearchHits().stream()
-                .map(h -> DevicePropertyMapper.M.toDto(h.getContent()))
+                .map(h -> MapstructUtils.convert(h.getContent(), DeviceProperty.class))
                 .collect(Collectors.toList());
     }
 
