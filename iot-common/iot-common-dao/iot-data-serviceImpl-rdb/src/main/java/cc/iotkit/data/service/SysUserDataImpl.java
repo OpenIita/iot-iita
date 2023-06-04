@@ -94,6 +94,36 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     }
 
     @Override
+    public SysUser selectByPhonenumber(String phonenumber) {
+        return null;
+    }
+
+    @Override
+    public SysUser selectTenantUserByPhonenumber(String phonenumber, String tenantId) {
+        return null;
+    }
+
+    @Override
+    public SysUser selectTenantUserByEmail(String email, String tenantId) {
+        return null;
+    }
+
+    @Override
+    public SysUser selectUserByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public SysUser selectTenantUserByUserName(String username, String tenantId) {
+        return null;
+    }
+
+    @Override
+    public SysUser selectUserByUserName(String username) {
+        return null;
+    }
+
+    @Override
     public Paging<SysUser> findAll(PageRequest<SysUser> pageRequest) {
         return PageBuilder.toPaging(userRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
     }
