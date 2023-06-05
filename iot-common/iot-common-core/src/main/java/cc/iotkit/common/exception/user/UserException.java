@@ -11,6 +11,7 @@ package cc.iotkit.common.exception.user;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BaseException;
+import cc.iotkit.common.exception.BizException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserException extends BaseException {
+public class UserException extends BizException {
 
     /**
      * 所属模块
@@ -30,15 +31,17 @@ public class UserException extends BaseException {
     /**
      * 错误码
      */
-    private String code;
+    private Integer code;
 
     /**
      * 错误消息
      */
     private String message;
 
-    public UserException(String code, Object... args) {
-        super("user", code, args, null);
+    public UserException(String message) {
+        super(  message);
+        this.code = ErrCode.SYSTEM_EXCEPTION.getKey();
+
     }
 
 }

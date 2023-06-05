@@ -51,11 +51,11 @@ public class SysRegisterService {
         sysUser.setUserType(userType);
 
         if (!userService.checkUserNameUnique(sysUser)) {
-            throw new UserException("user.register.save.error", username);
+            throw new UserException( username);
         }
         boolean regFlag = userService.registerUser(sysUser, tenantId);
         if (!regFlag) {
-            throw new UserException("user.register.error");
+            throw new UserException( "注册失败" );
         }
         recordLogininfor(tenantId, username, Constants.REGISTER, MessageUtils.message("user.register.success"));
     }

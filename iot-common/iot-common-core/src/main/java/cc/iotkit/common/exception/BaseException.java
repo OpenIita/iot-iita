@@ -40,29 +40,29 @@ public class BaseException extends RuntimeException {
     /**
      * 错误消息
      */
-    private String defaultMessage;
+    private String message;
 
-    public BaseException(String module, String code, Object[] args, String defaultMessage) {
+    public BaseException(String module, String code, Object[] args, String message) {
         this.module = module;
         this.code = code;
         this.args = args;
-        this.defaultMessage = defaultMessage;
+        this.message = message;
     }
 
-    public BaseException(String module, String code, Object[] args) {
-        this(module, code, args, null);
+    public BaseException(String module, String code, String message) {
+        this(module, code, null, message);
     }
 
-    public BaseException(String module, String defaultMessage) {
-        this(module, null, null, defaultMessage);
+    public BaseException(String module, String message) {
+        this(module, null, null, message);
     }
 
     public BaseException(String code, Object[] args) {
         this(null, code, args, null);
     }
 
-    public BaseException(String defaultMessage) {
-        this(null, null, null, defaultMessage);
+    public BaseException(String message) {
+        this(null, null, null, message);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class BaseException extends RuntimeException {
             message = MessageUtils.message(code, args);
         }
         if (message == null) {
-            message = defaultMessage;
+            message = message;
         }
         return message;
     }
