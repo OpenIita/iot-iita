@@ -13,6 +13,8 @@ import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.github.linpeilie.annotations.AutoMapping;
+import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.Size;
@@ -30,6 +32,8 @@ public class DeviceQueryBo extends BaseDto {
     private String keyword;
 
     @ApiModelProperty(value="分组")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
     private String group;
 
     @ApiModelProperty(value="设备id")
@@ -55,6 +59,8 @@ public class DeviceQueryBo extends BaseDto {
 
     @ApiModelProperty(value="设备状态")
     @Size(max = 255, message = "设备状态长度不正确")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
     private String state;
 
     @ApiModelProperty(value="用户id")

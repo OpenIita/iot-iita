@@ -1,6 +1,8 @@
 package cc.iotkit.manager.dto.vo.deviceinfo;
 
 import cc.iotkit.model.device.DeviceInfo;
+import io.github.linpeilie.annotations.AutoMapping;
+import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -67,6 +69,8 @@ public class DeviceInfoVo implements Serializable {
 
     @ApiModelProperty(value = "设备状态")
     @ExcelProperty(value = "设备状态")
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
     private String state;
 
     @ApiModelProperty(value = "用户id")

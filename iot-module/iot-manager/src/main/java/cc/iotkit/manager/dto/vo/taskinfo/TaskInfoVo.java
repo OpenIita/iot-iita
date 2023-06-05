@@ -1,13 +1,17 @@
 package cc.iotkit.manager.dto.vo.taskinfo;
 
 import cc.iotkit.model.rule.TaskInfo;
+import io.github.linpeilie.annotations.AutoMapping;
+import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
+
 import java.util.Date;
 import java.io.Serializable;
 import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -19,50 +23,51 @@ import io.github.linpeilie.annotations.AutoMapper;
 @ExcelIgnoreUnannotated
 @AutoMapper(target = TaskInfo.class)
 
-public class TaskInfoVo implements Serializable  {
+public class TaskInfoVo implements Serializable {
 
-	private static final long serialVersionUID = -1L;
+    private static final long serialVersionUID = -1L;
 
-	@ApiModelProperty(value="主键")
+    @ApiModelProperty(value = "主键")
     @ExcelProperty(value = "主键")
-		private String id;
+    private String id;
 
-	@ApiModelProperty(value="任务输出")
+    @ApiModelProperty(value = "任务输出")
     @ExcelProperty(value = "任务输出")
-		private String actions;
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
+    private String actions;
 
-	@ApiModelProperty(value="创建时间")
+    @ApiModelProperty(value = "创建时间")
     @ExcelProperty(value = "创建时间")
-		private Long createAt;
+    private Long createAt;
 
-	@ApiModelProperty(value="描述")
+    @ApiModelProperty(value = "描述")
     @ExcelProperty(value = "描述")
-		private String desc;
+    private String desc;
 
-	@ApiModelProperty(value="表达式")
+    @ApiModelProperty(value = "表达式")
     @ExcelProperty(value = "表达式")
-		private String expression;
+    private String expression;
 
-	@ApiModelProperty(value="任务名称")
+    @ApiModelProperty(value = "任务名称")
     @ExcelProperty(value = "任务名称")
-		private String name;
+    private String name;
 
-	@ApiModelProperty(value="操作备注")
+    @ApiModelProperty(value = "操作备注")
     @ExcelProperty(value = "操作备注")
-		private String reason;
+    private String reason;
 
-	@ApiModelProperty(value="任务状态")
+    @ApiModelProperty(value = "任务状态")
     @ExcelProperty(value = "任务状态")
-		private String state;
+    private String state;
 
-	@ApiModelProperty(value="任务类型")
+    @ApiModelProperty(value = "任务类型")
     @ExcelProperty(value = "任务类型")
-		private String type;
+    private String type;
 
-	@ApiModelProperty(value="创建者")
+    @ApiModelProperty(value = "创建者")
     @ExcelProperty(value = "创建者")
-		private String uid;
-
+    private String uid;
 
 
 }

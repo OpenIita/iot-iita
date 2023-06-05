@@ -1,13 +1,17 @@
 package cc.iotkit.manager.dto.vo.thingmodel;
 
 import cc.iotkit.model.product.ThingModel;
+import io.github.linpeilie.annotations.AutoMapping;
+import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
+
 import java.util.Date;
 import java.io.Serializable;
 import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -19,22 +23,23 @@ import io.github.linpeilie.annotations.AutoMapper;
 @ExcelIgnoreUnannotated
 @AutoMapper(target = ThingModel.class)
 
-public class ThingModelVo implements Serializable  {
+public class ThingModelVo implements Serializable {
 
-	private static final long serialVersionUID = -1L;
+    private static final long serialVersionUID = -1L;
 
-	@ApiModelProperty(value="主键")
+    @ApiModelProperty(value = "主键")
     @ExcelProperty(value = "主键")
-		private String id;
+    private String id;
 
-	@ApiModelProperty(value="模型内容")
+    @ApiModelProperty(value = "模型内容")
     @ExcelProperty(value = "模型内容")
-		private String model;
+    @AutoMapping(ignore = true)
+    @ReverseAutoMapping(ignore = true)
+    private String model;
 
-	@ApiModelProperty(value="产品key")
+    @ApiModelProperty(value = "产品key")
     @ExcelProperty(value = "产品key")
-		private String productKey;
-
+    private String productKey;
 
 
 }
