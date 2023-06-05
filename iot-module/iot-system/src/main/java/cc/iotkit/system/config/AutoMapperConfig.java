@@ -9,6 +9,7 @@ import io.github.linpeilie.annotations.MapperConfig;
  * @Version: V1.0
  * @Description: mapperstruct 配置
  */
-@MapperConfig(mapperPackage = "cc.iotkit.system.dto")
+@MapperConfig(mapperPackage = "cc.iotkit.system.dto"
+,adapterPackage="cc.iotkit.system.dto")
 public class AutoMapperConfig {
 }
