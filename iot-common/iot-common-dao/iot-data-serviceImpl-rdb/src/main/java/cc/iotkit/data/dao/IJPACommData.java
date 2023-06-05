@@ -34,7 +34,7 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
 
 
     default T findById(ID id) {
-        return  (T)getBaseRepository().findById(id).orElse(null);
+        return (T) MapstructUtils.convert(getBaseRepository().findById(id).orElse(null), getTClass());
     }
 
 
@@ -42,13 +42,13 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
     @Override
     default List<T> findByIds(Collection<ID> id) {
         List allById = getBaseRepository().findAllById(id);
-        return allById;
+        return MapstructUtils.convert(allById, getTClass());
     }
 
     @Override
     default T save(T data) {
         Object o = getBaseRepository().save(MapstructUtils.convert(data, getJpaRepositoryClass()));
-        return (T) o;
+        return (T) MapstructUtils.convert(o, getTClass());
     }
 
     @Override
@@ -81,7 +81,7 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
         Example example = genExample(pageRequest.getData());
 
         Page<T> all = getBaseRepository().findAll(example, PageBuilder.toPageable(pageRequest));
-        return  PageBuilder.toPaging(all);
+        return  PageBuilder.toPaging(all, getTClass());
     }
 
     /**
@@ -92,7 +92,7 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
         Example example = genExample(data);
 
         List all = getBaseRepository().findAll(example);
-        return all;
+        return MapstructUtils.convert(all, getTClass());
     }
 
     /**

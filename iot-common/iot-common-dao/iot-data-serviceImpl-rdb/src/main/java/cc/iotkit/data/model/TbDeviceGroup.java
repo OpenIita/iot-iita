@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.device.DeviceGroup;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,7 +23,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "device_group")
 @ApiModel(value = "设备组")
-@AutoMapper(target = DeviceIdGroup.class)
+@AutoMapper(target = DeviceGroup.class)
 public class TbDeviceGroup {
 
     @Id
