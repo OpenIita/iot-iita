@@ -32,7 +32,7 @@ public class TbSysDictType extends BaseEntity {
      */
     @Id
     @ApiModelProperty(value = "字典主键")
-    private Long dictId;
+    private Long id;
 
     /**
      * 租户编号

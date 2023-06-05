@@ -1,6 +1,6 @@
  [
     {
-      "dict_code": 1,
+      "id": 1,
       "tenant_id": "000000",
       "dict_sort": 1,
       "dict_label": "男",
@@ -18,7 +18,7 @@
       "remark": "性别男"
     },
     {
-      "dict_code": 2,
+      "id": 2,
       "tenant_id": "000000",
       "dict_sort": 2,
       "dict_label": "女",
@@ -36,7 +36,7 @@
       "remark": "性别女"
     },
     {
-      "dict_code": 3,
+      "id": 3,
       "tenant_id": "000000",
       "dict_sort": 3,
       "dict_label": "未知",
@@ -54,7 +54,7 @@
       "remark": "性别未知"
     },
     {
-      "dict_code": 4,
+      "id": 4,
       "tenant_id": "000000",
       "dict_sort": 1,
       "dict_label": "显示",
@@ -72,7 +72,7 @@
       "remark": "显示菜单"
     },
     {
-      "dict_code": 5,
+      "id": 5,
       "tenant_id": "000000",
       "dict_sort": 2,
       "dict_label": "隐藏",
@@ -90,7 +90,7 @@
       "remark": "隐藏菜单"
     },
     {
-      "dict_code": 6,
+      "id": 6,
       "tenant_id": "000000",
       "dict_sort": 1,
       "dict_label": "正常",
@@ -108,7 +108,7 @@
       "remark": "正常状态"
     },
     {
-      "dict_code": 7,
+      "id": 7,
       "tenant_id": "000000",
       "dict_sort": 2,
       "dict_label": "停用",
@@ -126,7 +126,7 @@
       "remark": "停用状态"
     },
     {
-      "dict_code": 12,
+      "id": 12,
       "tenant_id": "000000",
       "dict_sort": 1,
       "dict_label": "是",
@@ -144,7 +144,7 @@
       "remark": "系统默认是"
     },
     {
-      "dict_code": 13,
+      "id": 13,
       "tenant_id": "000000",
       "dict_sort": 2,
       "dict_label": "否",
@@ -162,7 +162,7 @@
       "remark": "系统默认否"
     },
     {
-      "dict_code": 14,
+      "id": 14,
       "tenant_id": "000000",
       "dict_sort": 1,
       "dict_label": "通知",
@@ -180,7 +180,7 @@
       "remark": "通知"
     },
     {
-      "dict_code": 15,
+      "id": 15,
       "tenant_id": "000000",
       "dict_sort": 2,
       "dict_label": "公告",
@@ -198,7 +198,7 @@
       "remark": "公告"
     },
     {
-      "dict_code": 16,
+      "id": 16,
       "tenant_id": "000000",
       "dict_sort": 1,
       "dict_label": "正常",
@@ -216,7 +216,7 @@
       "remark": "正常状态"
     },
     {
-      "dict_code": 17,
+      "id": 17,
       "tenant_id": "000000",
       "dict_sort": 2,
       "dict_label": "关闭",
@@ -234,7 +234,7 @@
       "remark": "关闭状态"
     },
     {
-      "dict_code": 18,
+      "id": 18,
       "tenant_id": "000000",
       "dict_sort": 1,
       "dict_label": "新增",
@@ -252,7 +252,7 @@
       "remark": "新增操作"
     },
     {
-      "dict_code": 19,
+      "id": 19,
       "tenant_id": "000000",
       "dict_sort": 2,
       "dict_label": "修改",
@@ -270,7 +270,7 @@
       "remark": "修改操作"
     },
     {
-      "dict_code": 20,
+      "id": 20,
       "tenant_id": "000000",
       "dict_sort": 3,
       "dict_label": "删除",
@@ -288,7 +288,7 @@
       "remark": "删除操作"
     },
     {
-      "dict_code": 21,
+      "id": 21,
       "tenant_id": "000000",
       "dict_sort": 4,
       "dict_label": "授权",
@@ -306,7 +306,7 @@
       "remark": "授权操作"
     },
     {
-      "dict_code": 22,
+      "id": 22,
       "tenant_id": "000000",
       "dict_sort": 5,
       "dict_label": "导出",
@@ -324,7 +324,7 @@
       "remark": "导出操作"
     },
     {
-      "dict_code": 23,
+      "id": 23,
       "tenant_id": "000000",
       "dict_sort": 6,
       "dict_label": "导入",
@@ -342,7 +342,7 @@
       "remark": "导入操作"
     },
     {
-      "dict_code": 24,
+      "id": 24,
       "tenant_id": "000000",
       "dict_sort": 7,
       "dict_label": "强退",
@@ -360,7 +360,7 @@
       "remark": "强退操作"
     },
     {
-      "dict_code": 25,
+      "id": 25,
       "tenant_id": "000000",
       "dict_sort": 8,
       "dict_label": "生成代码",
@@ -378,7 +378,7 @@
       "remark": "生成操作"
     },
     {
-      "dict_code": 26,
+      "id": 26,
       "tenant_id": "000000",
       "dict_sort": 9,
       "dict_label": "清空数据",
@@ -396,7 +396,7 @@
       "remark": "清空操作"
     },
     {
-      "dict_code": 27,
+      "id": 27,
       "tenant_id": "000000",
       "dict_sort": 1,
       "dict_label": "成功",
@@ -414,7 +414,7 @@
       "remark": "正常状态"
     },
     {
-      "dict_code": 28,
+      "id": 28,
       "tenant_id": "000000",
       "dict_sort": 2,
       "dict_label": "失败",
@@ -432,7 +432,7 @@
       "remark": "停用状态"
     },
     {
-      "dict_code": 29,
+      "id": 29,
       "tenant_id": "000000",
       "dict_sort": 99,
       "dict_label": "其他",

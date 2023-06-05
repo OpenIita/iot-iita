@@ -1,6 +1,6 @@
  [
     {
-      "config_id": 1,
+      "id": 1,
       "tenant_id": "000000",
       "config_name": "主框架页-默认皮肤样式名称",
       "config_key": "sys.index.skinName",
@@ -14,7 +14,7 @@
       "remark": "蓝色 skin-blue、绿色 skin-green、紫色 skin-purple、红色 skin-red、黄色 skin-yellow"
     },
     {
-      "config_id": 2,
+      "id": 2,
       "tenant_id": "000000",
       "config_name": "用户管理-账号初始密码",
       "config_key": "sys.user.initPassword",
@@ -28,7 +28,7 @@
       "remark": "初始化密码 123456"
     },
     {
-      "config_id": 3,
+      "id": 3,
       "tenant_id": "000000",
       "config_name": "主框架页-侧边栏主题",
       "config_key": "sys.index.sideTheme",
@@ -42,7 +42,7 @@
       "remark": "深色主题theme-dark，浅色主题theme-light"
     },
     {
-      "config_id": 5,
+      "id": 5,
       "tenant_id": "000000",
       "config_name": "账号自助-是否开启用户注册功能",
       "config_key": "sys.account.registerUser",
@@ -56,7 +56,7 @@
       "remark": "是否开启注册用户功能（true开启，false关闭）"
     },
     {
-      "config_id": 11,
+      "id": 11,
       "tenant_id": "000000",
       "config_name": "OSS预览列表资源开关",
       "config_key": "sys.oss.previewListResource",

@@ -1,6 +1,6 @@
  [
     {
-      "post_id": 1,
+      "id": 1,
       "tenant_id": "000000",
       "post_code": "ceo",
       "post_name": "董事长",
@@ -14,7 +14,7 @@
       "remark": ""
     },
     {
-      "post_id": 2,
+      "id": 2,
       "tenant_id": "000000",
       "post_code": "se",
       "post_name": "项目经理",
@@ -28,7 +28,7 @@
       "remark": ""
     },
     {
-      "post_id": 3,
+      "id": 3,
       "tenant_id": "000000",
       "post_code": "hr",
       "post_name": "人力资源",
@@ -42,7 +42,7 @@
       "remark": ""
     },
     {
-      "post_id": 4,
+      "id": 4,
       "tenant_id": "000000",
       "post_code": "user",
       "post_name": "普通员工",

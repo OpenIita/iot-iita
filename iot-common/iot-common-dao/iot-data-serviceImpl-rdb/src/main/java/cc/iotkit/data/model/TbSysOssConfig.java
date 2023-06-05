@@ -30,7 +30,7 @@ public class TbSysOssConfig extends BaseEntity {
      */
     @Id
     @ApiModelProperty(value = "主建")
-    private Long ossConfigId;
+    private Long id;
 
     /**
      * 租户编号

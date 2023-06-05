@@ -1,6 +1,6 @@
  [
     {
-      "oss_config_id": 1,
+      "id": 1,
       "tenant_id": "000000",
       "config_key": "minio",
       "access_key": "ruoyi",
@@ -22,7 +22,7 @@
       "remark": null
     },
     {
-      "oss_config_id": 2,
+      "id": 2,
       "tenant_id": "000000",
       "config_key": "qiniu",
       "access_key": "XXXXXXXXXXXXXXX",
@@ -44,7 +44,7 @@
       "remark": null
     },
     {
-      "oss_config_id": 3,
+      "id": 3,
       "tenant_id": "000000",
       "config_key": "aliyun",
       "access_key": "XXXXXXXXXXXXXXX",
@@ -66,7 +66,7 @@
       "remark": null
     },
     {
-      "oss_config_id": 4,
+      "id": 4,
       "tenant_id": "000000",
       "config_key": "qcloud",
       "access_key": "XXXXXXXXXXXXXXX",
@@ -88,7 +88,7 @@
       "remark": null
     },
     {
-      "oss_config_id": 5,
+      "id": 5,
       "tenant_id": "000000",
       "config_key": "image",
       "access_key": "ruoyi",

@@ -30,7 +30,7 @@ public class TbSysOss extends BaseEntity {
      */
     @Id
     @ApiModelProperty(value = "对象存储主键")
-    private Long ossId;
+    private Long id;
 
     /**
      * 租户编号

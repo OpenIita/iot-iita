@@ -115,12 +115,12 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
                     .where(predicateBuilder.build())
                     .orderBy(tbSysMenu.parentId.asc(), tbSysMenu.orderNum.asc()).fetch();
         } else {
-            tbSysMenuList = jpaQueryFactory.select(Projections.bean(TbSysMenu.class, tbSysMenu.menuId.countDistinct().as(tbSysMenu.menuId),
+            tbSysMenuList = jpaQueryFactory.select(Projections.bean(TbSysMenu.class, tbSysMenu.id.countDistinct().as(tbSysMenu.id),
                             tbSysMenu.parentId, tbSysMenu.menuName, tbSysMenu.path, tbSysMenu.component, tbSysMenu.queryParam,
                             tbSysMenu.visible, tbSysMenu.status, tbSysMenu.perms, tbSysMenu.isFrame, tbSysMenu.isCache, tbSysMenu.menuType,
                             tbSysMenu.icon, tbSysMenu.orderNum, tbSysMenu.createTime))
                     .from(tbSysMenu)
-                    .leftJoin(tbSysRoleMenu).on(tbSysMenu.menuId.eq(tbSysRoleMenu.menuId))
+                    .leftJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId))
                     .leftJoin(tbSysUserRole).on(tbSysRoleMenu.roleId.eq(tbSysUserRole.roleId))
                     .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
                     .where(predicateBuilder
@@ -137,7 +137,7 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
     public List<String> selectMenuPermsByUserId(Long userId) {
         return jpaQueryFactory.select(Projections.bean(String.class, tbSysMenu.perms.countDistinct()))
                 .from(tbSysMenu)
-                .leftJoin(tbSysRoleMenu).on(tbSysMenu.menuId.eq(tbSysRoleMenu.menuId))
+                .leftJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId))
                 .leftJoin(tbSysUserRole).on(tbSysRoleMenu.roleId.eq(tbSysUserRole.roleId))
                 .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
                 .where(PredicateBuilder.instance()
@@ -151,7 +151,7 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
     public List<String> selectMenuPermsByRoleId(Long roleId) {
         return jpaQueryFactory.select(Projections.bean(String.class, tbSysMenu.perms.countDistinct()))
                 .from(tbSysMenu)
-                .leftJoin(tbSysRoleMenu).on(tbSysMenu.menuId.eq(tbSysRoleMenu.menuId))
+                .leftJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId))
                 .where(PredicateBuilder.instance()
                         .and(tbSysMenu.status.eq("0"))
                         .and(tbSysRoleMenu.roleId.eq(roleId))
@@ -171,12 +171,12 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
 
     @Override
     public List<SysMenu> selectMenuTreeByUserId(Long userId) {
-        return jpaQueryFactory.select(Projections.bean(SysMenu.class, tbSysMenu.menuId.countDistinct().as(tbSysMenu.menuId),
+        return jpaQueryFactory.select(Projections.bean(SysMenu.class, tbSysMenu.id.countDistinct().as(tbSysMenu.id),
                         tbSysMenu.parentId, tbSysMenu.menuName, tbSysMenu.path, tbSysMenu.component, tbSysMenu.queryParam,
                         tbSysMenu.visible, tbSysMenu.status, tbSysMenu.perms, tbSysMenu.isFrame, tbSysMenu.isCache, tbSysMenu.menuType,
                         tbSysMenu.icon, tbSysMenu.orderNum, tbSysMenu.createTime))
                 .from(tbSysMenu)
-                .leftJoin(tbSysRoleMenu).on(tbSysMenu.menuId.eq(tbSysRoleMenu.menuId))
+                .leftJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId))
                 .leftJoin(tbSysUserRole).on(tbSysRoleMenu.roleId.eq(tbSysUserRole.roleId))
                 .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
                 .leftJoin(tbSysUser).on(tbSysUserRole.userId.eq(tbSysUser.id))
@@ -203,7 +203,7 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
                         PredicateBuilder.instance()
                                 .and(QTbSysMenu.tbSysMenu.menuName.eq(menu.getMenuName()))
                                 .and(QTbSysMenu.tbSysMenu.parentId.eq(menu.getParentId()))
-                                .and(ObjectUtil.isNotNull(menu.getId()), () -> QTbSysMenu.tbSysMenu.menuId.ne(menu.getId()))
+                                .and(ObjectUtil.isNotNull(menu.getId()), () -> QTbSysMenu.tbSysMenu.id.ne(menu.getId()))
                                 .build()).fetchOne();
         return Objects.isNull(tbSysMenu);
     }

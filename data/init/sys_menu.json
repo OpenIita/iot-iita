@@ -1,6 +1,6 @@
  [
     {
-      "menu_id": 1,
+      "id": 1,
       "menu_name": "系统管理",
       "parent_id": 0,
       "order_num": 1,
@@ -22,7 +22,7 @@
       "remark": "系统管理目录"
     },
     {
-      "menu_id": 2,
+      "id": 2,
       "menu_name": "系统监控",
       "parent_id": 0,
       "order_num": 3,
@@ -44,7 +44,7 @@
       "remark": "系统监控目录"
     },
     {
-      "menu_id": 3,
+      "id": 3,
       "menu_name": "系统工具",
       "parent_id": 0,
       "order_num": 4,
@@ -66,7 +66,7 @@
       "remark": "系统工具目录"
     },
     {
-      "menu_id": 4,
+      "id": 4,
       "menu_name": "PLUS官网",
       "parent_id": 0,
       "order_num": 5,
@@ -88,7 +88,7 @@
       "remark": "RuoYi-Vue-Plus官网地址"
     },
     {
-      "menu_id": 6,
+      "id": 6,
       "menu_name": "租户管理",
       "parent_id": 0,
       "order_num": 2,
@@ -110,7 +110,7 @@
       "remark": "租户管理目录"
     },
     {
-      "menu_id": 100,
+      "id": 100,
       "menu_name": "用户管理",
       "parent_id": 1,
       "order_num": 1,
@@ -132,7 +132,7 @@
       "remark": "用户管理菜单"
     },
     {
-      "menu_id": 101,
+      "id": 101,
       "menu_name": "角色管理",
       "parent_id": 1,
       "order_num": 2,
@@ -154,7 +154,7 @@
       "remark": "角色管理菜单"
     },
     {
-      "menu_id": 102,
+      "id": 102,
       "menu_name": "菜单管理",
       "parent_id": 1,
       "order_num": 3,
@@ -176,7 +176,7 @@
       "remark": "菜单管理菜单"
     },
     {
-      "menu_id": 103,
+      "id": 103,
       "menu_name": "部门管理",
       "parent_id": 1,
       "order_num": 4,
@@ -198,7 +198,7 @@
       "remark": "部门管理菜单"
     },
     {
-      "menu_id": 104,
+      "id": 104,
       "menu_name": "岗位管理",
       "parent_id": 1,
       "order_num": 5,
@@ -220,7 +220,7 @@
       "remark": "岗位管理菜单"
     },
     {
-      "menu_id": 105,
+      "id": 105,
       "menu_name": "字典管理",
       "parent_id": 1,
       "order_num": 6,
@@ -242,7 +242,7 @@
       "remark": "字典管理菜单"
     },
     {
-      "menu_id": 106,
+      "id": 106,
       "menu_name": "参数设置",
       "parent_id": 1,
       "order_num": 7,
@@ -264,7 +264,7 @@
       "remark": "参数设置菜单"
     },
     {
-      "menu_id": 107,
+      "id": 107,
       "menu_name": "通知公告",
       "parent_id": 1,
       "order_num": 8,
@@ -286,7 +286,7 @@
       "remark": "通知公告菜单"
     },
     {
-      "menu_id": 108,
+      "id": 108,
       "menu_name": "日志管理",
       "parent_id": 1,
       "order_num": 9,
@@ -308,7 +308,7 @@
       "remark": "日志管理菜单"
     },
     {
-      "menu_id": 109,
+      "id": 109,
       "menu_name": "在线用户",
       "parent_id": 2,
       "order_num": 1,
@@ -330,7 +330,7 @@
       "remark": "在线用户菜单"
     },
     {
-      "menu_id": 113,
+      "id": 113,
       "menu_name": "缓存监控",
       "parent_id": 2,
       "order_num": 5,
@@ -352,7 +352,7 @@
       "remark": "缓存监控菜单"
     },
     {
-      "menu_id": 114,
+      "id": 114,
       "menu_name": "表单构建",
       "parent_id": 3,
       "order_num": 1,
@@ -374,7 +374,7 @@
       "remark": "表单构建菜单"
     },
     {
-      "menu_id": 115,
+      "id": 115,
       "menu_name": "代码生成",
       "parent_id": 3,
       "order_num": 2,
@@ -396,7 +396,7 @@
       "remark": "代码生成菜单"
     },
     {
-      "menu_id": 117,
+      "id": 117,
       "menu_name": "Admin监控",
       "parent_id": 2,
       "order_num": 5,
@@ -418,7 +418,7 @@
       "remark": "Admin监控菜单"
     },
     {
-      "menu_id": 118,
+      "id": 118,
       "menu_name": "文件管理",
       "parent_id": 1,
       "order_num": 10,
@@ -440,7 +440,7 @@
       "remark": "文件管理菜单"
     },
     {
-      "menu_id": 120,
+      "id": 120,
       "menu_name": "任务调度中心",
       "parent_id": 2,
       "order_num": 5,
@@ -462,7 +462,7 @@
       "remark": "Xxl-Job控制台菜单"
     },
     {
-      "menu_id": 121,
+      "id": 121,
       "menu_name": "租户管理",
       "parent_id": 6,
       "order_num": 1,
@@ -484,7 +484,7 @@
       "remark": "租户管理菜单"
     },
     {
-      "menu_id": 122,
+      "id": 122,
       "menu_name": "租户套餐管理",
       "parent_id": 6,
       "order_num": 2,
@@ -506,7 +506,7 @@
       "remark": "租户套餐管理菜单"
     },
     {
-      "menu_id": 500,
+      "id": 500,
       "menu_name": "操作日志",
       "parent_id": 108,
       "order_num": 1,
@@ -528,7 +528,7 @@
       "remark": "操作日志菜单"
     },
     {
-      "menu_id": 501,
+      "id": 501,
       "menu_name": "登录日志",
       "parent_id": 108,
       "order_num": 2,
@@ -550,7 +550,7 @@
       "remark": "登录日志菜单"
     },
     {
-      "menu_id": 1001,
+      "id": 1001,
       "menu_name": "用户查询",
       "parent_id": 100,
       "order_num": 1,
@@ -572,7 +572,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1002,
+      "id": 1002,
       "menu_name": "用户新增",
       "parent_id": 100,
       "order_num": 2,
@@ -594,7 +594,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1003,
+      "id": 1003,
       "menu_name": "用户修改",
       "parent_id": 100,
       "order_num": 3,
@@ -616,7 +616,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1004,
+      "id": 1004,
       "menu_name": "用户删除",
       "parent_id": 100,
       "order_num": 4,
@@ -638,7 +638,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1005,
+      "id": 1005,
       "menu_name": "用户导出",
       "parent_id": 100,
       "order_num": 5,
@@ -660,7 +660,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1006,
+      "id": 1006,
       "menu_name": "用户导入",
       "parent_id": 100,
       "order_num": 6,
@@ -682,7 +682,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1007,
+      "id": 1007,
       "menu_name": "重置密码",
       "parent_id": 100,
       "order_num": 7,
@@ -704,7 +704,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1008,
+      "id": 1008,
       "menu_name": "角色查询",
       "parent_id": 101,
       "order_num": 1,
@@ -726,7 +726,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1009,
+      "id": 1009,
       "menu_name": "角色新增",
       "parent_id": 101,
       "order_num": 2,
@@ -748,7 +748,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1010,
+      "id": 1010,
       "menu_name": "角色修改",
       "parent_id": 101,
       "order_num": 3,
@@ -770,7 +770,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1011,
+      "id": 1011,
       "menu_name": "角色删除",
       "parent_id": 101,
       "order_num": 4,
@@ -792,7 +792,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1012,
+      "id": 1012,
       "menu_name": "角色导出",
       "parent_id": 101,
       "order_num": 5,
@@ -814,7 +814,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1013,
+      "id": 1013,
       "menu_name": "菜单查询",
       "parent_id": 102,
       "order_num": 1,
@@ -836,7 +836,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1014,
+      "id": 1014,
       "menu_name": "菜单新增",
       "parent_id": 102,
       "order_num": 2,
@@ -858,7 +858,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1015,
+      "id": 1015,
       "menu_name": "菜单修改",
       "parent_id": 102,
       "order_num": 3,
@@ -880,7 +880,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1016,
+      "id": 1016,
       "menu_name": "菜单删除",
       "parent_id": 102,
       "order_num": 4,
@@ -902,7 +902,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1017,
+      "id": 1017,
       "menu_name": "部门查询",
       "parent_id": 103,
       "order_num": 1,
@@ -924,7 +924,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1018,
+      "id": 1018,
       "menu_name": "部门新增",
       "parent_id": 103,
       "order_num": 2,
@@ -946,7 +946,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1019,
+      "id": 1019,
       "menu_name": "部门修改",
       "parent_id": 103,
       "order_num": 3,
@@ -968,7 +968,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1020,
+      "id": 1020,
       "menu_name": "部门删除",
       "parent_id": 103,
       "order_num": 4,
@@ -990,7 +990,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1021,
+      "id": 1021,
       "menu_name": "岗位查询",
       "parent_id": 104,
       "order_num": 1,
@@ -1012,7 +1012,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1022,
+      "id": 1022,
       "menu_name": "岗位新增",
       "parent_id": 104,
       "order_num": 2,
@@ -1034,7 +1034,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1023,
+      "id": 1023,
       "menu_name": "岗位修改",
       "parent_id": 104,
       "order_num": 3,
@@ -1056,7 +1056,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1024,
+      "id": 1024,
       "menu_name": "岗位删除",
       "parent_id": 104,
       "order_num": 4,
@@ -1078,7 +1078,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1025,
+      "id": 1025,
       "menu_name": "岗位导出",
       "parent_id": 104,
       "order_num": 5,
@@ -1100,7 +1100,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1026,
+      "id": 1026,
       "menu_name": "字典查询",
       "parent_id": 105,
       "order_num": 1,
@@ -1122,7 +1122,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1027,
+      "id": 1027,
       "menu_name": "字典新增",
       "parent_id": 105,
       "order_num": 2,
@@ -1144,7 +1144,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1028,
+      "id": 1028,
       "menu_name": "字典修改",
       "parent_id": 105,
       "order_num": 3,
@@ -1166,7 +1166,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1029,
+      "id": 1029,
       "menu_name": "字典删除",
       "parent_id": 105,
       "order_num": 4,
@@ -1188,7 +1188,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1030,
+      "id": 1030,
       "menu_name": "字典导出",
       "parent_id": 105,
       "order_num": 5,
@@ -1210,7 +1210,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1031,
+      "id": 1031,
       "menu_name": "参数查询",
       "parent_id": 106,
       "order_num": 1,
@@ -1232,7 +1232,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1032,
+      "id": 1032,
       "menu_name": "参数新增",
       "parent_id": 106,
       "order_num": 2,
@@ -1254,7 +1254,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1033,
+      "id": 1033,
       "menu_name": "参数修改",
       "parent_id": 106,
       "order_num": 3,
@@ -1276,7 +1276,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1034,
+      "id": 1034,
       "menu_name": "参数删除",
       "parent_id": 106,
       "order_num": 4,
@@ -1298,7 +1298,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1035,
+      "id": 1035,
       "menu_name": "参数导出",
       "parent_id": 106,
       "order_num": 5,
@@ -1320,7 +1320,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1036,
+      "id": 1036,
       "menu_name": "公告查询",
       "parent_id": 107,
       "order_num": 1,
@@ -1342,7 +1342,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1037,
+      "id": 1037,
       "menu_name": "公告新增",
       "parent_id": 107,
       "order_num": 2,
@@ -1364,7 +1364,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1038,
+      "id": 1038,
       "menu_name": "公告修改",
       "parent_id": 107,
       "order_num": 3,
@@ -1386,7 +1386,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1039,
+      "id": 1039,
       "menu_name": "公告删除",
       "parent_id": 107,
       "order_num": 4,
@@ -1408,7 +1408,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1040,
+      "id": 1040,
       "menu_name": "操作查询",
       "parent_id": 500,
       "order_num": 1,
@@ -1430,7 +1430,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1041,
+      "id": 1041,
       "menu_name": "操作删除",
       "parent_id": 500,
       "order_num": 2,
@@ -1452,7 +1452,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1042,
+      "id": 1042,
       "menu_name": "日志导出",
       "parent_id": 500,
       "order_num": 4,
@@ -1474,7 +1474,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1043,
+      "id": 1043,
       "menu_name": "登录查询",
       "parent_id": 501,
       "order_num": 1,
@@ -1496,7 +1496,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1044,
+      "id": 1044,
       "menu_name": "登录删除",
       "parent_id": 501,
       "order_num": 2,
@@ -1518,7 +1518,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1045,
+      "id": 1045,
       "menu_name": "日志导出",
       "parent_id": 501,
       "order_num": 3,
@@ -1540,7 +1540,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1046,
+      "id": 1046,
       "menu_name": "在线查询",
       "parent_id": 109,
       "order_num": 1,
@@ -1562,7 +1562,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1047,
+      "id": 1047,
       "menu_name": "批量强退",
       "parent_id": 109,
       "order_num": 2,
@@ -1584,7 +1584,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1048,
+      "id": 1048,
       "menu_name": "单条强退",
       "parent_id": 109,
       "order_num": 3,
@@ -1606,7 +1606,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1050,
+      "id": 1050,
       "menu_name": "账户解锁",
       "parent_id": 501,
       "order_num": 4,
@@ -1628,7 +1628,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1055,
+      "id": 1055,
       "menu_name": "生成查询",
       "parent_id": 115,
       "order_num": 1,
@@ -1650,7 +1650,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1056,
+      "id": 1056,
       "menu_name": "生成修改",
       "parent_id": 115,
       "order_num": 2,
@@ -1672,7 +1672,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1057,
+      "id": 1057,
       "menu_name": "生成删除",
       "parent_id": 115,
       "order_num": 3,
@@ -1694,7 +1694,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1058,
+      "id": 1058,
       "menu_name": "导入代码",
       "parent_id": 115,
       "order_num": 2,
@@ -1716,7 +1716,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1059,
+      "id": 1059,
       "menu_name": "预览代码",
       "parent_id": 115,
       "order_num": 4,
@@ -1738,7 +1738,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1060,
+      "id": 1060,
       "menu_name": "生成代码",
       "parent_id": 115,
       "order_num": 5,
@@ -1760,7 +1760,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1600,
+      "id": 1600,
       "menu_name": "文件查询",
       "parent_id": 118,
       "order_num": 1,
@@ -1782,7 +1782,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1601,
+      "id": 1601,
       "menu_name": "文件上传",
       "parent_id": 118,
       "order_num": 2,
@@ -1804,7 +1804,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1602,
+      "id": 1602,
       "menu_name": "文件下载",
       "parent_id": 118,
       "order_num": 3,
@@ -1826,7 +1826,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1603,
+      "id": 1603,
       "menu_name": "文件删除",
       "parent_id": 118,
       "order_num": 4,
@@ -1848,7 +1848,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1604,
+      "id": 1604,
       "menu_name": "配置添加",
       "parent_id": 118,
       "order_num": 5,
@@ -1870,7 +1870,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1605,
+      "id": 1605,
       "menu_name": "配置编辑",
       "parent_id": 118,
       "order_num": 6,
@@ -1892,7 +1892,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1606,
+      "id": 1606,
       "menu_name": "租户查询",
       "parent_id": 121,
       "order_num": 1,
@@ -1914,7 +1914,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1607,
+      "id": 1607,
       "menu_name": "租户新增",
       "parent_id": 121,
       "order_num": 2,
@@ -1936,7 +1936,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1608,
+      "id": 1608,
       "menu_name": "租户修改",
       "parent_id": 121,
       "order_num": 3,
@@ -1958,7 +1958,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1609,
+      "id": 1609,
       "menu_name": "租户删除",
       "parent_id": 121,
       "order_num": 4,
@@ -1980,7 +1980,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1610,
+      "id": 1610,
       "menu_name": "租户导出",
       "parent_id": 121,
       "order_num": 5,
@@ -2002,7 +2002,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1611,
+      "id": 1611,
       "menu_name": "租户套餐查询",
       "parent_id": 122,
       "order_num": 1,
@@ -2024,7 +2024,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1612,
+      "id": 1612,
       "menu_name": "租户套餐新增",
       "parent_id": 122,
       "order_num": 2,
@@ -2046,7 +2046,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1613,
+      "id": 1613,
       "menu_name": "租户套餐修改",
       "parent_id": 122,
       "order_num": 3,
@@ -2068,7 +2068,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1614,
+      "id": 1614,
       "menu_name": "租户套餐删除",
       "parent_id": 122,
       "order_num": 4,
@@ -2090,7 +2090,7 @@
       "remark": ""
     },
     {
-      "menu_id": 1615,
+      "id": 1615,
       "menu_name": "租户套餐导出",
       "parent_id": 122,
       "order_num": 5,

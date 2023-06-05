@@ -32,7 +32,7 @@ public class TbSysMenu extends BaseEntity {
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @Column(name = "menu_id")
     @ApiModelProperty(value = "菜单ID")
-    private Long menuId;
+    private Long id;
 
     /**
      * 父菜单ID

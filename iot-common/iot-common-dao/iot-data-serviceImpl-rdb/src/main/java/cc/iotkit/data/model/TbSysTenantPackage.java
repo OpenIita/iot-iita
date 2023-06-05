@@ -29,7 +29,7 @@ public class TbSysTenantPackage extends BaseEntity {
      */
     @Id
     @ApiModelProperty(value = "租户套餐id")
-    private Long packageId;
+    private Long id;
     /**
      * 套餐名称
      */

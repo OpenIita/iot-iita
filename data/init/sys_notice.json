@@ -1,6 +1,6 @@
  [
     {
-      "notice_id": 1,
+      "id": 1,
       "tenant_id": "000000",
       "notice_title": "温馨提醒：2018-07-01 新版本发布啦",
       "notice_type": "2",
@@ -14,7 +14,7 @@
       "remark": "管理员"
     },
     {
-      "notice_id": 2,
+      "id": 2,
       "tenant_id": "000000",
       "notice_title": "维护通知：2018-07-01 系统凌晨维护",
       "notice_type": "1",

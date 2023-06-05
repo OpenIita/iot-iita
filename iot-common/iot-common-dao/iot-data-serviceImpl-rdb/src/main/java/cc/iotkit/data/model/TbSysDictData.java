@@ -24,12 +24,14 @@ import javax.persistence.Table;
 @ApiModel(value = "字典数据表")
 public class TbSysDictData extends BaseEntity {
 
+
+
     /**
      * 字典编码
      */
     @Id
     @ApiModelProperty(value = "字典编码")
-    private Long dictCode;
+    private Long id;
 
     /**
      * 租户编号

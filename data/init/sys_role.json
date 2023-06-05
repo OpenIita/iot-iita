@@ -1,6 +1,6 @@
  [
     {
-      "role_id": 1,
+      "id": 1,
       "tenant_id": "000000",
       "role_name": "超级管理员",
       "role_key": "superadmin",
@@ -18,7 +18,7 @@
       "remark": "超级管理员"
     },
     {
-      "role_id": 2,
+      "id": 2,
       "tenant_id": "000000",
       "role_name": "普通角色",
       "role_key": "common",

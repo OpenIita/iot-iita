@@ -1,6 +1,6 @@
  [
     {
-      "dept_id": 100,
+      "id": 100,
       "tenant_id": "000000",
       "parent_id": 0,
       "ancestors": "0",
@@ -18,7 +18,7 @@
       "update_time": null
     },
     {
-      "dept_id": 101,
+      "id": 101,
       "tenant_id": "000000",
       "parent_id": 100,
       "ancestors": "0,100",
@@ -36,7 +36,7 @@
       "update_time": null
     },
     {
-      "dept_id": 102,
+      "id": 102,
       "tenant_id": "000000",
       "parent_id": 100,
       "ancestors": "0,100",
@@ -54,7 +54,7 @@
       "update_time": null
     },
     {
-      "dept_id": 103,
+      "id": 103,
       "tenant_id": "000000",
       "parent_id": 101,
       "ancestors": "0,100,101",
@@ -72,7 +72,7 @@
       "update_time": null
     },
     {
-      "dept_id": 104,
+      "id": 104,
       "tenant_id": "000000",
       "parent_id": 101,
       "ancestors": "0,100,101",
@@ -90,7 +90,7 @@
       "update_time": null
     },
     {
-      "dept_id": 105,
+      "id": 105,
       "tenant_id": "000000",
       "parent_id": 101,
       "ancestors": "0,100,101",
@@ -108,7 +108,7 @@
       "update_time": null
     },
     {
-      "dept_id": 106,
+      "id": 106,
       "tenant_id": "000000",
       "parent_id": 101,
       "ancestors": "0,100,101",
@@ -126,7 +126,7 @@
       "update_time": null
     },
     {
-      "dept_id": 107,
+      "id": 107,
       "tenant_id": "000000",
       "parent_id": 101,
       "ancestors": "0,100,101",
@@ -144,7 +144,7 @@
       "update_time": null
     },
     {
-      "dept_id": 108,
+      "id": 108,
       "tenant_id": "000000",
       "parent_id": 102,
       "ancestors": "0,100,102",
@@ -162,7 +162,7 @@
       "update_time": null
     },
     {
-      "dept_id": 109,
+      "id": 109,
       "tenant_id": "000000",
       "parent_id": 102,
       "ancestors": "0,100,102",

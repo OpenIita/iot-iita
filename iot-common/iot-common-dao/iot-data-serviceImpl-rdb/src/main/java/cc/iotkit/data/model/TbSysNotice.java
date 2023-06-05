@@ -31,7 +31,7 @@ public class TbSysNotice extends BaseEntity {
      */
     @Id
     @ApiModelProperty(value = "公告ID")
-    private Long noticeId;
+    private Long id;
 
     /**
      * 租户编号
