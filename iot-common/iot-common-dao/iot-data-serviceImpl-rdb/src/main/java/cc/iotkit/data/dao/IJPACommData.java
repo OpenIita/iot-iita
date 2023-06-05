@@ -104,7 +104,7 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
 
         Optional one = getBaseRepository().findOne(example);
         if(one.isPresent()){
-            MapstructUtils.convert(one.get(), getTClass());
+            return (T) MapstructUtils.convert(one.get(), getTClass());
         }
         return null;
     }
