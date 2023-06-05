@@ -100,32 +100,59 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
 
     @Override
     public SysUser selectByPhonenumber(String phonenumber) {
-        return null;
+        TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
+                .where(PredicateBuilder.instance()
+                        .and(tbSysUser.phonenumber.eq(phonenumber))
+                        .build()).fetchOne();
+        return MapstructUtils.convert(ret, SysUser.class);
     }
 
     @Override
     public SysUser selectTenantUserByPhonenumber(String phonenumber, String tenantId) {
-        return null;
+        TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
+                .where(PredicateBuilder.instance()
+                        .and(tbSysUser.phonenumber.eq(phonenumber))
+                        .and(tbSysUser.tenantId.eq(tenantId))
+                        .build()).fetchOne();
+        return MapstructUtils.convert(ret, SysUser.class);
     }
 
     @Override
     public SysUser selectTenantUserByEmail(String email, String tenantId) {
-        return null;
+        TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
+                .where(PredicateBuilder.instance()
+                        .and(tbSysUser.email.eq(email))
+                        .and(tbSysUser.tenantId.eq(tenantId))
+                        .build()).fetchOne();
+        return MapstructUtils.convert(ret, SysUser.class);
     }
 
     @Override
     public SysUser selectUserByEmail(String email) {
-        return null;
+        TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
+                .where(PredicateBuilder.instance()
+                        .and(tbSysUser.email.eq(email))
+                        .build()).fetchOne();
+        return MapstructUtils.convert(ret, SysUser.class);
     }
 
     @Override
     public SysUser selectTenantUserByUserName(String username, String tenantId) {
-        return null;
+        TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
+                .where(PredicateBuilder.instance()
+                        .and(tbSysUser.userName.eq(username))
+                        .and(tbSysUser.tenantId.eq(tenantId))
+                        .build()).fetchOne();
+        return MapstructUtils.convert(ret, SysUser.class);
     }
 
     @Override
     public SysUser selectUserByUserName(String username) {
-        return null;
+         TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
+                .where(PredicateBuilder.instance()
+                        .and(tbSysUser.userName.eq(username))
+                        .build()).fetchOne();
+         return MapstructUtils.convert(ret, SysUser.class);
     }
 
     @Override
