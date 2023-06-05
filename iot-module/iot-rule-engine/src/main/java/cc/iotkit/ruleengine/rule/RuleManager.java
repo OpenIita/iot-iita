@@ -9,6 +9,7 @@
  */
 package cc.iotkit.ruleengine.rule;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IRuleInfoData;
@@ -32,6 +33,7 @@ import cc.iotkit.ruleengine.filter.Filter;
 import cc.iotkit.ruleengine.link.LinkFactory;
 import cc.iotkit.ruleengine.listener.DeviceListener;
 import cc.iotkit.ruleengine.listener.Listener;
+import cn.hutool.core.collection.CollectionUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
