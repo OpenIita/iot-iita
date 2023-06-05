@@ -9,6 +9,7 @@
  */
 package cc.iotkit.common.web.handler;
 
+import cc.iotkit.common.exception.BizException;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;
@@ -38,6 +39,11 @@ public class GlobalExceptionHandler {
         if (e instanceof NotPermissionException || e instanceof NotRoleException) {
             response.setStatus(403);
             return new RequestResult(403, "没有权限");
+        }
+        if (e instanceof BizException){
+            BizException bizException = (BizException) e;
+            response.setStatus(500);
+            return new RequestResult(bizException.getCode(), bizException.getMessage());
         }
 
         if (e.getMessage().contains("Unauthorized")) {

@@ -43,6 +43,11 @@ public class SysTenantDataImpl implements ISysTenantData, IJPACommData<SysTenant
     }
 
     @Override
+    public Class getTClass() {
+        return SysTenant.class;
+    }
+
+    @Override
     public SysTenant findById(Long aLong) {
         return MapstructUtils.convert(sysTenantRepository.findById(aLong),SysTenant.class);
     }

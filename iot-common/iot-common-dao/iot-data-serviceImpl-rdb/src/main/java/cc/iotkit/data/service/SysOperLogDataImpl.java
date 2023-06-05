@@ -49,6 +49,11 @@ public class SysOperLogDataImpl implements ISysOperLogData, IJPACommData<SysOper
     }
 
     @Override
+    public Class getTClass() {
+        return SysOperLog.class;
+    }
+
+    @Override
     public Paging<SysOperLog> findByConditions(String tenantId, String title, Integer businessType, Integer status, int page, int size) {
         return null;
     }

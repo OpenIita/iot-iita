@@ -65,6 +65,11 @@ public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, S
     }
 
     @Override
+    public Class getTClass() {
+        return TaskInfo.class;
+    }
+
+    @Override
     public TaskInfo findById(String s) {
         return  MapstructUtils.convert(taskInfoRepository.findById(s).orElse(null), TaskInfo.class);
     }

@@ -38,6 +38,11 @@ public class DeviceGroupDataImpl implements IDeviceGroupData, IJPACommData<Devic
     }
 
     @Override
+    public Class getTClass() {
+        return DeviceGroup.class;
+    }
+
+    @Override
     public Paging<DeviceGroup> findByNameLike(String name, int page, int size) {
         Page<TbDeviceGroup> groups = deviceGroupRepository.findByNameLike("%" + name.trim() + "%",
                 Pageable.ofSize(size).withPage(page - 1));

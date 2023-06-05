@@ -38,6 +38,11 @@ public class ProductModelDataImpl implements IProductModelData, IJPACommData<Pro
     }
 
     @Override
+    public Class getTClass() {
+        return ProductModel.class;
+    }
+
+    @Override
     public ProductModel findByModel(String model) {
         return MapstructUtils.convert(productModelRepository.findByModel(model), ProductModel.class);
     }

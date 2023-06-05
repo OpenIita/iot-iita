@@ -41,6 +41,11 @@ public class SysDictTypeDataImpl implements ISysDictTypeData, IJPACommData<SysDi
         return TbSysDictType.class;
     }
 
+    @Override
+    public Class getTClass() {
+        return SysDictType.class;
+    }
+
 
     @Override
     public List<SysDictType> findByConditions(SysDictType query) {

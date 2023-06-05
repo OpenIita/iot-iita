@@ -59,6 +59,11 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
     }
 
     @Override
+    public Class getTClass() {
+        return SysMenu.class;
+    }
+
+    @Override
     public SysMenu findById(Long id) {
         TbSysMenu tbSysMenu = sysMenuRepository.findById(id).orElseThrow(() ->
                 new BizException(ErrCode.DATA_NOT_EXIST));

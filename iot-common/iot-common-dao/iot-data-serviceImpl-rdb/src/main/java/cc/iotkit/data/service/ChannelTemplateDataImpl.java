@@ -44,6 +44,11 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData, IJPACommDa
     }
 
     @Override
+    public Class getTClass() {
+        return ChannelTemplate.class;
+    }
+
+    @Override
     public ChannelTemplate findById(String id) {
         return MapstructUtils.convert(channelTemplateRepository.findById(id).orElse(null), ChannelTemplate.class);
     }

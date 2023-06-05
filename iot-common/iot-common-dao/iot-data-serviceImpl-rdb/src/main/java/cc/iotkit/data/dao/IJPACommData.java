@@ -27,6 +27,8 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
 
     Class getJpaRepositoryClass();
 
+    Class getTClass();
+
 
 
 
@@ -101,7 +103,10 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
         Example example = genExample(data);
 
         Optional one = getBaseRepository().findOne(example);
-        return (T) one.orElse(null);
+        if(one.isPresent()){
+            MapstructUtils.convert(one.get(), getTClass());
+        }
+        return null;
     }
 
 

@@ -62,6 +62,11 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
     }
 
     @Override
+    public Class getTClass() {
+        return DeviceInfo.class;
+    }
+
+    @Override
     public void saveProperties(String deviceId, Map<String, Object> properties) {
     }
 

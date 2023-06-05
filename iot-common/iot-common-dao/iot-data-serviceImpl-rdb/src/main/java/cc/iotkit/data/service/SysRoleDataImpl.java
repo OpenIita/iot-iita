@@ -55,6 +55,11 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
     }
 
     @Override
+    public Class getTClass() {
+        return SysRole.class;
+    }
+
+    @Override
     public SysRole findById(Long id) {
         return MapstructUtils.convert(sysRoleRepository.findById(id), SysRole.class);
     }

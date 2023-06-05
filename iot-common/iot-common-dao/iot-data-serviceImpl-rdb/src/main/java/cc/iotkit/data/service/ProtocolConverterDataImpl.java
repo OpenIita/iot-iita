@@ -47,6 +47,11 @@ public class ProtocolConverterDataImpl implements IProtocolConverterData, IJPACo
     }
 
     @Override
+    public Class getTClass() {
+        return ProtocolConverter.class;
+    }
+
+    @Override
     public List<ProtocolConverter> findByUid(String uid) {
         return MapstructUtils.convert(protocolConverterRepository.findByUid(uid), ProtocolConverter.class);
     }

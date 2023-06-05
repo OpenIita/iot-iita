@@ -40,6 +40,11 @@ public class SysNoticeDataImpl implements ISysNoticeData, IJPACommData<SysNotice
         return TbSysNotice.class;
     }
 
+    @Override
+    public Class getTClass() {
+        return SysNotice.class;
+    }
+
 
     @Override
     public Paging<SysNotice> findByConditions(String noticeTitle, String noticeType, String status, int page, int size) {

@@ -37,6 +37,10 @@ public class SysTenantPackageDataImpl implements ISysTenantPackageData, IJPAComm
         return TbSysTenantPackage.class;
     }
 
+    @Override
+    public Class getTClass() {
+        return SysTenantPackage.class;
+    }
 
 
 }

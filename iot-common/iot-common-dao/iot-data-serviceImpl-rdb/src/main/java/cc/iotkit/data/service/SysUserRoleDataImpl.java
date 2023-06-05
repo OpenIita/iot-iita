@@ -44,6 +44,11 @@ public class SysUserRoleDataImpl implements ISysUserRoleData, IJPACommData<SysUs
     }
 
     @Override
+    public Class getTClass() {
+        return SysUserRole.class;
+    }
+
+    @Override
     public int deleteByUserId(Long userId) {
         return sysUserRoleRepository.deleteAllByUserId(userId);
     }

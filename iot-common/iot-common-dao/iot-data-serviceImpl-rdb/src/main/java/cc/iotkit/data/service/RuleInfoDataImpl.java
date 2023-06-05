@@ -46,6 +46,11 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
     }
 
     @Override
+    public Class getTClass() {
+        return RuleInfo.class;
+    }
+
+    @Override
     public List<RuleInfo> findByUidAndType(String uid, String type) {
         return MapstructUtils.convert(ruleInfoRepository.findByUidAndType(uid, type), RuleInfo.class);
     }

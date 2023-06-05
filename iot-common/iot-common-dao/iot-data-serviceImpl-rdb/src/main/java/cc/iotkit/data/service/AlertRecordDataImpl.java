@@ -37,6 +37,11 @@ public class AlertRecordDataImpl implements IAlertRecordData, IJPACommData<Alert
         return TbAlertRecord.class;
     }
 
+    @Override
+    public Class getTClass() {
+        return AlertRecord.class;
+    }
+
 
     @Override
     public Paging<AlertRecord> selectAlertConfigPage(PageRequest<AlertRecord> request) {

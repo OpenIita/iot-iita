@@ -38,6 +38,10 @@ public class SysOssDataImpl implements ISysOssData, IJPACommData<SysOss, Long> {
         return TbSysOss.class;
     }
 
+    @Override
+    public Class getTClass() {
+        return SysOss.class;
+    }
 
 
 }

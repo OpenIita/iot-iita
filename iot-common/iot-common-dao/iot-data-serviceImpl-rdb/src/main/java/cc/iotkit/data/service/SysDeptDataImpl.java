@@ -49,6 +49,11 @@ public class SysDeptDataImpl implements ISysDeptData, IJPACommData<SysDept, Long
         return TbSysDept.class;
     }
 
+    @Override
+    public Class getTClass() {
+        return SysDept.class;
+    }
+
 
     @Override
     public List<SysDept> findDepts(SysDept dept) {

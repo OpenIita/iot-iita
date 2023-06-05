@@ -36,6 +36,11 @@ public class ProductDataImpl implements IProductData, IJPACommData<Product, Stri
     }
 
     @Override
+    public Class getTClass() {
+        return null;
+    }
+
+    @Override
     public List<Product> findByCategory(String category) {
         return MapstructUtils.convert(productRepository.findByCategory(category), Product.class);
     }

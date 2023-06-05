@@ -57,6 +57,11 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
         return TbSysUser.class;
     }
 
+    @Override
+    public Class getTClass() {
+        return SysUser.class;
+    }
+
 
     @Override
     public long countByDeptId(Long aLong) {

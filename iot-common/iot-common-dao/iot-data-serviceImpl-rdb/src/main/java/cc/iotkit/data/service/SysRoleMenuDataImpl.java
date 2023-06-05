@@ -44,6 +44,11 @@ public class SysRoleMenuDataImpl implements ISysRoleMenuData, IJPACommData<SysRo
     }
 
     @Override
+    public Class getTClass() {
+        return SysRoleMenu.class;
+    }
+
+    @Override
     public boolean checkMenuExistRole(Long menuId) {
         TbSysRoleMenu tbSysRoleMenu = jpaQueryFactory
                 .select(QTbSysRoleMenu.tbSysRoleMenu)

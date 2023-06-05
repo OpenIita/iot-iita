@@ -61,6 +61,11 @@ public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, S
     }
 
     @Override
+    public Class getTClass() {
+        return UserInfo.class;
+    }
+
+    @Override
     public UserInfo findById(String s) {
         return MapstructUtils.convert(userInfoRepository.findById(s).orElse(null), UserInfo.class);
     }

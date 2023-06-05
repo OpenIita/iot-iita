@@ -48,5 +48,10 @@ public class SysOssConfigDataImpl implements ISysOssConfigData, IJPACommData<Sys
         return TbSysOssConfig.class;
     }
 
+    @Override
+    public Class getTClass() {
+        return SysOssConfig.class;
+    }
+
 
 }

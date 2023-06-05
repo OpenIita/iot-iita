@@ -57,6 +57,11 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
     }
 
     @Override
+    public Class getTClass() {
+        return VirtualDevice.class;
+    }
+
+    @Override
     public List<VirtualDevice> findByUid(String uid) {
         return MapstructUtils.convert(virtualDeviceRepository.findByUid(uid), VirtualDevice.class);
     }

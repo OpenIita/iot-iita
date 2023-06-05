@@ -47,6 +47,11 @@ public class ThingModelDataImpl implements IThingModelData, IJPACommData<ThingMo
     }
 
     @Override
+    public Class getTClass() {
+        return ThingModel.class;
+    }
+
+    @Override
     public ThingModel findById(String s) {
         return MapstructUtils.convert(thingModelRepository.findById(s).orElse(null),ThingModel.class);
     }

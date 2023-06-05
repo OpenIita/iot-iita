@@ -39,6 +39,11 @@ public class SpaceDataImpl implements ISpaceData, IJPACommData<Space, String> {
     }
 
     @Override
+    public Class getTClass() {
+        return Space.class;
+    }
+
+    @Override
     public List<Space> findByUidOrderByCreateAtDesc(String uid) {
         return MapstructUtils.convert(spaceRepository.findByUidOrderByCreateAtDesc(uid), Space.class);
     }

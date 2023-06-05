@@ -45,6 +45,11 @@ public class CategoryDataImpl implements ICategoryData, IJPACommData<Category, S
     }
 
     @Override
+    public Class getTClass() {
+        return Category.class;
+    }
+
+    @Override
     public Category findById(String s) {
         return MapstructUtils.convert(categoryRepository.findById(s).orElse(null), Category.class);
     }

@@ -38,11 +38,10 @@ public class AlertConfigDataImpl implements IAlertConfigData, IJPACommData<Alert
         return TbAlertConfig.class;
     }
 
-
-
-
-
-
+    @Override
+    public Class getTClass() {
+        return AlertConfig.class;
+    }
 
 
     @Override

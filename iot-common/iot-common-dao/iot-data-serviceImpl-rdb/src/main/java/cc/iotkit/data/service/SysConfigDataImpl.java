@@ -47,6 +47,11 @@ public class SysConfigDataImpl implements ISysConfigData, IJPACommData<SysConfig
     }
 
     @Override
+    public Class getTClass() {
+        return SysConfig.class;
+    }
+
+    @Override
     public SysConfig findById(Long id) {
         TbSysConfig tbSysConfig = baseRepository.findById(id).orElseThrow(() ->
                 new BizException(ErrCode.DATA_NOT_EXIST));

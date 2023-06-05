@@ -37,6 +37,11 @@ public class HomeDataImpl implements IHomeData, IJPACommData<Home, String> {
     }
 
     @Override
+    public Class getTClass() {
+        return Home.class;
+    }
+
+    @Override
     public Home findByUidAndCurrent(String uid, boolean current) {
         return MapstructUtils.convert(homeRepository.findByUidAndCurrent(uid, current), Home.class);
     }

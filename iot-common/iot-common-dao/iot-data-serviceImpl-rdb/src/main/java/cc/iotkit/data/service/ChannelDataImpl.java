@@ -43,6 +43,11 @@ public class ChannelDataImpl implements IChannelData, IJPACommData<Channel, Stri
     }
 
     @Override
+    public Class getTClass() {
+        return Channel.class;
+    }
+
+    @Override
     public Channel findById(String id) {
         return MapstructUtils.convert(channelRepository.findById(id).orElse(null), Channel.class);
     }

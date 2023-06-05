@@ -43,6 +43,11 @@ public class SysUserPostDataImpl implements ISysUserPostData, IJPACommData<SysUs
     }
 
     @Override
+    public Class getTClass() {
+        return SysUserPost.class;
+    }
+
+    @Override
     public void batchSave(List<SysUserPost> data) {
         sysUserPostRepository.saveAll(MapstructUtils.convert(data, TbSysUserPost.class));
     }

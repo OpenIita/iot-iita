@@ -57,6 +57,11 @@ public class DeviceConfigDataImpl implements IDeviceConfigData, IJPACommData<Dev
         return TbDeviceConfig.class;
     }
 
+    @Override
+    public Class getTClass() {
+        return DeviceConfig.class;
+    }
+
 
     @Override
     public DeviceConfig save(DeviceConfig data) {

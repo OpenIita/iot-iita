@@ -44,6 +44,11 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData, IJPACo
     }
 
     @Override
+    public Class getTClass() {
+        return ProtocolComponent.class;
+    }
+
+    @Override
     public List<ProtocolComponent> findByState(String state) {
         return MapstructUtils.convert(protocolComponentRepository.findByState(state), ProtocolComponent.class);
     }

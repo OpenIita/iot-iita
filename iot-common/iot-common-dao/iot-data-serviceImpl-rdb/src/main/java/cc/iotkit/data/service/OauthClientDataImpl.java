@@ -51,6 +51,11 @@ public class OauthClientDataImpl implements IOauthClientData, IJPACommData<Oauth
     }
 
     @Override
+    public Class getTClass() {
+        return OauthClient.class;
+    }
+
+    @Override
     public OauthClient findById(String s) {
         return MapstructUtils.convert(oauthClientRepository.findById(s).orElse(null), OauthClient.class);
     }

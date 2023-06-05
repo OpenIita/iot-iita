@@ -51,6 +51,11 @@ public class SysPostDataImpl implements ISysPostData, IJPACommData<SysPost, Long
     }
 
     @Override
+    public Class getTClass() {
+        return SysPost.class;
+    }
+
+    @Override
     public Paging<SysPost> findAll(PageRequest<SysPost> pageRequest) {
         return PageBuilder.toPaging(postRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
     }

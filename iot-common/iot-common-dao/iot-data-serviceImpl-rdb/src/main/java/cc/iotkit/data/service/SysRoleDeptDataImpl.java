@@ -50,4 +50,9 @@ public class SysRoleDeptDataImpl implements ISysRoleDeptData, IJPACommData<SysRo
     public Class getJpaRepositoryClass() {
         return TbSysRoleDept.class;
     }
+
+    @Override
+    public Class getTClass() {
+        return SysRoleDept.class;
+    }
 }

@@ -46,6 +46,11 @@ public class SpaceDeviceDataImpl implements ISpaceDeviceData, IJPACommData<Space
     }
 
     @Override
+    public Class getTClass() {
+        return SpaceDevice.class;
+    }
+
+    @Override
     public List<SpaceDevice> findByUidOrderByUseAtDesc(String uid) {
         return MapstructUtils.convert(spaceDeviceRepository.findByUidOrderByUseAtDesc(uid), SpaceDevice.class);
     }
