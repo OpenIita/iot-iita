@@ -9,6 +9,7 @@
  */
 package cc.iotkit.ruleengine.task;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.data.manager.ITaskInfoData;
@@ -54,7 +55,11 @@ public class TaskManager implements ApplicationContextAware {
     public void initTask() {
         int idx = 1;
         while (true) {
-            List<TaskInfo> tasks = taskInfoData.findAll();
+            PageRequest<TaskInfo> pageRequest = new PageRequest<>();
+            pageRequest.setPageNum(idx+=1);
+            pageRequest.setPageSize(100);
+            Paging<TaskInfo> all = taskInfoData.findAll(pageRequest);
+            List<TaskInfo> tasks = all.getData();
             // 如果记录为空，直接跳出循环
             if (CollectionUtil.isEmpty(tasks)) {
                 break;
