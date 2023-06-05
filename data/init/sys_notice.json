@@ -1,30 +1,30 @@
  [
     {
       "id": 1,
-      "tenant_id": "000000",
-      "notice_title": "温馨提醒：2018-07-01 新版本发布啦",
-      "notice_type": "2",
-      "notice_content": "5paw54mI5pys5YaF5a65",
+      "tenantId": "000000",
+      "noticeTitle": "温馨提醒：2018-07-01 新版本发布啦",
+      "noticeType": "2",
+      "noticeContent": "5paw54mI5pys5YaF5a65",
       "status": "0",
-      "create_dept": 103,
-      "create_by": 1,
+      "createDept": 103,
+      "createBy": 1,
 
-      "update_by": null,
-      "update_time": null,
+      "updateBy": null,
+      "updateTime": null,
       "remark": "管理员"
     },
     {
       "id": 2,
-      "tenant_id": "000000",
-      "notice_title": "维护通知：2018-07-01 系统凌晨维护",
-      "notice_type": "1",
-      "notice_content": "57u05oqk5YaF5a65",
+      "tenantId": "000000",
+      "noticeTitle": "维护通知：2018-07-01 系统凌晨维护",
+      "noticeType": "1",
+      "noticeContent": "57u05oqk5YaF5a65",
       "status": "0",
-      "create_dept": 103,
-      "create_by": 1,
+      "createDept": 103,
+      "createBy": 1,
 
-      "update_by": null,
-      "update_time": null,
+      "updateBy": null,
+      "updateTime": null,
       "remark": "管理员"
     }
   ]

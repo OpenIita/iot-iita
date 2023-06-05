@@ -1,24 +1,24 @@
  [
     {
       "id": 1,
-      "tenant_id": "000000",
-      "contact_user_name": "管理组",
-      "contact_phone": "15888888888",
-      "company_name": "XXX有限公司",
-      "license_number": null,
+      "tenantId": "000000",
+      "contactUserName": "管理组",
+      "contactPhone": "15888888888",
+      "companyName": "XXX有限公司",
+      "licenseNumber": null,
       "address": null,
       "intro": "多租户通用后台管理管理系统",
       "domain": null,
       "remark": null,
-      "package_id": null,
-      "expire_time": null,
-      "account_count": -1,
+      "packageId": null,
+      "expireTime": null,
+      "accountCount": -1,
       "status": "0",
-      "del_flag": "0",
-      "create_dept": 103,
-      "create_by": 1,
+      "delFlag": "0",
+      "createDept": 103,
+      "createBy": 1,
 
-      "update_by": null,
-      "update_time": null
+      "updateBy": null,
+      "updateTime": null
     }
   ]

@@ -1,14 +1,14 @@
  [
     {
-      "role_id": 2,
-      "dept_id": 100
+      "roleId": 2,
+      "deptId": 100
     },
     {
-      "role_id": 2,
-      "dept_id": 101
+      "roleId": 2,
+      "deptId": 101
     },
     {
-      "role_id": 2,
-      "dept_id": 105
+      "roleId": 2,
+      "deptId": 105
     }
   ]
