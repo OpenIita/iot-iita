@@ -73,7 +73,14 @@ public class RuleManager {
     public void initRules() {
         int idx = 1;
         while (true) {
-            List<RuleInfo> rules = ruleInfoData.findAll();
+            PageRequest<RuleInfo> pageRequest = new PageRequest<>();
+            pageRequest.setPageNum(idx+=1);
+            pageRequest.setPageSize(100);
+            Paging<RuleInfo> all = ruleInfoData.findAll(pageRequest);
+            List<RuleInfo> rules = all.getData();
+            if(CollectionUtil.isEmpty(rules)){
+                return;
+            }
             rules.forEach(rule -> {
                 try {
                     //不添加停止的规则
