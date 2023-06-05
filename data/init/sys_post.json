@@ -1,0 +1,58 @@
+ [
+    {
+      "post_id": 1,
+      "tenant_id": "000000",
+      "post_code": "ceo",
+      "post_name": "董事长",
+      "post_sort": 1,
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": ""
+    },
+    {
+      "post_id": 2,
+      "tenant_id": "000000",
+      "post_code": "se",
+      "post_name": "项目经理",
+      "post_sort": 2,
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": ""
+    },
+    {
+      "post_id": 3,
+      "tenant_id": "000000",
+      "post_code": "hr",
+      "post_name": "人力资源",
+      "post_sort": 3,
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": ""
+    },
+    {
+      "post_id": 4,
+      "tenant_id": "000000",
+      "post_code": "user",
+      "post_name": "普通员工",
+      "post_sort": 4,
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": ""
+    }
+  ]

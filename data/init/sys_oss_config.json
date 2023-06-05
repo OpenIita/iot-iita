@@ -1,0 +1,112 @@
+ [
+    {
+      "oss_config_id": 1,
+      "tenant_id": "000000",
+      "config_key": "minio",
+      "access_key": "ruoyi",
+      "secret_key": "ruoyi123",
+      "bucket_name": "ruoyi",
+      "prefix": "",
+      "endpoint": "127.0.0.1:9000",
+      "domain": "",
+      "is_https": "N",
+      "region": "",
+      "access_policy": "1",
+      "status": "0",
+      "ext1": "",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": 1,
+
+      "remark": null
+    },
+    {
+      "oss_config_id": 2,
+      "tenant_id": "000000",
+      "config_key": "qiniu",
+      "access_key": "XXXXXXXXXXXXXXX",
+      "secret_key": "XXXXXXXXXXXXXXX",
+      "bucket_name": "ruoyi",
+      "prefix": "",
+      "endpoint": "s3-cn-north-1.qiniucs.com",
+      "domain": "",
+      "is_https": "N",
+      "region": "",
+      "access_policy": "1",
+      "status": "1",
+      "ext1": "",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": 1,
+
+      "remark": null
+    },
+    {
+      "oss_config_id": 3,
+      "tenant_id": "000000",
+      "config_key": "aliyun",
+      "access_key": "XXXXXXXXXXXXXXX",
+      "secret_key": "XXXXXXXXXXXXXXX",
+      "bucket_name": "ruoyi",
+      "prefix": "",
+      "endpoint": "oss-cn-beijing.aliyuncs.com",
+      "domain": "",
+      "is_https": "N",
+      "region": "",
+      "access_policy": "1",
+      "status": "1",
+      "ext1": "",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": 1,
+
+      "remark": null
+    },
+    {
+      "oss_config_id": 4,
+      "tenant_id": "000000",
+      "config_key": "qcloud",
+      "access_key": "XXXXXXXXXXXXXXX",
+      "secret_key": "XXXXXXXXXXXXXXX",
+      "bucket_name": "ruoyi-1250000000",
+      "prefix": "",
+      "endpoint": "cos.ap-beijing.myqcloud.com",
+      "domain": "",
+      "is_https": "N",
+      "region": "ap-beijing",
+      "access_policy": "1",
+      "status": "1",
+      "ext1": "",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": 1,
+
+      "remark": null
+    },
+    {
+      "oss_config_id": 5,
+      "tenant_id": "000000",
+      "config_key": "image",
+      "access_key": "ruoyi",
+      "secret_key": "ruoyi123",
+      "bucket_name": "ruoyi",
+      "prefix": "image",
+      "endpoint": "127.0.0.1:9000",
+      "domain": "",
+      "is_https": "N",
+      "region": "",
+      "access_policy": "1",
+      "status": "1",
+      "ext1": "",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": 1,
+
+      "remark": null
+    }
+  ]

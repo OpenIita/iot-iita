@@ -1,0 +1,14 @@
+ [
+    {
+      "info_id": 1665628533390614529,
+      "tenant_id": "000000",
+      "user_name": "admin",
+      "ipaddr": "127.0.0.1",
+      "login_location": "内网IP",
+      "browser": "Chrome",
+      "os": "Windows 10 or Windows Server 2016",
+      "status": "0",
+      "msg": "登录成功"
+
+    }
+  ]

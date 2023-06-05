@@ -1,0 +1,106 @@
+ [
+    {
+      "dict_id": 1,
+      "tenant_id": "000000",
+      "dict_name": "用户性别",
+      "dict_type": "sys_user_sex",
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": "用户性别列表"
+    },
+    {
+      "dict_id": 2,
+      "tenant_id": "000000",
+      "dict_name": "菜单状态",
+      "dict_type": "sys_show_hide",
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": "菜单状态列表"
+    },
+    {
+      "dict_id": 3,
+      "tenant_id": "000000",
+      "dict_name": "系统开关",
+      "dict_type": "sys_normal_disable",
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": "系统开关列表"
+    },
+    {
+      "dict_id": 6,
+      "tenant_id": "000000",
+      "dict_name": "系统是否",
+      "dict_type": "sys_yes_no",
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": "系统是否列表"
+    },
+    {
+      "dict_id": 7,
+      "tenant_id": "000000",
+      "dict_name": "通知类型",
+      "dict_type": "sys_notice_type",
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": "通知类型列表"
+    },
+    {
+      "dict_id": 8,
+      "tenant_id": "000000",
+      "dict_name": "通知状态",
+      "dict_type": "sys_notice_status",
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": "通知状态列表"
+    },
+    {
+      "dict_id": 9,
+      "tenant_id": "000000",
+      "dict_name": "操作类型",
+      "dict_type": "sys_oper_type",
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": "操作类型列表"
+    },
+    {
+      "dict_id": 10,
+      "tenant_id": "000000",
+      "dict_name": "系统状态",
+      "dict_type": "sys_common_status",
+      "status": "0",
+      "create_dept": 103,
+      "create_by": 1,
+
+      "update_by": null,
+      "update_time": null,
+      "remark": "登录状态列表"
+    }
+  ]

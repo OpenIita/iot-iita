@@ -12,6 +12,7 @@ package cc.iotkit.manager.service;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.data.manager.*;
+import cc.iotkit.data.system.*;
 import cc.iotkit.model.Id;
 import cc.iotkit.model.OauthClient;
 import cc.iotkit.model.UserInfo;
@@ -30,6 +31,7 @@ import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
+import cc.iotkit.model.system.*;
 import cc.iotkit.temporal.IDbStructureData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Charsets;
@@ -88,6 +90,64 @@ public class ExampleDataInit implements SmartInitializingSingleton {
     @Autowired
     private IChannelData iChannelData;
 
+    @Autowired
+    private ISysDeptData sysDeptData;
+
+    @Autowired
+    private ISysMenuData sysMenuData;
+
+
+    @Autowired
+    private ISysPostData sysPostData;
+
+    @Autowired
+    private ISysRoleData sysRoleData;
+
+    @Autowired
+    private ISysUserData sysUserData;
+
+    @Autowired
+    private ISysTenantData sysTenantData;
+
+    @Autowired
+    private ISysConfigData sysConfigData;
+
+    @Autowired
+    private ISysDictData sysDictData;
+
+    @Autowired
+    private ISysDictTypeData sysDictTypeData;
+
+    @Autowired
+    private ISysLogininforData sysLogininforData;
+
+    @Autowired
+    private ISysNoticeData sysNoticeData;
+
+    @Autowired
+    private ISysOperLogData sysOperLogData;
+
+    @Autowired
+    private ISysOssData sysOssData;
+
+    @Autowired
+    private ISysOssConfigData sysOssConfigData;
+
+    @Autowired
+    private ISysRoleDeptData sysRoleDeptData;
+
+    @Autowired
+    private ISysRoleMenuData sysRoleMenuData;
+
+    @Autowired
+    private ISysTenantPackageData sysTenantPackageData;
+
+    @Autowired
+    private ISysUserPostData sysUserPostData;
+
+    @Autowired
+    private ISysUserRoleData sysUserRoleData;
+
     @Override
     public void afterSingletonsInstantiated() {
         //等redis实例化后再执行
@@ -141,6 +201,8 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                     initData("channel", iChannelData, new TypeReference<List<Channel>>() {
                     });
 
+                    initSysData();
+
                     log.info("init data finished.");
 
                     FileUtils.write(initFile, "", Charsets.UTF_8);
@@ -151,6 +213,69 @@ public class ExampleDataInit implements SmartInitializingSingleton {
             }
         }, 100);
 
+    }
+
+    private void initSysData() throws IOException {
+        initData("sys_config", sysConfigData, new TypeReference<List<SysConfig>>() {
+        });
+
+        initData("sys_dept", sysDeptData, new TypeReference<List<SysDept>>() {
+        });
+
+        initData("sys_dict_data", sysDictData, new TypeReference<List<SysDictData>>() {
+        });
+
+        initData("sys_dict_type", sysDictTypeData, new TypeReference<List<SysDictType>>() {
+        });
+
+        initData("sys_logininfor", sysLogininforData, new TypeReference<List<SysLogininfor>>() {
+        });
+        initData("sys_menu", sysMenuData, new TypeReference<List<SysMenu>>() {
+        });
+
+        initData("sys_notice", sysNoticeData, new TypeReference<List<SysNotice>>() {
+        });
+
+        initData("sys_oper_log", sysOperLogData, new TypeReference<List<SysOperLog>>() {
+        });
+
+
+        initData("sys_oss", sysOssData, new TypeReference<List<SysOss>>() {
+        });
+
+        initData("sys_oss_config", sysOssConfigData, new TypeReference<List<SysOssConfig>>() {
+        });
+
+        initData("sys_post", sysPostData, new TypeReference<List<SysPost>>() {
+        });
+        initData("sys_role", sysRoleData, new TypeReference<List<SysRole>>() {
+        });
+
+        initData("sys_dept", sysDeptData, new TypeReference<List<SysDept>>() {
+        });
+
+        initData("sys_role_dept", sysRoleDeptData, new TypeReference<List<SysRoleDept>>() {
+        });
+
+
+        initData("sys_role_menu", sysRoleMenuData, new TypeReference<List<SysRoleMenu>>() {
+        });
+
+
+        initData("sys_tenant",sysTenantData , new TypeReference<List<SysTenant>>() {
+        });
+
+        initData("sys_tenant_package", sysTenantPackageData, new TypeReference<List<SysTenantPackage>>() {
+        });
+
+        initData("sys_user", sysUserData, new TypeReference<List<SysUser>>() {
+        });
+
+        initData("sys_user_post", sysUserPostData, new TypeReference<List<SysUserPost>>() {
+        });
+
+        initData("sys_user_role", sysUserRoleData, new TypeReference<List<SysUserRole>>() {
+        });
     }
 
     private <T> T initData(String name, ICommonData service, TypeReference<T> type) throws IOException {
