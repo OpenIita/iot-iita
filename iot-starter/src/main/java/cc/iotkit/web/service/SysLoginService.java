@@ -337,8 +337,7 @@ public class SysLoginService {
      * @param userId 用户ID
      */
     public void recordLoginInfo(Long userId) {
-        SysUser sysUser = new SysUser();
-        sysUser.setId(userId);
+        SysUser sysUser = userData.findById(userId);
         sysUser.setLoginIp(ServletUtils.getClientIP());
         sysUser.setLoginDate(DateUtils.getNowDate());
         sysUser.setUpdateBy(userId);
