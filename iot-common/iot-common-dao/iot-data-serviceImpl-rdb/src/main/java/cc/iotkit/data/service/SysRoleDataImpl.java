@@ -144,7 +144,7 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
     }
 
     private List<SysRole> buildQueryTitle(Predicate predicate) {
-        return jpaQueryFactory.select(Projections.bean(SysRole.class, tbSysRole.id.countDistinct(), tbSysRole.roleName,
+        return jpaQueryFactory.select(Projections.fields(SysRole.class, tbSysRole.id, tbSysRole.roleName,
                         tbSysRole.roleKey, tbSysRole.roleSort, tbSysRole.menuCheckStrictly, tbSysRole.deptCheckStrictly,
                         tbSysRole.status, tbSysRole.delFlag, tbSysRole.createTime, tbSysRole.remark))
                 .from(tbSysRole)
