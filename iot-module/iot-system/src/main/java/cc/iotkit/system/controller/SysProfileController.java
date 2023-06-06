@@ -47,7 +47,7 @@ public class SysProfileController extends BaseController {
      */
 
     @ApiOperation(value = "个人信息", notes = "个人信息")
-    @PostMapping
+    @PostMapping("/getDeail")
     public ProfileVo profile() {
         SysUserVo user = userService.selectUserById(LoginHelper.getUserId());
         ProfileVo profileVo = new ProfileVo();
@@ -62,7 +62,7 @@ public class SysProfileController extends BaseController {
      */
     @ApiOperation(value = "修改用户", notes = "修改用户")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
-    @PostMapping
+    @PostMapping("/updateProfile")
     public void updateProfile(@RequestBody Request<SysUserProfileBo> bo) {
         SysUserProfileBo profile = bo.getData();
         SysUserBo user = BeanUtil.toBean(profile, SysUserBo.class);

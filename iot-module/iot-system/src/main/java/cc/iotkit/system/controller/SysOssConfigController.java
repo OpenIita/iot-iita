@@ -66,7 +66,7 @@ public class SysOssConfigController extends BaseController {
     @ApiOperation(value = "新增对象存储配置", notes = "新增对象存储配置")
     @SaCheckPermission("system:oss:add")
     @Log(title = "对象存储配置", businessType = BusinessType.INSERT)
-    @PostMapping()
+    @PostMapping("/add")
     public void add(@Validated(AddGroup.class) @RequestBody Request<SysOssConfigBo> bo) {
         ossConfigService.insertByBo(bo.getData());
     }

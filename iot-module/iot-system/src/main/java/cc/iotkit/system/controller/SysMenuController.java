@@ -74,9 +74,9 @@ public class SysMenuController extends BaseController {
             TenantConstants.TENANT_ADMIN_ROLE_KEY
     }, mode = SaMode.OR)
     @SaCheckPermission("system:menu:query")
-    @PostMapping(value = "/{menuId}")
-    public SysMenuVo getInfo(@PathVariable Long menuId) {
-        return menuService.selectMenuById(menuId);
+    @PostMapping(value = "/getDetail")
+    public SysMenuVo getInfo(@PathVariable Request<Long> menuId) {
+        return menuService.selectMenuById(menuId.getData());
     }
 
     /**
@@ -120,7 +120,7 @@ public class SysMenuController extends BaseController {
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:menu:add")
     @Log(title = "菜单管理", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/add")
     public void add(@Validated @RequestBody Request<SysMenuBo> bo) {
         SysMenuBo menu = bo.getData();
         if (!menuService.checkMenuNameUnique(menu)) {

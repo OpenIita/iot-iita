@@ -82,7 +82,7 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "新增角色", notes = "新增角色")
     @SaCheckPermission("system:role:add")
     @Log(title = "角色管理", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/add")
     public void add(@Validated @RequestBody Request<SysRoleBo> bo) {
         SysRoleBo role = bo.getData();
 
@@ -101,7 +101,7 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "修改保存角色", notes = "修改保存角色")
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
-    @PostMapping
+    @PostMapping("/edit")
     public void edit(@Validated @RequestBody Request<SysRoleBo> bo) {
         SysRoleBo role = bo.getData();
 

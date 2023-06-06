@@ -81,7 +81,7 @@ public class SysTenantPackageController extends BaseController {
     @ApiOperation("获取租户套餐详细信息")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenantPackage:query")
-    @PostMapping("/{packageId}")
+    @PostMapping("/getInfo")
     public SysTenantPackageVo getInfo(@NotNull(message = "主键不能为空")
                                       @PathVariable Long packageId) {
         return tenantPackageService.queryById(packageId);
@@ -95,8 +95,8 @@ public class SysTenantPackageController extends BaseController {
     @SaCheckPermission("system:tenantPackage:add")
     @Log(title = "租户套餐", businessType = BusinessType.INSERT)
     @PostMapping("/add")
-    public void add(@Validated(AddGroup.class) @RequestBody SysTenantPackageBo bo) {
-        tenantPackageService.insertByBo(bo);
+    public void add(@Validated(AddGroup.class) @RequestBody Request<SysTenantPackageBo> bo) {
+        tenantPackageService.insertByBo(bo.getData());
     }
 
     /**

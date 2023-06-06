@@ -58,7 +58,7 @@ public class SysNoticeController extends BaseController {
     @ApiOperation(value = "新增通知公告", notes = "新增通知公告")
     @SaCheckPermission("system:notice:add")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/add")
     public void add(@Validated @RequestBody Request<SysNoticeBo> bo) {
         noticeService.insertNotice(bo.getData());
     }

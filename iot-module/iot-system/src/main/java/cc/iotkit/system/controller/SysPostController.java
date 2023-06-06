@@ -66,7 +66,7 @@ public class SysPostController extends BaseController {
      */
     @ApiOperation("根据岗位编号获取详细信息")
     @SaCheckPermission("system:post:query")
-    @PostMapping(value = "/{postId}")
+    @PostMapping(value = "/getDetail")
     public SysPostVo getInfo(@PathVariable Request<Long> postId) {
         return postService.selectPostById(postId.getData());
     }
@@ -77,7 +77,7 @@ public class SysPostController extends BaseController {
     @ApiOperation("新增岗位")
     @SaCheckPermission("system:post:add")
     @Log(title = "岗位管理", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/add")
     public void add(@RequestBody @Validated(EditGroup.class)Request<SysPostBo> post) {
         if (!postService.checkPostNameUnique(post.getData())) {
             fail("新增岗位'" + post.getData().getPostName() + "'失败，岗位名称已存在");

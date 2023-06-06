@@ -74,7 +74,7 @@ public class SysDictTypeController extends BaseController {
     @ApiOperation(value = "新增字典类型", notes = "新增字典类型")
     @SaCheckPermission("system:dict:add")
     @Log(title = "字典类型", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/add")
     public void add(@Validated @RequestBody SysDictTypeBo dict) {
         if (!dictTypeService.checkDictTypeUnique(dict)) {
             fail("新增字典'" + dict.getDictName() + "'失败，字典类型已存在");
