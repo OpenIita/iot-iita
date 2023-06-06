@@ -79,17 +79,18 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public Paging<SysUserVo> selectUnallocatedList( PageRequest<SysUserBo> query) {
-        return null;
+        return sysUserData.selectUnallocatedList(query.to(SysUser.class)).to(SysUserVo.class);
     }
 
     @Override
     public SysUserVo selectUserByUserName(String userName) {
-        return null;
+        return MapstructUtils.convert(sysUserData.selectUserByUserName(userName),SysUserVo.class);
     }
 
     @Override
     public SysUserVo selectUserByPhonenumber(String phonenumber) {
-        return null;
+        return MapstructUtils.convert(sysUserData.findByPhonenumber(phonenumber),SysUserVo.class);
+
     }
 
     @Override
@@ -99,12 +100,12 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public String selectUserRoleGroup(String userName) {
-        return null;
+        return sysUserData.selectUserRoleGroup(userName);
     }
 
     @Override
     public String selectUserPostGroup(String userName) {
-        return null;
+        return sysUserData.selectUserPostGroup(userName);
     }
 
     @Override

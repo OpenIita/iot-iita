@@ -94,4 +94,8 @@ public class PageRequest<T> extends Request<T> implements Serializable {
   public Integer getPageNum() {
     return pageNum == null ? DEFAULT_PAGE_NUM : pageNum;
   }
+
+  public Integer getOffset() {
+    return (getPageNum() - 1) * getPageSize();
+  }
 }

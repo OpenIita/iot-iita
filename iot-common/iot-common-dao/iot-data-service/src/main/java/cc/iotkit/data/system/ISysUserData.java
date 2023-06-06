@@ -41,4 +41,14 @@ public interface ISysUserData extends ICommonData<SysUser, Long> {
 
 
     Paging<SysUser> selectAllocatedList(PageRequest<SysUser> to);
+
+    String selectUserPostGroup(String userName);
+
+    String selectUserRoleGroup(String userName);
+
+
+
+    Paging<SysUser> selectUnallocatedList(PageRequest<SysUser> to);
+
+    SysUser findByPhonenumber(String phonenumber);
 }

@@ -8,6 +8,8 @@ import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysUserRepository;
+import cc.iotkit.data.model.TbSysPost;
+import cc.iotkit.data.model.TbSysRole;
 import cc.iotkit.data.model.TbSysUser;
 import cc.iotkit.data.system.ISysDeptData;
 import cc.iotkit.data.system.ISysUserData;
@@ -16,6 +18,8 @@ import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysDept;
 import cc.iotkit.model.system.SysUser;
 import cn.hutool.core.util.ObjectUtil;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -26,9 +30,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static cc.iotkit.data.model.QTbSysDept.tbSysDept;
+import static cc.iotkit.data.model.QTbSysPost.tbSysPost;
+import static cc.iotkit.data.model.QTbSysRole.tbSysRole;
 import static cc.iotkit.data.model.QTbSysUser.tbSysUser;
+import static cc.iotkit.data.model.QTbSysUserPost.tbSysUserPost;
+import static cc.iotkit.data.model.QTbSysUserRole.tbSysUserRole;
 
 
 /**
@@ -153,6 +162,76 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
                         .and(tbSysUser.userName.eq(username))
                         .build()).fetchOne();
          return MapstructUtils.convert(ret, SysUser.class);
+    }
+
+    @Override
+    public Paging<SysUser> selectAllocatedList(PageRequest<SysUser> to) {
+        SysUser data = to.getData();
+
+        PredicateBuilder builder = PredicateBuilder.instance()
+                .and(StringUtils.isNotBlank(data.getPhonenumber()), () -> tbSysUser.phonenumber.like(data.getPhonenumber()))
+                .and(StringUtils.isNotBlank(data.getUserName()), () -> tbSysUser.userName.like(data.getUserName()))
+                .and(StringUtils.isNotBlank(data.getStatus()), () -> tbSysUser.status.eq(data.getStatus()))
+                .and(Objects.nonNull(data.getDeptId()), () -> tbSysUser.deptId.eq(data.getDeptId()))
+                .and(tbSysUser.delFlag.eq(UserConstants.ROLE_NORMAL));
+        QueryResults<TbSysUser> tbSysUserQueryResults = jpaQueryFactory.select(Projections.bean(TbSysUser.class, tbSysUser.id, tbSysUser.deptId, tbSysUser.userName,
+                        tbSysUser.nickName, tbSysUser.email, tbSysUser.phonenumber, tbSysUser.createTime)).from(tbSysUser)
+                .leftJoin(tbSysDept).on(tbSysUser.deptId.eq(tbSysDept.id))
+                .leftJoin(tbSysUserRole).on(tbSysUser.id.eq(tbSysUserRole.userId))
+                .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
+                .where(builder.build()).offset(to.getOffset()).limit(to.getPageSize()).fetchResults();
+        return new Paging<>(tbSysUserQueryResults.getTotal(), MapstructUtils.convert(tbSysUserQueryResults.getResults(), SysUser.class));
+
+    }
+
+    @Override
+    public String selectUserPostGroup(String userName) {
+        List<TbSysPost> fetch = jpaQueryFactory.select(Projections.bean(TbSysPost.class, tbSysPost.id, tbSysPost.postName, tbSysPost.postCode)).from(tbSysPost)
+                .leftJoin(tbSysUserPost).on(tbSysPost.id.eq(tbSysUserPost.postId))
+                .leftJoin(tbSysUser).on(tbSysUserPost.userId.eq(tbSysUser.id))
+                .where(tbSysUser.userName.eq(userName))
+                .orderBy(tbSysPost.postSort.asc()).fetch();
+        return fetch.stream().map(TbSysPost::getPostName).collect(Collectors.joining(","));
+    }
+
+    @Override
+    public String selectUserRoleGroup(String userName) {
+        List<TbSysRole> fetch = jpaQueryFactory.select(tbSysRole).from(tbSysRole)
+                .leftJoin(tbSysUserRole).on(tbSysRole.id.eq(tbSysUserRole.roleId))
+                .leftJoin(tbSysUser).on(tbSysUserRole.userId.eq(tbSysUser.id))
+                .where(tbSysUser.userName.eq(userName))
+                .orderBy(tbSysRole.roleSort.asc()).fetch();
+        return fetch.stream().map(TbSysRole::getRoleName).collect(Collectors.joining(","));
+    }
+
+
+
+    @Override
+    public Paging<SysUser> selectUnallocatedList(PageRequest<SysUser> to) {
+        //TODO:  未分配用户列表
+        SysUser data = to.getData();
+        PredicateBuilder builder = PredicateBuilder.instance()
+                .and(StringUtils.isNotBlank(data.getPhonenumber()), () -> tbSysUser.phonenumber.like(data.getPhonenumber()))
+                .and(StringUtils.isNotBlank(data.getUserName()), () -> tbSysUser.userName.like(data.getUserName()))
+                .and(StringUtils.isNotBlank(data.getStatus()), () -> tbSysUser.status.eq(data.getStatus()))
+                .and(Objects.nonNull(data.getDeptId()), () -> tbSysUser.deptId.eq(data.getDeptId()))
+                .and(tbSysUser.delFlag.eq(UserConstants.ROLE_NORMAL));
+        QueryResults<SysUser> sysUserQueryResults = jpaQueryFactory.select(Projections.bean(SysUser.class, tbSysUser.id, tbSysUser.deptId, tbSysUser.userName,
+                        tbSysUser.nickName, tbSysUser.email, tbSysUser.phonenumber, tbSysUser.createTime)).from(tbSysUser)
+                .leftJoin(tbSysDept).on(tbSysUser.deptId.eq(tbSysDept.id))
+                .leftJoin(tbSysUserRole).on(tbSysUser.id.eq(tbSysUserRole.userId))
+                .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
+                .where(builder.build()).offset(to.getOffset()).limit(to.getPageSize()).fetchResults();
+        return new Paging<>(sysUserQueryResults.getTotal(), sysUserQueryResults.getResults());
+    }
+
+    @Override
+    public SysUser findByPhonenumber(String phonenumber) {
+        TbSysUser user = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
+                .where(PredicateBuilder.instance()
+                        .and(tbSysUser.phonenumber.eq(phonenumber))
+                        .build()).fetchOne();
+        return MapstructUtils.convert(user, SysUser.class);
     }
 
     @Override
