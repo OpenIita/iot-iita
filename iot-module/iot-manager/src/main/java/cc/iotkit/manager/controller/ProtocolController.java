@@ -66,14 +66,14 @@ public class ProtocolController {
 
     @ApiOperation("添加组件")
     @PostMapping("/addComponent")
-    public boolean addComponent(@RequestBody @Validated ProtocolComponentBo component) {
-        return protocolService.addComponent(component);
+    public boolean addComponent(@RequestBody @Validated Request<ProtocolComponentBo> bo) {
+        return protocolService.addComponent(bo.getData());
     }
 
     @ApiOperation("修改组件")
     @PostMapping("/editComponent")
-    public String saveComponent(@RequestBody @Validated ProtocolComponentBo component) {
-       return protocolService.saveComponent(component);
+    public String saveComponent(@RequestBody @Validated Request<ProtocolComponentBo> bo) {
+       return protocolService.saveComponent(bo.getData());
     }
 
     @ApiOperation("获取组件详情")
@@ -87,8 +87,8 @@ public class ProtocolController {
     @ApiOperation("保存组件脚本")
     @PostMapping("/saveComponentScript")
     public boolean saveComponentScript(@Validated
-            @RequestBody ProtocolComponentBo upReq) {
-        return protocolService.saveComponentScript(upReq);
+            @RequestBody Request<ProtocolComponentBo> upReq) {
+        return protocolService.saveComponentScript(upReq.getData());
     }
 
 
@@ -113,15 +113,14 @@ public class ProtocolController {
 
     @ApiOperation("新增转换脚本")
     @PostMapping("/converter/add")
-    public boolean addConverter(@Validated @RequestBody ProtocolConverterBo converter) {
-        return protocolService.addConverter(converter);
-
+    public boolean addConverter(@Validated @RequestBody Request<ProtocolConverterBo> converter) {
+        return protocolService.addConverter(converter.getData());
     }
 
     @ApiOperation("修改转换脚本")
     @PostMapping("/converter/edit")
-    public boolean editConverter(ProtocolConverterBo req) {
-        return protocolService.editConverter(req);
+    public boolean editConverter(Request<ProtocolConverterBo> req) {
+        return protocolService.editConverter(req.getData());
     }
 
 
@@ -138,9 +137,9 @@ public class ProtocolController {
     @PostMapping("/converterScript/edit")
     @ApiOperation("保存转换脚本")
     public boolean saveConverterScript(
-            @Validated @RequestBody ProtocolConverterBo req) {
+            @Validated @RequestBody Request<ProtocolConverterBo> req) {
 
-        return protocolService.saveConverterScript(req);
+        return protocolService.saveConverterScript(req.getData());
     }
 
     @PostMapping("/converter/delete")
@@ -152,8 +151,8 @@ public class ProtocolController {
 
     @PostMapping("/component/changeState}")
     @ApiOperation("组件启用/禁用")
-    public boolean changeComponentState(@RequestBody @Validated ChangeStateBo req) {
-       return protocolService.changeComponentState(req);
+    public boolean changeComponentState(@RequestBody @Validated Request<ChangeStateBo> req) {
+       return protocolService.changeComponentState(req.getData());
     }
 
 }

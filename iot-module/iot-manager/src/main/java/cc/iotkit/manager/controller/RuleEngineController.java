@@ -69,8 +69,8 @@ public class RuleEngineController {
 
     @ApiOperation("规则编辑")
     @PostMapping("/edit")
-    public boolean saveRule(@RequestBody @Validated  RuleInfoBo ruleInfoBo) {
-        return ruleEngineService.saveRule(ruleInfoBo);
+    public boolean saveRule(@RequestBody @Validated  Request<RuleInfoBo> ruleInfoBo) {
+        return ruleEngineService.saveRule(ruleInfoBo.getData());
 
     }
 
@@ -120,8 +120,8 @@ public class RuleEngineController {
 
     @ApiOperation("定时任务编辑")
     @PostMapping("/task/save")
-    public boolean saveTask(@Validated @RequestBody TaskInfoBo taskInfo) {
-       return ruleEngineService.saveTask(taskInfo);
+    public boolean saveTask(@Validated @RequestBody Request<TaskInfoBo> taskInfo) {
+       return ruleEngineService.saveTask(taskInfo.getData());
     }
 
     @ApiOperation("停止定时任务")

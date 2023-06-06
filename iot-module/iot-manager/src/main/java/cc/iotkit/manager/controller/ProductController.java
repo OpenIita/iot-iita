@@ -110,9 +110,9 @@ public class ProductController {
     @SaCheckRole("iot_admin")
     @ApiOperation("品类编辑")
     @PostMapping("/category/edit")
-    public boolean saveCategory(@Validated @RequestBody CategoryBo req) {
+    public boolean saveCategory(@Validated @RequestBody Request<CategoryBo> req) {
 
-        return productService.editCategory(req);
+        return productService.editCategory(req.getData());
     }
 
     @SaCheckRole("iot_admin")
@@ -131,13 +131,13 @@ public class ProductController {
 
     @PostMapping("/getModelsByProductKey")
     @ApiModelProperty("获取产品型号")
-    public List<ProductModelVo> getModels(String productKey) {
-        return productService.getModels(productKey);
+    public List<ProductModelVo> getModels(@Validated @RequestBody Request<String> bo) {
+        return productService.getModels(bo.getData());
     }
 
     @PostMapping("/productModel/edit")
     @ApiOperation("编辑产品型号")
-    public boolean saveProductModel(ProductModelBo productModel) {
-        return productService.editProductModel(productModel);
+    public boolean saveProductModel(@Validated @RequestBody Request<ProductModelBo> bo) {
+        return productService.editProductModel(bo.getData());
     }
 }

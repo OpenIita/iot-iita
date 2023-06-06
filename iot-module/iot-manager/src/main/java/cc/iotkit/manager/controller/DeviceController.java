@@ -133,15 +133,14 @@ public class DeviceController {
 
     @ApiOperation("获取设备详情")
     @PostMapping(Constants.API_DEVICE.DETAIL)
-    public DeviceInfo getDetail(@PathVariable("deviceId") String deviceId) {
-        return deviceServiceImpl.getDetail(deviceId);
+    public DeviceInfo getDetail(@PathVariable("deviceId") Request<String> deviceId) {
+        return deviceServiceImpl.getDetail(deviceId.getData());
     }
 
     @ApiOperation("获取设备详情")
-    @PostMapping("/{pk}/{dn}")
-    public DeviceInfo getByPkDn(@PathVariable("pk") String pk,
-                                @PathVariable("dn") String dn) {
-        return deviceServiceImpl.getByPkDn(pk, dn);
+    @PostMapping("/getByPkDn")
+    public DeviceInfo getByPkDn(@Validated @RequestBody Request<DeviceQueryByPkDnBo> query) {
+        return deviceServiceImpl.getByPkDn(query.getData().getPk(), query.getData().getDn());
     }
 
     @ApiOperation("删除设备")
@@ -178,7 +177,7 @@ public class DeviceController {
     @PostMapping("/getThingModel")
     public ThingModelVo getThingModel(@Validated @RequestBody Request<String> request) {
         String deviceId = request.getData();
-        DeviceInfo deviceInfo = getDetail(deviceId);
+        DeviceInfo deviceInfo = deviceServiceImpl.getDetail(deviceId);
         return productService.getThingModelByProductKey(deviceInfo.getProductKey());
     }
 
@@ -198,14 +197,12 @@ public class DeviceController {
     /**
      * 消费设备信息消息（实时推送设备信息）
      */
-    @PostMapping("/{deviceId}/consumer/{clientId}")
+    @PostMapping("/consumer")
     public DeferredResult<ThingModelMessage> consumerDeviceInfo(
-            @PathVariable("deviceId") String deviceId,
-            @PathVariable("clientId") String clientId
+            @Validated @RequestBody Request<DeviceConsumerBo> bo
     ) {
-
-        return deviceServiceImpl.addConsumer(deviceId, clientId);
-
+        DeviceConsumerBo data = bo.getData();
+        return deviceServiceImpl.addConsumer(data.getDeviceId(), data.getClientId());
     }
 
     /**
@@ -298,8 +295,10 @@ public class DeviceController {
     /**
      * 设备配置下发
      */
-    @PostMapping("/config/{deviceId}/send")
-    public InvokeResult sendConfig(@PathVariable("deviceId") String deviceId) {
+    @ApiOperation(value = "设备配置下发")
+    @PostMapping("/config/send")
+    public InvokeResult sendConfig(@Validated @RequestBody Request<String> bo) {
+        String deviceId = bo.getData();
         return new InvokeResult(deviceService.sendConfig(deviceId));
     }
 
