@@ -2,6 +2,7 @@ package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.system.ISysTenantPackageData;
 import cc.iotkit.model.system.SysTenantPackage;
 import cc.iotkit.system.dto.bo.SysTenantPackageBo;
@@ -38,13 +39,14 @@ public class SysTenantPackageServiceImpl implements ISysTenantPackageService {
      * 查询租户套餐列表
      */
     @Override
-    public Paging<SysTenantPackageVo> queryPageList(SysTenantPackageBo bo, PageRequest<?> query) {
-        return new Paging<>();
+    public Paging<SysTenantPackageVo> queryPageList( PageRequest<SysTenantPackageBo> query) {
+        return sysTenantPackageData.findAll(query.to(SysTenantPackage.class)).to(SysTenantPackageVo.class);
     }
 
     @Override
     public List<SysTenantPackageVo> selectList() {
-        return new ArrayList<>();
+        List<SysTenantPackage> all = sysTenantPackageData.findAll();
+        return MapstructUtils.convert(all,SysTenantPackageVo.class);
     }
 
     /**
@@ -52,7 +54,8 @@ public class SysTenantPackageServiceImpl implements ISysTenantPackageService {
      */
     @Override
     public List<SysTenantPackageVo> queryList(SysTenantPackageBo bo) {
-        return new ArrayList<>();
+        List<SysTenantPackage> all = sysTenantPackageData.findAllByCondition(bo.to(SysTenantPackage.class));
+        return MapstructUtils.convert(all,SysTenantPackageVo.class);
     }
 
     /**
@@ -61,7 +64,8 @@ public class SysTenantPackageServiceImpl implements ISysTenantPackageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean insertByBo(SysTenantPackageBo bo) {
-        return false;
+        sysTenantPackageData.save(bo.to(SysTenantPackage.class));
+        return true;
     }
 
     /**
@@ -70,7 +74,8 @@ public class SysTenantPackageServiceImpl implements ISysTenantPackageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateByBo(SysTenantPackageBo bo) {
-        return false;
+        sysTenantPackageData.save(bo.to(SysTenantPackage.class));
+        return true;
     }
 
     /**
@@ -90,6 +95,7 @@ public class SysTenantPackageServiceImpl implements ISysTenantPackageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        return false;
+        sysTenantPackageData.deleteByIds(ids);
+        return true;
     }
 }

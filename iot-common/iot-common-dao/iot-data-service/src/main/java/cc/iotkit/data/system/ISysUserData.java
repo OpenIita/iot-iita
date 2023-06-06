@@ -1,5 +1,7 @@
 package cc.iotkit.data.system;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.system.SysUser;
 
@@ -36,4 +38,7 @@ public interface ISysUserData extends ICommonData<SysUser, Long> {
     SysUser selectTenantUserByUserName(String username, String tenantId);
 
     SysUser selectUserByUserName(String username);
+
+
+    Paging<SysUser> selectAllocatedList(PageRequest<SysUser> to);
 }

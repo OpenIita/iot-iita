@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -72,12 +73,12 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     }
 
     @Override
-    public Paging<SysUserVo> selectAllocatedList(SysUserBo user, PageRequest<?> query) {
-        return null;
+    public Paging<SysUserVo> selectAllocatedList( PageRequest<SysUserBo> query) {
+        return sysUserData.selectAllocatedList(query.to(SysUser.class)).to(SysUserVo.class);
     }
 
     @Override
-    public Paging<SysUserVo> selectUnallocatedList(SysUserBo user, PageRequest<?> query) {
+    public Paging<SysUserVo> selectUnallocatedList( PageRequest<SysUserBo> query) {
         return null;
     }
 
@@ -283,7 +284,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     }
 
     @Override
-    public void deleteUserByIds(Long[] userIds) {
-        sysUserData.deleteByIds(List.of(userIds));
+    public void deleteUserByIds(Collection<Long> userIds) {
+        sysUserData.deleteByIds(userIds);
     }
 }

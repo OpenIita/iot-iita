@@ -62,7 +62,7 @@ public class SysOperlogController extends BaseController {
     @ApiOperation("批量删除操作日志记录")
     @Log(title = "操作日志", businessType = BusinessType.DELETE)
     @SaCheckPermission("monitor:operlog:remove")
-    @DeleteMapping("/{operIds}")
+    @PostMapping("/{operIds}")
     public void remove(@PathVariable Long[] operIds) {
         operLogService.deleteOperLogByIds(List.of(operIds));
     }
@@ -73,7 +73,7 @@ public class SysOperlogController extends BaseController {
     @ApiOperation("清理操作日志记录")
     @Log(title = "操作日志", businessType = BusinessType.CLEAN)
     @SaCheckPermission("monitor:operlog:remove")
-    @DeleteMapping("/clean")
+    @PostMapping("/clean")
     public void clean() {
         operLogService.cleanOperLog();
     }

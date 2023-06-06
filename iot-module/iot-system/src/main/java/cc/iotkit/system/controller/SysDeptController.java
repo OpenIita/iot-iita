@@ -76,7 +76,7 @@ public class SysDeptController extends BaseController {
     @SaCheckPermission("system:dept:add")
     @ApiOperation("新增部门")
     @Log(title = "部门管理", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/add")
     public void add(@Validated @RequestBody Request<SysDeptBo> bo) {
         SysDeptBo dept = bo.getData();
         if (!deptService.checkDeptNameUnique(dept)) {
@@ -91,7 +91,7 @@ public class SysDeptController extends BaseController {
     @ApiOperation("修改部门")
     @SaCheckPermission("system:dept:edit")
     @Log(title = "部门管理", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PostMapping("/edit")
     public void edit(@Validated @RequestBody Request<SysDeptBo> bo) {
         SysDeptBo dept = bo.getData();
         Long deptId = dept.getDeptId();
@@ -114,7 +114,7 @@ public class SysDeptController extends BaseController {
     @SaCheckPermission("system:dept:remove")
     @ApiOperation("删除部门")
     @Log(title = "部门管理", businessType = BusinessType.DELETE)
-    @PostMapping("/delete}")
+    @PostMapping("/delete")
     public void remove(@Validated @RequestBody Request<Long> bo) {
         Long deptId = bo.getData();
         if (deptService.hasChildByDeptId(deptId)) {

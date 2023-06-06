@@ -1,6 +1,7 @@
 package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.constant.CacheConstants;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
@@ -17,6 +18,7 @@ import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -36,13 +38,14 @@ public class SysUserOnlineController extends BaseController {
     /**
      * 获取在线用户监控列表
      *
-     * @param ipaddr   IP地址
-     * @param userName 用户名
      */
     @ApiOperation("获取在线用户监控列表")
     @SaCheckPermission("monitor:online:list")
-    @GetMapping("/list")
-    public Paging<SysUserOnline> list(String ipaddr, String userName) {
+    @PostMapping("/list")
+    public Paging<SysUserOnline> list(@RequestBody @Validated Request<SysUserOnline> request) {
+        SysUserOnline data = request.getData();
+        String ipaddr = data.getIpaddr();
+        String userName = data.getUserName();
         // 获取所有未过期的 token
         List<String> keys = StpUtil.searchTokenValue("", 0, -1, false);
         List<UserOnlineDTO> userOnlineDTOList = new ArrayList<>();
@@ -77,15 +80,14 @@ public class SysUserOnlineController extends BaseController {
     /**
      * 强退用户
      *
-     * @param tokenId token值
      */
     @ApiOperation("强退用户")
     @SaCheckPermission("monitor:online:forceLogout")
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
-    @DeleteMapping("/{tokenId}")
-    public void forceLogout(@PathVariable String tokenId) {
+    @PostMapping("/kickoutByTokenValue")
+    public void forceLogout(@RequestBody @Validated Request<String> bo) {
         try {
-            StpUtil.kickoutByTokenValue(tokenId);
+            StpUtil.kickoutByTokenValue(bo.getData());
         } catch (NotLoginException ignored) {
         }
     }

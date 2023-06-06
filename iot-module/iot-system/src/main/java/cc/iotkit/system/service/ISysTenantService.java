@@ -28,7 +28,7 @@ public interface ISysTenantService {
     /**
      * 查询租户列表
      */
-    Paging<SysTenantVo> queryPageList(SysTenantBo bo, PageRequest<?> query);
+    Paging<SysTenantVo> queryPageList(  PageRequest<SysTenantBo> query);
 
     /**
      * 查询租户列表

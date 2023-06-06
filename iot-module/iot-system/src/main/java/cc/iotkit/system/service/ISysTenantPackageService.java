@@ -23,7 +23,7 @@ public interface ISysTenantPackageService {
     /**
      * 查询租户套餐列表
      */
-    Paging<SysTenantPackageVo> queryPageList(SysTenantPackageBo bo, PageRequest<?> query);
+    Paging<SysTenantPackageVo> queryPageList( PageRequest<SysTenantPackageBo> query);
 
     /**
      * 查询租户套餐已启用列表

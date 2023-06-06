@@ -175,8 +175,8 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "查询已分配用户角色列表", notes = "查询已分配用户角色列表")
     @SaCheckPermission("system:role:list")
     @PostMapping("/authUser/allocatedList")
-    public Paging<SysUserVo> allocatedList(Request<SysUserBo> bo, PageRequest<?> query) {
-        return userService.selectAllocatedList(bo.getData(), query);
+    public Paging<SysUserVo> allocatedList(@RequestBody @Validated PageRequest<SysUserBo> query) {
+        return userService.selectAllocatedList(query);
     }
 
     /**
@@ -185,8 +185,8 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "查询未分配用户角色列表", notes = "查询未分配用户角色列表")
     @SaCheckPermission("system:role:list")
     @PostMapping("/authUser/unallocatedList")
-    public Paging<SysUserVo> unallocatedList(Request<SysUserBo> bo, PageRequest<?> query) {
-        return userService.selectUnallocatedList(bo.getData(), query);
+    public Paging<SysUserVo> unallocatedList( PageRequest<SysUserBo> query) {
+        return userService.selectUnallocatedList( query);
     }
 
     /**

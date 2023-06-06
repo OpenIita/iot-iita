@@ -90,7 +90,7 @@ public class SysDictDataController {
      */
     @SaCheckPermission("system:dict:add")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/add")
     public void add(@Validated @RequestBody Request<SysDictDataBo> bo) {
         dictDataService.insertDictData(bo.getData());
     }
@@ -101,7 +101,7 @@ public class SysDictDataController {
     @ApiOperation(value = "修改保存字典类型", notes = "修改保存字典类型")
     @SaCheckPermission("system:dict:edit")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PutMapping("/edit")
     public void edit(@Validated @RequestBody Request<SysDictDataBo> bo) {
         dictDataService.updateDictData(bo.getData());
     }
@@ -113,7 +113,7 @@ public class SysDictDataController {
     @ApiOperation(value = "删除字典类型", notes = "删除字典类型")
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public void remove(@Validated @RequestBody Request<Long[]> bo) {
         dictDataService.deleteDictDataByIds(bo.getData());
     }

@@ -46,8 +46,8 @@ public class SysTenantServiceImpl implements ISysTenantService {
     }
 
     @Override
-    public Paging<SysTenantVo> queryPageList(SysTenantBo bo, PageRequest<?> query) {
-        return null;
+    public Paging<SysTenantVo> queryPageList(PageRequest<SysTenantBo> query) {
+        return sysTenantData.findAll(query.to(SysTenant.class)).to(SysTenantVo.class);
     }
 
     @Override

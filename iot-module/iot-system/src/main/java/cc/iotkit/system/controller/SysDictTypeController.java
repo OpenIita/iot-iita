@@ -102,7 +102,7 @@ public class SysDictTypeController extends BaseController {
      */
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{dictIds}")
+    @PostMapping("/delete")
     public void remove(@PathVariable Collection<Long> dictIds) {
         dictTypeService.deleteDictTypeByIds(dictIds);
     }
@@ -112,7 +112,7 @@ public class SysDictTypeController extends BaseController {
      */
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.CLEAN)
-    @DeleteMapping("/refreshCache")
+    @PostMapping("/refreshCache")
     public void refreshCache() {
         dictTypeService.resetDictCache();
     }

@@ -2,6 +2,7 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.constant.TenantConstants;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
@@ -49,8 +50,8 @@ public class SysTenantController extends BaseController {
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:list")
     @PostMapping("/list")
-    public Paging<SysTenantVo> list(SysTenantBo bo, PageRequest<?> query) {
-        return tenantService.queryPageList(bo, query);
+    public Paging<SysTenantVo> list(@Validated @RequestBody PageRequest<SysTenantBo> query) {
+        return tenantService.queryPageList(query);
     }
 
     /**
@@ -61,36 +62,36 @@ public class SysTenantController extends BaseController {
     @SaCheckPermission("system:tenant:export")
     @Log(title = "租户", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(SysTenantBo bo, HttpServletResponse response) {
-        List<SysTenantVo> list = tenantService.queryList(bo);
+    public void export(Request<SysTenantBo> bo, HttpServletResponse response) {
+        List<SysTenantVo> list = tenantService.queryList(bo.getData());
         ExcelUtil.exportExcel(list, "租户", SysTenantVo.class, response);
     }
 
     /**
      * 获取租户详细信息
      *
-     * @param id 主键
      */
     @ApiOperation("获取租户详细信息")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:query")
-    @GetMapping("/{id}")
-    public SysTenantVo getInfo(@NotNull(message = "主键不能为空")
-                               @PathVariable Long id) {
-        return tenantService.queryById(id);
+    @PostMapping("/getDetail")
+    public SysTenantVo getInfo(@Validated @RequestBody Request<Long> bo) {
+        return tenantService.queryById(bo.getData());
     }
 
     /**
      * 新增租户
      */
+    @ApiOperation("新增租户")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:add")
     @Log(title = "租户", businessType = BusinessType.INSERT)
     @Lock4j
     @PostMapping()
-    public void add(@Validated(AddGroup.class) @RequestBody SysTenantBo bo) {
-        if (!tenantService.checkCompanyNameUnique(bo)) {
-            fail("新增租户'" + bo.getCompanyName() + "'失败，企业名称已存在");
+    public void add(@Validated(AddGroup.class) @RequestBody Request<SysTenantBo> bo) {
+        SysTenantBo data = bo.getData();
+        if (!tenantService.checkCompanyNameUnique(data)) {
+            fail("新增租户'" + data.getCompanyName() + "'失败，企业名称已存在");
         }
         //TenantHelper.ignore(() -> tenantService.insertByBo(bo));
     }
@@ -98,16 +99,18 @@ public class SysTenantController extends BaseController {
     /**
      * 修改租户
      */
+    @ApiOperation("修改租户")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:edit")
     @Log(title = "租户", businessType = BusinessType.UPDATE)
     @PutMapping()
-    public void edit(@Validated(EditGroup.class) @RequestBody SysTenantBo bo) {
-        tenantService.checkTenantAllowed(bo.getTenantId());
-        if (!tenantService.checkCompanyNameUnique(bo)) {
-            fail("修改租户'" + bo.getCompanyName() + "'失败，公司名称已存在");
+    public void edit(@Validated(EditGroup.class) @RequestBody Request<SysTenantBo> bo) {
+        SysTenantBo data = bo.getData();
+        tenantService.checkTenantAllowed(data.getTenantId());
+        if (!tenantService.checkCompanyNameUnique(data)) {
+            fail("修改租户'" + data.getCompanyName() + "'失败，公司名称已存在");
         }
-        tenantService.updateByBo(bo);
+        tenantService.updateByBo(data);
     }
 
     /**
@@ -117,41 +120,42 @@ public class SysTenantController extends BaseController {
     @SaCheckPermission("system:tenant:edit")
     @Log(title = "租户", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
-    public void changeStatus(@RequestBody SysTenantBo bo) {
-        tenantService.checkTenantAllowed(bo.getTenantId());
-        tenantService.updateTenantStatus(bo);
+    public void changeStatus(@RequestBody Request<SysTenantBo> bo) {
+        SysTenantBo data = bo.getData();
+        tenantService.checkTenantAllowed(data.getTenantId());
+        tenantService.updateTenantStatus(data);
     }
 
     /**
      * 删除租户
      *
-     * @param ids 主键串
      */
+    @ApiOperation("删除租户")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:remove")
     @Log(title = "租户", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ids}")
-    public void remove(@NotEmpty(message = "主键不能为空")
-                       @PathVariable Long[] ids) {
-        tenantService.deleteWithValidByIds(List.of(ids), true);
+    @PostMapping("/delete")
+    public void remove(@Validated @RequestBody Request<Long[]> bo) {
+        tenantService.deleteWithValidByIds(List.of(bo.getData()), true);
     }
 
     /**
      * 动态切换租户
      *
-     * @param tenantId 租户ID
      */
+    @ApiOperation("动态切换租户")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
-    @GetMapping("/dynamic/{tenantId}")
-    public void dynamicTenant(@NotBlank(message = "租户ID不能为空") @PathVariable String tenantId) {
-        TenantHelper.setDynamic(tenantId);
+    @PostMapping("/dynamic")
+    public void dynamicTenant(@Validated @RequestBody Request<String> bo) {
+        TenantHelper.setDynamic(bo.getData());
     }
 
     /**
      * 清除动态租户
      */
+    @ApiOperation("清除动态租户")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
-    @GetMapping("/dynamic/clear")
+    @PostMapping("/dynamic/clear")
     public void dynamicClear() {
         TenantHelper.clearDynamic();
     }
@@ -163,10 +167,11 @@ public class SysTenantController extends BaseController {
      * @param tenantId  租户id
      * @param packageId 套餐id
      */
+    @ApiOperation("同步租户套餐")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:edit")
     @Log(title = "租户", businessType = BusinessType.UPDATE)
-    @GetMapping("/syncTenantPackage")
+    @PostMapping("/syncTenantPackage")
     public void syncTenantPackage(@NotBlank(message = "租户ID不能为空") String tenantId, @NotBlank(message = "套餐ID不能为空") String packageId) {
         //TenantHelper.ignore(() -> tenantService.syncTenantPackage(tenantId, packageId));
     }

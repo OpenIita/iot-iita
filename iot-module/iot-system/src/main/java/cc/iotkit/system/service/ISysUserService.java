@@ -5,6 +5,7 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysUserBo;
 import cc.iotkit.system.dto.vo.SysUserVo;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,18 +29,16 @@ public interface ISysUserService {
     /**
      * 根据条件分页查询已分配用户角色列表
      *
-     * @param user 用户信息
      * @return 用户信息集合信息
      */
-    Paging<SysUserVo> selectAllocatedList(SysUserBo user, PageRequest<?> query);
+    Paging<SysUserVo> selectAllocatedList( PageRequest<SysUserBo> query);
 
     /**
      * 根据条件分页查询未分配用户角色列表
      *
-     * @param user 用户信息
      * @return 用户信息集合信息
      */
-    Paging<SysUserVo> selectUnallocatedList(SysUserBo user, PageRequest<?> query);
+    Paging<SysUserVo> selectUnallocatedList( PageRequest<SysUserBo> query);
 
     /**
      * 通过用户名查询用户
@@ -200,6 +199,6 @@ public interface ISysUserService {
      * @param userIds 需要删除的用户ID
      * @return 结果
      */
-    void deleteUserByIds(Long[] userIds);
+    void deleteUserByIds(Collection<Long> userIds);
 
 }

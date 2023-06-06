@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -149,7 +150,7 @@ public class SysUserController extends BaseController {
     @ApiOperation("新增用户")
     @SaCheckPermission("system:user:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/add")
     public void add(@Validated(EditGroup.class) @RequestBody Request<SysUserBo> reqUser) {
         SysUserBo user=reqUser.getData();
         if (!userService.checkUserNameUnique(user)) {
@@ -174,7 +175,7 @@ public class SysUserController extends BaseController {
     @ApiOperation("修改用户")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PostMapping("/edit")
     public void edit(@Validated(EditGroup.class) @RequestBody Request<SysUserBo> reqUser) {
         SysUserBo user=reqUser.getData();
         userService.checkUserAllowed(user);
@@ -192,14 +193,14 @@ public class SysUserController extends BaseController {
     /**
      * 删除用户
      *
-     * @param userIds 角色ID串
      */
     @ApiOperation("删除用户")
     @SaCheckPermission("system:user:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{userIds}")
-    public void remove(@PathVariable Long[] userIds) {
-        if (ArrayUtil.contains(userIds, LoginHelper.getUserId())) {
+    @PostMapping("/delete")
+    public void remove(@Validated @RequestBody Request<List<Long>> bo) {
+        List<Long> userIds = bo.getData();
+        if (userIds.contains( LoginHelper.getUserId())) {
             fail("当前用户不能删除");
         }
         userService.deleteUserByIds(userIds);
@@ -211,7 +212,7 @@ public class SysUserController extends BaseController {
     @ApiOperation("重置密码")
     @SaCheckPermission("system:user:resetPwd")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
-    @PutMapping("/resetPwd")
+    @PostMapping("/resetPwd")
     public void resetPwd(@RequestBody @Validated(EditGroup.class)Request<SysUserBo> reqUser) {
         SysUserBo user=reqUser.getData();
         userService.checkUserAllowed(user);
@@ -226,7 +227,7 @@ public class SysUserController extends BaseController {
     @ApiOperation("状态修改")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
-    @PutMapping("/changeStatus")
+    @PostMapping("/changeStatus")
     public void changeStatus(@RequestBody @Validated(EditGroup.class)Request<SysUserBo> reqUser) {
         SysUserBo user=reqUser.getData();
         userService.checkUserAllowed(user);
@@ -241,7 +242,7 @@ public class SysUserController extends BaseController {
      */
     @ApiOperation("根据用户编号获取授权角色")
     @SaCheckPermission("system:user:query")
-    @GetMapping("/authRole/{userId}")
+    @PostMapping("/authRole/{userId}")
     public SysUserInfoVo authRole(@PathVariable Long userId) {
         SysUserVo user = userService.selectUserById(userId);
         List<SysRoleVo> roles = roleService.selectRolesByUserId(userId);
@@ -260,7 +261,7 @@ public class SysUserController extends BaseController {
     @ApiOperation("用户授权角色")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
-    @PutMapping("/authRole")
+    @PostMapping("/authRole")
     public void insertAuthRole(Request<Long> reqUserId, Long[] roleIds) {
         Long userId=reqUserId.getData();
         userService.checkUserDataScope(userId);
@@ -272,7 +273,7 @@ public class SysUserController extends BaseController {
      */
     @ApiOperation("获取部门树列表")
     @SaCheckPermission("system:user:list")
-    @GetMapping("/deptTree")
+    @PostMapping("/deptTree")
     public List<Tree<Long>> deptTree(@RequestBody @Validated(QueryGroup.class) Request<SysDeptBo> reqDept) {
         SysDeptBo dept=reqDept.getData();
         return deptService.selectDeptTreeList(dept);

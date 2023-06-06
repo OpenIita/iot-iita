@@ -77,7 +77,7 @@ public class SysLogininforController extends BaseController {
     @ApiOperation("清理系统访问记录")
     @SaCheckPermission("monitor:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.CLEAN)
-    @DeleteMapping("/clean")
+    @PostMapping("/clean")
     public void clean() {
         logininforService.cleanLogininfor();
     }
