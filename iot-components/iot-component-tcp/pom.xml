@@ -88,6 +88,7 @@
                     <target>${java.version}</target>
                     <forceJavacCompilerUse>true</forceJavacCompilerUse>
                     <useIncrementalCompilation>false</useIncrementalCompilation>
+                    <encoding>utf8</encoding>
                 </configuration>
             </plugin>
         </plugins>

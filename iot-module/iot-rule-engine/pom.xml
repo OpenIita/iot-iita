@@ -107,9 +107,10 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <encoding>utf8</encoding>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    
+
 </project>

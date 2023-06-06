@@ -3,10 +3,12 @@
   <parent>
     <artifactId>iot-components</artifactId>
     <groupId>cc.iotkit</groupId>
-    <version>${revision}</version>
+    <version>0.4.5-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
+  <groupId>cc.iotkit</groupId>
   <artifactId>iot-emqx-component</artifactId>
+  <version>0.4.5-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
@@ -48,67 +50,44 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>11</source>
-          <target>11</target>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
           <forceJavacCompilerUse>true</forceJavacCompilerUse>
           <useIncrementalCompilation>false</useIncrementalCompilation>
+          <encoding>utf8</encoding>
         </configuration>
       </plugin>
     </plugins>
   </build>
   <dependencies>
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-core</artifactId>
-      <version>4.2.2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-web-proxy</artifactId>
-      <version>4.2.2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-mqtt</artifactId>
-      <version>4.2.2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.luaj</groupId>
-      <artifactId>luaj-jse</artifactId>
-      <version>3.0.1</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>cc.iotkit</groupId>
-       <artifactId>iot-common-model</artifactId>
-      <version>0.4.3-SNAPSHOT</version>
+      <artifactId>iot-common-model</artifactId>
+      <version>0.4.5-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-common-core</artifactId>
-      <version>0.4.3-SNAPSHOT</version>
+      <version>0.4.5-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-component-base</artifactId>
-      <version>0.4.3-SNAPSHOT</version>
+      <version>0.4.5-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-data-service</artifactId>
-      <version>0.4.3-SNAPSHOT</version>
+      <version>0.4.5-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-script-engine</artifactId>
-      <version>0.4.3-SNAPSHOT</version>
+      <version>0.4.5-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
