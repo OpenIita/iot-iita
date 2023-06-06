@@ -2,6 +2,7 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.validate.AddGroup;
@@ -12,6 +13,7 @@ import cc.iotkit.system.dto.bo.SysOssConfigBo;
 import cc.iotkit.system.dto.vo.SysOssConfigVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysOssConfigService;
+import io.swagger.annotations.ApiOperation;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +40,11 @@ public class SysOssConfigController extends BaseController {
     /**
      * 查询对象存储配置列表
      */
+    @ApiOperation(value = "查询对象存储配置列表", notes = "查询对象存储配置列表")
     @SaCheckPermission("system:oss:list")
-    @GetMapping("/list")
-    public Paging<SysOssConfigVo> list(@Validated(QueryGroup.class) SysOssConfigBo bo, PageRequest<?> query) {
-        return ossConfigService.queryPageList(bo, query);
+    @PostMapping("/list")
+    public Paging<SysOssConfigVo> list(@Validated @RequestBody PageRequest<SysOssConfigBo> query) {
+        return ossConfigService.queryPageList(query);
     }
 
     /**
@@ -49,8 +52,9 @@ public class SysOssConfigController extends BaseController {
      *
      * @param ossConfigId OSS配置ID
      */
+    @ApiOperation(value = "获取对象存储配置详细信息", notes = "获取对象存储配置详细信息")
     @SaCheckPermission("system:oss:query")
-    @GetMapping("/{ossConfigId}")
+    @PostMapping("/{ossConfigId}")
     public SysOssConfigVo getInfo(@NotNull(message = "主键不能为空")
                                   @PathVariable Long ossConfigId) {
         return ossConfigService.queryById(ossConfigId);
@@ -59,11 +63,12 @@ public class SysOssConfigController extends BaseController {
     /**
      * 新增对象存储配置
      */
+    @ApiOperation(value = "新增对象存储配置", notes = "新增对象存储配置")
     @SaCheckPermission("system:oss:add")
     @Log(title = "对象存储配置", businessType = BusinessType.INSERT)
     @PostMapping()
-    public void add(@Validated(AddGroup.class) @RequestBody SysOssConfigBo bo) {
-        ossConfigService.insertByBo(bo);
+    public void add(@Validated(AddGroup.class) @RequestBody Request<SysOssConfigBo> bo) {
+        ossConfigService.insertByBo(bo.getData());
     }
 
     /**
@@ -72,21 +77,19 @@ public class SysOssConfigController extends BaseController {
     @SaCheckPermission("system:oss:edit")
     @Log(title = "对象存储配置", businessType = BusinessType.UPDATE)
     @PutMapping()
-    public void edit(@Validated(EditGroup.class) @RequestBody SysOssConfigBo bo) {
-        ossConfigService.updateByBo(bo);
+    public void edit(@Validated(EditGroup.class) @RequestBody Request<SysOssConfigBo> bo) {
+        ossConfigService.updateByBo(bo.getData());
     }
 
     /**
      * 删除对象存储配置
      *
-     * @param ossConfigIds OSS配置ID串
      */
     @SaCheckPermission("system:oss:remove")
     @Log(title = "对象存储配置", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ossConfigIds}")
-    public void remove(@NotEmpty(message = "主键不能为空")
-                       @PathVariable Long[] ossConfigIds) {
-        ossConfigService.deleteWithValidByIds(List.of(ossConfigIds), true);
+    @PostMapping("/delete")
+    public void remove(@Validated @RequestBody Request<List<Long>> bo) {
+        ossConfigService.deleteWithValidByIds(bo.getData(), true);
     }
 
     /**
@@ -94,8 +97,8 @@ public class SysOssConfigController extends BaseController {
      */
     @SaCheckPermission("system:oss:edit")
     @Log(title = "对象存储状态修改", businessType = BusinessType.UPDATE)
-    @PutMapping("/changeStatus")
-    public void changeStatus(@RequestBody SysOssConfigBo bo) {
-        ossConfigService.updateOssConfigStatus(bo);
+    @PostMapping("/changeStatus")
+    public void changeStatus(@RequestBody Request<SysOssConfigBo> bo) {
+        ossConfigService.updateOssConfigStatus(bo.getData());
     }
 }

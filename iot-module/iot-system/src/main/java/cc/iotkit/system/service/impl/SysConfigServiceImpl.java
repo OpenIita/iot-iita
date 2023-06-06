@@ -7,6 +7,7 @@ import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
 import cc.iotkit.common.service.ConfigService;
+import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StringUtils;
@@ -15,6 +16,7 @@ import cc.iotkit.model.system.SysConfig;
 import cc.iotkit.system.dto.bo.SysConfigBo;
 import cc.iotkit.system.dto.vo.SysConfigVo;
 import cc.iotkit.system.service.ISysConfigService;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,14 +78,17 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      */
     @Override
     public boolean selectRegisterEnabled(String tenantId) {
-//        SysConfig retConfig = baseMapper.selectOne(new LambdaQueryWrapper<SysConfig>()
-//            .eq(SysConfig::getConfigKey, "sys.account.registerUser")
-//            .eq(TenantHelper.isEnable(),SysConfig::getTenantId, tenantId));
-//        if (ObjectUtil.isNull(retConfig)) {
-//            return false;
-//        }
-//        return Convert.toBool(retConfig.getConfigValue());
-        return false;
+        SysConfig query = new SysConfig();
+        query.setConfigKey("sys.account.registerUser");
+        if(TenantHelper.isEnable()){
+            query.setTenantId(tenantId);
+        }
+        SysConfig retConfig = sysConfigData.findOneByCondition(query);
+
+        if (ObjectUtil.isNull(retConfig)) {
+            return false;
+        }
+        return Convert.toBool(retConfig.getConfigValue());
     }
 
     /**
@@ -167,10 +172,9 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      */
     @Override
     public boolean checkConfigKeyUnique(SysConfigBo config) {
-//        long configId = ObjectUtil.isNull(config.getId()) ? -1L : config.getId();
-//        SysConfig old = sysConfigData.findByConfigKey(config.getConfigKey());
-//        return !ObjectUtil.isNotNull(old) || old.getId() == configId;
-        return true;
+        long configId = ObjectUtil.isNull(config.getId()) ? -1L : config.getId();
+        SysConfig old = sysConfigData.findByConfigKey(config.getConfigKey());
+        return !ObjectUtil.isNotNull(old) || old.getId() == configId;
     }
 
     /**

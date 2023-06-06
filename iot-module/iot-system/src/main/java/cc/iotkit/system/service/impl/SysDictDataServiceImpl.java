@@ -28,13 +28,8 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
     private final ISysDictData sysDictData;
 
     @Override
-    public Paging<SysDictDataVo> selectPageDictDataList(SysDictDataBo dictData, PageRequest<?> query) {
-        return MapstructUtils.convert(
-                sysDictData.findByConditions(
-                        dictData.to(SysDictData.class),
-                        query.getPageNum(),
-                        query.getPageSize()
-                ), SysDictDataVo.class);
+    public Paging<SysDictDataVo> selectPageDictDataList( PageRequest<SysDictDataBo> query) {
+        return sysDictData.findAll(query.to(SysDictData.class) ).to(SysDictDataVo.class);
     }
 
     /**

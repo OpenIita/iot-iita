@@ -11,6 +11,7 @@ import cc.iotkit.common.utils.TreeBuildUtils;
 import cc.iotkit.data.system.ISysDeptData;
 import cc.iotkit.data.system.ISysRoleData;
 import cc.iotkit.data.system.ISysUserData;
+import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysDept;
 import cc.iotkit.model.system.SysRole;
 import cc.iotkit.system.dto.bo.SysDeptBo;
@@ -26,6 +27,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static cc.iotkit.data.model.QTbSysDept.tbSysDept;
 
 /**
  * 部门管理 服务实现
@@ -93,10 +96,8 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
      */
     @Override
     public List<Long> selectDeptListByRoleId(Long roleId) {
-        SysRole role = sysRoleData.findById(roleId);
         return sysDeptData.findByRoleId(roleId).stream()
                 .map(SysDept::getId).collect(Collectors.toList());
-//        return baseMapper.selectDeptListByRoleId(roleId, role.getDeptCheckStrictly());
     }
 
     /**
@@ -144,10 +145,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
      */
     @Override
     public long selectNormalChildrenDeptById(Long deptId) {
-//        return baseMapper.selectCount(new LambdaQueryWrapper<SysDept>()
-//                .eq(SysDept::getStatus, UserConstants.DEPT_NORMAL)
-//                .apply(DataBaseHelper.findInSet(deptId, "ancestors")));
-        return 0;
+        return  sysDeptData.selectNormalChildrenDeptById(deptId);
     }
 
     /**
@@ -180,12 +178,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
      */
     @Override
     public boolean checkDeptNameUnique(SysDeptBo dept) {
-//        boolean exist = baseMapper.exists(new LambdaQueryWrapper<SysDept>()
-//                .eq(SysDept::getDeptName, dept.getDeptName())
-//                .eq(SysDept::getParentId, dept.getParentId())
-//                .ne(ObjectUtil.isNotNull(dept.getDeptId()), SysDept::getDeptId, dept.getDeptId()));
-//        return !exist;
-        return false;
+        return sysDeptData.checkDeptNameUnique( dept.getDeptName(), dept.getParentId(), dept.getDeptId());
     }
 
     /**

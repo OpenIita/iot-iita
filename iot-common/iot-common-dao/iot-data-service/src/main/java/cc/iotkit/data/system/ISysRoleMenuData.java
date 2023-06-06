@@ -3,6 +3,7 @@ package cc.iotkit.data.system;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.system.SysRoleMenu;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -15,6 +16,6 @@ public interface ISysRoleMenuData extends ICommonData<SysRoleMenu, Long> {
 
     long insertBatch(List<SysRoleMenu> list);
 
-    long deleteByRoleId(List<Long> ids);
+    long deleteByRoleId(Collection<Long> ids);
 
 }

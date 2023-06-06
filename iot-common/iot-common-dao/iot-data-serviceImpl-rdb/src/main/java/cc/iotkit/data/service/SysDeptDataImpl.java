@@ -6,11 +6,14 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysDeptRepository;
+import cc.iotkit.data.model.QTbSysRoleDept;
 import cc.iotkit.data.model.TbSysDept;
 import cc.iotkit.data.system.ISysDeptData;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysDept;
 import cn.hutool.core.util.ObjectUtil;
+import com.querydsl.core.types.dsl.BooleanTemplate;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static cc.iotkit.data.model.QTbSysDept.tbSysDept;
+import static cc.iotkit.data.model.QTbSysRoleDept.tbSysRoleDept;
 
 /**
  * @Author：tfd
@@ -68,17 +72,43 @@ public class SysDeptDataImpl implements ISysDeptData, IJPACommData<SysDept, Long
 
     @Override
     public List<SysDept> findByRoleId(Long roleId) {
-        return null;
+        List<TbSysDept> list = jpaQueryFactory.select(tbSysDept).from(tbSysDept).leftJoin(tbSysRoleDept).on(tbSysDept.id.eq(tbSysRoleDept.deptId))
+                .where(tbSysRoleDept.roleId.eq(roleId)).orderBy(tbSysDept.parentId.desc(), tbSysDept.orderNum.desc()).fetch();
+        return MapstructUtils.convert(list,SysDept.class);
+
     }
 
     @Override
     public long countByParentId(Long parentId) {
-        return 0;
+        return jpaQueryFactory.select(tbSysDept.id.count()).from(tbSysDept).where(tbSysDept.parentId.eq(parentId)).fetchOne();
     }
 
     @Override
     public List<SysDept> findByDeptId(Long deptId) {
         return MapstructUtils.convert(deptRepository.findAll().stream().filter(o->o.getAncestors().indexOf(deptId.toString())!=-1)
                 .collect(Collectors.toList()),SysDept.class);
+    }
+
+    @Override
+    public boolean checkDeptNameUnique(String deptName, Long parentId, Long deptId) {
+        PredicateBuilder predicateBuilder = PredicateBuilder.instance().and(tbSysDept.deptName.eq(deptName))
+                .and(tbSysDept.parentId.eq(parentId));
+        if (ObjectUtil.isNotNull(deptId)) {
+            predicateBuilder.and(tbSysDept.id.ne(deptId));
+        }
+        Long aLong = jpaQueryFactory.select(tbSysDept.id.count()).where(predicateBuilder.build()).fetchOne();
+        if (aLong > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public long selectNormalChildrenDeptById(Long deptId) {
+
+        PredicateBuilder predicateBuilder = PredicateBuilder.instance().and(tbSysDept.status.eq(UserConstants.DEPT_NORMAL));
+         return jpaQueryFactory.select(tbSysDept.ancestors).where(predicateBuilder.build()).fetch().stream().filter(o->o.indexOf(deptId.toString())!=-1).count();
+
+
     }
 }

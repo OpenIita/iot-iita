@@ -29,7 +29,7 @@ public interface ISysOssConfigService {
     /**
      * 查询列表
      */
-    Paging<SysOssConfigVo> queryPageList(SysOssConfigBo bo, PageRequest<?> query);
+    Paging<SysOssConfigVo> queryPageList(PageRequest<SysOssConfigBo> query);
 
 
     /**

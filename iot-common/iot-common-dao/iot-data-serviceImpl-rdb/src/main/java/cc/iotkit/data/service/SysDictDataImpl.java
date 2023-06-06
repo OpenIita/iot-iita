@@ -60,13 +60,10 @@ public class SysDictDataImpl implements ISysDictData, IJPACommData<SysDictData, 
 
     @Override
     public List<SysDictData> findByConditions(SysDictData query) {
-        return null;
+        return findAllByCondition(query);
     }
 
-    @Override
-    public Paging<SysDictData> findByConditions(SysDictData query, int page, int size) {
-        return null;
-    }
+
 
     @Override
     public SysDictData findByDictTypeAndDictValue(String dictType, String dictValue) {

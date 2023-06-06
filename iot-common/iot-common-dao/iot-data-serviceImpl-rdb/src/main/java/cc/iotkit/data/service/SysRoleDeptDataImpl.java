@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 import static cc.iotkit.data.model.QTbSysRoleDept.tbSysRoleDept;
@@ -32,7 +33,7 @@ public class SysRoleDeptDataImpl implements ISysRoleDeptData, IJPACommData<SysRo
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public void deleteByRoleId(List<Long> roleIds) {
+    public void deleteByRoleId(Collection<Long> roleIds) {
         jpaQueryFactory.delete(tbSysRoleDept).where(PredicateBuilder.instance().and(tbSysRoleDept.roleId.in(roleIds)).build());
     }
 

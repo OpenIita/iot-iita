@@ -2,6 +2,7 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.constant.GlobalConstants;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
@@ -38,6 +39,7 @@ public class SysLogininforController extends BaseController {
     /**
      * 获取系统访问记录列表
      */
+
     @ApiOperation("获取系统访问记录列表")
     @SaCheckPermission("monitor:logininfor:list")
     @PostMapping("/list")
@@ -52,21 +54,21 @@ public class SysLogininforController extends BaseController {
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)
     @SaCheckPermission("monitor:logininfor:export")
     @PostMapping("/export")
-    public void export(SysLogininforBo logininfor, HttpServletResponse response) {
-        List<SysLogininforVo> list = logininforService.selectLogininforList(logininfor);
+    public void export(Request<SysLogininforBo> logininfor, HttpServletResponse response) {
+        List<SysLogininforVo> list = logininforService.selectLogininforList(logininfor.getData());
         ExcelUtil.exportExcel(list, "登录日志", SysLogininforVo.class, response);
     }
 
     /**
      * 批量删除登录日志
-     * @param infoIds 日志ids
+
      */
     @ApiOperation("批量删除登录日志")
     @SaCheckPermission("monitor:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{infoIds}")
-    public void remove(@PathVariable Long[] infoIds) {
-        logininforService.deleteLogininforByIds(List.of(infoIds));
+    @PostMapping("/delete")
+    public void remove(@RequestBody @Validated Request<List<Long>> bo) {
+        logininforService.deleteLogininforByIds(bo.getData());
     }
 
     /**
@@ -83,9 +85,9 @@ public class SysLogininforController extends BaseController {
     @ApiOperation("账户解锁")
     @SaCheckPermission("monitor:logininfor:unlock")
     @Log(title = "账户解锁", businessType = BusinessType.OTHER)
-    @GetMapping("/unlock/{userName}")
-    public void unlock(@PathVariable("userName") String userName) {
-        String loginName = GlobalConstants.PWD_ERR_CNT_KEY + userName;
+    @PostMapping("/unlockByUserName")
+    public void unlock(@Validated @RequestBody Request<String> bo) {
+        String loginName = GlobalConstants.PWD_ERR_CNT_KEY + bo.getData();
         if (RedisUtils.hasKey(loginName)) {
             RedisUtils.deleteObject(loginName);
         }

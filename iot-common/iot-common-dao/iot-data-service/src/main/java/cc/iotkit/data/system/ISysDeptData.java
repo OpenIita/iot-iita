@@ -49,4 +49,8 @@ public interface ISysDeptData extends ICommonData<SysDept, Long> {
      */
     List<SysDept> findByDeptId(Long deptId);
 
+
+    boolean checkDeptNameUnique(String deptName, Long parentId, Long deptId);
+
+    long selectNormalChildrenDeptById(Long deptId);
 }

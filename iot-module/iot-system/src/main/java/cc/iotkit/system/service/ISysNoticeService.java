@@ -17,7 +17,7 @@ import java.util.List;
 public interface ISysNoticeService {
 
 
-    Paging<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageRequest<?> query);
+    Paging<SysNoticeVo> selectPageNoticeList( PageRequest<SysNoticeBo> query);
 
     /**
      * 查询公告信息

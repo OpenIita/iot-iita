@@ -3,6 +3,7 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.validate.QueryGroup;
@@ -13,6 +14,7 @@ import cc.iotkit.system.dto.vo.SysOssVo;
 import cc.iotkit.system.service.ISysOssService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.ObjectUtil;
+import io.swagger.annotations.ApiOperation;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -42,7 +44,7 @@ public class SysOssController extends BaseController {
      * 查询OSS对象存储列表
      */
     @SaCheckPermission("system:oss:list")
-    @GetMapping("/list")
+    @PostMapping("/list")
     public Paging<SysOssVo> list(@Validated(QueryGroup.class) SysOssBo bo, PageRequest<?> query) {
         return ossService.queryPageList(bo, query);
     }
@@ -50,13 +52,12 @@ public class SysOssController extends BaseController {
     /**
      * 查询OSS对象基于id串
      *
-     * @param ossIds OSS对象ID串
      */
+    @ApiOperation(value = "查询OSS对象基于id串", notes = "查询OSS对象基于id串")
     @SaCheckPermission("system:oss:list")
-    @GetMapping("/listByIds/{ossIds}")
-    public List<SysOssVo> listByIds(@NotEmpty(message = "主键不能为空")
-                                    @PathVariable Long[] ossIds) {
-        return ossService.listByIds(Arrays.asList(ossIds));
+    @PostMapping("/listByIds")
+    public List<SysOssVo> listByIds(@Validated @RequestBody Request<List<Long>> bo) {
+        return ossService.listByIds(bo.getData());
     }
 
     /**
@@ -64,6 +65,7 @@ public class SysOssController extends BaseController {
      *
      * @param file 文件
      */
+    @ApiOperation(value = "上传OSS对象存储", notes = "上传OSS对象存储")
     @SaCheckPermission("system:oss:upload")
     @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -82,25 +84,24 @@ public class SysOssController extends BaseController {
     /**
      * 下载OSS对象
      *
-     * @param ossId OSS对象ID
      */
     @SaCheckPermission("system:oss:download")
-    @GetMapping("/download/{ossId}")
-    public void download(@PathVariable Long ossId, HttpServletResponse response) throws IOException {
-        ossService.download(ossId);
+    @PostMapping("/downloadById")
+    public void download(@RequestBody @Validated Request<Long> bo, HttpServletResponse response) throws IOException {
+        ossService.download(bo.getData());
     }
 
     /**
      * 删除OSS对象存储
      *
-     * @param ossIds OSS对象ID串
+
      */
+    @ApiOperation(value = "删除OSS对象存储", notes = "删除OSS对象存储")
     @SaCheckPermission("system:oss:remove")
     @Log(title = "OSS对象存储", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ossIds}")
-    public void remove(@NotEmpty(message = "主键不能为空")
-                       @PathVariable Long[] ossIds) {
-        ossService.deleteWithValidByIds(List.of(ossIds), true);
+    @PostMapping("/delete")
+    public void remove(@Validated @RequestBody Request<List<Long>> bo) {
+        ossService.deleteWithValidByIds(bo.getData(), true);
     }
 
 }

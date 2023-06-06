@@ -39,12 +39,8 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
     private final ISysDictData sysDictData;
 
     @Override
-    public Paging<SysDictTypeVo> selectPageDictTypeList(SysDictTypeBo dictType, PageRequest<?> query) {
-        return MapstructUtils.convert(
-                sysDictTypeData.findByConditions(
-                        dictType.to(SysDictType.class),
-                        query.getPageNum(), query.getPageSize()),
-                SysDictTypeVo.class);
+    public Paging<SysDictTypeVo> selectPageDictTypeList( PageRequest<?> query) {
+        return sysDictTypeData.findAll(query.to(SysDictType.class)).to(SysDictTypeVo.class);
     }
 
     /**

@@ -65,7 +65,7 @@ public class SysRoleMenuDataImpl implements ISysRoleMenuData, IJPACommData<SysRo
     }
 
     @Override
-    public long deleteByRoleId(List<Long> ids) {
+    public long deleteByRoleId(Collection<Long> ids) {
         return jpaQueryFactory.delete(tbSysRoleMenu).where(tbSysRoleMenu.roleId.in(ids)).execute();
     }
 

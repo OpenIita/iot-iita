@@ -1,11 +1,13 @@
 package cc.iotkit.system.controller;
 
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.file.MimeTypeUtils;
 import cc.iotkit.common.web.core.BaseController;
+import cc.iotkit.system.dto.bo.SysChangePwdBo;
 import cc.iotkit.system.dto.bo.SysUserBo;
 import cc.iotkit.system.dto.bo.SysUserProfileBo;
 import cc.iotkit.system.dto.vo.AvatarVo;
@@ -17,6 +19,7 @@ import cc.iotkit.system.service.ISysUserService;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.io.FileUtil;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -42,7 +45,9 @@ public class SysProfileController extends BaseController {
     /**
      * 个人信息
      */
-    @GetMapping
+
+    @ApiOperation(value = "个人信息", notes = "个人信息")
+    @PostMapping
     public ProfileVo profile() {
         SysUserVo user = userService.selectUserById(LoginHelper.getUserId());
         ProfileVo profileVo = new ProfileVo();
@@ -55,9 +60,11 @@ public class SysProfileController extends BaseController {
     /**
      * 修改用户
      */
+    @ApiOperation(value = "修改用户", notes = "修改用户")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public void updateProfile(@RequestBody SysUserProfileBo profile) {
+    @PostMapping
+    public void updateProfile(@RequestBody Request<SysUserProfileBo> bo) {
+        SysUserProfileBo profile = bo.getData();
         SysUserBo user = BeanUtil.toBean(profile, SysUserBo.class);
         if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
             fail("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
@@ -75,12 +82,14 @@ public class SysProfileController extends BaseController {
     /**
      * 重置密码
      *
-     * @param newPassword 旧密码
-     * @param oldPassword 新密码
      */
+    @ApiOperation(value = "重置密码", notes = "重置密码")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
-    @PutMapping("/updatePwd")
-    public void updatePwd(String oldPassword, String newPassword) {
+    @PostMapping("/updatePwd")
+    public void updatePwd(@RequestBody @Validated Request<SysChangePwdBo> bo) {
+        SysChangePwdBo data = bo.getData();
+        String newPassword = data.getNewPassword();
+        String oldPassword = data.getOldPassword();
         SysUserVo user = userService.selectUserById(LoginHelper.getUserId());
         String password = user.getPassword();
         if (!BCrypt.checkpw(oldPassword, password)) {
@@ -101,6 +110,7 @@ public class SysProfileController extends BaseController {
      *
      * @param avatarfile 用户头像
      */
+    @ApiOperation(value = "头像上传", notes = "头像上传")
     @Log(title = "用户头像", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public AvatarVo avatar(@RequestPart("avatarfile") MultipartFile avatarfile) {

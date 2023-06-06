@@ -2,6 +2,7 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
@@ -11,6 +12,7 @@ import cc.iotkit.system.service.ISysDictDataService;
 import cc.iotkit.system.service.ISysDictTypeService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.ObjectUtil;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +39,10 @@ public class SysDictDataController {
      * 查询字典数据列表
      */
     @SaCheckPermission("system:dict:list")
-    @GetMapping("/list")
-    public Paging<SysDictDataVo> list(SysDictDataBo dictData, PageRequest<?> query) {
-        return dictDataService.selectPageDictDataList(dictData, query);
+    @ApiOperation(value = "查询字典数据列表", notes = "查询字典数据列表")
+    @PostMapping("/list")
+    public Paging<SysDictDataVo> list(@Validated @RequestBody  PageRequest<SysDictDataBo> query) {
+        return dictDataService.selectPageDictDataList( query);
     }
 
     /**
@@ -47,30 +50,34 @@ public class SysDictDataController {
      */
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:dict:export")
+    @ApiOperation(value = "导出字典数据列表", notes = "导出字典数据列表")
     @PostMapping("/export")
-    public void export(SysDictDataBo dictData, HttpServletResponse response) {
-        List<SysDictDataVo> list = dictDataService.selectDictDataList(dictData);
+    public void export(@RequestBody @Validated Request<SysDictDataBo> bo, HttpServletResponse response) {
+        List<SysDictDataVo> list = dictDataService.selectDictDataList(bo.getData());
         ExcelUtil.exportExcel(list, "字典数据", SysDictDataVo.class, response);
     }
 
     /**
      * 查询字典数据详细
      *
-     * @param dictCode 字典code
+
      */
     @SaCheckPermission("system:dict:query")
-    @GetMapping(value = "/{dictCode}")
-    public SysDictDataVo getInfo(@PathVariable Long dictCode) {
-        return dictDataService.selectDictDataById(dictCode);
+    @ApiOperation(value = "查询字典数据详细", notes = "查询字典数据详细")
+    @PostMapping(value = "/getInfo")
+    public SysDictDataVo getInfo(@Validated @RequestBody Request<Long> bo) {
+        return dictDataService.selectDictDataById(bo.getData());
     }
 
     /**
      * 根据字典类型查询字典数据信息
      *
-     * @param dictType 字典类型
+
      */
-    @GetMapping(value = "/type/{dictType}")
-    public List<SysDictDataVo> dictType(@PathVariable String dictType) {
+    @ApiOperation(value = "根据字典类型查询字典数据信息", notes = "根据字典类型查询字典数据信息")
+    @PostMapping(value = "/type")
+    public List<SysDictDataVo> dictType(@Validated @RequestBody Request<String> bo) {
+        String dictType = bo.getData();
         List<SysDictDataVo> data = dictTypeService.selectDictDataByType(dictType);
         if (ObjectUtil.isNull(data)) {
             data = new ArrayList<SysDictDataVo>();
@@ -84,29 +91,30 @@ public class SysDictDataController {
     @SaCheckPermission("system:dict:add")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
-    public void add(@Validated @RequestBody SysDictDataBo dict) {
-        dictDataService.insertDictData(dict);
+    public void add(@Validated @RequestBody Request<SysDictDataBo> bo) {
+        dictDataService.insertDictData(bo.getData());
     }
 
     /**
      * 修改保存字典类型
      */
+    @ApiOperation(value = "修改保存字典类型", notes = "修改保存字典类型")
     @SaCheckPermission("system:dict:edit")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
-    public void edit(@Validated @RequestBody SysDictDataBo dict) {
-        dictDataService.updateDictData(dict);
+    public void edit(@Validated @RequestBody Request<SysDictDataBo> bo) {
+        dictDataService.updateDictData(bo.getData());
     }
 
     /**
      * 删除字典类型
      *
-     * @param dictCodes 字典code串
      */
+    @ApiOperation(value = "删除字典类型", notes = "删除字典类型")
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{dictCodes}")
-    public void remove(@PathVariable Long[] dictCodes) {
-        dictDataService.deleteDictDataByIds(dictCodes);
+    @DeleteMapping("/delete")
+    public void remove(@Validated @RequestBody Request<Long[]> bo) {
+        dictDataService.deleteDictDataByIds(bo.getData());
     }
 }

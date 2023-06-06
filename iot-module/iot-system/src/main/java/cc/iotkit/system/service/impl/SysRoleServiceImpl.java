@@ -330,7 +330,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteRoleByIds(Long[] roleIds) {
+    public void deleteRoleByIds(Collection<Long> roleIds) {
         for (Long roleId : roleIds) {
             checkRoleAllowed(roleId);
             checkRoleDataScope(roleId);
@@ -339,12 +339,12 @@ public class SysRoleServiceImpl implements ISysRoleService {
                 throw new ServiceException(String.format("%1$s已分配,不能删除", role.getRoleName()));
             }
         }
-        List<Long> ids = Arrays.asList(roleIds);
+
         // 删除角色与菜单关联
-        iSysRoleMenuData.deleteByRoleId(ids);
+        iSysRoleMenuData.deleteByRoleId(roleIds);
         // 删除角色与部门关联
-        iSysRoleDeptData.deleteByRoleId(ids);
-        iSysRoleData.deleteByIds(ids);
+        iSysRoleDeptData.deleteByRoleId(roleIds);
+        iSysRoleData.deleteByIds(roleIds);
     }
 
     /**

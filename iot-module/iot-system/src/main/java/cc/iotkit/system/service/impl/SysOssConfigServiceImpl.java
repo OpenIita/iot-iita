@@ -74,8 +74,8 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
     }
 
     @Override
-    public Paging<SysOssConfigVo> queryPageList(SysOssConfigBo bo, PageRequest<?> query) {
-       return null;
+    public Paging<SysOssConfigVo> queryPageList(PageRequest<SysOssConfigBo> query) {
+       return baseData.findAll(query.to(SysOssConfig.class)).to(SysOssConfigVo.class);
     }
 
 

@@ -3,6 +3,7 @@ package cc.iotkit.data.system;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.system.SysRoleDept;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface ISysRoleDeptData extends ICommonData<SysRoleDept, Long> {
 
-    void deleteByRoleId(List<Long> roleIds);
+    void deleteByRoleId(Collection<Long> roleIds);
 
     long insertBatch(List<SysRoleDept> list);
 

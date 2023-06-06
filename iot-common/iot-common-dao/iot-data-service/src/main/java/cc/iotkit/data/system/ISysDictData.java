@@ -19,10 +19,7 @@ public interface ISysDictData extends ICommonData<SysDictData, Long> {
      */
     List<SysDictData> findByConditions(SysDictData query);
 
-    /**
-     * 按条件分页查询
-     */
-    Paging<SysDictData> findByConditions(SysDictData query, int page, int size);
+
 
     /**
      * 根据字典类型和字典键值查询字典数据信息

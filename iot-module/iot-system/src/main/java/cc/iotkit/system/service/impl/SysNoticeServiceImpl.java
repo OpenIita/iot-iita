@@ -30,8 +30,8 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
     private ISysNoticeData sysNoticeData;
 
     @Override
-    public Paging<SysNoticeVo> selectPageNoticeList(SysNoticeBo notice, PageRequest<?> query) {
-        return new Paging<>();
+    public Paging<SysNoticeVo> selectPageNoticeList( PageRequest<SysNoticeBo> query) {
+        return sysNoticeData.findAll(query.to(SysNotice.class)).to(SysNoticeVo.class);
     }
 
     /**
@@ -53,7 +53,8 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
      */
     @Override
     public List<SysNoticeVo> selectNoticeList(SysNoticeBo notice) {
-        return new ArrayList<>();
+        List<SysNotice> allByCondition = sysNoticeData.findAllByCondition(notice.to(SysNotice.class));
+        return MapstructUtils.convert(allByCondition, SysNoticeVo.class);
     }
 
     /**

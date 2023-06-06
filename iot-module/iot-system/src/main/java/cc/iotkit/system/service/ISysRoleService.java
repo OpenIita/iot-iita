@@ -6,6 +6,7 @@ import cc.iotkit.model.system.SysUserRole;
 import cc.iotkit.system.dto.bo.SysRoleBo;
 import cc.iotkit.system.dto.vo.SysRoleVo;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -151,7 +152,7 @@ public interface ISysRoleService {
      * @param roleIds 需要删除的角色ID
      * @return 结果
      */
-    void deleteRoleByIds(Long[] roleIds);
+    void deleteRoleByIds(Collection<Long> roleIds);
 
     /**
      * 取消授权用户角色

@@ -2,6 +2,7 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
@@ -10,6 +11,7 @@ import cc.iotkit.system.dto.bo.SysDictTypeBo;
 import cc.iotkit.system.dto.vo.SysDictTypeVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysDictTypeService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,19 +36,22 @@ public class SysDictTypeController extends BaseController {
     /**
      * 查询字典类型列表
      */
+    @ApiOperation(value = "查询字典类型列表", notes = "查询字典类型列表")
     @SaCheckPermission("system:dict:list")
-    @GetMapping("/list")
-    public Paging<SysDictTypeVo> list(SysDictTypeBo dictType, PageRequest<?> query) {
-        return dictTypeService.selectPageDictTypeList(dictType, query);
+    @PostMapping("/list")
+    public Paging<SysDictTypeVo> list(  PageRequest<SysDictTypeBo> query) {
+        return dictTypeService.selectPageDictTypeList( query);
     }
 
     /**
      * 导出字典类型列表
      */
+    @ApiOperation(value = "导出字典类型列表", notes = "导出字典类型列表")
     @Log(title = "字典类型", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:dict:export")
     @PostMapping("/export")
-    public void export(SysDictTypeBo dictType, HttpServletResponse response) {
+    public void export(@RequestBody SysDictTypeBo dictType, HttpServletResponse response) {
+
         List<SysDictTypeVo> list = dictTypeService.selectDictTypeList(dictType);
         ExcelUtil.exportExcel(list, "字典类型", SysDictTypeVo.class, response);
     }
@@ -54,17 +59,19 @@ public class SysDictTypeController extends BaseController {
     /**
      * 查询字典类型详细
      *
-     * @param dictId 字典ID
+
      */
+    @ApiOperation(value = "查询字典类型详细", notes = "查询字典类型详细")
     @SaCheckPermission("system:dict:query")
-    @GetMapping(value = "/{dictId}")
-    public SysDictTypeVo getInfo(@PathVariable Long dictId) {
-        return dictTypeService.selectDictTypeById(dictId);
+    @PostMapping(value = "/getById")
+    public SysDictTypeVo getInfo(@Validated @RequestBody Request<Long> bo) {
+        return dictTypeService.selectDictTypeById(bo.getData());
     }
 
     /**
      * 新增字典类型
      */
+    @ApiOperation(value = "新增字典类型", notes = "新增字典类型")
     @SaCheckPermission("system:dict:add")
     @Log(title = "字典类型", businessType = BusinessType.INSERT)
     @PostMapping
@@ -113,7 +120,7 @@ public class SysDictTypeController extends BaseController {
     /**
      * 获取字典选择框列表
      */
-    @GetMapping("/optionselect")
+    @PostMapping("/optionselect")
     public List<SysDictTypeVo> optionselect() {
         return dictTypeService.selectDictTypeAll();
     }
