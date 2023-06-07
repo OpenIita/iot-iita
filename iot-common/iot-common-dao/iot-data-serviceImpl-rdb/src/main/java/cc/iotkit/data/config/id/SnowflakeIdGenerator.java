@@ -2,6 +2,9 @@ package cc.iotkit.data.config.id;
 
 import cc.iotkit.common.utils.SnowflakeIdGeneratorUtil;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.Objects;
+
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
@@ -18,6 +21,17 @@ public class SnowflakeIdGenerator implements IdentifierGenerator {
 
   @Override
   public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException {
+    Field id = null;
+    try {
+      id = o.getClass().getDeclaredField("id");
+      id.setAccessible(true);
+      Object val = id.get(o);
+      if (Objects.nonNull(val)){
+        return (Serializable) val;
+      }
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+
+    }
     return SnowflakeIdGeneratorUtil.getInstanceSnowflake().nextId();
   }
 }
