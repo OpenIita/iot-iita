@@ -12,6 +12,7 @@ import cc.iotkit.data.model.TbSysPost;
 import cc.iotkit.data.model.TbSysRole;
 import cc.iotkit.data.model.TbSysUser;
 import cc.iotkit.data.system.ISysDeptData;
+import cc.iotkit.data.system.ISysRoleData;
 import cc.iotkit.data.system.ISysUserData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
@@ -53,6 +54,8 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     private final SysUserRepository userRepository;
 
     private final ISysDeptData sysDeptData;
+
+    private final ISysRoleData sysRoleData;
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -98,6 +101,20 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
         return Objects.isNull(ret);
     }
 
+    @Override
+    public SysUser findById(Long id){
+        TbSysUser sysUser = jpaQueryFactory.select(tbSysUser).from(tbSysUser).where(tbSysUser.id.eq(id)).fetchOne();
+
+        SysUser convert = MapstructUtils.convert(sysUser, SysUser.class);
+        List<SysRole> sysRoles = sysRoleData.findByUserId(id);
+        convert.setRoles(sysRoles);
+        SysDept dept = sysDeptData.findById(convert.getDeptId());
+        if(ObjectUtil.isNotNull(dept)){
+            convert.setDept(dept);
+        }
+        return convert;
+
+    }
     @Override
     public boolean checkEmailUnique(SysUser user) {
         final TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
@@ -169,11 +186,8 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
             SysDept sysDept = sysDeptData.findById(deptId);
             convert.setDept(sysDept);
             // 获取角色信息
-            List<SysRole> sysRoles = jpaQueryFactory.select(Projections.bean(SysRole.class, tbSysRole.id, tbSysRole.roleName, tbSysRole.roleKey, tbSysRole.roleSort, tbSysRole.dataScope, tbSysRole.status, tbSysRole.delFlag, tbSysRole.createTime, tbSysRole.remark))
-                    .from(tbSysRole)
-                    .leftJoin(tbSysUserRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
-                    .where(tbSysUserRole.userId.eq(ret.getId()))
-                    .fetch();
+            List<SysRole> sysRoles = sysRoleData.findByUserId(ret.getId());
+
             convert.setRoles(sysRoles);
         }
         return convert;

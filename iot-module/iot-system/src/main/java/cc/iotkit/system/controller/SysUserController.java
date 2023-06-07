@@ -123,13 +123,13 @@ public class SysUserController extends BaseController {
 
     /**
      * 根据用户编号获取详细信息
-     *
-     * @param userId 用户ID
+     *用户ID
      */
     @ApiOperation("根据用户编号获取详细信息")
     @SaCheckPermission("system:user:query")
-    @PostMapping(value = {"/", "/{userId}"})
-    public SysUserInfoVo getInfo(@PathVariable(value = "userId", required = false) Long userId) {
+    @PostMapping(value = {"/getDetail"})
+    public SysUserInfoVo getInfo(@Validated @RequestBody Request<Long> req) {
+        Long userId = req.getData();
         userService.checkUserDataScope(userId);
         SysUserInfoVo userInfoVo = new SysUserInfoVo();
         List<SysRoleVo> roles = roleService.selectRoleAll();
