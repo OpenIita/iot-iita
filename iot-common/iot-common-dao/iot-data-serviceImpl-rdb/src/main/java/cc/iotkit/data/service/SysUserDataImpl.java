@@ -16,6 +16,7 @@ import cc.iotkit.data.system.ISysUserData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysDept;
+import cc.iotkit.model.system.SysRole;
 import cc.iotkit.model.system.SysUser;
 import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.core.QueryResults;
@@ -161,7 +162,21 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
                 .where(PredicateBuilder.instance()
                         .and(tbSysUser.userName.eq(username))
                         .build()).fetchOne();
-         return MapstructUtils.convert(ret, SysUser.class);
+        SysUser convert = MapstructUtils.convert(ret, SysUser.class);
+        Long deptId = ret.getDeptId();
+        if(Objects.nonNull(deptId)){
+            // 获取部门信息
+            SysDept sysDept = sysDeptData.findById(deptId);
+            convert.setDept(sysDept);
+            // 获取角色信息
+            List<SysRole> sysRoles = jpaQueryFactory.select(Projections.bean(SysRole.class, tbSysRole.id, tbSysRole.roleName, tbSysRole.roleKey, tbSysRole.roleSort, tbSysRole.dataScope, tbSysRole.status, tbSysRole.delFlag, tbSysRole.createTime, tbSysRole.remark))
+                    .from(tbSysRole)
+                    .leftJoin(tbSysUserRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
+                    .where(tbSysUserRole.userId.eq(ret.getId()))
+                    .fetch();
+            convert.setRoles(sysRoles);
+        }
+        return convert;
     }
 
     @Override
