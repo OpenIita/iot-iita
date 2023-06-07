@@ -271,15 +271,22 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     }
 
     private Predicate buildQueryCondition(SysUser user) {
-        List<SysDept> depts = sysDeptData.findByDeptId(user.getDeptId());
-        List<Long> ids = StreamUtils.toList(depts, SysDept::getId);
-        ids.add(user.getDeptId());
+        Long deptId = user.getDeptId();
+        List<Long> ids;
+        if(Objects.nonNull(deptId)){
+            List<SysDept> depts = sysDeptData.findByDeptId(deptId);
+            ids = StreamUtils.toList(depts, SysDept::getId);
+            ids.add(deptId);
+        } else {
+            ids = null;
+        }
+
         return PredicateBuilder.instance()
                 .and(tbSysUser.delFlag.eq(UserConstants.USER_NORMAL))
                 .and(ObjectUtil.isNotNull(user.getId()), () -> tbSysUser.id.eq(user.getId()))
                 .and(StringUtils.isNotEmpty(user.getUserName()), () -> tbSysUser.userName.like(user.getUserName()))
                 .and(StringUtils.isNotEmpty(user.getStatus()), () -> tbSysUser.status.eq(user.getStatus()))
                 .and(StringUtils.isNotEmpty(user.getPhonenumber()), () -> tbSysUser.phonenumber.like(user.getPhonenumber()))
-                .and(ObjectUtil.isNotNull(user.getDeptId()), () -> tbSysUser.deptId.in(ids)).build();
+                .and(ObjectUtil.isNotEmpty(ids), () -> tbSysUser.deptId.in(ids)).build();
     }
 }
