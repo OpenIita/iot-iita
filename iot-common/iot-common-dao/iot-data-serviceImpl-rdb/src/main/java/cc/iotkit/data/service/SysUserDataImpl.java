@@ -251,7 +251,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
 
     @Override
     public Paging<SysUser> findAll(PageRequest<SysUser> pageRequest) {
-        return PageBuilder.toPaging(userRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
+        return PageBuilder.toPaging(userRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest))).to(SysUser.class);
     }
 
     @Override
