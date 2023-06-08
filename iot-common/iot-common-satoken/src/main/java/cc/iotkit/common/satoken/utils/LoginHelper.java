@@ -60,8 +60,8 @@ public class LoginHelper {
             model.setDevice(deviceType.getDevice());
         }
         StpUtil.login(loginUser.getLoginId(),
-            model.setExtra(TENANT_KEY, loginUser.getTenantId())
-                .setExtra(USER_KEY, loginUser.getUserId()));
+                model.setExtra(TENANT_KEY, loginUser.getTenantId())
+                        .setExtra(USER_KEY, loginUser.getUserId()));
         StpUtil.getTokenSession().set(LOGIN_USER_KEY, loginUser);
     }
 
@@ -89,17 +89,15 @@ public class LoginHelper {
      * 获取用户id
      */
     public static Long getUserId() {
-        Long userId;
         try {
-            userId = Convert.toLong(SaHolder.getStorage().get(USER_KEY));
-            if (ObjectUtil.isNull(userId)) {
-                userId = Convert.toLong(StpUtil.getExtra(USER_KEY));
-                SaHolder.getStorage().set(USER_KEY, userId);
+            LoginUser user = LoginUser.from(StpUtil.getLoginIdAsString());
+            if (user == null) {
+                return null;
             }
+            return user.getUserId();
         } catch (Exception e) {
             return null;
         }
-        return userId;
     }
 
     /**

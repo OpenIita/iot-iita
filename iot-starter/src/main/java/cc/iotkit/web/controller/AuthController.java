@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URL;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 认证
@@ -138,7 +139,6 @@ public class AuthController {
             throw new BizException("当前租户不允许注册");
         }
         registerService.register(user);
-
     }
 
     /**
@@ -150,7 +150,11 @@ public class AuthController {
     @GetMapping("/tenant/list")
     public LoginTenantVo tenantList(HttpServletRequest request) throws Exception {
         List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());
-        List<TenantListVo> voList = MapstructUtils.convert(tenantList, TenantListVo.class);
+        List<TenantListVo> voList = tenantList.stream().map(t -> TenantListVo.builder()
+                .tenantId(t.getTenantId())
+                .companyName(t.getCompanyName())
+                .domain(t.getDomain())
+                .build()).collect(Collectors.toList());
         // 获取域名
         String host = new URL(request.getRequestURL().toString()).getHost();
         // 根据域名进行筛选

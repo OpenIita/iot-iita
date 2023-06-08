@@ -142,6 +142,13 @@
                 <artifactId>sa-token-spring-boot-starter</artifactId>
                 <version>${satoken.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-dao-redis-jackson</artifactId>
+                <version>${satoken.version}</version>
+            </dependency>
+
             <!-- Sa-Token 整合 jwt -->
             <dependency>
                 <groupId>cn.dev33</groupId>

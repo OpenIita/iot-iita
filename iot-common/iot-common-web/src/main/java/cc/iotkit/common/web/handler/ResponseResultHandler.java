@@ -10,7 +10,6 @@
 package cc.iotkit.common.web.handler;
 
 import cc.iotkit.common.api.Response;
-
 import cn.dev33.satoken.util.SaResult;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -18,20 +17,15 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @ControllerAdvice
 public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String wrapResponse = request.getHeader("wrap-response");
-        return "json".equals(wrapResponse);
+        return true;
     }
 
     @Override

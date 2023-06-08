@@ -1,5 +1,6 @@
 package cc.iotkit.common.undefined;
 
+import cc.iotkit.common.utils.StringUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -115,6 +116,28 @@ public class LoginUser implements Serializable {
             throw new IllegalArgumentException("用户ID不能为空");
         }
         return userType + ":" + userId;
+    }
+
+    /**
+     * 根据loginId构造loginUser对象
+     *
+     * @param loginId 登录id
+     * @return LoginUser
+     * @see LoginUser::getLoginId
+     */
+    public static LoginUser from(String loginId) {
+        if (StringUtils.isBlank(loginId)) {
+            return null;
+        }
+        String[] split = loginId.split(":");
+        if (split.length < 2) {
+            return null;
+        }
+
+        LoginUser user = new LoginUser();
+        user.setUserType(split[0]);
+        user.setUserId(Long.parseLong(split[1]));
+        return user;
     }
 
 }

@@ -2,7 +2,10 @@ package cc.iotkit.web.domain.vo;
 
 import cc.iotkit.system.dto.vo.SysTenantVo;
 import io.github.linpeilie.annotations.AutoMapper;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -11,6 +14,9 @@ import lombok.Data;
  * @author Lion Li
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @AutoMapper(target = SysTenantVo.class)
 public class TenantListVo {
 
