@@ -285,16 +285,15 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     }
 
     private Predicate buildQueryCondition(SysUser user) {
-        Long deptId = user.getDeptId();
         List<Long> ids;
-        if(Objects.nonNull(deptId)){
+        if(Objects.nonNull(user)&&Objects.nonNull(user.getDeptId())){
+            Long deptId = user.getDeptId();
             List<SysDept> depts = sysDeptData.findByDeptId(deptId);
             ids = StreamUtils.toList(depts, SysDept::getId);
             ids.add(deptId);
         } else {
             ids = null;
         }
-
         return PredicateBuilder.instance()
                 .and(tbSysUser.delFlag.eq(UserConstants.USER_NORMAL))
                 .and(ObjectUtil.isNotNull(user.getId()), () -> tbSysUser.id.eq(user.getId()))

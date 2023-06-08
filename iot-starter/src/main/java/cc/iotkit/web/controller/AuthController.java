@@ -1,5 +1,6 @@
 package cc.iotkit.web.controller;
 
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.undefined.EmailLoginBody;
@@ -59,13 +60,14 @@ public class AuthController {
      */
     @ApiOperation("登录")
     @PostMapping("/login")
-    public LoginVo login(@Validated @RequestBody LoginBody body) {
+    public LoginVo login(@Validated @RequestBody Request<LoginBody> body) {
+        LoginBody loginBody=body.getData();
         LoginVo loginVo = new LoginVo();
         // 生成令牌
         String token = loginService.login(
-                body.getTenantId(),
-                body.getUsername(), body.getPassword(),
-                body.getCode(), body.getUuid());
+                loginBody.getTenantId(),
+                loginBody.getUsername(), loginBody.getPassword(),
+                loginBody.getCode(), loginBody.getUuid());
         loginVo.setToken(token);
         return loginVo;
     }

@@ -11,6 +11,7 @@ import java.util.Map;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author: Longjun.Tu
@@ -77,9 +78,10 @@ public class PageRequest<T> extends Request<T> implements Serializable {
   }
 
   public <DTO> PageRequest<DTO> to(Class<DTO> dtoClass) {
-    DTO dto = MapstructUtils.convert(getData(), dtoClass);
     PageRequest<DTO> pageRequest = new PageRequest<>();
-    pageRequest.setData(dto);
+    if(Objects.nonNull(getData())){
+      pageRequest.setData(MapstructUtils.convert(getData(), dtoClass));
+    }
     pageRequest.setPageNum(this.getPageNum());
     pageRequest.setPageSize(this.getPageSize());
     pageRequest.setRequestId(this.getRequestId());
