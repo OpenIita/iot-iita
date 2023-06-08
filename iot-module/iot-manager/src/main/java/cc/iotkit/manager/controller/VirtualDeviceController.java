@@ -95,7 +95,7 @@ public class VirtualDeviceController {
      * 获取虚拟设备详情
      */
     @ApiOperation("获取虚拟设备详情")
-    @GetMapping("/getDetail")
+    @PostMapping("/getDetail")
     public VirtualDevice detail(@Validated @RequestBody Request<String> bo) {
         return checkOwner(bo.getData());
     }

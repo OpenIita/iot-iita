@@ -48,7 +48,7 @@ public class UserInfoController {
      * 平台用户列表
      */
     @SaCheckRole("iot_admin")
-    @GetMapping("/platform/users")
+    @PostMapping("/platform/users")
     public List<UserInfo> getPlatformUsers() {
         return userInfoData.findByType(UserInfo.USER_TYPE_PLATFORM);
     }
@@ -94,7 +94,7 @@ public class UserInfoController {
     /**
      * 客户端用户列表
      */
-    @GetMapping("/client/users")
+    @PostMapping("/client/users")
     public List<UserInfo> clientUsers() {
         return userInfoData.findByTypeAndOwnerId(UserInfo.USER_TYPE_CLIENT, AuthUtil.getUserId());
     }

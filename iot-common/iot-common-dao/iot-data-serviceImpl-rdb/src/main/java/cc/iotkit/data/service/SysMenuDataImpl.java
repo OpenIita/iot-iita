@@ -161,13 +161,14 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
 
     @Override
     public List<SysMenu> selectMenuTreeAll() {
-        return jpaQueryFactory.select(Projections.bean(SysMenu.class, tbSysMenu.perms.countDistinct()))
+         List<TbSysMenu> rets= jpaQueryFactory.select(tbSysMenu)
                 .from(tbSysMenu)
                 .where(PredicateBuilder.instance()
                         .and(tbSysMenu.menuType.in(UserConstants.TYPE_DIR, UserConstants.TYPE_MENU))
                         .and(tbSysMenu.status.eq(UserConstants.MENU_NORMAL))
                         .build())
                 .orderBy(tbSysMenu.parentId.asc(), tbSysMenu.orderNum.asc()).fetch();
+        return MapstructUtils.convert(rets,SysMenu.class);
     }
 
     @Override

@@ -65,7 +65,7 @@ public class SpaceDeviceController {
     /**
      * 我最近使用的设备列表
      */
-    @GetMapping(Constants.API_SPACE.RECENT_DEVICES)
+    @PostMapping(Constants.API_SPACE.RECENT_DEVICES)
     public List<SpaceDeviceVo> getMyRecentDevices() {
         List<SpaceDevice> spaceDevices = spaceDeviceData.findByUidOrderByUseAtDesc(AuthUtil.getUserId());
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
@@ -74,7 +74,7 @@ public class SpaceDeviceController {
     /**
      * 获取用户收藏设备列表
      */
-    @GetMapping(Constants.API_SPACE.GET_COLLECT_DEVICES)
+    @PostMapping(Constants.API_SPACE.GET_COLLECT_DEVICES)
     public List<SpaceDeviceVo> getCollectDevices() {
         Home home=homeData.findByUidAndCurrent(AuthUtil.getUserId(), true);
         List<SpaceDevice> spaceDevices = spaceDeviceData.findByHomeIdAndCollect(home.getId(),true);
@@ -97,7 +97,7 @@ public class SpaceDeviceController {
      *
      * @param spaceId 空间id
      */
-    @GetMapping(Constants.API_SPACE.SPACE_DEVICES)
+    @PostMapping(Constants.API_SPACE.SPACE_DEVICES)
     public List<SpaceDeviceVo> getMyDevices(@PathVariable("spaceId") String spaceId) {
         String uid = AuthUtil.getUserId();
         List<SpaceDevice> spaceDevices;
@@ -141,7 +141,7 @@ public class SpaceDeviceController {
     /**
      * 获取用户所有设备列表
      */
-    @GetMapping("/{userId}/devices")
+    @PostMapping("/{userId}/devices")
     public List<SpaceDeviceVo> getDevices(@PathVariable("userId") String userId) {
         List<SpaceDevice> spaceDevices = spaceDeviceData.findByUid(userId);
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
@@ -150,7 +150,7 @@ public class SpaceDeviceController {
     /**
      * 搜索未添加过的设备
      */
-    @GetMapping(Constants.API_SPACE.FIND_DEVICE)
+    @PostMapping(Constants.API_SPACE.FIND_DEVICE)
     List<FindDeviceVo> findDevice(String mac) {
         if (StringUtils.isBlank(mac)) {
             throw new BizException(ErrCode.DATA_BLANK);
@@ -308,7 +308,7 @@ public class SpaceDeviceController {
     /**
      * 获取房间中指定设备信息
      */
-    @GetMapping(Constants.API_SPACE.GET_DEVICE)
+    @PostMapping(Constants.API_SPACE.GET_DEVICE)
     public SpaceDeviceVo getSpaceDevice(@PathVariable("deviceId") String deviceId) {
         String uid = AuthUtil.getUserId();
         SpaceDevice spaceDevice = spaceDeviceData.findByDeviceIdAndUid(deviceId, uid);
