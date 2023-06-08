@@ -62,7 +62,7 @@ public class SysPostDataImpl implements ISysPostData, IJPACommData<SysPost, Long
 
     @Override
     public List<Long> selectPostListByUserId(Long userId) {
-        return jpaQueryFactory.select(Projections.bean(Long.class, tbSysPost.id))
+        return jpaQueryFactory.select( tbSysPost.id)
                 .from(tbSysPost)
                 .leftJoin(tbSysUserPost).on(tbSysUserPost.postId.eq(tbSysPost.id))
                 .leftJoin(tbSysUser).on(tbSysUser.id.eq(tbSysUserPost.userId))

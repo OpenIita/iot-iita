@@ -143,6 +143,15 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
         return buildQueryTitle(buildQueryWrapper(role));
     }
 
+    @Override
+    public List<SysRole> findByUserId(Long id) {
+        return jpaQueryFactory.select(Projections.bean(SysRole.class, tbSysRole.id, tbSysRole.roleName, tbSysRole.roleKey, tbSysRole.roleSort, tbSysRole.dataScope, tbSysRole.status, tbSysRole.delFlag, tbSysRole.createTime, tbSysRole.remark))
+                .from(tbSysRole)
+                .leftJoin(tbSysUserRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
+                .where(tbSysUserRole.userId.eq(id))
+                .fetch();
+    }
+
     private List<SysRole> buildQueryTitle(Predicate predicate) {
         return jpaQueryFactory.select(Projections.fields(SysRole.class, tbSysRole.id, tbSysRole.roleName,
                         tbSysRole.roleKey, tbSysRole.roleSort, tbSysRole.menuCheckStrictly, tbSysRole.deptCheckStrictly,

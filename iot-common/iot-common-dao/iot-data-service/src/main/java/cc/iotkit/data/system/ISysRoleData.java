@@ -60,4 +60,6 @@ public interface ISysRoleData extends ICommonData<SysRole, Long> {
     int updateById(SysRole role);
 
     List<SysRole> selectRoleList(SysRole role);
+
+    List<SysRole> findByUserId(Long id);
 }

@@ -12,10 +12,12 @@ import cc.iotkit.data.model.TbSysPost;
 import cc.iotkit.data.model.TbSysRole;
 import cc.iotkit.data.model.TbSysUser;
 import cc.iotkit.data.system.ISysDeptData;
+import cc.iotkit.data.system.ISysRoleData;
 import cc.iotkit.data.system.ISysUserData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysDept;
+import cc.iotkit.model.system.SysRole;
 import cc.iotkit.model.system.SysUser;
 import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.core.QueryResults;
@@ -52,6 +54,8 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     private final SysUserRepository userRepository;
 
     private final ISysDeptData sysDeptData;
+
+    private final ISysRoleData sysRoleData;
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -97,6 +101,20 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
         return Objects.isNull(ret);
     }
 
+    @Override
+    public SysUser findById(Long id){
+        TbSysUser sysUser = jpaQueryFactory.select(tbSysUser).from(tbSysUser).where(tbSysUser.id.eq(id)).fetchOne();
+
+        SysUser convert = MapstructUtils.convert(sysUser, SysUser.class);
+        List<SysRole> sysRoles = sysRoleData.findByUserId(id);
+        convert.setRoles(sysRoles);
+        SysDept dept = sysDeptData.findById(convert.getDeptId());
+        if(ObjectUtil.isNotNull(dept)){
+            convert.setDept(dept);
+        }
+        return convert;
+
+    }
     @Override
     public boolean checkEmailUnique(SysUser user) {
         final TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
@@ -161,7 +179,18 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
                 .where(PredicateBuilder.instance()
                         .and(tbSysUser.userName.eq(username))
                         .build()).fetchOne();
-         return MapstructUtils.convert(ret, SysUser.class);
+        SysUser convert = MapstructUtils.convert(ret, SysUser.class);
+        Long deptId = ret.getDeptId();
+        if(Objects.nonNull(deptId)){
+            // 获取部门信息
+            SysDept sysDept = sysDeptData.findById(deptId);
+            convert.setDept(sysDept);
+            // 获取角色信息
+            List<SysRole> sysRoles = sysRoleData.findByUserId(ret.getId());
+
+            convert.setRoles(sysRoles);
+        }
+        return convert;
     }
 
     @Override
@@ -236,7 +265,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
 
     @Override
     public Paging<SysUser> findAll(PageRequest<SysUser> pageRequest) {
-        return PageBuilder.toPaging(userRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
+        return PageBuilder.toPaging(userRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest))).to(SysUser.class);
     }
 
     @Override
@@ -256,15 +285,22 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     }
 
     private Predicate buildQueryCondition(SysUser user) {
-        List<SysDept> depts = sysDeptData.findByDeptId(user.getDeptId());
-        List<Long> ids = StreamUtils.toList(depts, SysDept::getId);
-        ids.add(user.getDeptId());
+        Long deptId = user.getDeptId();
+        List<Long> ids;
+        if(Objects.nonNull(deptId)){
+            List<SysDept> depts = sysDeptData.findByDeptId(deptId);
+            ids = StreamUtils.toList(depts, SysDept::getId);
+            ids.add(deptId);
+        } else {
+            ids = null;
+        }
+
         return PredicateBuilder.instance()
                 .and(tbSysUser.delFlag.eq(UserConstants.USER_NORMAL))
                 .and(ObjectUtil.isNotNull(user.getId()), () -> tbSysUser.id.eq(user.getId()))
                 .and(StringUtils.isNotEmpty(user.getUserName()), () -> tbSysUser.userName.like(user.getUserName()))
                 .and(StringUtils.isNotEmpty(user.getStatus()), () -> tbSysUser.status.eq(user.getStatus()))
                 .and(StringUtils.isNotEmpty(user.getPhonenumber()), () -> tbSysUser.phonenumber.like(user.getPhonenumber()))
-                .and(ObjectUtil.isNotNull(user.getDeptId()), () -> tbSysUser.deptId.in(ids)).build();
+                .and(ObjectUtil.isNotEmpty(ids), () -> tbSysUser.deptId.in(ids)).build();
     }
 }
