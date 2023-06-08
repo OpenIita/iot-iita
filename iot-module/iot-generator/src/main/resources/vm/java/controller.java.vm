@@ -43,7 +43,7 @@ public class ${ClassName}Controller extends BaseController {
      * 查询${functionName}列表
      */
     @SaCheckPermission("${permissionPrefix}:list")
-    @GetMapping("/list")
+    @PostMapping("/list")
 #if($table.crud || $table.sub)
     public TableDataInfo<${ClassName}Vo> list(${ClassName}Bo bo, PageQuery pageQuery) {
         return ${className}Service.queryPageList(bo, pageQuery);
@@ -72,7 +72,7 @@ public class ${ClassName}Controller extends BaseController {
      * @param ${pkColumn.javaField} 主键
      */
     @SaCheckPermission("${permissionPrefix}:query")
-    @GetMapping("/{${pkColumn.javaField}}")
+    @PostMapping("/{${pkColumn.javaField}}")
     public R<${ClassName}Vo> getInfo(@NotNull(message = "主键不能为空")
                                      @PathVariable ${pkColumn.javaType} ${pkColumn.javaField}) {
         return R.ok(${className}Service.queryById(${pkColumn.javaField}));

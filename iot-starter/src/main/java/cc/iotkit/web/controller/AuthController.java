@@ -6,7 +6,6 @@ import cc.iotkit.common.undefined.EmailLoginBody;
 import cc.iotkit.common.undefined.LoginBody;
 import cc.iotkit.common.undefined.RegisterBody;
 import cc.iotkit.common.undefined.SmsLoginBody;
-import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.system.dto.bo.SysTenantBo;
@@ -147,7 +146,7 @@ public class AuthController {
      * @return 租户列表
      */
     @ApiOperation("登录页面租户下拉框")
-    @GetMapping("/tenant/list")
+    @PostMapping("/tenant/list")
     public LoginTenantVo tenantList(HttpServletRequest request) throws Exception {
         List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());
         List<TenantListVo> voList = tenantList.stream().map(t -> TenantListVo.builder()

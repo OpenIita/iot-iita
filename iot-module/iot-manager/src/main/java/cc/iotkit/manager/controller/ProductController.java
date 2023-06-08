@@ -76,7 +76,7 @@ public class ProductController {
         ProductVo dto = productService.getDetail(request.getData());
         return dto;
     }
-    @GetMapping("/getThingModelByProductKey")
+    @PostMapping("/getThingModelByProductKey")
     @ApiOperation("查看物模型")
     public ThingModelVo getThingModelByProductKey(@RequestParam  @Validated Request<String> request) {
 

@@ -25,7 +25,7 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
@@ -54,7 +54,7 @@ public class CaptchaController {
      *
      * @param phonenumber 用户手机号
      */
-//    @GetMapping("/resource/sms/code")
+//    @PostMapping("/resource/sms/code")
 //    public void smsCode(@NotBlank(message = "{user.phonenumber.not.blank}") String phonenumber) {
 //        if (!smsProperties.getEnabled()) {
 //            throw new BizException("当前系统没有开启短信功能！");
@@ -80,7 +80,7 @@ public class CaptchaController {
      *
      * @param email 邮箱
      */
-//    @GetMapping("/resource/email/code")
+//    @PostMapping("/resource/email/code")
 //    public void emailCode(@NotBlank(message = "{user.email.not.blank}") String email) {
 //        if (!mailProperties.getEnabled()) {
 //            throw new BizException("当前系统没有开启邮件功能！"));
@@ -101,7 +101,7 @@ public class CaptchaController {
      * 生成验证码
      */
     @ApiOperation(value = "生成验证码")
-    @GetMapping("/code")
+    @PostMapping("/code")
     public CaptchaVo getCode() {
         CaptchaVo captchaVo = new CaptchaVo();
         boolean captchaEnabled = captchaProperties.getEnable();

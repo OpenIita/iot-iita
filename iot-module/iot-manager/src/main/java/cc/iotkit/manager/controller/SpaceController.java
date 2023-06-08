@@ -39,7 +39,7 @@ public class SpaceController {
     /**
      * 取用户当前家庭
      */
-    @GetMapping("/currentHome")
+    @PostMapping("/currentHome")
     public Home getCurrentHome() {
         return homeData.findByUidAndCurrent(AuthUtil.getUserId(), true);
     }
@@ -47,7 +47,7 @@ public class SpaceController {
     /**
      * 取用户所有家庭
      */
-    @GetMapping("/getUserHomes")
+    @PostMapping("/getUserHomes")
     public List<Home> getUserHomes() {
         return homeData.findByUid(AuthUtil.getUserId());
     }
@@ -87,7 +87,7 @@ public class SpaceController {
     /**
      * 我的空间列表
      */
-    @GetMapping("/spaces/{homeId}")
+    @PostMapping("/spaces/{homeId}")
     public List<Space> getSpaces(@PathVariable("homeId") String homeId) {
         return spaceData.findByUidAndHomeIdOrderByCreateAtDesc(AuthUtil.getUserId(), homeId);
     }

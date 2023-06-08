@@ -50,7 +50,7 @@ public class VirtualManager {
     private IVirtualDeviceLogData virtualDeviceLogData;
 
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         new Timer().schedule(new TimerTask() {
             @Override
