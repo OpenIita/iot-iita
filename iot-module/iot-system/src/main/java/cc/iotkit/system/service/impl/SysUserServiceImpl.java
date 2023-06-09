@@ -135,13 +135,14 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public void checkUserDataScope(Long userId) {
-        if (!LoginHelper.isSuperAdmin()) {
-            SysUser user = new SysUser();
-            user.setId(userId);
-            List<SysUser> users = sysUserData.findAllByCondition(user);
-            if (CollUtil.isEmpty(users)) {
-                throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
-            }
+        if (ObjectUtil.isNull(userId)) {
+            return;
+        }
+        if (LoginHelper.isSuperAdmin()) {
+            return;
+        }
+        if (ObjectUtil.isNull(sysUserData.findById(userId))) {
+            throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
         }
     }
 

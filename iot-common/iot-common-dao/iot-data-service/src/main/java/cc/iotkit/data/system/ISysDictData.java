@@ -36,7 +36,7 @@ public interface ISysDictData extends ICommonData<SysDictData, Long> {
      * @param dictType 字典类型
      * @return 字典数据集合信息
      */
-    List<SysDictType> findByDicType(String dictType);
+    List<SysDictData> findByDicType(String dictType);
 
     /**
      * 根据字典类型查询字典数据数量

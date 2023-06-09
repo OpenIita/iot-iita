@@ -128,8 +128,8 @@ public class SysUserController extends BaseController {
     @ApiOperation("根据用户编号获取详细信息")
     @SaCheckPermission("system:user:query")
     @PostMapping(value = {"/getDetail"})
-    public SysUserInfoVo getInfo(@Validated @RequestBody Request<Long> req) {
-        Long userId = req.getData();
+    public SysUserInfoVo getInfo(@Validated @RequestBody Request<SysUserBo> req) {
+        Long userId = req.getData().getId();
         userService.checkUserDataScope(userId);
         SysUserInfoVo userInfoVo = new SysUserInfoVo();
         List<SysRoleVo> roles = roleService.selectRoleAll();
@@ -275,8 +275,7 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:list")
     @PostMapping("/deptTree")
     public List<Tree<Long>> deptTree(@RequestBody @Validated(QueryGroup.class) Request<SysDeptBo> reqDept) {
-        SysDeptBo dept=reqDept.getData();
-        return deptService.selectDeptTreeList(dept);
+        return deptService.selectDeptTreeList(reqDept.getData());
     }
 
 }

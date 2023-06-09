@@ -3,6 +3,7 @@ package cc.iotkit.data.system;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.system.SysDictType;
+import cc.iotkit.model.system.SysUser;
 
 import java.util.List;
 
@@ -39,4 +40,5 @@ public interface ISysDictTypeData extends ICommonData<SysDictType, Long> {
      */
     void updateDicType(String dictType, String newType);
 
+    boolean checkDictTypeUnique(SysDictType dictType);
 }

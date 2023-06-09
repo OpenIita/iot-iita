@@ -13,7 +13,9 @@ import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.system.ISysDictData;
 import cc.iotkit.data.system.ISysDictTypeData;
+import cc.iotkit.model.system.SysDictData;
 import cc.iotkit.model.system.SysDictType;
+import cc.iotkit.model.system.SysUser;
 import cc.iotkit.system.dto.bo.SysDictTypeBo;
 import cc.iotkit.system.dto.vo.SysDictDataVo;
 import cc.iotkit.system.dto.vo.SysDictTypeVo;
@@ -39,7 +41,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
     private final ISysDictData sysDictData;
 
     @Override
-    public Paging<SysDictTypeVo> selectPageDictTypeList( PageRequest<?> query) {
+    public Paging<SysDictTypeVo> selectPageDictTypeList( PageRequest<SysDictTypeBo> query) {
         return sysDictTypeData.findAll(query.to(SysDictType.class)).to(SysDictTypeVo.class);
     }
 
@@ -151,7 +153,12 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
     @Override
     public List<SysDictDataVo> updateDictType(SysDictTypeBo bo) {
         SysDictType oldDict = sysDictTypeData.findById(bo.getId());
-        sysDictTypeData.updateDicType(oldDict.getDictType(), bo.getDictType());
+        List<SysDictData> olds=sysDictData.findByDicType(oldDict.getDictType());
+        for (SysDictData sd:olds) {
+            sd.setDictType(bo.getDictType());
+            sysDictData.save(sd);
+        }
+        sysDictTypeData.save(bo.to(SysDictType.class));
 //            CacheUtils.evict(CacheNames.SYS_DICT, oldDict.getDictType());
         return MapstructUtils.convert(sysDictData.findByDicType(bo.getDictType()), SysDictDataVo.class);
     }
@@ -164,11 +171,8 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
      */
     @Override
     public boolean checkDictTypeUnique(SysDictTypeBo dictType) {
-//        boolean exist = baseMapper.exists(new LambdaQueryWrapper<SysDictType>()
-//                .eq(SysDictType::getDictType, dictType.getDictType())
-//                .ne(ObjectUtil.isNotNull(dictType.getDictId()), SysDictType::getDictId, dictType.getDictId()));
-//        return !exist;
-        return false;
+        boolean exist = sysDictTypeData.checkDictTypeUnique(dictType.to(SysDictType.class));
+        return !exist;
     }
 
     /**

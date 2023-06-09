@@ -17,7 +17,7 @@ import java.util.List;
 public interface ISysDictTypeService {
 
 
-    Paging<SysDictTypeVo> selectPageDictTypeList( PageRequest<?> query);
+    Paging<SysDictTypeVo> selectPageDictTypeList( PageRequest<SysDictTypeBo> query);
 
     /**
      * 根据条件分页查询字典类型

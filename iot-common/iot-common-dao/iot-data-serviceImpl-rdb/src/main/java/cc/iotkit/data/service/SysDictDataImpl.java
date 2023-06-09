@@ -1,19 +1,15 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.IJPACommData;
-import cc.iotkit.data.dao.SysDeptRepository;
-import cc.iotkit.data.model.TbSysDept;
+import cc.iotkit.data.dao.SysDictDataRepository;
 import cc.iotkit.data.model.TbSysDictData;
 import cc.iotkit.data.system.ISysDictData;
 import cc.iotkit.data.util.PredicateBuilder;
-import cc.iotkit.model.system.SysDept;
 import cc.iotkit.model.system.SysDictData;
 import cc.iotkit.model.system.SysDictType;
-import cn.hutool.core.util.ObjectUtil;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +18,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import static cc.iotkit.data.model.QTbSysDept.tbSysDept;
+import static cc.iotkit.data.model.QTbSysDictData.tbSysDictData;
 
 /**
  * @Author：tfd
@@ -37,7 +31,7 @@ import static cc.iotkit.data.model.QTbSysDept.tbSysDept;
 public class SysDictDataImpl implements ISysDictData, IJPACommData<SysDictData, Long> {
 
     @Autowired
-    private SysDeptRepository baseRepository;
+    private SysDictDataRepository baseRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -71,8 +65,14 @@ public class SysDictDataImpl implements ISysDictData, IJPACommData<SysDictData, 
     }
 
     @Override
-    public List<SysDictType> findByDicType(String dictType) {
-        return null;
+    public List<SysDictData> findByDicType(String dictType) {
+        List<TbSysDictData> rets=jpaQueryFactory.select(tbSysDictData).from(tbSysDictData)
+                .where(PredicateBuilder.instance()
+                        .and(tbSysDictData.status.eq(UserConstants.DICT_NORMAL))
+                        .and(tbSysDictData.dictType.eq(dictType))
+                        .build()).orderBy(tbSysDictData.dictSort.asc())
+                        .fetch();
+        return MapstructUtils.convert(rets,SysDictData.class);
     }
 
     @Override
