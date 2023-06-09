@@ -59,7 +59,7 @@ public class TaskManager implements ApplicationContextAware {
             pageRequest.setPageNum(idx+=1);
             pageRequest.setPageSize(100);
             Paging<TaskInfo> all = taskInfoData.findAll(pageRequest);
-            List<TaskInfo> tasks = all.getData();
+            List<TaskInfo> tasks = all.getRows();
             // 如果记录为空，直接跳出循环
             if (CollectionUtil.isEmpty(tasks)) {
                 break;

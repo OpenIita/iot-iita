@@ -99,10 +99,10 @@ public class MapstructUtils {
         if (ObjectUtil.isNull(source)) {
             return null;
         }
-        if (CollUtil.isEmpty(source.getData())) {
+        if (CollUtil.isEmpty(source.getRows())) {
             return new Paging<>(0, new ArrayList<>());
         }
-        return new Paging<>(source.getTotal(), CONVERTER.convert(source.getData(), desc));
+        return new Paging<>(source.getTotal(), CONVERTER.convert(source.getRows(), desc));
     }
 
 }

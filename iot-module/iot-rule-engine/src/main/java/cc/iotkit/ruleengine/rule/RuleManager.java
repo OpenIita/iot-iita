@@ -79,7 +79,7 @@ public class RuleManager {
             pageRequest.setPageNum(idx+=1);
             pageRequest.setPageSize(100);
             Paging<RuleInfo> all = ruleInfoData.findAll(pageRequest);
-            List<RuleInfo> rules = all.getData();
+            List<RuleInfo> rules = all.getRows();
             if(CollectionUtil.isEmpty(rules)){
                 return;
             }

@@ -23,7 +23,7 @@ public class Paging<T> {
 
     private long total;
 
-    private List<T> data;
+    private List<T> rows;
 
     public <VO> Paging<VO> to(Class<VO> voClass) {
         return MapstructUtils.convert(this, voClass);

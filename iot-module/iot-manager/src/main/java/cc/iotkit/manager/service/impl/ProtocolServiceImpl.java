@@ -205,7 +205,7 @@ public class ProtocolServiceImpl implements IProtocolService {
     @Override
     public Paging<ProtocolComponentVo> selectPageList(PageRequest<ProtocolComponentBo> query) {
         Paging<ProtocolComponentVo> components = protocolComponentData.findAll(query.to(ProtocolComponent.class)).to(ProtocolComponentVo.class);
-        components.getData().forEach(c -> c.setState(
+        components.getRows().forEach(c -> c.setState(
                 componentManager.isRunning(c.getId()) ?
                         ProtocolComponent.STATE_RUNNING : ProtocolComponent.STATE_STOPPED
         ));
