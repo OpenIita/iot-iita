@@ -38,6 +38,7 @@ public class BizException extends RuntimeException {
 
     public BizException(String message) {
         super(message);
+        this.message = message;
         this.code = ErrCode.SYSTEM_EXCEPTION.getKey();
     }
 

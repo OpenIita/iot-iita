@@ -259,7 +259,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
             return CollUtil.newArrayList();
         }
         return TreeBuildUtils.build(menus, (menu, tree) ->
-                tree.setId(menu.getMenuId())
+                tree.setId(menu.getId())
                         .setParentId(menu.getParentId())
                         .setName(menu.getMenuName())
                         .setWeight(menu.getOrderNum()));

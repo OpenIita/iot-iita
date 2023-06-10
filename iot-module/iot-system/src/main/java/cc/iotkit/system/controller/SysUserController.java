@@ -70,7 +70,7 @@ public class SysUserController extends BaseController {
     @PostMapping("/export")
     public void export(@RequestBody @Validated(QueryGroup.class) Request<SysUserBo> req,
                        HttpServletResponse response) {
-        SysUserBo user=req.getData();
+        SysUserBo user = req.getData();
         List<SysUserVo> list = userService.selectUserList(user);
         List<SysUserExportVo> listVo = MapstructUtils.convert(list, SysUserExportVo.class);
         ExcelUtil.exportExcel(listVo, "用户数据", SysUserExportVo.class, response);
@@ -123,13 +123,13 @@ public class SysUserController extends BaseController {
 
     /**
      * 根据用户编号获取详细信息
-     *用户ID
+     * 用户ID
      */
     @ApiOperation("根据用户编号获取详细信息")
     @SaCheckPermission("system:user:query")
     @PostMapping(value = {"/getDetail"})
-    public SysUserInfoVo getInfo(@Validated @RequestBody Request<SysUserBo> req) {
-        Long userId = req.getData().getId();
+    public SysUserInfoVo getInfo(@Validated @RequestBody Request<Long> req) {
+        Long userId = req.getData();
         userService.checkUserDataScope(userId);
         SysUserInfoVo userInfoVo = new SysUserInfoVo();
         List<SysRoleVo> roles = roleService.selectRoleAll();
@@ -152,7 +152,7 @@ public class SysUserController extends BaseController {
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     public void add(@Validated(EditGroup.class) @RequestBody Request<SysUserBo> reqUser) {
-        SysUserBo user=reqUser.getData();
+        SysUserBo user = reqUser.getData();
         if (!userService.checkUserNameUnique(user)) {
             fail("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
         } else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
@@ -177,7 +177,7 @@ public class SysUserController extends BaseController {
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     public void edit(@Validated(EditGroup.class) @RequestBody Request<SysUserBo> reqUser) {
-        SysUserBo user=reqUser.getData();
+        SysUserBo user = reqUser.getData();
         userService.checkUserAllowed(user);
         userService.checkUserDataScope(user.getId());
         if (!userService.checkUserNameUnique(user)) {
@@ -192,7 +192,6 @@ public class SysUserController extends BaseController {
 
     /**
      * 删除用户
-     *
      */
     @ApiOperation("删除用户")
     @SaCheckPermission("system:user:remove")
@@ -200,7 +199,7 @@ public class SysUserController extends BaseController {
     @PostMapping("/delete")
     public void remove(@Validated @RequestBody Request<List<Long>> bo) {
         List<Long> userIds = bo.getData();
-        if (userIds.contains( LoginHelper.getUserId())) {
+        if (userIds.contains(LoginHelper.getUserId())) {
             fail("当前用户不能删除");
         }
         userService.deleteUserByIds(userIds);
@@ -213,8 +212,8 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:resetPwd")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PostMapping("/resetPwd")
-    public void resetPwd(@RequestBody @Validated(EditGroup.class)Request<SysUserBo> reqUser) {
-        SysUserBo user=reqUser.getData();
+    public void resetPwd(@RequestBody @Validated(EditGroup.class) Request<SysUserBo> reqUser) {
+        SysUserBo user = reqUser.getData();
         userService.checkUserAllowed(user);
         userService.checkUserDataScope(user.getId());
         user.setPassword(BCrypt.hashpw(user.getPassword()));
@@ -228,8 +227,8 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
-    public void changeStatus(@RequestBody @Validated(EditGroup.class)Request<SysUserBo> reqUser) {
-        SysUserBo user=reqUser.getData();
+    public void changeStatus(@RequestBody @Validated(EditGroup.class) Request<SysUserBo> reqUser) {
+        SysUserBo user = reqUser.getData();
         userService.checkUserAllowed(user);
         userService.checkUserDataScope(user.getId());
         userService.updateUserStatus(user.getId(), user.getStatus());
@@ -255,15 +254,15 @@ public class SysUserController extends BaseController {
     /**
      * 用户授权角色
      *
-     * @param reqUserId  用户Id
-     * @param roleIds 角色ID串
+     * @param reqUserId 用户Id
+     * @param roleIds   角色ID串
      */
     @ApiOperation("用户授权角色")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
     @PostMapping("/authRole")
     public void insertAuthRole(Request<Long> reqUserId, Long[] roleIds) {
-        Long userId=reqUserId.getData();
+        Long userId = reqUserId.getData();
         userService.checkUserDataScope(userId);
         userService.insertUserAuth(userId, roleIds);
     }

@@ -16,7 +16,7 @@ public class BaseController {
     }
 
     public static void fail(String msg) {
-        throw new ViewException(msg);
+        throw new ViewException(ViewException.CODE_FAILED, msg);
     }
 
     public static <T> void fail(T data) {

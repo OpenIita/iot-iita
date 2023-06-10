@@ -13,8 +13,8 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ViewException extends RuntimeException {
 
-    public static final int CODE_FAILED = 0;
-    public static final int CODE_WARN = 1;
+    public static final int CODE_FAILED = 500;
+    public static final int CODE_WARN = 601;
 
     private int code;
     private String message;
@@ -25,6 +25,7 @@ public class ViewException extends RuntimeException {
 
     public ViewException(String message) {
         super(message);
+        this.message = message;
     }
 
     public ViewException(int code, String message) {

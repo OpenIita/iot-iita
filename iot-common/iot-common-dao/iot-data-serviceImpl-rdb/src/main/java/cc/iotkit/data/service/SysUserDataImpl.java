@@ -21,7 +21,6 @@ import cc.iotkit.model.system.SysRole;
 import cc.iotkit.model.system.SysUser;
 import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -75,7 +74,6 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
         return SysUser.class;
     }
 
-
     @Override
     public long countByDeptId(Long aLong) {
         return 0;
@@ -102,19 +100,20 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     }
 
     @Override
-    public SysUser findById(Long id){
+    public SysUser findById(Long id) {
         TbSysUser sysUser = jpaQueryFactory.select(tbSysUser).from(tbSysUser).where(tbSysUser.id.eq(id)).fetchOne();
 
         SysUser convert = MapstructUtils.convert(sysUser, SysUser.class);
         List<SysRole> sysRoles = sysRoleData.findByUserId(id);
         convert.setRoles(sysRoles);
         SysDept dept = sysDeptData.findById(convert.getDeptId());
-        if(ObjectUtil.isNotNull(dept)){
+        if (ObjectUtil.isNotNull(dept)) {
             convert.setDept(dept);
         }
         return convert;
 
     }
+
     @Override
     public boolean checkEmailUnique(SysUser user) {
         final TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
@@ -175,13 +174,13 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
 
     @Override
     public SysUser selectUserByUserName(String username) {
-         TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
+        TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
                 .where(PredicateBuilder.instance()
                         .and(tbSysUser.userName.eq(username))
                         .build()).fetchOne();
         SysUser convert = MapstructUtils.convert(ret, SysUser.class);
         Long deptId = ret.getDeptId();
-        if(Objects.nonNull(deptId)){
+        if (Objects.nonNull(deptId)) {
             // 获取部门信息
             SysDept sysDept = sysDeptData.findById(deptId);
             convert.setDept(sysDept);
@@ -204,7 +203,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
                 .and(Objects.nonNull(data.getDeptId()), () -> tbSysUser.deptId.eq(data.getDeptId()))
                 .and(tbSysUser.delFlag.eq(UserConstants.ROLE_NORMAL));
         QueryResults<TbSysUser> tbSysUserQueryResults = jpaQueryFactory.select(Projections.bean(TbSysUser.class, tbSysUser.id, tbSysUser.deptId, tbSysUser.userName,
-                        tbSysUser.nickName, tbSysUser.email, tbSysUser.phonenumber, tbSysUser.createTime)).from(tbSysUser)
+                tbSysUser.nickName, tbSysUser.email, tbSysUser.phonenumber, tbSysUser.createTime)).from(tbSysUser)
                 .leftJoin(tbSysDept).on(tbSysUser.deptId.eq(tbSysDept.id))
                 .leftJoin(tbSysUserRole).on(tbSysUser.id.eq(tbSysUserRole.userId))
                 .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
@@ -234,7 +233,6 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     }
 
 
-
     @Override
     public Paging<SysUser> selectUnallocatedList(PageRequest<SysUser> to) {
         //TODO:  未分配用户列表
@@ -246,7 +244,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
                 .and(Objects.nonNull(data.getDeptId()), () -> tbSysUser.deptId.eq(data.getDeptId()))
                 .and(tbSysUser.delFlag.eq(UserConstants.ROLE_NORMAL));
         QueryResults<SysUser> sysUserQueryResults = jpaQueryFactory.select(Projections.bean(SysUser.class, tbSysUser.id, tbSysUser.deptId, tbSysUser.userName,
-                        tbSysUser.nickName, tbSysUser.email, tbSysUser.phonenumber, tbSysUser.createTime)).from(tbSysUser)
+                tbSysUser.nickName, tbSysUser.email, tbSysUser.phonenumber, tbSysUser.createTime)).from(tbSysUser)
                 .leftJoin(tbSysDept).on(tbSysUser.deptId.eq(tbSysDept.id))
                 .leftJoin(tbSysUserRole).on(tbSysUser.id.eq(tbSysUserRole.userId))
                 .leftJoin(tbSysRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
@@ -286,7 +284,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
 
     private Predicate buildQueryCondition(SysUser user) {
         List<Long> ids;
-        if(Objects.nonNull(user)&&Objects.nonNull(user.getDeptId())){
+        if (Objects.nonNull(user) && Objects.nonNull(user.getDeptId())) {
             Long deptId = user.getDeptId();
             List<SysDept> depts = sysDeptData.findByDeptId(deptId);
             ids = StreamUtils.toList(depts, SysDept::getId);
@@ -295,7 +293,6 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
             ids = null;
         }
         return PredicateBuilder.instance()
-                .and(tbSysUser.delFlag.eq(UserConstants.USER_NORMAL))
                 .and(ObjectUtil.isNotNull(user.getId()), () -> tbSysUser.id.eq(user.getId()))
                 .and(StringUtils.isNotEmpty(user.getUserName()), () -> tbSysUser.userName.like(user.getUserName()))
                 .and(StringUtils.isNotEmpty(user.getStatus()), () -> tbSysUser.status.eq(user.getStatus()))

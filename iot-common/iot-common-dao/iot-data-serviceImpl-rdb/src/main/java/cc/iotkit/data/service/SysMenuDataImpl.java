@@ -1,7 +1,5 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
@@ -112,6 +110,7 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
         List<TbSysMenu> tbSysMenuList;
         if (isSuperAdmin) {
             tbSysMenuList = jpaQueryFactory.select(tbSysMenu)
+                    .from(tbSysMenu)
                     .where(predicateBuilder.build())
                     .orderBy(tbSysMenu.parentId.asc(), tbSysMenu.orderNum.asc()).fetch();
         } else {

@@ -135,7 +135,12 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
 
     @Override
     public Paging<SysRole> findAll(PageRequest<SysRole> pageRequest) {
-        return PageBuilder.toPaging(sysRoleRepository.findAll(buildQueryWrapper(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
+        return PageBuilder.toPaging(
+                sysRoleRepository.findAll(
+                        buildQueryWrapper(pageRequest.getData()),
+                        PageBuilder.toPageable(pageRequest))
+                , SysRole.class
+        );
     }
 
     @Override
@@ -154,8 +159,8 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
 
     private List<SysRole> buildQueryTitle(Predicate predicate) {
         return jpaQueryFactory.select(Projections.fields(SysRole.class, tbSysRole.id, tbSysRole.roleName,
-                        tbSysRole.roleKey, tbSysRole.roleSort, tbSysRole.menuCheckStrictly, tbSysRole.deptCheckStrictly,
-                        tbSysRole.status, tbSysRole.delFlag, tbSysRole.createTime, tbSysRole.remark))
+                tbSysRole.roleKey, tbSysRole.roleSort, tbSysRole.menuCheckStrictly, tbSysRole.deptCheckStrictly,
+                tbSysRole.status, tbSysRole.delFlag, tbSysRole.createTime, tbSysRole.remark))
                 .from(tbSysRole)
                 .leftJoin(tbSysUserRole).on(tbSysUserRole.roleId.eq(tbSysRole.id))
                 .leftJoin(tbSysUser).on(tbSysUser.id.eq(tbSysUserRole.userId))
@@ -166,7 +171,6 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
 
     private Predicate buildQueryWrapper(SysRole role) {
         return PredicateBuilder.instance()
-                .and(tbSysRole.delFlag.eq(UserConstants.ROLE_NORMAL))
                 .and(Objects.nonNull(role.getId()), () -> tbSysRole.id.eq(role.getId()))
                 .and(StringUtils.isNotBlank(role.getRoleName()), () -> tbSysRole.roleName.like(role.getRoleName()))
                 .and(StringUtils.isNotBlank(role.getStatus()), () -> tbSysRole.roleName.eq(role.getStatus()))

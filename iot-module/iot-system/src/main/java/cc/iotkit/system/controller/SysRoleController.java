@@ -47,7 +47,7 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "获取角色信息列表", notes = "获取角色信息列表,根据查询条件分页")
     @SaCheckPermission("system:role:list")
     @PostMapping("/list")
-    public Paging<SysRoleVo> list(PageRequest<SysRoleBo> query) {
+    public Paging<SysRoleVo> list(@RequestBody @Validated PageRequest<SysRoleBo> query) {
         return roleService.selectPageRoleList(query);
     }
 
@@ -140,7 +140,8 @@ public class SysRoleController extends BaseController {
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
-    public void changeStatus(@RequestBody SysRoleBo role) {
+    public void changeStatus(@RequestBody Request<SysRoleBo> bo) {
+        SysRoleBo role = bo.getData();
         roleService.checkRoleAllowed(role.getRoleId());
         roleService.checkRoleDataScope(role.getRoleId());
         roleService.updateRoleStatus(role.getRoleId(), role.getStatus());

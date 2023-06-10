@@ -62,7 +62,6 @@ public class SysDeptDataImpl implements ISysDeptData, IJPACommData<SysDept, Long
     @Override
     public List<SysDept> findDepts(SysDept dept) {
         PredicateBuilder predicateBuilder = PredicateBuilder.instance()
-                .and(tbSysDept.delFlag.eq(UserConstants.USER_NORMAL))
                 .and(ObjectUtil.isNotNull(dept.getId()), () -> tbSysDept.id.eq(dept.getId()))
                 .and(ObjectUtil.isNotNull(dept.getParentId()), () -> tbSysDept.parentId.eq(dept.getParentId()))
                 .and(StringUtils.isNotEmpty(dept.getDeptName()), () -> tbSysDept.deptName.like(dept.getDeptName()))

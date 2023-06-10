@@ -57,12 +57,16 @@ public class SysPostDataImpl implements ISysPostData, IJPACommData<SysPost, Long
 
     @Override
     public Paging<SysPost> findAll(PageRequest<SysPost> pageRequest) {
-        return PageBuilder.toPaging(postRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
+        return PageBuilder.toPaging(
+                postRepository.findAll(
+                        buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest))
+                , SysPost.class
+        );
     }
 
     @Override
     public List<Long> selectPostListByUserId(Long userId) {
-        return jpaQueryFactory.select( tbSysPost.id)
+        return jpaQueryFactory.select(tbSysPost.id)
                 .from(tbSysPost)
                 .leftJoin(tbSysUserPost).on(tbSysUserPost.postId.eq(tbSysPost.id))
                 .leftJoin(tbSysUser).on(tbSysUser.id.eq(tbSysUserPost.userId))
@@ -73,9 +77,9 @@ public class SysPostDataImpl implements ISysPostData, IJPACommData<SysPost, Long
 
     @Override
     public List<SysPost> selectPostList(SysPost post) {
-        List<TbSysPost> ret=jpaQueryFactory.selectFrom(tbSysPost).where(buildQueryCondition(post))
+        List<TbSysPost> ret = jpaQueryFactory.selectFrom(tbSysPost).where(buildQueryCondition(post))
                 .orderBy(tbSysPost.postSort.asc()).fetch();
-        return MapstructUtils.convert(ret,SysPost.class);
+        return MapstructUtils.convert(ret, SysPost.class);
     }
 
     @Override
@@ -100,8 +104,8 @@ public class SysPostDataImpl implements ISysPostData, IJPACommData<SysPost, Long
 
     private Predicate buildQueryCondition(SysPost post) {
         return PredicateBuilder.instance()
-                .and(StringUtils.isNotBlank(post.getPostCode()),()->tbSysPost.postCode.like(post.getPostCode()))
-                .and(StringUtils.isNotBlank(post.getPostName()),()->tbSysPost.postName.like(post.getPostName()))
-                .and(StringUtils.isNotBlank(post.getStatus()),()->tbSysPost.status.eq(post.getStatus())).build();
+                .and(StringUtils.isNotBlank(post.getPostCode()), () -> tbSysPost.postCode.like(post.getPostCode()))
+                .and(StringUtils.isNotBlank(post.getPostName()), () -> tbSysPost.postName.like(post.getPostName()))
+                .and(StringUtils.isNotBlank(post.getStatus()), () -> tbSysPost.status.eq(post.getStatus())).build();
     }
 }

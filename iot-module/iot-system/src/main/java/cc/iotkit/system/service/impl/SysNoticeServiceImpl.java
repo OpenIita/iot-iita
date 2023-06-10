@@ -27,7 +27,7 @@ import java.util.List;
 @Service
 public class SysNoticeServiceImpl implements ISysNoticeService {
 
-    private ISysNoticeData sysNoticeData;
+    private final ISysNoticeData sysNoticeData;
 
     @Override
     public Paging<SysNoticeVo> selectPageNoticeList( PageRequest<SysNoticeBo> query) {

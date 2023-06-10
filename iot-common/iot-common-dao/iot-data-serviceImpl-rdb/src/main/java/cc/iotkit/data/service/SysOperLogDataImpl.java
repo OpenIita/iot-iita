@@ -65,7 +65,12 @@ public class SysOperLogDataImpl implements ISysOperLogData, IJPACommData<SysOper
 
     @Override
     public Paging<SysOperLog> findAll(PageRequest<SysOperLog> pageRequest) {
-        return PageBuilder.toPaging(operLogRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
+        return PageBuilder.toPaging(
+                operLogRepository.findAll(
+                        buildQueryCondition(pageRequest.getData()),
+                        PageBuilder.toPageable(pageRequest))
+                , SysOperLog.class
+        );
     }
 
     @Override
@@ -75,18 +80,18 @@ public class SysOperLogDataImpl implements ISysOperLogData, IJPACommData<SysOper
 
     @Override
     public List<SysOperLog> findAllByCondition(SysOperLog data) {
-        List<TbSysOperLog> ret=jpaQueryFactory.selectFrom(tbSysOperLog).where(buildQueryCondition(data))
+        List<TbSysOperLog> ret = jpaQueryFactory.selectFrom(tbSysOperLog).where(buildQueryCondition(data))
                 .orderBy(tbSysOperLog.id.desc()).fetch();
         return MapstructUtils.convert(ret, SysOperLog.class);
     }
 
     private Predicate buildQueryCondition(SysOperLog data) {
         return PredicateBuilder.instance()
-                .and(StringUtils.isNotBlank(data.getTitle()),()->tbSysOperLog.title.like(data.getTitle()))
-                .and(data.getBusinessType()!=null&&data.getBusinessType()>0,()->tbSysOperLog.businessType.eq(data.getBusinessType()))
-                .and(ArrayUtil.isNotEmpty(data.getBusinessTypes()),()->tbSysOperLog.businessType.in(Arrays.asList(data.getBusinessTypes())))
-                .and(data.getStatus() != null && data.getStatus() > 0,()->tbSysOperLog.status.eq(data.getStatus()))
-                .and(StringUtils.isNotBlank(data.getOperName()),()->tbSysOperLog.operName.like(data.getOperName()))
+                .and(StringUtils.isNotBlank(data.getTitle()), () -> tbSysOperLog.title.like(data.getTitle()))
+                .and(data.getBusinessType() != null && data.getBusinessType() > 0, () -> tbSysOperLog.businessType.eq(data.getBusinessType()))
+                .and(ArrayUtil.isNotEmpty(data.getBusinessTypes()), () -> tbSysOperLog.businessType.in(Arrays.asList(data.getBusinessTypes())))
+                .and(data.getStatus() != null && data.getStatus() > 0, () -> tbSysOperLog.status.eq(data.getStatus()))
+                .and(StringUtils.isNotBlank(data.getOperName()), () -> tbSysOperLog.operName.like(data.getOperName()))
                 .build();
     }
 }
