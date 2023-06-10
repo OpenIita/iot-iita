@@ -1,7 +1,11 @@
 package cc.iotkit.manager.service;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
+import cc.iotkit.comps.ApiTool;
 import cc.iotkit.data.manager.IOtaDeviceData;
 import cc.iotkit.data.manager.IOtaPackageData;
+import cc.iotkit.model.alert.AlertConfig;
 import cc.iotkit.model.ota.OtaPackage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +27,7 @@ public class OtaService {
 
     private final IOtaPackageData iOtaPackageData;
     private final IOtaDeviceData iOtaDeviceData;
+    private final DeviceService deviceService;
 
 
     @Value("${oss.region}")
@@ -48,7 +53,19 @@ public class OtaService {
         iOtaPackageData.findByVersionGreaterThan(version);
     }
 
+    public Paging<OtaPackage> getOtaPackagePageList(PageRequest<OtaPackage> request) {
+        return iOtaPackageData.findAll(request);
+    }
+
     public void batchOta() {
+    }
+
+    /**
+     * 开始升级
+     */
+    public void startUpgrade() {
+        //构建升级包
+        deviceService.otaUpgrade("", true);
     }
 
 }
