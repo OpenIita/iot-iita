@@ -2,22 +2,15 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.common.constant.UserConstants;
-import cc.iotkit.common.utils.StreamUtils;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.IJPACommData;
-import cc.iotkit.data.dao.SysDeptRepository;
 import cc.iotkit.data.dao.SysDictTypeRepository;
 import cc.iotkit.data.model.TbSysDictType;
-import cc.iotkit.data.model.TbSysUser;
 import cc.iotkit.data.system.ISysDictTypeData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
-import cc.iotkit.model.system.SysDept;
 import cc.iotkit.model.system.SysDictType;
-import cc.iotkit.model.system.SysDictType;
-import cc.iotkit.model.system.SysUser;
-import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static cc.iotkit.data.model.QTbSysDictType.tbSysDictType;
-import static cc.iotkit.data.model.QTbSysUser.tbSysUser;
 
 /**
  * @Author：tfd
@@ -70,7 +62,10 @@ public class SysDictTypeDataImpl implements ISysDictTypeData, IJPACommData<SysDi
 
     @Override
     public List<SysDictType> findByConditions(SysDictType query) {
-        return null;
+        List<TbSysDictType> rets=jpaQueryFactory.select(tbSysDictType).from(tbSysDictType)
+                .where(buildQueryCondition(query))
+                .fetch();
+        return MapstructUtils.convert(rets, SysDictType.class);
     }
 
     @Override

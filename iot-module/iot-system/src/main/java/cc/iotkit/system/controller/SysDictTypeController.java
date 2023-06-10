@@ -6,16 +6,20 @@ import cc.iotkit.common.api.Request;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
+import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysDictTypeBo;
 import cc.iotkit.system.dto.vo.SysDictTypeVo;
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysDictTypeService;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
@@ -65,7 +69,7 @@ public class SysDictTypeController extends BaseController {
     @ApiOperation(value = "查询字典类型详细", notes = "查询字典类型详细")
     @SaCheckPermission("system:dict:query")
     @PostMapping(value = "/getById")
-    public SysDictTypeVo getInfo(@Validated @RequestBody Request<SysDictTypeBo> bo) {
+    public SysDictTypeVo getInfo(@Validated(QueryGroup.class) @RequestBody Request<SysDictTypeBo> bo) {
         Long dictTypeId = bo.getData().getId();
         return dictTypeService.selectDictTypeById(dictTypeId);
     }
@@ -77,7 +81,7 @@ public class SysDictTypeController extends BaseController {
     @SaCheckPermission("system:dict:add")
     @Log(title = "字典类型", businessType = BusinessType.INSERT)
     @PostMapping("/add")
-    public void add(@Validated @RequestBody Request<SysDictTypeBo> dict) {
+    public void add(@Validated(EditGroup.class) @RequestBody Request<SysDictTypeBo> dict) {
         if (!dictTypeService.checkDictTypeUnique(dict.getData())) {
             fail("新增字典'" + dict.getData().getDictName() + "'失败，字典类型已存在");
         }
@@ -87,10 +91,11 @@ public class SysDictTypeController extends BaseController {
     /**
      * 修改字典类型
      */
+    @ApiOperation(value = "修改字典类型", notes = "修改字典类型")
     @SaCheckPermission("system:dict:edit")
     @Log(title = "字典类型", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
-    public void edit(@Validated @RequestBody Request<SysDictTypeBo> dict) {
+    public void edit(@Validated(EditGroup.class) @RequestBody Request<SysDictTypeBo> dict) {
         if (!dictTypeService.checkDictTypeUnique(dict.getData())) {
             fail("修改字典'" + dict.getData().getDictName() + "'失败，字典类型已存在");
         }
@@ -102,16 +107,18 @@ public class SysDictTypeController extends BaseController {
      *
      * @param dictIds 字典ID串
      */
+    @ApiOperation(value = "删除字典类型", notes = "删除字典类型")
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @PostMapping("/delete")
-    public void remove(@PathVariable Collection<Long> dictIds) {
+    public void remove(@RequestBody @Validated Collection<Long> dictIds) {
         dictTypeService.deleteDictTypeByIds(dictIds);
     }
 
     /**
      * 刷新字典缓存
      */
+    @ApiOperation(value = "刷新字典缓存", notes = "刷新字典缓存")
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.CLEAN)
     @PostMapping("/refreshCache")
@@ -122,6 +129,7 @@ public class SysDictTypeController extends BaseController {
     /**
      * 获取字典选择框列表
      */
+    @ApiOperation(value = "获取字典选择框列表", notes = "获取字典选择框列表")
     @PostMapping("/optionselect")
     public List<SysDictTypeVo> optionselect() {
         return dictTypeService.selectDictTypeAll();

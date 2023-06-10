@@ -88,6 +88,7 @@ public class SysDictDataController {
     /**
      * 新增字典类型
      */
+    @ApiOperation(value = "新增字典类型", notes = "新增字典类型")
     @SaCheckPermission("system:dict:add")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping("/add")

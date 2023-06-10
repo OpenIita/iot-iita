@@ -227,6 +227,16 @@ public interface Constants {
          */
         String INVOKE_SERVICE_PROPERTY_GET = "/{deviceId}/service/property/get";
 
+        /**
+         * OTA升级
+         */
+        String OTA_UPGRADE_PACKAGE = "{deviceId}/ota/upgrade/package/";
+
+        /**
+         * OTA升级进度上报
+         */
+        String OTA_UPGRADE_INFORM = "{deviceId}/ota/upgrade/inform/";
+
     }
 
     interface API_SPACE {

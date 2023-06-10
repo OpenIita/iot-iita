@@ -13,6 +13,7 @@ import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
+import cc.iotkit.comps.ApiTool;
 import cc.iotkit.comps.DeviceComponentManager;
 import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.data.manager.IDeviceInfoData;
@@ -21,6 +22,7 @@ import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.temporal.IThingModelMessageData;
 import cc.iotkit.virtualdevice.VirtualManager;
+import io.vertx.core.http.HttpMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -69,6 +71,10 @@ public class DeviceService {
 
         return send(deviceId, device.getProductKey(), device.getDeviceName(),
                 args, ThingModelMessage.TYPE_SERVICE, service);
+    }
+
+    public String otaUpgrade(String token, boolean checkOwner) {
+        return null;
     }
 
     /**
