@@ -153,3 +153,10 @@ user:
     maxRetryCount: 5
     # 密码锁定时间（默认10分钟）
     lockTime: 10
+
+oss:
+  region: xxxxx
+  endpoint: xxxxx
+  accessKey: xxxxx
+  secretKey: xxxxx
+  buckName: xxxx
