@@ -66,8 +66,8 @@ public class SysPostController extends BaseController {
      */
     @ApiOperation("根据岗位编号获取详细信息")
     @SaCheckPermission("system:post:query")
-    @PostMapping(value = "/getDetail")
-    public SysPostVo getInfo(@PathVariable Request<Long> postId) {
+    @PostMapping(value = "/getInfo")
+    public SysPostVo getInfo(@RequestBody @Validated Request<Long> postId) {
         return postService.selectPostById(postId.getData());
     }
 
@@ -78,7 +78,7 @@ public class SysPostController extends BaseController {
     @SaCheckPermission("system:post:add")
     @Log(title = "岗位管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
-    public void add(@RequestBody @Validated(EditGroup.class)Request<SysPostBo> post) {
+    public void add(@RequestBody @Validated(EditGroup.class) Request<SysPostBo> post) {
         if (!postService.checkPostNameUnique(post.getData())) {
             fail("新增岗位'" + post.getData().getPostName() + "'失败，岗位名称已存在");
         } else if (!postService.checkPostCodeUnique(post.getData())) {
@@ -111,8 +111,8 @@ public class SysPostController extends BaseController {
     @ApiOperation("删除岗位")
     @SaCheckPermission("system:post:remove")
     @Log(title = "岗位管理", businessType = BusinessType.DELETE)
-    @PostMapping("/{postIds}")
-    public void remove(@PathVariable @Validated(EditGroup.class) Request<Collection> postIds) {
+    @PostMapping("/delete")
+    public void remove(@RequestBody @Validated Request<List<Long>> postIds) {
         postService.deletePostByIds(postIds.getData());
     }
 

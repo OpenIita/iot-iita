@@ -32,8 +32,10 @@ public class MapstructUtils {
      * @return desc
      */
     public static <T, V> V convert(T source, Class<V> desc) {
-        Assert.notNull(source, "source is null");
         Assert.notNull(desc, "desc is null");
+        if (source == null) {
+            return null;
+        }
         return CONVERTER.convert(source, desc);
     }
 

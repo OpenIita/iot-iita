@@ -58,20 +58,19 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "导出角色信息列表", notes = "导出角色信息列表")
     @SaCheckPermission("system:role:export")
     @PostMapping("/export")
-    public void export(@RequestBody @Validated  Request<SysRoleBo> role, HttpServletResponse response) {
+    public void export(@RequestBody @Validated Request<SysRoleBo> role, HttpServletResponse response) {
         List<SysRoleVo> list = roleService.selectRoleList(role.getData());
         ExcelUtil.exportExcel(list, "角色数据", SysRoleVo.class, response);
     }
 
     /**
      * 根据角色编号获取详细信息
-     *
-     * @param roleId 角色ID
      */
     @ApiOperation(value = "根据角色编号获取详细信息", notes = "根据角色编号获取详细信息")
     @SaCheckPermission("system:role:query")
-    @PostMapping(value = "/{roleId}")
-    public SysRoleVo getInfo(@PathVariable Long roleId) {
+    @PostMapping(value = "/getInfo")
+    public SysRoleVo getInfo(@Validated @RequestBody Request<Long> bo) {
+        Long roleId = bo.getData();
         roleService.checkRoleDataScope(roleId);
         return roleService.selectRoleById(roleId);
     }
@@ -149,8 +148,6 @@ public class SysRoleController extends BaseController {
 
     /**
      * 删除角色
-     *
-
      */
     @ApiOperation(value = "删除角色", notes = "删除角色")
     @SaCheckPermission("system:role:remove")
@@ -186,8 +183,8 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "查询未分配用户角色列表", notes = "查询未分配用户角色列表")
     @SaCheckPermission("system:role:list")
     @PostMapping("/authUser/unallocatedList")
-    public Paging<SysUserVo> unallocatedList( PageRequest<SysUserBo> query) {
-        return userService.selectUnallocatedList( query);
+    public Paging<SysUserVo> unallocatedList(PageRequest<SysUserBo> query) {
+        return userService.selectUnallocatedList(query);
     }
 
     /**

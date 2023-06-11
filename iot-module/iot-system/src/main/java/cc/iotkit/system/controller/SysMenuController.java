@@ -74,8 +74,8 @@ public class SysMenuController extends BaseController {
             TenantConstants.TENANT_ADMIN_ROLE_KEY
     }, mode = SaMode.OR)
     @SaCheckPermission("system:menu:query")
-    @PostMapping(value = "/getDetail")
-    public SysMenuVo getInfo(@PathVariable Request<Long> menuId) {
+    @PostMapping(value = "/getInfo")
+    public SysMenuVo getInfo(@RequestBody Request<Long> menuId) {
         return menuService.selectMenuById(menuId.getData());
     }
 

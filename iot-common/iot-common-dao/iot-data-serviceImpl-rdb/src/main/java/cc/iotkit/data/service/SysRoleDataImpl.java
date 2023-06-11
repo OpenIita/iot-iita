@@ -61,13 +61,12 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
 
     @Override
     public SysRole findById(Long id) {
-        return MapstructUtils.convert(sysRoleRepository.findById(id), SysRole.class);
+        return MapstructUtils.convert(sysRoleRepository.findById(id).orElse(null), SysRole.class);
     }
 
     @Override
     public List<Long> selectMenuListByRoleId(Long roleId, boolean menuCheckStrictly) {
-
-        List<Long> roleIds = jpaQueryFactory.select(Projections.bean(Long.class, tbSysMenu.id))
+        List<Long> roleIds = jpaQueryFactory.select(Projections.fields(tbSysMenu.id))
                 .from(tbSysMenu)
                 .innerJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId))
                 .where(PredicateBuilder.instance()
