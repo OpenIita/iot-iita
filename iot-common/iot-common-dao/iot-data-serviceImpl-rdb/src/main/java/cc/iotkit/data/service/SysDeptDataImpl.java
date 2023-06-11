@@ -1,19 +1,15 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysDeptRepository;
-import cc.iotkit.data.model.QTbSysRoleDept;
 import cc.iotkit.data.model.TbSysDept;
 import cc.iotkit.data.system.ISysDeptData;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysDept;
 import cn.hutool.core.util.ObjectUtil;
-import com.querydsl.core.types.dsl.BooleanTemplate;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

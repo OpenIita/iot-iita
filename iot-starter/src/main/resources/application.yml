@@ -160,3 +160,6 @@ oss:
   accessKey: xxxxx
   secretKey: xxxxx
   buckName: xxxx
+baetyl:
+  api-type: feign
+  service-url: http://116.168.30.140:30004

@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Response {
-    private int code;
+    private Integer code;
     private String message;
     private Object data;
-    private long timestamp;
+    private String requestId;
 }

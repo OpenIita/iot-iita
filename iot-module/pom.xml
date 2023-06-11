@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>iot-system</module>
+        <module>iot-baetyl</module>
         <module>iot-manager</module>
         <module>iot-rule-engine</module>
         <module>iot-message-notify</module>

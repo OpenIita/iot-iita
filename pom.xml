@@ -45,7 +45,7 @@
         <knife4j.version>2.0.9</knife4j.version>
         <validateion.version>1.1.0.Final</validateion.version>
         <lombok.version>1.18.26</lombok.version>
-
+        <openfeign.version>2.1.1.RELEASE</openfeign.version>
     </properties>
 
     <dependencyManagement>
@@ -64,6 +64,13 @@
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>${beanutils.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${openfeign.version}</version>
             </dependency>
 
             <dependency>
@@ -515,6 +522,12 @@
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-system</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-baetyl</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
