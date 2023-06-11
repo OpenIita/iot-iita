@@ -154,6 +154,10 @@
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-system</artifactId>
     </dependency>
+    <dependency>
+      <groupId>cc.iotkit</groupId>
+      <artifactId>iot-baetyl</artifactId>
+    </dependency>
  <!--   <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-baetyl</artifactId>
