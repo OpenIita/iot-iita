@@ -27,7 +27,7 @@ public class SysMenuBo extends BaseDto {
      * 菜单ID
      */
     @NotNull(message = "菜单ID不能为空", groups = { EditGroup.class })
-    private Long menuId;
+    private Long id;
 
     /**
      * 父菜单ID
