@@ -84,7 +84,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
         final TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
                 .where(PredicateBuilder.instance()
                         .and(tbSysUser.userName.eq(user.getUserName()))
-                        .and(Objects.nonNull(user.getId()), () -> tbSysUser.id.eq(user.getId()))
+                        .and(Objects.nonNull(user.getId()), () -> tbSysUser.id.ne(user.getId()))
                         .build()).fetchOne();
         return Objects.isNull(ret);
     }
@@ -94,7 +94,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
         final TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
                 .where(PredicateBuilder.instance()
                         .and(tbSysUser.phonenumber.eq(user.getPhonenumber()))
-                        .and(Objects.nonNull(user.getId()), () -> tbSysUser.id.eq(user.getId()))
+                        .and(Objects.nonNull(user.getId()), () -> tbSysUser.id.ne(user.getId()))
                         .build()).fetchOne();
         return Objects.isNull(ret);
     }
@@ -119,7 +119,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
         final TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
                 .where(PredicateBuilder.instance()
                         .and(tbSysUser.email.eq(user.getEmail()))
-                        .and(Objects.nonNull(user.getId()), () -> tbSysUser.id.eq(user.getId()))
+                        .and(Objects.nonNull(user.getId()), () -> tbSysUser.id.ne(user.getId()))
                         .build()).fetchOne();
         return Objects.isNull(ret);
     }
