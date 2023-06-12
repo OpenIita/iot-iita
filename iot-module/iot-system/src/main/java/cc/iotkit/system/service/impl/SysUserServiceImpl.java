@@ -18,6 +18,7 @@ import cc.iotkit.system.dto.bo.SysUserBo;
 import cc.iotkit.system.dto.vo.SysUserVo;
 import cc.iotkit.system.service.ISysUserService;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
@@ -175,7 +176,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
      */
     private void insertUserPost(SysUserBo user, boolean clear) {
         List<Long> posts = user.getPostIds();
-        if (ArrayUtil.isNotEmpty(posts)) {
+        if (CollectionUtil.isNotEmpty(posts)) {
             if (clear) {
                 // 删除用户与岗位关联
                 sysUserPostData.deleteByUserId(user.getId());
@@ -199,7 +200,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
      * @param clear   清除已存在的关联数据
      */
     private void insertUserRole(Long userId, List<Long> roleIds, boolean clear) {
-        if (ArrayUtil.isNotEmpty(roleIds)) {
+        if (CollectionUtil.isNotEmpty(roleIds)) {
             // 判断是否具有此角色的操作权限
             List<SysRole> roles = sysRoleData.selectRoleList(new SysRole());
             if (CollUtil.isEmpty(roles)) {

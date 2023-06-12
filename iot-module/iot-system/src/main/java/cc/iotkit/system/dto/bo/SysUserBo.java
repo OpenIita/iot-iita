@@ -2,10 +2,12 @@ package cc.iotkit.system.dto.bo;
 
 import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.common.constant.UserConstants;
+import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.model.system.SysUser;
 import io.github.linpeilie.annotations.AutoMapper;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,6 +31,7 @@ public class SysUserBo extends BaseDto {
     /**
      * 用户ID
      */
+    @NotNull(message = "用户ID不能为空", groups = {EditGroup.class})
     private Long id;
 
     /**
