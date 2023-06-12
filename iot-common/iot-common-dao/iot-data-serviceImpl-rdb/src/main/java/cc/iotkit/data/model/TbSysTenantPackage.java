@@ -1,5 +1,6 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.data.model.BaseEntity;
 import cc.iotkit.model.system.SysTenantPackage;
 import io.github.linpeilie.annotations.AutoMapper;
@@ -59,6 +60,6 @@ public class TbSysTenantPackage extends BaseEntity {
      * 删除标志（0代表存在 2代表删除）
      */
     @ApiModelProperty(value = "删除标志（0代表存在 2代表删除）")
-    private String delFlag;
+    private String delFlag= UserConstants.NORMAL;
 
 }

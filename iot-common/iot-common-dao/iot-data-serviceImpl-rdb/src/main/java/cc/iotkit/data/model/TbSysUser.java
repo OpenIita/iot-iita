@@ -1,5 +1,6 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.model.system.SysUser;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -107,7 +109,7 @@ public class TbSysUser extends BaseEntity {
      * 删除标志（0代表存在 2代表删除）
      */
     @ApiModelProperty(value = "删除标志（0代表存在 2代表删除）")
-    private String delFlag;
+    private String delFlag=UserConstants.NORMAL;
 
     /**
      * 最后登录IP
