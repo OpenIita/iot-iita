@@ -114,6 +114,7 @@ public class SysRoleController extends BaseController {
 
         if (roleService.updateRole(role) > 0) {
             roleService.cleanOnlineUserByRole(role.getId());
+            return;
         }
         fail("修改角色'" + role.getRoleName() + "'失败，请联系管理员");
     }

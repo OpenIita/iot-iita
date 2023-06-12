@@ -414,7 +414,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
                 return;
             }
             LoginUser loginUser = LoginHelper.getLoginUser(token);
-            if (loginUser.getRoles().stream().anyMatch(r -> r.getRoleId().equals(roleId))) {
+            if (loginUser.getRoles().stream().anyMatch(r -> r.getId().equals(roleId))) {
                 try {
                     StpUtil.logoutByTokenValue(token);
                 } catch (NotLoginException ignored) {
