@@ -1,5 +1,6 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysRoleDeptRepository;
 import cc.iotkit.data.model.TbSysDept;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static cc.iotkit.data.model.QTbSysRoleDept.tbSysRoleDept;
 
@@ -39,7 +41,7 @@ public class SysRoleDeptDataImpl implements ISysRoleDeptData, IJPACommData<SysRo
 
     @Override
     public long insertBatch(List<SysRoleDept> list) {
-        return 0;
+        return sysRoleDeptRepository.saveAll(MapstructUtils.convert(list,TbSysRoleDept.class)).size();
     }
 
     @Override
