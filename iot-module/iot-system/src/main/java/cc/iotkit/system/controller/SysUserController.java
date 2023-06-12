@@ -237,12 +237,12 @@ public class SysUserController extends BaseController {
     /**
      * 根据用户编号获取授权角色
      *
-     * @param userId 用户ID
      */
     @ApiOperation("根据用户编号获取授权角色")
     @SaCheckPermission("system:user:query")
-    @PostMapping("/authRole/{userId}")
-    public SysUserInfoVo authRole(@PathVariable Long userId) {
+    @PostMapping("/authRoleByUserId")
+    public SysUserInfoVo authRole(@Validated @RequestBody Request<Long> bo) {
+        Long userId = bo.getData();
         SysUserVo user = userService.selectUserById(userId);
         List<SysRoleVo> roles = roleService.selectRolesByUserId(userId);
         SysUserInfoVo userInfoVo = new SysUserInfoVo();

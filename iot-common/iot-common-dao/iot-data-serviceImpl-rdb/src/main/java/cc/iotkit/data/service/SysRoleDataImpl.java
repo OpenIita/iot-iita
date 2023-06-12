@@ -91,7 +91,7 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
     @Override
     public List<SysRole> selectRolePermissionByUserId(Long userId) {
         return buildQueryTitle(PredicateBuilder.instance()
-                .and(tbSysRole.delFlag.eq("0"))
+                .and(tbSysRole.delFlag.eq(UserConstants.NORMAL))
                 .and(tbSysUserRole.userId.eq(userId))
                 .build());
     }
