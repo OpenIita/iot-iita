@@ -111,7 +111,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     @Override
     public boolean checkUserNameUnique(SysUserBo user) {
         boolean exist = sysUserData.checkUserNameUnique(user.to(SysUser.class));
-        return !exist;
+        return exist;
     }
 
     @Override
