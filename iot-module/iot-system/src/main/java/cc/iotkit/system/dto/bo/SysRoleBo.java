@@ -29,7 +29,7 @@ public class SysRoleBo extends BaseDto {
      * 角色ID
      */
     @NotNull(message = "角色ID不能为空", groups = { EditGroup.class })
-    private Long roleId;
+    private Long id;
 
     /**
      * 角色名称
@@ -87,11 +87,11 @@ public class SysRoleBo extends BaseDto {
     private Long[] deptIds;
 
     public SysRoleBo(Long roleId) {
-        this.roleId = roleId;
+        this.id = roleId;
     }
 
     public boolean isSuperAdmin() {
-        return UserConstants.SUPER_ADMIN_ID.equals(this.roleId);
+        return UserConstants.SUPER_ADMIN_ID.equals(this.id);
     }
 
 }

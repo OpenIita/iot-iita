@@ -61,7 +61,8 @@ public class SysRoleMenuDataImpl implements ISysRoleMenuData, IJPACommData<SysRo
 
     @Override
     public long insertBatch(List<SysRoleMenu> list) {
-        return jpaQueryFactory.insert(tbSysRoleMenu).values(List.of(Objects.requireNonNull(MapstructUtils.convert(list, TbSysRoleMenu.class)))).execute();
+        List<TbSysRoleMenu> tbSysRoleMenus = Objects.requireNonNull(MapstructUtils.convert(list, TbSysRoleMenu.class));
+        return sysRoleMenuRepository.saveAll(tbSysRoleMenus).size();
     }
 
     @Override

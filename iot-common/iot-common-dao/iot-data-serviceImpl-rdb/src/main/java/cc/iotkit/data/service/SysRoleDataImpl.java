@@ -66,7 +66,7 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
 
     @Override
     public List<Long> selectMenuListByRoleId(Long roleId, boolean menuCheckStrictly) {
-        List<Long> roleIds = jpaQueryFactory.select(Projections.fields(tbSysMenu.id))
+        List<Long> roleIds = jpaQueryFactory.select(tbSysMenu.id)
                 .from(tbSysMenu)
                 .innerJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId))
                 .where(PredicateBuilder.instance()
@@ -110,7 +110,7 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
         final TbSysRole tbSysRoleRes = jpaQueryFactory.select(tbSysRole).from(tbSysRole)
                 .where(PredicateBuilder.instance()
                         .and(tbSysRole.roleName.eq(role.getRoleName()))
-                        .and(Objects.nonNull(role.getId()), () -> tbSysRole.id.eq(role.getId()))
+                        .and(Objects.nonNull(role.getId()), () -> tbSysRole.id.ne(role.getId()))
                         .build()).fetchOne();
         return Objects.isNull(tbSysRoleRes);
     }
@@ -120,7 +120,7 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
         final TbSysRole tbSysRoleRes = jpaQueryFactory.select(tbSysRole).from(tbSysRole)
                 .where(PredicateBuilder.instance()
                         .and(tbSysRole.roleKey.eq(role.getRoleKey()))
-                        .and(Objects.nonNull(role.getId()), () -> tbSysRole.id.eq(role.getId()))
+                        .and(Objects.nonNull(role.getId()), () -> tbSysRole.id.ne(role.getId()))
                         .build()).fetchOne();
         return Objects.isNull(tbSysRoleRes);
     }
