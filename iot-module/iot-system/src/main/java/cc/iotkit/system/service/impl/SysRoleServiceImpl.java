@@ -212,7 +212,6 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Transactional(rollbackFor = Exception.class)
     public int insertRole(SysRoleBo bo) {
         SysRole role = iSysRoleData.save(bo.to(SysRole.class));
-        bo.setRoleId(role.getId());
         return insertRoleMenu(bo);
     }
 
@@ -228,7 +227,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         // 修改角色信息
         iSysRoleData.updateById(bo.to(SysRole.class));
         // 删除角色与菜单关联
-        iSysRoleMenuData.deleteByRoleId(List.of(bo.getRoleId()));
+        iSysRoleMenuData.deleteByRoleId(List.of(bo.getId()));
         return insertRoleMenu(bo);
     }
 
@@ -259,7 +258,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         // 修改角色信息
         iSysRoleData.updateById(MapstructUtils.convert(bo, SysRole.class));
         // 删除角色与部门关联
-        iSysRoleDeptData.deleteByRoleId(List.of(bo.getRoleId()));
+        iSysRoleDeptData.deleteByRoleId(List.of(bo.getId()));
         // 新增角色和部门信息（数据权限）
         return insertRoleDept(bo);
 
@@ -276,7 +275,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         List<SysRoleMenu> list = new ArrayList<>();
         for (Long menuId : role.getMenuIds()) {
             SysRoleMenu rm = new SysRoleMenu();
-            rm.setRoleId(role.getRoleId());
+            rm.setRoleId(role.getId());
             rm.setMenuId(menuId);
             list.add(rm);
         }
@@ -297,7 +296,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         List<SysRoleDept> list = new ArrayList<>();
         for (Long deptId : role.getDeptIds()) {
             SysRoleDept rd = new SysRoleDept();
-            rd.setRoleId(role.getRoleId());
+            rd.setRoleId(role.getId());
             rd.setDeptId(deptId);
             list.add(rd);
         }
