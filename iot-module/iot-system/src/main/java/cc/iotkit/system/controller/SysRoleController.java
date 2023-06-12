@@ -104,8 +104,8 @@ public class SysRoleController extends BaseController {
     public void edit(@Validated @RequestBody Request<SysRoleBo> bo) {
         SysRoleBo role = bo.getData();
 
-        roleService.checkRoleAllowed(role.getRoleId());
-        roleService.checkRoleDataScope(role.getRoleId());
+        roleService.checkRoleAllowed(role.getId());
+        roleService.checkRoleDataScope(role.getId());
         if (!roleService.checkRoleNameUnique(role)) {
             fail("修改角色'" + role.getRoleName() + "'失败，角色名称已存在");
         } else if (!roleService.checkRoleKeyUnique(role)) {
@@ -113,7 +113,7 @@ public class SysRoleController extends BaseController {
         }
 
         if (roleService.updateRole(role) > 0) {
-            roleService.cleanOnlineUserByRole(role.getRoleId());
+            roleService.cleanOnlineUserByRole(role.getId());
         }
         fail("修改角色'" + role.getRoleName() + "'失败，请联系管理员");
     }
@@ -127,8 +127,8 @@ public class SysRoleController extends BaseController {
     @PostMapping("/dataScope")
     public void dataScope(@RequestBody Request<SysRoleBo> bo) {
         SysRoleBo role = bo.getData();
-        roleService.checkRoleAllowed(role.getRoleId());
-        roleService.checkRoleDataScope(role.getRoleId());
+        roleService.checkRoleAllowed(role.getId());
+        roleService.checkRoleDataScope(role.getId());
         roleService.authDataScope(role);
     }
 
@@ -141,9 +141,9 @@ public class SysRoleController extends BaseController {
     @PostMapping("/changeStatus")
     public void changeStatus(@RequestBody Request<SysRoleBo> bo) {
         SysRoleBo role = bo.getData();
-        roleService.checkRoleAllowed(role.getRoleId());
-        roleService.checkRoleDataScope(role.getRoleId());
-        roleService.updateRoleStatus(role.getRoleId(), role.getStatus());
+        roleService.checkRoleAllowed(role.getId());
+        roleService.checkRoleDataScope(role.getId());
+        roleService.updateRoleStatus(role.getId(), role.getStatus());
     }
 
     /**
