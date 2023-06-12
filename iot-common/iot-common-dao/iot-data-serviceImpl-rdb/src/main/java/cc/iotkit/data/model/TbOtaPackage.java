@@ -23,6 +23,10 @@ public class TbOtaPackage {
 
     private String sign;
 
+    private Boolean isDiff;
+
+    private String md5;
+
     private String name;
 
     private String desc;
