@@ -353,6 +353,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteAuthUser(SysUserRole userRole) {
         long rows = iSysUserRoleData.delete(userRole.getRoleId(), List.of(userRole.getUserId()));
         if (rows > 0) {
@@ -368,6 +369,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteAuthUsers(Long roleId, Long[] userIds) {
         long rows = iSysUserRoleData.delete(roleId, Arrays.asList(userIds));
         if (rows > 0) {
