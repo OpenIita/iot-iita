@@ -5,10 +5,15 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
+import com.github.yitter.contract.IdGeneratorOptions;
+import com.github.yitter.idgen.YitIdHelper;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author: Longjun.Tu
@@ -18,6 +23,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SnowflakeIdGenerator implements IdentifierGenerator {
+
+  @PostConstruct
+  public void snowflakeIdGenerator() {
+    // TODO: 2023/6/12 从配置文件中读取
+    IdGeneratorOptions options = new IdGeneratorOptions((short) 1);
+    YitIdHelper.setIdGenerator(options);
+  }
 
   @Override
   public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException {
@@ -32,6 +44,6 @@ public class SnowflakeIdGenerator implements IdentifierGenerator {
     } catch (NoSuchFieldException | IllegalAccessException e) {
 
     }
-    return SnowflakeIdGeneratorUtil.getInstanceSnowflake().nextId();
+    return YitIdHelper.nextId();
   }
 }

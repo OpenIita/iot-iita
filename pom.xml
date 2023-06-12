@@ -46,6 +46,7 @@
         <knife4j.version>2.0.9</knife4j.version>
         <validateion.version>1.1.0.Final</validateion.version>
         <lombok.version>1.18.26</lombok.version>
+        <yitter.version>1.0.6</yitter.version>
     </properties>
 
     <dependencyManagement>
@@ -74,7 +75,11 @@
                 <artifactId>commons-beanutils</artifactId>
                 <version>${beanutils.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.github.yitter</groupId>
+                <artifactId>yitter-idgenerator</artifactId>
+                <version>${yitter.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
