@@ -231,12 +231,12 @@ public class SysRoleController extends BaseController {
     /**
      * 获取对应角色部门树列表
      *
-     * @param roleId 角色ID
      */
     @ApiOperation(value = "获取对应角色部门树列表", notes = "获取对应角色部门树列表")
     @SaCheckPermission("system:role:list")
-    @PostMapping(value = "/deptTree/{roleId}")
-    public DeptTreeSelectVo roleDeptTreeselect(@PathVariable("roleId") Long roleId) {
+    @PostMapping(value = "/deptTreeByRoleId")
+    public DeptTreeSelectVo roleDeptTreeselect(@Validated @RequestBody Request<Long> bo) {
+        Long roleId = bo.getData();
         DeptTreeSelectVo selectVo = new DeptTreeSelectVo();
         selectVo.setCheckedKeys(deptService.selectDeptListByRoleId(roleId));
         selectVo.setDepts(deptService.selectDeptTreeList(new SysDeptBo()));
