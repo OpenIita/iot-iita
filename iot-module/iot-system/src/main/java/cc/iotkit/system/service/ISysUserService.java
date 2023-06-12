@@ -148,7 +148,7 @@ public interface ISysUserService {
      * @param userId  用户ID
      * @param roleIds 角色组
      */
-    void insertUserAuth(Long userId, Long[] roleIds);
+    void insertUserAuth(Long userId, List<Long> roleIds);
 
     /**
      * 修改用户状态

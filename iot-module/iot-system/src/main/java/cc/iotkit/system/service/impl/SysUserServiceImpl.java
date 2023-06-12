@@ -174,14 +174,14 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
      * @param clear 清除已存在的关联数据
      */
     private void insertUserPost(SysUserBo user, boolean clear) {
-        Long[] posts = user.getPostIds();
+        List<Long> posts = user.getPostIds();
         if (ArrayUtil.isNotEmpty(posts)) {
             if (clear) {
                 // 删除用户与岗位关联
                 sysUserPostData.deleteByUserId(user.getId());
             }
             // 新增用户与岗位管理
-            List<SysUserPost> list = StreamUtils.toList(List.of(posts), postId -> {
+            List<SysUserPost> list = StreamUtils.toList(posts, postId -> {
                 SysUserPost up = new SysUserPost();
                 up.setUserId(user.getId());
                 up.setPostId(postId);
@@ -198,7 +198,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
      * @param roleIds 角色组
      * @param clear   清除已存在的关联数据
      */
-    private void insertUserRole(Long userId, Long[] roleIds, boolean clear) {
+    private void insertUserRole(Long userId, List<Long> roleIds, boolean clear) {
         if (ArrayUtil.isNotEmpty(roleIds)) {
             // 判断是否具有此角色的操作权限
             List<SysRole> roles = sysRoleData.selectRoleList(new SysRole());
@@ -209,7 +209,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
             if (!LoginHelper.isSuperAdmin(userId)) {
                 roleList.remove(UserConstants.SUPER_ADMIN_ID);
             }
-            List<Long> canDoRoleList = StreamUtils.filter(List.of(roleIds), roleList::contains);
+            List<Long> canDoRoleList = StreamUtils.filter(roleIds, roleList::contains);
             if (CollUtil.isEmpty(canDoRoleList)) {
                 throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
             }
@@ -252,7 +252,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertUserAuth(Long userId, Long[] roleIds) {
+    public void insertUserAuth(Long userId, List<Long> roleIds) {
         insertUserRole(userId, roleIds, true);
     }
 

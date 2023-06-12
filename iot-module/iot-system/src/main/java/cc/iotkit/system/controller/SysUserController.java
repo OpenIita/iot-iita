@@ -261,7 +261,7 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
     @PostMapping("/authRole")
-    public void insertAuthRole(Request<Long> reqUserId, Long[] roleIds) {
+    public void insertAuthRole(Request<Long> reqUserId, List<Long> roleIds) {
         Long userId = reqUserId.getData();
         userService.checkUserDataScope(userId);
         userService.insertUserAuth(userId, roleIds);
