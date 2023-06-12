@@ -128,6 +128,14 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
     @Override
     public int updateById(SysRole role) {
         long execute = jpaQueryFactory.update(tbSysRole)
+                .set(tbSysRole.roleName, role.getRoleName())
+                .set(tbSysRole.roleKey, role.getRoleKey())
+                .set(tbSysRole.roleSort, role.getRoleSort())
+                .set(tbSysRole.dataScope, role.getDataScope())
+                .set(tbSysRole.status, role.getStatus())
+                .set(tbSysRole.menuCheckStrictly, role.getMenuCheckStrictly())
+                .set(tbSysRole.deptCheckStrictly, role.getDeptCheckStrictly())
+                .set(tbSysRole.remark, role.getRemark())
                 .where(PredicateBuilder.instance().and(tbSysRole.id.eq(role.getId())).build()).execute();
         return Integer.parseInt(execute + "");
     }
