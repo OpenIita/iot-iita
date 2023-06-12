@@ -60,7 +60,7 @@ public class SysUserRoleDataImpl implements ISysUserRoleData, IJPACommData<SysUs
 
     @Override
     public long insertBatch(List<SysUserRole> list) {
-        return jpaQueryFactory.insert(tbSysRole).values(List.of(Objects.requireNonNull(MapstructUtils.convert(list, TbSysUserRole.class)))).execute();
+        return sysUserRoleRepository.saveAll(MapstructUtils.convert(list,TbSysUserRole.class)).size();
     }
 
     @Override
