@@ -66,22 +66,20 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
 
     @Override
     public List<Long> selectMenuListByRoleId(Long roleId, boolean menuCheckStrictly) {
-        List<Long> roleIds = jpaQueryFactory.select(tbSysMenu.id)
-                .from(tbSysMenu)
-                .innerJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId))
-                .where(PredicateBuilder.instance()
-                        .and(tbSysRoleMenu.roleId.eq(roleId))
-                        .build())
-                .orderBy(tbSysMenu.parentId.asc(), tbSysMenu.orderNum.asc()).fetch();
+
 
         PredicateBuilder predicateBuilder = PredicateBuilder.instance()
                 .and(tbSysRoleMenu.roleId.eq(roleId));
 
         if (menuCheckStrictly) {
+            List<Long> roleIds = jpaQueryFactory.select(tbSysMenu.parentId)
+                    .from(tbSysMenu)
+                    .innerJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId).and(tbSysRoleMenu.roleId.eq(roleId)))
+                    .fetch();
             predicateBuilder.and(tbSysMenu.id.notIn(roleIds));
         }
 
-        return jpaQueryFactory.select(Projections.bean(Long.class, tbSysMenu.id))
+        return jpaQueryFactory.select( tbSysMenu.id)
                 .from(tbSysMenu)
                 .leftJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId))
                 .where(predicateBuilder.build())
