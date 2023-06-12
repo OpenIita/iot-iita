@@ -117,13 +117,13 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     @Override
     public boolean checkPhoneUnique(SysUserBo user) {
         boolean exist = sysUserData.checkPhoneUnique(user.to(SysUser.class));
-        return !exist;
+        return exist;
     }
 
     @Override
     public boolean checkEmailUnique(SysUserBo user) {
         boolean exist = sysUserData.checkEmailUnique(user.to(SysUser.class));
-        return !exist;
+        return exist;
     }
 
     @Override
