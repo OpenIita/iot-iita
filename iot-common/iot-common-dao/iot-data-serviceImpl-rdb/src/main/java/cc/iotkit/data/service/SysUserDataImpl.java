@@ -201,7 +201,9 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
                 .and(StringUtils.isNotBlank(data.getUserName()), () -> tbSysUser.userName.like(data.getUserName()))
                 .and(StringUtils.isNotBlank(data.getStatus()), () -> tbSysUser.status.eq(data.getStatus()))
                 .and(Objects.nonNull(data.getDeptId()), () -> tbSysUser.deptId.eq(data.getDeptId()))
-                .and(tbSysUser.delFlag.eq(UserConstants.ROLE_NORMAL));
+                .and(tbSysUser.delFlag.eq(UserConstants.ROLE_NORMAL))
+                .and(Objects.nonNull(data.getRoleId()),()-> tbSysRole.id.eq(data.getRoleId()));
+
         QueryResults<TbSysUser> tbSysUserQueryResults = jpaQueryFactory.select(Projections.bean(TbSysUser.class, tbSysUser.id, tbSysUser.deptId, tbSysUser.userName,
                 tbSysUser.nickName, tbSysUser.email, tbSysUser.phonenumber, tbSysUser.createTime)).from(tbSysUser)
                 .leftJoin(tbSysDept).on(tbSysUser.deptId.eq(tbSysDept.id))
@@ -235,14 +237,16 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
 
     @Override
     public Paging<SysUser> selectUnallocatedList(PageRequest<SysUser> to) {
-        //TODO:  未分配用户列表
         SysUser data = to.getData();
-        PredicateBuilder builder = PredicateBuilder.instance()
-                .and(StringUtils.isNotBlank(data.getPhonenumber()), () -> tbSysUser.phonenumber.like(data.getPhonenumber()))
-                .and(StringUtils.isNotBlank(data.getUserName()), () -> tbSysUser.userName.like(data.getUserName()))
-                .and(StringUtils.isNotBlank(data.getStatus()), () -> tbSysUser.status.eq(data.getStatus()))
-                .and(Objects.nonNull(data.getDeptId()), () -> tbSysUser.deptId.eq(data.getDeptId()))
-                .and(tbSysUser.delFlag.eq(UserConstants.ROLE_NORMAL));
+        PredicateBuilder builder = PredicateBuilder.instance();
+        if(Objects.nonNull(data)){
+            builder.and(StringUtils.isNotBlank(data.getPhonenumber()), () -> tbSysUser.phonenumber.like(data.getPhonenumber()))
+                    .and(StringUtils.isNotBlank(data.getUserName()), () -> tbSysUser.userName.like(data.getUserName()))
+                    .and(StringUtils.isNotBlank(data.getStatus()), () -> tbSysUser.status.eq(data.getStatus()))
+                    .and(Objects.nonNull(data.getDeptId()), () -> tbSysUser.deptId.eq(data.getDeptId()))
+                    .and(tbSysUser.delFlag.eq(UserConstants.ROLE_NORMAL));
+        }
+
         QueryResults<SysUser> sysUserQueryResults = jpaQueryFactory.select(Projections.bean(SysUser.class, tbSysUser.id, tbSysUser.deptId, tbSysUser.userName,
                 tbSysUser.nickName, tbSysUser.email, tbSysUser.phonenumber, tbSysUser.createTime)).from(tbSysUser)
                 .leftJoin(tbSysDept).on(tbSysUser.deptId.eq(tbSysDept.id))

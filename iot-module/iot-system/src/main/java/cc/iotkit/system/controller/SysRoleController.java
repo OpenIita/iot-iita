@@ -9,6 +9,7 @@ import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.model.system.SysUserRole;
 import cc.iotkit.system.dto.bo.SysDeptBo;
+import cc.iotkit.system.dto.bo.SysRoleAuthBo;
 import cc.iotkit.system.dto.bo.SysRoleBo;
 import cc.iotkit.system.dto.bo.SysUserBo;
 import cc.iotkit.system.dto.vo.DeptTreeSelectVo;
@@ -202,28 +203,30 @@ public class SysRoleController extends BaseController {
     /**
      * 批量取消授权用户
      *
-     * @param roleId  角色ID
-     * @param userIds 用户ID串
      */
     @ApiOperation(value = "批量取消授权用户", notes = "批量取消授权用户")
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.GRANT)
     @PostMapping("/authUser/cancelAll")
-    public void cancelAuthUserAll(Long roleId, Long[] userIds) {
+    public void cancelAuthUserAll(@Validated @RequestBody Request<SysRoleAuthBo> bo) {
+        SysRoleAuthBo data = bo.getData();
+        Long roleId = data.getRoleId();
+        Long[] userIds = data.getUserIds();
         roleService.deleteAuthUsers(roleId, userIds);
     }
 
     /**
      * 批量选择用户授权
      *
-     * @param roleId  角色ID
-     * @param userIds 用户ID串
      */
     @ApiOperation(value = "批量选择用户授权", notes = "批量选择用户授权")
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.GRANT)
     @PostMapping("/authUser/selectAll")
-    public void selectAuthUserAll(Long roleId, Long[] userIds) {
+    public void selectAuthUserAll(@Validated @RequestBody Request<SysRoleAuthBo> bo) {
+        SysRoleAuthBo data = bo.getData();
+        Long roleId = data.getRoleId();
+        Long[] userIds = data.getUserIds();
         roleService.checkRoleDataScope(roleId);
         roleService.insertAuthUsers(roleId, userIds);
     }
