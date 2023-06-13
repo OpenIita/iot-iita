@@ -1,11 +1,20 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysDeptRepository;
+import cc.iotkit.data.dao.SysNoticRepository;
 import cc.iotkit.data.model.TbSysNotice;
 import cc.iotkit.data.system.ISysNoticeData;
+import cc.iotkit.data.util.PageBuilder;
+import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysNotice;
+import cc.iotkit.model.system.SysUser;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static cc.iotkit.data.model.QTbSysNotice.tbSysNotice;
 
 /**
  * @Author：tfd
@@ -25,7 +36,7 @@ import java.util.List;
 public class SysNoticeDataImpl implements ISysNoticeData, IJPACommData<SysNotice, Long> {
 
     @Autowired
-    private SysDeptRepository baseRepository;
+    private SysNoticRepository baseRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -47,7 +58,22 @@ public class SysNoticeDataImpl implements ISysNoticeData, IJPACommData<SysNotice
 
 
     @Override
-    public Paging<SysNotice> findByConditions(String noticeTitle, String noticeType, String status, int page, int size) {
-        return null;
+    public Paging<SysNotice> findByConditions(PageRequest<SysNotice> pageRequest) {
+        SysNotice data = pageRequest.getData();
+        Predicate predicate = buildQueryCondition(data);
+        QueryResults<TbSysNotice> tbSysNoticeQueryResults = jpaQueryFactory.select(tbSysNotice).from(tbSysNotice).where(predicate).offset(pageRequest.getOffset()).limit(pageRequest.getPageSize()).fetchResults();
+        return new Paging<>(tbSysNoticeQueryResults.getTotal(), MapstructUtils.convert(tbSysNoticeQueryResults.getResults(), SysNotice.class));
+    }
+
+    private Predicate buildQueryCondition(SysNotice query) {
+        return PredicateBuilder.instance().and(StringUtils.isNotBlank(query.getNoticeTitle()), ()->
+                tbSysNotice.noticeTitle.like(query.getNoticeTitle()))
+                .and(StringUtils.isNotBlank(query.getNoticeType()), ()->
+                        tbSysNotice.noticeType.eq(query.getNoticeType()))
+                .and(StringUtils.isNotBlank(query.getStatus()), ()->
+                        tbSysNotice.status.eq(query.getStatus()))
+                .and(StringUtils.isNotBlank(query.getCreateByName()), ()->(
+                        tbSysNotice.createBy.like(query.getCreateByName())))
+        .build();
     }
 }

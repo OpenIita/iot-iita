@@ -31,7 +31,7 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
 
     @Override
     public Paging<SysNoticeVo> selectPageNoticeList( PageRequest<SysNoticeBo> query) {
-        return sysNoticeData.findAll(query.to(SysNotice.class)).to(SysNoticeVo.class);
+        return sysNoticeData.findByConditions(query.to(SysNotice.class)).to(SysNoticeVo.class);
     }
 
     /**

@@ -2,6 +2,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysDeptRepository;
+import cc.iotkit.data.dao.SysOssRepository;
 import cc.iotkit.data.model.TbSysTenantPackage;
 import cc.iotkit.data.system.ISysTenantPackageData;
 import cc.iotkit.model.system.SysTenantPackage;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class SysTenantPackageDataImpl implements ISysTenantPackageData, IJPACommData<SysTenantPackage, Long> {
 
     @Autowired
-    private SysDeptRepository baseRepository;
+    private SysOssRepository baseRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
 
