@@ -14,8 +14,10 @@ import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -27,6 +29,8 @@ import javax.persistence.Table;
 public class TbSpaceDevice {
 
     @Id
+    @GeneratedValue(generator = "SnowflakeIdGenerator")
+    @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     private String id;
 
     /**

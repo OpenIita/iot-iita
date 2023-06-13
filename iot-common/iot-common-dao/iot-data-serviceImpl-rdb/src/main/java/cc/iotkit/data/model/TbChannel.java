@@ -4,8 +4,10 @@ import cc.iotkit.model.notify.Channel;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,6 +22,8 @@ import javax.persistence.Table;
 @AutoMapper(target= Channel.class)
 public class TbChannel {
     @Id
+    @GeneratedValue(generator = "SnowflakeIdGenerator")
+    @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "通道id")
     private String id;
 

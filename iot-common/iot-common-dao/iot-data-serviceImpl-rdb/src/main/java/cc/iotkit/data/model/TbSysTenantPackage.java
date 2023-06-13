@@ -7,8 +7,10 @@ import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -29,6 +31,8 @@ public class TbSysTenantPackage extends BaseEntity {
      * 租户套餐id
      */
     @Id
+    @GeneratedValue(generator = "SnowflakeIdGenerator")
+    @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "租户套餐id")
     private Long id;
     /**

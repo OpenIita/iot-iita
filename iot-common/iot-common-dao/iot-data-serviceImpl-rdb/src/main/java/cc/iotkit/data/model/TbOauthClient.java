@@ -13,8 +13,10 @@ import cc.iotkit.model.OauthClient;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -25,6 +27,8 @@ import javax.persistence.Table;
 public class TbOauthClient {
 
     @Id
+    @GeneratedValue(generator = "SnowflakeIdGenerator")
+    @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "id")
     private String id;
 

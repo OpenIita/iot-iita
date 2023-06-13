@@ -15,11 +15,9 @@ import io.github.linpeilie.annotations.AutoMapping;
 import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -28,6 +26,8 @@ import javax.persistence.Table;
 public class TbTaskInfo {
 
     @Id
+    @GeneratedValue(generator = "SnowflakeIdGenerator")
+    @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "主键")
     private String id;
 

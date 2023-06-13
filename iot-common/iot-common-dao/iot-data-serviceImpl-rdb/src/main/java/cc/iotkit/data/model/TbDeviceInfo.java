@@ -7,8 +7,11 @@ import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Data
@@ -18,7 +21,9 @@ import javax.persistence.Table;
 @AutoMapper(target = DeviceInfo.class)
 public class TbDeviceInfo {
 
-    @javax.persistence.Id
+    @Id
+    @GeneratedValue(generator = "SnowflakeIdGenerator")
+    @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     private String id;
 
     @ApiModelProperty(value = "设备id")

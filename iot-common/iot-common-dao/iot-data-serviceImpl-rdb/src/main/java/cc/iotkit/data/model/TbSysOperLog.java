@@ -110,6 +110,7 @@ public class TbSysOperLog implements Serializable {
      * 返回参数
      */
     @ApiModelProperty(value = "返回参数")
+    @Column(length = 2000)
     private String jsonResult;
 
     /**
@@ -122,6 +123,7 @@ public class TbSysOperLog implements Serializable {
      * 错误消息
      */
     @ApiModelProperty(value = "错误消息")
+    @Column(length = 2000)
     private String errorMsg;
 
     /**
