@@ -54,8 +54,8 @@ public class SysPostController extends BaseController {
     @Log(title = "岗位管理", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:post:export")
     @PostMapping("/export")
-    public void export(@RequestBody @Validated(QueryGroup.class) Request<SysPostBo> post, HttpServletResponse response) {
-        List<SysPostVo> list = postService.selectPostList(post.getData());
+    public void export(@Validated(QueryGroup.class) SysPostBo post, HttpServletResponse response) {
+        List<SysPostVo> list = postService.selectPostList(post);
         ExcelUtil.exportExcel(list, "岗位数据", SysPostVo.class, response);
     }
 

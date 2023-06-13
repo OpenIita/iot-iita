@@ -62,8 +62,8 @@ public class SysTenantController extends BaseController {
     @SaCheckPermission("system:tenant:export")
     @Log(title = "租户", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(Request<SysTenantBo> bo, HttpServletResponse response) {
-        List<SysTenantVo> list = tenantService.queryList(bo.getData());
+    public void export(SysTenantBo bo, HttpServletResponse response) {
+        List<SysTenantVo> list = tenantService.queryList(bo);
         ExcelUtil.exportExcel(list, "租户", SysTenantVo.class, response);
     }
 

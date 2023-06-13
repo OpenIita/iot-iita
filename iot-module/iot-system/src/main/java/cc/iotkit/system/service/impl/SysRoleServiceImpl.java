@@ -24,7 +24,6 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -335,7 +334,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
             checkRoleDataScope(roleId);
             SysRole role = iSysRoleData.findById(roleId);
             if (countUserRoleByRoleId(roleId) > 0) {
-                throw new ServiceException(String.format("%1$s已分配,不能删除", role.getRoleName()));
+                throw new BizException(String.format("%1$s已分配,不能删除", role.getRoleName()));
             }
         }
 

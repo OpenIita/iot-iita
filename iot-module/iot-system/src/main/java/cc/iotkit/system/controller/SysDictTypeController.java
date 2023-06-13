@@ -55,9 +55,9 @@ public class SysDictTypeController extends BaseController {
     @Log(title = "字典类型", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:dict:export")
     @PostMapping("/export")
-    public void export(@RequestBody @Validated(QueryGroup.class)PageRequest<SysDictTypeBo> dictType, HttpServletResponse response) {
+    public void export(@Validated(QueryGroup.class) SysDictTypeBo dictType, HttpServletResponse response) {
 
-        List<SysDictTypeVo> list = dictTypeService.selectDictTypeList(dictType.getData());
+        List<SysDictTypeVo> list = dictTypeService.selectDictTypeList(dictType);
         ExcelUtil.exportExcel(list, "字典类型", SysDictTypeVo.class, response);
     }
 
