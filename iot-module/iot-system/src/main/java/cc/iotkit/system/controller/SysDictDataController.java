@@ -64,7 +64,7 @@ public class SysDictDataController {
      */
     @SaCheckPermission("system:dict:query")
     @ApiOperation(value = "查询字典数据详细", notes = "查询字典数据详细")
-    @PostMapping(value = "/getInfo")
+    @PostMapping(value = "/getDetail")
     public SysDictDataVo getInfo(@Validated @RequestBody Request<Long> bo) {
         return dictDataService.selectDictDataById(bo.getData());
     }
