@@ -61,9 +61,7 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      */
     @Override
     public String selectConfigByKey(String configKey) {
-        SysConfig data = new SysConfig();
-        data.setConfigKey(configKey);
-        SysConfig sysConfig = sysConfigData.findOneByCondition(data);
+        SysConfig sysConfig = sysConfigData.findByConfigKey(configKey);
         if (ObjectUtil.isNotNull(sysConfig)) {
             return sysConfig.getConfigValue();
         }

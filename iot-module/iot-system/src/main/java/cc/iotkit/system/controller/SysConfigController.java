@@ -68,8 +68,8 @@ public class SysConfigController extends BaseController {
 
   @ApiOperation("根据参数键名查询参数值")
   @PostMapping(value = "/getConfigKey")
-  public void getConfigKey(@RequestBody @Validated Request<String> request) {
-    configService.selectConfigByKey(request.getData());
+  public String  getConfigKey(@RequestBody @Validated Request<String> request) {
+    return configService.selectConfigByKey(request.getData());
   }
 
 
