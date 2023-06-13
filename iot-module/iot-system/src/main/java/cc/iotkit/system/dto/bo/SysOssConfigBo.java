@@ -28,7 +28,7 @@ public class SysOssConfigBo extends BaseDto {
      * 主建
      */
     @NotNull(message = "主建不能为空", groups = {EditGroup.class})
-    private Long ossConfigId;
+    private Long id;
 
     /**
      * 配置key

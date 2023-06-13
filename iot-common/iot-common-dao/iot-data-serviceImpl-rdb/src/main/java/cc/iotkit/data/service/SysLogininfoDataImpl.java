@@ -55,7 +55,7 @@ public class SysLogininfoDataImpl implements ISysLogininforData, IJPACommData<Sy
 
     @Override
     public Paging<SysLogininfor> findAll(PageRequest<SysLogininfor> pageRequest) {
-        return PageBuilder.toPaging(logininfoRepository.findAll(genPredicate(pageRequest.getData()), PageBuilder.toPageable(pageRequest)));
+        return PageBuilder.toPaging(logininfoRepository.findAll(genPredicate(pageRequest.getData()), PageBuilder.toPageable(pageRequest))).to(SysLogininfor.class);
     }
 
     @Override

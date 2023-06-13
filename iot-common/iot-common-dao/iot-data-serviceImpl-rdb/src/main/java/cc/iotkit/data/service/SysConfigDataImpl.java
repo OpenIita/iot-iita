@@ -104,9 +104,12 @@ public class SysConfigDataImpl implements ISysConfigData, IJPACommData<SysConfig
     @Override
     public SysConfig findOneByCondition(SysConfig data) {
         Predicate predicate = PredicateBuilder.instance()
-                .and(StringUtils.isNotEmpty(data.getConfigKey()), () -> tbSysConfig.configKey.eq(data.getConfigKey()))
+                .and(StringUtils.isNotBlank(data.getConfigKey()), () -> tbSysConfig.configKey.eq(data.getConfigKey()))
                 .build();
-        TbSysConfig tbSysConfig = baseRepository.findOne(predicate).orElseThrow(() -> new BizException(ErrCode.DATA_NOT_EXIST));
+        TbSysConfig tbSysConfig = baseRepository.findOne(predicate).orElse(null);
+        if(Objects.isNull(tbSysConfig)){
+            return null;
+        }
         return MapstructUtils.convert(tbSysConfig, SysConfig.class);
     }
 

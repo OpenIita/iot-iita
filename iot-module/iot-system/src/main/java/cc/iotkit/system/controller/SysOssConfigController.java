@@ -50,14 +50,12 @@ public class SysOssConfigController extends BaseController {
     /**
      * 获取对象存储配置详细信息
      *
-     * @param ossConfigId OSS配置ID
      */
     @ApiOperation(value = "获取对象存储配置详细信息", notes = "获取对象存储配置详细信息")
     @SaCheckPermission("system:oss:query")
-    @PostMapping("/{ossConfigId}")
-    public SysOssConfigVo getInfo(@NotNull(message = "主键不能为空")
-                                  @PathVariable Long ossConfigId) {
-        return ossConfigService.queryById(ossConfigId);
+    @PostMapping("/getDetail")
+    public SysOssConfigVo getInfo(@Validated @RequestBody Request<Long> bo) {
+        return ossConfigService.queryById(bo.getData());
     }
 
     /**
