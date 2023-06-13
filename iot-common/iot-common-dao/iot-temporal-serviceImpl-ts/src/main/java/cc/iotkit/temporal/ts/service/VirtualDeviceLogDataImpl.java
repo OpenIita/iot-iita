@@ -9,13 +9,16 @@
  */
 package cc.iotkit.temporal.ts.service;
 
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.VirtualDeviceLog;
 import cc.iotkit.temporal.IVirtualDeviceLogData;
 import cc.iotkit.temporal.ts.dao.TsTemplate;
 import cc.iotkit.temporal.ts.dm.TableManager;
 import cc.iotkit.temporal.ts.model.TsVirtualDeviceLog;
-import org.jooq.*;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Table;
 import org.jooq.conf.ParamType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

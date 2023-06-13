@@ -9,15 +9,16 @@
  */
 package cc.iotkit.temporal.ts.service;
 
-import cc.iotkit.model.Paging;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.TaskLog;
 import cc.iotkit.temporal.ITaskLogData;
 import cc.iotkit.temporal.ts.dao.TsTemplate;
-//import cc.iotkit.temporal.ts.dm.TableManager;
 import cc.iotkit.temporal.ts.dm.TableManager;
 import cc.iotkit.temporal.ts.model.TsTaskLog;
-import cc.iotkit.temporal.ts.dao.TsTemplate;
-import org.jooq.*;
+import org.jooq.InsertValuesStep4;
+import org.jooq.Record;
+import org.jooq.Record4;
+import org.jooq.SelectForUpdateStep;
 import org.jooq.conf.ParamType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -29,6 +30,8 @@ import java.util.stream.Collectors;
 
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.table;
+
+//import cc.iotkit.temporal.ts.dm.TableManager;
 
 @Service
 public class TaskLogDataImpl implements ITaskLogData {
