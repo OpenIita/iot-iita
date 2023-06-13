@@ -48,6 +48,7 @@ public class ProductController {
     private IProductService productService;
 
     @PostMapping("/list")
+    @ApiOperation("列表")
     public Paging<ProductVo> getProducts(@Validated @RequestBody
             PageRequest<ProductBo> request) {
         return productService.selectPageList(request);
