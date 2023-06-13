@@ -44,7 +44,7 @@ public class SysLogininforController extends BaseController {
     @SaCheckPermission("monitor:logininfor:list")
     @PostMapping("/list")
     public Paging<SysLogininforVo> list(@RequestBody @Validated(QueryGroup.class) PageRequest<SysLogininforBo> query) {
-        return logininforService.selectPageLogininforList(query);
+        return logininforService.findAll(query);
     }
 
     /**

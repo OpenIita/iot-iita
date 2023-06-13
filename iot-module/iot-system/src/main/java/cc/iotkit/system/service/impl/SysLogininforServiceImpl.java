@@ -8,6 +8,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.ip.AddressUtils;
 import cc.iotkit.data.system.ISysLogininforData;
+import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.model.system.SysLogininfor;
 import cc.iotkit.system.dto.bo.SysLogininforBo;
 import cc.iotkit.system.dto.vo.SysLogininforVo;
@@ -84,10 +85,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
         return "[" + msg.toString() + "]";
     }
 
-    @Override
-    public Paging<SysLogininforVo> selectPageLogininforList(PageRequest<?> query) {
-        return null;
-    }
+
 
     /**
      * 新增系统登录日志
@@ -133,5 +131,10 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
     @Override
     public void cleanLogininfor() {
         sysLogininforData.deleteAll();
+    }
+
+    @Override
+    public Paging<SysLogininforVo> findAll(PageRequest<SysLogininforBo> query) {
+        return sysLogininforData.findAll(query.to(SysLogininfor.class)).to(SysLogininforVo.class);
     }
 }

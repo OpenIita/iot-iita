@@ -16,7 +16,6 @@ import java.util.List;
 public interface ISysLogininforService {
 
 
-    Paging<SysLogininforVo> selectPageLogininforList(PageRequest<?> query);
 
     /**
      * 新增系统登录日志
@@ -45,4 +44,6 @@ public interface ISysLogininforService {
      * 清空系统登录日志
      */
     void cleanLogininfor();
+
+    Paging<SysLogininforVo> findAll(PageRequest<SysLogininforBo> query);
 }
