@@ -39,7 +39,7 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
 
     @Override
     public Paging<SysConfigVo> selectPageConfigList(PageRequest<SysConfigBo> query) {
-        return sysConfigData.findAll(query.to(SysConfig.class)).to(SysConfigVo.class);
+        return sysConfigData.findAllByConditions(query.to(SysConfig.class)).to(SysConfigVo.class);
     }
 
     /**

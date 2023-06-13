@@ -26,7 +26,7 @@ public class SysNoticeBo extends BaseDto {
      * 公告ID
      */
     @NotNull(message = "公告ID不能为空", groups = { EditGroup.class })
-    private Long noticeId;
+    private Long id;
 
     /**
      * 公告标题

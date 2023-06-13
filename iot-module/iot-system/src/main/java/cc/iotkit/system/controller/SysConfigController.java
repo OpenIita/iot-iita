@@ -60,7 +60,7 @@ public class SysConfigController extends BaseController {
 
   @ApiOperation("根据参数编号获取详细信息")
   @SaCheckPermission("system:config:query")
-  @PostMapping(value = "/getInfo")
+  @PostMapping(value = "/getDetail")
   public SysConfigVo getInfo(@RequestBody @Validated Request<Long> request) {
     return configService.selectConfigById(request.getData());
   }
@@ -106,7 +106,7 @@ public class SysConfigController extends BaseController {
   @ApiOperation("删除参数配置")
   @SaCheckPermission("system:config:remove")
   @Log(title = "参数管理", businessType = BusinessType.DELETE)
-  @PostMapping("/remove")
+  @PostMapping("/delete")
   public void remove(@RequestBody @Validated Request<List<Long>> request) {
     configService.deleteConfigByIds(request.getData());
   }

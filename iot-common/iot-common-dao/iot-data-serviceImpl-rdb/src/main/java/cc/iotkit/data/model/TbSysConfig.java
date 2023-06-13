@@ -34,7 +34,7 @@ public class TbSysConfig extends BaseEntity {
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "参数主键")
-    private Long configId;
+    private Long id;
 
     /**
      * 租户编号

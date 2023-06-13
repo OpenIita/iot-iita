@@ -14,7 +14,9 @@ import cc.iotkit.data.system.ISysConfigData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysConfig;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections.IteratorUtils;
 import org.springframework.context.annotation.Primary;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
 
@@ -34,6 +37,9 @@ import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
 public class SysConfigDataImpl implements ISysConfigData, IJPACommData<SysConfig, Long> {
 
     private final SysConfigRepository baseRepository;
+
+
+    private final JPAQueryFactory jpaQueryFactory;
 
 
     @Override
@@ -106,8 +112,27 @@ public class SysConfigDataImpl implements ISysConfigData, IJPACommData<SysConfig
 
     @Override
     public SysConfig findByConfigKey(String configKey) {
-        TbSysConfig tbSysConfig = baseRepository.findByConfigKey(configKey).orElseThrow(() ->
-                new BizException(ErrCode.DATA_NOT_EXIST));
+        TbSysConfig tbSysConfig = baseRepository.findByConfigKey(configKey).orElse(null);
+        if(Objects.isNull(tbSysConfig)){
+            return null;
+        }
         return MapstructUtils.convert(tbSysConfig, SysConfig.class);
+    }
+
+    @Override
+    public Paging<SysConfig> findAllByConditions(PageRequest<SysConfig> pageRequest) {
+        SysConfig data = pageRequest.getData();
+        Predicate predicate = buildPredicate(data);
+        QueryResults<TbSysConfig> tbSysConfigQueryResults = jpaQueryFactory.select(tbSysConfig).from(tbSysConfig).where(predicate).limit(pageRequest.getPageSize()).offset(pageRequest.getOffset()).fetchResults();
+        return PageBuilder.queryResults2Page(tbSysConfigQueryResults, SysConfig.class);
+
+    }
+
+    private Predicate buildPredicate(SysConfig data) {
+        return PredicateBuilder.instance()
+                .and(StringUtils.isNotEmpty(data.getConfigKey()), () -> tbSysConfig.configKey.eq(data.getConfigKey()))
+                .and(StringUtils.isNotEmpty(data.getConfigName()), () -> tbSysConfig.configName.like(data.getConfigName()))
+                .and(StringUtils.isNotEmpty(data.getConfigType()), () -> tbSysConfig.configType.eq(data.getConfigType()))
+                .build();
     }
 }

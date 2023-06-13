@@ -7,7 +7,9 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.model.TbSysConfig;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.system.SysConfig;
+import cc.iotkit.model.system.SysNotice;
 import cn.hutool.core.collection.CollUtil;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.OrderSpecifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -76,5 +78,10 @@ public class PageBuilder {
 
   public static Pageable buildPageable(int page, int size) {
     return org.springframework.data.domain.PageRequest.of(page, size);
+  }
+
+  public static <T> Paging<T> queryResults2Page(QueryResults queryResults, Class clz) {
+    return new Paging<>(queryResults.getTotal(), MapstructUtils.convert(queryResults.getResults(), clz));
+
   }
 }
