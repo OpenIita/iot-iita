@@ -19,7 +19,6 @@ import cc.iotkit.system.dto.vo.SysUserVo;
 import cc.iotkit.system.service.ISysUserService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,12 +149,13 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     @Override
     public int insertUser(SysUserBo user) {
         // 新增用户信息
-        int rows=sysUserData.save(user.to(SysUser.class))!=null?1:0;
+        SysUser newUser=sysUserData.save(user.to(SysUser.class));
+        user.setId(newUser.getId());
         // 新增用户岗位关联
         insertUserPost(user,false);
         // 新增用户与角色管理
         insertUserRole(user, false);
-        return rows;
+        return newUser!=null?1:0;
     }
 
     /**
