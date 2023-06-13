@@ -63,8 +63,6 @@ public class SysDictTypeController extends BaseController {
 
     /**
      * 查询字典类型详细
-     *
-
      */
     @ApiOperation(value = "查询字典类型详细", notes = "查询字典类型详细")
     @SaCheckPermission("system:dict:query")
@@ -111,8 +109,8 @@ public class SysDictTypeController extends BaseController {
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @PostMapping("/delete")
-    public void remove(@RequestBody @Validated Collection<Long> dictIds) {
-        dictTypeService.deleteDictTypeByIds(dictIds);
+    public void remove(@RequestBody @Validated Request<List<Long>> dictIds) {
+        dictTypeService.deleteDictTypeByIds(dictIds.getData());
     }
 
     /**
