@@ -29,15 +29,16 @@ public class ThingModelMessage {
     public static final String TYPE_LIFETIME = "lifetime";
     public static final String TYPE_STATE = "state";
     public static final String TYPE_PROPERTY = "property";
+
     public static final String TYPE_EVENT = "event";
     public static final String TYPE_SERVICE = "service";
-    public static final String TYPE_CONFIG = "config";
 
+    public static final String TYPE_OTA = "ota";
+    public static final String TYPE_CONFIG = "config";
     public static final String ID_PROPERTY_GET = "get";
     public static final String ID_PROPERTY_SET = "set";
     public static final String ID_CONFIG_GET = "get";
     public static final String ID_CONFIG_SET = "set";
-
     public static final String ID_DEREGISTER = "deregister";
 
     private String id;

@@ -73,8 +73,10 @@ public class DeviceService {
                 args, ThingModelMessage.TYPE_SERVICE, service);
     }
 
-    public String otaUpgrade(String token, boolean checkOwner) {
-        return null;
+    public String otaUpgrade(String deviceId, boolean checkOwner, Object data) {
+        DeviceInfo device = getAndCheckDevice(deviceId, checkOwner);
+        return send(deviceId, device.getProductKey(), device.getDeviceName(),
+                data, ThingModelMessage.TYPE_OTA, "OTA");
     }
 
     /**
