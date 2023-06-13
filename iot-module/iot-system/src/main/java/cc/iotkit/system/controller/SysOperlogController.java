@@ -2,6 +2,7 @@ package cc.iotkit.system.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
@@ -57,14 +58,14 @@ public class SysOperlogController extends BaseController {
 
     /**
      * 批量删除操作日志记录
-     * @param operIds 日志ids
      */
     @ApiOperation("批量删除操作日志记录")
     @Log(title = "操作日志", businessType = BusinessType.DELETE)
     @SaCheckPermission("monitor:operlog:remove")
-    @PostMapping("/{operIds}")
-    public void remove(@PathVariable Long[] operIds) {
-        operLogService.deleteOperLogByIds(List.of(operIds));
+    @PostMapping("/delete")
+    public void remove(@Validated @RequestBody Request<List<Long>> bo) {
+        List<Long> operIds = bo.getData();
+        operLogService.deleteOperLogByIds(operIds);
     }
 
     /**
