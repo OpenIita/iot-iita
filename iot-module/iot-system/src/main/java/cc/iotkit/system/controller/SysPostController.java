@@ -95,11 +95,6 @@ public class SysPostController extends BaseController {
     @Log(title = "岗位管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     public void edit(@RequestBody @Validated(EditGroup.class) Request<SysPostBo> post) {
-        if (!postService.checkPostNameUnique(post.getData())) {
-            fail("修改岗位'" + post.getData().getPostName() + "'失败，岗位名称已存在");
-        } else if (!postService.checkPostCodeUnique(post.getData())) {
-            fail("修改岗位'" + post.getData().getPostName() + "'失败，岗位编码已存在");
-        }
         postService.updatePost(post.getData());
     }
 

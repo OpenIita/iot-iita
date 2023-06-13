@@ -1,6 +1,7 @@
 package cc.iotkit.system.service.impl;
 
 import cc.iotkit.common.constant.UserConstants;
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.service.DeptService;
@@ -11,9 +12,7 @@ import cc.iotkit.common.utils.TreeBuildUtils;
 import cc.iotkit.data.system.ISysDeptData;
 import cc.iotkit.data.system.ISysRoleData;
 import cc.iotkit.data.system.ISysUserData;
-import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysDept;
-import cc.iotkit.model.system.SysRole;
 import cc.iotkit.system.dto.bo.SysDeptBo;
 import cc.iotkit.system.dto.vo.SysDeptVo;
 import cc.iotkit.system.service.ISysDeptService;
@@ -27,8 +26,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static cc.iotkit.data.model.QTbSysDept.tbSysDept;
 
 /**
  * 部门管理 服务实现
@@ -178,7 +175,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
      */
     @Override
     public boolean checkDeptNameUnique(SysDeptBo dept) {
-        return sysDeptData.checkDeptNameUnique( dept.getDeptName(), dept.getParentId(), dept.getDeptId());
+        return sysDeptData.checkDeptNameUnique( dept.getDeptName(), dept.getParentId(), dept.getId());
     }
 
     /**
@@ -226,26 +223,30 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
 //    @CacheEvict(cacheNames = CacheNames.SYS_DEPT, key = "#bo.deptId")
     @Override
     public void updateDept(SysDeptBo bo) {
-//        SysDept dept = MapstructUtils.convert(bo, SysDept.class);
-//        SysDept oldDept = baseMapper.selectById(dept.getDeptId());
-//        if (!oldDept.getParentId().equals(dept.getParentId())) {
-//            // 如果是新父部门 则校验是否具有新父部门权限 避免越权
-//            this.checkDeptDataScope(dept.getParentId());
-//            SysDept newParentDept = baseMapper.selectById(dept.getParentId());
-//            if (ObjectUtil.isNotNull(newParentDept) && ObjectUtil.isNotNull(oldDept)) {
-//                String newAncestors = newParentDept.getAncestors() + StringUtils.SEPARATOR + newParentDept.getDeptId();
-//                String oldAncestors = oldDept.getAncestors();
-//                dept.setAncestors(newAncestors);
-//                updateDeptChildren(dept.getDeptId(), newAncestors, oldAncestors);
-//            }
-//        }
-//        int result = baseMapper.updateById(dept);
-//        if (UserConstants.DEPT_NORMAL.equals(dept.getStatus()) && StringUtils.isNotEmpty(dept.getAncestors())
-//                && !StringUtils.equals(UserConstants.DEPT_NORMAL, dept.getAncestors())) {
-//            // 如果该部门是启用状态，则启用该部门的所有上级部门
-//            updateParentDeptStatusNormal(dept);
-//        }
-//        return result;
+        SysDept dept = MapstructUtils.convert(bo, SysDept.class);
+        SysDept oldDept = sysDeptData.findById(bo.getId());
+        if(oldDept==null){
+            throw new BizException(ErrCode.DATA_NOT_EXIST);
+        }
+
+        if (!oldDept.getParentId().equals(dept.getParentId())) {
+            // 如果是新父部门 则校验是否具有新父部门权限 避免越权
+            this.checkDeptDataScope(dept.getParentId());
+            SysDept newParentDept = sysDeptData.findById(dept.getParentId());
+            if (ObjectUtil.isNotNull(newParentDept) && ObjectUtil.isNotNull(oldDept)) {
+                String newAncestors = newParentDept.getAncestors() + StringUtils.SEPARATOR + newParentDept.getId();
+                String oldAncestors = oldDept.getAncestors();
+                dept.setAncestors(newAncestors);
+                updateDeptChildren(dept.getId(), newAncestors, oldAncestors);
+            }
+        }
+
+        sysDeptData.save(dept);
+        if (UserConstants.DEPT_NORMAL.equals(dept.getStatus()) && StringUtils.isNotEmpty(dept.getAncestors())
+                && !StringUtils.equals(UserConstants.DEPT_NORMAL, dept.getAncestors())) {
+            // 如果该部门是启用状态，则启用该部门的所有上级部门
+            updateParentDeptStatusNormal(dept);
+        }
     }
 
     /**

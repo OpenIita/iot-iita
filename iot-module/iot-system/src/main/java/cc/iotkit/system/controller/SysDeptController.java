@@ -44,7 +44,6 @@ public class SysDeptController extends BaseController {
 
     /**
      * 查询部门列表（排除节点）
-     *
      */
     @ApiOperation("查询部门列表（排除节点）")
     @SaCheckPermission("system:dept:list")
@@ -59,12 +58,11 @@ public class SysDeptController extends BaseController {
 
     /**
      * 根据部门编号获取详细信息
-     *
      */
     @SaCheckPermission("system:dept:query")
     @ApiOperation("根据部门编号获取详细信息")
     @PostMapping(value = "/getInfo")
-    public SysDeptVo getInfo(@Validated @RequestBody  Request<Long> bo) {
+    public SysDeptVo getInfo(@Validated @RequestBody Request<Long> bo) {
         Long deptId = bo.getData();
         deptService.checkDeptDataScope(deptId);
         return deptService.selectDeptById(deptId);
@@ -94,11 +92,9 @@ public class SysDeptController extends BaseController {
     @PostMapping("/edit")
     public void edit(@Validated @RequestBody Request<SysDeptBo> bo) {
         SysDeptBo dept = bo.getData();
-        Long deptId = dept.getDeptId();
+        Long deptId = dept.getId();
         deptService.checkDeptDataScope(deptId);
-        if (!deptService.checkDeptNameUnique(dept)) {
-            fail("修改部门'" + dept.getDeptName() + "'失败，部门名称已存在");
-        } else if (dept.getParentId().equals(deptId)) {
+        if (dept.getParentId().equals(deptId)) {
             fail("修改部门'" + dept.getDeptName() + "'失败，上级部门不能是自己");
         } else if (StringUtils.equals(UserConstants.DEPT_DISABLE, dept.getStatus())
                 && deptService.selectNormalChildrenDeptById(deptId) > 0) {
@@ -109,7 +105,6 @@ public class SysDeptController extends BaseController {
 
     /**
      * 删除部门
-     *
      */
     @SaCheckPermission("system:dept:remove")
     @ApiOperation("删除部门")

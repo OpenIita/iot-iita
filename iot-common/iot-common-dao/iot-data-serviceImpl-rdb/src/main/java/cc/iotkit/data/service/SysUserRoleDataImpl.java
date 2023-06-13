@@ -9,16 +9,12 @@ import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysUserRole;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
-import static cc.iotkit.data.model.QTbSysRole.tbSysRole;
-import static cc.iotkit.data.model.QTbSysRoleMenu.tbSysRoleMenu;
 import static cc.iotkit.data.model.QTbSysUserRole.tbSysUserRole;
 
 /**

@@ -27,7 +27,7 @@ public class SysDeptBo extends BaseDto {
      * 部门id
      */
     @NotNull(message = "部门id不能为空", groups = { EditGroup.class })
-    private Long deptId;
+    private Long id;
 
     /**
      * 父部门ID

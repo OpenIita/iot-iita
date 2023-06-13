@@ -106,12 +106,17 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
         SysUser convert = MapstructUtils.convert(sysUser, SysUser.class);
         List<SysRole> sysRoles = sysRoleData.findByUserId(id);
         convert.setRoles(sysRoles);
-        SysDept dept = sysDeptData.findById(convert.getDeptId());
+
+        Long deptId = convert.getDeptId();
+        if(deptId==null){
+            return convert;
+        }
+
+        SysDept dept = sysDeptData.findById(deptId);
         if (ObjectUtil.isNotNull(dept)) {
             convert.setDept(dept);
         }
         return convert;
-
     }
 
     @Override

@@ -18,6 +18,7 @@ import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysDeptBo;
 import cc.iotkit.system.dto.bo.SysUserBo;
+import cc.iotkit.system.dto.bo.SysUserRolesBo;
 import cc.iotkit.system.dto.vo.*;
 import cc.iotkit.system.listener.SysUserImportListener;
 import cc.iotkit.system.service.*;
@@ -236,7 +237,6 @@ public class SysUserController extends BaseController {
 
     /**
      * 根据用户编号获取授权角色
-     *
      */
     @ApiOperation("根据用户编号获取授权角色")
     @SaCheckPermission("system:user:query")
@@ -254,17 +254,17 @@ public class SysUserController extends BaseController {
     /**
      * 用户授权角色
      *
-     * @param reqUserId 用户Id
-     * @param roleIds   角色ID串
+     * @param userRole 用户角色
      */
     @ApiOperation("用户授权角色")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
     @PostMapping("/authRole")
-    public void insertAuthRole(Request<Long> reqUserId, List<Long> roleIds) {
-        Long userId = reqUserId.getData();
+    public void insertAuthRole(@RequestBody @Validated Request<SysUserRolesBo> userRole) {
+        SysUserRolesBo data = userRole.getData();
+        Long userId = data.getUserId();
         userService.checkUserDataScope(userId);
-        userService.insertUserAuth(userId, roleIds);
+        userService.insertUserAuth(userId, data.getRoleIds());
     }
 
     /**

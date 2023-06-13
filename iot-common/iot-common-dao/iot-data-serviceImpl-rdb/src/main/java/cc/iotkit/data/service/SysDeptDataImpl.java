@@ -62,14 +62,14 @@ public class SysDeptDataImpl implements ISysDeptData, IJPACommData<SysDept, Long
                 .and(ObjectUtil.isNotNull(dept.getParentId()), () -> tbSysDept.parentId.eq(dept.getParentId()))
                 .and(StringUtils.isNotEmpty(dept.getDeptName()), () -> tbSysDept.deptName.like(dept.getDeptName()))
                 .and(StringUtils.isNotEmpty(dept.getStatus()), () -> tbSysDept.status.eq(dept.getStatus()));
-        return MapstructUtils.convert(StreamSupport.stream(deptRepository.findAll(predicateBuilder.build()).spliterator(),false).collect(Collectors.toList()),SysDept.class);
+        return MapstructUtils.convert(StreamSupport.stream(deptRepository.findAll(predicateBuilder.build()).spliterator(), false).collect(Collectors.toList()), SysDept.class);
     }
 
     @Override
     public List<SysDept> findByRoleId(Long roleId) {
         List<TbSysDept> list = jpaQueryFactory.select(tbSysDept).from(tbSysDept).leftJoin(tbSysRoleDept).on(tbSysDept.id.eq(tbSysRoleDept.deptId))
                 .where(tbSysRoleDept.roleId.eq(roleId)).orderBy(tbSysDept.parentId.desc(), tbSysDept.orderNum.desc()).fetch();
-        return MapstructUtils.convert(list,SysDept.class);
+        return MapstructUtils.convert(list, SysDept.class);
 
     }
 
@@ -80,8 +80,8 @@ public class SysDeptDataImpl implements ISysDeptData, IJPACommData<SysDept, Long
 
     @Override
     public List<SysDept> findByDeptId(Long deptId) {
-        return MapstructUtils.convert(deptRepository.findAll().stream().filter(o->o.getAncestors().indexOf(deptId.toString())!=-1)
-                .collect(Collectors.toList()),SysDept.class);
+        return MapstructUtils.convert(deptRepository.findAll().stream().filter(o -> o.getAncestors().indexOf(deptId.toString()) != -1)
+                .collect(Collectors.toList()), SysDept.class);
     }
 
     @Override
@@ -91,18 +91,18 @@ public class SysDeptDataImpl implements ISysDeptData, IJPACommData<SysDept, Long
         if (ObjectUtil.isNotNull(deptId)) {
             predicateBuilder.and(tbSysDept.id.ne(deptId));
         }
-        Long aLong = jpaQueryFactory.select(tbSysDept.id.count()).where(predicateBuilder.build()).fetchOne();
-        if (aLong > 0) {
-            return true;
-        }
-        return false;
+        Long count = jpaQueryFactory.select(tbSysDept.id.count())
+                .from(tbSysDept)
+                .where(predicateBuilder.build())
+                .fetchOne();
+        return count==0;
     }
 
     @Override
     public long selectNormalChildrenDeptById(Long deptId) {
 
         PredicateBuilder predicateBuilder = PredicateBuilder.instance().and(tbSysDept.status.eq(UserConstants.DEPT_NORMAL));
-         return jpaQueryFactory.select(tbSysDept.ancestors).where(predicateBuilder.build()).fetch().stream().filter(o->o.indexOf(deptId.toString())!=-1).count();
+        return jpaQueryFactory.select(tbSysDept.ancestors).where(predicateBuilder.build()).fetch().stream().filter(o -> o.indexOf(deptId.toString()) != -1).count();
 
 
     }

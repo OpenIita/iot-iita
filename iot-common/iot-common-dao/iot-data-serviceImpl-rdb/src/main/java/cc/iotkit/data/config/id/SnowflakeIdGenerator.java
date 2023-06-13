@@ -1,19 +1,16 @@
 package cc.iotkit.data.config.id;
 
-import cc.iotkit.common.utils.SnowflakeIdGeneratorUtil;
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.Objects;
-
 import com.github.yitter.contract.IdGeneratorOptions;
 import com.github.yitter.idgen.YitIdHelper;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.Objects;
 
 /**
  * @author: Longjun.Tu

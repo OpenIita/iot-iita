@@ -26,7 +26,7 @@ public class SysPostBo extends BaseDto {
      * 岗位ID
      */
     @NotNull(message = "岗位ID不能为空", groups = { EditGroup.class })
-    private Long postId;
+    private Long id;
 
     /**
      * 岗位编码
