@@ -275,7 +275,7 @@
       "menuType": "C",
       "orderNum": 7,
       "parentId": 1,
-      "path": "config",
+      "path": "sysconfig",
       "perms": "system:config:list",
       "queryParam": "",
       "remark": "参数设置菜单",
