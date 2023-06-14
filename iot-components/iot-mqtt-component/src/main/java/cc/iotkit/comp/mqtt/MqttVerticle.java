@@ -155,8 +155,13 @@ public class MqttVerticle extends AbstractVerticle {
 
                 try {
                     Map<String, Object> head = new HashMap<>();
-                    head.put("topic", message.topicName());
-                    executor.onReceive(head, "", payload);
+                    String topic = message.topicName();
+                    head.put("topic", topic);
+                    if (topic.toLowerCase().contains("ota")) {
+                        executor.onReceive(head, "ota", payload);
+                    } else {
+                        executor.onReceive(head, "", payload);
+                    }
                     if (message.qosLevel() == MqttQoS.AT_LEAST_ONCE) {
                         endpoint.publishAcknowledge(message.messageId());
                     } else if (message.qosLevel() == MqttQoS.EXACTLY_ONCE) {
