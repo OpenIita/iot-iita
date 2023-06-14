@@ -10,19 +10,20 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.validate.AddGroup;
+import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.manager.dto.bo.category.CategoryBo;
 import cc.iotkit.manager.dto.bo.product.ProductBo;
 import cc.iotkit.manager.dto.bo.productmodel.ProductModelBo;
 import cc.iotkit.manager.dto.bo.thingmodel.ThingModelBo;
-import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.dto.vo.category.CategoryVo;
 import cc.iotkit.manager.dto.vo.product.ProductVo;
 import cc.iotkit.manager.dto.vo.productmodel.ProductModelVo;
-import cc.iotkit.common.api.Paging;
+import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.service.IProductService;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import io.swagger.annotations.Api;
@@ -66,8 +67,8 @@ public class ProductController {
     @ApiOperation(value = "编辑产品")
     @PostMapping("/edit")
     @Log(title = "产品", businessType = BusinessType.UPDATE)
-    public boolean edit(@RequestBody @Validated ProductBo productBo) {
-        return productService.updateEntity(productBo);
+    public boolean edit(@Validated(EditGroup.class) @RequestBody Request<ProductBo> request) {
+        return productService.updateEntity(request.getData());
     }
 
 
@@ -103,9 +104,15 @@ public class ProductController {
 
 
     @PostMapping("/category/list")
-    @ApiOperation("产品品类展示")
+    @ApiOperation("产品品类分页展示")
     public Paging<CategoryVo> getCategories(@Validated @RequestBody PageRequest<CategoryBo> request) {
         return productService.selectCategoryPageList(request);
+    }
+
+    @PostMapping("/category/getList")
+    @ApiOperation("产品品类展示")
+    public List<CategoryVo> getCategorieList() {
+        return productService.selectCategoryList();
     }
 
     @SaCheckRole("iot_admin")
@@ -124,6 +131,7 @@ public class ProductController {
 
     }
 
+    @ApiOperation("上传产品图片")
     @PostMapping("/uploadImg/{productKey}")
     public String uploadImg(@PathVariable("productKey") String productKey,
                             @RequestParam("file") MultipartFile file) {

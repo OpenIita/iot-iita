@@ -24,4 +24,6 @@ public interface IProductData extends IOwnedData<Product, String> {
      */
     List<Product> findByCategory(String category);
 
+
+
 }

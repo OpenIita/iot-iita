@@ -4,7 +4,6 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.ICategoryData;
@@ -16,10 +15,10 @@ import cc.iotkit.manager.dto.bo.category.CategoryBo;
 import cc.iotkit.manager.dto.bo.product.ProductBo;
 import cc.iotkit.manager.dto.bo.productmodel.ProductModelBo;
 import cc.iotkit.manager.dto.bo.thingmodel.ThingModelBo;
-import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.dto.vo.category.CategoryVo;
 import cc.iotkit.manager.dto.vo.product.ProductVo;
 import cc.iotkit.manager.dto.vo.productmodel.ProductModelVo;
+import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.IProductService;
 import cc.iotkit.model.product.Category;
@@ -182,9 +181,9 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public Paging<ProductVo> selectPageList(PageRequest<ProductBo> request) {
-        if (!AuthUtil.isAdmin()) {
-            return productData.findByUid(AuthUtil.getUserId(), request.getPageNum(), request.getPageSize()).to(ProductVo.class);
-        }
+//        if (!AuthUtil.isAdmin()) {
+//            return productData.findByUid(AuthUtil.getUserId(), request.getPageNum(), request.getPageSize()).to(ProductVo.class);
+//        }
 
         return productData.findAll(request.to(Product.class)).to(ProductVo.class);
     }
@@ -192,6 +191,12 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public Paging<CategoryVo> selectCategoryPageList(PageRequest<CategoryBo> request) {
         return MapstructUtils.convert(categoryData.findAll(request.to(Category.class)), CategoryVo.class);
+
+    }
+
+    @Override
+    public List<CategoryVo> selectCategoryList() {
+        return MapstructUtils.convert(categoryData.findAll(), CategoryVo.class);
 
     }
 

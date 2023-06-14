@@ -6,10 +6,10 @@ import cc.iotkit.manager.dto.bo.category.CategoryBo;
 import cc.iotkit.manager.dto.bo.product.ProductBo;
 import cc.iotkit.manager.dto.bo.productmodel.ProductModelBo;
 import cc.iotkit.manager.dto.bo.thingmodel.ThingModelBo;
-import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
-import cc.iotkit.manager.dto.vo.product.ProductVo;
 import cc.iotkit.manager.dto.vo.category.CategoryVo;
+import cc.iotkit.manager.dto.vo.product.ProductVo;
 import cc.iotkit.manager.dto.vo.productmodel.ProductModelVo;
+import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -44,6 +44,8 @@ public interface IProductService {
     Paging<ProductVo> selectPageList(PageRequest<ProductBo> request);
 
     Paging<CategoryVo> selectCategoryPageList(PageRequest<CategoryBo> request);
+
+    List<CategoryVo> selectCategoryList();
 
     List<ProductModelVo> getModels(String productKey);
 
