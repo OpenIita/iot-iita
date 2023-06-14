@@ -33,6 +33,7 @@ import java.util.UUID;
 @Api(tags = {"用户"})
 @RestController
 @RequestMapping("/user")
+@Deprecated
 public class UserInfoController {
 
     @Autowired
