@@ -7,16 +7,14 @@ import cc.iotkit.common.enums.LoginType;
 import cc.iotkit.common.enums.UserStatus;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.exception.user.UserException;
+import cc.iotkit.common.log.event.LogininforEvent;
 import cc.iotkit.common.redis.utils.RedisUtils;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.undefined.LoginUser;
 import cc.iotkit.common.undefined.RoleDTO;
 import cc.iotkit.common.undefined.XcxLoginUser;
-import cc.iotkit.common.utils.DateUtils;
-import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.common.utils.MessageUtils;
-import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.common.utils.*;
 import cc.iotkit.common.web.config.properties.CaptchaProperties;
 import cc.iotkit.common.web.utils.ServletUtils;
 import cc.iotkit.data.system.ISysUserData;
@@ -173,7 +171,13 @@ public class SysLoginService {
      * @param message  消息内容
      */
     private void recordLogininfor(String tenantId, String username, String status, String message) {
-
+        LogininforEvent logininforEvent = new LogininforEvent();
+        logininforEvent.setTenantId(tenantId);
+        logininforEvent.setUsername(username);
+        logininforEvent.setStatus(status);
+        logininforEvent.setMessage(message);
+        logininforEvent.setRequest(ServletUtils.getRequest());
+        SpringUtils.context().publishEvent(logininforEvent);
     }
 
     /**
