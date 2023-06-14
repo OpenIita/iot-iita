@@ -1,7 +1,7 @@
 [
   {
     "id":"6293953092084e2df303ba3e",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "三路开关",
     "productKey": "eDhXKwEzwFybM5R7",
     "devices": [
@@ -20,7 +20,7 @@
   },
   {
     "id":"629391ae92084e2df303ba3d",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "温湿度传感器",
     "productKey": "6kYp6jszrDns2yh4",
     "devices": [
@@ -44,7 +44,7 @@
   },
   {
     "id":  "629390f492084e2df303ba3c",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "调光灯",
     "productKey": "xpsYHExTKPFaQMS7",
     "devices": [
@@ -65,7 +65,7 @@
   },
   {
     "id": "62925cb72002b44c15caeb1c",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "虚拟门磁1",
     "productKey": "PN3EDmkBZDD8whDd",
     "devices": [
@@ -86,7 +86,7 @@
   },
   {
     "id":  "628fd800fba69e633a972e12",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "开关1",
     "productKey": "Rf4QSjbm65X45753",
     "devices": [
@@ -102,7 +102,7 @@
   },
   {
     "id":  "628fa6bc1b735b73cb260042",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "虚拟插座12",
     "productKey": "cGCrkK7Ex4FESAwe",
     "devices": [
