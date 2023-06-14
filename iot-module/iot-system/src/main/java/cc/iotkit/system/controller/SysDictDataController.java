@@ -52,8 +52,8 @@ public class SysDictDataController {
     @SaCheckPermission("system:dict:export")
     @ApiOperation(value = "导出字典数据列表", notes = "导出字典数据列表")
     @PostMapping("/export")
-    public void export(@RequestBody @Validated Request<SysDictDataBo> bo, HttpServletResponse response) {
-        List<SysDictDataVo> list = dictDataService.selectDictDataList(bo.getData());
+    public void export(SysDictDataBo bo, HttpServletResponse response) {
+        List<SysDictDataVo> list = dictDataService.selectDictDataList(bo);
         ExcelUtil.exportExcel(list, "字典数据", SysDictDataVo.class, response);
     }
 

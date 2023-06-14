@@ -181,6 +181,7 @@ public class DeviceController {
         return productService.getThingModelByProductKey(deviceInfo.getProductKey());
     }
 
+    @ApiOperation("添加标签")
     @PostMapping("/tag/add")
     public boolean addTag(@Validated @RequestBody Request<DeviceTagAddBo> bo) {
         return deviceServiceImpl.addTag(bo.getData());
@@ -197,6 +198,7 @@ public class DeviceController {
     /**
      * 消费设备信息消息（实时推送设备信息）
      */
+    @ApiOperation("消费设备信息消息（实时推送设备信息）")
     @PostMapping("/consumer")
     public DeferredResult<ThingModelMessage> consumerDeviceInfo(
             @Validated @RequestBody Request<DeviceConsumerBo> bo
@@ -208,6 +210,7 @@ public class DeviceController {
     /**
      * 获取分组列表
      */
+    @ApiOperation(value = "获取分组列表")
     @PostMapping("/groups/list")
     public Paging<DeviceGroupVo> getDeviceGroups(
             @Validated @RequestBody PageRequest<DeviceGroupBo> pageRequest) {

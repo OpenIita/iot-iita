@@ -80,7 +80,7 @@ public class SysDeptDataImpl implements ISysDeptData, IJPACommData<SysDept, Long
 
     @Override
     public List<SysDept> findByDeptId(Long deptId) {
-        return MapstructUtils.convert(deptRepository.findAll().stream().filter(o -> o.getAncestors().indexOf(deptId.toString()) != -1)
+        return MapstructUtils.convert(deptRepository.findAll().stream().filter(o -> o.getAncestors() != null && o.getAncestors().contains(deptId.toString()))
                 .collect(Collectors.toList()), SysDept.class);
     }
 
@@ -95,7 +95,7 @@ public class SysDeptDataImpl implements ISysDeptData, IJPACommData<SysDept, Long
                 .from(tbSysDept)
                 .where(predicateBuilder.build())
                 .fetchOne();
-        return count==0;
+        return count == 0;
     }
 
     @Override

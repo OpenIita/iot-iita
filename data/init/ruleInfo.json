@@ -29,7 +29,7 @@
         "config": "{\"id\":\"de533da1-18cb-48ef-b913-22bdd96dcac9\",\"type\":\"http\",\"services\":[{\"url\":\"http://localhost:8087/aligenie/push\",\"script\":\"this.translate=function(msg){\\n  var data={};\\n  for(var p in msg.data){\\n\\tdata[p]=msg.data[p];\\n  }\\n  \\nreturn {\\n\\t//指定相对路径\\n    path:\\\"/\\\",\\n    method:\\\"post\\\",\\n    header:{\\n      //指定请求头\\n      contentType:\\\"application/json; charset=utf-8\\\"\\n    },\\n    body:JSON.stringify({\\n      deviceId:msg.deviceId,\\n      type:msg.type,\\n      identifier:msg.identifier,\\n      data:data\\n    })\\n  }\\n}\"}]}"
       }
     ],
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "state": "stopped",
     "desc": "ss",
     "createAt": 1649218592640
@@ -60,7 +60,7 @@
         "config": "{\"id\":\"35781aae-360f-4931-9d72-69f27e326e68\",\"type\":\"http\",\"services\":[{\"url\":\"https://xiaodu.baidu.com/saiya/smarthome/changereport\",\"script\":\"this.translate=function(msg,device){\\n  var pk=msg.productKey;\\n  var attributeName=\\\"\\\";\\n  //插座/开关\\n  if(pk==\\\"cGCrkK7Ex4FESAwe\\\" || pk==\\\"Rf4QSjbm65X45753\\\"){\\n\\tattributeName=\\\"turnOnState\\\";\\n  }\\n  //取openUid\\n  var tag=device.tag;\\n  if(!tag || !tag.duerosOpenUid){\\n\\treturn null;\\n  }\\n  var openUid=tag.duerosOpenUid.value;\\n  \\n  return {\\n    \\\"path\\\":\\\"\\\",\\n    \\\"method\\\":\\\"post\\\",\\n    \\\"header\\\":{\\n      //指定请求头\\n      \\\"contentType\\\":\\\"application/json; charset=utf-8\\\"\\n    },\\n    \\\"body\\\":JSON.stringify({\\n\\t  \\\"header\\\": {\\n\\t\\t  \\\"namespace\\\": \\\"DuerOS.ConnectedHome.Control\\\",\\n\\t\\t  \\\"name\\\": \\\"ChangeReportRequest\\\",\\n\\t\\t  \\\"messageId\\\": new Date().getTime()+\\\"\\\",\\n\\t\\t  \\\"payloadVersion\\\": \\\"1\\\"\\n\\t  },\\n\\t  \\\"payload\\\": {\\n\\t\\t  \\\"botId\\\": \\\"eb20e515-f505-8d31-abef-46da3345f114\\\",\\n\\t\\t  \\\"openUid\\\": openUid,\\n\\t\\t  \\\"appliance\\\": {\\n\\t\\t\\t  \\\"applianceId\\\": msg.deviceId,\\n\\t\\t\\t  \\\"attributeName\\\": attributeName\\n\\t\\t  }\\n\\t  }\\n  \\t})\\n  }\\n}\"}]}"
       }
     ],
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "state": "running",
     "desc": "开关插座开关状态推送",
     "createAt": 1652515471242
@@ -87,7 +87,7 @@
         "config": "{\"id\":\"fde024b5-5105-4639-8602-d04300613af9\",\"type\":\"device\",\"services\":[{\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"set\",\"inputData\":[{\"identifier\":\"powerSwitch\",\"value\":\"1\"}]},{\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"set\",\"inputData\":[{\"identifier\":\"windSpeed\",\"value\":\"20\"}]}]}"
       }
     ],
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "state": "stopped",
     "desc": "test",
     "createAt": 1649167998895

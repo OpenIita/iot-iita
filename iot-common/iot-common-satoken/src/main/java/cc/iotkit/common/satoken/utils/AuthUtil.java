@@ -19,7 +19,7 @@ import java.util.List;
 public class AuthUtil {
 
     public static String getUserId() {
-        return StpUtil.getLoginId().toString();
+        return String.valueOf(LoginHelper.getUserId());
     }
 
     public static List<String> getUserRoles() {
@@ -27,7 +27,7 @@ public class AuthUtil {
     }
 
     public static boolean isAdmin() {
-        return AuthUtil.getUserRoles().contains(Constants.ROLE_ADMIN);
+        return LoginHelper.isSuperAdmin();
     }
 
     public static boolean isClientUser() {

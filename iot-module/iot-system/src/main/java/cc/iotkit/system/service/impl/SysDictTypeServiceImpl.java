@@ -15,7 +15,6 @@ import cc.iotkit.data.system.ISysDictData;
 import cc.iotkit.data.system.ISysDictTypeData;
 import cc.iotkit.model.system.SysDictData;
 import cc.iotkit.model.system.SysDictType;
-import cc.iotkit.model.system.SysUser;
 import cc.iotkit.system.dto.bo.SysDictTypeBo;
 import cc.iotkit.system.dto.vo.SysDictDataVo;
 import cc.iotkit.system.dto.vo.SysDictTypeVo;
@@ -41,7 +40,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
     private final ISysDictData sysDictData;
 
     @Override
-    public Paging<SysDictTypeVo> selectPageDictTypeList( PageRequest<SysDictTypeBo> query) {
+    public Paging<SysDictTypeVo> selectPageDictTypeList(PageRequest<SysDictTypeBo> query) {
         return sysDictTypeData.findAll(query.to(SysDictType.class)).to(SysDictTypeVo.class);
     }
 
@@ -153,8 +152,8 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
     @Override
     public List<SysDictDataVo> updateDictType(SysDictTypeBo bo) {
         SysDictType oldDict = sysDictTypeData.findById(bo.getId());
-        List<SysDictData> olds=sysDictData.findByDicType(oldDict.getDictType());
-        for (SysDictData sd:olds) {
+        List<SysDictData> olds = sysDictData.findByDicType(oldDict.getDictType());
+        for (SysDictData sd : olds) {
             sd.setDictType(bo.getDictType());
             sysDictData.save(sd);
         }
@@ -189,7 +188,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
         // 优先从本地缓存获取
         List<SysDictDataVo> datas = (List<SysDictDataVo>) SaHolder.getStorage().get(CacheConstants.SYS_DICT_KEY + dictType);
         if (ObjectUtil.isNull(datas)) {
-            datas = SpringUtils.getAopProxy(this).selectDictDataByType(dictType);
+            datas = selectDictDataByType(dictType);
             SaHolder.getStorage().set(CacheConstants.SYS_DICT_KEY + dictType, datas);
         }
 

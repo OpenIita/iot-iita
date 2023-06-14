@@ -7,19 +7,21 @@ import cc.iotkit.common.log.event.LogininforEvent;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.ip.AddressUtils;
+import cc.iotkit.common.web.utils.ServletUtils;
 import cc.iotkit.data.system.ISysLogininforData;
-import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.model.system.SysLogininfor;
 import cc.iotkit.system.dto.bo.SysLogininforBo;
 import cc.iotkit.system.dto.vo.SysLogininforVo;
 import cc.iotkit.system.service.ISysLogininforService;
 import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -44,7 +46,10 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
     @Async
     @EventListener
     public void recordLogininfor(LogininforEvent logininforEvent) {
-        String ip = logininforEvent.getIp();
+        HttpServletRequest request = logininforEvent.getRequest();
+        final UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
+        final String ip = ServletUtils.getClientIP();
+
         String address = AddressUtils.getRealAddressByIP(ip);
         StringBuilder s = new StringBuilder();
         s.append(getBlock(ip));
@@ -54,7 +59,6 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
         s.append(getBlock(logininforEvent.getMessage()));
         // 打印信息到日志
         log.info(s.toString(), logininforEvent.getArgs());
-        UserAgent userAgent = logininforEvent.getUserAgent();
         // 获取客户端操作系统
         String os = userAgent.getOs().getName();
         // 获取客户端浏览器

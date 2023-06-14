@@ -59,8 +59,8 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "导出角色信息列表", notes = "导出角色信息列表")
     @SaCheckPermission("system:role:export")
     @PostMapping("/export")
-    public void export(@RequestBody @Validated Request<SysRoleBo> role, HttpServletResponse response) {
-        List<SysRoleVo> list = roleService.selectRoleList(role.getData());
+    public void export(@Validated SysRoleBo role, HttpServletResponse response) {
+        List<SysRoleVo> list = roleService.selectRoleList(role);
         ExcelUtil.exportExcel(list, "角色数据", SysRoleVo.class, response);
     }
 

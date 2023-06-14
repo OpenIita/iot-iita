@@ -51,9 +51,9 @@ public class SysConfigController extends BaseController {
   @Log(title = "参数管理", businessType = BusinessType.EXPORT)
   @SaCheckPermission("system:config:export")
   @PostMapping("/export")
-  public void export(@RequestBody @Validated(QueryGroup.class) Request<SysConfigBo> config,
+  public void export(@Validated(QueryGroup.class) SysConfigBo config,
       HttpServletResponse response) {
-    List<SysConfigVo> list = configService.selectConfigList(config.getData());
+    List<SysConfigVo> list = configService.selectConfigList(config);
     ExcelUtil.exportExcel(list, "参数数据", SysConfigVo.class, response);
   }
 

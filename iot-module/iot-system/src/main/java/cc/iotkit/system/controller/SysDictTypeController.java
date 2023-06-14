@@ -55,16 +55,14 @@ public class SysDictTypeController extends BaseController {
     @Log(title = "字典类型", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:dict:export")
     @PostMapping("/export")
-    public void export(@RequestBody @Validated(QueryGroup.class)PageRequest<SysDictTypeBo> dictType, HttpServletResponse response) {
+    public void export(@Validated(QueryGroup.class) SysDictTypeBo dictType, HttpServletResponse response) {
 
-        List<SysDictTypeVo> list = dictTypeService.selectDictTypeList(dictType.getData());
+        List<SysDictTypeVo> list = dictTypeService.selectDictTypeList(dictType);
         ExcelUtil.exportExcel(list, "字典类型", SysDictTypeVo.class, response);
     }
 
     /**
      * 查询字典类型详细
-     *
-
      */
     @ApiOperation(value = "查询字典类型详细", notes = "查询字典类型详细")
     @SaCheckPermission("system:dict:query")
@@ -111,8 +109,8 @@ public class SysDictTypeController extends BaseController {
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @PostMapping("/delete")
-    public void remove(@RequestBody @Validated Collection<Long> dictIds) {
-        dictTypeService.deleteDictTypeByIds(dictIds);
+    public void remove(@RequestBody @Validated Request<List<Long>> dictIds) {
+        dictTypeService.deleteDictTypeByIds(dictIds.getData());
     }
 
     /**

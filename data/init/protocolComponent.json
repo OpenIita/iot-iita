@@ -1,7 +1,7 @@
 [
   {
     "id": "eabb131d-8fd1-43a8-88d9-a198abfd3d42",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "MQTT标准协议组件",
     "type": "device",
     "protocol": "mqtt",
@@ -14,7 +14,7 @@
   },
   {
     "id": "6c095554-35e7-4e9d-a8d2-bb919e9479f4",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "EMQX标准协议组件",
     "type": "device",
     "protocol": "mqtt",
@@ -27,7 +27,7 @@
   },
   {
     "id": "3ababc5e-15e9-45a7-8f38-2a6afd45c780",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "小度音箱接入组件",
     "type": "biz",
     "protocol": "http",
@@ -40,7 +40,7 @@
   },
   {
     "id": "2c089bb8-0412-449e-94f1-212d35a50219",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "WEBSOCKET服务端",
     "type": "device",
     "protocol": "websocket",
@@ -54,7 +54,7 @@
 ,
   {
     "id": "305a8b86-4566-4f2a-a57f-f84ca47471a1",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "DLT645电表通讯组件",
     "type": "device",
     "protocol": "tcp",

@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 @Api(tags = {"空间设备"})
 @RestController
 @RequestMapping("/space")
+@Deprecated
 public class SpaceDeviceController {
 
     @Autowired
