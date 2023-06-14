@@ -73,13 +73,13 @@ public class ProductController {
 
     @ApiOperation("查看详情")
     @PostMapping(value = "/getDetail")
-    public ProductVo getDetail(@RequestParam  @Validated Request<String> request) {
+    public ProductVo getDetail(@RequestBody  @Validated Request<String> request) {
         ProductVo dto = productService.getDetail(request.getData());
         return dto;
     }
     @PostMapping("/getThingModelByProductKey")
     @ApiOperation("查看物模型")
-    public ThingModelVo getThingModelByProductKey(@RequestParam  @Validated Request<String> request) {
+    public ThingModelVo getThingModelByProductKey(@RequestBody  @Validated Request<String> request) {
 
         return productService.getThingModelByProductKey(request.getData());
 
