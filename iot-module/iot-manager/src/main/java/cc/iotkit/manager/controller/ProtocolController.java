@@ -126,7 +126,7 @@ public class ProtocolController {
        return protocolService.deleteConverter(id);
     }
 
-    @PostMapping("/component/changeState}")
+    @PostMapping("/component/changeState")
     @ApiOperation("组件启用/禁用")
     public boolean changeComponentState(@RequestBody @Validated Request<ChangeStateBo> req) {
        return protocolService.changeComponentState(req.getData());
