@@ -1,8 +1,7 @@
 package cc.iotkit.common.api;
 
 import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.common.utils.SnowflakeIdGeneratorUtil;
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.IdUtil;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -63,16 +62,7 @@ public class PageRequest<T> extends Request<T> implements Serializable {
         pageRequest.setPageSize(DEFAULT_PAGE_SIZE);
         pageRequest.setPageNum(DEFAULT_PAGE_NUM);
         pageRequest.setData(data);
-        pageRequest.setRequestId(String.valueOf(SnowflakeIdGeneratorUtil.getInstanceSnowflake().nextId()));
-        return pageRequest;
-    }
-
-    public static <DTO> PageRequest<DTO> request2PageRequest(Request<DTO> request) {
-        PageRequest<DTO> pageRequest = new PageRequest<>();
-        pageRequest.setData(request.getData());
-        pageRequest.setPageNum(DEFAULT_PAGE_NUM);
-        pageRequest.setPageSize(DEFAULT_PAGE_SIZE);
-        pageRequest.setRequestId(request.getRequestId());
+        pageRequest.setRequestId(IdUtil.simpleUUID());
         return pageRequest;
     }
 

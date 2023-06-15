@@ -9,7 +9,7 @@
  */
 package cc.iotkit.data.manager;
 
-import cc.iotkit.data.IOwnedData;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.product.Product;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 产品接口
  */
-public interface IProductData extends IOwnedData<Product, String> {
+public interface IProductData extends ICommonData<Product,Long> {
 
     /**
      * 按品类取产品列表

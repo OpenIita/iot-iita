@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductCacheEvict {
 
-    @CacheEvict(value = Constants.CACHE_PRODUCT, key = "#root.method.name+#pk")
-    public void findById(String pk) {
+    @CacheEvict(value = Constants.CACHE_PRODUCT, key = "#root.method.name+#id")
+    public void findById(Long id) {
     }
 
 }

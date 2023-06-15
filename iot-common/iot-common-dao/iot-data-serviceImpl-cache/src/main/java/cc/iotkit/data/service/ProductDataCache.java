@@ -28,29 +28,29 @@ public class ProductDataCache implements IProductData {
         return productData.findByCategory(category);
     }
 
-    @Override
-    public List<Product> findByUid(String uid) {
-        return productData.findByUid(uid);
-    }
+//    @Override
+//    public List<Product> findByUid(String uid) {
+//        return productData.findByUid(uid);
+//    }
 
-    @Override
-    public Paging<Product> findByUid(String uid, int page, int size) {
-        return productData.findByUid(uid, page, size);
-    }
+//    @Override
+//    public Paging<Product> findByUid(String uid, int page, int size) {
+//        return productData.findByUid(uid, page, size);
+//    }
 
-    @Override
-    public long countByUid(String uid) {
-        return productData.countByUid(uid);
-    }
+//    @Override
+//    public long countByUid(String uid) {
+//        return productData.countByUid(uid);
+//    }
 
     @Override
     @Cacheable(value = Constants.CACHE_PRODUCT, key = "#root.method.name+#s", unless = "#result == null")
-    public Product findById(String s) {
+    public Product findById(Long s) {
         return productData.findById(s);
     }
 
     @Override
-    public List<Product> findByIds(Collection<String> id) {
+    public List<Product> findByIds(Collection<Long> id) {
         return null;
     }
 
@@ -68,14 +68,14 @@ public class ProductDataCache implements IProductData {
     }
 
     @Override
-    public void deleteById(String s) {
+    public void deleteById(Long s) {
         productData.deleteById(s);
         //清除缓存
         productCacheEvict.findById(s);
     }
 
     @Override
-    public void deleteByIds(Collection<String> strings) {
+    public void deleteByIds(Collection<Long> ids) {
 
     }
 

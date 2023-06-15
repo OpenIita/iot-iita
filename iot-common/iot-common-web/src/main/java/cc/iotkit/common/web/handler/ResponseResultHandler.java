@@ -10,8 +10,8 @@
 package cc.iotkit.common.web.handler;
 
 import cc.iotkit.common.api.Response;
-import cc.iotkit.common.utils.SnowflakeIdGeneratorUtil;
 import cn.dev33.satoken.util.SaResult;
+import cn.hutool.core.util.IdUtil;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -37,20 +37,20 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
         if (body instanceof GlobalExceptionHandler.RequestResult) {
             GlobalExceptionHandler.RequestResult requestResult = (GlobalExceptionHandler.RequestResult) body;
             return new Response(requestResult.getCode(), requestResult.getMessage(),
-                    "", String.valueOf(SnowflakeIdGeneratorUtil.getInstanceSnowflake().nextId()));
+                    "", IdUtil.simpleUUID());
         } else if (body instanceof SaResult) {
             SaResult result = (SaResult) body;
-            return new Response(result.getCode(), result.getMsg(), result.getData(), String.valueOf(SnowflakeIdGeneratorUtil.getInstanceSnowflake().nextId()));
+            return new Response(result.getCode(), result.getMsg(), result.getData(), IdUtil.simpleUUID());
         } else if (body instanceof Map) {
             Map map = (Map) body;
             //spring mvc内部异常
             if (map.containsKey("timestamp") && map.containsKey("status") && map.containsKey("error")) {
                 return new Response((Integer) map.get("status"), (String) map.get("error"),
-                        "", String.valueOf(SnowflakeIdGeneratorUtil.getInstanceSnowflake().nextId()));
+                        "", IdUtil.simpleUUID());
             }
         }
 
-        return new Response(200, "", body, String.valueOf(SnowflakeIdGeneratorUtil.getInstanceSnowflake().nextId()));
+        return new Response(200, "", body, IdUtil.simpleUUID());
     }
 
 }

@@ -81,25 +81,20 @@ public class ProductController {
     @PostMapping("/getThingModelByProductKey")
     @ApiOperation("查看物模型")
     public ThingModelVo getThingModelByProductKey(@RequestBody  @Validated Request<String> request) {
-
         return productService.getThingModelByProductKey(request.getData());
-
     }
 
     @ApiOperation("保存物模型")
     @PostMapping("/thingModel/save")
     public boolean saveThingModel(@Validated @RequestBody Request<ThingModelBo> request) {
-
         return productService.saveThingModel(request.getData());
-
-
     }
 
     @PostMapping("/thingModel/delete")
     @ApiOperation("删除物模型")
     @Log(title = "物模型", businessType = BusinessType.DELETE)
-    public boolean deleteThingModel(@Validated @RequestBody Request<String> productKey) {
-       return productService.deleteThingModel(productKey.getData());
+    public boolean deleteThingModel(@Validated @RequestBody Request<Long> id) {
+       return productService.deleteThingModel(id.getData());
     }
 
 

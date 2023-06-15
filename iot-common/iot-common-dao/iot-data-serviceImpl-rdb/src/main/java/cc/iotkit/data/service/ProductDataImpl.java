@@ -18,7 +18,7 @@ import java.util.List;
 
 @Primary
 @Service
-public class ProductDataImpl implements IProductData, IJPACommData<Product, String> {
+public class ProductDataImpl implements IProductData, IJPACommData<Product, Long> {
 
     @Autowired
     private ProductRepository productRepository;
@@ -43,12 +43,10 @@ public class ProductDataImpl implements IProductData, IJPACommData<Product, Stri
         return MapstructUtils.convert(productRepository.findByCategory(category), Product.class);
     }
 
-    @Override
     public List<Product> findByUid(String uid) {
         return MapstructUtils.convert(productRepository.findByUid(uid), Product.class);
     }
 
-    @Override
     public Paging<Product> findByUid(String uid, int page, int size) {
         Page<TbProduct> productPage = productRepository.findByUid(uid,
                 Pageable.ofSize(size).withPage(page - 1));
@@ -56,23 +54,19 @@ public class ProductDataImpl implements IProductData, IJPACommData<Product, Stri
                 MapstructUtils.convert(productPage.getContent(), Product.class));
     }
 
-    @Override
     public long countByUid(String uid) {
         return productRepository.countByUid(uid);
     }
 
-
     @Override
-    public Product findById(String s) {
-        return MapstructUtils.convert(productRepository.findById(s).orElse(null), Product.class);
+    public Product findById(Long id) {
+        return MapstructUtils.convert(productRepository.findById(id).orElse(null), Product.class);
     }
-
 
     @Override
     public Product save(Product data) {
         productRepository.save(MapstructUtils.convert(data, TbProduct.class));
         return data;
     }
-
 
 }

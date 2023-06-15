@@ -31,9 +31,7 @@ public interface IProductService {
 
     boolean saveThingModel(ThingModelBo data);
 
-    boolean deleteThingModel(String data);
-
-
+    boolean deleteThingModel(Long id);
 
     boolean deleteCategory(String data);
 

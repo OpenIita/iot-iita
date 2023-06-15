@@ -9,19 +9,22 @@
  */
 package cc.iotkit.model.product;
 
-import cc.iotkit.model.Owned;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
+import lombok.*;
 
+import java.io.Serializable;
+
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product implements Owned<String> {
+public class Product extends TenantModel implements Id<Long>, Serializable {
 
-    private String id;
+    private Long id;
+
+    private String key;
 
     private String name;
 

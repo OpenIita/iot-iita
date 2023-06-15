@@ -9,29 +9,26 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
-import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.data.dao.ThingModelRepository;
+import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.data.model.TbThingModel;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.product.ThingModel;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
+/**
+ * @author sjg
+ */
 @Primary
 @Service
 @RequiredArgsConstructor
-public class ThingModelDataImpl implements IThingModelData, IJPACommData<ThingModel, String> {
+public class ThingModelDataImpl implements IThingModelData, IJPACommData<ThingModel, Long> {
 
     @Autowired
     private ThingModelRepository thingModelRepository;
@@ -52,28 +49,26 @@ public class ThingModelDataImpl implements IThingModelData, IJPACommData<ThingMo
     }
 
     @Override
-    public ThingModel findById(String s) {
-        return MapstructUtils.convert(thingModelRepository.findById(s).orElse(null),ThingModel.class);
+    public ThingModel findById(Long id) {
+        TbThingModel tbThingModel = thingModelRepository.findById(id).orElse(null);
+        ThingModel convert = MapstructUtils.convert(tbThingModel, ThingModel.class);
+        if (tbThingModel != null && convert != null) {
+            convert.setModel(JsonUtils.parseObject(tbThingModel.getModel(), ThingModel.Model.class));
+        }
+        return convert;
     }
-
 
     @Override
     public ThingModel save(ThingModel data) {
-        if (StringUtils.isBlank(data.getId())) {
-            data.setId(UUID.randomUUID().toString());
-        }
-        thingModelRepository.save(MapstructUtils.convert(data, TbThingModel.class));
+        TbThingModel to = data.to(TbThingModel.class);
+        to.setModel(JsonUtils.toJsonString(data.getModel()));
+        thingModelRepository.save(to);
         return data;
     }
 
-
-
     @Override
-    public void deleteById(String s) {
-        thingModelRepository.deleteById(s);
+    public void deleteById(Long id) {
+        thingModelRepository.deleteById(id);
     }
-
-
-
 
 }

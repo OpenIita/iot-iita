@@ -1,12 +1,10 @@
 package cc.iotkit.common.api;
 
-import cc.iotkit.common.utils.SnowflakeIdGeneratorUtil;
+import cn.hutool.core.util.IdUtil;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * @author: Longjun.Tu
@@ -22,7 +20,7 @@ public class RequestEmpty implements Serializable {
 
   public static RequestEmpty of() {
     RequestEmpty request = new RequestEmpty();
-    request.setRequestId(String.valueOf(SnowflakeIdGeneratorUtil.getInstanceSnowflake().nextId()));
+    request.setRequestId(IdUtil.simpleUUID());
     return request;
   }
 

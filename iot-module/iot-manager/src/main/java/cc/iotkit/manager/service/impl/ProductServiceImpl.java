@@ -29,6 +29,7 @@ import cc.iotkit.temporal.IDbStructureData;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectResult;
+import com.github.yitter.idgen.YitIdHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -71,27 +72,22 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     private IDbStructureData dbStructureData;
 
-
     private OSS ossClient;
 
     @Override
     public ProductVo addEntity(ProductBo data) {
         Product product = data.to(Product.class);
 
-        dataOwnerService.checkOwnerSave(productData, product);
-
         if (product.getCreateAt() == null) {
             product.setCreateAt(System.currentTimeMillis());
         }
         productData.save(product);
         return MapstructUtils.convert(product, ProductVo.class);
-}
+    }
 
     @Override
     public boolean updateEntity(ProductBo productBo) {
         Product product = productBo.to(Product.class);
-
-        dataOwnerService.checkOwnerSave(productData, product);
 
         if (product.getCreateAt() == null) {
             product.setCreateAt(System.currentTimeMillis());
@@ -102,27 +98,29 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ProductVo getDetail(String productKey) {
-       return MapstructUtils.convert(dataOwnerService.checkOwner(productData.findById(productKey)), ProductVo.class);
+        return MapstructUtils.convert(productData.findById(productKey), ProductVo.class);
     }
 
     @Override
     public ThingModelVo getThingModelByProductKey(String productKey) {
-        checkProductOwner(productKey);
-        ThingModel thingModel = thingModelData.findById(productKey);
+//        ThingModel thingModel = thingModelData.findById(productKey);
+        // todo
+        ThingModel thingModel = thingModelData.findById(0L);
         return MapstructUtils.convert(thingModel, ThingModelVo.class);
     }
 
     @Override
     public boolean saveThingModel(ThingModelBo data) {
         String productKey = data.getProductKey();
-        checkProductOwner(productKey);
         String model = data.getModel();
-        ThingModel oldData = thingModelData.findById(productKey);
-        ThingModel thingModel = new ThingModel(productKey, productKey, JsonUtils.parseObject(model, ThingModel.Model.class));
+        ThingModel oldData = thingModelData.findOneByCondition(ThingModel.builder().productKey(productKey).build());
+        ThingModel thingModel = new ThingModel(YitIdHelper.nextId(), productKey, JsonUtils.parseObject(model, ThingModel.Model.class));
+
         if (oldData == null) {
             //定义时序数据库物模型数据结构
             dbStructureData.defineThingModel(thingModel);
         } else {
+            thingModel.setId(oldData.getId());
             //更新时序数据库物模型数据结构
             dbStructureData.updateThingModel(thingModel);
         }
@@ -131,15 +129,13 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public boolean deleteThingModel(String productKey) {
-        checkProductOwner(productKey);
-        ThingModel thingModel = thingModelData.findById(productKey);
+    public boolean deleteThingModel(Long id) {
+        ThingModel thingModel = thingModelData.findById(id);
         //删除时序数据库物模型数据结构
         dbStructureData.defineThingModel(thingModel);
-        thingModelData.deleteById(productKey);
+        thingModelData.deleteById(id);
         return true;
     }
-
 
 
     @Override
@@ -160,8 +156,6 @@ public class ProductServiceImpl implements IProductService {
     @SneakyThrows
 
     public String uploadImg(String productKey, MultipartFile file) {
-        productKey = getProduct(productKey).getId();
-
         String fileName = file.getOriginalFilename();
         String end = fileName.substring(fileName.lastIndexOf("."));
         if (ossClient == null) {
@@ -176,7 +170,7 @@ public class ProductServiceImpl implements IProductService {
         PutObjectResult result = ossClient.putObject(bucket, fileName,
                 file.getInputStream());
         return ossClient.generatePresignedUrl(bucket, fileName,
-                new Date(new Date().getTime() + 3600L * 1000 * 24 * 365 * 10)).toString();
+                new Date(System.currentTimeMillis() + 3600L * 1000 * 24 * 365 * 10)).toString();
     }
 
     @Override
@@ -216,7 +210,6 @@ public class ProductServiceImpl implements IProductService {
         if (product == null) {
             throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
-        dataOwnerService.checkOwner(product);
 
         ProductModel oldScript = productModelData.findByModel(model);
         if (oldScript != null && !oldScript.getProductKey().equals(productKey)) {
@@ -229,13 +222,13 @@ public class ProductServiceImpl implements IProductService {
     }
 
     private Product getProduct(String productKey) {
-       return dataOwnerService.checkOwner(productData.findById(productKey));
+        return productData.findById(productKey);
     }
 
 
     /***********/
     private void checkProductOwner(String productKey) {
-        dataOwnerService.checkOwner(productData.findById(productKey));
+//        dataOwnerService.checkOwner(productData.findById(productKey));
     }
 
 }

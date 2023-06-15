@@ -32,7 +32,10 @@ public class TbProduct {
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "产品id")
-    private String id;
+    private Long id;
+
+    @ApiModelProperty(value = "产品key")
+    private String productKey;
 
     @ApiModelProperty(value = "产品名称")
     private String name;

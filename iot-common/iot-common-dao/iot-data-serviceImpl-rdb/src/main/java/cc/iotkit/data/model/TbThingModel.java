@@ -29,7 +29,7 @@ public class TbThingModel {
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "主键")
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value = "产品key")
     private String productKey;
@@ -38,7 +38,6 @@ public class TbThingModel {
     @Column(columnDefinition = "text")
     @AutoMapping(ignore = true)
     @ReverseAutoMapping(ignore = true)
-
     private String model;
 
 }

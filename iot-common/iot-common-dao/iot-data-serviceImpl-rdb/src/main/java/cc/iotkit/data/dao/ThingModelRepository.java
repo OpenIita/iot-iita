@@ -12,6 +12,6 @@ package cc.iotkit.data.dao;
 import cc.iotkit.data.model.TbThingModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ThingModelRepository extends JpaRepository<TbThingModel, String> {
+public interface ThingModelRepository extends JpaRepository<TbThingModel, Long> {
 
 }
