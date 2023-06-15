@@ -137,7 +137,7 @@ public class RuleEngineController {
         return ruleEngineService.resumeTask(request.getData());
     }
 
-    @ApiOperation("启动定时任务")
+    @ApiOperation("更新定时任务")
     @PostMapping("/task/renew")
     public boolean renewTask(@Validated @RequestBody Request<String> request) {
         String taskId = request.getData();
