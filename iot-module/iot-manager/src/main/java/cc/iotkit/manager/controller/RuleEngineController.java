@@ -90,7 +90,7 @@ public class RuleEngineController {
     }
 
     @ApiOperation("删除规则")
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public boolean deleteRule(@Validated @RequestBody Request<String> request) {
         String ruleId = request.getData();
         return ruleEngineService.deleteRule(ruleId);
@@ -105,7 +105,7 @@ public class RuleEngineController {
     }
 
     @ApiOperation("清理日志")
-    @DeleteMapping("/ruleLog//clear")
+    @PostMapping("/ruleLog/clear")
     public boolean clearRuleLogs(@Validated @RequestBody Request<String> request) {
         String ruleId = request.getData();
         return ruleEngineService.clearRuleLogs(ruleId);
@@ -146,7 +146,7 @@ public class RuleEngineController {
     }
 
     @ApiOperation("删除定时任务")
-    @DeleteMapping("/task/delete")
+    @PostMapping("/task/delete")
     public boolean deleteTask(@Validated @RequestBody Request<String> request) {
         String taskId = request.getData();
         return ruleEngineService.deleteTask(taskId);
@@ -161,7 +161,7 @@ public class RuleEngineController {
 
     }
     @ApiOperation("清除定时任务日志")
-    @DeleteMapping("/taskLogs/clear")
+    @PostMapping("/taskLogs/clear")
     public boolean clearTaskLogs( @Validated @RequestBody PageRequest<String> request) {
        return ruleEngineService.clearTaskLogs(request.getData());
     }
