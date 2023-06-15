@@ -24,7 +24,7 @@ public class Product extends TenantModel implements Id<Long>, Serializable {
 
     private Long id;
 
-    private String key;
+    private String productKey;
 
     private String name;
 

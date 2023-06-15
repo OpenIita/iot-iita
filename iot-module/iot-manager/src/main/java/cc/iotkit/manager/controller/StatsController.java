@@ -57,7 +57,7 @@ public class StatsController {
             mainStats.setDeviceStatsOfCategory(deviceInfoData.getDeviceStatsByCategory(""));
         } else {
             mainStats.setCategoryTotal(ICategoryData.count());
-            mainStats.setProductTotal(productData.countByUid(uid));
+//            mainStats.setProductTotal(productData.countByUid(uid));
             mainStats.setDeviceTotal(deviceInfoData.countByUid(uid));
 //            mainStats.setReportTotal(deviceReportRepository.countByUid(uid));
             //上报数据统计

@@ -32,9 +32,10 @@ public class ProductBo extends BaseDto  {
 
 	private static final long serialVersionUID = -1L;
 
-
 	@ApiModelProperty(value="id")
-	private String id;
+	private Long id;
+	@ApiModelProperty(value="productKey")
+	private String productKey;
 
 	@ApiModelProperty(value="品类")
 	@Size(max = 255, message = "品类长度不正确")

@@ -26,4 +26,5 @@ public interface ProductRepository extends JpaRepository<TbProduct, Long> {
 
     long countByUid(String uid);
 
+    TbProduct findByProductKey(String productKey);
 }

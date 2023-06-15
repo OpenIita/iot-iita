@@ -71,4 +71,13 @@ public class ThingModelDataImpl implements IThingModelData, IJPACommData<ThingMo
         thingModelRepository.deleteById(id);
     }
 
+    @Override
+    public ThingModel findByProductKey(String productKey) {
+        TbThingModel tbThingModel = thingModelRepository.findByProductKey(productKey).orElse(null);
+        ThingModel convert = MapstructUtils.convert(tbThingModel, ThingModel.class);
+        if (tbThingModel != null && convert != null) {
+            convert.setModel(JsonUtils.parseObject(tbThingModel.getModel(), ThingModel.Model.class));
+        }
+        return convert;
+    }
 }

@@ -1,6 +1,6 @@
 [
   {
-    "id": "xpsYHExTKPFaQMS7",
+    "id": "0",
     "productKey": "xpsYHExTKPFaQMS7",
     "model": {
       "properties": [
@@ -34,7 +34,7 @@
     }
   },
   {
-    "id": "hdX3PCMcFrCYpesJ",
+    "id": "1",
     "productKey": "hdX3PCMcFrCYpesJ",
     "model": {
       "properties": [
@@ -82,7 +82,7 @@
     }
   },
   {
-    "id": "hbtgIA0SuVw9lxjB",
+    "id": "2",
     "productKey": "hbtgIA0SuVw9lxjB",
     "model": {
       "properties": [],
@@ -178,7 +178,7 @@
     }
   },
   {
-    "id": "eDhXKwEzwFybM5R7",
+    "id": "3",
     "productKey": "eDhXKwEzwFybM5R7",
     "model": {
       "properties": [
@@ -274,7 +274,7 @@
     }
   },
   {
-    "id": "cGCrkK7Ex4FESAwe",
+    "id": "4",
     "productKey": "cGCrkK7Ex4FESAwe",
     "model": {
       "properties": [
@@ -344,7 +344,7 @@
     }
   },
   {
-    "id": "Rf4QSjbm65X45753",
+    "id": "5",
     "productKey": "Rf4QSjbm65X45753",
     "model": {
       "properties": [
@@ -436,7 +436,7 @@
     "_class": "cc.iotkit.model.ThingModel"
   },
   {
-    "id": "PN3EDmkBZDD8whDd",
+    "id": "6",
     "productKey": "PN3EDmkBZDD8whDd",
     "model": {
       "properties": [
@@ -496,7 +496,7 @@
     }
   },
   {
-    "id": "N523nWsCiG3CAn6X",
+    "id": "7",
     "productKey": "N523nWsCiG3CAn6X",
     "model": {
       "properties": [
@@ -658,7 +658,7 @@
     }
   },
   {
-    "id": "KdJYpTp5ywNhmrmC",
+    "id": "8",
     "productKey": "KdJYpTp5ywNhmrmC",
     "model": {
       "properties": [],
@@ -684,7 +684,7 @@
     }
   },
   {
-    "id": "Eit3kmGJtxSHfCKT",
+    "id": "9",
     "productKey": "Eit3kmGJtxSHfCKT",
     "model": {
       "properties": [
@@ -718,7 +718,7 @@
     }
   },
   {
-    "id": "D8c5pXFmt2KJDxNm",
+    "id": "10",
     "productKey": "D8c5pXFmt2KJDxNm",
     "model": {
       "properties": [
@@ -814,7 +814,7 @@
     }
   },
   {
-    "id": "AWcJnf7ymGSkaz5M",
+    "id": "11",
     "productKey": "AWcJnf7ymGSkaz5M",
     "model": {
       "properties": [
@@ -944,7 +944,7 @@
     }
   },
   {
-    "id": "6kYp6jszrDns2yh4",
+    "id": "12",
     "productKey": "6kYp6jszrDns2yh4",
     "model": {
       "properties": [
@@ -984,7 +984,7 @@
     }
   },
   {
-    "id": "bGdZt8ffBETtsirm",
+    "id": "13",
     "productKey": "bGdZt8ffBETtsirm",
     "model": {
       "properties": [
@@ -1047,7 +1047,7 @@
     }
   },
   {
-    "id": "BRD3x4fkKxkaxXFt",
+    "id": "14",
     "productKey": "BRD3x4fkKxkaxXFt",
     "model": {
       "properties": [],
@@ -1115,7 +1115,7 @@
     }
   },
   {
-    "id": "PwMfpXmp4ZWkGahn",
+    "id": "15",
     "productKey": "PwMfpXmp4ZWkGahn",
     "model": {
       "properties": [

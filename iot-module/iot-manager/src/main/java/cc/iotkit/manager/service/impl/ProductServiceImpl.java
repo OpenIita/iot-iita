@@ -98,14 +98,13 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ProductVo getDetail(String productKey) {
-        return MapstructUtils.convert(productData.findById(productKey), ProductVo.class);
+        return MapstructUtils.convert(productData.findByProductKey(productKey), ProductVo.class);
     }
 
     @Override
     public ThingModelVo getThingModelByProductKey(String productKey) {
-//        ThingModel thingModel = thingModelData.findById(productKey);
-        // todo
-        ThingModel thingModel = thingModelData.findById(0L);
+
+        ThingModel thingModel = thingModelData.findByProductKey(productKey);
         return MapstructUtils.convert(thingModel, ThingModelVo.class);
     }
 
@@ -206,7 +205,7 @@ public class ProductServiceImpl implements IProductService {
         ProductModel productModel = productModelBo.to(ProductModel.class);
         String model = productModel.getModel();
         String productKey = productModel.getProductKey();
-        Product product = productData.findById(productKey);
+        Product product = productData.findByProductKey(productKey);
         if (product == null) {
             throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
@@ -222,13 +221,13 @@ public class ProductServiceImpl implements IProductService {
     }
 
     private Product getProduct(String productKey) {
-        return productData.findById(productKey);
+        return productData.findByProductKey(productKey);
     }
 
 
     /***********/
     private void checkProductOwner(String productKey) {
-//        dataOwnerService.checkOwner(productData.findById(productKey));
+//        dataOwnerService.checkOwner(productData.findByProductKey(productKey));
     }
 
 }

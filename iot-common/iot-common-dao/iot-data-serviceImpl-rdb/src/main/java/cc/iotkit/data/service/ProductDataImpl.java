@@ -43,6 +43,11 @@ public class ProductDataImpl implements IProductData, IJPACommData<Product, Long
         return MapstructUtils.convert(productRepository.findByCategory(category), Product.class);
     }
 
+    @Override
+    public Product findByProductKey(String productKey) {
+        return MapstructUtils.convert(productRepository.findByProductKey(productKey), Product.class);
+    }
+
     public List<Product> findByUid(String uid) {
         return MapstructUtils.convert(productRepository.findByUid(uid), Product.class);
     }
@@ -59,8 +64,9 @@ public class ProductDataImpl implements IProductData, IJPACommData<Product, Long
     }
 
     @Override
+    @Deprecated
     public Product findById(Long id) {
-        return MapstructUtils.convert(productRepository.findById(id).orElse(null), Product.class);
+        throw new IllegalStateException("Deprecated method");
     }
 
     @Override

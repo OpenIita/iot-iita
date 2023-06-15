@@ -25,7 +25,11 @@ public class ProductVo implements Serializable  {
 
 	@ApiModelProperty(value="产品id")
     @ExcelProperty(value = "产品id")
-		private String id;
+		private Long id;
+
+	@ApiModelProperty(value="产品id")
+	@ExcelProperty(value = "产品id")
+	private String productKey;
 
 	@ApiModelProperty(value="品类")
     @ExcelProperty(value = "品类")

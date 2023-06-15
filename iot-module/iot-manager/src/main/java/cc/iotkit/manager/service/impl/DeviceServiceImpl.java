@@ -115,7 +115,7 @@ public class DeviceServiceImpl implements IDeviceService {
         String deviceName = deviceInfo.getDeviceName();
         String parentId = deviceInfo.getParentId();
 
-        Product product = productData.findById(productKey);
+        Product product = productData.findByProductKey(productKey);
         if (product == null) {
             throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }

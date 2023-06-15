@@ -28,6 +28,12 @@ public class ProductDataCache implements IProductData {
         return productData.findByCategory(category);
     }
 
+    @Override
+    @Cacheable(value = Constants.CACHE_PRODUCT, key = "#root.method.name+#s", unless = "#result == null")
+    public Product findByProductKey(String productKey) {
+        return productData.findByProductKey(productKey);
+    }
+
 //    @Override
 //    public List<Product> findByUid(String uid) {
 //        return productData.findByUid(uid);
@@ -45,6 +51,7 @@ public class ProductDataCache implements IProductData {
 
     @Override
     @Cacheable(value = Constants.CACHE_PRODUCT, key = "#root.method.name+#s", unless = "#result == null")
+    @Deprecated
     public Product findById(Long s) {
         return productData.findById(s);
     }

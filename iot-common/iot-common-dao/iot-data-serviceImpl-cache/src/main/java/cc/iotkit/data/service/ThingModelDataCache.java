@@ -49,10 +49,11 @@ public class ThingModelDataCache implements IThingModelData {
     @Override
     public void deleteById(Long s) {
         thingModelData.deleteById(s);
+        thingModelCacheEvict.findById(s);
     }
 
     @Override
-    public void deleteByIds(Collection<Long> strings) {
+    public void deleteByIds(Collection<Long> ids) {
 
     }
 
@@ -81,4 +82,9 @@ public class ThingModelDataCache implements IThingModelData {
         return null;
     }
 
+    @Override
+    @Cacheable(value = Constants.CACHE_THING_MODEL, key = "#root.method.name+#s", unless = "#result == null")
+    public ThingModel findByProductKey(String productKey) {
+        return thingModelData.findByProductKey(productKey);
+    }
 }

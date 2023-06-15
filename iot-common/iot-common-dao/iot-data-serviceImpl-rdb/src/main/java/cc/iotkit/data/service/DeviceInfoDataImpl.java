@@ -363,7 +363,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
                 args.toArray());
         for (DataItem item : rst) {
             //找到产品对应的品类取出品类名
-            Product product = productData.findById(item.getName());
+            Product product = productData.findByProductKey(item.getName());
             String cateId = product.getCategory();
             Category category = categoryData.findById(cateId);
             if (category == null) {
