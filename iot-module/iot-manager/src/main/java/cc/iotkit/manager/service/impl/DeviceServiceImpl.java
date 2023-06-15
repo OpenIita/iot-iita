@@ -89,14 +89,14 @@ public class DeviceServiceImpl implements IDeviceService {
 
         String uid = "";
         String subUid = "";
-        if (!AuthUtil.isAdmin()) {
-            //客户端用户使用绑定子用户查询
-            if (AuthUtil.isClientUser()) {
-                subUid = AuthUtil.getUserId();
-            } else {
-                uid = AuthUtil.getUserId();
-            }
-        }
+//        if (!AuthUtil.isAdmin()) {
+//            //客户端用户使用绑定子用户查询
+//            if (AuthUtil.isClientUser()) {
+//                subUid = AuthUtil.getUserId();
+//            } else {
+//                uid = AuthUtil.getUserId();
+//            }
+//        }
 
         String pk = query.getProductKey();
         //关键字查询
