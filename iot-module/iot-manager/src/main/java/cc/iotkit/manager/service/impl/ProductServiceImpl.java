@@ -4,7 +4,6 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.ICategoryData;
@@ -16,10 +15,10 @@ import cc.iotkit.manager.dto.bo.category.CategoryBo;
 import cc.iotkit.manager.dto.bo.product.ProductBo;
 import cc.iotkit.manager.dto.bo.productmodel.ProductModelBo;
 import cc.iotkit.manager.dto.bo.thingmodel.ThingModelBo;
-import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.dto.vo.category.CategoryVo;
 import cc.iotkit.manager.dto.vo.product.ProductVo;
 import cc.iotkit.manager.dto.vo.productmodel.ProductModelVo;
+import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.IProductService;
 import cc.iotkit.model.product.Category;
@@ -30,6 +29,7 @@ import cc.iotkit.temporal.IDbStructureData;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectResult;
+import com.github.yitter.idgen.YitIdHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -72,27 +72,22 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     private IDbStructureData dbStructureData;
 
-
     private OSS ossClient;
 
     @Override
     public ProductVo addEntity(ProductBo data) {
         Product product = data.to(Product.class);
 
-        dataOwnerService.checkOwnerSave(productData, product);
-
         if (product.getCreateAt() == null) {
             product.setCreateAt(System.currentTimeMillis());
         }
         productData.save(product);
         return MapstructUtils.convert(product, ProductVo.class);
-}
+    }
 
     @Override
     public boolean updateEntity(ProductBo productBo) {
         Product product = productBo.to(Product.class);
-
-        dataOwnerService.checkOwnerSave(productData, product);
 
         if (product.getCreateAt() == null) {
             product.setCreateAt(System.currentTimeMillis());
@@ -103,27 +98,28 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ProductVo getDetail(String productKey) {
-       return MapstructUtils.convert(dataOwnerService.checkOwner(productData.findById(productKey)), ProductVo.class);
+        return MapstructUtils.convert(productData.findByProductKey(productKey), ProductVo.class);
     }
 
     @Override
     public ThingModelVo getThingModelByProductKey(String productKey) {
-        checkProductOwner(productKey);
-        ThingModel thingModel = thingModelData.findById(productKey);
+
+        ThingModel thingModel = thingModelData.findByProductKey(productKey);
         return MapstructUtils.convert(thingModel, ThingModelVo.class);
     }
 
     @Override
     public boolean saveThingModel(ThingModelBo data) {
         String productKey = data.getProductKey();
-        checkProductOwner(productKey);
         String model = data.getModel();
-        ThingModel oldData = thingModelData.findById(productKey);
-        ThingModel thingModel = new ThingModel(productKey, productKey, JsonUtils.parseObject(model, ThingModel.Model.class));
+        ThingModel oldData = thingModelData.findOneByCondition(ThingModel.builder().productKey(productKey).build());
+        ThingModel thingModel = new ThingModel(YitIdHelper.nextId(), productKey, JsonUtils.parseObject(model, ThingModel.Model.class));
+
         if (oldData == null) {
             //定义时序数据库物模型数据结构
             dbStructureData.defineThingModel(thingModel);
         } else {
+            thingModel.setId(oldData.getId());
             //更新时序数据库物模型数据结构
             dbStructureData.updateThingModel(thingModel);
         }
@@ -132,15 +128,13 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public boolean deleteThingModel(String productKey) {
-        checkProductOwner(productKey);
-        ThingModel thingModel = thingModelData.findById(productKey);
+    public boolean deleteThingModel(Long id) {
+        ThingModel thingModel = thingModelData.findById(id);
         //删除时序数据库物模型数据结构
         dbStructureData.defineThingModel(thingModel);
-        thingModelData.deleteById(productKey);
+        thingModelData.deleteById(id);
         return true;
     }
-
 
 
     @Override
@@ -161,8 +155,6 @@ public class ProductServiceImpl implements IProductService {
     @SneakyThrows
 
     public String uploadImg(String productKey, MultipartFile file) {
-        productKey = getProduct(productKey).getId();
-
         String fileName = file.getOriginalFilename();
         String end = fileName.substring(fileName.lastIndexOf("."));
         if (ossClient == null) {
@@ -177,14 +169,14 @@ public class ProductServiceImpl implements IProductService {
         PutObjectResult result = ossClient.putObject(bucket, fileName,
                 file.getInputStream());
         return ossClient.generatePresignedUrl(bucket, fileName,
-                new Date(new Date().getTime() + 3600L * 1000 * 24 * 365 * 10)).toString();
+                new Date(System.currentTimeMillis() + 3600L * 1000 * 24 * 365 * 10)).toString();
     }
 
     @Override
     public Paging<ProductVo> selectPageList(PageRequest<ProductBo> request) {
-        if (!AuthUtil.isAdmin()) {
-            return productData.findByUid(AuthUtil.getUserId(), request.getPageNum(), request.getPageSize()).to(ProductVo.class);
-        }
+//        if (!AuthUtil.isAdmin()) {
+//            return productData.findByUid(AuthUtil.getUserId(), request.getPageNum(), request.getPageSize()).to(ProductVo.class);
+//        }
 
         return productData.findAll(request.to(Product.class)).to(ProductVo.class);
     }
@@ -192,6 +184,12 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public Paging<CategoryVo> selectCategoryPageList(PageRequest<CategoryBo> request) {
         return MapstructUtils.convert(categoryData.findAll(request.to(Category.class)), CategoryVo.class);
+
+    }
+
+    @Override
+    public List<CategoryVo> selectCategoryList() {
+        return MapstructUtils.convert(categoryData.findAll(), CategoryVo.class);
 
     }
 
@@ -207,11 +205,10 @@ public class ProductServiceImpl implements IProductService {
         ProductModel productModel = productModelBo.to(ProductModel.class);
         String model = productModel.getModel();
         String productKey = productModel.getProductKey();
-        Product product = productData.findById(productKey);
+        Product product = productData.findByProductKey(productKey);
         if (product == null) {
             throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
-        dataOwnerService.checkOwner(product);
 
         ProductModel oldScript = productModelData.findByModel(model);
         if (oldScript != null && !oldScript.getProductKey().equals(productKey)) {
@@ -224,13 +221,13 @@ public class ProductServiceImpl implements IProductService {
     }
 
     private Product getProduct(String productKey) {
-       return dataOwnerService.checkOwner(productData.findById(productKey));
+        return productData.findByProductKey(productKey);
     }
 
 
     /***********/
     private void checkProductOwner(String productKey) {
-        dataOwnerService.checkOwner(productData.findById(productKey));
+//        dataOwnerService.checkOwner(productData.findByProductKey(productKey));
     }
 
 }

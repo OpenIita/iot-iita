@@ -5,7 +5,6 @@ import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysRoleMenuRepository;
 import cc.iotkit.data.model.QTbSysRoleMenu;
 import cc.iotkit.data.model.TbSysRoleMenu;
-import cc.iotkit.data.model.TbSysUserRole;
 import cc.iotkit.data.system.ISysRoleMenuData;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysRoleMenu;
@@ -15,7 +14,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 import static cc.iotkit.data.model.QTbSysRoleMenu.tbSysRoleMenu;
 
@@ -50,13 +51,12 @@ public class SysRoleMenuDataImpl implements ISysRoleMenuData, IJPACommData<SysRo
 
     @Override
     public boolean checkMenuExistRole(Long menuId) {
-        TbSysRoleMenu tbSysRoleMenu = jpaQueryFactory
-                .select(QTbSysRoleMenu.tbSysRoleMenu)
+        return jpaQueryFactory
+                .select(QTbSysRoleMenu.tbSysRoleMenu.count())
                 .from(QTbSysRoleMenu.tbSysRoleMenu)
                 .where(PredicateBuilder.instance()
                         .and(QTbSysRoleMenu.tbSysRoleMenu.menuId.eq(menuId))
-                        .build()).fetchOne();
-        return Objects.nonNull(tbSysRoleMenu);
+                        .build()).fetchOne() > 0;
     }
 
     @Override

@@ -66,7 +66,7 @@ public class DevicePropertyConsumer implements ConsumerHandler<ThingModelMessage
         }
 
         //物模型校验，过滤非物模型属性
-        ThingModel thingModel = thingModelData.findById(deviceInfo.getProductKey());
+        ThingModel thingModel = thingModelData.findByProductKey(deviceInfo.getProductKey());
         if (thingModel == null) {
             return;
         }

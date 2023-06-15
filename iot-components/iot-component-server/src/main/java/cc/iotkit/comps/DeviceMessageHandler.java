@@ -131,6 +131,13 @@ public class DeviceMessageHandler implements IMessageHandler {
                         doAction(action);
                         onResult.accept(new ReceiveResult(message.getProductKey(), message.getDeviceName(), message));
                         return;
+                    case "ota":
+                        //上报数据
+                        DeviceMessage otaMessage = MessageParser.parse(new DeviceMessage(), data);
+                        doOta(otaMessage);
+                        doAction(action);
+                        onResult.accept(new ReceiveResult(otaMessage.getProductKey(), otaMessage.getDeviceName(), otaMessage));
+                        return;
                 }
 
             } catch (Throwable e) {
@@ -178,6 +185,11 @@ public class DeviceMessageHandler implements IMessageHandler {
         } catch (Throwable e) {
             log.error("device state change error", e);
         }
+    }
+
+    private void doOta(DeviceMessage message) {
+        ThingModelMessage thingModelMessage = converter.decode(message);
+        deviceBehaviourService.reportMessage(thingModelMessage);
     }
 
     private void doReport(DeviceMessage message) {

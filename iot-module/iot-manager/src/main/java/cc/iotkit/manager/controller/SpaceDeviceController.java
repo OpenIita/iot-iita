@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 @Api(tags = {"空间设备"})
 @RestController
 @RequestMapping("/space")
+@Deprecated
 public class SpaceDeviceController {
 
     @Autowired
@@ -115,7 +116,7 @@ public class SpaceDeviceController {
     private SpaceDeviceVo parseSpaceDevice(SpaceDevice sd) {
         DeviceInfo device = deviceInfoData.findByDeviceId(sd.getDeviceId());
         Space space = spaceData.findById(sd.getSpaceId());
-        Product product = productData.findById(device.getProductKey());
+        Product product = productData.findByProductKey(device.getProductKey());
         Category category = categoryData.findById(product.getCategory());
         DeviceInfo.State state = device.getState();
 
@@ -193,7 +194,7 @@ public class SpaceDeviceController {
                 .productKey(device.getProductKey())
                 .build();
 
-        Product product = productData.findById(device.getProductKey());
+        Product product = productData.findByProductKey(device.getProductKey());
         Category category = categoryData.findById(product.getCategory());
         findDeviceVo.setProductName(product.getName());
         findDeviceVo.setProductImg(product.getImg());

@@ -25,12 +25,12 @@ public class ThingModelDataCache implements IThingModelData {
 
     @Override
     @Cacheable(value = Constants.CACHE_THING_MODEL, key = "#root.method.name+#s", unless = "#result == null")
-    public ThingModel findById(String s) {
+    public ThingModel findById(Long s) {
         return thingModelData.findById(s);
     }
 
     @Override
-    public List<ThingModel> findByIds(Collection<String> id) {
+    public List<ThingModel> findByIds(Collection<Long> id) {
         return null;
     }
 
@@ -47,12 +47,13 @@ public class ThingModelDataCache implements IThingModelData {
     }
 
     @Override
-    public void deleteById(String s) {
+    public void deleteById(Long s) {
         thingModelData.deleteById(s);
+        thingModelCacheEvict.findById(s);
     }
 
     @Override
-    public void deleteByIds(Collection<String> strings) {
+    public void deleteByIds(Collection<Long> ids) {
 
     }
 
@@ -81,4 +82,9 @@ public class ThingModelDataCache implements IThingModelData {
         return null;
     }
 
+    @Override
+    @Cacheable(value = Constants.CACHE_THING_MODEL, key = "#root.method.name+#s", unless = "#result == null")
+    public ThingModel findByProductKey(String productKey) {
+        return thingModelData.findByProductKey(productKey);
+    }
 }

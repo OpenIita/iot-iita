@@ -29,11 +29,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = ProtocolComponent.class, reverseConvertGenerate = false)
 public class ProtocolComponentBo extends BaseDto {
+    private static final long serialVersionUID = -1L;
 
     @ApiModelProperty(value = "")
     private String id;
-
-    private static final long serialVersionUID = -1L;
 
     @ApiModelProperty(value = "")
     @Size(max = 65535, message = "长度不正确")

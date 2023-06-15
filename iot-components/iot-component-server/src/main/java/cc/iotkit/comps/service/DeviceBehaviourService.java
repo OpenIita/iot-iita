@@ -91,7 +91,7 @@ public class DeviceBehaviourService {
             }
         }
 
-        Product product = productData.findById(pk);
+        Product product = productData.findByProductKey(pk);
         if (product == null) {
             throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
@@ -203,7 +203,7 @@ public class DeviceBehaviourService {
         List<String> subDeviceIds = deviceInfoData.findSubDeviceIds(device.getDeviceId());
         for (String subDeviceId : subDeviceIds) {
             DeviceInfo subDevice = deviceInfoData.findByDeviceId(subDeviceId);
-            Product product = productData.findById(subDevice.getProductKey());
+            Product product = productData.findByProductKey(subDevice.getProductKey());
             Boolean transparent = product.getTransparent();
             //透传设备父设备上线，子设备也上线。非透传设备父设备离线，子设备才离线
             if (transparent != null && transparent || !online) {

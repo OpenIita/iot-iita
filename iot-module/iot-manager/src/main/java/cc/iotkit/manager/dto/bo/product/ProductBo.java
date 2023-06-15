@@ -1,25 +1,11 @@
 package cc.iotkit.manager.dto.bo.product;
 
+import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.model.product.Product;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import jakarta.validation.constraints.Size;
-
-
-import java.io.Serializable;
-import java.util.Date;
-import java.math.BigDecimal;
-
-import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.common.validate.AddGroup;
-import cc.iotkit.common.validate.EditGroup;
-
-import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,9 +18,10 @@ public class ProductBo extends BaseDto  {
 
 	private static final long serialVersionUID = -1L;
 
-
 	@ApiModelProperty(value="id")
-	private String id;
+	private Long id;
+	@ApiModelProperty(value="productKey")
+	private String productKey;
 
 	@ApiModelProperty(value="品类")
 	@Size(max = 255, message = "品类长度不正确")

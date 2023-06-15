@@ -26,7 +26,7 @@ public class ThingModelService {
     private IThingModelData thingModelData;
 
     public void parseParams(ThingService<Object> service) {
-        ThingModel thingModel = thingModelData.findById(service.getProductKey());
+        ThingModel thingModel = thingModelData.findByProductKey(service.getProductKey());
         ThingModel.Model model = thingModel.getModel();
 
         String type = service.getType();

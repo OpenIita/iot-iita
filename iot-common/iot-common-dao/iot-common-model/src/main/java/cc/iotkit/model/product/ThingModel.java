@@ -10,24 +10,28 @@
 package cc.iotkit.model.product;
 
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * @author sjg
+ */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ThingModel implements Id<String> {
+public class ThingModel extends TenantModel implements Id<Long>, Serializable {
+    private static final long serialVersionUID = 1L;
 
-    private String id;
+    private Long id;
 
     private String productKey;
 

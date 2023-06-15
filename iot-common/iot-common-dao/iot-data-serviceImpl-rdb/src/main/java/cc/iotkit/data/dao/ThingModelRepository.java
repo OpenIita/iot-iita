@@ -12,6 +12,9 @@ package cc.iotkit.data.dao;
 import cc.iotkit.data.model.TbThingModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ThingModelRepository extends JpaRepository<TbThingModel, String> {
+import java.util.Optional;
 
+public interface ThingModelRepository extends JpaRepository<TbThingModel, Long> {
+
+    Optional<TbThingModel> findByProductKey(String productKey);
 }

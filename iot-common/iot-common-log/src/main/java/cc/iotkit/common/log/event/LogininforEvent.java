@@ -3,6 +3,7 @@ package cc.iotkit.common.log.event;
 import cn.hutool.http.useragent.UserAgent;
 import lombok.Data;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 /**
@@ -45,6 +46,10 @@ public class LogininforEvent implements Serializable {
      */
     private UserAgent userAgent;
 
+    /**
+     * 请求体
+     */
+    private HttpServletRequest request;
     /**
      * 其他参数
      */

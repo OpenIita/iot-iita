@@ -3,6 +3,8 @@ package cc.iotkit.manager.dto.bo.protocolconverter;
 import cc.iotkit.model.protocol.ProtocolConverter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import io.swagger.annotations.ApiModel;
@@ -33,6 +35,7 @@ public class ProtocolConverterBo extends BaseDto {
     private static final long serialVersionUID = -1L;
 
     @ApiModelProperty(value = "id")
+    @NotBlank(message = "id不能为空", groups = {EditGroup.class})
     private String id;
 
     @ApiModelProperty(value = "创建时间")
@@ -44,6 +47,7 @@ public class ProtocolConverterBo extends BaseDto {
 
     @ApiModelProperty(value = "转换器名称")
     @Size(max = 255, message = "转换器名称长度不正确")
+    @NotBlank(message = "转换器名称不能为空", groups = {AddGroup.class})
     private String name;
 
     @ApiModelProperty(value = "脚本内容")

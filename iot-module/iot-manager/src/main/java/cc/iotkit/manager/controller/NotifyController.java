@@ -1,6 +1,10 @@
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
+import cc.iotkit.manager.dto.bo.channel.ChannelConfigBo;
+import cc.iotkit.manager.dto.vo.channel.ChannelConfigVo;
 import cc.iotkit.manager.service.NotifyService;
 import cc.iotkit.model.notify.Channel;
 import cc.iotkit.model.notify.ChannelConfig;
@@ -15,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-
 import java.util.List;
 
 /**
@@ -40,8 +43,8 @@ public class NotifyController {
 
     @ApiOperation("获取通道配置列表")
     @PostMapping("/channel/config/getList")
-    public List<ChannelConfig> getChannelConfigList() {
-        return notifyService.getChannelConfigList();
+    public Paging<ChannelConfigVo> getChannelConfigList(PageRequest<ChannelConfigBo> request) {
+        return notifyService.getChannelConfigList(request);
     }
 
     @ApiOperation("新增通道配置")

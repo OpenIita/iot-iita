@@ -31,7 +31,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = ThingModel.class, reverseConvertGenerate = false)
 public class ThingModelBo extends BaseDto {
-
     private static final long serialVersionUID = -1L;
 
     @ApiModelProperty(value = "模型内容")
@@ -41,7 +40,7 @@ public class ThingModelBo extends BaseDto {
     private String model;
 
     @ApiModelProperty(value = "产品key")
-    @Size(max = 255, message = "产品key长度不正确")
+    @Size(min = 16, max = 16, message = "产品key长度不正确")
     private String productKey;
 
 }

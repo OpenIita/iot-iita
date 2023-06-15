@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ThingModelCacheEvict {
 
     @CacheEvict(value = Constants.CACHE_THING_MODEL, key = "#root.method.name+#s")
-    public void findById(String s) {
+    public void findById(Long s) {
     }
 
 }

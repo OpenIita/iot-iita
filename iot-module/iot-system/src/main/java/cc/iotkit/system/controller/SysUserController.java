@@ -69,9 +69,8 @@ public class SysUserController extends BaseController {
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:user:export")
     @PostMapping("/export")
-    public void export(@RequestBody @Validated(QueryGroup.class) Request<SysUserBo> req,
+    public void export(@Validated(QueryGroup.class) SysUserBo user,
                        HttpServletResponse response) {
-        SysUserBo user = req.getData();
         List<SysUserVo> list = userService.selectUserList(user);
         List<SysUserExportVo> listVo = MapstructUtils.convert(list, SysUserExportVo.class);
         ExcelUtil.exportExcel(listVo, "用户数据", SysUserExportVo.class, response);

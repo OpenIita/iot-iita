@@ -1,8 +1,12 @@
 package cc.iotkit.manager.service;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.manager.IChannelConfigData;
 import cc.iotkit.data.manager.IChannelData;
 import cc.iotkit.data.manager.IChannelTemplateData;
+import cc.iotkit.manager.dto.bo.channel.ChannelConfigBo;
+import cc.iotkit.manager.dto.vo.channel.ChannelConfigVo;
 import cc.iotkit.model.notify.Channel;
 import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.ChannelTemplate;
@@ -34,8 +38,8 @@ public class NotifyService {
         return iChannelData.findAll();
     }
 
-    public List<ChannelConfig> getChannelConfigList() {
-        return iChannelConfigData.findAll();
+    public Paging<ChannelConfigVo> getChannelConfigList(PageRequest<ChannelConfigBo> request) {
+        return iChannelConfigData.findAll(request.to(ChannelConfig.class)).to(ChannelConfigVo.class);
     }
 
     public ChannelConfig addChannelConfig(ChannelConfig channelConfig) {

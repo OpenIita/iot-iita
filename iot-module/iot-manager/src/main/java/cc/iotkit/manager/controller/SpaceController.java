@@ -27,6 +27,7 @@ import java.util.List;
 @Api(tags = {"空间"})
 @RestController
 @RequestMapping("/space")
+@Deprecated
 public class SpaceController {
 
     @Autowired

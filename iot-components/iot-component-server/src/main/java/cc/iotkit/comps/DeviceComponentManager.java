@@ -205,7 +205,7 @@ public class DeviceComponentManager {
         }
 
         DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(service.getProductKey(), service.getDeviceName());
-        Product product = productData.findById(service.getProductKey());
+        Product product = productData.findByProductKey(service.getProductKey());
         String linkPk = service.getProductKey();
         String linkDn = service.getDeviceName();
 

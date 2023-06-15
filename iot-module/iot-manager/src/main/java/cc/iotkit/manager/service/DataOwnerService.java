@@ -61,7 +61,8 @@ public class DataOwnerService {
             }
         }
 
-        throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
+//        throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);暂时先注释，重新设计
+        return data;
     }
 
     /**
@@ -89,7 +90,8 @@ public class DataOwnerService {
             return;
         }
 
-        throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
+//        throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);暂时先注释，重新设计
+        return;
     }
 
     /**

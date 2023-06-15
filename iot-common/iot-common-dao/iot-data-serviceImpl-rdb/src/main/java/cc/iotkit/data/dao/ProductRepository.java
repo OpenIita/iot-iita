@@ -16,7 +16,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProductRepository extends JpaRepository<TbProduct, String> {
+public interface ProductRepository extends JpaRepository<TbProduct, Long> {
 
     List<TbProduct> findByCategory(String category);
 
@@ -26,4 +26,5 @@ public interface ProductRepository extends JpaRepository<TbProduct, String> {
 
     long countByUid(String uid);
 
+    TbProduct findByProductKey(String productKey);
 }

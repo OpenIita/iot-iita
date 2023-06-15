@@ -1,28 +1,28 @@
 [
   {
     "id": "62995ba4dbf51a5ec41d5f7b",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "自定义表计协议",
     "desc": "用于燃气表的协议",
     "createAt": 1654217636597
   },
   {
     "id": "628ceb14addfdb2a3b4b5727",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "奇特HTTP标准协议",
     "desc": "奇特HTTP标准协议转换器",
     "createAt": 1653402388275
   },
   {
     "id": "6260396d67aced2696184053",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "奇特MQTT标准协议",
     "desc": "奇特MQTT标准协议转换器",
     "createAt": 1650473325173
   },
   {
     "id": "d7e84930-5460-4638-aa3f-e0c2015628f4",
-    "uid": "fa1c5eaa-de6e-48b6-805e-8f091c7bb831",
+    "uid": "1",
     "name": "WS标准协议",
     "desc": "WS标准协议转换器",
     "createAt": 1650473325173

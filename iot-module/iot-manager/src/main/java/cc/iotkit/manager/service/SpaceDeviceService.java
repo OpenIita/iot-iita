@@ -49,7 +49,7 @@ public class SpaceDeviceService {
         List<SpaceDeviceVo> spaceDeviceVos = new ArrayList<>();
         spaceDevices.forEach(sd -> {
             DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(sd.getDeviceId());
-            Product product = productData.findById(deviceInfo.getProductKey());
+            Product product = productData.findByProductKey(deviceInfo.getProductKey());
             spaceDeviceVos.add(SpaceDeviceVo.builder()
                     .uid(sd.getUid())
                     .deviceId(sd.getDeviceId())
