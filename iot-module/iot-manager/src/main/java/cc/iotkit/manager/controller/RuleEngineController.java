@@ -131,13 +131,13 @@ public class RuleEngineController {
         return ruleEngineService.pauseTask(taskId);
     }
 
-    @ApiOperation("启动定时任务")
+    @ApiOperation("恢复定时任务")
     @PostMapping("/task/resume")
     public boolean resumeTask(@Validated @RequestBody Request<String> request) {
         return ruleEngineService.resumeTask(request.getData());
     }
 
-    @ApiOperation("恢复定时任务")
+    @ApiOperation("启动定时任务")
     @PostMapping("/task/renew")
     public boolean renewTask(@Validated @RequestBody Request<String> request) {
         String taskId = request.getData();
