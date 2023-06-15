@@ -104,7 +104,7 @@ public class ProductController {
         return productService.selectCategoryPageList(request);
     }
 
-    @PostMapping("/category/getList")
+    @PostMapping("/category/getAll")
     @ApiOperation("产品品类展示")
     public List<CategoryVo> getCategorieList() {
         return productService.selectCategoryList();
