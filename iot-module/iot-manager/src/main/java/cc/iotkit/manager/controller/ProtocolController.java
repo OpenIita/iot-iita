@@ -51,8 +51,9 @@ public class ProtocolController {
 
     @ApiOperation("修改组件")
     @PostMapping("/editComponent")
-    public String saveComponent(@RequestBody @Validated Request<ProtocolComponentBo> bo) {
-       return protocolService.saveComponent(bo.getData());
+    public boolean saveComponent(@RequestBody @Validated Request<ProtocolComponentBo> bo) {
+        protocolService.saveComponent(bo.getData());
+        return true;
     }
 
     @ApiOperation("获取组件详情")
