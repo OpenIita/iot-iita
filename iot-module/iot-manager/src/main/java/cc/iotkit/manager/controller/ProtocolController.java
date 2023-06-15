@@ -12,6 +12,8 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
+import cc.iotkit.common.validate.AddGroup;
+import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.manager.dto.bo.ChangeStateBo;
 import cc.iotkit.manager.dto.bo.protocolcomponent.ProtocolComponentBo;
 import cc.iotkit.manager.dto.bo.protocolconverter.ProtocolConverterBo;
@@ -90,13 +92,13 @@ public class ProtocolController {
 
     @ApiOperation("新增转换脚本")
     @PostMapping("/converter/add")
-    public boolean addConverter(@Validated @RequestBody Request<ProtocolConverterBo> converter) {
+    public boolean addConverter(@Validated(AddGroup.class) @RequestBody Request<ProtocolConverterBo> converter) {
         return protocolService.addConverter(converter.getData());
     }
 
     @ApiOperation("修改转换脚本")
     @PostMapping("/converter/edit")
-    public boolean editConverter(@Validated @RequestBody Request<ProtocolConverterBo> req) {
+    public boolean editConverter(@Validated(EditGroup.class) @RequestBody Request<ProtocolConverterBo> req) {
         return protocolService.editConverter(req.getData());
     }
 
