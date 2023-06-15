@@ -129,16 +129,15 @@ public class RuleEngineController {
     public boolean pauseTask(@Validated @RequestBody Request<String> request) {
         String taskId = request.getData();
         return ruleEngineService.pauseTask(taskId);
-
-
     }
 
-    @ApiOperation("恢复定时任务")
+    @ApiOperation("启动定时任务")
     @PostMapping("/task/resume")
     public boolean resumeTask(@Validated @RequestBody Request<String> request) {
         return ruleEngineService.resumeTask(request.getData());
     }
 
+    @ApiOperation("恢复定时任务")
     @PostMapping("/task/renew")
     public boolean renewTask(@Validated @RequestBody Request<String> request) {
         String taskId = request.getData();
@@ -146,14 +145,14 @@ public class RuleEngineController {
 
     }
 
-
+    @ApiOperation("删除定时任务")
     @DeleteMapping("/task/delete")
     public boolean deleteTask(@Validated @RequestBody Request<String> request) {
         String taskId = request.getData();
         return ruleEngineService.deleteTask(taskId);
 
     }
-
+    @ApiOperation("定时任务日志list")
     @PostMapping("/taskLogs/list")
     public Paging<TaskLogVo> getTaskLogs(
             @Validated @RequestBody PageRequest<TaskLogBo> request
@@ -161,7 +160,7 @@ public class RuleEngineController {
         return ruleEngineService.selectTaskLogPageList(request);
 
     }
-
+    @ApiOperation("清除定时任务日志")
     @DeleteMapping("/taskLogs/clear")
     public boolean clearTaskLogs( @Validated @RequestBody PageRequest<String> request) {
        return ruleEngineService.clearTaskLogs(request.getData());
