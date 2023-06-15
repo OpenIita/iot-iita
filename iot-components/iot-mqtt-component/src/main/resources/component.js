@@ -212,6 +212,7 @@ function disconnect(clientId) {
 }
 
 function ota(head, payload) {
+    payload = JSON.parse(payload);
     var topic = head.topic;
     var arr = topic.split('/');
     if (arr.length < 6) {

@@ -18,10 +18,12 @@ import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
 import cc.iotkit.data.manager.IDeviceInfoData;
+import cc.iotkit.data.manager.IDeviceOtaInfoData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.manager.IProductModelData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.model.ota.DeviceOtaInfo;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.mq.MqProducer;
@@ -41,6 +43,9 @@ public class DeviceBehaviourService {
 
     @Autowired
     private IProductModelData productModelData;
+    @Autowired
+    private IDeviceOtaInfoData deviceOtaInfoData;
+
     @Autowired
     @Qualifier("deviceInfoDataCache")
     private IDeviceInfoData deviceInfoData;
@@ -266,5 +271,11 @@ public class DeviceBehaviourService {
     public void reportMessage(String jsonMsg) {
         ThingModelMessage message = JsonUtils.parseObject(jsonMsg, ThingModelMessage.class);
         reportMessage(message);
+    }
+
+    public void deviceOta(ThingModelMessage message) {
+        DeviceOtaInfo otaInfo = (DeviceOtaInfo)message.getData();
+        otaInfo.setDeviceId(message.getDeviceId());
+        deviceOtaInfoData.save(otaInfo);
     }
 }

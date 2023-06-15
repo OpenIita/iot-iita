@@ -189,7 +189,7 @@ public class DeviceMessageHandler implements IMessageHandler {
 
     private void doOta(DeviceMessage message) {
         ThingModelMessage thingModelMessage = converter.decode(message);
-        deviceBehaviourService.reportMessage(thingModelMessage);
+        deviceBehaviourService.deviceOta(thingModelMessage);
     }
 
     private void doReport(DeviceMessage message) {
