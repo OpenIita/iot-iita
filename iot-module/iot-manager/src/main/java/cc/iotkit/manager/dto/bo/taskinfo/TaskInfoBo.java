@@ -33,6 +33,9 @@ public class TaskInfoBo extends BaseDto {
 
     private static final long serialVersionUID = -1L;
 
+    @ApiModelProperty(value = "id")
+    private String id;
+
     @ApiModelProperty(value = "任务输出")
     @Size(max = 65535, message = "任务输出长度不正确")
     @AutoMapping(ignore = true)
