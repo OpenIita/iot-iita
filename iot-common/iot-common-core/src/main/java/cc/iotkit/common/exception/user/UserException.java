@@ -41,6 +41,7 @@ public class UserException extends BizException {
     public UserException(String message) {
         super(  message);
         this.code = ErrCode.SYSTEM_EXCEPTION.getKey();
+        this.message = message;
 
     }
 
