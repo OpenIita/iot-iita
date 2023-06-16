@@ -10,13 +10,8 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
-import cc.iotkit.common.enums.ErrCode;
-import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.satoken.utils.AuthUtil;
-import cc.iotkit.common.utils.ReflectUtil;
-import cc.iotkit.data.manager.IRuleInfoData;
-import cc.iotkit.data.manager.ITaskInfoData;
 import cc.iotkit.manager.dto.bo.ruleinfo.RuleInfoBo;
 import cc.iotkit.manager.dto.bo.ruleinfo.RuleLogBo;
 import cc.iotkit.manager.dto.bo.taskinfo.TaskInfoBo;
@@ -25,29 +20,16 @@ import cc.iotkit.manager.dto.vo.ruleinfo.RuleInfoVo;
 import cc.iotkit.manager.dto.vo.ruleinfo.RuleLogVo;
 import cc.iotkit.manager.dto.vo.taskinfo.TaskInfoVo;
 import cc.iotkit.manager.dto.vo.taskinfo.TaskLogVo;
-import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.manager.service.IRuleEngineService;
-import cc.iotkit.model.rule.RuleInfo;
-import cc.iotkit.model.rule.RuleLog;
-import cc.iotkit.model.rule.TaskInfo;
-import cc.iotkit.model.rule.TaskLog;
-import cc.iotkit.ruleengine.rule.RuleManager;
-import cc.iotkit.ruleengine.task.TaskManager;
-import cc.iotkit.temporal.IRuleLogData;
-import cc.iotkit.temporal.ITaskLogData;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = {"规则引擎"})
 @Slf4j
@@ -71,7 +53,6 @@ public class RuleEngineController {
     @PostMapping("/edit")
     public boolean saveRule(@RequestBody @Validated  Request<RuleInfoBo> ruleInfoBo) {
         return ruleEngineService.saveRule(ruleInfoBo.getData());
-
     }
 
     @ApiOperation("暂停规则")
@@ -152,6 +133,7 @@ public class RuleEngineController {
         return ruleEngineService.deleteTask(taskId);
 
     }
+
     @ApiOperation("定时任务日志list")
     @PostMapping("/taskLogs/list")
     public Paging<TaskLogVo> getTaskLogs(
@@ -160,9 +142,10 @@ public class RuleEngineController {
         return ruleEngineService.selectTaskLogPageList(request);
 
     }
+
     @ApiOperation("清除定时任务日志")
     @PostMapping("/taskLogs/clear")
-    public boolean clearTaskLogs( @Validated @RequestBody PageRequest<String> request) {
+    public boolean clearTaskLogs( @Validated @RequestBody Request<String> request) {
        return ruleEngineService.clearTaskLogs(request.getData());
     }
 

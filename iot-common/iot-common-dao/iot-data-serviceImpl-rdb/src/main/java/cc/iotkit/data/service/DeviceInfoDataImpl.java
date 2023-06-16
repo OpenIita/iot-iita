@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 @Primary
 @Service
-public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceInfo, String> {
+public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceInfo, String> {
 
     @Autowired
     private DeviceInfoRepository deviceInfoRepository;
@@ -170,7 +170,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
 
     @Override
     public List<DeviceInfo> findByParentId(String parentId) {
-        return parseVoToDto(deviceInfoRepository.findByParentId(parentId ));
+        return parseVoToDto(deviceInfoRepository.findByParentId(parentId));
     }
 
     @Override
@@ -192,7 +192,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
                 "a.device_name\n" +
                 "FROM device_info a JOIN product p ON p.node_type=0 AND a.product_key=p.id";
         if (StringUtils.isNotBlank(uid)) {
-            sql += " WHERE a.uid='"+uid+"'";
+            sql += " WHERE a.uid='" + uid + "'";
         }
         return jdbcTemplate.queryForList(sql);
     }
@@ -295,15 +295,15 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
                         String.format("WHERE b.device_id in(%s)", deviceIds), new BeanPropertyRowMapper<>(DeviceIdGroup.class));
 
         //取设备标签
-        List<TbDeviceTag> tags = list.size() == 0 ? new ArrayList<>() :
-                jdbcTemplate.query("\n" +
-                        "SELECT\n" +
-                        "a.id,\n" +
-                        "a.code,\n" +
-                        "a.name,\n" +
-                        "a.value\n" +
-                        "FROM device_tag a " +
-                        String.format("WHERE a.device_id IN(%s)", deviceIds), new BeanPropertyRowMapper<>(TbDeviceTag.class));
+//        List<TbDeviceTag> tags = list.size() == 0 ? new ArrayList<>() :
+//                jdbcTemplate.query("\n" +
+//                        "SELECT\n" +
+//                        "a.id,\n" +
+//                        "a.code,\n" +
+//                        "a.name,\n" +
+//                        "a.value\n" +
+//                        "FROM device_tag a " +
+//                        String.format("WHERE a.device_id IN(%s)", deviceIds), new BeanPropertyRowMapper<>(TbDeviceTag.class));
 
         for (DeviceInfo device : list) {
             //设置设备分组
@@ -314,11 +314,11 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
             device.setGroup(groupMap);
 
             //设置设备标签
-            Map<String, DeviceInfo.Tag> tagMap = new HashMap<>();
-            tags.stream().filter(t -> device.getDeviceId().equals(t.getDeviceId()))
-                    .forEach(t -> tagMap.put(t.getCode(),
-                            new DeviceInfo.Tag(t.getCode(), t.getName(), t.getValue())));
-            device.setTag(tagMap);
+//            Map<String, DeviceInfo.Tag> tagMap = new HashMap<>();
+//            tags.stream().filter(t -> device.getDeviceId().equals(t.getDeviceId()))
+//                    .forEach(t -> tagMap.put(t.getCode(),
+//                            new DeviceInfo.Tag(t.getCode(), t.getName(), t.getValue())));
+//            device.setTag(tagMap);
         }
 
         return new Paging<>(total, list);
@@ -375,7 +375,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
 
         //按品类分组求合
         rst.stream().collect(Collectors.groupingBy(DataItem::getName,
-                        Collectors.summarizingLong(item -> (long) item.getValue())))
+                Collectors.summarizingLong(item -> (long) item.getValue())))
                 .forEach((key, sum) -> stats.add(new DataItem(key, sum.getSum())));
 
         return stats;
@@ -444,7 +444,6 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
     }
 
 
-
     @Override
     public DeviceInfo findById(String s) {
         return MapstructUtils.convert(
@@ -506,7 +505,6 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
     }
 
 
-
     @Override
     public long count() {
         return deviceInfoRepository.count();
@@ -532,7 +530,6 @@ public class DeviceInfoDataImpl implements IDeviceInfoData,IJPACommData<DeviceIn
     public DeviceInfo findOneByCondition(DeviceInfo data) {
         return null;
     }
-
 
 
 }

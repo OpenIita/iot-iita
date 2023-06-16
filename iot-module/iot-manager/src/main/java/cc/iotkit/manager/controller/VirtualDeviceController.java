@@ -51,7 +51,6 @@ public class VirtualDeviceController {
     @Autowired
     private IVirtualDeviceLogData virtualDeviceLogData;
 
-
     @ApiOperation("获取虚拟设备列表")
     @PostMapping("/list")
     public Paging<VirtualDevice> getDevices(
@@ -127,7 +126,7 @@ public class VirtualDeviceController {
      * 删除
      */
     @ApiOperation("删除虚拟设备")
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public void delete(@Validated @RequestBody Request<String> bo) {
         String id = bo.getData();
         checkOwner(id);
@@ -184,7 +183,6 @@ public class VirtualDeviceController {
 
         return virtualDeviceLogData.findByVirtualDeviceId(data.getDeviceId(), bo.getPageNum(), bo.getPageSize());
     }
-
 
     private VirtualDevice checkOwner(String id) {
         VirtualDevice oldData = virtualDeviceData.findById(id);
