@@ -19,7 +19,7 @@ public class ChannelConfigBo extends BaseDto  {
 	private static final long serialVersionUID = -1L;
 
 	@ApiModelProperty(value="id")
-	private String id;
+	private Long id;
 
 	@ApiModelProperty(value="通道id")
 	private Long channelId;

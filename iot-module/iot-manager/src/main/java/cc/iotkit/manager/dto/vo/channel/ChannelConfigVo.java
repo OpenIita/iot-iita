@@ -22,7 +22,7 @@ public class ChannelConfigVo implements Serializable {
 
     @ApiModelProperty(value="通道配置id")
     @ExcelProperty(value = "通道配置id")
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value="通道id")
     @ExcelProperty(value = "通道id")
