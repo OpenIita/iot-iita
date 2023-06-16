@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @Date: 2023/5/11 21:00
  * @Description:
  */
-public interface ChannelConfigRepository extends JpaRepository<TbChannelConfig, String> {
+public interface ChannelConfigRepository extends JpaRepository<TbChannelConfig, Long> {
 }

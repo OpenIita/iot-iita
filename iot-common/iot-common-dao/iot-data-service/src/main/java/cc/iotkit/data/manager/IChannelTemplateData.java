@@ -8,5 +8,5 @@ import cc.iotkit.model.notify.ChannelTemplate;
  * date: 2023-05-11 17:15
  * description:
  **/
-public interface IChannelTemplateData extends ICommonData<ChannelTemplate, String> {
+public interface IChannelTemplateData extends ICommonData<ChannelTemplate, Long> {
 }

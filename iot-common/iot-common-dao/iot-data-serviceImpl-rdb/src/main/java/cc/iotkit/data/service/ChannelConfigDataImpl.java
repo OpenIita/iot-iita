@@ -1,14 +1,13 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.dao.ChannelConfigRepository;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IChannelConfigData;
-import cc.iotkit.data.dao.ChannelConfigRepository;
 import cc.iotkit.data.model.ChannelConfigMapper;
 import cc.iotkit.data.model.TbChannelConfig;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.notify.ChannelConfig;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +15,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -28,7 +24,7 @@ import java.util.stream.Collectors;
  **/
 @Primary
 @Service
-public class ChannelConfigDataImpl implements IChannelConfigData, IJPACommData<ChannelConfig, String> {
+public class ChannelConfigDataImpl implements IChannelConfigData, IJPACommData<ChannelConfig, Long> {
 
     @Resource
     private ChannelConfigRepository channelConfigRepository;
@@ -49,31 +45,6 @@ public class ChannelConfigDataImpl implements IChannelConfigData, IJPACommData<C
     @Override
     public Class getTClass() {
         return ChannelConfig.class;
-    }
-
-    @Override
-    public ChannelConfig findById(String id) {
-        return channelConfigMapper.toDto(channelConfigRepository.findById(id).orElse(null));
-    }
-
-    @Override
-    public List<ChannelConfig> findByIds(Collection<String> id) {
-        return null;
-    }
-
-    @Override
-    public ChannelConfig save(ChannelConfig data) {
-        if (StringUtils.isBlank(data.getId())) {
-            data.setId(UUID.randomUUID().toString());
-        }
-        channelConfigRepository.save(channelConfigMapper.toVo(data));
-        return data;
-    }
-
-    @Override
-    public List<ChannelConfig> findAll() {
-        return channelConfigRepository.findAll().stream().map(channelConfigMapper::toDto)
-                .collect(Collectors.toList());
     }
 
     @Override

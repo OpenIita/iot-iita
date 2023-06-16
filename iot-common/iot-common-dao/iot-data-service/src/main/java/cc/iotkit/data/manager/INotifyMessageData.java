@@ -8,5 +8,5 @@ import cc.iotkit.model.notify.NotifyMessage;
  * @Date: 2023/5/13 18:32
  * @Description:
  */
-public interface INotifyMessageData extends ICommonData<NotifyMessage, String> {
+public interface INotifyMessageData extends ICommonData<NotifyMessage, Long> {
 }

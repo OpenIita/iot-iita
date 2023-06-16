@@ -18,11 +18,11 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChannelConfig implements Id<String> {
+public class ChannelConfig implements Id<Long> {
 
-    private String id;
+    private Long id;
 
-    private String channelId;
+    private Long channelId;
 
     private String title;
 

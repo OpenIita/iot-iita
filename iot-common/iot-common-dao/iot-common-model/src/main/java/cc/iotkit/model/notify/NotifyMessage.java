@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotifyMessage implements Id<String> {
+public class NotifyMessage implements Id<Long> {
 
-    private String id;
+    private Long id;
 
     private String content;
 

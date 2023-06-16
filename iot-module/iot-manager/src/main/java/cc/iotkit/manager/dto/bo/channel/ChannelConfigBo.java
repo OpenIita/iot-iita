@@ -22,7 +22,7 @@ public class ChannelConfigBo extends BaseDto  {
 	private String id;
 
 	@ApiModelProperty(value="通道id")
-	private String channelId;
+	private Long channelId;
 
 	@ApiModelProperty(value="通道配置名称")
 	private String title;

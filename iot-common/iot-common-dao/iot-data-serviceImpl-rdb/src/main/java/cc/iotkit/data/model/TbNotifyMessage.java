@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.notify.NotifyMessage;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,12 +21,13 @@ import javax.persistence.Table;
 @Entity
 @ApiModel(value = "通知消息")
 @Table(name = "notify_message")
+@AutoMapper(target= NotifyMessage.class)
 public class TbNotifyMessage {
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "通知消息id")
-    private String id;
+    private Long id;
 
     private String content;
 
