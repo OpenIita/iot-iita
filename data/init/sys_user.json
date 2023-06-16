@@ -27,9 +27,9 @@
       "tenantId": "000000",
       "deptId": 105,
       "userName": "lionli",
-      "nickName": "疯狂的狮子Li",
+      "nickName": "铱塔智联",
       "userType": "sys_user",
-      "email": "crazyLionLi@qq.com",
+      "email": "jay.m@waterme.cn",
       "phonenumber": "15666666666",
       "sex": "1",
       "avatar": null,
@@ -44,5 +44,24 @@
       "updateBy": null,
       "updateTime": null,
       "remark": "测试员"
-    }
+    },
+   {
+     "id": 3,
+     "create_by": null,
+     "create_dept": null,
+     "avatar": null,
+     "del_flag": "0",
+     "dept_id": 100,
+     "email": null,
+     "login_ip": "127.0.0.1",
+     "nick_name": "铱塔智联",
+     "password": "$2a$10$W4DZDmkL1GPxKSxoNQ5yGuwLKbzuYALmNZujnENB18yNszQwCnwuC",
+     "phonenumber": null,
+     "remark": "",
+     "sex": "0",
+     "status": "0",
+     "tenant_id": null,
+     "user_name": "openiita",
+     "user_type": "sys_user"
+   }
   ]
