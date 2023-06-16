@@ -6,15 +6,15 @@
 <p align="center"><img  src="https://img.shields.io/badge/JDK-11+-important.svg">  <img  src="https://img.shields.io/badge/Redis-5.0-important.svg"> <img  src="https://img.shields.io/badge/SpringBoot-2.6.2-blue.svg"> <img  src="https://img.shields.io/badge/Elasticsearch-7.15.2-red.svg">  <img  src="https://img.shields.io/badge/Satoken-1.30.0-yellow.svg"> 
 </p>
 <p align="center"><img  src="https://img.shields.io/badge/License-Apache2.0-lightgrey.svg"> 
-<img  src="https://img.shields.io/badge/Copyright-奇特物联/iotkit-60569f.svg"> <img  src="https://img.shields.io/badge/v0.4.2-60569f.svg">
+<img  src="https://img.shields.io/badge/Copyright-铱塔智联/openiita-60569f.svg"> <img  src="https://img.shields.io/badge/v0.4.5-60569f.svg">
 <img  src="https://img.shields.io/badge/物联网平台-f44e91.svg">
 </p>
 
 #### 介绍
-此仓库为奇特物联(iotkit)物联网平台开源项目。
-奇特物联是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能, 能帮助你快速搭建自己的物联网相关业务平台。
+此仓库为铱塔智联(openiita)物联网平台开源项目。
+铱塔智联开源平台是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能, 能帮助你快速搭建自己的物联网相关业务平台。
 
-系统包含了品类、物模型、消息转换、通讯组件（mqtt/EMQX通讯组件、小度音箱接入组件、onenet Studio接入组件）、modbus透传接入、modbus虚拟网关、云端低代码设备开发、设备管理、设备分组、规则引擎、第三方平台接入、数据流转（http/mqtt/kafka）、数据可视化、报警中心等模块和智能家居APP（小程序）。
+系统包含了品类、物模型、消息转换、通讯组件（mqtt/EMQX通讯组件、小度音箱接入组件、onenet Studio接入组件）、modbus透传接入、云端低代码设备开发、设备管理、设备分组、规则引擎、第三方平台接入、数据流转（http/mqtt/kafka）、数据可视化、报警中心等模块和智能家居APP（小程序）。
 
 #### 低配服务器万级设备接入能力
 
@@ -50,15 +50,9 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 #### 系统生态
 
-**前端项目见：** https://gitee.com/iotkit-open-source/iot-console-web
+**前端项目见：** https://gitee.com/openiita/iita-iot-web-admin
 
- **演示地址：** [演示地址](http://120.76.96.206)，账号：guest1,密码：guest123  (只读权限)
-
- **边缘设备：** https://gitee.com/iotkit-open-source/iot-edge-device
-
- **智能家居小程序：** https://gitee.com/iotkit-open-source/iot-mp-home ，微信搜索小程序： 奇特物联
-
- **小度接入：** 小度APP添加设备中搜索 奇特物联
+ **演示地址：** [演示地址](http://159.75.222.119:16808)，账号：guest1,密码：guest123  (只读权限)
 
 
 **系统截图**
@@ -68,7 +62,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 #### 软件架构
 软件架构说明
-本系统采用springboot、vertx、redis、H2、mysql、elasticsearch、TDEngine、RocketMq、sa-token等框架和第三方软件，中间件采用模块化无侵入集成非常容易扩展和替换。
+本系统采用springboot、jpa、vertx、redis、H2、mysql、elasticsearch、TDEngine、RocketMq、sa-token等框架和第三方软件，中间件采用模块化无侵入集成非常容易扩展和替换。
 
 默认使用内置的redis、h2数据库、es时序数据库和vertx消息总线以减小启动难度，可实现 **零配置一键启动** ，程序在第一次启动的时候会使用data/init目录的示例数据进行初始化。
 
@@ -104,10 +98,6 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 3、在iot-standalone模块的Application类上右键运行
 
 4、若出现报错，可能是数据没有初始化完或重复初始化，把项目根目录下.init文件和data/iotkit.xx文件删除后重启
-
-
-#### docker运行
-git clone https://gitee.com/iotkit-open-source/iotkit-parent.git && cd iotkit-parent/docker-compose && docker-compose up -d 
 
 
 #### 服务器部署
