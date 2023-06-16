@@ -3,6 +3,7 @@ package cc.iotkit.manager.dto.bo.channel;
 import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.model.notify.ChannelConfig;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.github.linpeilie.annotations.AutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class ChannelConfigBo extends BaseDto  {
 	private String title;
 
 	@ApiModelProperty(value="通道配置参数")
+	@AutoMapping(ignore = true)
 	private String param;
 
 	@ApiModelProperty(value="创建时间")
