@@ -19,7 +19,7 @@ public class ChannelConfigBo extends BaseDto  {
 	private static final long serialVersionUID = -1L;
 
 	@ApiModelProperty(value="id")
-	private String id;
+	private Long id;
 
 	@ApiModelProperty(value="通道id")
 	private Long channelId;
@@ -28,7 +28,7 @@ public class ChannelConfigBo extends BaseDto  {
 	private String title;
 
 	@ApiModelProperty(value="通道配置参数")
-	@AutoMapping(ignore = true)
+	@AutoMapping(target = "param", expression = "java(cc.iotkit.common.utils.JsonUtils.parse(source.getParam(), ChannelConfig.ChannelParam.class))")
 	private String param;
 
 	@ApiModelProperty(value="创建时间")

@@ -22,7 +22,7 @@ public class ChannelConfigVo implements Serializable {
 
     @ApiModelProperty(value="通道配置id")
     @ExcelProperty(value = "通道配置id")
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value="通道id")
     @ExcelProperty(value = "通道id")
@@ -34,8 +34,8 @@ public class ChannelConfigVo implements Serializable {
 
     @ApiModelProperty(value="通道配置参数")
     @ExcelProperty(value = "通道配置参数")
-    @AutoMapping(ignore = true)
-    @ReverseAutoMapping(ignore = true)
+    @ReverseAutoMapping(target = "param", expression = "java(cc.iotkit.common.utils.JsonUtils.toJsonString(source.getParam()))")
+    @AutoMapping(target = "param", expression = "java(cc.iotkit.common.utils.JsonUtils.parse(source.getParam(), ChannelConfig.ChannelParam.class))")
     private String param;
 
     @ApiModelProperty(value="创建时间")
