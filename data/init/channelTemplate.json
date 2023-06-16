@@ -1,0 +1,26 @@
+[
+  {
+    "id": "0640bbe2-788e-ca94-5fb4-c5e7f91e546d",
+    "channelConfigId": "947d22b7-305b-d959-874a-06e277143d44",
+    "channelCode": "Email",
+    "title": "告警邮件模板",
+    "content": "您的设备【${title}】<font color=\"warning\">温度过高</font>",
+    "createAt": 1683816661690
+  },
+  {
+    "id": "7fd90ab1-63c8-cd92-2a58-b7bd04f557f1",
+    "channelConfigId": "75f37720-22bb-4f0b-f127-78f2091507a0",
+    "channelCode": "DingTalk",
+    "title": "告警钉钉模板",
+    "content": "您的设备【${title}】<font color=\"warning\">温度过高</font>",
+    "createAt": 1683816661690
+  },
+  {
+    "id": "74ece781-1d84-220b-cbb2-3270e245bb3b",
+    "channelConfigId": "6e5db9b5-a709-723b-665b-bbca5ce6a62c",
+    "channelCode": "QyWechat",
+    "title": "告警企业微信模板",
+    "content": "您的设备【${title}】<font color=\"warning\">温度过高</font>",
+    "createAt": 1683816661690
+  }
+]

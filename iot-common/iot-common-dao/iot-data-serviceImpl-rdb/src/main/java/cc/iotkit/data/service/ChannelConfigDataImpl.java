@@ -1,13 +1,12 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IChannelConfigData;
 import cc.iotkit.data.dao.ChannelConfigRepository;
+import cc.iotkit.data.model.ChannelConfigMapper;
 import cc.iotkit.data.model.TbChannelConfig;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.model.notify.Channel;
 import cc.iotkit.model.notify.ChannelConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;
@@ -20,6 +19,7 @@ import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * author: 石恒
@@ -32,6 +32,9 @@ public class ChannelConfigDataImpl implements IChannelConfigData, IJPACommData<C
 
     @Resource
     private ChannelConfigRepository channelConfigRepository;
+
+    @Resource
+    private ChannelConfigMapper channelConfigMapper;
 
     @Override
     public JpaRepository getBaseRepository() {
@@ -50,7 +53,7 @@ public class ChannelConfigDataImpl implements IChannelConfigData, IJPACommData<C
 
     @Override
     public ChannelConfig findById(String id) {
-        return MapstructUtils.convert(channelConfigRepository.findById(id).orElse(null), ChannelConfig.class);
+        return channelConfigMapper.toDto(channelConfigRepository.findById(id).orElse(null));
     }
 
     @Override
@@ -63,9 +66,24 @@ public class ChannelConfigDataImpl implements IChannelConfigData, IJPACommData<C
         if (StringUtils.isBlank(data.getId())) {
             data.setId(UUID.randomUUID().toString());
         }
-        channelConfigRepository.save(MapstructUtils.convert(data, TbChannelConfig.class));
+        channelConfigRepository.save(channelConfigMapper.toVo(data));
         return data;
     }
 
+    @Override
+    public List<ChannelConfig> findAll() {
+        return channelConfigRepository.findAll().stream().map(channelConfigMapper::toDto)
+                .collect(Collectors.toList());
+    }
 
+    @Override
+    public Paging<ChannelConfig> findAll(PageRequest<ChannelConfig> pageRequest) {
+        Page<TbChannelConfig> tbChannelConfigs = channelConfigRepository.findAll(Pageable.ofSize(pageRequest.getPageSize()).withPage(pageRequest.getPageNum() - 1));
+        return new Paging<>(
+                tbChannelConfigs.getTotalElements(),
+                tbChannelConfigs.getContent()
+                        .stream().map(channelConfigMapper::toDto)
+                        .collect(Collectors.toList())
+        );
+    }
 }

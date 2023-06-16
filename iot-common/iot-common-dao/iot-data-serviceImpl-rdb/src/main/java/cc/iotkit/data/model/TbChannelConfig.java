@@ -7,10 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @Author: 石恒
@@ -21,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "channel_config")
 @ApiModel(value = "通道配置")
-@AutoMapper(target= ChannelConfig.class)
+@AutoMapper(target = ChannelConfig.class)
 public class TbChannelConfig {
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -36,6 +33,7 @@ public class TbChannelConfig {
     private String title;
 
     @ApiModelProperty(value = "通道配置参数")
+    @Column(columnDefinition = "TEXT")
     private String param;
 
     @ApiModelProperty(value = "创建时间")
