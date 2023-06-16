@@ -13,6 +13,7 @@ import cc.iotkit.manager.service.NotifyService;
 import cc.iotkit.model.notify.Channel;
 import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.ChannelTemplate;
+import cc.iotkit.model.notify.NotifyMessage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -109,6 +110,12 @@ public class NotifyController {
     @PostMapping("/channel/template/delById")
     public Boolean delChannelTemplateById(@RequestBody @Validated(EditGroup.class) Request<Long> request) {
         return notifyService.delChannelTemplateById(request.getData());
+    }
+
+    @ApiOperation("消息列表")
+    @PostMapping("/message/getList")
+    public Paging<NotifyMessage> messageList(@RequestBody @Validated(QueryGroup.class) PageRequest<NotifyMessage> request) {
+        return notifyService.getNotifyMessageList(request);
     }
 
 }

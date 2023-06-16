@@ -6,6 +6,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IChannelConfigData;
 import cc.iotkit.data.manager.IChannelData;
 import cc.iotkit.data.manager.IChannelTemplateData;
+import cc.iotkit.data.manager.INotifyMessageData;
 import cc.iotkit.manager.dto.bo.channel.ChannelConfigBo;
 import cc.iotkit.manager.dto.bo.channel.ChannelTemplateBo;
 import cc.iotkit.manager.dto.vo.channel.ChannelConfigVo;
@@ -13,6 +14,7 @@ import cc.iotkit.manager.dto.vo.channel.ChannelTemplateVo;
 import cc.iotkit.model.notify.Channel;
 import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.ChannelTemplate;
+import cc.iotkit.model.notify.NotifyMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,9 @@ public class NotifyService {
 
     @Resource
     private IChannelTemplateData iChannelTemplateData;
+
+    @Resource
+    private INotifyMessageData iNotifyMessageData;
 
     public List<Channel> getChannelList() {
         return iChannelData.findAll();
@@ -85,5 +90,9 @@ public class NotifyService {
     public Boolean delChannelTemplateById(Long id) {
         iChannelTemplateData.deleteById(id);
         return Boolean.TRUE;
+    }
+
+    public Paging<NotifyMessage> getNotifyMessageList(PageRequest<NotifyMessage> request) {
+        return iNotifyMessageData.findAll(request);
     }
 }
