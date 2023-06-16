@@ -114,7 +114,7 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
                     .where(predicateBuilder.build())
                     .orderBy(tbSysMenu.parentId.asc(), tbSysMenu.orderNum.asc()).fetch();
         } else {
-            tbSysMenuList = jpaQueryFactory.select(Projections.bean(TbSysMenu.class, tbSysMenu.id.countDistinct().as(tbSysMenu.id),
+            tbSysMenuList = jpaQueryFactory.select(Projections.bean(TbSysMenu.class, tbSysMenu.id,
                             tbSysMenu.parentId, tbSysMenu.menuName, tbSysMenu.path, tbSysMenu.component, tbSysMenu.queryParam,
                             tbSysMenu.visible, tbSysMenu.status, tbSysMenu.perms, tbSysMenu.isFrame, tbSysMenu.isCache, tbSysMenu.menuType,
                             tbSysMenu.icon, tbSysMenu.orderNum, tbSysMenu.createTime))
@@ -172,7 +172,7 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
 
     @Override
     public List<SysMenu> selectMenuTreeByUserId(Long userId) {
-        return jpaQueryFactory.select(Projections.bean(SysMenu.class, tbSysMenu.id.countDistinct().as(tbSysMenu.id),
+        return jpaQueryFactory.select(Projections.bean(SysMenu.class, tbSysMenu.id.as(tbSysMenu.id),
                         tbSysMenu.parentId, tbSysMenu.menuName, tbSysMenu.path, tbSysMenu.component, tbSysMenu.queryParam,
                         tbSysMenu.visible, tbSysMenu.status, tbSysMenu.perms, tbSysMenu.isFrame, tbSysMenu.isCache, tbSysMenu.menuType,
                         tbSysMenu.icon, tbSysMenu.orderNum, tbSysMenu.createTime))
