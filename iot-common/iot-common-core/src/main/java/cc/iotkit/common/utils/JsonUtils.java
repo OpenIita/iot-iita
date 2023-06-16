@@ -5,10 +5,12 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +34,17 @@ public class JsonUtils {
         }
         try {
             return OBJECT_MAPPER.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> T parse(String json, Class<T> cls) {
+        if (StringUtils.isBlank(json)) {
+            return null;
+        }
+        try {
+            return OBJECT_MAPPER.readValue(json, cls);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

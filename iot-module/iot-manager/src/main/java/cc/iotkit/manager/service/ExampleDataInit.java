@@ -20,6 +20,9 @@ import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.notify.Channel;
+import cc.iotkit.model.notify.ChannelConfig;
+import cc.iotkit.model.notify.ChannelTemplate;
+import cc.iotkit.model.notify.NotifyMessage;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
@@ -89,13 +92,17 @@ public class ExampleDataInit implements SmartInitializingSingleton {
     private IDbStructureData dbStructureData;
     @Autowired
     private IChannelData iChannelData;
-
+    @Autowired
+    private IChannelConfigData iChannelConfigData;
+    @Autowired
+    private IChannelTemplateData iChannelTemplateData;
+    @Autowired
+    private INotifyMessageData iNotifyMessageData;
     @Autowired
     private ISysDeptData sysDeptData;
 
     @Autowired
     private ISysMenuData sysMenuData;
-
 
     @Autowired
     private ISysPostData sysPostData;
@@ -199,6 +206,12 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                     initData("virtualDevice", virtualDeviceData, new TypeReference<List<VirtualDevice>>() {
                     });
                     initData("channel", iChannelData, new TypeReference<List<Channel>>() {
+                    });
+                    initData("channelConfig", iChannelConfigData, new TypeReference<List<ChannelConfig>>() {
+                    });
+                    initData("channelTemplate", iChannelTemplateData, new TypeReference<List<ChannelTemplate>>() {
+                    });
+                    initData("notifyMessage", iNotifyMessageData, new TypeReference<List<NotifyMessage>>() {
                     });
 
                     initSysData();
