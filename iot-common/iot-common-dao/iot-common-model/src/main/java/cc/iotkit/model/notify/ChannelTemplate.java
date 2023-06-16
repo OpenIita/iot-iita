@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChannelTemplate implements Id<String> {
+public class ChannelTemplate implements Id<Long> {
 
-    private String id;
+    private Long id;
 
-    private String channelConfigId;
+    private Long channelConfigId;
 
     private String title;
 

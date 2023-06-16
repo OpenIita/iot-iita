@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Channel implements Id<String> {
+public class Channel implements Id<Long> {
 
-    private String id;
+    private Long id;
 
     private String code;
 

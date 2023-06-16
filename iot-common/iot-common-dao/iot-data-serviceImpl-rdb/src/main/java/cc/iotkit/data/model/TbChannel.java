@@ -25,7 +25,7 @@ public class TbChannel {
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "通道id")
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value = "通道名称")
     private String code;

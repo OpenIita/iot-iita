@@ -8,6 +8,6 @@ import cc.iotkit.model.notify.Channel;
  * date: 2023-05-11 17:15
  * description:
  **/
-public interface IChannelData extends ICommonData<Channel, String> {
+public interface IChannelData extends ICommonData<Channel, Long> {
 
 }
