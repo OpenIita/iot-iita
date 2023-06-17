@@ -27,8 +27,6 @@ public class ThingModelVo implements Serializable {
 
     @ApiModelProperty(value = "模型内容")
     @ExcelProperty(value = "模型内容")
-    @AutoMapping(ignore = true)
-    @ReverseAutoMapping(ignore = true)
     private ThingModel.Model model;
 
     @ApiModelProperty(value = "产品key")
