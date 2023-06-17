@@ -6,5 +6,9 @@
     {
       "userId": 2,
       "roleId": 2
-    }
+    },
+   {
+     "userId": 3,
+     "roleId": 2
+   }
   ]

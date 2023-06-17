@@ -50,18 +50,18 @@
      "create_by": null,
      "create_dept": null,
      "avatar": null,
-     "del_flag": "0",
-     "dept_id": 100,
+     "delFlag": "0",
+     "deptId": 100,
      "email": null,
-     "login_ip": "127.0.0.1",
-     "nick_name": "铱塔智联",
+     "loginIp": "127.0.0.1",
+     "nickName": "铱塔智联",
      "password": "$2a$10$W4DZDmkL1GPxKSxoNQ5yGuwLKbzuYALmNZujnENB18yNszQwCnwuC",
      "phonenumber": null,
      "remark": "",
      "sex": "0",
      "status": "0",
-     "tenant_id": null,
-     "user_name": "openiita",
-     "user_type": "sys_user"
+     "tenantId": "000000",
+     "userName": "openiita",
+     "userType": "sys_user"
    }
   ]
