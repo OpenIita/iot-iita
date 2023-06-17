@@ -188,8 +188,9 @@ public class DeviceService {
                 .build();
         if (!ThingModelMessage.TYPE_CONFIG.equals(type)
                 && !ThingModelMessage.TYPE_LIFETIME.equals(type)
+                && !ThingModelMessage.TYPE_OTA.equals(type)
         ) {
-            //非配置且非生命周期下发需要做物模型转换
+            //非配置非OTA且非生命周期下发需要做物模型转换
             thingModelService.parseParams(thingService);
         }
 

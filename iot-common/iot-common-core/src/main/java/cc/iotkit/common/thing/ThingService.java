@@ -23,6 +23,8 @@ public class ThingService<T> {
     public static final String TYPE_PROPERTY = "property";
     public static final String TYPE_SERVICE = "service";
 
+    public static final String TYPE_OTA = "ota";
+
     private String mid;
 
     private String productKey;

@@ -68,33 +68,13 @@ public class OtaService {
         return iOtaPackageData.findAll(request);
     }
 
-    public void batchOta() {
-    }
-
     /**
      * 开始升级
      */
-    public void startUpgrade(String otaId, String deviceId) {
+    public String startUpgrade(String otaId, String deviceId) {
         OtaPackage otaPackage = iOtaPackageData.findById(otaId);
         //构建升级包
-        JsonObject buildOtaPackage = buildOtaPackage(otaPackage);
-        String id = deviceService.otaUpgrade(deviceId, true, buildOtaPackage);
-    }
-
-    private JsonObject buildOtaPackage(OtaPackage otaPackage) {
-        JsonObject ota = new JsonObject();
-        JsonObject extData = new JsonObject();
-        extData.addProperty("key1", "测试1");
-        extData.addProperty("key2", "测试2");
-        ota.addProperty("size", otaPackage.getSize());
-        ota.addProperty("sign", otaPackage.getSign());
-        ota.addProperty("version", otaPackage.getVersion());
-        ota.addProperty("isDiff", Boolean.toString(otaPackage.getIsDiff()));
-        ota.addProperty("url", otaPackage.getUrl());
-        ota.addProperty("signMethod", "MD5");
-        ota.addProperty("module", "MCU");
-        ota.add("extData", extData);
-        return ota;
+        return deviceService.otaUpgrade(deviceId, true, otaPackage);
     }
 
     public Paging<DeviceOtaInfoVO> otaResult(PageRequest<DeviceOtaInfoBo> request) {

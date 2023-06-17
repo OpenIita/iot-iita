@@ -1,5 +1,7 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.model.ota.OtaPackage;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,12 +18,13 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "ota_package")
+@AutoMapper(target = OtaPackage.class)
 public class TbOtaPackage {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
-    private String id;
+    private Long id;
 
     private Long size;
 
@@ -38,6 +41,12 @@ public class TbOtaPackage {
     private String version;
 
     private String url;
+
+    private String signMethod;
+
+    private String module;
+
+    private String extData;
 
     private Long createAt;
 }

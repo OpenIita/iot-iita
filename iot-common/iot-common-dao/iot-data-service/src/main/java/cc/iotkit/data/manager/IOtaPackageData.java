@@ -10,7 +10,7 @@ import java.util.List;
  * @Date: 2023/5/19 21:46
  * @Description:
  */
-public interface IOtaPackageData extends ICommonData<OtaPackage, String> {
+public interface IOtaPackageData extends ICommonData<OtaPackage, Long> {
 
     List<OtaPackage> findByVersionGreaterThan(String version);
 

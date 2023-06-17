@@ -10,6 +10,7 @@ import cc.iotkit.data.model.TbOtaDevice;
 import cc.iotkit.data.model.TbOtaPackage;
 import cc.iotkit.model.ota.OtaDevice;
 import cc.iotkit.model.ota.OtaPackage;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -29,10 +30,10 @@ import java.util.stream.Collectors;
  */
 @Primary
 @Service
-public class IOtaPackageDataImpl implements IOtaPackageData, IJPACommData<OtaPackage, String> {
+@RequiredArgsConstructor
+public class IOtaPackageDataImpl implements IOtaPackageData, IJPACommData<OtaPackage, Long> {
 
-    @Resource
-    private IOtaPackageRepository iOtaPackageRepository;
+    private final IOtaPackageRepository iOtaPackageRepository;
 
     @Override
     public List<OtaPackage> findByVersionGreaterThan(String version) {
@@ -52,25 +53,6 @@ public class IOtaPackageDataImpl implements IOtaPackageData, IJPACommData<OtaPac
     @Override
     public Class getTClass() {
         return OtaPackage.class;
-    }
-
-    @Override
-    public OtaPackage save(OtaPackage data) {
-        if (StringUtils.isBlank(data.getId())) {
-            data.setId(UUID.randomUUID().toString());
-        }
-        iOtaPackageRepository.save(MapstructUtils.convert(data, TbOtaPackage.class));
-        return data;
-    }
-
-    @Override
-    public OtaPackage findById(String id) {
-        return MapstructUtils.convert(iOtaPackageRepository.findById(id).orElse(null), OtaPackage.class);
-    }
-
-    @Override
-    public void deleteById(String id) {
-        iOtaPackageRepository.deleteById(id);
     }
 
     @Override
