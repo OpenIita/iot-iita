@@ -107,8 +107,8 @@ public class DeviceController {
     }
 
     @ApiOperation("获取设备详情")
-    @PostMapping(Constants.API_DEVICE.DETAIL)
-    public DeviceInfo getDetail(@PathVariable("deviceId") Request<String> deviceId) {
+    @PostMapping("/detail")
+    public DeviceInfo getDetail(@RequestBody @Validated Request<String> deviceId) {
         return deviceServiceImpl.getDetail(deviceId.getData());
     }
 
