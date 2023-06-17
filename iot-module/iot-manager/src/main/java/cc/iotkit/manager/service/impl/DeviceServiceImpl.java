@@ -204,7 +204,7 @@ public class DeviceServiceImpl implements IDeviceService {
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
         dataOwnerService.checkOwner(deviceInfo);
         deviceService.unbindDevice(deviceId);
-        return false;
+        return true;
     }
 
     @Override
@@ -213,7 +213,7 @@ public class DeviceServiceImpl implements IDeviceService {
         DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
         dataOwnerService.checkOwner(device);
         deviceInfoData.updateTag(deviceId, bo.to(DeviceInfo.Tag.class));
-        return false;
+        return true;
     }
 
     @Override
@@ -225,7 +225,7 @@ public class DeviceServiceImpl implements IDeviceService {
         message.setOccurred(System.currentTimeMillis());
         message.setTime(System.currentTimeMillis());
         behaviourService.reportMessage(message);
-        return false;
+        return true;
     }
 
     @Override
@@ -382,7 +382,7 @@ public class DeviceServiceImpl implements IDeviceService {
         }
 
         deviceConfigData.save(deviceConfig);
-        return false;
+        return true;
     }
 
     @Override

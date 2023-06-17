@@ -216,7 +216,7 @@ public class ProductServiceImpl implements IProductService {
 
         productModel.setModifyAt(System.currentTimeMillis());
         productModelData.save(productModel);
-        return false;
+        return true;
     }
 
     private Product getProduct(String productKey) {

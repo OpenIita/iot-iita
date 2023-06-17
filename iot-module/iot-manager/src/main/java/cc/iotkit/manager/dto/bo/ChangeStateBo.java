@@ -13,10 +13,9 @@ import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.Size;
 
 
-@ApiModel(value = "ProtocolComponentBo")
+@ApiModel(value = "ChangeStateBo")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = ProtocolComponent.class, reverseConvertGenerate = false)
 public class ChangeStateBo extends BaseDto {
     private static final long serialVersionUID = -1L;
 
