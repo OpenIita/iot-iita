@@ -15,6 +15,7 @@ import lombok.SneakyThrows;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * JSON 工具类
@@ -117,6 +118,12 @@ public class JsonUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    public static <T> T objectToJavaBean(Object obj, Class<T> clazz) {
+        if (Objects.isNull(obj)) {
+            return null;
+        }
+        return OBJECT_MAPPER.convertValue(obj,clazz);
     }
 
 }

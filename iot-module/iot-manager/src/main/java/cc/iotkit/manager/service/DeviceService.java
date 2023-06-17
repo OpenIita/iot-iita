@@ -76,7 +76,7 @@ public class DeviceService {
     public String otaUpgrade(String deviceId, boolean checkOwner, Object data) {
         DeviceInfo device = getAndCheckDevice(deviceId, checkOwner);
         return send(deviceId, device.getProductKey(), device.getDeviceName(),
-                data, ThingModelMessage.TYPE_OTA, "OTA");
+                data, ThingModelMessage.TYPE_OTA, "ota");
     }
 
     /**

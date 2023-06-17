@@ -2,16 +2,25 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
 import cc.iotkit.comps.ApiTool;
+import cc.iotkit.data.manager.IDeviceOtaInfoData;
 import cc.iotkit.data.manager.IOtaDeviceData;
 import cc.iotkit.data.manager.IOtaPackageData;
+import cc.iotkit.data.service.DeviceOtaInfoDataImpl;
+import cc.iotkit.manager.dto.bo.ota.DeviceOtaInfoBo;
+import cc.iotkit.manager.dto.vo.channel.ChannelTemplateVo;
+import cc.iotkit.manager.dto.vo.ota.DeviceOtaInfoVO;
 import cc.iotkit.model.alert.AlertConfig;
+import cc.iotkit.model.notify.ChannelTemplate;
+import cc.iotkit.model.ota.DeviceOtaInfo;
 import cc.iotkit.model.ota.OtaPackage;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.InputStream;
 import java.util.UUID;
@@ -29,6 +38,7 @@ public class OtaService {
     private final IOtaPackageData iOtaPackageData;
     private final IOtaDeviceData iOtaDeviceData;
     private final DeviceService deviceService;
+    private final IDeviceOtaInfoData deviceOtaInfoData;
 
 
     @Value("${oss.region}")
@@ -85,6 +95,10 @@ public class OtaService {
         ota.addProperty("module", "MCU");
         ota.add("extData", extData);
         return ota;
+    }
+
+    public Paging<DeviceOtaInfoVO> otaResult(PageRequest<DeviceOtaInfoBo> request) {
+        return deviceOtaInfoData.findAll(request.to(DeviceOtaInfo.class)).to(DeviceOtaInfoVO.class);
     }
 
 }

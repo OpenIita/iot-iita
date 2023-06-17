@@ -19,9 +19,9 @@ import org.springframework.stereotype.Service;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class DeviceOtaInfoDataImpl implements IDeviceOtaInfoData, IJPACommData<DeviceOtaInfo, String> {
+public class DeviceOtaInfoDataImpl implements IDeviceOtaInfoData, IJPACommData<DeviceOtaInfo, Long> {
 
-    private DeviceOtaInfoRepository deviceOtaInfoRepository;
+    private final DeviceOtaInfoRepository deviceOtaInfoRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
 

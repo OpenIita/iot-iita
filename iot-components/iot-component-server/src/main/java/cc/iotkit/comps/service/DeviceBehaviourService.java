@@ -14,6 +14,7 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
 import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
@@ -33,9 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -274,8 +273,25 @@ public class DeviceBehaviourService {
     }
 
     public void deviceOta(ThingModelMessage message) {
-        DeviceOtaInfo otaInfo = (DeviceOtaInfo)message.getData();
-        otaInfo.setDeviceId(message.getDeviceId());
-        deviceOtaInfoData.save(otaInfo);
+        DeviceOtaInfo deviceOtaInfoTemp = JsonUtils.objectToJavaBean(message.getData(), DeviceOtaInfo.class);
+        if (Objects.isNull(deviceOtaInfoTemp)) {
+            log.debug("device ota upload data is null deviceId:{}", message.getDeviceId());
+            return;
+        }
+        deviceOtaInfoTemp.setTaskId(message.getMid());
+        deviceOtaInfoTemp.setDeviceId(message.getDeviceId());
+        deviceOtaInfoTemp.setDeviceName(message.getDeviceName());
+        deviceOtaInfoTemp.setProductKey(message.getProductKey());
+        DeviceOtaInfo deviceOtaInfo = deviceOtaInfoData.findOneByCondition(DeviceOtaInfo.builder()
+                .taskId(message.getMid())
+                        .productKey(message.getProductKey())
+                        .deviceName(message.getDeviceName())
+                .deviceId(message.getDeviceId()).build());
+        if (Objects.nonNull(deviceOtaInfo)) {
+            deviceOtaInfo.setStep(deviceOtaInfoTemp.getStep());
+        }else{
+            deviceOtaInfo = deviceOtaInfoTemp;
+        }
+        deviceOtaInfoData.save(deviceOtaInfo);
     }
 }

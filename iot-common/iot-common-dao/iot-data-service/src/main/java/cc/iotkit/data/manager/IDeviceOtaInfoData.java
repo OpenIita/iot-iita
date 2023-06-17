@@ -8,5 +8,5 @@ import cc.iotkit.model.ota.DeviceOtaInfo;
  * @Date: 2023/6/15 22:14
  * @Description:
  */
-public interface IDeviceOtaInfoData extends ICommonData<DeviceOtaInfo, String> {
+public interface IDeviceOtaInfoData extends ICommonData<DeviceOtaInfo, Long> {
 }

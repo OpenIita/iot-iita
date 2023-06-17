@@ -13,11 +13,23 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeviceOtaInfo implements Id<String> {
-    private String id;
+public class DeviceOtaInfo implements Id<Long> {
+
+    private Long id;
+
     private Integer step;
+
+    private String taskId;
+
     private String desc;
+
     private String version;
+
     private String module;
+
     private String deviceId;
+
+    private String productKey;
+
+    private String deviceName;
 }

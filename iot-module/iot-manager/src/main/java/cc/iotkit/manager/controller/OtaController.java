@@ -3,6 +3,9 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
+import cc.iotkit.manager.dto.bo.ota.DeviceOtaInfoBo;
+import cc.iotkit.manager.dto.bo.ota.DeviceUpgradeBo;
+import cc.iotkit.manager.dto.vo.ota.DeviceOtaInfoVO;
 import cc.iotkit.manager.service.OtaService;
 import cc.iotkit.model.alert.AlertConfig;
 import cc.iotkit.model.ota.DeviceOta;
@@ -66,10 +69,17 @@ public class OtaController {
         return otaService.getOtaPackagePageList(request);
     }
 
-    @ApiOperation("设备获取升级包")
+    @ApiOperation("设备升级")
     @PostMapping("/device/upgrade")
-    public void deviceUpgrade(@RequestBody Request<DeviceOta> deviceOtaRequest) {
-        DeviceOta deviceOta = deviceOtaRequest.getData();
-        otaService.findByVersionGreaterThan(deviceOta.getCurrentVersion(), deviceOta.getDeviceId());
+    public void deviceUpgrade(@RequestBody Request<DeviceUpgradeBo> request) {
+        otaService.startUpgrade(request.getData().getOtaId(), request.getData().getDeviceId());
     }
+
+    @ApiOperation("设备升级结果查询")
+    @PostMapping("/result")
+    public Paging<DeviceOtaInfoVO> otaResult(@RequestBody PageRequest<DeviceOtaInfoBo> request) {
+        return otaService.otaResult(request);
+    }
+
+
 }
