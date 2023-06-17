@@ -37,7 +37,6 @@ public class SysUserOnlineController extends BaseController {
 
     /**
      * 获取在线用户监控列表
-     *
      */
     @ApiOperation("获取在线用户监控列表")
     @SaCheckPermission("monitor:online:list")
@@ -74,12 +73,11 @@ public class SysUserOnlineController extends BaseController {
         Collections.reverse(userOnlineDTOList);
         userOnlineDTOList.removeAll(Collections.singleton(null));
         List<SysUserOnline> userOnlineList = BeanUtil.copyToList(userOnlineDTOList, SysUserOnline.class);
-        return null;
+        return new Paging<>(userOnlineList.size(), userOnlineList);
     }
 
     /**
      * 强退用户
-     *
      */
     @ApiOperation("强退用户")
     @SaCheckPermission("monitor:online:forceLogout")

@@ -167,7 +167,7 @@ public class DeviceServiceImpl implements IDeviceService {
     @Override
     public DeviceInfo getDetail(String deviceId) {
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
-        dataOwnerService.checkOwner(deviceInfo);
+//        dataOwnerService.checkOwner(deviceInfo);
         deviceInfo.setProperty(deviceInfoData.getProperties(deviceId));
         return deviceInfo;
     }
