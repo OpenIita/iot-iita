@@ -51,7 +51,7 @@ public class AlertController {
 
     @ApiOperation("删除告警中心配置")
     @PostMapping("/deleteAlertConfigById")
-    public Boolean deleteAlertConfigById(@RequestBody @Validated Request<String> request) {
+    public Boolean deleteAlertConfigById(@RequestBody @Validated Request<Long> request) {
         return alertService.deleteAlertConfigById(request);
     }
 

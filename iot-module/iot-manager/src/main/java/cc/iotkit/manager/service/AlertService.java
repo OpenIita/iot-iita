@@ -37,7 +37,7 @@ public class AlertService {
         return alertConfigData.save(request.getData());
     }
 
-    public Boolean deleteAlertConfigById(Request<String> request) {
+    public Boolean deleteAlertConfigById(Request<Long> request) {
          alertConfigData.deleteById(request.getData());
         return Boolean.TRUE;
     }
