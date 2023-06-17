@@ -1,5 +1,6 @@
 package cc.iotkit.common.web.interceptor;
 
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StringUtils;
@@ -9,6 +10,7 @@ import cn.hutool.core.map.MapUtil;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
+import org.slf4j.MDC;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,15 +45,17 @@ public class PlusWebInvokeTimeInterceptor implements HandlerInterceptor {
                 if (request instanceof RepeatedlyRequestWrapper) {
                     BufferedReader reader = request.getReader();
                     jsonParam = IoUtil.read(reader);
+                    Request req = JsonUtils.parseObject(jsonParam,Request.class);
+                    MDC.put("requestId",req.getRequestId());
                 }
-                log.debug("[PLUS]开始请求 => URL[{}],参数类型[json],参数:[{}]", url, jsonParam);
+                log.debug("开始请求 => URL[{}],参数类型[json],参数:[{}]", url, jsonParam);
             } else {
                 Map<String, String[]> parameterMap = request.getParameterMap();
                 if (MapUtil.isNotEmpty(parameterMap)) {
                     String parameters = JsonUtils.toJsonString(parameterMap);
-                    log.debug("[PLUS]开始请求 => URL[{}],参数类型[param],参数:[{}]", url, parameters);
+                    log.debug("开始请求 => URL[{}],参数类型[param],参数:[{}]", url, parameters);
                 } else {
-                    log.debug("[PLUS]开始请求 => URL[{}],无参数", url);
+                    log.debug("开始请求 => URL[{}],无参数", url);
                 }
             }
 
@@ -72,8 +76,9 @@ public class PlusWebInvokeTimeInterceptor implements HandlerInterceptor {
         if (!prodProfile.equals(SpringUtils.getActiveProfile())) {
             StopWatch stopWatch = invokeTimeTL.get();
             stopWatch.stop();
-            log.debug("[PLUS]结束请求 => URL[{}],耗时:[{}]毫秒", request.getMethod() + " " + request.getRequestURI(), stopWatch.getTime());
+            log.debug("结束请求 => URL[{}],耗时:[{}]毫秒", request.getMethod() + " " + request.getRequestURI(), stopWatch.getTime());
             invokeTimeTL.remove();
+            MDC.clear();
         }
     }
 
