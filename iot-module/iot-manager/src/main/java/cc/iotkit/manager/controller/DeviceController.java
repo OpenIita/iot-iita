@@ -92,8 +92,7 @@ public class DeviceController {
         return deviceServiceImpl.addDevice(bo.getData());
     }
 
-    @ApiOperation(value = "获取子设备", notes = "获取子设备", httpMethod = "GET")
-    @ApiImplicitParam(name = "deviceId", value = "设备ID", dataTypeClass = String.class, paramType = "form")
+    @ApiOperation(value = "获取子设备", notes = "获取子设备")
     @PostMapping("/children/list")
     public List<DeviceInfoVo> getChildren(@Validated @RequestBody PageRequest<String> request) {
         String deviceId = request.getData();
@@ -108,8 +107,8 @@ public class DeviceController {
 
     @ApiOperation("获取设备详情")
     @PostMapping("/detail")
-    public DeviceInfo getDetail(@RequestBody @Validated Request<String> deviceId) {
-        return deviceServiceImpl.getDetail(deviceId.getData());
+    public DeviceInfo getDetail(@RequestBody @Validated Request<String> request) {
+        return deviceServiceImpl.getDetail(request.getData());
     }
 
     @ApiOperation("获取设备详情")
