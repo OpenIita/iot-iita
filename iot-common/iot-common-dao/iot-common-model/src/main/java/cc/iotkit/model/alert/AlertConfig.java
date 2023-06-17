@@ -22,9 +22,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlertConfig implements Owned<String> {
+public class AlertConfig implements Owned<Long> {
 
-    private String id;
+    private Long id;
 
     /**
      * 配置所属用户
