@@ -38,6 +38,7 @@ public class ThingModelDataCache implements IThingModelData {
     public ThingModel save(ThingModel data) {
         data = thingModelData.save(data);
         thingModelCacheEvict.findById(data.getId());
+        thingModelCacheEvict.findByProductKey(data.getProductKey());
         return data;
     }
 
@@ -83,7 +84,7 @@ public class ThingModelDataCache implements IThingModelData {
     }
 
     @Override
-    @Cacheable(value = Constants.CACHE_THING_MODEL, key = "#root.method.name+#s", unless = "#result == null")
+    @Cacheable(value = Constants.CACHE_THING_MODEL, key = "#root.method.name+#productKey", unless = "#result == null")
     public ThingModel findByProductKey(String productKey) {
         return thingModelData.findByProductKey(productKey);
     }

@@ -111,7 +111,7 @@ public class ProductServiceImpl implements IProductService {
     public boolean saveThingModel(ThingModelBo data) {
         String productKey = data.getProductKey();
         String model = data.getModel();
-        ThingModel oldData = thingModelData.findOneByCondition(ThingModel.builder().productKey(productKey).build());
+        ThingModel oldData = thingModelData.findByProductKey(productKey);
         ThingModel thingModel = new ThingModel(YitIdHelper.nextId(), productKey, JsonUtils.parseObject(model, ThingModel.Model.class));
 
         if (oldData == null) {

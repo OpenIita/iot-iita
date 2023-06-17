@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OtaPackage implements Id<String> {
+public class OtaPackage implements Id<Long> {
 
-    private String id;
+    private Long id;
 
     private Long size;
 
@@ -34,6 +34,12 @@ public class OtaPackage implements Id<String> {
     private String version;
 
     private String url;
+
+    private String signMethod;
+
+    private String module;
+
+    private String extData;
 
     private Long createAt;
 }

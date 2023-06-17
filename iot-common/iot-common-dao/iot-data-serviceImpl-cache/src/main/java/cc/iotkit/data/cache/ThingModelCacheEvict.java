@@ -11,4 +11,8 @@ public class ThingModelCacheEvict {
     public void findById(Long s) {
     }
 
+    @CacheEvict(value = Constants.CACHE_THING_MODEL, key = "#root.method.name+#productKey")
+    public void findByProductKey(String productKey){
+    }
+
 }
