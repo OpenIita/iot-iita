@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @Primary
 @Service
-public class AlertConfigDataImpl implements IAlertConfigData, IJPACommData<AlertConfig, String> {
+public class AlertConfigDataImpl implements IAlertConfigData, IJPACommData<AlertConfig, Long> {
 
     @Autowired
     private AlertConfigRepository alertConfigRepository;
