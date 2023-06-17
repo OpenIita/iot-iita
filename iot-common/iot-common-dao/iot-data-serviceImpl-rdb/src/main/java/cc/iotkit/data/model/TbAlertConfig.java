@@ -21,7 +21,7 @@ public class TbAlertConfig {
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "告警配置id")
-    private String id;
+    private Long id;
 
     /**
      * 配置所属用户
