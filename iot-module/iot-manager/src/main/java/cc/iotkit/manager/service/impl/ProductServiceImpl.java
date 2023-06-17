@@ -103,7 +103,6 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ThingModelVo getThingModelByProductKey(String productKey) {
-
         ThingModel thingModel = thingModelData.findByProductKey(productKey);
         return MapstructUtils.convert(thingModel, ThingModelVo.class);
     }
