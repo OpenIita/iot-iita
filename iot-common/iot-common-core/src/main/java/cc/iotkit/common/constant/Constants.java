@@ -225,7 +225,7 @@ public interface Constants {
         /**
          * 设备-属性获取
          */
-        String INVOKE_SERVICE_PROPERTY_GET = "/{deviceId}/service/property/get";
+        String INVOKE_SERVICE_PROPERTY_GET = "/service/property/get";
 
         /**
          * OTA升级

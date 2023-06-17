@@ -63,50 +63,26 @@ public class DeviceController {
 
 
     @ApiOperation(value = "服务调用", notes = "服务调用", httpMethod = "POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "设备ID", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "service", value = "服务", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "args", value = "参数", dataTypeClass = Map.class),
-    })
-    @PostMapping(Constants.API_DEVICE.INVOKE_SERVICE)
-    public InvokeResult invokeService(@PathVariable("deviceId") String deviceId,
-                                      @PathVariable("service") String service,
-                                      @RequestBody Map<String, Object> args) {
-        if (StringUtils.isBlank(deviceId) || StringUtils.isBlank(service)) {
-            throw new BizException(ErrCode.PARAMS_EXCEPTION);
-        }
-        return new InvokeResult(deviceService.invokeService(deviceId, service, args));
+    @PostMapping("/service/invoke")
+    public InvokeResult invokeService(@RequestBody @Validated Request<ServiceInvokeBo> request) {
+        return new InvokeResult(deviceService.invokeService(request.getData().getDeviceId(), request.getData().getService(), request.getData().getArgs()));
     }
 
     @ApiOperation(value = "属性获取", notes = "属性获取", httpMethod = "POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "设备ID", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "propertyNames", value = "属性列表", dataTypeClass = ArrayList.class)
-    })
-    @PostMapping(Constants.API_DEVICE.INVOKE_SERVICE_PROPERTY_GET)
-    public InvokeResult invokeServicePropertySet(@PathVariable("deviceId") String deviceId,
-                                                 @RequestBody List<String> propertyNames) {
-        if (StringUtils.isBlank(deviceId)) {
-            throw new BizException(ErrCode.PARAMS_EXCEPTION);
-        }
-        return new InvokeResult(deviceService.getProperty(deviceId, propertyNames, true));
+    @PostMapping("/service/property/get")
+    public InvokeResult invokeServicePropertySet(@RequestBody @Validated  Request<GetDeviceServicePorpertyBo> request) {
+        return new InvokeResult(deviceService.getProperty(request.getData().getDeviceId(), request.getData().getPropertyNames(), true));
     }
 
     @ApiOperation(value = "属性设置", notes = "属性设置", httpMethod = "POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "设备ID", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "args", value = "参数", dataTypeClass = Map.class)
-    })
-    @PostMapping(Constants.API_DEVICE.SET_PROPERTIES)
-    public InvokeResult setProperty(@PathVariable("deviceId") String deviceId,
-                                    @RequestBody Map<String, Object> args) {
-        return new InvokeResult(deviceService.setProperty(deviceId, args));
+    @PostMapping("/service/property/set")
+    public InvokeResult setProperty(@RequestBody @Validated Request<SetDeviceServicePorpertyBo> request) {
+        return new InvokeResult(deviceService.setProperty(request.getData().getDeviceId(), request.getData().getArgs()));
     }
 
     @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "POST")
     @PostMapping("/list")
     public Paging<DeviceInfo> getDevices(@Validated @RequestBody PageRequest<DeviceQueryBo> pageRequest) {
-
         return deviceServiceImpl.getDevices(pageRequest);
     }
 
@@ -121,7 +97,6 @@ public class DeviceController {
     @PostMapping("/children/list")
     public List<DeviceInfoVo> getChildren(@Validated @RequestBody PageRequest<String> request) {
         String deviceId = request.getData();
-
         return deviceServiceImpl.selectChildrenPageList(deviceId);
     }
 
@@ -240,7 +215,7 @@ public class DeviceController {
      * 删除分组
      */
     @ApiOperation(value = "删除分组")
-    @DeleteMapping("/group/delete")
+    @PostMapping("/group/delete")
     public boolean deleteGroup(@Validated @RequestBody Request<String> request) {
         String id = request.getData();
         return deviceServiceImpl.deleteGroup(id);

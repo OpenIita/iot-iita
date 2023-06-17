@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * 平台API调用工具类
  */
 @Slf4j
+@Deprecated
 public class ApiTool {
 
     private final Vertx vertx;

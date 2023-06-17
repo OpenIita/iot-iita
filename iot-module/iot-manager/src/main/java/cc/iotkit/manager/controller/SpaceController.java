@@ -111,7 +111,7 @@ public class SpaceController {
                 .build());
     }
 
-    @DeleteMapping("/delSpace/{id}")
+    @PostMapping("/delSpace/{id}")
     public void delSpace(@PathVariable("id") String id) {
         checkExistAndOwner(id);
         spaceData.deleteById(id);
