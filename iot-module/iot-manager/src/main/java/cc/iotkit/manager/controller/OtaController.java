@@ -59,7 +59,7 @@ public class OtaController {
 
     @ApiOperation("删除升级包")
     @PostMapping("/package/delById")
-    public Boolean delChannelConfigById(@RequestBody @Valid Request<String> request) {
+    public Boolean delChannelConfigById(@RequestBody @Valid Request<Long> request) {
         return otaService.delOtaPackageById(request.getData());
     }
 
@@ -84,7 +84,7 @@ public class OtaController {
     @ApiOperation("OTA升级")
     @PostMapping("/down")
     public void ota(@RequestBody PageRequest<DeviceOtaInfoBo> request) {
-        otaService.startUpgrade("0417d633-2806-4a0f-ab2a-afe35e2b2dc6", "16870054884740abcd123456000000103");
+        otaService.startUpgrade(1L, "16870054884740abcd123456000000103");
     }
 
 

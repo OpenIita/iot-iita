@@ -55,7 +55,7 @@ public class OtaService {
         return iOtaPackageData.save(otaPackage);
     }
 
-    public Boolean delOtaPackageById(String id) {
+    public Boolean delOtaPackageById(Long id) {
         iOtaPackageData.deleteById(id);
         return Boolean.TRUE;
     }
@@ -71,7 +71,7 @@ public class OtaService {
     /**
      * 开始升级
      */
-    public String startUpgrade(String otaId, String deviceId) {
+    public String startUpgrade(Long otaId, String deviceId) {
         OtaPackage otaPackage = iOtaPackageData.findById(otaId);
         //构建升级包
         return deviceService.otaUpgrade(deviceId, true, otaPackage);

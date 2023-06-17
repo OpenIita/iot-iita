@@ -18,5 +18,5 @@ import lombok.EqualsAndHashCode;
 public class DeviceUpgradeBo extends BaseDto {
     private static final long serialVersionUID = -1L;
     private String deviceId;
-    private String otaId;
+    private Long otaId;
 }
