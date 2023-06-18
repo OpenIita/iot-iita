@@ -10,11 +10,13 @@
 package cc.iotkit.common.web.handler;
 
 import cc.iotkit.common.api.Response;
+import cc.iotkit.common.utils.JsonUtils;
 import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.IdUtil;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,7 +28,7 @@ import java.util.Map;
 public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return true;
+        return !converterType.equals(StringHttpMessageConverter.class);
     }
 
     @Override
@@ -48,6 +50,8 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
                 return new Response((Integer) map.get("status"), (String) map.get("error"),
                         "", IdUtil.simpleUUID());
             }
+        } else if (body instanceof Response) {
+            return body;
         }
 
         return new Response(200, "", body, IdUtil.simpleUUID());

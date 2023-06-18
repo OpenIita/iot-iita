@@ -103,7 +103,9 @@ public class MqttVerticle extends AbstractVerticle {
             endpoint.accept(false);
             endpoint.closeHandler((v) -> {
                 log.warn("client connection closed,clientId:{}", clientId);
-                if (mqttConnectPool.get(clientId) == false) return;
+                if (!mqttConnectPool.get(clientId)) {
+                    return;
+                }
                 executor.onReceive(new HashMap<>(), "disconnect", clientId, (r) -> {
                     //删除设备与连接关系
                     endpointMap.remove(getEndpointKey(r));
