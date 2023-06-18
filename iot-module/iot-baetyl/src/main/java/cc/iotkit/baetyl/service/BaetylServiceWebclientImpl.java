@@ -84,4 +84,19 @@ public class BaetylServiceWebclientImpl implements IBaetylService {
     public GetNodesVo getNodes(GetNodesBo data) {
         return null;
     }
+
+    @Override
+    public GetCoreConfigVo getCoreConfig(String data) {
+        return null;
+    }
+
+    @Override
+    public String getInstallCommand(GetInstallCommandBo data) {
+        return null;
+    }
+
+    @Override
+    public GetNodePropertiesVo getNodeProperties(String data) {
+        return null;
+    }
 }

@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/baetyl")
-@Api(tags = "边缘计算管理")
-public class BartylController extends BaseController {
+@RequestMapping("/baetyl/node")
+@Api(tags = "边缘计算节点管理")
+public class BartylNodeController extends BaseController {
 
   @Autowired
   private  IBaetylService configService;
@@ -95,5 +95,24 @@ public class BartylController extends BaseController {
   public GetNodesVo getNodes(@Validated @RequestBody Request<GetNodesBo> request) {
     return configService.getNodes(request.getData());
   }
+
+  @ApiOperation("获取 core 配置")
+  @PostMapping("/getCoreConfig")
+  public GetCoreConfigVo getCoreConfig(@Validated @RequestBody Request<String> request) {
+    return configService.getCoreConfig(request.getData());
+  }
+
+  @ApiOperation("获取安装命令")
+  @PostMapping("/getInstallCommand")
+  public String getInstallCommand(@Validated @RequestBody Request<GetInstallCommandBo> request) {
+    return configService.getInstallCommand(request.getData());
+  }
+
+  @ApiOperation("获取节点属性")
+  @PostMapping("/getNodeProperties")
+  public GetNodePropertiesVo getNodeProperties(@Validated @RequestBody Request<String> request) {
+    return configService.getNodeProperties(request.getData());
+  }
+
 
 }
