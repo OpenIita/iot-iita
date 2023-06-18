@@ -45,4 +45,10 @@ public interface BaetylServiceFeignClient {
     GetNodesVo getNodes(@RequestParam(value = "selector") String selector, @RequestParam(value = "fieldSelector") String fieldSelector, @RequestParam(value = "limit") Integer limit,
                         @RequestParam(value = "continue") String isContinue, @RequestParam(value = "pageNo") Integer pageNo, @RequestParam(value = "pageSize") Integer pageSize,
                         @RequestParam(value = "name") String name, @RequestParam(value = "nodeSelector") String nodeSelector);
+    @GetMapping(value = BaetylConstant.Url.NodeManagement.GetCoreConfig)
+    GetCoreConfigVo getCoreConfig(@PathVariable(value = "name") String name);
+    @GetMapping(value = BaetylConstant.Url.NodeManagement.GetInstallCommand)
+    String getInstallCommand(@PathVariable(value = "name") String name, @RequestParam(value = "mode") String mode);
+    @GetMapping(value = BaetylConstant.Url.NodeManagement.GetNodeProperties)
+    GetNodePropertiesVo getNodeProperties(@PathVariable(value = "name") String data);
 }

@@ -25,4 +25,10 @@ public interface IBaetylService {
     GetNodeCoreVersionVo getNodeCoreVersion(String data);
 
     GetNodesVo getNodes(GetNodesBo data);
+
+    GetCoreConfigVo getCoreConfig(String data);
+
+    String getInstallCommand(GetInstallCommandBo data);
+
+    GetNodePropertiesVo getNodeProperties(String data);
 }
