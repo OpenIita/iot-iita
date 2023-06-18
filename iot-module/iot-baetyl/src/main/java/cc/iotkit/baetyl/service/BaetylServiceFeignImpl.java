@@ -74,4 +74,19 @@ public class BaetylServiceFeignImpl implements IBaetylService {
         return client.getNodes(data.getSelector(),data.getFieldSelector(),data.getLimit(),data.getIsContinue(),data.getPageNo(),data.getPageSize(),
                 data.getName(),data.getNodeSelector());
     }
+
+    @Override
+    public GetCoreConfigVo getCoreConfig(String data) {
+        return client.getCoreConfig(data);
+    }
+
+    @Override
+    public String getInstallCommand(GetInstallCommandBo data) {
+        return client.getInstallCommand(data.getName(),data.getMode());
+    }
+
+    @Override
+    public GetNodePropertiesVo getNodeProperties(String data) {
+        return client.getNodeProperties(data);
+    }
 }
