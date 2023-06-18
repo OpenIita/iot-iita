@@ -237,6 +237,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      * @param status 角色状态
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateRoleStatus(Long roleId, String status) {
         SysRole sysRole = new SysRole();
         sysRole.setId(roleId);
