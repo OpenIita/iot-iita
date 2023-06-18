@@ -44,13 +44,11 @@ public class TbRuleInfo {
     @ApiModelProperty(value = "监听器")
     @AutoMapping(ignore = true)
     @ReverseAutoMapping(ignore = true)
-
     private String listeners;
 
     @Column(columnDefinition = "text")
     @AutoMapping(ignore = true)
     @ReverseAutoMapping(ignore = true)
-
     @ApiModelProperty(value = "过滤器")
     private String filters;
 
@@ -58,7 +56,6 @@ public class TbRuleInfo {
     @ApiModelProperty(value = "动作")
     @AutoMapping(ignore = true)
     @ReverseAutoMapping(ignore = true)
-
     private String actions;
 
     @ApiModelProperty(value = "用户id")

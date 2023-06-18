@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -33,9 +34,9 @@ public class RuleInfo implements Owned<String> {
 
     private String type;
 
-    private List<Listener> listeners;
+    private List<FilterConfig> listeners;
 
-    private List<Filter> filters;
+    private List<FilterConfig> filters;
 
     private List<RuleAction> actions;
 
@@ -47,16 +48,15 @@ public class RuleInfo implements Owned<String> {
 
     private Long createAt;
 
-    @Data
-    public static class Listener {
-        private String type;
-        protected String config;
+    public List<FilterConfig> getListeners() {
+        return listeners == null ? new ArrayList<>() : listeners;
     }
 
-    @Data
-    public static class Filter {
-        private String type;
-        protected String config;
+    public List<FilterConfig> getFilters() {
+        return filters == null ? new ArrayList<>() : filters;
     }
 
+    public List<RuleAction> getActions() {
+        return actions == null ? new ArrayList<>() : actions;
+    }
 }

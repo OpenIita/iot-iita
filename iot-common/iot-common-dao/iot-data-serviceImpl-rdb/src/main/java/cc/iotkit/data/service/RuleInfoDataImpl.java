@@ -9,12 +9,15 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.dao.RuleInfoRepository;
 import cc.iotkit.data.model.TbRuleInfo;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.model.rule.FilterConfig;
+import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +27,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Primary
 @Service
@@ -52,15 +57,16 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
 
     @Override
     public List<RuleInfo> findByUidAndType(String uid, String type) {
-        return MapstructUtils.convert(ruleInfoRepository.findByUidAndType(uid, type), RuleInfo.class);
+        return fromTb(ruleInfoRepository.findByUidAndType(uid, type));
     }
 
     @Override
     public Paging<RuleInfo> findByUidAndType(String uid, String type, int page, int size) {
         Page<TbRuleInfo> paged = ruleInfoRepository.findByUidAndType(uid, type,
                 Pageable.ofSize(size).withPage(page - 1));
+
         return new Paging<>(paged.getTotalElements(),
-                MapstructUtils.convert(paged.getContent(), RuleInfo.class));
+                fromTb(paged.getContent()));
     }
 
     @Override
@@ -68,20 +74,19 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
         Page<TbRuleInfo> paged = ruleInfoRepository.findByType(type,
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                MapstructUtils.convert(paged.getContent(), RuleInfo.class));
+                fromTb(paged.getContent()));
     }
 
     @Override
     public List<RuleInfo> findByUid(String uid) {
-        return MapstructUtils.convert(ruleInfoRepository.findByUid(uid), RuleInfo.class);
+        return fromTb(ruleInfoRepository.findByUid(uid));
     }
 
     @Override
     public Paging<RuleInfo> findByUid(String uid, int page, int size) {
         Page<TbRuleInfo> paged = ruleInfoRepository.findByUid(uid,
                 Pageable.ofSize(size).withPage(page - 1));
-        return new Paging<>(paged.getTotalElements(),
-                MapstructUtils.convert(paged.getContent(), RuleInfo.class));
+        return new Paging<>(paged.getTotalElements(), fromTb(paged.getContent()));
     }
 
     @Override
@@ -92,7 +97,7 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
 
     @Override
     public RuleInfo findById(String s) {
-        return MapstructUtils.convert(ruleInfoRepository.findById(s).orElse(null), RuleInfo.class);
+        return from(ruleInfoRepository.findById(s).orElse(null));
     }
 
     @Override
@@ -106,9 +111,39 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
             data.setId(UUID.randomUUID().toString());
             data.setCreateAt(System.currentTimeMillis());
         }
-        ruleInfoRepository.save(MapstructUtils.convert(data, TbRuleInfo.class));
+        ruleInfoRepository.save(from(data));
         return data;
     }
 
+    private static RuleInfo from(TbRuleInfo tb) {
+        RuleInfo convert = MapstructUtils.convert(tb, RuleInfo.class);
+        assert convert != null;
+        convert.setActions(JsonUtils.parseArray(tb.getActions(), RuleAction.class));
+        convert.setFilters(JsonUtils.parseArray(tb.getFilters(), FilterConfig.class));
+        convert.setListeners(JsonUtils.parseArray(tb.getListeners(), FilterConfig.class));
+        return convert;
+    }
 
+    private static TbRuleInfo from(RuleInfo rule) {
+        TbRuleInfo convert = MapstructUtils.convert(rule, TbRuleInfo.class);
+        assert convert != null;
+        convert.setActions(JsonUtils.toJsonString(rule.getActions()));
+        convert.setFilters(JsonUtils.toJsonString(rule.getFilters()));
+        convert.setListeners(JsonUtils.toJsonString(rule.getListeners()));
+        return convert;
+    }
+
+    private static List<RuleInfo> fromTb(List<TbRuleInfo> list) {
+        if (list == null) {
+            return new ArrayList<>();
+        }
+        return list.stream().map(RuleInfoDataImpl::from).collect(Collectors.toList());
+    }
+
+    private static List<TbRuleInfo> fromBo(List<RuleInfo> list) {
+        if (list == null) {
+            return new ArrayList<>();
+        }
+        return list.stream().map(RuleInfoDataImpl::from).collect(Collectors.toList());
+    }
 }

@@ -83,7 +83,7 @@ public class RuleEngineServiceImpl implements IRuleEngineService {
 
     @Override
     public boolean saveRule(RuleInfoBo ruleInfoBo) {
-        RuleInfo rule = MapstructUtils.convert(ruleInfoBo, RuleInfo.class);
+        RuleInfo rule = ruleInfoBo.to(RuleInfo.class);
         if (StringUtils.isBlank(rule.getId())) {
             rule.setId(UUID.randomUUID().toString());
             rule.setState(RuleInfo.STATE_STOPPED);
@@ -154,7 +154,7 @@ public class RuleEngineServiceImpl implements IRuleEngineService {
 
     @Override
     public Paging<RuleLogVo> selectRuleLogPageList(PageRequest<RuleLogBo> request) {
-       RuleLog ruleLog = request.getData().to(RuleLog.class);
+        RuleLog ruleLog = request.getData().to(RuleLog.class);
 
         return ruleLogData.findByRuleId(ruleLog.getRuleId(), request.getPageNum(), request.getPageSize()).to(RuleLogVo.class);
     }

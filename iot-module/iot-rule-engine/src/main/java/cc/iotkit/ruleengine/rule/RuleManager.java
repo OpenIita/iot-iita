@@ -11,9 +11,11 @@ package cc.iotkit.ruleengine.rule;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.model.rule.FilterConfig;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.ruleengine.action.*;
@@ -76,11 +78,11 @@ public class RuleManager {
         int idx = 1;
         while (true) {
             PageRequest<RuleInfo> pageRequest = new PageRequest<>();
-            pageRequest.setPageNum(idx+=1);
+            pageRequest.setPageNum(idx += 1);
             pageRequest.setPageSize(100);
             Paging<RuleInfo> all = ruleInfoData.findAll(pageRequest);
             List<RuleInfo> rules = all.getRows();
-            if(CollectionUtil.isEmpty(rules)){
+            if (CollectionUtil.isEmpty(rules)) {
                 return;
             }
             rules.forEach(rule -> {
@@ -120,15 +122,26 @@ public class RuleManager {
 
     private Rule parseRule(RuleInfo ruleInfo) {
         List<Listener<?>> listeners = new ArrayList<>();
-        for (RuleInfo.Listener listener : ruleInfo.getListeners()) {
+        for (FilterConfig listener : ruleInfo.getListeners()) {
+            if (StringUtils.isBlank(listener.getConfig())) {
+                continue;
+            }
             listeners.add(parseListener(listener.getType(), listener.getConfig()));
         }
+
         List<Filter<?>> filters = new ArrayList<>();
-        for (RuleInfo.Filter filter : ruleInfo.getFilters()) {
+        for (FilterConfig filter : ruleInfo.getFilters()) {
+            if (StringUtils.isBlank(filter.getConfig())) {
+                continue;
+            }
             filters.add(parseFilter(filter.getType(), filter.getConfig()));
         }
+
         List<Action<?>> actions = new ArrayList<>();
         for (RuleAction action : ruleInfo.getActions()) {
+            if (StringUtils.isBlank(action.getConfig())) {
+                continue;
+            }
             actions.add(parseAction(ruleInfo.getId(), action.getType(), action.getConfig()));
         }
 

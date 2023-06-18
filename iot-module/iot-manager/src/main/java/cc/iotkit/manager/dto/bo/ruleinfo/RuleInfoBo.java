@@ -1,29 +1,17 @@
 package cc.iotkit.manager.dto.bo.ruleinfo;
 
+import cc.iotkit.common.api.BaseDto;
+import cc.iotkit.model.rule.FilterConfig;
+import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.github.linpeilie.annotations.AutoMapping;
-import io.github.linpeilie.annotations.ReverseAutoMapping;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import jakarta.validation.constraints.Size;
-
-
-import java.io.Serializable;
-import java.util.Date;
-import java.math.BigDecimal;
-
-import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.common.validate.AddGroup;
-import cc.iotkit.common.validate.EditGroup;
-
-import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 @ApiModel(value = "RuleInfoBo")
 @Data
@@ -37,10 +25,7 @@ public class RuleInfoBo extends BaseDto {
     private String id;
 
     @ApiModelProperty(value = "动作")
-    @Size(max = 65535, message = "动作长度不正确")
-    @AutoMapping(ignore = true)
-    @ReverseAutoMapping(ignore = true)
-    private String actions;
+    private List<RuleAction> actions;
 
     @ApiModelProperty(value = "创建时间")
     private Long createAt;
@@ -50,16 +35,10 @@ public class RuleInfoBo extends BaseDto {
     private String desc;
 
     @ApiModelProperty(value = "过滤器")
-    @Size(max = 65535, message = "过滤器长度不正确")
-    @AutoMapping(ignore = true)
-    @ReverseAutoMapping(ignore = true)
-    private String filters;
+    private List<FilterConfig> filters;
 
     @ApiModelProperty(value = "监听器")
-    @Size(max = 65535, message = "监听器长度不正确")
-    @AutoMapping(ignore = true)
-    @ReverseAutoMapping(ignore = true)
-    private String listeners;
+    private List<FilterConfig> listeners;
 
     @ApiModelProperty(value = "规则名称")
     @Size(max = 255, message = "规则名称长度不正确")

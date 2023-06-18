@@ -49,7 +49,7 @@ public class RuleEngineController {
         return ruleEngineService.selectPageList(request);
     }
 
-    @ApiOperation("规则编辑")
+    @ApiOperation("保存规则")
     @PostMapping("/edit")
     public boolean saveRule(@RequestBody @Validated  Request<RuleInfoBo> ruleInfoBo) {
         return ruleEngineService.saveRule(ruleInfoBo.getData());
@@ -99,7 +99,7 @@ public class RuleEngineController {
         return ruleEngineService.selectTaskPageList(request);
     }
 
-    @ApiOperation("定时任务编辑")
+    @ApiOperation("保存定时任务")
     @PostMapping("/task/save")
     public boolean saveTask(@Validated @RequestBody Request<TaskInfoBo> taskInfo) {
        return ruleEngineService.saveTask(taskInfo.getData());

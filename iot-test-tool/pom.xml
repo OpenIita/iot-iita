@@ -14,11 +14,10 @@
     </description>
 
     <modules>
-       <!-- <module>iot-test-mqtt</module>-->
+        <module>iot-test-mqtt</module>
         <module>iot-virtual-device</module>
     </modules>
 
     <artifactId>iot-test-tool</artifactId>
-
 
 </project>

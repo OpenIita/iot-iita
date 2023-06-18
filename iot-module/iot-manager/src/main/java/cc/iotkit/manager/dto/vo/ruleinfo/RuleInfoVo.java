@@ -1,5 +1,7 @@
 package cc.iotkit.manager.dto.vo.ruleinfo;
 
+import cc.iotkit.model.rule.FilterConfig;
+import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
 import io.github.linpeilie.annotations.AutoMapping;
 import io.github.linpeilie.annotations.ReverseAutoMapping;
@@ -11,6 +13,7 @@ import lombok.ToString;
 import java.util.Date;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
@@ -33,9 +36,7 @@ public class RuleInfoVo implements Serializable {
 
     @ApiModelProperty(value = "动作")
     @ExcelProperty(value = "动作")
-	@AutoMapping(ignore = true)
-	@ReverseAutoMapping(ignore = true)
-    private String actions;
+    private List<RuleAction> actions;
 
     @ApiModelProperty(value = "创建时间")
     @ExcelProperty(value = "创建时间")
@@ -47,15 +48,11 @@ public class RuleInfoVo implements Serializable {
 
     @ApiModelProperty(value = "过滤器")
     @ExcelProperty(value = "过滤器")
-	@AutoMapping(ignore = true)
-	@ReverseAutoMapping(ignore = true)
-    private String filters;
+    private List<FilterConfig> filters;
 
     @ApiModelProperty(value = "监听器")
     @ExcelProperty(value = "监听器")
-	@AutoMapping(ignore = true)
-	@ReverseAutoMapping(ignore = true)
-    private String listeners;
+    private List<FilterConfig> listeners;
 
     @ApiModelProperty(value = "规则名称")
     @ExcelProperty(value = "规则名称")
