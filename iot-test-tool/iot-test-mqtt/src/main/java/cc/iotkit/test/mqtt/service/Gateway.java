@@ -11,13 +11,13 @@ package cc.iotkit.test.mqtt.service;
 
 
 import cc.iotkit.common.constant.Constants;
-import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.test.mqtt.config.Mqtt;
 import cc.iotkit.test.mqtt.model.Request;
 import io.netty.handler.codec.mqtt.MqttQoS;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.Json;
 import io.vertx.mqtt.MqttClient;
 import io.vertx.mqtt.MqttClientOptions;
 import io.vertx.mqtt.messages.MqttConnAckMessage;
@@ -64,7 +64,7 @@ public class Gateway extends Device {
             return;
         }
 
-        if(isConnecting){
+        if (isConnecting) {
             return;
         }
 
@@ -114,7 +114,7 @@ public class Gateway extends Device {
                     request.setId(UUID.randomUUID().toString());
                     request.setParams(subDevice);
                     String registerTopic = String.format("/sys/%s/%s/s/register", productKey, deviceName);
-                    String payload = JsonUtils.toJsonString(request);
+                    String payload = Json.encode(request);
                     client.publish(registerTopic, Buffer.buffer(payload), MqttQoS.AT_LEAST_ONCE, false, false);
                     log.info("publish message,topic:{},payload:{}", registerTopic, payload);
                 }

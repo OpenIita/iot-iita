@@ -20,7 +20,8 @@ import java.util.Objects;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonUtils {
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    private static final ObjectMapper OBJECT_MAPPER = SpringUtils.getBean(ObjectMapper.class);
 
     public static ObjectMapper getObjectMapper() {
         return OBJECT_MAPPER;
