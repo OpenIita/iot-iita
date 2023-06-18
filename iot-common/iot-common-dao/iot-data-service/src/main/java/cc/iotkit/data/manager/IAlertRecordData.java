@@ -15,7 +15,7 @@ import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.alert.AlertRecord;
 
 
-public interface IAlertRecordData extends ICommonData<AlertRecord, String> {
+public interface IAlertRecordData extends ICommonData<AlertRecord, Long> {
 
 
   Paging<AlertRecord> selectAlertConfigPage(PageRequest<AlertRecord> request);

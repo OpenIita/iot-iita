@@ -14,7 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Data
 @Entity
-@ApiModel(value = "告警记录")
+//@ApiModel(value = "告警记录")
 @Table(name = "alert_record")
 @AutoMapper(target= AlertConfig.class)
 public class TbAlertRecord {
@@ -23,7 +23,7 @@ public class TbAlertRecord {
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     @ApiModelProperty(value = "告警记录id")
-    private String id;
+    private Long id;
 
     /**
      * 配置所属用户

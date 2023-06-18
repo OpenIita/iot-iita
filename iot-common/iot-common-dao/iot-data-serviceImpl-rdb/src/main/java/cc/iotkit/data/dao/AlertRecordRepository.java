@@ -12,6 +12,6 @@ package cc.iotkit.data.dao;
 import cc.iotkit.data.model.TbAlertRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AlertRecordRepository extends JpaRepository<TbAlertRecord, String> {
+public interface AlertRecordRepository extends JpaRepository<TbAlertRecord, Long> {
 
 }
