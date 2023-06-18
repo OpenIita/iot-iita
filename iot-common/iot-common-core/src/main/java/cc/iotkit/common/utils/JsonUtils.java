@@ -5,12 +5,10 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,8 +20,7 @@ import java.util.Objects;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonUtils {
-
-    private static final ObjectMapper OBJECT_MAPPER = SpringUtils.getBean(ObjectMapper.class);
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static ObjectMapper getObjectMapper() {
         return OBJECT_MAPPER;
@@ -119,11 +116,12 @@ public class JsonUtils {
             throw new RuntimeException(e);
         }
     }
+
     public static <T> T objectToJavaBean(Object obj, Class<T> clazz) {
         if (Objects.isNull(obj)) {
             return null;
         }
-        return OBJECT_MAPPER.convertValue(obj,clazz);
+        return OBJECT_MAPPER.convertValue(obj, clazz);
     }
 
 }

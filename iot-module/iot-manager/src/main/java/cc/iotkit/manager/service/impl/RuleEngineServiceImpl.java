@@ -146,9 +146,13 @@ public class RuleEngineServiceImpl implements IRuleEngineService {
             throw new BizException(ErrCode.RULE_NOT_FOUND);
         }
         dataOwnerService.checkOwner(ruleInfo);
-        ruleInfoData.deleteById(ruleInfo.getId());
-        ruleManager.remove(ruleInfo.getId());
-        ruleLogData.deleteByRuleId(ruleId);
+        try {
+            ruleInfoData.deleteById(ruleInfo.getId());
+            ruleManager.remove(ruleInfo.getId());
+            ruleLogData.deleteByRuleId(ruleId);
+        } catch (Throwable e) {
+            log.warn("删除失败", e);
+        }
         return true;
     }
 
