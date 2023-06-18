@@ -50,6 +50,8 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
                 return new Response((Integer) map.get("status"), (String) map.get("error"),
                         "", IdUtil.simpleUUID());
             }
+        } else if (body instanceof Response) {
+            return body;
         }
 
         return new Response(200, "", body, IdUtil.simpleUUID());
