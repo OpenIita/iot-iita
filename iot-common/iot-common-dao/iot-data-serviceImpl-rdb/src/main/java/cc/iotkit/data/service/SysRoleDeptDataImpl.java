@@ -36,7 +36,7 @@ public class SysRoleDeptDataImpl implements ISysRoleDeptData, IJPACommData<SysRo
 
     @Override
     public void deleteByRoleId(Collection<Long> roleIds) {
-        jpaQueryFactory.delete(tbSysRoleDept).where(PredicateBuilder.instance().and(tbSysRoleDept.roleId.in(roleIds)).build());
+        jpaQueryFactory.delete(tbSysRoleDept).where(PredicateBuilder.instance().and(tbSysRoleDept.roleId.in(roleIds)).build()).execute();
     }
 
     @Override
