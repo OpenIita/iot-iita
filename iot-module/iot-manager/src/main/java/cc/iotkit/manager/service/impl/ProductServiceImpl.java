@@ -194,7 +194,7 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public List<ProductModelVo> getModels(String productKey) {
-        dataOwnerService.checkOwner(productData, productKey);
+//        dataOwnerService.checkOwner(productData, productKey);
         return MapstructUtils.convert(productModelData.findByProductKey(productKey), ProductModelVo.class);
 
     }

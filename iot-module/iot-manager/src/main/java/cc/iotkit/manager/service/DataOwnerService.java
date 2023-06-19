@@ -98,7 +98,7 @@ public class DataOwnerService {
      * 从库中取对应数据Id的数据中的uid是否与当前登录用户一致，并把当前用户id设置到数据中
      */
     public void checkOwnerSave(ICommonData<?, ?> service, Owned<?> data) {
-        checkOwner(service, data.getId());
+//        checkOwner(service, data.getId());
         data.setUid(AuthUtil.getUserId());
     }
 
