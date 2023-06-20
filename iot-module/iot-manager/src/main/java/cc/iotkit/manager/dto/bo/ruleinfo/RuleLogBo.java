@@ -2,6 +2,7 @@ package cc.iotkit.manager.dto.bo.ruleinfo;
 
 import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.model.rule.RuleInfo;
+import cc.iotkit.model.rule.RuleLog;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +14,7 @@ import jakarta.validation.constraints.Size;
 @ApiModel(value = "RuleLogBo")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = RuleInfo.class, reverseConvertGenerate = false)
+@AutoMapper(target = RuleLog.class, reverseConvertGenerate = false)
 public class RuleLogBo extends BaseDto  {
 
 	private static final long serialVersionUID = -1L;
