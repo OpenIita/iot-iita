@@ -9,12 +9,14 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.ITaskInfoData;
 import cc.iotkit.data.dao.TaskInfoRepository;
 import cc.iotkit.data.model.TbTaskInfo;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.TaskInfo;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Primary
 @Service
@@ -38,7 +41,8 @@ public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, S
 
     @Override
     public List<TaskInfo> findByUid(String uid) {
-        return MapstructUtils.convert(taskInfoRepository.findByUid(uid), TaskInfo.class);
+        return taskInfoRepository.findByUid(uid).stream().map(this::to)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -46,7 +50,9 @@ public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, S
         Page<TbTaskInfo> paged = taskInfoRepository.findByUid(uid,
                 Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                MapstructUtils.convert(paged.getContent(), TaskInfo.class));
+                paged.getContent().stream().map(this::to)
+                        .collect(Collectors.toList())
+        );
     }
 
     @Override
@@ -71,10 +77,8 @@ public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, S
 
     @Override
     public TaskInfo findById(String s) {
-        return  MapstructUtils.convert(taskInfoRepository.findById(s).orElse(null), TaskInfo.class);
+        return to(taskInfoRepository.findById(s).orElse(null));
     }
-
-
 
     @Override
     public TaskInfo save(TaskInfo data) {
@@ -82,12 +86,22 @@ public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, S
             data.setId(UUID.randomUUID().toString());
             data.setCreateAt(System.currentTimeMillis());
         }
-        taskInfoRepository.save(MapstructUtils.convert(data, TbTaskInfo.class));
+        taskInfoRepository.save(to(data));
         return data;
     }
 
+    private TaskInfo to(TbTaskInfo tb) {
+        TaskInfo convert = MapstructUtils.convert(tb, TaskInfo.class);
+        assert convert != null;
+        convert.setActions(JsonUtils.parseArray(tb.getActions(), RuleAction.class));
+        return convert;
+    }
 
-
-
+    private TbTaskInfo to(TaskInfo t) {
+        TbTaskInfo convert = MapstructUtils.convert(t, TbTaskInfo.class);
+        assert convert != null;
+        convert.setActions(JsonUtils.toJsonString(t.getActions()));
+        return convert;
+    }
 
 }

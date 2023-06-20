@@ -62,7 +62,6 @@ public class TbTaskInfo {
     @ApiModelProperty(value = "任务输出")
     @AutoMapping(ignore = true)
     @ReverseAutoMapping(ignore = true)
-
     private String actions;
 
     /**

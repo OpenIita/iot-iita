@@ -1,5 +1,6 @@
 package cc.iotkit.manager.dto.vo.taskinfo;
 
+import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.TaskInfo;
 import io.github.linpeilie.annotations.AutoMapping;
 import io.github.linpeilie.annotations.ReverseAutoMapping;
@@ -11,6 +12,7 @@ import lombok.ToString;
 import java.util.Date;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
@@ -22,7 +24,6 @@ import io.github.linpeilie.annotations.AutoMapper;
 @Data
 @ExcelIgnoreUnannotated
 @AutoMapper(target = TaskInfo.class)
-
 public class TaskInfoVo implements Serializable {
 
     private static final long serialVersionUID = -1L;
@@ -33,9 +34,7 @@ public class TaskInfoVo implements Serializable {
 
     @ApiModelProperty(value = "任务输出")
     @ExcelProperty(value = "任务输出")
-    @AutoMapping(ignore = true)
-    @ReverseAutoMapping(ignore = true)
-    private String actions;
+    private List<RuleAction> actions;
 
     @ApiModelProperty(value = "创建时间")
     @ExcelProperty(value = "创建时间")
