@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OtaDevice implements Id<String> {
+public class OtaDevice implements Id<Long> {
 
-    private String id;
+    private Long id;
 
     private String deviceName;
 

@@ -36,11 +36,6 @@ public class IOtaPackageDataImpl implements IOtaPackageData, IJPACommData<OtaPac
     private final IOtaPackageRepository iOtaPackageRepository;
 
     @Override
-    public List<OtaPackage> findByVersionGreaterThan(String version) {
-        return null;
-    }
-
-    @Override
     public JpaRepository getBaseRepository() {
         return iOtaPackageRepository;
     }
@@ -53,11 +48,6 @@ public class IOtaPackageDataImpl implements IOtaPackageData, IJPACommData<OtaPac
     @Override
     public Class getTClass() {
         return OtaPackage.class;
-    }
-
-    @Override
-    public long count() {
-        return iOtaPackageRepository.count();
     }
 
     @Override

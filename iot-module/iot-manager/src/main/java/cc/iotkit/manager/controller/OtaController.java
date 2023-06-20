@@ -69,10 +69,10 @@ public class OtaController {
         return otaService.getOtaPackagePageList(request);
     }
 
-    @ApiOperation("设备升级")
+    @ApiOperation("OTA升级")
     @PostMapping("/device/upgrade")
-    public String deviceUpgrade(@RequestBody Request<DeviceUpgradeBo> request) {
-        return otaService.startUpgrade(request.getData().getOtaId(), request.getData().getDeviceId());
+    public void deviceUpgrade(@RequestBody Request<DeviceUpgradeBo> request) {
+        otaService.startUpgrade(request.getData().getOtaId(), request.getData().getDeviceIds());
     }
 
     @ApiOperation("设备升级结果查询")
@@ -80,12 +80,5 @@ public class OtaController {
     public Paging<DeviceOtaInfoVO> otaResult(@RequestBody PageRequest<DeviceOtaInfoBo> request) {
         return otaService.otaResult(request);
     }
-
-    @ApiOperation("OTA升级")
-    @PostMapping("/down")
-    public void ota(@RequestBody PageRequest<DeviceOtaInfoBo> request) {
-        otaService.startUpgrade(1L, "16870054884740abcd123456000000103");
-    }
-
 
 }

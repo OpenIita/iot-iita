@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * @Author: 石恒
  * @Date: 2023/6/16 21:13
@@ -17,6 +19,6 @@ import lombok.EqualsAndHashCode;
 @AutoMapper(target = DeviceUpgradeBo.class, reverseConvertGenerate = false)
 public class DeviceUpgradeBo extends BaseDto {
     private static final long serialVersionUID = -1L;
-    private String deviceId;
+    private List<String> deviceIds;
     private Long otaId;
 }

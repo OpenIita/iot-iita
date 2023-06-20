@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  */
 @Primary
 @Service
-public class IOtaDeviceDataImpl implements IOtaDeviceData, IJPACommData<OtaDevice, String> {
+public class IOtaDeviceDataImpl implements IOtaDeviceData, IJPACommData<OtaDevice, Long> {
 
     @Resource
     private IOtaDeviceRepository iOtaDeviceRepository;
@@ -46,46 +46,5 @@ public class IOtaDeviceDataImpl implements IOtaDeviceData, IJPACommData<OtaDevic
     @Override
     public Class getTClass() {
         return OtaDevice.class;
-    }
-
-    @Override
-    public OtaDevice save(OtaDevice data) {
-        if (StringUtils.isBlank(data.getId())) {
-            data.setId(UUID.randomUUID().toString());
-        }
-        iOtaDeviceRepository.save(MapstructUtils.convert(data, TbOtaDevice.class));
-        return data;
-    }
-
-    @Override
-    public OtaDevice findById(String id) {
-        return MapstructUtils.convert(iOtaDeviceRepository.findById(id).orElse(null), OtaDevice.class);
-    }
-
-    @Override
-    public void deleteById(String id) {
-        iOtaDeviceRepository.deleteById(id);
-    }
-
-    @Override
-    public long count() {
-        return iOtaDeviceRepository.count();
-    }
-
-    @Override
-    public List<OtaDevice> findAll() {
-        return iOtaDeviceRepository.findAll().stream().map(e -> MapstructUtils.convert(e, OtaDevice.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Paging<OtaDevice> findAll(PageRequest<OtaDevice> pageRequest) {
-        Page<TbOtaDevice> tbOtaPackages = iOtaDeviceRepository.findAll(Pageable.ofSize(pageRequest.getPageSize()).withPage(pageRequest.getPageNum() - 1));
-        return new Paging<>(
-                tbOtaPackages.getTotalElements(),
-                tbOtaPackages.getContent()
-                        .stream().map(e -> MapstructUtils.convert(e, OtaDevice.class))
-                        .collect(Collectors.toList())
-        );
     }
 }

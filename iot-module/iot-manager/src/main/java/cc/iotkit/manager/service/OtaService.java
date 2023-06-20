@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -60,10 +61,6 @@ public class OtaService {
         return Boolean.TRUE;
     }
 
-    public void findByVersionGreaterThan(String version, String deviceId) {
-        iOtaPackageData.findByVersionGreaterThan(version);
-    }
-
     public Paging<OtaPackage> getOtaPackagePageList(PageRequest<OtaPackage> request) {
         return iOtaPackageData.findAll(request);
     }
@@ -71,10 +68,11 @@ public class OtaService {
     /**
      * 开始升级
      */
-    public String startUpgrade(Long otaId, String deviceId) {
+    public void startUpgrade(Long otaId, List<String> deviceIds) {
         OtaPackage otaPackage = iOtaPackageData.findById(otaId);
-        //构建升级包
-        return deviceService.otaUpgrade(deviceId, true, otaPackage);
+        deviceIds.forEach(deviceId -> {
+            deviceService.otaUpgrade(deviceId, true, otaPackage);
+        });
     }
 
     public Paging<DeviceOtaInfoVO> otaResult(PageRequest<DeviceOtaInfoBo> request) {
