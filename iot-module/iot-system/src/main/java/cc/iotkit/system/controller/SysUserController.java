@@ -25,7 +25,6 @@ import cc.iotkit.system.service.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +36,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -166,6 +164,7 @@ public class SysUserController extends BaseController {
             }
         }
         user.setPassword(BCrypt.hashpw(user.getPassword()));
+        user.setUserType("sys_user");
         userService.insertUser(user);
     }
 
