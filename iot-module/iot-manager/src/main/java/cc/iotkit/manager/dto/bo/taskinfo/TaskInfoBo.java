@@ -1,28 +1,16 @@
 package cc.iotkit.manager.dto.bo.taskinfo;
 
+import cc.iotkit.common.api.BaseDto;
+import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.TaskInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.github.linpeilie.annotations.AutoMapping;
-import io.github.linpeilie.annotations.ReverseAutoMapping;
-import jakarta.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-
-import java.io.Serializable;
-import java.util.Date;
-import java.math.BigDecimal;
-
-import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.common.validate.AddGroup;
-import cc.iotkit.common.validate.EditGroup;
-
-import io.github.linpeilie.annotations.AutoMapper;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 
 @ApiModel(value = "TaskInfoBo")
@@ -37,10 +25,7 @@ public class TaskInfoBo extends BaseDto {
     private String id;
 
     @ApiModelProperty(value = "任务输出")
-    @Size(max = 65535, message = "任务输出长度不正确")
-    @AutoMapping(ignore = true)
-    @ReverseAutoMapping(ignore = true)
-    private String actions;
+    private List<RuleAction> actions;
 
     @ApiModelProperty(value = "创建时间")
     private Long createAt;

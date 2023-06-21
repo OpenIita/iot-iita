@@ -12,6 +12,4 @@ import java.util.List;
  */
 public interface IOtaPackageData extends ICommonData<OtaPackage, Long> {
 
-    List<OtaPackage> findByVersionGreaterThan(String version);
-
 }
