@@ -200,6 +200,12 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    public boolean deleteProductModel(String id) {
+        productModelData.deleteById(id);
+        return true;
+    }
+
+    @Override
     public boolean editProductModel(ProductModelBo productModelBo) {
         ProductModel productModel = productModelBo.to(ProductModel.class);
         String model = productModel.getModel();

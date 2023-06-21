@@ -48,4 +48,6 @@ public interface IProductService {
     List<ProductModelVo> getModels(String productKey);
 
     boolean editProductModel(ProductModelBo productModel);
+
+    boolean deleteProductModel(String id);
 }

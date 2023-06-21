@@ -144,4 +144,10 @@ public class ProductController {
     public boolean saveProductModel(@Validated @RequestBody Request<ProductModelBo> bo) {
         return productService.editProductModel(bo.getData());
     }
+
+    @PostMapping("/productModel/delete")
+    @ApiOperation("删除产品型号")
+    public boolean deleteProductModel(@Validated @RequestBody Request<String> id) {
+        return productService.deleteProductModel(id.getData());
+    }
 }
