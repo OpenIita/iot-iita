@@ -266,7 +266,14 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public int updateUserProfile(SysUserBo user) {
-        return 0;
+        SysUser oldUser=sysUserData.findById(user.getId());
+        if(ObjectUtil.isNotNull(user.getNickName())){
+            oldUser.setNickName(user.getNickName());
+        }
+        oldUser.setPhonenumber(user.getPhonenumber());
+        oldUser.setEmail(user.getEmail());
+        oldUser.setSex(user.getSex());
+        return sysUserData.save(oldUser)!=null?1:0;
     }
 
     @Override

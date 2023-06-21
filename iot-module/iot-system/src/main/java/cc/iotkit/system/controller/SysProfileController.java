@@ -47,7 +47,7 @@ public class SysProfileController extends BaseController {
      */
 
     @ApiOperation(value = "个人信息", notes = "个人信息")
-    @PostMapping("/getDeail")
+    @PostMapping("/getDetail")
     public ProfileVo profile() {
         SysUserVo user = userService.selectUserById(LoginHelper.getUserId());
         ProfileVo profileVo = new ProfileVo();
