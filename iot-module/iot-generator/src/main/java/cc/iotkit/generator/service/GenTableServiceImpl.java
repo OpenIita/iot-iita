@@ -1,5 +1,6 @@
 package cc.iotkit.generator.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.exception.BizException;
@@ -7,6 +8,7 @@ import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.file.FileUtils;
+import cc.iotkit.generator.core.PageBuilder;
 import cc.iotkit.generator.core.PageQuery;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
@@ -88,8 +90,8 @@ public class GenTableServiceImpl implements IGenTableService {
     }
 
     @Override
-    public Paging<GenTable> selectPageGenTableList(GenTable genTable, PageQuery pageQuery) {
-        Page<GenTable> page = baseMapper.selectPage(pageQuery.build(), this.buildGenTableQueryWrapper(genTable));
+    public Paging<GenTable> selectPageGenTableList(  PageRequest<GenTable> pageQuery) {
+        Page<GenTable> page = baseMapper.selectPage(PageBuilder.build(pageQuery), this.buildGenTableQueryWrapper(pageQuery.getData()));
         return new Paging<>(page.getTotal(), page.getRecords());
     }
 
@@ -98,15 +100,15 @@ public class GenTableServiceImpl implements IGenTableService {
         QueryWrapper<GenTable> wrapper = Wrappers.query();
         wrapper.like(StringUtils.isNotBlank(genTable.getTableName()), "lower(table_name)", StringUtils.lowerCase(genTable.getTableName()))
             .like(StringUtils.isNotBlank(genTable.getTableComment()), "lower(table_comment)", StringUtils.lowerCase(genTable.getTableComment()))
-            .between(params.get("beginTime") != null && params.get("endTime") != null,
+            .between(StringUtils.isNotBlank((CharSequence) params.get("beginTime"))  && StringUtils.isNotBlank((CharSequence) params.get("endTime")),
                 "create_time", params.get("beginTime"), params.get("endTime"));
         return wrapper;
     }
 
 
     @Override
-    public Paging<GenTable> selectPageDbTableList(GenTable genTable, PageQuery pageQuery) {
-        Page<GenTable> page = baseMapper.selectPageDbTableList(pageQuery.build(), genTable);
+    public Paging<GenTable> selectPageDbTableList(PageRequest<GenTable> pageQuery) {
+        Page<GenTable> page = baseMapper.selectPageDbTableList(PageBuilder.build(pageQuery), pageQuery.getData());
         return new Paging<>(page.getTotal(), page.getRecords());
     }
 

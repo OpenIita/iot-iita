@@ -2,8 +2,6 @@ package cc.iotkit.generator.controller;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.generator.core.PageQuery;
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.io.IoUtil;
 
@@ -14,11 +12,13 @@ import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.generator.domain.GenTable;
 import cc.iotkit.generator.domain.GenTableColumn;
 import cc.iotkit.generator.service.IGenTableService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -40,10 +40,11 @@ public class GenController extends BaseController {
     /**
      * 查询代码生成列表
      */
-    @SaCheckPermission("tool:gen:list")
+//    @SaCheckPermission("tool:gen:list")
+    @ApiOperation(value = "查询代码生成列表", notes = "查询代码生成列表,根据查询条件分页")
     @PostMapping("/list")
-    public Paging<GenTable> genList(GenTable genTable, PageQuery pageQuery) {
-        return genTableService.selectPageGenTableList(genTable, pageQuery);
+    public Paging<GenTable> genList(@RequestBody @Validated PageRequest<GenTable> query) {
+        return genTableService.selectPageGenTableList(query );
     }
 
     /**
@@ -51,7 +52,7 @@ public class GenController extends BaseController {
      *
      * @param tableId 表ID
      */
-    @SaCheckPermission("tool:gen:query")
+//    @SaCheckPermission("tool:gen:query")
     @PostMapping(value = "/{tableId}")
     public Map<String, Object> getInfo(@PathVariable Long tableId) {
         GenTable table = genTableService.selectGenTableById(tableId);
@@ -67,10 +68,10 @@ public class GenController extends BaseController {
     /**
      * 查询数据库列表
      */
-    @SaCheckPermission("tool:gen:list")
+//    @SaCheckPermission("tool:gen:list")
     @PostMapping("/db/list")
-    public Paging<GenTable> dataList(GenTable genTable, PageQuery pageQuery) {
-        return genTableService.selectPageDbTableList(genTable, pageQuery);
+    public Paging<GenTable> dataList(@RequestBody @Validated PageRequest<GenTable> pageQuery) {
+        return genTableService.selectPageDbTableList( pageQuery);
     }
 
     /**
@@ -78,7 +79,7 @@ public class GenController extends BaseController {
      *
      * @param tableId 表ID
      */
-    @SaCheckPermission("tool:gen:list")
+//    @SaCheckPermission("tool:gen:list")
     @PostMapping(value = "/column/{tableId}")
     public Paging<GenTableColumn> columnList(Long tableId) {
 
@@ -92,7 +93,7 @@ public class GenController extends BaseController {
      *
      * @param tables 表名串
      */
-    @SaCheckPermission("tool:gen:import")
+//    @SaCheckPermission("tool:gen:import")
     @Log(title = "代码生成", businessType = BusinessType.IMPORT)
     @PostMapping("/importTable")
     public void importTableSave(String tables) {
@@ -106,7 +107,7 @@ public class GenController extends BaseController {
     /**
      * 修改保存代码生成业务
      */
-    @SaCheckPermission("tool:gen:edit")
+//    @SaCheckPermission("tool:gen:edit")
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
     @PutMapping
     public void editSave(@Validated @RequestBody GenTable genTable) {
@@ -120,7 +121,7 @@ public class GenController extends BaseController {
      *
      * @param tableIds 表ID串
      */
-    @SaCheckPermission("tool:gen:remove")
+//    @SaCheckPermission("tool:gen:remove")
     @Log(title = "代码生成", businessType = BusinessType.DELETE)
     @DeleteMapping("/{tableIds}")
     public void remove(@PathVariable Long[] tableIds) {
@@ -133,7 +134,7 @@ public class GenController extends BaseController {
      *
      * @param tableId 表ID
      */
-    @SaCheckPermission("tool:gen:preview")
+//    @SaCheckPermission("tool:gen:preview")
     @PostMapping("/preview/{tableId}")
     public Map<String, String> preview(@PathVariable("tableId") Long tableId) throws IOException {
         Map<String, String> dataMap = genTableService.previewCode(tableId);
@@ -145,7 +146,7 @@ public class GenController extends BaseController {
      *
      * @param tableName 表名
      */
-    @SaCheckPermission("tool:gen:code")
+//    @SaCheckPermission("tool:gen:code")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @PostMapping("/download/{tableName}")
     public void download(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
@@ -158,7 +159,7 @@ public class GenController extends BaseController {
      *
      * @param tableName 表名
      */
-    @SaCheckPermission("tool:gen:code")
+//    @SaCheckPermission("tool:gen:code")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @PostMapping("/genCode/{tableName}")
     public void genCode(@PathVariable("tableName") String tableName) {
@@ -171,7 +172,7 @@ public class GenController extends BaseController {
      *
      * @param tableName 表名
      */
-    @SaCheckPermission("tool:gen:edit")
+//    @SaCheckPermission("tool:gen:edit")
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
     @PostMapping("/synchDb/{tableName}")
     public void synchDb(@PathVariable("tableName") String tableName) {
@@ -184,7 +185,7 @@ public class GenController extends BaseController {
      *
      * @param tables 表名串
      */
-    @SaCheckPermission("tool:gen:code")
+//    @SaCheckPermission("tool:gen:code")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @PostMapping("/batchGenCode")
     public void batchGenCode(HttpServletResponse response, String tables) throws IOException {

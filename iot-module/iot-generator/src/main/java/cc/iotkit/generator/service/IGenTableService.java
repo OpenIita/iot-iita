@@ -2,6 +2,7 @@ package cc.iotkit.generator.service;
 
 
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.generator.core.PageQuery;
 import cc.iotkit.generator.domain.GenTable;
@@ -28,18 +29,17 @@ public interface IGenTableService {
     /**
      * 查询业务列表
      *
-     * @param genTable 业务信息
+     *
      * @return 业务集合
      */
-    Paging<GenTable> selectPageGenTableList(GenTable genTable, PageQuery pageQuery);
+    Paging<GenTable> selectPageGenTableList(PageRequest<GenTable> pageQuery);
 
     /**
      * 查询据库列表
      *
-     * @param genTable 业务信息
      * @return 数据库表集合
      */
-    Paging<GenTable> selectPageDbTableList(GenTable genTable, PageQuery pageQuery);
+    Paging<GenTable> selectPageDbTableList(PageRequest<GenTable>  pageQuery);
 
     /**
      * 查询据库列表
