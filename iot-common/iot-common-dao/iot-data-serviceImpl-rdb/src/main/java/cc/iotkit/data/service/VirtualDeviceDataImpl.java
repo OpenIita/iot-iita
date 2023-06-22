@@ -9,7 +9,6 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IVirtualDeviceData;
 import cc.iotkit.data.dao.VirtualDeviceMappingRepository;
@@ -22,7 +21,6 @@ import cc.iotkit.model.device.VirtualDevice;
 import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +28,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,12 +36,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<VirtualDevice, String> {
 
-
     private final VirtualDeviceRepository virtualDeviceRepository;
 
-
     private final VirtualDeviceMappingRepository virtualDeviceMappingRepository;
-
 
     @Override
     public JpaRepository getBaseRepository() {
@@ -96,7 +90,7 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
 
     @Override
     public VirtualDevice findById(String s) {
-        VirtualDevice dto = MapstructUtils.convert(virtualDeviceRepository.findById(s).orElse(null),VirtualDevice.class);
+        VirtualDevice dto = MapstructUtils.convert(virtualDeviceRepository.findById(s).orElse(null), VirtualDevice.class);
         dto.setDevices(getVirtualDeviceIds(s));
         return dto;
     }
@@ -108,10 +102,11 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public VirtualDevice save(VirtualDevice data) {
         if (StringUtils.isBlank(data.getId())) {
             data.setId(IdUtil.simpleUUID());
+            data.setState(VirtualDevice.STATE_STOPPED);
             data.setCreateAt(System.currentTimeMillis());
         }
         virtualDeviceRepository.save(MapstructUtils.convert(data, TbVirtualDevice.class));
@@ -130,7 +125,7 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(String s) {
         virtualDeviceRepository.deleteById(s);
         virtualDeviceMappingRepository.deleteByVirtualId(s);
@@ -141,7 +136,6 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
     public List<VirtualDevice> findAll() {
         return MapstructUtils.convert(virtualDeviceRepository.findAll(), VirtualDevice.class);
     }
-
 
 
 }

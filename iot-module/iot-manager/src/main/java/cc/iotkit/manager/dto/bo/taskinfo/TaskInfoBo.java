@@ -18,7 +18,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = TaskInfo.class, reverseConvertGenerate = false)
 public class TaskInfoBo extends BaseDto {
-
     private static final long serialVersionUID = -1L;
 
     @ApiModelProperty(value = "id")
@@ -54,8 +53,16 @@ public class TaskInfoBo extends BaseDto {
     @Size(max = 255, message = "任务类型长度不正确")
     private String type;
 
+    @ApiModelProperty(value = "延时时长秒")
+    private Integer seconds;
+
     @ApiModelProperty(value = "创建者")
     @Size(max = 255, message = "创建者长度不正确")
     private String uid;
 
+    public void setSeconds(Integer seconds) {
+        if (TaskInfo.TYPE_DELAY.equals(getType())) {
+            setExpression("" + seconds);
+        }
+    }
 }

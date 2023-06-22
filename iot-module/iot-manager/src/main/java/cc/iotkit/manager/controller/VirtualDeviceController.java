@@ -10,10 +10,10 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.IVirtualDeviceData;
 import cc.iotkit.manager.dto.bo.ChangeStateBo;
@@ -21,10 +21,8 @@ import cc.iotkit.manager.dto.bo.device.DeviceLogQueryBo;
 import cc.iotkit.manager.dto.bo.device.DeviceSaveScriptBo;
 import cc.iotkit.manager.dto.bo.virtualdevice.VirtualSaveDevicesBo;
 import cc.iotkit.manager.service.DataOwnerService;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.device.VirtualDeviceLog;
-import cc.iotkit.model.product.Product;
 import cc.iotkit.temporal.IVirtualDeviceLogData;
 import cc.iotkit.virtualdevice.VirtualManager;
 import io.swagger.annotations.Api;
@@ -32,7 +30,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -53,14 +54,8 @@ public class VirtualDeviceController {
 
     @ApiOperation("获取虚拟设备列表")
     @PostMapping("/list")
-    public Paging<VirtualDevice> getDevices(
-            PageRequest<VirtualDevice> pageRequest) {
-        String uid = AuthUtil.getUserId();
-        if (AuthUtil.isAdmin()) {
-            return virtualDeviceData.findAll(pageRequest);
-        } else {
-            return virtualDeviceData.findByUid(uid, pageRequest.getPageNum(), pageRequest.getPageNum());
-        }
+    public Paging<VirtualDevice> getDevices(PageRequest<VirtualDevice> pageRequest) {
+        return virtualDeviceData.findAll(pageRequest);
     }
 
     /**
@@ -68,11 +63,7 @@ public class VirtualDeviceController {
      */
     @ApiOperation("添加虚拟设备")
     @PostMapping("/add")
-    public void add(VirtualDevice virtualDevice) {
-        virtualDevice.setId(null);
-        virtualDevice.setUid(AuthUtil.getUserId());
-        virtualDevice.setState(VirtualDevice.STATE_STOPPED);
-        virtualDevice.setCreateAt(System.currentTimeMillis());
+    public void add(@Validated @RequestBody VirtualDevice virtualDevice) {
         virtualDeviceData.save(virtualDevice);
     }
 
@@ -81,7 +72,7 @@ public class VirtualDeviceController {
      */
     @ApiOperation("修改虚拟设备")
     @PostMapping("/modify")
-    public void modify(Request<VirtualDevice> bo) {
+    public void modify(@Validated @RequestBody Request<VirtualDevice> bo) {
         VirtualDevice virtualDevice = bo.getData();
         VirtualDevice oldData = checkOwner(virtualDevice.getId());
         ReflectUtil.copyNoNulls(virtualDevice, oldData,

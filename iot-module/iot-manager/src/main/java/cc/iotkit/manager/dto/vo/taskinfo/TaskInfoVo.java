@@ -68,5 +68,11 @@ public class TaskInfoVo implements Serializable {
     @ExcelProperty(value = "创建者")
     private String uid;
 
+    public Integer getSeconds() {
+        if (TaskInfo.TYPE_DELAY.equals(getType())) {
+            return Integer.parseInt(getExpression());
+        }
+        return null;
+    }
 
 }

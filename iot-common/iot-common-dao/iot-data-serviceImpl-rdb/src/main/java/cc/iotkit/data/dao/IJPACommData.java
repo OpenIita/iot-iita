@@ -33,15 +33,9 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
 
     Class getTClass();
 
-
-
-
-
     default T findById(ID id) {
         return (T) MapstructUtils.convert(getBaseRepository().findById(id).orElse(null), getTClass());
     }
-
-
 
     @Override
     default List<T> findByIds(Collection<ID> id) {

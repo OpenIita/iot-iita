@@ -103,15 +103,11 @@ public class ProtocolController {
         return protocolService.editConverter(req.getData());
     }
 
-
-
     @ApiOperation("获取转换脚本详情")
     @PostMapping("/getConverterScript")
     public ProtocolConverterVo getConverter(@RequestBody Request<String> req) {
         String id = req.getData();
-
         return protocolService.getConverter(id);
-
     }
 
     @PostMapping("/converterScript/edit")

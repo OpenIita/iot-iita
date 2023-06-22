@@ -247,7 +247,11 @@ public class RuleEngineServiceImpl implements IRuleEngineService {
         dataOwnerService.checkOwner(taskInfo);
         taskManager.deleteTask(taskId, "delete by " + AuthUtil.getUserId());
         taskInfoData.deleteById(taskId);
-        taskLogData.deleteByTaskId(taskId);
+        try {
+            taskLogData.deleteByTaskId(taskId);
+        } catch (Throwable e) {
+            log.error("delete task logs failed", e);
+        }
         return true;
     }
 
