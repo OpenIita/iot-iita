@@ -15,6 +15,7 @@ import cc.iotkit.model.alert.AlertConfig;
 import cc.iotkit.model.notify.ChannelTemplate;
 import cc.iotkit.model.ota.DeviceOtaInfo;
 import cc.iotkit.model.ota.OtaPackage;
+import cc.iotkit.oss.service.OssTemplate;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,12 @@ import java.util.UUID;
  * @Author: 石恒
  * @Date: 2023/5/19 20:49
  * @Description:
+ * oss:
+ *   region: tb3321.oss-cn-shanghai.aliyuncs.com
+ *   endpoint: oss-cn-shanghai.aliyuncs.com
+ *   accessKey: LTAI5tAq5Db5eHt5DTYmXLF4
+ *   secretKey: bPbHQbeXPSRtyNxxCsw5uRVGJTxNHK
+ *   buckName: tb3321
  */
 @Slf4j
 @Service
@@ -40,6 +47,7 @@ public class OtaService {
     private final IOtaDeviceData iOtaDeviceData;
     private final DeviceService deviceService;
     private final IDeviceOtaInfoData deviceOtaInfoData;
+    private final OssTemplate ossTemplate;
 
 
     @Value("${oss.region}")
@@ -49,6 +57,7 @@ public class OtaService {
 
     public String uploadFile(InputStream inputStream, String suffix) throws Exception {
         String objectName = UUID.randomUUID().toString().replaceAll("-", "") + suffix;
+        ossTemplate.putObject(buckName, objectName, inputStream);
         return "https://" + region + "/" + objectName;
     }
 
