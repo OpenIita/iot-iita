@@ -1,8 +1,7 @@
 -- ----------------------------
 -- 18、代码生成业务表
 -- ----------------------------
-drop table if exists gen_table;
-create table gen_table (
+create table if not exists gen_table (
                            table_id          bigint(20)      not null                   comment '编号',
                            data_name         varchar(200)    default ''                 comment '数据源名称',
                            table_name        varchar(200)    default ''                 comment '表名称',
@@ -32,8 +31,8 @@ create table gen_table (
 -- ----------------------------
 -- 19、代码生成业务表字段
 -- ----------------------------
-drop table if exists gen_table_column;
-create table gen_table_column (
+
+create table if not exists gen_table_column (
                                   column_id         bigint(20)      not null                   comment '编号',
                                   table_id          bigint(20)                                 comment '归属表编号',
                                   column_name       varchar(200)                               comment '列名称',

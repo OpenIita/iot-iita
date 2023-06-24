@@ -19,6 +19,7 @@ public enum DataBaseType {
      */
     MY_SQL("MySQL"),
 
+    H2("H2"),
     /**
      * Oracle
      */

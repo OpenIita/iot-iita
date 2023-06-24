@@ -41,6 +41,11 @@ public class DataBaseHelper {
         return DataBaseType.MY_SQL == getDataBaseType();
     }
 
+    public static boolean isH2() {
+        return DataBaseType.H2 == getDataBaseType();
+    }
+
+
     public static boolean isOracle() {
         return DataBaseType.ORACLE == getDataBaseType();
     }
