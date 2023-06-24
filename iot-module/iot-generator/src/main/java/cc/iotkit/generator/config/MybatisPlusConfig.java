@@ -1,5 +1,6 @@
 package cc.iotkit.generator.config;
 
+import cc.iotkit.generator.core.DbIdGenerator;
 import cc.iotkit.generator.factory.YmlPropertySourceFactory;
 import cn.hutool.core.net.NetUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
@@ -80,7 +81,8 @@ public class MybatisPlusConfig {
      */
     @Bean
     public IdentifierGenerator idGenerator() {
-        return new DefaultIdentifierGenerator(NetUtil.getLocalhost());
+        String hostAddress = NetUtil.getLocalhost().getHostAddress();
+        return new DbIdGenerator((short) ((short) hostAddress.hashCode()%64));
     }
 
     /**

@@ -36,7 +36,10 @@
             <artifactId>iot-common-doc</artifactId>
         </dependency>
         <!--常用工具类 -->
-
+        <dependency>
+            <groupId>com.github.yitter</groupId>
+            <artifactId>yitter-idgenerator</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>cc.iotkit</groupId>

@@ -541,6 +541,11 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
+                <artifactId>iot-generator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.iotkit</groupId>
                 <artifactId>iot-virtual-device</artifactId>
                 <version>${project.version}</version>
             </dependency>
