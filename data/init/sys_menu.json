@@ -43,6 +43,28 @@
       "status": "0",
       "visible": "0"
     },
+   {
+     "id": 3,
+     "createBy": 1,
+     "createDept": 103,
+
+     "updateBy": 1,
+
+     "component": null,
+     "icon": "tool",
+     "isCache": "0",
+     "isFrame": "1",
+     "menuName": "系统工具",
+     "menuType": "M",
+     "orderNum": 24,
+     "parentId": 0,
+     "path": "tool",
+     "perms": "",
+     "queryParam": "",
+     "remark": "系统工具目录",
+     "status": "0",
+     "visible": "0"
+   },
     {
       "id": 4,
       "createBy": 1,
@@ -306,6 +328,28 @@
       "status": "0",
       "visible": "0"
     },
+   {
+     "id": 115,
+     "createBy": 1,
+     "createDept": 103,
+
+     "updateBy": null,
+     "updateTime": null,
+     "component": "tool/gen/index",
+     "icon": "code",
+     "isCache": "0",
+     "isFrame": "1",
+     "menuName": "代码生成",
+     "menuType": "C",
+     "orderNum": 2,
+     "parentId": 3,
+     "path": "gen",
+     "perms": "tool:gen:list",
+     "queryParam": "",
+     "remark": "代码生成菜单",
+     "status": "0",
+     "visible": "0"
+   },
     {
       "id": 118,
       "createBy": 1,
