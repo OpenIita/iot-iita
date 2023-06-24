@@ -1,5 +1,6 @@
 package cc.iotkit.generator.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.exception.BizException;
@@ -7,6 +8,8 @@ import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.file.FileUtils;
+import cc.iotkit.generator.core.DbIdGenerator;
+import cc.iotkit.generator.core.PageBuilder;
 import cc.iotkit.generator.core.PageQuery;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
@@ -15,7 +18,6 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -59,7 +61,7 @@ public class GenTableServiceImpl implements IGenTableService {
 
     private final GenTableMapper baseMapper;
     private final GenTableColumnMapper genTableColumnMapper;
-    private final IdentifierGenerator identifierGenerator;
+    private final DbIdGenerator identifierGenerator;
 
     /**
      * 查询业务字段列表
@@ -70,8 +72,8 @@ public class GenTableServiceImpl implements IGenTableService {
     @Override
     public List<GenTableColumn> selectGenTableColumnListByTableId(Long tableId) {
         return genTableColumnMapper.selectList(new LambdaQueryWrapper<GenTableColumn>()
-            .eq(GenTableColumn::getTableId, tableId)
-            .orderByAsc(GenTableColumn::getSort));
+                .eq(GenTableColumn::getTableId, tableId)
+                .orderByAsc(GenTableColumn::getSort));
     }
 
     /**
@@ -88,8 +90,8 @@ public class GenTableServiceImpl implements IGenTableService {
     }
 
     @Override
-    public Paging<GenTable> selectPageGenTableList(GenTable genTable, PageQuery pageQuery) {
-        Page<GenTable> page = baseMapper.selectPage(pageQuery.build(), this.buildGenTableQueryWrapper(genTable));
+    public Paging<GenTable> selectPageGenTableList(  PageRequest<GenTable> pageQuery) {
+        Page<GenTable> page = baseMapper.selectPage(PageBuilder.build(pageQuery), this.buildGenTableQueryWrapper(pageQuery.getData()));
         return new Paging<>(page.getTotal(), page.getRecords());
     }
 
@@ -98,15 +100,18 @@ public class GenTableServiceImpl implements IGenTableService {
         QueryWrapper<GenTable> wrapper = Wrappers.query();
         wrapper.like(StringUtils.isNotBlank(genTable.getTableName()), "lower(table_name)", StringUtils.lowerCase(genTable.getTableName()))
             .like(StringUtils.isNotBlank(genTable.getTableComment()), "lower(table_comment)", StringUtils.lowerCase(genTable.getTableComment()))
-            .between(params.get("beginTime") != null && params.get("endTime") != null,
+            .between(StringUtils.isNotBlank((CharSequence) params.get("beginTime"))  && StringUtils.isNotBlank((CharSequence) params.get("endTime")),
                 "create_time", params.get("beginTime"), params.get("endTime"));
         return wrapper;
     }
 
 
     @Override
-    public Paging<GenTable> selectPageDbTableList(GenTable genTable, PageQuery pageQuery) {
-        Page<GenTable> page = baseMapper.selectPageDbTableList(pageQuery.build(), genTable);
+    public Paging<GenTable> selectPageDbTableList(PageRequest<GenTable> pageQuery) {
+        GenTable genTable = pageQuery.getData();
+        genTable.getParams().put("genTableNames",baseMapper.selectTableNameList(genTable.getDataName()));
+
+        Page<GenTable> page = baseMapper.selectPageDbTableList(PageBuilder.build(pageQuery), genTable);
         return new Paging<>(page.getTotal(), page.getRecords());
     }
 
@@ -117,7 +122,7 @@ public class GenTableServiceImpl implements IGenTableService {
      * @return 数据库表集合
      */
     @Override
-    public List<GenTable> selectDbTableListByNames(String[] tableNames) {
+    public List<GenTable> selectDbTableListByNames(Collection<String> tableNames) {
         return baseMapper.selectDbTableListByNames(tableNames);
     }
 
@@ -158,10 +163,10 @@ public class GenTableServiceImpl implements IGenTableService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void deleteGenTableByIds(Long[] tableIds) {
-        List<Long> ids = Arrays.asList(tableIds);
-        baseMapper.deleteBatchIds(ids);
-        genTableColumnMapper.delete(new LambdaQueryWrapper<GenTableColumn>().in(GenTableColumn::getTableId, ids));
+    public void deleteGenTableByIds(Collection<Long> tableIds) {
+
+        baseMapper.deleteBatchIds(tableIds);
+        genTableColumnMapper.delete(new LambdaQueryWrapper<GenTableColumn>().in(GenTableColumn::getTableId, tableIds));
     }
 
     /**
@@ -209,7 +214,7 @@ public class GenTableServiceImpl implements IGenTableService {
         GenTable table = baseMapper.selectGenTableById(tableId);
         List<Long> menuIds = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            menuIds.add(identifierGenerator.nextId(null).longValue());
+            menuIds.add((Long) identifierGenerator.nextId(null));
         }
         table.setMenuIds(menuIds);
         // 设置主键列信息
@@ -353,7 +358,7 @@ public class GenTableServiceImpl implements IGenTableService {
         GenTable table = baseMapper.selectGenTableByName(tableName);
         List<Long> menuIds = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            menuIds.add(identifierGenerator.nextId(null).longValue());
+            menuIds.add((Long) identifierGenerator.nextId(null));
         }
         table.setMenuIds(menuIds);
         // 设置主键列信息

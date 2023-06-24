@@ -2,37 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-<!--    <parent>-->
-<!--        <groupId>cc.iotkit</groupId>-->
-<!--        <artifactId>iot-module</artifactId>-->
-<!--        <version>${revision}</version>-->
-<!--    </parent>-->
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <parent>
+        <artifactId>iot-module</artifactId>
+        <groupId>cc.iotkit</groupId>
+        <version>${revision}</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>iot-generator</artifactId>
-    <version>1.0.0</version>
+
 
     <description>
         generator 代码生成
     </description>
 
     <properties>
-        <dynamic-ds.version>3.6.1</dynamic-ds.version>
-        <mapstruct-plus.version>1.2.1</mapstruct-plus.version>
+        <dynamic-ds.version>3.5.1</dynamic-ds.version>
         <mapstruct-plus.lombok.version>0.2.0</mapstruct-plus.lombok.version>
-        <spring-boot.mybatis>3.0.1</spring-boot.mybatis>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
 
     </properties>
@@ -49,7 +36,10 @@
             <artifactId>iot-common-doc</artifactId>
         </dependency>
         <!--常用工具类 -->
-
+        <dependency>
+            <groupId>com.github.yitter</groupId>
+            <artifactId>yitter-idgenerator</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>cc.iotkit</groupId>
@@ -74,11 +64,7 @@
             <version>${dynamic-ds.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${spring-boot.mybatis}</version>
-        </dependency>
+
 
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -93,5 +79,37 @@
         </dependency>
 
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source> <!-- depending on your project -->
+                    <target>${java.version}</target> <!-- depending on your project -->
+                    <encoding>utf8</encoding>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.github.linpeilie</groupId>
+                            <artifactId>mapstruct-plus-processor</artifactId>
+                            <version>${mapstruct-plus.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
+                        <!-- other annotation processors -->
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -2,11 +2,13 @@ package cc.iotkit.generator.service;
 
 
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.generator.core.PageQuery;
 import cc.iotkit.generator.domain.GenTable;
 import cc.iotkit.generator.domain.GenTableColumn;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -28,18 +30,17 @@ public interface IGenTableService {
     /**
      * 查询业务列表
      *
-     * @param genTable 业务信息
+     *
      * @return 业务集合
      */
-    Paging<GenTable> selectPageGenTableList(GenTable genTable, PageQuery pageQuery);
+    Paging<GenTable> selectPageGenTableList(PageRequest<GenTable> pageQuery);
 
     /**
      * 查询据库列表
      *
-     * @param genTable 业务信息
      * @return 数据库表集合
      */
-    Paging<GenTable> selectPageDbTableList(GenTable genTable, PageQuery pageQuery);
+    Paging<GenTable> selectPageDbTableList(PageRequest<GenTable>  pageQuery);
 
     /**
      * 查询据库列表
@@ -47,7 +48,7 @@ public interface IGenTableService {
      * @param tableNames 表名称组
      * @return 数据库表集合
      */
-    List<GenTable> selectDbTableListByNames(String[] tableNames);
+    List<GenTable> selectDbTableListByNames(Collection<String> tableNames);
 
     /**
      * 查询所有表信息
@@ -78,7 +79,7 @@ public interface IGenTableService {
      * @param tableIds 需要删除的表数据ID
      * @return 结果
      */
-    void deleteGenTableByIds(Long[] tableIds);
+    void deleteGenTableByIds(Collection<Long> tableIds);
 
     /**
      * 导入表结构

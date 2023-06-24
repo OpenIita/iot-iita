@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cc.iotkit.generator.domain.GenTable;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Lion Li
  */
-@InterceptorIgnore(dataPermission = "true", tenantLine = "true")
+@InterceptorIgnore( tenantLine = "true")
 public interface GenTableMapper extends BaseMapperPlus<GenTable, GenTable> {
 
     /**
@@ -23,6 +24,7 @@ public interface GenTableMapper extends BaseMapperPlus<GenTable, GenTable> {
      * @param genTable 查询条件
      * @return 数据库表集合
      */
+    @InterceptorIgnore( tenantLine = "true")
     Page<GenTable> selectPageDbTableList(@Param("page") Page<GenTable> page, @Param("genTable") GenTable genTable);
 
     /**
@@ -31,7 +33,7 @@ public interface GenTableMapper extends BaseMapperPlus<GenTable, GenTable> {
      * @param tableNames 表名称组
      * @return 数据库表集合
      */
-    List<GenTable> selectDbTableListByNames(String[] tableNames);
+    List<GenTable> selectDbTableListByNames(Collection<String> tableNames);
 
     /**
      * 查询所有表信息
@@ -55,5 +57,8 @@ public interface GenTableMapper extends BaseMapperPlus<GenTable, GenTable> {
      * @return 业务信息
      */
     GenTable selectGenTableByName(String tableName);
+
+    List<String> selectTableNameList(String dataName);
+
 
 }
