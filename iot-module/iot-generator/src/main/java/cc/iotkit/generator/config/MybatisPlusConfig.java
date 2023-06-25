@@ -81,8 +81,9 @@ public class MybatisPlusConfig {
      */
     @Bean
     public IdentifierGenerator idGenerator() {
-        String hostAddress = NetUtil.getLocalhost().getHostAddress();
-        return new DbIdGenerator((short) ((short) hostAddress.hashCode()%64));
+//        String hostAddress = NetUtil.getLocalhost().getHostAddress();
+       // TODO: 采用配置文件里的
+        return new DbIdGenerator((short) 1);
     }
 
     /**
