@@ -63,10 +63,10 @@ public class ${ClassName}DataImpl implements I${ClassName}Data, IJPACommData<${C
                     #else
                         #set($condition='bo.get'+$AttrName+'() != null')
                     #end
-                    builder.and($condition, ()=>tb${ClassName}.${columnName}.eq(bo.get${AttrName}()));
+                    builder.and($condition, ()=>tb${ClassName}.${javaField}.eq(bo.get${AttrName}()));
                 #else
                     builder.and(params.get("begin$AttrName") != null && params.get("end$AttrName") != null,
-                            ()=>tb${ClassName}.${columnName}.bettwen(params.get("begin$AttrName"), params.get("end$AttrName")));
+                            ()=>tb${ClassName}.${javaField}.bettwen(params.get("begin$AttrName"), params.get("end$AttrName")));
                 #end
             #end
         #end
