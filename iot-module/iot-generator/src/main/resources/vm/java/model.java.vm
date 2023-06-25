@@ -1,16 +1,16 @@
-package ${packageName}.domain;
+package ${packageName}.model;
 
+import cc.iotkit.model.Id;
 #foreach ($column in $columns)
 #if($column.javaField=='tenantId')
 #set($IsTenant=1)
 #end
 #end
 #if($IsTenant==1)
-import cc.iotkit.common.tenant.core.TenantEntity;
+import cc.iotkit.model.TenantModel;
 #else
-import cc.iotkit.common.mybatis.core.domain.BaseEntity;
+import cc.iotkit.data.model.BaseEntity;
 #end
-import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 #foreach ($import in $importList)
@@ -26,14 +26,13 @@ import java.io.Serial;
  * @date ${datetime}
  */
 #if($IsTenant==1)
-#set($Entity="TenantEntity")
+#set($Entity="TenantModel")
 #else
-#set($Entity="BaseEntity")
+#set($Entity="BaseModel")
 #end
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("${tableName}")
-public class ${ClassName} extends ${Entity} {
+public class ${ClassName} extends ${Entity} implements Id<Long>, Serializable{
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -43,15 +42,6 @@ public class ${ClassName} extends ${Entity} {
     /**
      * $column.columnComment
      */
-#if($column.javaField=='delFlag')
-    @TableLogic
-#end
-#if($column.javaField=='version')
-    @Version
-#end
-#if($column.isPk==1)
-    @TableId(value = "$column.columnName")
-#end
     private $column.javaType $column.javaField;
 
 #end

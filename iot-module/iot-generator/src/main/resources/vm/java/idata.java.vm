@@ -1,0 +1,17 @@
+package ${packageName}.data;
+
+import cc.iotkit.data.ICommonData;
+import cc.iotkit.model.system.SysRole;
+
+import java.util.List;
+
+/**
+ * 数据接口
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface I${ClassName}Data extends ICommonData<${ClassName}, Long> {
+
+
+}

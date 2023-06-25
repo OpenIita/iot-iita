@@ -1,9 +1,12 @@
 package ${packageName}.domain.bo;
 
 import ${packageName}.domain.${ClassName};
-import cc.iotkit.common.mybatis.core.domain.BaseEntity;
-import cc.iotkit.common.core.validate.AddGroup;
-import cc.iotkit.common.core.validate.EditGroup;
+import cc.iotkit.common.api.BaseDto;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.Request;
+import cc.iotkit.common.validate.AddGroup;
+import cc.iotkit.common.validate.EditGroup;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +24,7 @@ import ${import};
 @Data
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = ${ClassName}.class, reverseConvertGenerate = false)
-public class ${ClassName}Bo extends BaseEntity {
+public class ${ClassName}Bo extends BaseDto {
 
 #foreach ($column in $columns)
 #if(!$table.isSuperColumn($column.javaField) && ($column.query || $column.insert || $column.edit))

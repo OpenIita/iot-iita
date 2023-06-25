@@ -111,14 +111,16 @@ public class VelocityUtils {
      */
     public static List<String> getTemplateList(String tplCategory) {
         List<String> templates = new ArrayList<String>();
-        templates.add("vm/java/domain.java.vm");
+        templates.add("vm/java/model.java.vm");
         templates.add("vm/java/vo.java.vm");
         templates.add("vm/java/bo.java.vm");
-        templates.add("vm/java/mapper.java.vm");
+//        templates.add("vm/java/mapper.java.vm");
         templates.add("vm/java/service.java.vm");
         templates.add("vm/java/serviceImpl.java.vm");
         templates.add("vm/java/controller.java.vm");
-        templates.add("vm/xml/mapper.xml.vm");
+        templates.add("vm/java/idata.java.vm");
+        templates.add("vm/java/idataimpl.java.vm");
+        templates.add("vm/java/tbmodel.java.vm");
         if (DataBaseHelper.isOracle()) {
             templates.add("vm/sql/oracle/sql.vm");
         } else if (DataBaseHelper.isPostgerSql()) {

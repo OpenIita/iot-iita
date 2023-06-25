@@ -3,18 +3,15 @@ package ${packageName}.service.impl;
 import cc.iotkit.common.core.utils.MapstructUtils;
 import cc.iotkit.common.core.utils.StringUtils;
 #if($table.crud || $table.sub)
-import cc.iotkit.common.mybatis.core.page.TableDataInfo;
-import cc.iotkit.common.mybatis.core.page.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 #end
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import cc.iotkit.common.api.Request;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ${packageName}.domain.bo.${ClassName}Bo;
 import ${packageName}.domain.vo.${ClassName}Vo;
 import ${packageName}.domain.${ClassName};
-import ${packageName}.mapper.${ClassName}Mapper;
 import ${packageName}.service.I${ClassName}Service;
 
 import java.util.List;
@@ -31,14 +28,14 @@ import java.util.Collection;
 @Service
 public class ${ClassName}ServiceImpl implements I${ClassName}Service {
 
-    private final ${ClassName}Mapper baseMapper;
+    private final I${ClassName}Data baseData;
 
     /**
      * 查询${functionName}
      */
     @Override
     public ${ClassName}Vo queryById(${pkColumn.javaType} ${pkColumn.javaField}){
-        return baseMapper.selectVoById(${pkColumn.javaField});
+        return baseData.selectVoById(${pkColumn.javaField});
     }
 
 #if($table.crud || $table.sub)
@@ -46,10 +43,10 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
      * 查询${functionName}列表
      */
     @Override
-    public TableDataInfo<${ClassName}Vo> queryPageList(${ClassName}Bo bo, PageQuery pageQuery) {
+    public Paging<${ClassName}Vo> queryPageList(${ClassName}Bo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<${ClassName}> lqw = buildQueryWrapper(bo);
-        Page<${ClassName}Vo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
-        return TableDataInfo.build(result);
+        Paging<${ClassName}Vo> result = baseData.selectVoPage(pageQuery.build(), lqw);
+        return result;
     }
 #end
 
@@ -58,35 +55,8 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
      */
     @Override
     public List<${ClassName}Vo> queryList(${ClassName}Bo bo) {
-        LambdaQueryWrapper<${ClassName}> lqw = buildQueryWrapper(bo);
-        return baseMapper.selectVoList(lqw);
-    }
 
-    private LambdaQueryWrapper<${ClassName}> buildQueryWrapper(${ClassName}Bo bo) {
-        Map<String, Object> params = bo.getParams();
-        LambdaQueryWrapper<${ClassName}> lqw = Wrappers.lambdaQuery();
-#foreach($column in $columns)
-#if($column.query)
-#set($queryType=$column.queryType)
-#set($javaField=$column.javaField)
-#set($javaType=$column.javaType)
-#set($columnName=$column.columnName)
-#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
-#set($mpMethod=$column.queryType.toLowerCase())
-#if($queryType != 'BETWEEN')
-#if($javaType == 'String')
-#set($condition='StringUtils.isNotBlank(bo.get'+$AttrName+'())')
-#else
-#set($condition='bo.get'+$AttrName+'() != null')
-#end
-        lqw.$mpMethod($condition, ${ClassName}::get$AttrName, bo.get$AttrName());
-#else
-        lqw.between(params.get("begin$AttrName") != null && params.get("end$AttrName") != null,
-            ${ClassName}::get$AttrName ,params.get("begin$AttrName"), params.get("end$AttrName"));
-#end
-#end
-#end
-        return lqw;
+        return baseData.selectVoList(bo);
     }
 
     /**
@@ -96,7 +66,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
     public Boolean insertByBo(${ClassName}Bo bo) {
         ${ClassName} add = MapstructUtils.convert(bo, ${ClassName}.class);
         validEntityBeforeSave(add);
-        boolean flag = baseMapper.insert(add) > 0;
+        boolean flag = baseData.insert(add) > 0;
 #set($pk=$pkColumn.javaField.substring(0,1).toUpperCase() + ${pkColumn.javaField.substring(1)})
         if (flag) {
             bo.set$pk(add.get$pk());
@@ -111,7 +81,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
     public Boolean updateByBo(${ClassName}Bo bo) {
         ${ClassName} update = MapstructUtils.convert(bo, ${ClassName}.class);
         validEntityBeforeSave(update);
-        return baseMapper.updateById(update) > 0;
+        return baseData.updateById(update) > 0;
     }
 
     /**
@@ -129,6 +99,6 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
-        return baseMapper.deleteBatchIds(ids) > 0;
+        return baseData.deleteBatchIds(ids) > 0;
     }
 }

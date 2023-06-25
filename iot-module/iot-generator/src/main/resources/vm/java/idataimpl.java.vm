@@ -1,0 +1,76 @@
+package ${packageName}.data;
+
+import cc.iotkit.data.ICommonData;
+import ${packageName}.data.I${ClassName}Data;
+import ${packageName}.data.${ClassName};
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
+
+
+import static ${packageName}.data.model.QTb${ClassName}.tb${ClassName};
+/**
+ * 数据实现接口
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Primary
+@Service
+@RequiredArgsConstructor
+public class ${ClassName}DataImpl implements I${ClassName}Data, IJPACommData<${ClassName}, Long> {
+
+    private final ${ClassName}Repository baseRepository;
+
+
+
+    @Override
+    public JpaRepository getBaseRepository() {
+        return baseRepository;
+    }
+
+    @Override
+    public Class getJpaRepositoryClass() {
+        return Tb${ClassName}.class;
+    }
+
+    @Override
+    public Class getTClass() {
+        return ${ClassName}.class;
+    }
+
+
+    @Override
+    public Paging<${ClassName}> findAll(PageRequest<${ClassName}> pageRequest) {
+        return PageBuilder.toPaging(baseRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest))).to(${ClassName}.class);
+    }
+
+    private Predicate buildQueryCondition(${ClassName} bo) {
+        PredicateBuilder builder = PredicateBuilder.instance();
+
+        #foreach($column in $columns)
+            #if($column.query)
+                #set($queryType=$column.queryType)
+                #set($javaField=$column.javaField)
+                #set($javaType=$column.javaType)
+                #set($columnName=$column.columnName)
+                #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+                #if($queryType != 'BETWEEN')
+                    #if($javaType == 'String')
+                        #set($condition='StringUtils.isNotBlank(bo.get'+$AttrName+'())')
+                    #else
+                        #set($condition='bo.get'+$AttrName+'() != null')
+                    #end
+                    builder.and($condition, ()=>tb${ClassName}.${columnName}.eq(bo.get${AttrName}()));
+                #else
+                    builder.and(params.get("begin$AttrName") != null && params.get("end$AttrName") != null,
+                            ()=>tb${ClassName}.${columnName}.bettwen(params.get("begin$AttrName"), params.get("end$AttrName")));
+                #end
+            #end
+        #end
+        return builder.build();
+    }
+
+}
