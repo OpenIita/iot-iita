@@ -529,6 +529,12 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
+                <artifactId>iot-screen</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
                 <artifactId>iot-system</artifactId>
                 <version>${project.version}</version>
             </dependency>

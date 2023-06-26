@@ -46,10 +46,23 @@ public enum ErrCode implements IEnum {
     INIT_PRODUCER_ERROR(00000000, "初始化MQ生产者失败"),
     SEND_MSG_ERROR(00000000, "发送消息失败"),
 
+    /**
+     * 大屏通用异常段
+     * */
+    RESOURCE_FILE_NOT_FOUND(00000000, "资源包为空"),
+    BIG_SCREEN_NOT_FOUND(00000000, "大屏不存在"),
+    BIG_SCREEN_ALREADY(00000000, "大屏已存在"),
+    ADD_BIG_SCREEN_ERROR(00000000, "保存大屏失败"),
+    DELETE_BIG_SCREEN_ERROR(00000000, "删除大屏资源失败"),
+    SCREEN_API_NOT_FOUND(00000000, "大屏接口不存在"),
+    ADD_SCREEN_API_ERROR(00000000, "添加大屏接口失败"),
+    SCREEN_PUBLISH_ERROR(00000000, "大屏发布失败"),
+    API_LIST_BLANK(00000000, "接口列表为空"),
 
     /**
      * 业务通用异常段
      */
+    ID_BLANK(00000000, "ID为空"),
     TASK_NOT_SUPPORT_RENEW(00000000, "任务不支持续订"),
     GROUP_ALREADY(00000000, "分组已经存在"),
     GROUP_NOT_FOUND(00000000, "分组不存在"),
