@@ -59,11 +59,11 @@ public class OtaService {
         ossTemplate.putObject(buckName, objectName, inputStream);
         String url = "https://" + region + "/" + objectName;
         String md5 = md5OfFile(file);
-        return OtaPackageUploadVo.builder()
-                .url(url)
-                .size(size)
-                .md5(md5)
-                .build();
+        OtaPackageUploadVo otaPackageUploadVo = new OtaPackageUploadVo();
+        otaPackageUploadVo.setUrl(url);
+        otaPackageUploadVo.setSize(size);
+        otaPackageUploadVo.setMd5(md5);
+        return otaPackageUploadVo;
     }
 
     public static String md5OfFile(MultipartFile multipartFile) throws Exception {

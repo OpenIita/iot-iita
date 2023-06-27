@@ -3,7 +3,6 @@ package cc.iotkit.manager.dto.vo.ota;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
-import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,7 +13,6 @@ import java.io.Serializable;
  * @Description:
  */
 @Data
-@Builder
 @ExcelIgnoreUnannotated
 @ApiModel(value = "OtaPackageUploadVo")
 @AutoMapper(target = OtaPackageUploadVo.class)
