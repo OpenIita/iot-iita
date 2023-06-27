@@ -1,25 +1,13 @@
 package cc.iotkit.manager.dto.bo.device;
 
+import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.model.device.DeviceInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import io.github.linpeilie.annotations.AutoMapper;
 import io.github.linpeilie.annotations.AutoMapping;
 import io.github.linpeilie.annotations.ReverseAutoMapping;
-import jakarta.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.math.BigDecimal;
-
-import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.common.validate.AddGroup;
-import cc.iotkit.common.validate.EditGroup;
-
-import io.github.linpeilie.annotations.AutoMapper;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -64,6 +52,12 @@ public class DeviceInfoBo extends BaseDto {
     @ApiModelProperty(value = "设备描述")
     @Size(max = 255, message = "设备描述长度不正确")
     private String secret;
+
+    @ApiModelProperty(value = "经度")
+    private String longitude;
+
+    @ApiModelProperty(value = "纬度")
+    private String latitude;
 
     @ApiModelProperty(value = "设备状态")
     @Size(max = 255, message = "设备状态长度不正确")

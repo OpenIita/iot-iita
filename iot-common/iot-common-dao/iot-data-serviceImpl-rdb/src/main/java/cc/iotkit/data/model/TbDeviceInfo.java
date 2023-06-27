@@ -44,6 +44,12 @@ public class TbDeviceInfo {
     @ApiModelProperty(value = "父级id")
     private String parentId;
 
+    @ApiModelProperty(value = "经度")
+    private String longitude;
+
+    @ApiModelProperty(value = "纬度")
+    private String latitude;
+
     @ApiModelProperty(value = "用户id")
     private String uid;
 

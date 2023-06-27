@@ -136,6 +136,7 @@ public class DeviceServiceImpl implements IDeviceService {
         device.setDeviceName(deviceName);
         device.setSecret(secret.toString());
         device.setState(new DeviceInfo.State(false, null, null));
+        device.setLocate(new DeviceInfo.Locate(deviceInfo.getLongitude(),deviceInfo.getLatitude()));
         device.setCreateAt(System.currentTimeMillis());
         if (StringUtils.isNotBlank(parentId)) {
             device.setParentId(parentId);

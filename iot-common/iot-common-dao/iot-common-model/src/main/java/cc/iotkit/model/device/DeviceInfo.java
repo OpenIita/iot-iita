@@ -60,6 +60,11 @@ public class DeviceInfo implements Owned<String> {
     private List<String> subUid = new ArrayList<>();
 
     /**
+     * 设备定位对象
+     */
+    private Locate locate = new Locate();
+
+    /**
      * 设备在离线状态
      */
     private State state = new State();
@@ -80,6 +85,17 @@ public class DeviceInfo implements Owned<String> {
     private Map<String, Group> group = new HashMap<>();
 
     private Long createAt;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Locate {
+
+        private String longitude;
+
+        private String latitude;
+
+    }
 
     @Data
     @NoArgsConstructor

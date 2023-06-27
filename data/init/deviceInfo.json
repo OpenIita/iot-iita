@@ -7,6 +7,8 @@
     "secret": "rMAweEJrE7cxbQWa",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655415536032
@@ -33,6 +35,8 @@
     "secret": "eN4PjDhH4yx4mrmi",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655415536130
@@ -59,6 +63,8 @@
     "secret": "ePSkE7bzGMsR6rTs",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655415536135
@@ -85,6 +91,8 @@
     "secret": "mkQiSDk4rF3EWKFM",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655416465031
@@ -114,6 +122,8 @@
     "secret": "p72KAZyTA42zi8cJ",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655416465035
@@ -139,6 +149,8 @@
     "secret": "xnKZZyPKj2rH6ee3",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655416465133
@@ -168,6 +180,8 @@
     "secret": "PDkTxHPfw2H4WZjQ",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655416465231
@@ -193,6 +207,8 @@
     "secret": "3KdPNBKZEyDGaNYK",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655652738672
@@ -218,6 +234,8 @@
     "secret": "TBwbHJdJBQCpGdHi",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655652738676
@@ -243,6 +261,8 @@
     "secret": "86pTYbQxxX3wd2FR",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655652738773
@@ -268,6 +288,8 @@
     "secret": "FtxYcTM5p6B5GyPk",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655652738872
@@ -293,6 +315,8 @@
     "secret": "5yHFHseBHDbCK3eZ",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655652738972
@@ -318,6 +342,8 @@
     "secret": "pGC4z4TrbjZhii2m",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655652739072
@@ -343,6 +369,8 @@
     "secret": "HMxT2rQ55bzeRNJx",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655652739076
@@ -368,6 +396,8 @@
     "secret": "Z6yMp6D6mHKMjFi7",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655652739174
@@ -393,6 +423,8 @@
     "secret": "Ek3ZjwPayCymDxhN",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655652739272
@@ -418,6 +450,8 @@
     "secret": "NnnHaibdHJXMxNbC",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655652739372
@@ -443,6 +477,8 @@
     "secret": "bWkiEmY6wKM8WQP5",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false
     },
@@ -463,6 +499,8 @@
     "subUid": [
       "04c6722f-9a6d-40f3-ac9b-cd791b4c8933"
     ],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839933067
@@ -499,6 +537,8 @@
     "secret": "CN8ZGpcAheAbsDn2",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839933167
@@ -518,6 +558,8 @@
     "secret": "S4SDRKscRXAn43bc",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839933267
@@ -543,6 +585,8 @@
     "secret": "7N4S6eYzMCjA7YfK",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839933367
@@ -562,6 +606,8 @@
     "secret": "Jm7ecfyXawiend8K",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839933376
@@ -587,6 +633,8 @@
     "secret": "rtsZbST3tiJHccbe",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839933474
@@ -612,6 +660,8 @@
     "secret": "PXHwHXH4a8YJzZ3S",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839918667
@@ -639,6 +689,8 @@
     "secret": "BQj5SZetsC3eGtfM",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839918676
@@ -666,6 +718,8 @@
     "secret": "mbs4PsY4atEtzcA3",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839918771
@@ -693,6 +747,8 @@
     "secret": "4nrNrjnFMSQZB562",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839918871
@@ -720,6 +776,8 @@
     "secret": "Js66kBbXRjXmcpMB",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839918967
@@ -741,6 +799,8 @@
     "secret": "pGxKYrNJC7rDhsr8",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655416485331
@@ -760,6 +820,8 @@
     "secret": "ZxDQeQ8jhMrfx8eE",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655416485335
@@ -779,6 +841,8 @@
     "secret": "fEbdXEayedpBx6wk",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655416485433
@@ -798,6 +862,8 @@
     "secret": "Crm28CTD6iw7hYw5",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655416485531
@@ -817,6 +883,8 @@
     "secret": "FkCQGREXYCmjzxaZ",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655416485631
@@ -836,6 +904,8 @@
     "secret": "JwKxnDWGrRcP8xAJ",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839919567
@@ -855,6 +925,8 @@
     "secret": "xrX2mrkQwf3YYaWc",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839919576
@@ -874,6 +946,8 @@
     "secret": "diRBkEREDt47MzWF",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839919673
@@ -893,6 +967,8 @@
     "secret": "fR3R3i8BYDKWAiDj",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false
     },
@@ -908,6 +984,8 @@
     "secret": "t3NYS5p7ExYaWKx4",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false
     },
@@ -923,6 +1001,8 @@
     "secret": "KSpeRjXRP8H7tcAn",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false
     },
@@ -938,6 +1018,8 @@
     "secret": "DSBbhJW7cGXRWeZA",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839926671
@@ -957,6 +1039,8 @@
     "secret": "5bm8pNYcdj7YPMXn",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839926777
@@ -976,6 +1060,8 @@
     "secret": "neSfPnhsjCsQiCQx",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653839927067
@@ -995,6 +1081,8 @@
     "secret": "2D2k8mmHbi2AMh8G",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653785231385
@@ -1015,6 +1103,8 @@
     "secret": "AQHQJTQ2iXkncb3C",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653785231786
@@ -1035,6 +1125,8 @@
     "secret": "PwYEKSARBJjD4y6B",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653785232184
@@ -1055,6 +1147,8 @@
     "secret": "C8YxCycFFeQDPKX4",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653730979070
@@ -1076,6 +1170,8 @@
     "parentId": "16514626212240aabbccee01000000143",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653380321483
@@ -1099,6 +1195,8 @@
     "model": "GW01",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false,
       "onlineTime": 1653185932725,
@@ -1117,6 +1215,8 @@
     "parentId": "16514626212240aabbccee01000000143",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653380322090,
@@ -1138,6 +1238,8 @@
     "parentId": "16514626212240aabbccee01000000143",
     "uid": "15620886-b30d-439d-9e5f-13a094c1f1f9",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653380319984,
@@ -1159,6 +1261,8 @@
     "parentId": "16514626212240aabbccee01000000143",
     "uid": "15620886-b30d-439d-9e5f-13a094c1f1f9",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653380317469,
@@ -1178,6 +1282,8 @@
     "deviceName": "AA:BB:CC:EE:01",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653380312358,
@@ -1198,6 +1304,8 @@
     "parentId": "165017126122400cefafcfee61000012b",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655415536433,
@@ -1229,6 +1337,8 @@
     "subUid": [
       "04c6722f-9a6d-40f3-ac9b-cd791b4c8933"
     ],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false,
       "onlineTime": 1652602130873,
@@ -1266,6 +1376,8 @@
     "subUid": [
       "04c6722f-9a6d-40f3-ac9b-cd791b4c8933"
     ],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false,
       "onlineTime": 1652602115884,
@@ -1301,6 +1413,8 @@
     "subUid": [
       "629daa3de5a005209d182876"
     ],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655581924548,
@@ -1334,6 +1448,8 @@
     "subUid": [
       "629daa3de5a005209d182876"
     ],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655581925148,
@@ -1369,6 +1485,8 @@
     "subUid": [
       "629daa3de5a005209d182876"
     ],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655581925152,
@@ -1404,6 +1522,8 @@
     "subUid": [
       "629daa3de5a005209d182876"
     ],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655581925157,
@@ -1439,6 +1559,8 @@
     "subUid": [
       "629daa3de5a005209d182876"
     ],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655581925252,
@@ -1474,6 +1596,8 @@
     "subUid": [
       "629daa3de5a005209d182876"
     ],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655581925255,
@@ -1509,6 +1633,8 @@
     "subUid": [
       "629daa3de5a005209d182876"
     ],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1655581925247,
@@ -1543,6 +1669,8 @@
     "parentId": "16465226744430aabbccdd22000000143",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false,
       "onlineTime": 1653380311848,
@@ -1565,6 +1693,8 @@
     "parentId": "16465226744430aabbccdd22000000143",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false,
       "onlineTime": 1653380308883,
@@ -1585,6 +1715,8 @@
     "parentId": "16465226744430aabbccdd22000000143",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653729780071,
@@ -1606,6 +1738,8 @@
     "parentId": "16465226744430aabbccdd22000000143",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": true,
       "onlineTime": 1653729780174,
@@ -1625,6 +1759,8 @@
     "deviceName": "AA:BB:CC:DD:22",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false,
       "onlineTime": 1653380299997,
@@ -1641,6 +1777,8 @@
     "deviceName": "123456789123",
     "uid": "1",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false,
       "onlineTime": 1653380299997,
@@ -1658,6 +1796,8 @@
     "uid": "1",
     "parentId": "168187356997901234567891230000120",
     "subUid": [],
+    "longitude": "104.090377",
+    "latitude": "30.604218",
     "state": {
       "online": false,
       "onlineTime": 1653380299997,

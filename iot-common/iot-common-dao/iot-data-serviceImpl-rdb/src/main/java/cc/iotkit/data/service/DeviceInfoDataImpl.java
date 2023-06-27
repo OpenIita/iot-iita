@@ -1,14 +1,14 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.ReflectUtil;
+import cc.iotkit.data.dao.*;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
-import cc.iotkit.data.dao.*;
 import cc.iotkit.data.model.*;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
@@ -125,6 +125,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     private void parseStateToDto(TbDeviceInfo vo, DeviceInfo dto) {
         dto.setState(new DeviceInfo.State("online".equals(vo.getState()),
                 vo.getOnlineTime(), vo.getOfflineTime()));
+        dto.setLocate(new DeviceInfo.Locate(vo.getLongitude(),vo.getLatitude()));
     }
 
     /**
@@ -135,6 +136,9 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
         vo.setState(state.isOnline() ? "online" : "offline");
         vo.setOfflineTime(state.getOfflineTime());
         vo.setOnlineTime(state.getOnlineTime());
+        DeviceInfo.Locate locate=dto.getLocate();
+        vo.setLongitude(locate.getLongitude());
+        vo.setLatitude(locate.getLatitude());
     }
 
     /**
@@ -267,6 +271,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
                 .model(rs.getString("model"))
                 .secret(rs.getString("secret"))
                 .parentId(rs.getString("parent_id"))
+                .locate(new DeviceInfo.Locate(rs.getString("longitude"),rs.getString("latitude")))
                 .uid(rs.getString("uid"))
                 .state(new DeviceInfo.State(
                         "online".equals(rs.getString("state")),
