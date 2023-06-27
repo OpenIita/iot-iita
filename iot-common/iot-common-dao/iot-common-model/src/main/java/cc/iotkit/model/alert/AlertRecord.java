@@ -54,8 +54,7 @@ public class AlertRecord implements Owned<Long> {
     /**
      * 是否已读
      */
-    private Boolean read;
-
+    private Boolean readFlg;
 
 
 }

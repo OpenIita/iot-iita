@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 @Data
 @Entity
@@ -59,6 +60,6 @@ public class TbAlertRecord {
      * 是否已读
      */
     @ApiModelProperty(value = "是否已读")
-    private Boolean read;
+    private Boolean readFlg;
 
 }
