@@ -77,9 +77,6 @@ public interface Constants {
      */
     Long TOP_PARENT_ID = 0L;
 
-
-    String PRODUCT_SECRET = "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU";
-
     String ACCOUNT_SECRET = "3n1z33kzvpgz1foijpkepyd3e8tw84us";
 
     String CACHE_PRODUCT = "product_cache";

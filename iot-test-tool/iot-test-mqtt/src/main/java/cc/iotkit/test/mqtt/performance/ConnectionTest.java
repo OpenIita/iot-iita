@@ -43,7 +43,7 @@ public class ConnectionTest {
             int finalI = i;
             executor.submit(() -> {
                 log.info("start gateway " + (finalI + 1));
-                Gateway gateway = new Gateway("hbtgIA0SuVw9lxjB",
+                Gateway gateway = new Gateway("hbtgIA0SuVw9lxjB","xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU",
                         "TEST:GW:T" + StringUtils.leftPad(finalI + "", 6, "0"));
 
 //                gateway.addSubDevice("Rf4QSjbm65X45753",

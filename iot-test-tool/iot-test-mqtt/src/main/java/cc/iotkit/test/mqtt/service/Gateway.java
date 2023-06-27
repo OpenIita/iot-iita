@@ -49,8 +49,8 @@ public class Gateway extends Device {
 
     private boolean isConnecting;
 
-    public Gateway(String productKey, String deviceName) {
-        super(productKey, deviceName, "GW01");
+    public Gateway(String productKey, String productSecret, String deviceName) {
+        super(productKey, productSecret, deviceName, "GW01");
     }
 
     @SneakyThrows
@@ -74,7 +74,7 @@ public class Gateway extends Device {
             isConnecting = true;
             MqttClientOptions options = new MqttClientOptions();
             options.setUsername(this.deviceName);
-            options.setPassword(DigestUtils.md5Hex(Constants.PRODUCT_SECRET + clientId));
+            options.setPassword(DigestUtils.md5Hex(getProductSecret() + clientId));
             options.setCleanSession(true);
             options.setKeepAliveInterval(30);
             options.setClientId(clientId);
@@ -134,8 +134,8 @@ public class Gateway extends Device {
         }
     }
 
-    public void addSubDevice(String productKey, String deviceName, String model) {
-        subDevices.add(new Device(productKey, deviceName, model));
+    public void addSubDevice(String productKey, String productSecret, String deviceName, String model) {
+        subDevices.add(new Device(productKey, productSecret, deviceName, model));
     }
 
     public void onDeviceOnline(Consumer<Device> listener) {

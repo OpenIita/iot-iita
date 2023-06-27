@@ -41,10 +41,10 @@ public class TransparentTest {
         }
 
         log.info("start gateway ");
-        Gateway gateway = new Gateway("hbtgIA0SuVw9lxjB",
+        Gateway gateway = new Gateway("hbtgIA0SuVw9lxjB", "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU",
                 "TEST:GW:T0001");
 
-        gateway.addSubDevice("",
+        gateway.addSubDevice("hbtgIA0SuVw9lxjB", "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU",
                 "TEST_LIGHT_0001",
                 "M1");
 
@@ -54,7 +54,7 @@ public class TransparentTest {
             //设备上线后添加上报定时任务
             ReportTask reportTask = new ReportTask(gateway.getClient());
             reportTask.addTask(String.format("/sys/%s/%s/s/event/rawReport",
-                    pk, device.getDeviceName()),
+                            pk, device.getDeviceName()),
                     () -> {
                         Request request = new Request();
                         request.setId(UUID.randomUUID().toString());

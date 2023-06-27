@@ -51,14 +51,14 @@ public class ReportTest {
             int finalI = i;
             executor.submit(() -> {
                 log.info("start gateway " + (finalI + 1));
-                Gateway gateway = new Gateway("hbtgIA0SuVw9lxjB",
+                Gateway gateway = new Gateway("hbtgIA0SuVw9lxjB", "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU",
                         "TEST:GW:" + StringUtils.leftPad(finalI + "", 6, "0"));
 
-                gateway.addSubDevice("Rf4QSjbm65X45753",
+                gateway.addSubDevice("Rf4QSjbm65X45753", "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU",
                         "TEST_SW_" + StringUtils.leftPad(finalI + "", 6, "0"),
                         "S01");
 
-                gateway.addSubDevice("cGCrkK7Ex4FESAwe",
+                gateway.addSubDevice("cGCrkK7Ex4FESAwe", "xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU",
                         "TEST_SC_" + StringUtils.leftPad(finalI + "", 6, "0"),
                         "S01");
 
@@ -71,7 +71,7 @@ public class ReportTest {
                     //设备上线后添加上报定时任务
                     ReportTask reportTask = new ReportTask(gateway.getClient());
                     reportTask.addTask(String.format("/sys/%s/%s/s/event/property/post",
-                            pk, device.getDeviceName()),
+                                    pk, device.getDeviceName()),
                             () -> {
                                 Request request = new Request();
                                 request.setId(UUID.randomUUID().toString());

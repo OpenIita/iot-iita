@@ -122,10 +122,13 @@ function register(payload) {
     var pk = arr[0];
     var dn = arr[1];
     var model = arr[2];
-    var pwd = md5("xdkKUymrEGSCYWswqCvSPyRSFvH5j7CU" + auth.clientid);
+    var product = deviceBehaviour.getProductKey(pk)
+    var pwd = md5(product.productSecret + auth.clientid);
+
     if (pwd.toLocaleLowerCase() != auth.password.toLocaleLowerCase()) {
         throw new Error("incorrect password");
     }
+
     return {
         type: "register",
         data: {

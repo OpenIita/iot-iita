@@ -20,6 +20,8 @@ public class Device {
 
     protected String productKey;
 
+    private String productSecret ;
+
     protected String deviceName;
 
     private String model;

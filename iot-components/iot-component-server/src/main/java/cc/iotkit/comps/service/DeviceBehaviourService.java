@@ -165,7 +165,8 @@ public class DeviceBehaviourService {
         if (deviceInfo == null) {
             throw new BizException(ErrCode.DEVICE_NOT_FOUND);
         }
-        if (!Constants.PRODUCT_SECRET.equals(productSecret)) {
+        Product product = getProductKey(productKey);
+        if (!product.getProductSecret().equals(productSecret)) {
             throw new BizException(ErrCode.PRODUCT_SECRET_ERROR);
         }
 
@@ -284,14 +285,18 @@ public class DeviceBehaviourService {
         deviceOtaInfoTemp.setProductKey(message.getProductKey());
         DeviceOtaInfo deviceOtaInfo = deviceOtaInfoData.findOneByCondition(DeviceOtaInfo.builder()
                 .taskId(message.getMid())
-                        .productKey(message.getProductKey())
-                        .deviceName(message.getDeviceName())
+                .productKey(message.getProductKey())
+                .deviceName(message.getDeviceName())
                 .deviceId(message.getDeviceId()).build());
         if (Objects.nonNull(deviceOtaInfo)) {
             deviceOtaInfo.setStep(deviceOtaInfoTemp.getStep());
-        }else{
+        } else {
             deviceOtaInfo = deviceOtaInfoTemp;
         }
         deviceOtaInfoData.save(deviceOtaInfo);
+    }
+
+    public Product getProductKey(String productKey) {
+        return productData.findByProductKey(productKey);
     }
 }
