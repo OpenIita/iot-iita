@@ -1,25 +1,21 @@
-package cc.iotkit.model.ota;
+package cc.iotkit.manager.dto.bo.ota;
 
-import cc.iotkit.model.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import cc.iotkit.common.api.BaseDto;
+import io.github.linpeilie.annotations.AutoMapper;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Map;
+import lombok.EqualsAndHashCode;
 
 /**
  * @Author: 石恒
- * @Date: 2023/6/10 14:35
+ * @Date: 2023/6/27 22:09
  * @Description:
  */
+@ApiModel(value = "OtaPackageBo")
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class OtaPackage implements Id<Long> {
-
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+@AutoMapper(target = OtaPackageBo.class, reverseConvertGenerate = false)
+public class OtaPackageBo extends BaseDto {
 
     /**
      * 文件包大小
@@ -74,10 +70,5 @@ public class OtaPackage implements Id<Long> {
     /**
      * 扩展数据
      */
-    private String extData;
 
-    /**
-     * 创建时间
-     */
-    private Long createAt;
 }

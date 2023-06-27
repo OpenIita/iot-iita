@@ -1,6 +1,5 @@
 package cc.iotkit.manager.dto.vo.ota;
 
-import cc.iotkit.model.device.DeviceInfo;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
@@ -15,9 +14,9 @@ import java.io.Serializable;
  */
 @Data
 @ExcelIgnoreUnannotated
-@ApiModel(value = "DeviceOtaInfoVO")
-@AutoMapper(target = DeviceOtaInfoVO.class)
-public class DeviceOtaInfoVO implements Serializable {
+@ApiModel(value = "DeviceOtaInfoVo")
+@AutoMapper(target = DeviceOtaInfoVo.class)
+public class DeviceOtaInfoVo implements Serializable {
     private Long id;
 
     private Integer step;

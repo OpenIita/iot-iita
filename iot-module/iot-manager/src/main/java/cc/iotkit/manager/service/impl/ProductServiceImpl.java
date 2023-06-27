@@ -26,9 +26,12 @@ import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.temporal.IDbStructureData;
+import cn.hutool.core.lang.UUID;
+import cn.hutool.crypto.digest.MD5;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectResult;
+import com.amazonaws.util.Md5Utils;
 import com.github.yitter.idgen.YitIdHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -77,10 +80,13 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ProductVo addEntity(ProductBo data) {
         Product product = data.to(Product.class);
-
         if (product.getCreateAt() == null) {
             product.setCreateAt(System.currentTimeMillis());
         }
+
+        String secret = UUID.randomUUID().toString(true);
+        product.setProductSecret(secret);
+
         productData.save(product);
         return MapstructUtils.convert(product, ProductVo.class);
     }

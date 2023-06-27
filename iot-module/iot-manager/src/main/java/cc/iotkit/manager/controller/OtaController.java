@@ -5,10 +5,10 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.manager.dto.bo.ota.DeviceOtaInfoBo;
 import cc.iotkit.manager.dto.bo.ota.DeviceUpgradeBo;
-import cc.iotkit.manager.dto.vo.ota.DeviceOtaInfoVO;
+import cc.iotkit.manager.dto.bo.ota.OtaPackageBo;
+import cc.iotkit.manager.dto.vo.ota.DeviceOtaInfoVo;
+import cc.iotkit.manager.dto.vo.ota.OtaPackageUploadVo;
 import cc.iotkit.manager.service.OtaService;
-import cc.iotkit.model.alert.AlertConfig;
-import cc.iotkit.model.ota.DeviceOta;
 import cc.iotkit.model.ota.OtaPackage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.io.InputStream;
 
 /**
  * @Author: 石恒
@@ -41,25 +40,24 @@ public class OtaController {
 
     @ApiOperation("升级包上传")
     @PostMapping("/package/upload")
-    public String packageUpload(MultipartFile file) throws Exception {
+    public OtaPackageUploadVo packageUpload(MultipartFile file) throws Exception {
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             String suffix = StringUtils.isEmpty(fileName) ? "" : fileName.substring(fileName.lastIndexOf("."));
-            InputStream ins = file.getInputStream();
-            return otaService.uploadFile(ins, suffix);
+            return otaService.uploadFile(file, suffix);
         }
-        return "";
+        return null;
     }
 
     @ApiOperation("新增升级包")
     @PostMapping("/package/add")
-    public OtaPackage addChannelTemplate(@RequestBody @Valid Request<OtaPackage> request) throws Exception {
+    public OtaPackage packageAdd(@RequestBody @Valid Request<OtaPackageBo> request) throws Exception {
         return otaService.addOtaPackage(request.getData());
     }
 
     @ApiOperation("删除升级包")
     @PostMapping("/package/delById")
-    public Boolean delChannelConfigById(@RequestBody @Valid Request<Long> request) {
+    public Boolean delPackageById(@RequestBody @Valid Request<Long> request) {
         return otaService.delOtaPackageById(request.getData());
     }
 
@@ -77,7 +75,7 @@ public class OtaController {
 
     @ApiOperation("设备升级结果查询")
     @PostMapping("/result")
-    public Paging<DeviceOtaInfoVO> otaResult(@RequestBody PageRequest<DeviceOtaInfoBo> request) {
+    public Paging<DeviceOtaInfoVo> otaResult(@RequestBody PageRequest<DeviceOtaInfoBo> request) {
         return otaService.otaResult(request);
     }
 

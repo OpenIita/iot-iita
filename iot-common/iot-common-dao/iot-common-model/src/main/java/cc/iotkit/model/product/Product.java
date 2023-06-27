@@ -26,6 +26,8 @@ public class Product extends TenantModel implements Id<Long>, Serializable {
 
     private String productKey;
 
+    private String productSecret ;
+
     private String name;
 
     private String category;
