@@ -127,7 +127,7 @@ function register(payload) {
     var device = getPkDn(auth.clientid);
 
     var product = deviceBehaviour.getProductKey(pk)
-    var pwd = md5(product.productSecret + auth.clientid);
+    var pwd = md5(product.getProductSecret() + auth.clientid);
 
     /*if (pwd.toLocaleLowerCase() != auth.password.toLocaleLowerCase()) {
         throw new Error("incorrect password");

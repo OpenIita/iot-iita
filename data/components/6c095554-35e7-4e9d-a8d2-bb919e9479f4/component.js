@@ -109,7 +109,7 @@ function auth(head, type, payload) {
     var dn = arr[1];
     var model = arr[2];
     var product = deviceBehaviour.getProductKey(pk)
-    var pwd = md5(product.productSecret + payload.clientid);
+    var pwd = md5(product.getProductSecret() + payload.clientid);
 
     if (pwd.toLocaleLowerCase() != payload.password.toLocaleLowerCase()) {
         throw new Error("incorrect password");
@@ -160,7 +160,7 @@ function register(head, type, payload) {
     var dn = arr[1];
     var model = arr[2];
     var product = deviceBehaviour.getProductKey(pk)
-    var pwd = md5(product.productSecret + auth.clientid);
+    var pwd = md5(product.getProductSecret() + auth.clientid);
 
     if (pwd.toLocaleLowerCase() != auth.password.toLocaleLowerCase()) {
         throw new Error("incorrect password");
