@@ -37,6 +37,9 @@ public class TbProduct {
     @ApiModelProperty(value = "产品key")
     private String productKey;
 
+    @ApiModelProperty(value = "产品密钥")
+    private String productSecret;
+
     @ApiModelProperty(value = "产品名称")
     private String name;
 
