@@ -214,6 +214,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
                 "a.model,\n" +
                 "a.secret,\n" +
                 "a.parent_id,\n" +
+                "a.longitude,\n" +
+                "a.latitude,\n" +
                 "a.uid,\n" +
                 "a.state,\n" +
                 "a.online_time,\n" +
