@@ -20,7 +20,7 @@ public class Device {
 
     protected String productKey;
 
-//    private String productSecret ;
+    private String productSecret ;
 
     protected String deviceName;
 

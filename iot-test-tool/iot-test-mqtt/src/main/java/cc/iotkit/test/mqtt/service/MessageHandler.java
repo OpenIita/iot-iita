@@ -60,7 +60,7 @@ public class MessageHandler implements Handler<MqttPublishMessage> {
                     String productKey = data.get("productKey").toString();
                     String deviceName = data.get("deviceName").toString();
                     if (StringUtils.isBlank(productKey)) {
-                        deviceOnlineListener.accept(new Device(productKey, deviceName, ""));
+                        deviceOnlineListener.accept(new Device(productKey, "",deviceName, ""));
                         return;
                     }
 
@@ -69,7 +69,7 @@ public class MessageHandler implements Handler<MqttPublishMessage> {
                     log.info("subscribe topic:{}", subTopic);
                     client.subscribe(subTopic, 1, r -> {
                         if (deviceOnlineListener != null) {
-                            deviceOnlineListener.accept(new Device(productKey, deviceName, ""));
+                            deviceOnlineListener.accept(new Device(productKey,"", deviceName, ""));
                         }
                     });
                 }
