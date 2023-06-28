@@ -36,7 +36,7 @@
         <hutool.version>5.8.18</hutool.version>
         <redisson.version>3.17.4</redisson.version>
         <lock4j.version>2.2.4</lock4j.version>
-        <mapstruct-plus.version>1.2.5</mapstruct-plus.version>
+        <mapstruct-plus.version>1.3.1</mapstruct-plus.version>
         <alibaba-ttl.version>2.14.2</alibaba-ttl.version>
         <poi.version>5.2.3</poi.version>
         <easyexcel.version>3.2.1</easyexcel.version>
