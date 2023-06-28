@@ -9,6 +9,8 @@
  */
 package cc.iotkit.temporal.es.document;
 
+import cc.iotkit.model.device.VirtualDeviceLog;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +24,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@AutoMapper(target= VirtualDeviceLog.class)
 @Document(indexName = "virtual_device_log")
 public class DocVirtualDeviceLog {
 
