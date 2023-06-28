@@ -5,10 +5,7 @@ import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @Author: 石恒
@@ -36,6 +33,7 @@ public class TbOtaPackage {
 
     private String name;
 
+    @Column(name = "[desc]")
     private String desc;
 
     private String version;

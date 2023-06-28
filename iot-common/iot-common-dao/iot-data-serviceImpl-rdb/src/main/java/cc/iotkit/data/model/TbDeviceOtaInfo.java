@@ -6,10 +6,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @Author: 石恒
@@ -31,6 +28,7 @@ public class TbDeviceOtaInfo {
 
     private String taskId;
 
+    @Column(name = "[desc]")
     private String desc;
 
     private String version;
