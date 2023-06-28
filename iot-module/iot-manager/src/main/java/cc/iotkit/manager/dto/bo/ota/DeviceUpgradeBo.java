@@ -16,7 +16,6 @@ import java.util.List;
 @ApiModel(value = "DeviceUpgradeBo")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = DeviceUpgradeBo.class, reverseConvertGenerate = false)
 public class DeviceUpgradeBo extends BaseDto {
     private static final long serialVersionUID = -1L;
     private List<String> deviceIds;

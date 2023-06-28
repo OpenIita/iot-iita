@@ -1,6 +1,7 @@
 package cc.iotkit.manager.dto.bo.ota;
 
 import cc.iotkit.common.api.BaseDto;
+import cc.iotkit.model.ota.OtaPackage;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -14,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @ApiModel(value = "OtaPackageBo")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = OtaPackageBo.class, reverseConvertGenerate = false)
+@AutoMapper(target = OtaPackage.class, reverseConvertGenerate = false)
 public class OtaPackageBo extends BaseDto {
 
     /**
@@ -70,5 +71,5 @@ public class OtaPackageBo extends BaseDto {
     /**
      * 扩展数据
      */
-
+    private String extData;
 }

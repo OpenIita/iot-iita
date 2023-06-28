@@ -1,6 +1,7 @@
 package cc.iotkit.manager.dto.bo.ota;
 
 import cc.iotkit.common.api.BaseDto;
+import cc.iotkit.model.ota.DeviceOtaInfo;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -14,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @ApiModel(value = "DeviceOtaInfoBo")
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = DeviceOtaInfoBo.class, reverseConvertGenerate = false)
+@AutoMapper(target = DeviceOtaInfo.class, reverseConvertGenerate = false)
 public class DeviceOtaInfoBo extends BaseDto {
 
     private String taskId;
