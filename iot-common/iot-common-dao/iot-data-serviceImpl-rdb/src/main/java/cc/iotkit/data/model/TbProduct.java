@@ -58,11 +58,14 @@ public class TbProduct {
     @ApiModelProperty(value = "图片")
     private String img;
 
-    /**
-     * 是否透传,true/false
-     */
     @ApiModelProperty(value = "是否透传,true/false")
-    private String transparent;
+    private Boolean transparent;
+
+    @ApiModelProperty(value="是否开启设备定位,true/false")
+    private Boolean isOpenLocate;
+
+    @ApiModelProperty(value="定位更新方式")
+    private String locateUpdateType;
 
     @ApiModelProperty(value = "创建时间")
     private Long createAt;

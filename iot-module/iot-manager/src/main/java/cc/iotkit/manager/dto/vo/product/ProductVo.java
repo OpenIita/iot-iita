@@ -54,7 +54,15 @@ public class ProductVo implements Serializable  {
 
 	@ApiModelProperty(value="是否透传,true/false")
     @ExcelProperty(value = "是否透传,true/false")
-		private String transparent;
+		private Boolean transparent;
+
+	@ApiModelProperty(value="是否开启设备定位,true/false")
+	@ExcelProperty(value = "是否开启设备定位,true/false")
+	private Boolean isOpenLocate;
+
+	@ApiModelProperty(value="定位更新方式")
+	@ExcelProperty(value = "定位更新方式")
+	private String locateUpdateType;
 
 	@ApiModelProperty(value="用户ID")
     @ExcelProperty(value = "用户ID")

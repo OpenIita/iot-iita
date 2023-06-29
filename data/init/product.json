@@ -6,6 +6,7 @@
     "category": "light",
     "nodeType": 1,
     "isOpenLocate": true,
+    "transparent": false,
     "locateUpdateType": "manual",
     "uid": "1",
     "createAt": 1650174777304
@@ -18,6 +19,7 @@
     "category": "fan",
     "nodeType": 1,
     "isOpenLocate": false,
+    "transparent": false,
     "uid": "1",
     "createAt": 1646571291131
   },
@@ -78,6 +80,7 @@
     "uid": "1",
     "img": "null",
     "isOpenLocate": false,
+    "transparent": false,
     "createAt": 1650190400357
   },
   {
@@ -123,6 +126,7 @@
     "nodeType": 1,
     "uid": "1",
     "isOpenLocate": false,
+    "transparent": false,
     "createAt": 1650187781637
   },
   {
@@ -145,6 +149,7 @@
     "nodeType": 1,
     "uid": "1",
     "isOpenLocate": false,
+    "transparent": false,
     "createAt": 1649653149339
   },
   {
@@ -155,6 +160,7 @@
     "nodeType": 1,
     "uid": "1",
     "isOpenLocate": false,
+    "transparent": false,
     "createAt": 1649653149339
   },
   {
@@ -165,6 +171,7 @@
     "nodeType": 0,
     "uid": "1",
     "isOpenLocate": false,
+    "transparent": false,
     "createAt": 1649653149339
   },
   {
@@ -175,6 +182,7 @@
     "nodeType": 1,
     "uid": "1",
     "isOpenLocate": false,
+    "transparent": false,
     "createAt": 1649653149339
   }
 ]

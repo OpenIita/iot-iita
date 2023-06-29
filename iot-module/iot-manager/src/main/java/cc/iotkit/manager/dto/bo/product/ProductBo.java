@@ -43,7 +43,13 @@ public class ProductBo extends BaseDto  {
 
     	@ApiModelProperty(value="是否透传,true/false")
 	@Size(max = 255, message = "是否透传,true/false长度不正确")
-    	private String transparent;
+    	private Boolean transparent;
+
+	@ApiModelProperty(value="是否开启设备定位,true/false")
+	private Boolean isOpenLocate;
+
+	@ApiModelProperty(value="定位更新方式")
+	private String locateUpdateType;
 
     	@ApiModelProperty(value="用户ID")
 	@Size(max = 255, message = "用户ID长度不正确")
