@@ -3,6 +3,7 @@ package cc.iotkit.common.excel.core;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.ValidatorUtils;
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
@@ -60,7 +61,7 @@ public class DefaultExcelListener<T> extends AnalysisEventListener<T> implements
             // 如果是某一个单元格的转换异常 能获取到具体行号
             Integer rowIndex = excelDataConvertException.getRowIndex();
             Integer columnIndex = excelDataConvertException.getColumnIndex();
-            errMsg = StrUtil.format("第{}行-第{}列-表头{}: 解析异常<br/>",
+            errMsg = CharSequenceUtil.format("第{}行-第{}列-表头{}: 解析异常<br/>",
                     rowIndex + 1, columnIndex + 1, headMap.get(columnIndex));
             if (log.isDebugEnabled()) {
                 log.error(errMsg);
@@ -70,7 +71,7 @@ public class DefaultExcelListener<T> extends AnalysisEventListener<T> implements
             ConstraintViolationException constraintViolationException = (ConstraintViolationException) exception;
             Set<ConstraintViolation<?>> constraintViolations = constraintViolationException.getConstraintViolations();
             String constraintViolationsMsg = StreamUtils.join(constraintViolations, ConstraintViolation::getMessage, ", ");
-            errMsg = StrUtil.format("第{}行数据校验异常: {}", context.readRowHolder().getRowIndex() + 1, constraintViolationsMsg);
+            errMsg = CharSequenceUtil.format("第{}行数据校验异常: {}", context.readRowHolder().getRowIndex() + 1, constraintViolationsMsg);
             if (log.isDebugEnabled()) {
                 log.error(errMsg);
             }

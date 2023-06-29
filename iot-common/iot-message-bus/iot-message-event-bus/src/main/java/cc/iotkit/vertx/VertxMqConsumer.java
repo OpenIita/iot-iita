@@ -30,9 +30,7 @@ public class VertxMqConsumer<T> implements MqConsumer<T> {
     @SneakyThrows
     public VertxMqConsumer(Class<T> cls) {
         consumerVerticle = new MqConsumerVerticle<>(cls);
-        VertxManager.getVertx().deployVerticle(consumerVerticle, stringAsyncResult -> {
-            countDownLatch.countDown();
-        });
+        VertxManager.getVertx().deployVerticle(consumerVerticle, stringAsyncResult -> countDownLatch.countDown());
         //等待初始化穿完成
         countDownLatch.await();
     }

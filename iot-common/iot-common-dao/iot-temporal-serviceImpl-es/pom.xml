@@ -29,10 +29,6 @@
             <artifactId>jackson-annotations</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>io.github.linpeilie</groupId>-->
-<!--            <artifactId>mapstruct-plus</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>io.github.linpeilie</groupId>
             <artifactId>mapstruct-plus-spring-boot-starter</artifactId>

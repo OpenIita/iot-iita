@@ -22,9 +22,10 @@ public interface IOwnedData<T extends Owned<ID>, ID> extends ICommonData<T, ID> 
 
     /**
      * 按所属用户取数据
+     * @return
      */
-    default List<T> findByUid(String uid) {
-        return Collections.EMPTY_LIST;
+    default List findByUid(String uid) {
+        return Collections.emptyList();
 
     }
 

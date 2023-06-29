@@ -3,7 +3,7 @@ package cc.iotkit.common.web.utils;
 import cc.iotkit.common.utils.StringUtils;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.math.Calculator;
-import cn.hutool.core.util.CharUtil;
+import cn.hutool.core.text.CharPool;
 import cn.hutool.core.util.RandomUtil;
 
 /**
@@ -44,8 +44,8 @@ public class UnsignedMathGenerator implements CodeGenerator {
         int b = RandomUtil.randomInt(limit);
         String max = Integer.toString(Math.max(a,b));
         String min = Integer.toString(Math.min(a,b));
-        max = StringUtils.rightPad(max, this.numberLength, CharUtil.SPACE);
-        min = StringUtils.rightPad(min, this.numberLength, CharUtil.SPACE);
+        max = StringUtils.rightPad(max, this.numberLength, CharPool.SPACE);
+        min = StringUtils.rightPad(min, this.numberLength, CharPool.SPACE);
 
         return max + RandomUtil.randomChar(OPERATORS) + min + '=';
     }
