@@ -136,6 +136,11 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
+    public boolean existByProductKey(String productKey) {
+        return deviceInfoData.existByProductKey(productKey);
+    }
+
+    @Override
     public List<String> findSubDeviceIds(String parentId) {
         return deviceInfoData.findSubDeviceIds(parentId);
     }

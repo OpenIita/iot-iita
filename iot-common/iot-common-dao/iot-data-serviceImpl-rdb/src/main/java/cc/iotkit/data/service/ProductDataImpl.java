@@ -7,6 +7,7 @@ import cc.iotkit.data.dao.ProductRepository;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.model.TbProduct;
 import cc.iotkit.model.product.Product;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -16,12 +17,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static cc.iotkit.data.model.QTbProduct.tbProduct;
+
 @Primary
 @Service
 public class ProductDataImpl implements IProductData, IJPACommData<Product, Long> {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private JPAQueryFactory jpaQueryFactory;
 
     @Override
     public JpaRepository getBaseRepository() {
@@ -48,6 +53,11 @@ public class ProductDataImpl implements IProductData, IJPACommData<Product, Long
         return MapstructUtils.convert(productRepository.findByProductKey(productKey), Product.class);
     }
 
+    @Override
+    public void delByProductKey(String productKey) {
+        jpaQueryFactory.delete(tbProduct).where(tbProduct.productKey.eq(productKey)).execute();
+    }
+
     public List<Product> findByUid(String uid) {
         return MapstructUtils.convert(productRepository.findByUid(uid), Product.class);
     }
@@ -61,12 +71,6 @@ public class ProductDataImpl implements IProductData, IJPACommData<Product, Long
 
     public long countByUid(String uid) {
         return productRepository.countByUid(uid);
-    }
-
-    @Override
-    @Deprecated
-    public Product findById(Long id) {
-        throw new IllegalStateException("Deprecated method");
     }
 
     @Override

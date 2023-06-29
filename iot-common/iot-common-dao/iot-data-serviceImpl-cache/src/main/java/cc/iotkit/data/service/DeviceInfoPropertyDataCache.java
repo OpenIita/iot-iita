@@ -177,6 +177,11 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
+    public boolean existByProductKey(String productKey) {
+        return deviceInfoData.existByProductKey(productKey);
+    }
+
+    @Override
     public List<DeviceInfo> findByUid(String uid) {
         return deviceInfoData.findByUid(uid);
     }

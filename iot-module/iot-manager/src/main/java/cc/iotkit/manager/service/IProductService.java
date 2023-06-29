@@ -27,6 +27,8 @@ public interface IProductService {
 
     ProductVo getDetail(String data);
 
+    boolean deleteProduct(String productKey);
+
     ThingModelVo getThingModelByProductKey(String data);
 
     boolean saveThingModel(ThingModelBo data);

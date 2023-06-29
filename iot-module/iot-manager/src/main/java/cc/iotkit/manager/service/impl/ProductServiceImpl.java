@@ -6,10 +6,7 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.data.manager.ICategoryData;
-import cc.iotkit.data.manager.IProductData;
-import cc.iotkit.data.manager.IProductModelData;
-import cc.iotkit.data.manager.IThingModelData;
+import cc.iotkit.data.manager.*;
 import cc.iotkit.manager.config.AliyunConfig;
 import cc.iotkit.manager.dto.bo.category.CategoryBo;
 import cc.iotkit.manager.dto.bo.product.ProductBo;
@@ -43,6 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author: jay
@@ -65,6 +63,7 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     @Qualifier("categoryDataCache")
     private ICategoryData categoryData;
+
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
@@ -74,6 +73,9 @@ public class ProductServiceImpl implements IProductService {
     private IProductModelData productModelData;
     @Autowired
     private IDbStructureData dbStructureData;
+
+    @Autowired
+    private IDeviceInfoData deviceInfoData;
 
     private OSS ossClient;
 
@@ -105,6 +107,20 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ProductVo getDetail(String productKey) {
         return MapstructUtils.convert(productData.findByProductKey(productKey), ProductVo.class);
+    }
+
+    @Override
+    public boolean deleteProduct(String productKey) {
+        Product product = productData.findByProductKey(productKey);
+        if (Objects.isNull(product)) {
+            throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
+        }
+        boolean exist = deviceInfoData.existByProductKey(productKey);
+        if (exist) {
+            throw new BizException(ErrCode.DEVICE_HAS_ASSOCIATED);
+        }
+        productData.deleteById(product.getId());
+        return true;
     }
 
     @Override

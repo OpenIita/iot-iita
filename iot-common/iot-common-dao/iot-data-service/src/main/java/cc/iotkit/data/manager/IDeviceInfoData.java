@@ -132,7 +132,16 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
 
     /**
      * 获取所有网关类型设备
+     *
      * @return
      */
     List<DeviceInfo> findByProductNodeType(String uid);
+
+    /**
+     * 是否存在product类型的设备
+     *
+     * @param productKey
+     * @return
+     */
+    boolean existByProductKey(String productKey);
 }

@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 产品接口
  */
-public interface IProductData extends ICommonData<Product,Long> {
+public interface IProductData extends ICommonData<Product, Long> {
 
     /**
      * 按品类取产品列表
@@ -26,4 +26,6 @@ public interface IProductData extends ICommonData<Product,Long> {
 
 
     Product findByProductKey(String name);
+
+    void delByProductKey(String productKey);
 }

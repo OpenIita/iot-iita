@@ -48,7 +48,7 @@ public enum ErrCode implements IEnum {
 
     /**
      * 大屏通用异常段
-     * */
+     */
     RESOURCE_FILE_NOT_FOUND(00000000, "资源包为空"),
     BIG_SCREEN_NOT_FOUND(00000000, "大屏不存在"),
     BIG_SCREEN_ALREADY(00000000, "大屏已存在"),
@@ -70,6 +70,8 @@ public enum ErrCode implements IEnum {
     DEVICE_NOT_FOUND(00000000, "设备不存在"),
     DEVICE_OFFLINE(00000000, "设备已离线"),
     DEVICE_ALREADY(00000000, "设备已存在"),
+
+    DEVICE_HAS_ASSOCIATED(00000000, "设备已关联"),
     MODEL_ALREADY(00000000, "型号已存在"),
     MODEL_SCRIPT_NOT_FOUND(00000000, "产品型号脚本不存在"),
     PRODUCT_MODEL_NOT_FOUND(00000000, "产品型号不存在"),

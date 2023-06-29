@@ -132,7 +132,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     private void parseStateToDto(TbDeviceInfo vo, DeviceInfo dto) {
         dto.setState(new DeviceInfo.State("online".equals(vo.getState()),
                 vo.getOnlineTime(), vo.getOfflineTime()));
-        dto.setLocate(new DeviceInfo.Locate(vo.getLongitude(),vo.getLatitude()));
+        dto.setLocate(new DeviceInfo.Locate(vo.getLongitude(), vo.getLatitude()));
     }
 
     /**
@@ -143,7 +143,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
         vo.setState(state.isOnline() ? "online" : "offline");
         vo.setOfflineTime(state.getOfflineTime());
         vo.setOnlineTime(state.getOnlineTime());
-        DeviceInfo.Locate locate=dto.getLocate();
+        DeviceInfo.Locate locate = dto.getLocate();
         vo.setLongitude(locate.getLongitude());
         vo.setLatitude(locate.getLatitude());
     }
@@ -198,9 +198,14 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
 
     @Override
     public List<DeviceInfo> findByProductNodeType(String uid) {
-        List<TbDeviceInfo> devices=jpaQueryFactory.select(tbDeviceInfo).from(tbDeviceInfo)
+        List<TbDeviceInfo> devices = jpaQueryFactory.select(tbDeviceInfo).from(tbDeviceInfo)
                 .join(tbProduct).on(tbProduct.nodeType.eq(0).and(tbDeviceInfo.productKey.eq(tbProduct.productKey))).fetch();
-        return MapstructUtils.convert(devices,DeviceInfo.class);
+        return MapstructUtils.convert(devices, DeviceInfo.class);
+    }
+
+    @Override
+    public boolean existByProductKey(String productKey) {
+        return Optional.ofNullable(jpaQueryFactory.selectOne().from(tbDeviceInfo).where(tbDeviceInfo.productKey.eq(productKey)).fetchOne()).orElse(0) > 0;
     }
 
     @Override
@@ -275,7 +280,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
                 .model(rs.getString("model"))
                 .secret(rs.getString("secret"))
                 .parentId(rs.getString("parent_id"))
-                .locate(new DeviceInfo.Locate(rs.getString("longitude"),rs.getString("latitude")))
+                .locate(new DeviceInfo.Locate(rs.getString("longitude"), rs.getString("latitude")))
                 .uid(rs.getString("uid"))
                 .state(new DeviceInfo.State(
                         "online".equals(rs.getString("state")),
@@ -384,7 +389,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
 
         //按品类分组求合
         rst.stream().collect(Collectors.groupingBy(DataItem::getName,
-                Collectors.summarizingLong(item -> (long) item.getValue())))
+                        Collectors.summarizingLong(item -> (long) item.getValue())))
                 .forEach((key, sum) -> stats.add(new DataItem(key, sum.getSum())));
 
         return stats;

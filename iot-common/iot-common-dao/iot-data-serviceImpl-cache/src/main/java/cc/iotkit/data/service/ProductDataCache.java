@@ -29,9 +29,15 @@ public class ProductDataCache implements IProductData {
     }
 
     @Override
-    @Cacheable(value = Constants.CACHE_PRODUCT, key = "#root.method.name+#s", unless = "#result == null")
+    @Cacheable(value = Constants.CACHE_PRODUCT, key = "#root.targetClass+#productKey", unless = "#result == null")
     public Product findByProductKey(String productKey) {
         return productData.findByProductKey(productKey);
+    }
+
+    @Override
+    @Cacheable(value = Constants.CACHE_PRODUCT, key = "#root.targetClass+#productKey", unless = "#result == null")
+    public void delByProductKey(String productKey) {
+
     }
 
 //    @Override
@@ -76,6 +82,8 @@ public class ProductDataCache implements IProductData {
 
     @Override
     public void deleteById(Long s) {
+        Product product = findById(s);
+        delByProductKey(product.getProductKey());
         productData.deleteById(s);
         //清除缓存
         productCacheEvict.findById(s);

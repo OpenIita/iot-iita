@@ -44,14 +44,13 @@ import java.util.List;
 public class ProductController {
 
 
-
     @Autowired
     private IProductService productService;
 
     @PostMapping("/list")
     @ApiOperation("列表")
     public Paging<ProductVo> getProducts(@Validated @RequestBody
-            PageRequest<ProductBo> request) {
+                                         PageRequest<ProductBo> request) {
         return productService.selectPageList(request);
     }
 
@@ -74,13 +73,21 @@ public class ProductController {
 
     @ApiOperation("查看详情")
     @PostMapping(value = "/getDetail")
-    public ProductVo getDetail(@RequestBody  @Validated Request<String> request) {
+    public ProductVo getDetail(@RequestBody @Validated Request<String> request) {
         ProductVo dto = productService.getDetail(request.getData());
         return dto;
     }
+
+
+    @ApiOperation("删除产品")
+    @PostMapping(value = "/deleteProduct")
+    public boolean deleteProduct(@RequestBody @Validated Request<String> request) {
+        return productService.deleteProduct(request.getData());
+    }
+
     @PostMapping("/getThingModelByProductKey")
     @ApiOperation("查看物模型")
-    public ThingModelVo getThingModelByProductKey(@RequestBody  @Validated Request<String> request) {
+    public ThingModelVo getThingModelByProductKey(@RequestBody @Validated Request<String> request) {
         return productService.getThingModelByProductKey(request.getData());
     }
 
@@ -94,7 +101,7 @@ public class ProductController {
     @ApiOperation("删除物模型")
     @Log(title = "物模型", businessType = BusinessType.DELETE)
     public boolean deleteThingModel(@Validated @RequestBody Request<Long> id) {
-       return productService.deleteThingModel(id.getData());
+        return productService.deleteThingModel(id.getData());
     }
 
 
@@ -130,7 +137,7 @@ public class ProductController {
     @PostMapping("/uploadImg/{productKey}")
     public String uploadImg(@PathVariable("productKey") String productKey,
                             @RequestParam("file") MultipartFile file) {
-       return productService.uploadImg(productKey,file);
+        return productService.uploadImg(productKey, file);
     }
 
     @PostMapping("/getModelsByProductKey")
