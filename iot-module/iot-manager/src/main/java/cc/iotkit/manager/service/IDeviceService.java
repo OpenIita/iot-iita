@@ -11,6 +11,7 @@ import cc.iotkit.manager.dto.bo.devicegroup.DeviceGroupBo;
 import cc.iotkit.manager.dto.vo.deviceconfig.DeviceConfigVo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoVo;
+import cc.iotkit.manager.dto.vo.deviceinfo.ParentDeviceVo;
 import cc.iotkit.model.device.DeviceConfig;
 import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;
@@ -19,7 +20,6 @@ import cc.iotkit.model.device.message.ThingModelMessage;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: jay
@@ -34,7 +34,7 @@ public interface IDeviceService {
 
     List<DeviceInfoVo> selectChildrenPageList(String deviceId);
 
-    List<Map<String, Object>> getParentDevices();
+    List<ParentDeviceVo> getParentDevices();
 
     DeviceInfo getDetail(String deviceId);
 

@@ -14,8 +14,9 @@ import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.stats.DataItem;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -28,28 +29,34 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static cc.iotkit.data.model.QTbDeviceInfo.tbDeviceInfo;
+import static cc.iotkit.data.model.QTbProduct.tbProduct;
+
 @Primary
 @Service
+@RequiredArgsConstructor
 public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceInfo, String> {
 
-    @Autowired
-    private DeviceInfoRepository deviceInfoRepository;
-    @Autowired
-    private DeviceSubUserRepository deviceSubUserRepository;
-    @Autowired
-    private DeviceGroupMappingRepository deviceGroupMappingRepository;
-    @Autowired
-    private DeviceGroupRepository deviceGroupRepository;
-    @Autowired
-    private DeviceTagRepository deviceTagRepository;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
+
+    private final DeviceInfoRepository deviceInfoRepository;
+
+    private final DeviceSubUserRepository deviceSubUserRepository;
+
+    private final DeviceGroupMappingRepository deviceGroupMappingRepository;
+
+    private final DeviceGroupRepository deviceGroupRepository;
+
+    private final DeviceTagRepository deviceTagRepository;
+
+    private final JdbcTemplate jdbcTemplate;
+
     @Qualifier("productDataCache")
-    private IProductData productData;
-    @Autowired
+    private final IProductData productData;
+
     @Qualifier("categoryDataCache")
-    private ICategoryData categoryData;
+    private final ICategoryData categoryData;
+
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public JpaRepository getBaseRepository() {
@@ -190,15 +197,10 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     }
 
     @Override
-    public List<Map<String, Object>> findByProductNodeType(String uid) {
-        String sql = "SELECT\n" +
-                "a.id,\n" +
-                "a.device_name\n" +
-                "FROM device_info a JOIN product p ON p.node_type=0 AND a.product_key=p.id";
-        if (StringUtils.isNotBlank(uid)) {
-            sql += " WHERE a.uid='" + uid + "'";
-        }
-        return jdbcTemplate.queryForList(sql);
+    public List<DeviceInfo> findByProductNodeType(String uid) {
+        List<TbDeviceInfo> devices=jpaQueryFactory.select(tbDeviceInfo).from(tbDeviceInfo)
+                .join(tbProduct).on(tbProduct.nodeType.eq(0).and(tbDeviceInfo.productKey.eq(tbProduct.productKey))).fetch();
+        return MapstructUtils.convert(devices,DeviceInfo.class);
     }
 
     @Override

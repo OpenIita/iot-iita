@@ -24,6 +24,7 @@ import cc.iotkit.manager.dto.bo.devicegroup.DeviceGroupBo;
 import cc.iotkit.manager.dto.vo.deviceconfig.DeviceConfigVo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoVo;
+import cc.iotkit.manager.dto.vo.deviceinfo.ParentDeviceVo;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceService;
@@ -44,7 +45,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jay
@@ -157,12 +158,17 @@ public class DeviceServiceImpl implements IDeviceService {
     }
 
     @Override
-    public List<Map<String, Object>> getParentDevices() {
+    public List<ParentDeviceVo> getParentDevices() {
         String uid = "";
+        List<ParentDeviceVo> pdv = null;
         if (!AuthUtil.isAdmin()) {
             uid = AuthUtil.getUserId();
         }
-        return deviceInfoData.findByProductNodeType(uid);
+        List<DeviceInfo> ret=deviceInfoData.findByProductNodeType(uid);
+        if(ret.size()>0){
+            pdv=ret.stream().map(r->ParentDeviceVo.builder().id(r.getId()).deviceName(r.getDeviceName()).build()).collect(Collectors.toList());
+        }
+        return pdv;
     }
 
     @Override

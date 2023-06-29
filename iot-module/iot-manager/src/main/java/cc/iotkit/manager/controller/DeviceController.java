@@ -10,13 +10,8 @@
 package cc.iotkit.manager.controller;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
-import cc.iotkit.common.constant.Constants;
-import cc.iotkit.common.enums.ErrCode;
-import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.satoken.utils.AuthUtil;
-import cc.iotkit.common.utils.ReflectUtil;
-import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.manager.dto.bo.device.*;
 import cc.iotkit.manager.dto.bo.deviceconfig.DeviceConfigAddBo;
 import cc.iotkit.manager.dto.bo.devicegroup.DeviceAddGroupBo;
@@ -25,26 +20,29 @@ import cc.iotkit.manager.dto.bo.thingmodel.ThingModelMessageBo;
 import cc.iotkit.manager.dto.vo.deviceconfig.DeviceConfigVo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoVo;
+import cc.iotkit.manager.dto.vo.deviceinfo.ParentDeviceVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
-import cc.iotkit.manager.service.*;
+import cc.iotkit.manager.service.DeviceService;
+import cc.iotkit.manager.service.IDeviceService;
+import cc.iotkit.manager.service.IProductService;
 import cc.iotkit.model.InvokeResult;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.DeviceConfig;
 import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
 import cc.iotkit.model.device.message.ThingModelMessage;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Api(tags = {"设备"})
 @Slf4j
@@ -99,9 +97,9 @@ public class DeviceController {
         return deviceServiceImpl.selectChildrenPageList(deviceId);
     }
 
-    @ApiOperation("获取网关")
-    @PostMapping("/parentDevices")
-    public List<Map<String, Object>> getParentDevices() {
+    @ApiOperation("获取网关设备")
+    @PostMapping("/getParentDevices")
+    public List<ParentDeviceVo> getParentDevices() {
         return deviceServiceImpl.getParentDevices();
     }
 

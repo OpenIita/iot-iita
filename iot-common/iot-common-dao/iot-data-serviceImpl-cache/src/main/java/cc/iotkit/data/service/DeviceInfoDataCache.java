@@ -10,12 +10,12 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.cache.DeviceInfoCacheEvict;
 import cc.iotkit.data.cache.DeviceInfoCachePut;
-import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.stats.DataItem;
 import org.apache.commons.lang3.StringUtils;
@@ -131,7 +131,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
-    public List<Map<String, Object>> findByProductNodeType(String uid) {
+    public List<DeviceInfo> findByProductNodeType(String uid) {
         return deviceInfoData.findByProductNodeType(uid);
     }
 
