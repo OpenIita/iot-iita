@@ -35,9 +35,7 @@ public class VirtualDeviceLogDataImpl implements IVirtualDeviceLogData {
                 .findByVirtualDeviceId(virtualDeviceId,
                         Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(), paged.getContent().stream()
-                .map(o -> {
-                    return MapstructUtils.convert(o, VirtualDeviceLog.class);
-                })
+                .map(o -> MapstructUtils.convert(o, VirtualDeviceLog.class))
                 .collect(Collectors.toList()));
     }
 
