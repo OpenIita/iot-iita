@@ -400,5 +400,13 @@ public class DeviceServiceImpl implements IDeviceService {
 
     }
 
+    @Override
+    public boolean saveDevice(DeviceInfoBo data) {
+        DeviceInfo di=data.to(DeviceInfo.class);
+        di.setLocate(new DeviceInfo.Locate(data.getLongitude(),data.getLatitude()));
+        di.setState(data.getState());
+        return deviceInfoData.save(di)!=null;
+    }
+
 
 }

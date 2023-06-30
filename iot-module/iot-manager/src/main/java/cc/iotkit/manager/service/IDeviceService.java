@@ -71,4 +71,6 @@ public interface IDeviceService {
     boolean saveConfig(DeviceConfig data);
 
     DeviceConfigVo getConfig(String deviceId);
+
+    boolean saveDevice(DeviceInfoBo data);
 }
