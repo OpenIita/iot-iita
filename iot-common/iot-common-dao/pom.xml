@@ -22,7 +22,6 @@
         <module>iot-data-serviceImpl-rdb</module>
         <module>iot-temporal-service</module>
         <module>iot-temporal-serviceImpl-es</module>
-        <!--<module>iot-temporal-serviceImpl-ts</module>-->
         <module>iot-temproal-serviceImpl-td</module>
     </modules>
 
@@ -31,18 +30,6 @@
     <dependencyManagement>
 
         <dependencies>
-
-<!--            <dependency>-->
-<!--                <groupId>org.mapstruct</groupId>-->
-<!--                <artifactId>mapstruct</artifactId>-->
-<!--                <version>1.4.2.Final</version>-->
-<!--            </dependency>-->
-
-<!--            <dependency>-->
-<!--                <groupId>org.mapstruct</groupId>-->
-<!--                <artifactId>mapstruct-processor</artifactId>-->
-<!--                <version>1.4.2.Final</version>-->
-<!--            </dependency>-->
 
         </dependencies>
 

@@ -36,7 +36,7 @@ public class VirtualDeviceLogDataImpl implements IVirtualDeviceLogData {
         sql = "select count(*) from virtual_device_log_" + virtualDeviceId.toLowerCase();
         List<Long> counts = tdTemplate.queryForList(sql, Long.class);
 
-        return new Paging<>(counts.size() > 0 ? counts.get(0) : 0, logs.stream().map(r ->
+        return new Paging<>(!counts.isEmpty() ? counts.get(0) : 0, logs.stream().map(r ->
                 new VirtualDeviceLog(r.getTime().toString(), virtualDeviceId,
                         r.getVirtualDeviceName(),
                         r.getDeviceTotal(), r.getResult(),
