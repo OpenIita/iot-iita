@@ -20,6 +20,8 @@ public class DeviceInfoBo extends BaseDto {
 
     private static final long serialVersionUID = -1L;
 
+    private String id;
+
     @ApiModelProperty(value = "创建时间")
     private Long createAt;
 
@@ -63,7 +65,7 @@ public class DeviceInfoBo extends BaseDto {
     @Size(max = 255, message = "设备状态长度不正确")
     @AutoMapping(ignore = true)
     @ReverseAutoMapping(ignore = true)
-    private String state;
+    private DeviceInfo.State state;
 
     @ApiModelProperty(value = "用户id")
     @Size(max = 255, message = "用户id长度不正确")

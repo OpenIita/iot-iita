@@ -21,12 +21,7 @@ public class VertxMqProducer<T> implements MqProducer<T> {
     @SneakyThrows
     public VertxMqProducer(Class<T> cls) {
         producerVerticle = new MqProducerVerticle<>(cls);
-        VertxManager.getVertx().deployVerticle(producerVerticle, new Handler<AsyncResult<String>>() {
-            @Override
-            public void handle(AsyncResult<String> stringAsyncResult) {
-                countDownLatch.countDown();
-            }
-        });
+        VertxManager.getVertx().deployVerticle(producerVerticle, stringAsyncResult -> countDownLatch.countDown());
         //等待初始化完成
         countDownLatch.await();
     }

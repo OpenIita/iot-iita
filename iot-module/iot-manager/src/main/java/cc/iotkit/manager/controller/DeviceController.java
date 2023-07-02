@@ -90,6 +90,12 @@ public class DeviceController {
         return deviceServiceImpl.addDevice(bo.getData());
     }
 
+    @ApiOperation(value = "保存设备")
+    @PostMapping("/save")
+    public boolean saveDevice(@RequestBody @Validated Request<DeviceInfoBo> bo) {
+        return deviceServiceImpl.saveDevice(bo.getData());
+    }
+
     @ApiOperation(value = "获取子设备", notes = "获取子设备")
     @PostMapping("/children/list")
     public List<DeviceInfoVo> getChildren(@Validated @RequestBody PageRequest<String> request) {

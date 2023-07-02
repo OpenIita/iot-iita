@@ -1,5 +1,6 @@
 package cc.iotkit.common.excel.core;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.Setter;
 
@@ -64,7 +65,7 @@ public class DefaultExcelResult<T> implements ExcelResult<T> {
             return "读取失败，未解析到数据";
         } else {
             if (errorCount == 0) {
-                return StrUtil.format("恭喜您，全部读取成功！共{}条", successCount);
+                return CharSequenceUtil.format("恭喜您，全部读取成功！共{}条", successCount);
             } else {
                 return "";
             }
