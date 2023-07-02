@@ -465,8 +465,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     }
 
     @Override
-    public List<DeviceInfo> findByIds(Collection<String> id) {
-        return null;
+    public List<DeviceInfo> findByIds(Collection<String> ids) {
+        return MapstructUtils.convert(deviceInfoRepository.findAllById(ids),DeviceInfo.class);
     }
 
     @Override
@@ -514,8 +514,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     }
 
     @Override
-    public void deleteByIds(Collection<String> strings) {
-
+    public void deleteByIds(Collection<String> ids) {
+        deviceInfoRepository.deleteAllById(ids);
     }
 
 

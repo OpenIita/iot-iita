@@ -60,8 +60,8 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
-    public void deleteByIds(Collection<String> strings) {
-
+    public void deleteByIds(Collection<String> ids) {
+        deviceInfoData.deleteByIds(ids);
     }
 
     @Override

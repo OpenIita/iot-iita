@@ -219,8 +219,8 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
-    public List<DeviceInfo> findByIds(Collection<String> id) {
-        return null;
+    public List<DeviceInfo> findByIds(Collection<String> ids) {
+        return deviceInfoData.findByIds(ids);
     }
 
     @Override
@@ -252,7 +252,17 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
-    public void deleteByIds(Collection<String> strings) {
+    public void deleteByIds(Collection<String> ids) {
+        List<DeviceInfo> deviceInfos = deviceInfoData.findByIds(ids);
+        deviceInfos.forEach(device -> {
+            deviceInfoCacheEvict.findByDeviceId(device.getDeviceId());
+            deviceInfoCacheEvict.findByProductKeyAndDeviceName(device.getProductKey(), device.getDeviceName());
+            //清除属性缓存
+            clearProperties(device.getDeviceId());
+            //更新子设备列表缓存
+            putSubDeviceIds(device.getParentId());
+        });
+        deviceInfoData.deleteByIds(ids);
     }
 
     @Override
