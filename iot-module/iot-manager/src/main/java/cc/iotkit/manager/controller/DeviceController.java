@@ -121,6 +121,12 @@ public class DeviceController {
         return deviceServiceImpl.deleteDevice(request.getData());
     }
 
+    @ApiOperation("批量删除设备")
+    @PostMapping("/batchDelete")
+    public boolean batchDelete(@Validated @RequestBody Request<List<String>> request) {
+        return deviceServiceImpl.batchDeleteDevice(request.getData());
+    }
+
     @ApiOperation("设备物模型日志")
     @PostMapping("/deviceLogs/list")
     public Paging<ThingModelMessage> logs(@Validated @RequestBody PageRequest<DeviceLogQueryBo> request) {

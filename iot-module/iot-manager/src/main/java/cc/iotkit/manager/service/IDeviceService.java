@@ -42,6 +42,8 @@ public interface IDeviceService {
 
     boolean deleteDevice(String data);
 
+    boolean batchDeleteDevice(List<String> ids);
+
     Paging<ThingModelMessage> logs(PageRequest<DeviceLogQueryBo> request);
 
     List<DeviceProperty> getPropertyHistory(String deviceId, String name, long start, long end);
@@ -52,7 +54,7 @@ public interface IDeviceService {
 
     boolean simulateSend(ThingModelMessage message);
 
-    DeferredResult  addConsumer(String deviceId, String clientId);
+    DeferredResult addConsumer(String deviceId, String clientId);
 
     Paging<DeviceGroupVo> selectGroupPageList(PageRequest<DeviceGroupBo> pageRequest);
 

@@ -194,6 +194,12 @@ public class DeviceServiceImpl implements IDeviceService {
     }
 
     @Override
+    public boolean batchDeleteDevice(List<String> ids) {
+        deviceInfoData.deleteByIds(ids);
+        return true;
+    }
+
+    @Override
     public Paging<ThingModelMessage> logs(PageRequest<DeviceLogQueryBo> request) {
         DeviceLogQueryBo data = request.getData();
         return thingModelMessageData.findByTypeAndIdentifier(data.getDeviceId(), data.getType(), data.getIdentifier(), request.getPageNum(), request.getPageSize());
