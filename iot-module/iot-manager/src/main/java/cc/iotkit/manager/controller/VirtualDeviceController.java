@@ -125,6 +125,15 @@ public class VirtualDeviceController {
     }
 
     /**
+     * 删除
+     */
+    @ApiOperation("批量删除虚拟设备")
+    @PostMapping("/batchDelete")
+    public void batchDelete(@Validated @RequestBody Request<List<String>> ids) {
+        virtualDeviceData.deleteByIds(ids.getData());
+    }
+
+    /**
      * 保存脚本
      */
     @ApiOperation("保存脚本")
