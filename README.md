@@ -52,11 +52,12 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 **前端项目见：** https://gitee.com/openiita/iita-iot-web-admin
 
- **演示地址：** [演示地址](http://159.75.222.119:16808)，账号：guest1,密码：guest123  (只读权限)
+ **演示地址：** [点击访问](http://159.75.222.119:16808)
 
 
 **系统截图**
-![输入图片说明](doc/screenshot.jpg)
+
+![输入图片说明](![输入图片说明](doc/screenshot.png))
 
 
 
@@ -66,7 +67,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 默认使用内置的redis、h2数据库、es时序数据库和vertx消息总线以减小启动难度，可实现 **零配置一键启动** ，程序在第一次启动的时候会使用data/init目录的示例数据进行初始化。
 
-管理员账号密码：iotkit/iotkitadmin
+管理员账号密码：admin/admin123
 
 
 **注：** es版本为7.15.2，mysql版本为8.0+
@@ -85,7 +86,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 ##### 消息总线切换为RocketMq方法
 
-1、注释掉iot-standalone/pom.xml中的 iot-message-event-bus，并打开iot-message-rocketmq的注释
+1、注释掉iot-starter/pom.xml中的 iot-message-event-bus，并打开iot-message-rocketmq的注释
 
 2、application.xml中打开rocketmq配置
 
@@ -95,7 +96,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 2、clone代码，在idea中导入项目
 
-3、在iot-standalone模块的Application类上右键运行
+3、在iot-starter模块的Application类上右键运行
 
 4、若出现报错，可能是数据没有初始化完或重复初始化，把项目根目录下.init文件和data/iotkit.xx文件删除后重启
 
