@@ -57,7 +57,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 **系统截图**
 
-![输入图片说明](![输入图片说明](doc/screenshot.png))
+![输入图片说明](doc/screenshot.png) 
 
 
 
@@ -123,10 +123,10 @@ http://iotkit-open-source.gitee.io/document/
 
 ![输入图片说明](doc/ma.png) 
 
- 
-### roadmap
 
-绿色:已完成,蓝色:进行中,橙色:规划中
+### 项目规划
 
-![输入图片说明](https://foruda.gitee.com/images/1678275206158613401/8b29adfc_504690.jpeg)
+见：《[开源项目管理](https://open-iita.feishu.cn/base/G4owbWqkbaoI0LsYVnWcreXVnnc)》
+
+![输入图片说明](https://foruda.gitee.com/images/1686571717085038365/f1bd636b_504690.png "proj.png")
 
