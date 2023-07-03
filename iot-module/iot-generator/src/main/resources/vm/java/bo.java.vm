@@ -1,6 +1,6 @@
-package ${packageName}.domain.bo;
+package ${packageName}.dto.bo;
 
-import ${packageName}.domain.${ClassName};
+import ${packageName}.model.${ClassName};
 import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;

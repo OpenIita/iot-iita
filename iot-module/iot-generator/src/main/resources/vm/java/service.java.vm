@@ -1,12 +1,12 @@
 package ${packageName}.service;
 
-import ${packageName}.domain.${ClassName};
-import ${packageName}.domain.vo.${ClassName}Vo;
-import ${packageName}.domain.bo.${ClassName}Bo;
+import ${packageName}.dto.vo.${ClassName}Vo;
+import ${packageName}.dto.bo.${ClassName}Bo;
 #if($table.crud || $table.sub)
-import cc.iotkit.common.mybatis.core.page.TableDataInfo;
-import cc.iotkit.common.mybatis.core.page.PageQuery;
+
 #end
+import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.api.PageRequest;
 
 import java.util.Collection;
 import java.util.List;

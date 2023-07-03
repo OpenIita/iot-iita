@@ -5,7 +5,7 @@ import java.util.List;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +19,8 @@ import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.excel.utils.ExcelUtil;
-import ${packageName}.domain.vo.${ClassName}Vo;
-import ${packageName}.domain.bo.${ClassName}Bo;
+import ${packageName}.dto.vo.${ClassName}Vo;
+import ${packageName}.dto.bo.${ClassName}Bo;
 import ${packageName}.service.I${ClassName}Service;
 
 
@@ -70,12 +70,11 @@ public class ${ClassName}Controller extends BaseController {
     /**
      * 获取${functionName}详细信息
      *
-     * @param ${pkColumn.javaField} 主键
      */
     @SaCheckPermission("${permissionPrefix}:query")
     @PostMapping("/getDetail")
     @ApiOperation("获取${functionName}详细信息")
-    public R<${ClassName}Vo> getDetail(@Validated @RequestBody Request<Long> request) {
+    public ${ClassName}Vo getDetail(@Validated @RequestBody Request<Long> request) {
         return ${className}Service.queryById(request.getData());
     }
 
@@ -97,20 +96,19 @@ public class ${ClassName}Controller extends BaseController {
     @Log(title = "${functionName}", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ApiOperation("修改${functionName}")
-    public boolean edit(@Validated(EditGroup.class) @RequestBody  Request<${ClassName}Bo> bo) {
-        return ${className}Service.updateByBo(bo);
+    public boolean edit(@Validated(EditGroup.class) @RequestBody  Request<${ClassName}Bo> request) {
+        return ${className}Service.updateByBo(request.getData());
     }
 
     /**
      * 删除${functionName}
      *
-     * @param ${pkColumn.javaField}s 主键串
      */
     @SaCheckPermission("${permissionPrefix}:remove")
     @Log(title = "${functionName}", businessType = BusinessType.DELETE)
     @PostMapping("/delete")
     @ApiOperation("删除${functionName}")
     public boolean remove(@Validated @RequestBody Request<List<Long>> query) {
-        return ${className}Service.deleteWithValidByIds(query.getData());
+        return ${className}Service.deleteWithValidByIds(query.getData(), true);
     }
 }

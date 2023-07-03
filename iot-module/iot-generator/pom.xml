@@ -107,6 +107,7 @@
                         </path>
                         <!-- other annotation processors -->
                     </annotationProcessorPaths>
+
                 </configuration>
             </plugin>
         </plugins>

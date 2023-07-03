@@ -1,7 +1,7 @@
 package ${packageName}.service.impl;
 
-import cc.iotkit.common.core.utils.MapstructUtils;
-import cc.iotkit.common.core.utils.StringUtils;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
 #if($table.crud || $table.sub)
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
@@ -9,14 +9,17 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ${packageName}.domain.bo.${ClassName}Bo;
-import ${packageName}.domain.vo.${ClassName}Vo;
-import ${packageName}.domain.${ClassName};
+import ${packageName}.dto.bo.${ClassName}Bo;
+import ${packageName}.dto.vo.${ClassName}Vo;
+import ${packageName}.model.${ClassName};
 import ${packageName}.service.I${ClassName}Service;
+import ${packageName}.data.I${ClassName}Data;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
+import cc.iotkit.common.exception.BizException;
+
 
 /**
  * ${functionName}Service业务层处理
@@ -35,7 +38,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
      */
     @Override
     public ${ClassName}Vo queryById(${pkColumn.javaType} ${pkColumn.javaField}){
-        return baseData.selectVoById(${pkColumn.javaField});
+        return MapstructUtils.convert(baseData.findById(${pkColumn.javaField}), ${ClassName}Vo.class);
     }
 
 #if($table.crud || $table.sub)
@@ -43,9 +46,8 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
      * 查询${functionName}列表
      */
     @Override
-    public Paging<${ClassName}Vo> queryPageList(${ClassName}Bo bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<${ClassName}> lqw = buildQueryWrapper(bo);
-        Paging<${ClassName}Vo> result = baseData.selectVoPage(pageQuery.build(), lqw);
+    public Paging<${ClassName}Vo> queryPageList(PageRequest<${ClassName}Bo> pageQuery) {
+        Paging<${ClassName}Vo> result = baseData.findAll(pageQuery.to(${ClassName}.class)).to(${ClassName}Vo.class);
         return result;
     }
 #end
@@ -56,22 +58,22 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
     @Override
     public List<${ClassName}Vo> queryList(${ClassName}Bo bo) {
 
-        return baseData.selectVoList(bo);
+        return MapstructUtils.convert(baseData.findAllByCondition(bo.to(${ClassName}.class)), ${ClassName}Vo.class);
     }
 
     /**
      * 新增${functionName}
      */
     @Override
-    public Boolean insertByBo(${ClassName}Bo bo) {
+    public Long insertByBo(${ClassName}Bo bo) {
         ${ClassName} add = MapstructUtils.convert(bo, ${ClassName}.class);
         validEntityBeforeSave(add);
-        boolean flag = baseData.insert(add) > 0;
-#set($pk=$pkColumn.javaField.substring(0,1).toUpperCase() + ${pkColumn.javaField.substring(1)})
-        if (flag) {
-            bo.set$pk(add.get$pk());
+        baseData.save(add);
+        if (add == null) {
+            throw new BizException("新增失败");
         }
-        return flag;
+        #set($pk=$pkColumn.javaField.substring(0,1).toUpperCase() + ${pkColumn.javaField.substring(1)})
+        return add.get$pk();
     }
 
     /**
@@ -81,7 +83,11 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
     public Boolean updateByBo(${ClassName}Bo bo) {
         ${ClassName} update = MapstructUtils.convert(bo, ${ClassName}.class);
         validEntityBeforeSave(update);
-        return baseData.updateById(update) > 0;
+        ${ClassName} ret = baseData.save(update);
+        if(ret == null){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -99,6 +105,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
-        return baseData.deleteBatchIds(ids) > 0;
+        baseData.deleteByIds(ids);
+        return true;
     }
 }

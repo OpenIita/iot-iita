@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 #foreach ($column in $columns)
 #if($column.javaField=='tenantId')
 #set($IsTenant=1)
@@ -22,7 +24,6 @@ import lombok.EqualsAndHashCode;
 import ${import};
 #end
 
-import java.io.Serial;
 
 /**
  * ${functionName}对象 ${tableName}
@@ -43,8 +44,7 @@ import java.io.Serial;
 @AutoMapper(target = ${ClassName}.class)
 public class Tb${ClassName} extends ${Entity} {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+
 
 #foreach ($column in $columns)
 #if(!$table.isSuperColumn($column.javaField))

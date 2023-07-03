@@ -1,0 +1,15 @@
+package ${packageName}.data.dao;
+
+import cc.iotkit.data.model.Tb${ClassName};
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+
+/**
+ * ${functionName}对象 ${tableName}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface ${ClassName}Repository extends JpaRepository<Tb${ClassName}, Long>, QuerydslPredicateExecutor<Tb${ClassName}> {
+
+}

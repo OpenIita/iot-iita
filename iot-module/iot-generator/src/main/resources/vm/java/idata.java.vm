@@ -1,8 +1,7 @@
 package ${packageName}.data;
 
 import cc.iotkit.data.ICommonData;
-import cc.iotkit.model.system.SysRole;
-
+import ${packageName}.model.${ClassName};
 import java.util.List;
 
 /**

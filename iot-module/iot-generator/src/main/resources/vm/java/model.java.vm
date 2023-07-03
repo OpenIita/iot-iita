@@ -9,7 +9,7 @@ import cc.iotkit.model.Id;
 #if($IsTenant==1)
 import cc.iotkit.model.TenantModel;
 #else
-import cc.iotkit.data.model.BaseEntity;
+import cc.iotkit.model.BaseModel;
 #end
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +17,8 @@ import lombok.EqualsAndHashCode;
 import ${import};
 #end
 
-import java.io.Serial;
+import java.io.Serializable;
+
 
 /**
  * ${functionName}对象 ${tableName}
@@ -34,7 +35,6 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 public class ${ClassName} extends ${Entity} implements Id<Long>, Serializable{
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
 #foreach ($column in $columns)

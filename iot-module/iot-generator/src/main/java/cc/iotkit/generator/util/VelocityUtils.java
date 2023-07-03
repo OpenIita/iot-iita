@@ -121,6 +121,7 @@ public class VelocityUtils {
         templates.add("vm/java/idata.java.vm");
         templates.add("vm/java/idataimpl.java.vm");
         templates.add("vm/java/tbmodel.java.vm");
+        templates.add("vm/java/repository.java.vm");
         if (DataBaseHelper.isOracle()) {
             templates.add("vm/sql/oracle/sql.vm");
         } else if (DataBaseHelper.isPostgerSql()) {
@@ -162,11 +163,24 @@ public class VelocityUtils {
         if (template.contains("domain.java.vm")) {
             fileName = StringUtils.format("{}/domain/{}.java", javaPath, className);
         }
+        if (template.endsWith("tbmodel.java.vm")) {
+            fileName = StringUtils.format("{}/data/model/Tb{}.java", javaPath, className);
+        } else if (template.endsWith("model.java.vm")) {
+            fileName = StringUtils.format("{}/model/{}.java", javaPath, className);
+        }
+        if (template.endsWith("repository.java.vm")) {
+            fileName = StringUtils.format("{}/repository/{}Repository.java", javaPath, className);
+        }
+        if (template.endsWith("idata.java.vm")) {
+            fileName = StringUtils.format("{}/data/I{}Data.java", javaPath, className);
+        } else if (template.endsWith("idataimpl.java.vm")) {
+            fileName = StringUtils.format("{}/data/impl/{}DataImpl.java", javaPath, className);
+        }
         if (template.contains("vo.java.vm")) {
-            fileName = StringUtils.format("{}/domain/vo/{}Vo.java", javaPath, className);
+            fileName = StringUtils.format("{}/dto/vo/{}Vo.java", javaPath, className);
         }
         if (template.contains("bo.java.vm")) {
-            fileName = StringUtils.format("{}/domain/bo/{}Bo.java", javaPath, className);
+            fileName = StringUtils.format("{}/dto/bo/{}Bo.java", javaPath, className);
         }
         if (template.contains("mapper.java.vm")) {
             fileName = StringUtils.format("{}/mapper/{}Mapper.java", javaPath, className);

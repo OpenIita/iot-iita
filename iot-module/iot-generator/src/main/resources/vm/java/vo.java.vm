@@ -1,9 +1,9 @@
-package ${packageName}.domain.vo;
+package ${packageName}.dto.vo;
 
 #foreach ($import in $importList)
 import ${import};
 #end
-import ${packageName}.domain.${ClassName};
+import ${packageName}.model.${ClassName};
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import cc.iotkit.common.excel.annotation.ExcelDictFormat;
@@ -28,7 +28,7 @@ import java.util.Date;
 @AutoMapper(target = ${ClassName}.class)
 public class ${ClassName}Vo implements Serializable {
 
-    @Serial
+
     private static final long serialVersionUID = 1L;
 
 #foreach ($column in $columns)
