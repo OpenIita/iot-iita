@@ -45,6 +45,7 @@ public class ${ClassName}Bo extends BaseDto {
     @NotNull(message = "$column.columnComment不能为空", groups = { $Group })
 #end
 #end
+    @ApiModelProperty(value = "$column.columnComment", required = ${column.required})
     private $column.javaType $column.javaField;
 
 #end

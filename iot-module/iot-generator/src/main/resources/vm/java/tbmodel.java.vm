@@ -1,5 +1,6 @@
 package ${packageName}.data.model;
 
+import ${packageName}.model.IotContributor;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,7 +24,8 @@ import lombok.EqualsAndHashCode;
 #foreach ($import in $importList)
 import ${import};
 #end
-
+import javax.persistence.Table;
+import javax.persistence.Entity;
 
 /**
  * ${functionName}对象 ${tableName}

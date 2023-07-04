@@ -1,6 +1,6 @@
 package ${packageName}.data;
 
-import cc.iotkit.data.ICommonData;
+import ${packageName}.repository.${ClassName}Repository;
 import ${packageName}.data.I${ClassName}Data;
 import ${packageName}.data.model.Tb${ClassName};
 import ${packageName}.model.${ClassName};
@@ -20,6 +20,7 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.StringUtils;
 import java.util.Collection;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.util.PageBuilder;
 
 
 import static ${packageName}.data.model.QTb${ClassName}.tb${ClassName};
@@ -59,10 +60,10 @@ public class ${ClassName}DataImpl implements I${ClassName}Data {
                     #else
                         #set($condition='bo.get'+$AttrName+'() != null')
                     #end
-                    builder.and($condition, ()=>tb${ClassName}.${javaField}.eq(bo.get${AttrName}()));
+                    builder.and($condition, ()->tb${ClassName}.${javaField}.eq(bo.get${AttrName}()));
                 #else
                     builder.and(params.get("begin$AttrName") != null && params.get("end$AttrName") != null,
-                            ()=>tb${ClassName}.${javaField}.bettwen(params.get("begin$AttrName"), params.get("end$AttrName")));
+                            ()->tb${ClassName}.${javaField}.bettwen(params.get("begin$AttrName"), params.get("end$AttrName")));
                 #end
             #end
         #end
@@ -101,5 +102,31 @@ public class ${ClassName}DataImpl implements I${ClassName}Data {
         Tb${ClassName} ret = jpaQueryFactory.select(tb${ClassName}).from(tb${ClassName}).where(tb${ClassName}.id.eq(id)).fetchOne();
         ${ClassName} convert = MapstructUtils.convert(ret, ${ClassName}.class);
         return convert;
+    }
+
+    @Override
+    public long count() {
+        return baseRepository.count();
+    }
+
+    @Override
+    public List<IotContributor> findAll() {
+        return MapstructUtils.convert(baseRepository.findAll(), IotContributor.class);
+    }
+
+    @Override
+    public List<IotContributor> findAllByCondition(IotContributor data) {
+        Iterable<TbIotContributor> all = baseRepository.findAll(buildQueryCondition(data));
+        return MapstructUtils.convert(Lists.newArrayList(all), IotContributor.class);
+    }
+
+    @Override
+    public IotContributor findOneByCondition(IotContributor data) {
+        Optional<TbIotContributor> one = baseRepository.findOne(buildQueryCondition(data));
+
+        if(one.isPresent()){
+            return MapstructUtils.convert(one.get(), IotContributor.class);
+        }
+        return null;
     }
 }
