@@ -19,6 +19,7 @@
         <module>iot-message-notify</module>
         <module>iot-generator</module>
         <module>iot-screen</module>
+        <module>iot-contribution</module>
     </modules>
 
 

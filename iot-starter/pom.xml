@@ -156,6 +156,10 @@
     </dependency>
     <dependency>
       <groupId>cc.iotkit</groupId>
+      <artifactId>iot-contribution</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>cc.iotkit</groupId>
       <artifactId>iot-baetyl</artifactId>
     </dependency>
     <dependency>
