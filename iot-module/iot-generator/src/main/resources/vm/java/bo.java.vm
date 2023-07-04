@@ -8,6 +8,7 @@ import cc.iotkit.common.api.Request;
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.*;
