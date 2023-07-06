@@ -7,18 +7,18 @@ import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
-import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysOssConfigBo;
 import cc.iotkit.system.dto.vo.SysOssConfigVo;
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysOssConfigService;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.ApiOperation;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -72,9 +72,10 @@ public class SysOssConfigController extends BaseController {
     /**
      * 修改对象存储配置
      */
+    @ApiOperation(value = "修改对象存储配置", notes = "修改对象存储配置")
     @SaCheckPermission("system:oss:edit")
     @Log(title = "对象存储配置", businessType = BusinessType.UPDATE)
-    @PutMapping()
+    @PostMapping()
     public void edit(@Validated(EditGroup.class) @RequestBody Request<SysOssConfigBo> bo) {
         ossConfigService.updateByBo(bo.getData());
     }
@@ -83,6 +84,7 @@ public class SysOssConfigController extends BaseController {
      * 删除对象存储配置
      *
      */
+    @ApiOperation(value = "删除对象存储配置", notes = "删除对象存储配置")
     @SaCheckPermission("system:oss:remove")
     @Log(title = "对象存储配置", businessType = BusinessType.DELETE)
     @PostMapping("/delete")
@@ -93,6 +95,7 @@ public class SysOssConfigController extends BaseController {
     /**
      * 状态修改
      */
+    @ApiOperation(value = "状态修改", notes = "状态修改")
     @SaCheckPermission("system:oss:edit")
     @Log(title = "对象存储状态修改", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")

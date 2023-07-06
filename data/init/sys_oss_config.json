@@ -1,26 +1,26 @@
  [
-    {
-      "id": 1,
-      "tenantId": "000000",
-      "configKey": "minio",
-      "accessKey": "ruoyi",
-      "secretKey": "ruoyi123",
-      "bucketName": "ruoyi",
-      "prefix": "",
-      "endpoint": "127.0.0.1:9000",
-      "domain": "",
-      "is_https": "N",
-      "region": "",
-      "accessPolicy": "1",
-      "status": "0",
-      "ext1": "",
-      "createDept": 103,
-      "createBy": 1,
+   {
+     "id": 1,
+     "tenantId": "000000",
+     "configKey": "minio",
+     "accessKey": "admin",
+     "secretKey": "iita@123",
+     "bucketName": "iotkit",
+     "prefix": "",
+     "endpoint": "159.75.222.119:9000",
+     "domain": "",
+     "is_https": "N",
+     "region": "",
+     "accessPolicy": "1",
+     "status": "0",
+     "ext1": "",
+     "createDept": 103,
+     "createBy": 1,
 
-      "updateBy": 1,
+     "updateBy": 1,
 
-      "remark": null
-    },
+     "remark": null
+   },
     {
       "id": 2,
       "tenantId": "000000",
