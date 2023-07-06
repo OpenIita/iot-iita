@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 文件上传 服务层实现
@@ -77,13 +76,16 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
     }
 
     @Override
-    public void download(Long ossId) throws IOException {
+    public void download(Long ossId) {
     }
 
     @Override
     public SysOssVo upload(MultipartFile file) {
-        String originalfileName = file.getOriginalFilename();
-        String suffix = StringUtils.substring(originalfileName, originalfileName.lastIndexOf("."), originalfileName.length());
+        String originalFileName = file.getOriginalFilename();
+        if(originalFileName ==null){
+            throw new BizException("文件名为空，获取失败");
+        }
+        String suffix = StringUtils.substring(originalFileName, originalFileName.lastIndexOf("."), originalFileName.length());
         OssClient storage = OssFactory.instance();
         UploadResult uploadResult;
         try {
@@ -96,7 +98,7 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
         oss.setUrl(uploadResult.getUrl());
         oss.setFileSuffix(suffix);
         oss.setFileName(uploadResult.getFilename());
-        oss.setOriginalName(originalfileName);
+        oss.setOriginalName(originalFileName);
         oss.setService(storage.getConfigKey());
         sysOssData.save(oss);
         SysOssVo sysOssVo = MapstructUtils.convert(oss, SysOssVo.class);
@@ -105,7 +107,7 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
 
     @Override
     public void deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if (isValid) {
+        if (Boolean.TRUE.equals(isValid)) {
             // 做一些业务上的校验,判断是否需要校验
         }
         List<SysOss> list = sysOssData.findByIds(ids);

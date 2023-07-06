@@ -20,7 +20,7 @@ public class SystemApplicationRunner implements ApplicationRunner {
     private final ISysOssConfigService ossConfigService;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         ossConfigService.init();
         log.info("初始化OSS配置成功");
     }

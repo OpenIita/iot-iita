@@ -2,7 +2,7 @@ package cc.iotkit.system.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.system.dto.bo.SysLogininforBo;
+import cc.iotkit.system.dto.bo.SysLoginInfoBo;
 import cc.iotkit.system.dto.vo.SysLogininforVo;
 
 import java.util.Collection;
@@ -22,7 +22,7 @@ public interface ISysLogininforService {
      *
      * @param bo 访问日志对象
      */
-    void insertLogininfor(SysLogininforBo bo);
+    void insertLogininfor(SysLoginInfoBo bo);
 
     /**
      * 查询系统登录日志集合
@@ -30,7 +30,7 @@ public interface ISysLogininforService {
      * @param logininfor 访问日志对象
      * @return 登录记录集合
      */
-    List<SysLogininforVo> selectLogininforList(SysLogininforBo logininfor);
+    List<SysLogininforVo> selectLogininforList(SysLoginInfoBo logininfor);
 
     /**
      * 批量删除系统登录日志
@@ -45,5 +45,5 @@ public interface ISysLogininforService {
      */
     void cleanLogininfor();
 
-    Paging<SysLogininforVo> findAll(PageRequest<SysLogininforBo> query);
+    Paging<SysLogininforVo> findAll(PageRequest<SysLoginInfoBo> query);
 }

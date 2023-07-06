@@ -37,7 +37,7 @@ public class ScreenVerticle extends AbstractVerticle {
     }
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         httpServer = vertx.createHttpServer();
         Router router = Router.router(vertx);
         router.route(screenConfig.screenAdmin + "/*").handler(StaticHandler.create(screenConfig.getScreenDir()+"/"+apiHandler.getScreenId()+"/"+packageName));
@@ -62,7 +62,7 @@ public class ScreenVerticle extends AbstractVerticle {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         httpServer.close(voidAsyncResult -> log.info("close screen server..."));
     }
 }

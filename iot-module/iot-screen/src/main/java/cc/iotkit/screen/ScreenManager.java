@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +76,7 @@ public class ScreenManager {
         states.put(id, true);
     }
 
-    public void unpublish(Screen screen) {
+    public void unPublish(Screen screen) {
         Long id = screen.getId();
         ScreenComponent screenComponent = screens.get(id);
         if (screenComponent == null) {
@@ -83,7 +84,7 @@ public class ScreenManager {
         }
         screens.remove(id);
         states.remove(id);
-        screenComponent.unpublish();
+        screenComponent.unPublish();
     }
 
     public void previewApis(Screen screen,List<ScreenApi> screenApis) {
@@ -99,7 +100,7 @@ public class ScreenManager {
         Long id = screen.getId();
         ScreenComponent screenComponent = screens.get(id);
         if (screenComponent == null) {
-            return null;
+            return Collections.emptyList();
         }
         return screenComponent.getScreenApis();
     }

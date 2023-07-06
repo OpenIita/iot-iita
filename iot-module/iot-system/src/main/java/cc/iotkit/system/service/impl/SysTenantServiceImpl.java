@@ -57,12 +57,12 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public Boolean insertByBo(SysTenantBo bo) {
-        return null;
+        return false;
     }
 
     @Override
     public Boolean updateByBo(SysTenantBo bo) {
-        return null;
+        return false;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        return null;
+        return false;
     }
 
     @Override
@@ -104,6 +104,6 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public Boolean syncTenantPackage(String tenantId, String packageId) {
-        return null;
+        return false;
     }
 }

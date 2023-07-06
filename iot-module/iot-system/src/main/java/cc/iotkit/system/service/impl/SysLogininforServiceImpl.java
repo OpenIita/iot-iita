@@ -9,8 +9,8 @@ import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.ip.AddressUtils;
 import cc.iotkit.common.web.utils.ServletUtils;
 import cc.iotkit.data.system.ISysLogininforData;
-import cc.iotkit.model.system.SysLogininfor;
-import cc.iotkit.system.dto.bo.SysLogininforBo;
+import cc.iotkit.model.system.SysLoginInfo;
+import cc.iotkit.system.dto.bo.SysLoginInfoBo;
 import cc.iotkit.system.dto.vo.SysLogininforVo;
 import cc.iotkit.system.service.ISysLogininforService;
 import cn.hutool.http.useragent.UserAgent;
@@ -64,7 +64,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
         // 获取客户端浏览器
         String browser = userAgent.getBrowser().getName();
         // 封装对象
-        SysLogininforBo logininfor = new SysLogininforBo();
+        SysLoginInfoBo logininfor = new SysLoginInfoBo();
         logininfor.setTenantId(logininforEvent.getTenantId());
         logininfor.setUserName(logininforEvent.getUsername());
         logininfor.setIpaddr(ip);
@@ -97,8 +97,8 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
      * @param bo 访问日志对象
      */
     @Override
-    public void insertLogininfor(SysLogininforBo bo) {
-        SysLogininfor logininfor = MapstructUtils.convert(bo, SysLogininfor.class);
+    public void insertLogininfor(SysLoginInfoBo bo) {
+        SysLoginInfo logininfor = MapstructUtils.convert(bo, SysLoginInfo.class);
         logininfor.setLoginTime(new Date());
         sysLogininforData.save(logininfor);
     }
@@ -110,10 +110,10 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
      * @return 登录记录集合
      */
     @Override
-    public List<SysLogininforVo> selectLogininforList(SysLogininforBo logininfor) {
+    public List<SysLogininforVo> selectLogininforList(SysLoginInfoBo logininfor) {
         return MapstructUtils.convert(
                 sysLogininforData.findByConditions(
-                        MapstructUtils.convert(logininfor, SysLogininfor.class)
+                        MapstructUtils.convert(logininfor, SysLoginInfo.class)
                 ), SysLogininforVo.class
         );
     }
@@ -138,7 +138,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService {
     }
 
     @Override
-    public Paging<SysLogininforVo> findAll(PageRequest<SysLogininforBo> query) {
-        return sysLogininforData.findAll(query.to(SysLogininfor.class)).to(SysLogininforVo.class);
+    public Paging<SysLogininforVo> findAll(PageRequest<SysLoginInfoBo> query) {
+        return sysLogininforData.findAll(query.to(SysLoginInfo.class)).to(SysLogininforVo.class);
     }
 }

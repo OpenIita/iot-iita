@@ -84,9 +84,6 @@ public class SysUserOnlineController extends BaseController {
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
     @PostMapping("/kickoutByTokenValue")
     public void forceLogout(@RequestBody @Validated Request<String> bo) {
-        try {
-            StpUtil.kickoutByTokenValue(bo.getData());
-        } catch (NotLoginException ignored) {
-        }
+        StpUtil.kickoutByTokenValue(bo.getData());
     }
 }

@@ -18,6 +18,7 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,7 +63,7 @@ public class SysUserImportListener extends AnalysisEventListener<SysUserImportVo
                 userService.insertUser(user);
                 successNum++;
                 successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getUserName()).append(" 导入成功");
-            } else if (isUpdateSupport) {
+            } else if (Boolean.TRUE.equals(isUpdateSupport)) {
                 Long userId = sysUser.getId();
                 SysUserBo user = BeanUtil.toBean(userVo, SysUserBo.class);
                 user.setId(userId);
@@ -107,12 +108,12 @@ public class SysUserImportListener extends AnalysisEventListener<SysUserImportVo
 
             @Override
             public List<SysUserImportVo> getList() {
-                return null;
+                return Collections.emptyList();
             }
 
             @Override
             public List<String> getErrorList() {
-                return null;
+                return Collections.emptyList();
             }
         };
     }

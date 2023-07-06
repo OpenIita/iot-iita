@@ -89,7 +89,7 @@ public class SysMenuController extends BaseController {
     }, mode = SaMode.OR)
     @SaCheckPermission("system:menu:query")
     @PostMapping("/treeselect")
-    public List<Tree<Long>> treeselect(@Validated @RequestBody  Request<SysMenuBo> menu) {
+    public List<Tree<Long>> treeSelect(@Validated @RequestBody  Request<SysMenuBo> menu) {
         List<SysMenuVo> menus = menuService.selectMenuList(menu.getData(), LoginHelper.getUserId());
         return menuService.buildMenuTreeSelect(menus);
     }
@@ -105,7 +105,7 @@ public class SysMenuController extends BaseController {
     }, mode = SaMode.OR)
     @SaCheckPermission("system:menu:query")
     @PostMapping(value = "/roleMenuTreeselectByRoleId")
-    public MenuTreeSelectVo roleMenuTreeselect(@Validated @RequestBody Request<Long> bo) {
+    public MenuTreeSelectVo roleMenuTreeSelect(@Validated @RequestBody Request<Long> bo) {
         List<SysMenuVo> menus = menuService.selectMenuList(LoginHelper.getUserId());
         MenuTreeSelectVo selectVo = new MenuTreeSelectVo();
         selectVo.setCheckedKeys(menuService.selectMenuListByRoleId(bo.getData()));

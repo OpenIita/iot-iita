@@ -10,7 +10,7 @@ import cc.iotkit.data.model.TbSysLogininfor;
 import cc.iotkit.data.system.ISysLogininforData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
-import cc.iotkit.model.system.SysLogininfor;
+import cc.iotkit.model.system.SysLoginInfo;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import static cc.iotkit.data.model.QTbSysLogininfor.tbSysLogininfor;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class SysLogininfoDataImpl implements ISysLogininforData, IJPACommData<SysLogininfor, Long> {
+public class SysLogininfoDataImpl implements ISysLogininforData, IJPACommData<SysLoginInfo, Long> {
 
     private final SysLogininforRepository logininfoRepository;
 
@@ -50,22 +50,22 @@ public class SysLogininfoDataImpl implements ISysLogininforData, IJPACommData<Sy
 
     @Override
     public Class getTClass() {
-        return SysLogininfor.class;
+        return SysLoginInfo.class;
     }
 
     @Override
-    public Paging<SysLogininfor> findAll(PageRequest<SysLogininfor> pageRequest) {
-        return PageBuilder.toPaging(logininfoRepository.findAll(genPredicate(pageRequest.getData()), PageBuilder.toPageable(pageRequest))).to(SysLogininfor.class);
+    public Paging<SysLoginInfo> findAll(PageRequest<SysLoginInfo> pageRequest) {
+        return PageBuilder.toPaging(logininfoRepository.findAll(genPredicate(pageRequest.getData()), PageBuilder.toPageable(pageRequest))).to(SysLoginInfo.class);
     }
 
     @Override
-    public List<SysLogininfor> findByConditions(SysLogininfor data) {
+    public List<SysLoginInfo> findByConditions(SysLoginInfo data) {
         List<TbSysLogininfor> ret=jpaQueryFactory.selectFrom(tbSysLogininfor).where(genPredicate(data))
                 .orderBy(tbSysLogininfor.id.desc()).fetch();
-        return MapstructUtils.convert(ret, SysLogininfor.class);
+        return MapstructUtils.convert(ret, SysLoginInfo.class);
     }
 
-    private static Predicate genPredicate(SysLogininfor data) {
+    private static Predicate genPredicate(SysLoginInfo data) {
         return PredicateBuilder.instance()
                 .and(StringUtils.isNotBlank(data.getIpaddr()), () -> tbSysLogininfor.ipaddr.like(data.getIpaddr()))
                 .and(StringUtils.isNotBlank(data.getStatus()), () -> tbSysLogininfor.status.eq(data.getStatus()))
@@ -74,9 +74,9 @@ public class SysLogininfoDataImpl implements ISysLogininforData, IJPACommData<Sy
     }
 
     @Override
-    public Paging<SysLogininfor> findByConditions(SysLogininfor cond, int page, int size) {
+    public Paging<SysLoginInfo> findByConditions(SysLoginInfo cond, int page, int size) {
         Page<TbSysLogininfor> all = logininfoRepository.findAll(genPredicate(cond), PageBuilder.buildPageable(page, size));
-        return PageBuilder.toPaging(all, SysLogininfor.class);
+        return PageBuilder.toPaging(all, SysLoginInfo.class);
     }
 
     @Override

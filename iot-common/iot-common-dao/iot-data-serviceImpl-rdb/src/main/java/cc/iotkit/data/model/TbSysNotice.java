@@ -1,7 +1,5 @@
 package cc.iotkit.data.model;
 
-import cc.iotkit.data.model.BaseEntity;
-import cc.iotkit.model.system.SysLogininfor;
 import cc.iotkit.model.system.SysNotice;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;

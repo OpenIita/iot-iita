@@ -1,7 +1,6 @@
 package cc.iotkit.data.model;
 
 import cc.iotkit.common.constant.UserConstants;
-import cc.iotkit.data.model.BaseEntity;
 import cc.iotkit.model.system.SysTenantPackage;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
