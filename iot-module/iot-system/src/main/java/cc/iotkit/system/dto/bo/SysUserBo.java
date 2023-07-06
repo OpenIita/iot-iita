@@ -67,7 +67,7 @@ public class SysUserBo extends BaseDto {
     /**
      * 手机号码
      */
-    private String phoneNumber;
+    private String phonenumber;
 
     /**
      * 用户性别（0男 1女 2未知）

@@ -149,16 +149,16 @@ public class ScreenServiceImpl implements IScreenService {
     @Override
     public void publishStatusChange(PublishChangeBo data) {
         Screen screen = getAndCheckBigScreen(data.getId());
-        if (screen.STATE_RUNNING.equals(data.getState())) {//发布状态
+        if (Screen.STATE_RUNNING.equals(data.getState())) {//发布状态
             List<ScreenApi> screenApis=screenApiData.findByScreenId(screen.getId());
             if(screenApis==null||screenApis.size()==0){
                 throw new BizException(ErrCode.API_LIST_BLANK);
             }
-            screen.setState(screen.STATE_RUNNING);
+            screen.setState(Screen.STATE_RUNNING);
             screenManager.register(screen);
             screenManager.publish(screen);
         } else {//取消发布
-            screen.setState(screen.STATE_STOPPED);
+            screen.setState(Screen.STATE_STOPPED);
             screenManager.unPublish(screen);
         }
         screenData.save(screen);
