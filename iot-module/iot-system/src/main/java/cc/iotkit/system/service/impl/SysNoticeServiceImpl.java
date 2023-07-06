@@ -7,14 +7,10 @@ import cc.iotkit.data.system.ISysNoticeData;
 import cc.iotkit.model.system.SysNotice;
 import cc.iotkit.system.dto.bo.SysNoticeBo;
 import cc.iotkit.system.dto.vo.SysNoticeVo;
-import cc.iotkit.system.dto.vo.SysUserVo;
-import cn.hutool.core.util.ObjectUtil;
 import cc.iotkit.system.service.ISysNoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 

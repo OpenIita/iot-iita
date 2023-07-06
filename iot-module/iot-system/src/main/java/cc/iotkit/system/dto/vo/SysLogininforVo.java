@@ -2,7 +2,7 @@ package cc.iotkit.system.dto.vo;
 
 import cc.iotkit.common.excel.annotation.ExcelDictFormat;
 import cc.iotkit.common.excel.convert.ExcelDictConvert;
-import cc.iotkit.model.system.SysLogininfor;
+import cc.iotkit.model.system.SysLoginInfo;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import io.github.linpeilie.annotations.AutoMapper;
@@ -21,7 +21,7 @@ import java.util.Date;
  */
 @Data
 @ExcelIgnoreUnannotated
-@AutoMapper(target = SysLogininfor.class)
+@AutoMapper(target = SysLoginInfo.class)
 public class SysLogininforVo implements Serializable {
     private static final long serialVersionUID = 1L;
 

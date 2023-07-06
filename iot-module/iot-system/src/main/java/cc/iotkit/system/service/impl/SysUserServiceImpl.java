@@ -56,7 +56,6 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     private ISysUserPostData sysUserPostData;
 
 
-
     @Override
     public String selectUserNameById(Long userId) {
         return null;
@@ -69,33 +68,33 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public List<SysUserVo> selectUserList(SysUserBo user) {
-        return MapstructUtils.convert(sysUserData.findAllByCondition(user.to(SysUser.class)),SysUserVo.class);
+        return MapstructUtils.convert(sysUserData.findAllByCondition(user.to(SysUser.class)), SysUserVo.class);
     }
 
     @Override
-    public Paging<SysUserVo> selectAllocatedList( PageRequest<SysUserBo> query) {
+    public Paging<SysUserVo> selectAllocatedList(PageRequest<SysUserBo> query) {
         return sysUserData.selectAllocatedList(query.to(SysUser.class)).to(SysUserVo.class);
     }
 
     @Override
-    public Paging<SysUserVo> selectUnallocatedList( PageRequest<SysUserBo> query) {
+    public Paging<SysUserVo> selectUnallocatedList(PageRequest<SysUserBo> query) {
         return sysUserData.selectUnallocatedList(query.to(SysUser.class)).to(SysUserVo.class);
     }
 
     @Override
     public SysUserVo selectUserByUserName(String userName) {
-        return MapstructUtils.convert(sysUserData.selectUserByUserName(userName),SysUserVo.class);
+        return MapstructUtils.convert(sysUserData.selectUserByUserName(userName), SysUserVo.class);
     }
 
     @Override
     public SysUserVo selectUserByPhonenumber(String phonenumber) {
-        return MapstructUtils.convert(sysUserData.findByPhonenumber(phonenumber),SysUserVo.class);
+        return MapstructUtils.convert(sysUserData.findByPhonenumber(phonenumber), SysUserVo.class);
 
     }
 
     @Override
     public SysUserVo selectUserById(Long userId) {
-        return MapstructUtils.convert(sysUserData.findById(userId),SysUserVo.class);
+        return MapstructUtils.convert(sysUserData.findById(userId), SysUserVo.class);
     }
 
     @Override
@@ -110,20 +109,17 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public boolean checkUserNameUnique(SysUserBo user) {
-        boolean exist = sysUserData.checkUserNameUnique(user.to(SysUser.class));
-        return exist;
+        return sysUserData.checkUserNameUnique(user.to(SysUser.class));
     }
 
     @Override
     public boolean checkPhoneUnique(SysUserBo user) {
-        boolean exist = sysUserData.checkPhoneUnique(user.to(SysUser.class));
-        return exist;
+        return sysUserData.checkPhoneUnique(user.to(SysUser.class));
     }
 
     @Override
     public boolean checkEmailUnique(SysUserBo user) {
-        boolean exist = sysUserData.checkEmailUnique(user.to(SysUser.class));
-        return exist;
+        return sysUserData.checkEmailUnique(user.to(SysUser.class));
     }
 
     @Override
@@ -149,13 +145,13 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     @Override
     public int insertUser(SysUserBo user) {
         // 新增用户信息
-        SysUser newUser=sysUserData.save(user.to(SysUser.class));
+        SysUser newUser = sysUserData.save(user.to(SysUser.class));
         user.setId(newUser.getId());
         // 新增用户岗位关联
-        insertUserPost(user,false);
+        insertUserPost(user, false);
         // 新增用户与角色管理
         insertUserRole(user, false);
-        return newUser!=null?1:0;
+        return newUser != null ? 1 : 0;
     }
 
     /**
@@ -244,11 +240,10 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
         SysUser sysUser = MapstructUtils.convert(user, SysUser.class);
         // 防止错误更新后导致的数据误删除
         SysUser ret = sysUserData.save(sysUser);
-        if (ret==null) {
+        if (ret == null) {
             throw new BizException("修改用户" + user.getUserName() + "信息失败");
         }
-        return ret==null?1:0;
-
+        return 0;
     }
 
     @Override
@@ -259,21 +254,21 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public int updateUserStatus(Long userId, String status) {
-        SysUser user=sysUserData.findById(userId);
+        SysUser user = sysUserData.findById(userId);
         user.setStatus(status);
-        return sysUserData.save(user)!=null?1:0;
+        return sysUserData.save(user) != null ? 1 : 0;
     }
 
     @Override
     public int updateUserProfile(SysUserBo user) {
-        SysUser oldUser=sysUserData.findById(user.getId());
-        if(ObjectUtil.isNotNull(user.getNickName())){
+        SysUser oldUser = sysUserData.findById(user.getId());
+        if (ObjectUtil.isNotNull(user.getNickName())) {
             oldUser.setNickName(user.getNickName());
         }
-        oldUser.setPhonenumber(user.getPhonenumber());
+        oldUser.setPhonenumber(user.getPhoneNumber());
         oldUser.setEmail(user.getEmail());
         oldUser.setSex(user.getSex());
-        return sysUserData.save(oldUser)!=null?1:0;
+        return sysUserData.save(oldUser) != null ? 1 : 0;
     }
 
     @Override
@@ -283,9 +278,9 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public int resetUserPwd(Long userId, String password) {
-        SysUser user=sysUserData.findById(userId);
+        SysUser user = sysUserData.findById(userId);
         user.setPassword(password);
-        return sysUserData.save(user)!=null?1:0;
+        return sysUserData.save(user) != null ? 1 : 0;
     }
 
     @Override

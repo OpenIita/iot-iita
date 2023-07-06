@@ -1,6 +1,6 @@
 package cc.iotkit.data.model;
 
-import cc.iotkit.model.system.SysLogininfor;
+import cc.iotkit.model.system.SysLoginInfo;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +21,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "sys_logininfor")
-@AutoMapper(target = SysLogininfor.class)
+@AutoMapper(target = SysLoginInfo.class)
 public class TbSysLogininfor extends BaseEntity {
     /**
      * ID

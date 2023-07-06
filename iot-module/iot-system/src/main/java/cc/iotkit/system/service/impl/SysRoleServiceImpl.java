@@ -19,7 +19,6 @@ import cc.iotkit.model.system.SysUserRole;
 import cc.iotkit.system.dto.bo.SysRoleBo;
 import cc.iotkit.system.dto.vo.SysRoleVo;
 import cc.iotkit.system.service.ISysRoleService;
-import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -279,7 +278,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
             rm.setMenuId(menuId);
             list.add(rm);
         }
-        if (list.size() > 0) {
+        if (!list.isEmpty()) {
             rows = iSysRoleMenuData.insertBatch(list);
         }
         return Integer.parseInt(rows + "");
@@ -300,7 +299,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
             rd.setDeptId(deptId);
             list.add(rd);
         }
-        if (list.size() > 0) {
+        if (!list.isEmpty()) {
             rows = iSysRoleDeptData.insertBatch(list);
         }
         return Integer.parseInt(rows + "");
@@ -417,10 +416,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
             }
             LoginUser loginUser = LoginHelper.getLoginUser(token);
             if (loginUser.getRoles().stream().anyMatch(r -> r.getId().equals(roleId))) {
-                try {
-                    StpUtil.logoutByTokenValue(token);
-                } catch (NotLoginException ignored) {
-                }
+                StpUtil.logoutByTokenValue(token);
             }
         });
     }

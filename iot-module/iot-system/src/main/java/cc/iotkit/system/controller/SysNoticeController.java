@@ -8,14 +8,16 @@ import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysNoticeBo;
 import cc.iotkit.system.dto.vo.SysNoticeVo;
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cc.iotkit.system.service.ISysNoticeService;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

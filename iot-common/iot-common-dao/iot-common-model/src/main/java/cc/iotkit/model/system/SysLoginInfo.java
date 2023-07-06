@@ -1,22 +1,20 @@
-package cc.iotkit.system.dto.bo;
+package cc.iotkit.model.system;
 
-import cc.iotkit.model.system.SysLogininfor;
-import io.github.linpeilie.annotations.AutoMapper;
+import cc.iotkit.model.Id;
 import lombok.Data;
-
+import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
 
 /**
- * 系统访问记录业务对象 sys_logininfor
+ * 系统访问记录视图对象 sys_logininfor
  *
  * @author Michelle.Chung
+ * @date 2023-02-07
  */
-
 @Data
-@AutoMapper(target = SysLogininfor.class, reverseConvertGenerate = false)
-public class SysLogininforBo {
+public class SysLoginInfo implements Id<Long>,Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * 访问ID
@@ -32,6 +30,11 @@ public class SysLogininforBo {
      * 用户账号
      */
     private String userName;
+
+    /**
+     * 登录状态（0成功 1失败）
+     */
+    private String status;
 
     /**
      * 登录IP地址
@@ -53,10 +56,6 @@ public class SysLogininforBo {
      */
     private String os;
 
-    /**
-     * 登录状态（0成功 1失败）
-     */
-    private String status;
 
     /**
      * 提示消息
@@ -67,11 +66,6 @@ public class SysLogininforBo {
      * 访问时间
      */
     private Date loginTime;
-
-    /**
-     * 请求参数
-     */
-    private Map<String, Object> params = new HashMap<>();
 
 
 }

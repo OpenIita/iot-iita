@@ -68,9 +68,9 @@ public class ScreenComponent {
     }
 
     @SneakyThrows
-    public void unpublish() {
+    public void unPublish() {
         screenVerticle.stop();
         Future<Void> future = vertx.undeploy(deployedId);
-        future.onSuccess(unused -> log.info("unpublish screen success"));
+        future.onSuccess(unused -> log.info("unPublish screen success"));
     }
 }

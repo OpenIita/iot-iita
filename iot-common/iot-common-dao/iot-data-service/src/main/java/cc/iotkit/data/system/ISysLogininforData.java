@@ -2,7 +2,7 @@ package cc.iotkit.data.system;
 
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.model.system.SysLogininfor;
+import cc.iotkit.model.system.SysLoginInfo;
 
 import java.util.List;
 
@@ -11,17 +11,17 @@ import java.util.List;
  *
  * @author sjg
  */
-public interface ISysLogininforData extends ICommonData<SysLogininfor, Long> {
+public interface ISysLogininforData extends ICommonData<SysLoginInfo, Long> {
 
     /**
      * 按条件查询
      */
-    List<SysLogininfor> findByConditions(SysLogininfor cond);
+    List<SysLoginInfo> findByConditions(SysLoginInfo cond);
 
     /**
      * 按条件分页查询
      */
-    Paging<SysLogininfor> findByConditions(SysLogininfor cond, int page, int size);
+    Paging<SysLoginInfo> findByConditions(SysLoginInfo cond, int page, int size);
 
     /**
      * 按租户清除登录日志

@@ -2,9 +2,6 @@ package cc.iotkit.system.dto.bo;
 
 import cc.iotkit.common.api.BaseDto;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

@@ -159,7 +159,7 @@ public class ScreenServiceImpl implements IScreenService {
             screenManager.publish(screen);
         } else {//取消发布
             screen.setState(screen.STATE_STOPPED);
-            screenManager.unpublish(screen);
+            screenManager.unPublish(screen);
         }
         screenData.save(screen);
     }

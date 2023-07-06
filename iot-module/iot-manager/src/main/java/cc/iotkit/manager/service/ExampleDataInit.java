@@ -241,7 +241,7 @@ public class ExampleDataInit implements SmartInitializingSingleton {
         initData("sys_dict_type", sysDictTypeData, new TypeReference<List<SysDictType>>() {
         });
 
-        initData("sys_logininfor", sysLogininforData, new TypeReference<List<SysLogininfor>>() {
+        initData("sys_logininfor", sysLogininforData, new TypeReference<List<SysLoginInfo>>() {
         });
         initData("sys_menu", sysMenuData, new TypeReference<List<SysMenu>>() {
         });

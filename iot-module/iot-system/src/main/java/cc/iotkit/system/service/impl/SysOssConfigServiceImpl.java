@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 对象存储配置Service业务层处理
@@ -52,10 +53,10 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
         List<SysOssConfig> list = baseData.findAll();
         Map<String, List<SysOssConfig>> map = StreamUtils.groupByKey(list, SysOssConfig::getTenantId);
         try {
-            for (String tenantId : map.keySet()) {
-                TenantHelper.setDynamic(tenantId);
-                // 加载OSS初始化配置
-                for (SysOssConfig config : map.get(tenantId)) {
+
+            for (Map.Entry<String, List<SysOssConfig>> stringListEntry : map.entrySet()) {
+                TenantHelper.setDynamic(stringListEntry.getKey());
+                for (SysOssConfig config : stringListEntry.getValue()) {
                     String configKey = config.getConfigKey();
                     if ("0".equals(config.getStatus())) {
                         RedisUtils.setCacheObject(OssConstant.DEFAULT_CONFIG_KEY, configKey);
@@ -75,10 +76,8 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
 
     @Override
     public Paging<SysOssConfigVo> queryPageList(PageRequest<SysOssConfigBo> query) {
-       return baseData.findAll(query.to(SysOssConfig.class)).to(SysOssConfigVo.class);
+        return baseData.findAll(query.to(SysOssConfig.class)).to(SysOssConfigVo.class);
     }
-
-
 
 
     @Override
@@ -105,17 +104,15 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
      */
     private void validEntityBeforeSave(SysOssConfig entity) {
         if (StringUtils.isNotEmpty(entity.getConfigKey())
-            && !checkConfigKeyUnique(entity)) {
+                && !checkConfigKeyUnique(entity)) {
             throw new BizException("操作配置'" + entity.getConfigKey() + "'失败, 配置key已存在!");
         }
     }
 
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if (isValid) {
-            if (CollUtil.containsAny(ids, OssConstant.SYSTEM_DATA_IDS)) {
+        if (Objects.equals(Boolean.TRUE, isValid) && CollUtil.containsAny(ids, OssConstant.SYSTEM_DATA_IDS)) {
                 throw new BizException("系统内置, 不可删除!");
-            }
         }
         List<SysOssConfig> list = CollUtil.newArrayList();
         for (Long configId : ids) {
@@ -124,12 +121,9 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
         }
         // TODO: 2021/8/13 删除数据校验
         baseData.deleteByIds(ids);
-        boolean flag = true;
-        if (flag) {
-            list.forEach(sysOssConfig ->
+        list.forEach(sysOssConfig ->
                 CacheUtils.evict(CacheNames.SYS_OSS_CONFIG, sysOssConfig.getConfigKey()));
-        }
-        return flag;
+        return true;
     }
 
     /**
@@ -140,10 +134,7 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
         SysOssConfig q = new SysOssConfig();
         q.setConfigKey(sysOssConfig.getConfigKey());
         SysOssConfig info = baseData.findOneByCondition(q);
-        if (ObjectUtil.isNotNull(info) && info.getId() != ossConfigId) {
-            return false;
-        }
-        return true;
+        return !ObjectUtil.isNotNull(info) || info.getId() == ossConfigId;
     }
 
     /**

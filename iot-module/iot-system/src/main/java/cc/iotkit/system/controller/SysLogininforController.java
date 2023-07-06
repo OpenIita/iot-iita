@@ -10,7 +10,7 @@ import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.redis.utils.RedisUtils;
 import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
-import cc.iotkit.system.dto.bo.SysLogininforBo;
+import cc.iotkit.system.dto.bo.SysLoginInfoBo;
 import cc.iotkit.system.dto.vo.SysLogininforVo;
 import cc.iotkit.system.service.ISysLogininforService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
@@ -43,7 +43,7 @@ public class SysLogininforController extends BaseController {
     @ApiOperation("获取系统访问记录列表")
     @SaCheckPermission("monitor:logininfor:list")
     @PostMapping("/list")
-    public Paging<SysLogininforVo> list(@RequestBody @Validated(QueryGroup.class) PageRequest<SysLogininforBo> query) {
+    public Paging<SysLogininforVo> list(@RequestBody @Validated(QueryGroup.class) PageRequest<SysLoginInfoBo> query) {
         return logininforService.findAll(query);
     }
 
@@ -54,7 +54,7 @@ public class SysLogininforController extends BaseController {
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)
     @SaCheckPermission("monitor:logininfor:export")
     @PostMapping("/export")
-    public void export(SysLogininforBo logininfor, HttpServletResponse response) {
+    public void export(SysLoginInfoBo logininfor, HttpServletResponse response) {
         List<SysLogininforVo> list = logininforService.selectLogininforList(logininfor);
         ExcelUtil.exportExcel(list, "登录日志", SysLogininforVo.class, response);
     }
@@ -88,7 +88,7 @@ public class SysLogininforController extends BaseController {
     @PostMapping("/unlockByUserName")
     public void unlock(@Validated @RequestBody Request<String> bo) {
         String loginName = GlobalConstants.PWD_ERR_CNT_KEY + bo.getData();
-        if (RedisUtils.hasKey(loginName)) {
+        if (Boolean.TRUE.equals(RedisUtils.hasKey(loginName))) {
             RedisUtils.deleteObject(loginName);
         }
     }

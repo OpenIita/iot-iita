@@ -153,15 +153,13 @@ public class SysUserController extends BaseController {
         SysUserBo user = reqUser.getData();
         if (!userService.checkUserNameUnique(user)) {
             fail("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
-        } else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
+        } else if (StringUtils.isNotEmpty(user.getPhoneNumber()) && !userService.checkPhoneUnique(user)) {
             fail("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
         } else if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user)) {
             fail("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
-        if (TenantHelper.isEnable()) {
-            if (!tenantService.checkAccountBalance(TenantHelper.getTenantId())) {
-                fail("当前租户下用户名额不足，请联系管理员");
-            }
+        if (TenantHelper.isEnable() && !tenantService.checkAccountBalance(TenantHelper.getTenantId())) {
+            fail("当前租户下用户名额不足，请联系管理员");
         }
         user.setPassword(BCrypt.hashpw(user.getPassword()));
         user.setUserType("sys_user");
@@ -181,7 +179,7 @@ public class SysUserController extends BaseController {
         userService.checkUserDataScope(user.getId());
         if (!userService.checkUserNameUnique(user)) {
             fail("修改用户'" + user.getUserName() + "'失败，登录账号已存在");
-        } else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
+        } else if (StringUtils.isNotEmpty(user.getPhoneNumber()) && !userService.checkPhoneUnique(user)) {
             fail("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         } else if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user)) {
             fail("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
