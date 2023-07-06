@@ -38,7 +38,7 @@ this.decode = function (msg) {
             time: new Date().getTime(), //时间戳，消息上报时间
             data: payload.params,
         };
-    } else if (topic.indexOf("/ota/") > 0) {
+    } else if (topic.indexOf("/ota/") >= 0) {
         //事件上报
         return {
             mid: msg.mid,

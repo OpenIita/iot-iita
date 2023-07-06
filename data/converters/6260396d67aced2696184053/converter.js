@@ -154,6 +154,9 @@ this.encode = function (service, device) {
     } else if (type == "service") {
         method += identifier;
         topic += identifier;
+    } else if (type == "ota") {
+        method += identifier;
+        topic = "/ota/device/upgrade/" + service.productKey + "/" + service.deviceName;
     } else if (type == "config") {
         //设备配置下发
         method += identifier;

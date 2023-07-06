@@ -79,4 +79,10 @@ public class OtaController {
         return otaService.otaResult(request);
     }
 
+    @ApiOperation("ota升级测试")
+    @PostMapping("/testStartUpgrade")
+    public void testStartUpgrade(@RequestBody Request<Void> request) {
+        otaService.testStartUpgrade();
+    }
+
 }

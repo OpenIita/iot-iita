@@ -125,4 +125,19 @@ public class OtaService {
         return deviceOtaInfoData.findAll(request.to(DeviceOtaInfo.class)).to(DeviceOtaInfoVo.class);
     }
 
+    public void testStartUpgrade() {
+        String deviceId = "16885697173790test100001230000123";
+        OtaPackage otaPackage = OtaPackage.builder()
+                .createAt(System.currentTimeMillis())
+                .desc("升级测试")
+                .md5("AAAABCC")
+                .sign("AAAAAAAA")
+                .isDiff(false)
+                .size(1024L)
+                .url("http://www.baidu.com/resource/test.jpg")
+                .version("1.2.1")
+                .build();
+        deviceService.otaUpgrade(deviceId, true, otaPackage);
+    }
+
 }
