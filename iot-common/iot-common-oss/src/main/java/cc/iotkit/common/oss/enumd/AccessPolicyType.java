@@ -1,5 +1,6 @@
 package cc.iotkit.common.oss.enumd;
 
+import cc.iotkit.common.exception.BizException;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,7 +50,7 @@ public enum AccessPolicyType {
                 return value;
             }
         }
-        throw new RuntimeException("'type' not found By " + type);
+        throw new BizException("'type' not found By " + type);
     }
 
 }

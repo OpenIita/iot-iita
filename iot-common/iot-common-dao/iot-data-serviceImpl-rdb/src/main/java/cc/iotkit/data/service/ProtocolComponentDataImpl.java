@@ -20,6 +20,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,7 +81,7 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData, IJPACo
 
     @Override
     public List<ProtocolComponent> findByIds(Collection<String> id) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -105,7 +106,7 @@ public class ProtocolComponentDataImpl implements IProtocolComponentData, IJPACo
 
     @Override
     public Paging<ProtocolComponent> findAll(PageRequest<ProtocolComponent> pageRequest) {
-        ProtocolComponent query = pageRequest.getData();
+
         Predicate predicate = PredicateBuilder.instance()
                 .build();
         Page<TbProtocolComponent> all = protocolComponentRepository.findAll(predicate, PageBuilder.toPageable(pageRequest));

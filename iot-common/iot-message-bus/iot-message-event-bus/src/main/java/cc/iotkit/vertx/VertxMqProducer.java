@@ -2,8 +2,6 @@ package cc.iotkit.vertx;
 
 import cc.iotkit.mq.MqProducer;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import lombok.SneakyThrows;

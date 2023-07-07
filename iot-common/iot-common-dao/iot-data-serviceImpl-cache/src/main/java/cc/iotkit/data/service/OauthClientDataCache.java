@@ -10,17 +10,18 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.constant.Constants;
-import cc.iotkit.data.manager.IOauthClientData;
-import cc.iotkit.data.cache.OauthClientCacheEvict;
-import cc.iotkit.model.OauthClient;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.constant.Constants;
+import cc.iotkit.data.cache.OauthClientCacheEvict;
+import cc.iotkit.data.manager.IOauthClientData;
+import cc.iotkit.model.OauthClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -45,7 +46,7 @@ public class OauthClientDataCache implements IOauthClientData {
 
     @Override
     public List<OauthClient> findByIds(Collection<String> id) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -88,7 +89,7 @@ public class OauthClientDataCache implements IOauthClientData {
 
     @Override
     public List<OauthClient> findAllByCondition(OauthClient data) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

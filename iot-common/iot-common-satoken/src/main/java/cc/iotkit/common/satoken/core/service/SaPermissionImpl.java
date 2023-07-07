@@ -1,8 +1,8 @@
 package cc.iotkit.common.satoken.core.service;
 
-import cc.iotkit.common.undefined.LoginUser;
 import cc.iotkit.common.enums.UserType;
 import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.undefined.LoginUser;
 import cn.dev33.satoken.stp.StpInterface;
 
 import java.util.ArrayList;

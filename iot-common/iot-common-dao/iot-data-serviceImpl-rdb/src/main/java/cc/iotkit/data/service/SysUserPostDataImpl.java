@@ -7,7 +7,6 @@ import cc.iotkit.data.model.TbSysUserPost;
 import cc.iotkit.data.system.ISysUserPostData;
 import cc.iotkit.model.system.SysUserPost;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;

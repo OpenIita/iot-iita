@@ -1,6 +1,9 @@
 package cc.iotkit.common.oss.core;
 
 import cc.iotkit.common.oss.constant.OssConstant;
+import cc.iotkit.common.oss.entity.UploadResult;
+import cc.iotkit.common.oss.enumd.AccessPolicyType;
+import cc.iotkit.common.oss.enumd.PolicyType;
 import cc.iotkit.common.oss.exception.OssException;
 import cc.iotkit.common.oss.properties.OssProperties;
 import cc.iotkit.common.utils.DateUtils;
@@ -19,9 +22,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
-import cc.iotkit.common.oss.entity.UploadResult;
-import cc.iotkit.common.oss.enumd.AccessPolicyType;
-import cc.iotkit.common.oss.enumd.PolicyType;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

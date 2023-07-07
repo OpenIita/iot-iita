@@ -43,9 +43,9 @@ public class RuleLogDataImpl implements IRuleLogData {
         sql = "select count(*) from rule_log where rule_id=?";
         List<Long> counts = tdTemplate.queryForList(sql, Long.class, ruleId);
 
-        return new Paging<>(counts.size() > 0 ? counts.get(0) : 0, ruleLogs.stream().map(r ->
-                new RuleLog(r.getTime().toString(), ruleId, r.getState1(),
-                        r.getContent(), r.getSuccess(), r.getTime()))
+        return new Paging<>(!counts.isEmpty() ? counts.get(0) : 0, ruleLogs.stream().map(r ->
+                        new RuleLog(r.getTime().toString(), ruleId, r.getState1(),
+                                r.getContent(), r.getSuccess(), r.getTime()))
                 .collect(Collectors.toList()));
     }
 

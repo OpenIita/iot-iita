@@ -11,7 +11,6 @@ package cc.iotkit.temporal.es.document;
 
 import cc.iotkit.model.rule.TaskLog;
 import io.github.linpeilie.annotations.AutoMapper;
-import io.github.linpeilie.annotations.AutoMapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

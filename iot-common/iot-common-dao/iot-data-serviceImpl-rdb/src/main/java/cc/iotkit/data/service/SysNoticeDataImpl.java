@@ -5,14 +5,11 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.IJPACommData;
-import cc.iotkit.data.dao.SysDeptRepository;
 import cc.iotkit.data.dao.SysNoticRepository;
 import cc.iotkit.data.model.TbSysNotice;
 import cc.iotkit.data.system.ISysNoticeData;
-import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysNotice;
-import cc.iotkit.model.system.SysUser;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static cc.iotkit.data.model.QTbSysNotice.tbSysNotice;
 

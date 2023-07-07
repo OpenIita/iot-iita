@@ -1,10 +1,10 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.constant.Constants;
-import cc.iotkit.data.manager.ICategoryData;
-import cc.iotkit.data.cache.CategoryCacheEvict;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.constant.Constants;
+import cc.iotkit.data.cache.CategoryCacheEvict;
+import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.model.product.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -31,7 +32,7 @@ public class CategoryDataCache implements ICategoryData {
 
     @Override
     public List<Category> findByIds(Collection<String> id) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -73,7 +74,7 @@ public class CategoryDataCache implements ICategoryData {
 
     @Override
     public List<Category> findAllByCondition(Category data) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

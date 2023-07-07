@@ -134,7 +134,7 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
 
     @Override
     public List<String> selectMenuPermsByUserId(Long userId) {
-        List<String> menuIds = jpaQueryFactory.select(tbSysMenu.perms)
+        return jpaQueryFactory.select(tbSysMenu.perms)
                 .from(tbSysMenu)
                 .leftJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId))
                 .leftJoin(tbSysUserRole).on(tbSysRoleMenu.roleId.eq(tbSysUserRole.roleId))
@@ -144,7 +144,6 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
                         .and(tbSysRole.status.eq("0"))
                         .and(tbSysUserRole.userId.eq(userId))
                         .build()).fetch();
-        return menuIds;
     }
 
     @Override

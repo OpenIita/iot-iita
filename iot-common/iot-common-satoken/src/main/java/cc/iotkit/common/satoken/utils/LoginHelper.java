@@ -2,14 +2,13 @@ package cc.iotkit.common.satoken.utils;
 
 import cc.iotkit.common.constant.TenantConstants;
 import cc.iotkit.common.constant.UserConstants;
-import cc.iotkit.common.undefined.LoginUser;
 import cc.iotkit.common.enums.DeviceType;
 import cc.iotkit.common.enums.UserType;
+import cc.iotkit.common.undefined.LoginUser;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.context.model.SaStorage;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

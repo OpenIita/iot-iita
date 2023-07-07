@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 
 public class CodecUtil {
 
@@ -38,7 +39,7 @@ public class CodecUtil {
      * @return 解码后的byte[]
      * @throws Exception 抛出异常
      */
-    private static byte[] base64Decode(String base64Code) throws Exception {
+    private static byte[] base64Decode(String base64Code) {
         return StringUtils.isEmpty(base64Code) ? null : new Base64().decode(base64Code);
     }
 
@@ -56,7 +57,7 @@ public class CodecUtil {
         Cipher cipher = Cipher.getInstance(ALGORITHMSTR);
         cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(encryptKey.getBytes(), "AES"));
 
-        return cipher.doFinal(content.getBytes("utf-8"));
+        return cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
     }
 
 

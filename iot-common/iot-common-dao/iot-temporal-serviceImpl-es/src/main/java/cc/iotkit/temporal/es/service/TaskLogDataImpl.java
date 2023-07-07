@@ -37,7 +37,7 @@ public class TaskLogDataImpl implements ITaskLogData {
     public Paging<TaskLog> findByTaskId(String taskId, int page, int size) {
         Page<DocTaskLog> paged = taskLogRepository.findByTaskId(taskId, Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
-                paged.getContent().stream().map(o->{return MapstructUtils.convert(o, TaskLog.class);})
+                paged.getContent().stream().map(o -> MapstructUtils.convert(o, TaskLog.class))
                         .collect(Collectors.toList()));
     }
 

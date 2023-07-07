@@ -30,7 +30,7 @@ import java.util.Map;
 @Slf4j
 public class PlusWebInvokeTimeInterceptor implements HandlerInterceptor {
 
-    private final String prodProfile = "prod";
+    private final static String prodProfile = "prod";
 
     private final TransmittableThreadLocal<StopWatch> invokeTimeTL = new TransmittableThreadLocal<>();
 

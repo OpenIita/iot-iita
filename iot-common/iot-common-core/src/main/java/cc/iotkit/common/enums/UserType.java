@@ -1,5 +1,6 @@
 package cc.iotkit.common.enums;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +33,6 @@ public enum UserType {
                 return value;
             }
         }
-        throw new RuntimeException("'UserType' not found By " + str);
+        throw new BizException("'UserType' not found By " + str);
     }
 }

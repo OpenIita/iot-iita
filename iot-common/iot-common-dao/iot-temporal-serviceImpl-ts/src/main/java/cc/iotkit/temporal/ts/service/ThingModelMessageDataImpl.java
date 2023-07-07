@@ -47,7 +47,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
         Condition whereConditions = field("device_id").eq(deviceId);
         SelectJoinStep<Record9<Object, Object, Object, Object, Object, Object, Object, Object, Object>> step = TableManager.getSqlBuilder().select(field("time"), field("mid"),
                 field("product_key"), field("device_name"), field("type"),
-                field("identifier"), field("code"), field("data"),
+                field(zhe "identifier"), field("code"), field("data"),
                 field("report_time")).from(table);
 
 

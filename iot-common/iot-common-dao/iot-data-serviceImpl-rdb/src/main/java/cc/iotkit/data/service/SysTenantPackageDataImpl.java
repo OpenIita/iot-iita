@@ -1,7 +1,6 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.data.dao.IJPACommData;
-import cc.iotkit.data.dao.SysDeptRepository;
 import cc.iotkit.data.dao.SysOssRepository;
 import cc.iotkit.data.model.TbSysTenantPackage;
 import cc.iotkit.data.system.ISysTenantPackageData;

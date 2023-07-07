@@ -1,12 +1,11 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.DeviceGroupRepository;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IDeviceGroupData;
-import cc.iotkit.data.dao.DeviceGroupRepository;
 import cc.iotkit.data.model.TbDeviceGroup;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.device.DeviceGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 

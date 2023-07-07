@@ -3,7 +3,6 @@ package cc.iotkit.data.service;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysRoleDeptRepository;
-import cc.iotkit.data.model.TbSysDept;
 import cc.iotkit.data.model.TbSysRoleDept;
 import cc.iotkit.data.system.ISysRoleDeptData;
 import cc.iotkit.data.util.PredicateBuilder;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import static cc.iotkit.data.model.QTbSysRoleDept.tbSysRoleDept;
 

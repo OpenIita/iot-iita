@@ -1,18 +1,16 @@
 package cc.iotkit.data.model;
 
-import cc.iotkit.data.model.BaseEntity;
 import cc.iotkit.model.system.SysConfig;
 import io.github.linpeilie.annotations.AutoMapper;
-import javax.persistence.GeneratedValue;
-
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * 参数配置表 sys_config

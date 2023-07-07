@@ -11,8 +11,8 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
-import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.dao.UserInfoRepository;
+import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.model.TbUserInfo;
 import cc.iotkit.model.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Primary
