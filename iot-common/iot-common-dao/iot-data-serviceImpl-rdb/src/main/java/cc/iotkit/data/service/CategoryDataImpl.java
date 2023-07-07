@@ -9,21 +9,19 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.CategoryRepository;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.ICategoryData;
-import cc.iotkit.data.dao.CategoryRepository;
 import cc.iotkit.data.model.TbCategory;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.product.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,7 +54,7 @@ public class CategoryDataImpl implements ICategoryData, IJPACommData<Category, S
 
     @Override
     public List<Category> findByIds(Collection<String> id) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

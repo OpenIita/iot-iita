@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -98,7 +99,7 @@ public class JsonUtils {
 
     public static List<Dict> parseArrayMap(String text) {
         if (StringUtils.isBlank(text)) {
-            return null;
+            return Collections.emptyList();
         }
         try {
             return OBJECT_MAPPER.readValue(text, OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, Dict.class));

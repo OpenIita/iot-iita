@@ -8,6 +8,7 @@ import cn.hutool.core.lang.tree.parser.NodeParser;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class TreeBuildUtils extends TreeUtil {
 
     public static <T, K> List<Tree<K>> build(List<T> list, NodeParser<T, K> nodeParser) {
         if (CollUtil.isEmpty(list)) {
-            return null;
+            return Collections.emptyList();
         }
         K k = ReflectUtils.invokeGetter(list.get(0), "parentId");
         return TreeUtil.build(list, k, DEFAULT_CONFIG, nodeParser);

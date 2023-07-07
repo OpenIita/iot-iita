@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ public class MapstructUtils {
      */
     public static <T, V> List<V> convert(List<T> sourceList, Class<V> desc) {
         if (ObjectUtil.isNull(sourceList)) {
-            return null;
+            return Collections.emptyList();
         }
         if (CollUtil.isEmpty(sourceList)) {
             return CollUtil.newArrayList();

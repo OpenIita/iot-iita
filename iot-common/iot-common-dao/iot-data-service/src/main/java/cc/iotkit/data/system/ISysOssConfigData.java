@@ -1,7 +1,6 @@
 package cc.iotkit.data.system;
 
 import cc.iotkit.data.ICommonData;
-import cc.iotkit.model.system.SysOperLog;
 import cc.iotkit.model.system.SysOssConfig;
 
 /**

@@ -4,7 +4,6 @@ import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.ValidatorUtils;
 import cn.hutool.core.text.CharSequenceUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.exception.ExcelAnalysisException;
@@ -88,7 +87,7 @@ public class DefaultExcelListener<T> extends AnalysisEventListener<T> implements
 
     @Override
     public void invoke(T data, AnalysisContext context) {
-        if (isValidate) {
+        if (Boolean.TRUE.equals(isValidate)) {
             ValidatorUtils.validate(data);
         }
         excelResult.getList().add(data);

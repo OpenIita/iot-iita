@@ -298,7 +298,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
         String deviceIds = list.stream().map(d -> "'" + d.getDeviceId() + "'").collect(Collectors.joining(","));
 
         //取设备所属分组
-        List<DeviceIdGroup> groups = list.size() == 0 ? new ArrayList<>() :
+        List<DeviceIdGroup> groups = list.isEmpty() ? new ArrayList<>() :
                 jdbcTemplate.query("SELECT \n" +
                         "a.id,\n" +
                         "a.name, \n" +
@@ -537,7 +537,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
 
     @Override
     public List<DeviceInfo> findAllByCondition(DeviceInfo data) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

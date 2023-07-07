@@ -78,7 +78,7 @@ public class DbStructureDataImpl implements IDbStructureData {
             List<TdField> addFields = newFields.stream().filter((f) -> oldFields.stream()
                     .noneMatch(old -> old.getName().equals(f.getName())))
                     .collect(Collectors.toList());
-            if (addFields.size() > 0) {
+            if (!addFields.isEmpty()) {
                 sql = TableManager.getAddSTableColumnSql(tbName, addFields);
                 response = tdRestApi.execSql(sql);
                 if (response.getCode() != TdResponse.CODE_SUCCESS) {
@@ -95,7 +95,7 @@ public class DbStructureDataImpl implements IDbStructureData {
                     ))
                     .collect(Collectors.toList());
 
-            if (modifyFields.size() > 0) {
+            if (!modifyFields.isEmpty()) {
                 sql = TableManager.getModifySTableColumnSql(tbName, modifyFields);
                 response = tdRestApi.execSql(sql);
                 if (response.getCode() != TdResponse.CODE_SUCCESS) {
@@ -110,7 +110,7 @@ public class DbStructureDataImpl implements IDbStructureData {
                             //字段名不是time且没有相同字段名的
                             .noneMatch(n -> n.getName().equals(f.getName())))
                     .collect(Collectors.toList());
-            if (dropFields.size() > 0) {
+            if (!dropFields.isEmpty()) {
                 sql = TableManager.getDropSTableColumnSql(tbName, dropFields);
                 response = tdRestApi.execSql(sql);
                 if (response.getCode() != TdResponse.CODE_SUCCESS) {

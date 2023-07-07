@@ -47,7 +47,7 @@ public class TableManager {
      * 获取创建表sql
      */
     public static String getCreateSTableSql(String tbName, List<TdField> fields, TdField... tags) {
-        if (fields.size() == 0) {
+        if (fields.isEmpty()) {
             return null;
         }
 

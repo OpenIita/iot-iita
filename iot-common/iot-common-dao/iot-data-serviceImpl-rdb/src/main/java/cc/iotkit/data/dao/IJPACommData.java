@@ -5,11 +5,8 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.data.util.PageBuilder;
-import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.Id;
-import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -33,6 +30,7 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
 
     Class getTClass();
 
+    @Override
     default T findById(ID id) {
         return (T) MapstructUtils.convert(getBaseRepository().findById(id).orElse(null), getTClass());
     }

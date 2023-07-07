@@ -1,6 +1,8 @@
 package cc.iotkit.common.excel.annotation;
 
 
+import cc.iotkit.common.excel.core.CellMergeStrategy;
+
 import java.lang.annotation.*;
 
 /**

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +62,7 @@ public class ChannelTemplateDataImpl implements IChannelTemplateData, IJPACommDa
 
     @Override
     public List<ChannelTemplate> findAllByCondition(ChannelTemplate data) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

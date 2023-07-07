@@ -1,9 +1,8 @@
 package cc.iotkit.data.system;
 
-import cc.iotkit.data.ICommonData;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.system.SysDictType;
-import cc.iotkit.model.system.SysUser;
 
 import java.util.List;
 

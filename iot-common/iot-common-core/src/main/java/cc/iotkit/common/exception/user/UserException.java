@@ -10,7 +10,6 @@
 package cc.iotkit.common.exception.user;
 
 import cc.iotkit.common.enums.ErrCode;
-import cc.iotkit.common.exception.BaseException;
 import cc.iotkit.common.exception.BizException;
 import lombok.AllArgsConstructor;
 import lombok.Data;

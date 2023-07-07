@@ -4,24 +4,17 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.PageRequestEmpty;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.data.model.TbSysConfig;
-import cc.iotkit.model.product.Product;
-import cc.iotkit.model.system.SysConfig;
-import cc.iotkit.model.system.SysNotice;
 import cn.hutool.core.collection.CollUtil;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.OrderSpecifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 
 /**
  * @author: Longjun.Tu

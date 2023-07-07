@@ -9,7 +9,6 @@
  */
 package cc.iotkit.data.dao;
 
-import cc.iotkit.data.model.TbSysRoleDept;
 import cc.iotkit.data.model.TbSysRoleMenu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;

@@ -1,8 +1,6 @@
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.dao.IJPACommData;
-import cc.iotkit.data.dao.SysDeptRepository;
 import cc.iotkit.data.dao.SysOssRepository;
 import cc.iotkit.data.model.TbSysOss;
 import cc.iotkit.data.system.ISysOssData;

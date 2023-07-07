@@ -1,17 +1,13 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.dao.AlertRecordRepository;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IAlertRecordData;
-import cc.iotkit.data.dao.AlertRecordRepository;
 import cc.iotkit.data.model.TbAlertRecord;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.alert.AlertRecord;
-
-import java.util.Collection;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;

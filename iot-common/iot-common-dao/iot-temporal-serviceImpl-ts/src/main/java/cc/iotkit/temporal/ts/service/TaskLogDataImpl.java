@@ -31,8 +31,6 @@ import java.util.stream.Collectors;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.table;
 
-//import cc.iotkit.temporal.ts.dm.TableManager;
-
 @Service
 public class TaskLogDataImpl implements ITaskLogData {
 
@@ -62,9 +60,9 @@ public class TaskLogDataImpl implements ITaskLogData {
                 .where(field("task_id").eq(taskId)).getSQL(ParamType.INLINED);
         Long count = tsTemplate.queryForObject(whereSql, new BeanPropertyRowMapper<>(Long.class));
 
-        return new Paging<>(count , taskLogs.stream().map(r ->
-                new TaskLog(r.getTime().toString(), taskId,
-                        r.getContent(), r.getSuccess(), r.getTime()))
+        return new Paging<>(count, taskLogs.stream().map(r ->
+                        new TaskLog(r.getTime().toString(), taskId,
+                                r.getContent(), r.getSuccess(), r.getTime()))
                 .collect(Collectors.toList()));
     }
 
@@ -76,7 +74,7 @@ public class TaskLogDataImpl implements ITaskLogData {
                 field("time"),
                 field("task_id"),
                 field("content"), field("success")).values(
-                        new Date(),
+                new Date(),
                 log.getTaskId(),
                 log.getContent(), log.getSuccess());
 

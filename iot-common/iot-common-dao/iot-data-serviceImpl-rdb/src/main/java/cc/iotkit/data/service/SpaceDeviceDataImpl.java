@@ -9,13 +9,12 @@
  */
 package cc.iotkit.data.service;
 
-import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
-import cc.iotkit.data.manager.ISpaceDeviceData;
 import cc.iotkit.data.dao.SpaceDeviceRepository;
+import cc.iotkit.data.manager.ISpaceDeviceData;
 import cc.iotkit.data.model.TbSpaceDevice;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.space.SpaceDevice;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 

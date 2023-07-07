@@ -65,7 +65,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
                 pageRequest.setPageSize(1000);
                 pageRequest.setPageNum(page);
 
-                while ((paged = deviceInfoData.findAll(pageRequest)).getRows().size() > 0) {
+                while (!(paged = deviceInfoData.findAll(pageRequest)).getRows().isEmpty()) {
                     pageRequest.setPageNum(page++);
                     List<DeviceInfo> devices = paged.getRows();
                     for (DeviceInfo device : devices) {
@@ -282,7 +282,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
 
     @Override
     public List<DeviceInfo> findAllByCondition(DeviceInfo data) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

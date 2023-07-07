@@ -42,9 +42,9 @@ public class TaskLogDataImpl implements ITaskLogData {
         sql = "select count(*) from task_log where task_id=?";
         List<Long> counts = tdTemplate.queryForList(sql, Long.class, taskId);
 
-        return new Paging<>(counts.size() > 0 ? counts.get(0) : 0, taskLogs.stream().map(r ->
-                new TaskLog(r.getTime().toString(), taskId,
-                        r.getContent(), r.getSuccess(), r.getTime()))
+        return new Paging<>(!counts.isEmpty() ? counts.get(0) : 0, taskLogs.stream().map(r ->
+                        new TaskLog(r.getTime().toString(), taskId,
+                                r.getContent(), r.getSuccess(), r.getTime()))
                 .collect(Collectors.toList()));
     }
 

@@ -9,8 +9,8 @@
  */
 package cc.iotkit.temporal.td.service;
 
-import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.stats.TimeData;
 import cc.iotkit.temporal.IThingModelMessageData;
@@ -61,7 +61,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
         sql = String.format("select count(*) from thing_model_message where device_id=? %s",
                 sbCond.toString());
         List<Long> counts = tdTemplate.queryForList(sql, Long.class, args.toArray());
-        long count = counts.size() > 0 ? counts.get(0) : 0;
+        long count = !counts.isEmpty() ? counts.get(0) : 0;
 
         return new Paging<>(count, ruleLogs.stream().map(r ->
                         new ThingModelMessage(r.getTime().toString(), r.getMid(),
@@ -110,6 +110,6 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
     @Override
     public long count() {
         List<Long> counts = tdTemplate.queryForList("select count(*) from thing_model_message", Long.class);
-        return counts.size() > 0 ? counts.get(0) : 0;
+        return !counts.isEmpty() ? counts.get(0) : 0;
     }
 }
