@@ -66,7 +66,7 @@ public class SysProfileController extends BaseController {
     public void updateProfile(@RequestBody Request<SysUserProfileBo> bo) {
         SysUserProfileBo profile = bo.getData();
         SysUserBo user = BeanUtil.toBean(profile, SysUserBo.class);
-        if (StringUtils.isNotEmpty(user.getPhoneNumber()) && !userService.checkPhoneUnique(user)) {
+        if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
             fail("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
         if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user)) {

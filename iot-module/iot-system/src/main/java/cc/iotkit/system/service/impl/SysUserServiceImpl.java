@@ -265,7 +265,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
         if (ObjectUtil.isNotNull(user.getNickName())) {
             oldUser.setNickName(user.getNickName());
         }
-        oldUser.setPhonenumber(user.getPhoneNumber());
+        oldUser.setPhonenumber(user.getPhonenumber());
         oldUser.setEmail(user.getEmail());
         oldUser.setSex(user.getSex());
         return sysUserData.save(oldUser) != null ? 1 : 0;
