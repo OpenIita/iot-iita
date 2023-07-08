@@ -38,9 +38,9 @@ public class ProtocolController {
     @ApiOperation("上传Jar包")
     @PostMapping("/uploadJar")
     public String uploadJar(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("id") String id) {
-       return protocolService.uploadJar(file, id);
+            @RequestParam("id") String id,
+            @RequestPart("file") MultipartFile file, @RequestParam("requestId") String requestId) {
+        return protocolService.uploadJar(file, id);
     }
 
     @ApiOperation("添加组件")
@@ -67,7 +67,7 @@ public class ProtocolController {
     @ApiOperation("保存组件脚本")
     @PostMapping("/saveComponentScript")
     public boolean saveComponentScript(@Validated
-            @RequestBody Request<ProtocolComponentBo> upReq) {
+                                       @RequestBody Request<ProtocolComponentBo> upReq) {
         return protocolService.saveComponentScript(upReq.getData());
     }
 
@@ -81,7 +81,7 @@ public class ProtocolController {
     @ApiOperation("获取组件列表")
     @PostMapping("/list")
     public Paging<ProtocolComponentVo> getComponents(@Validated @RequestBody
-            PageRequest<ProtocolComponentBo> query) {
+                                                     PageRequest<ProtocolComponentBo> query) {
         return protocolService.selectPageList(query);
     }
 
@@ -122,13 +122,13 @@ public class ProtocolController {
     @ApiOperation("删除转换脚本")
     public boolean deleteConverter(@RequestBody @Validated Request<String> req) {
         String id = req.getData();
-       return protocolService.deleteConverter(id);
+        return protocolService.deleteConverter(id);
     }
 
     @PostMapping("/component/changeState")
     @ApiOperation("组件启用/禁用")
     public boolean changeComponentState(@RequestBody @Validated Request<ChangeStateBo> req) {
-       return protocolService.changeComponentState(req.getData());
+        return protocolService.changeComponentState(req.getData());
     }
 
 }
