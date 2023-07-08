@@ -19,7 +19,7 @@ public class SysOssBo extends BaseDto {
     /**
      * ossId
      */
-    private Long ossId;
+    private Long id;
 
     /**
      * 文件名

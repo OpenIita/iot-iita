@@ -20,7 +20,7 @@ public class SysOssVo implements Serializable {
     /**
      * 对象存储主键
      */
-    private Long ossId;
+    private Long id;
 
     /**
      * 文件名

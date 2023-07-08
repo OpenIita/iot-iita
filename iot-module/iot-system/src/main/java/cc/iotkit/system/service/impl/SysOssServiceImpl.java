@@ -41,16 +41,17 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
     private final ISysOssData sysOssData;
 
     @Override
-    public Paging<SysOssVo> queryPageList(SysOssBo bo, PageRequest<?> query) {
-        return new Paging<>();
+    public Paging<SysOssVo> queryPageList(PageRequest<SysOssBo> query) {
+        return sysOssData.findAll(query.to(SysOss.class)).to(SysOssVo.class);
     }
 
     @Override
     public List<SysOssVo> listByIds(Collection<Long> ossIds) {
         List<SysOssVo> list = new ArrayList<>();
         for (Long id : ossIds) {
-            SysOssVo vo = SpringUtils.getAopProxy(this).getById(id);
-            if (ObjectUtil.isNotNull(vo)) {
+            SysOss oss = sysOssData.findById(id);
+            if (ObjectUtil.isNotNull(oss)) {
+                SysOssVo vo = MapstructUtils.convert(oss, SysOssVo.class);
                 list.add(this.matchingUrl(vo));
             }
         }
@@ -100,7 +101,7 @@ public class SysOssServiceImpl implements ISysOssService, OssService {
         oss.setFileName(uploadResult.getFilename());
         oss.setOriginalName(originalFileName);
         oss.setService(storage.getConfigKey());
-        sysOssData.save(oss);
+        oss = sysOssData.save(oss);
         SysOssVo sysOssVo = MapstructUtils.convert(oss, SysOssVo.class);
         return this.matchingUrl(sysOssVo);
     }

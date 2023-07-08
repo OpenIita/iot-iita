@@ -21,7 +21,6 @@
         <module>iot-component-tcp</module>
         <module>iot-DLT645-component</module>
         <module>iot-websocket-component</module>
-        <module>iot-component-oss</module>
    <!--     <module>iot-ctwing-component</module>-->
     </modules>
 

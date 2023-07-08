@@ -42,9 +42,10 @@ public class SysOssController extends BaseController {
      * 查询OSS对象存储列表
      */
     @SaCheckPermission("system:oss:list")
+    @ApiOperation(value = "查询OSS对象存储列表", notes = "查询OSS对象存储列表")
     @PostMapping("/list")
-    public Paging<SysOssVo> list(@Validated(QueryGroup.class) SysOssBo bo, PageRequest<?> query) {
-        return ossService.queryPageList(bo, query);
+    public Paging<SysOssVo> list(@Validated(QueryGroup.class) @RequestBody PageRequest<SysOssBo> query) {
+        return ossService.queryPageList(query);
     }
 
     /**
@@ -67,7 +68,7 @@ public class SysOssController extends BaseController {
     @SaCheckPermission("system:oss:upload")
     @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public SysOssUploadVo upload(@RequestPart("file") MultipartFile file) {
+    public SysOssUploadVo upload(@RequestPart("file") MultipartFile file,@RequestParam("requestId") String requestId) {
         if (ObjectUtil.isNull(file)) {
             fail("上传文件不能为空");
         }
@@ -75,7 +76,7 @@ public class SysOssController extends BaseController {
         SysOssUploadVo uploadVo = new SysOssUploadVo();
         uploadVo.setUrl(oss.getUrl());
         uploadVo.setFileName(oss.getOriginalName());
-        uploadVo.setOssId(oss.getOssId().toString());
+        uploadVo.setOssId(oss.getId().toString());
         return uploadVo;
     }
 
@@ -85,6 +86,7 @@ public class SysOssController extends BaseController {
      */
     @SaCheckPermission("system:oss:download")
     @PostMapping("/downloadById")
+    @ApiOperation(value = "下载OSS对象", notes = "下载OSS对象")
     public void download(@RequestBody @Validated Request<Long> bo, HttpServletResponse response) throws IOException {
         ossService.download(bo.getData());
     }

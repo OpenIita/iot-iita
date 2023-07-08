@@ -2,28 +2,33 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.oss.core.OssClient;
+import cc.iotkit.common.oss.factory.OssFactory;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.manager.IDeviceOtaInfoData;
-import cc.iotkit.data.manager.IOtaDeviceData;
 import cc.iotkit.data.manager.IOtaPackageData;
+import cc.iotkit.data.system.ISysOssData;
 import cc.iotkit.manager.dto.bo.ota.DeviceOtaInfoBo;
 import cc.iotkit.manager.dto.bo.ota.OtaPackageBo;
 import cc.iotkit.manager.dto.vo.ota.DeviceOtaInfoVo;
 import cc.iotkit.manager.dto.vo.ota.OtaPackageUploadVo;
 import cc.iotkit.model.ota.DeviceOtaInfo;
 import cc.iotkit.model.ota.OtaPackage;
-import cc.iotkit.oss.service.OssTemplate;
+import cc.iotkit.model.system.SysOss;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.*;
+import cc.iotkit.common.oss.entity.UploadResult;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @Author: 石恒
@@ -36,27 +41,36 @@ import java.util.UUID;
 public class OtaService {
 
     private final IOtaPackageData iOtaPackageData;
-    private final IOtaDeviceData iOtaDeviceData;
     private final DeviceService deviceService;
     private final IDeviceOtaInfoData deviceOtaInfoData;
-    private final OssTemplate ossTemplate;
+    private final ISysOssData sysOssData;
 
+    public OtaPackageUploadVo uploadFile(MultipartFile file) throws Exception {
+        String originalFileName = file.getOriginalFilename();
+        if(originalFileName ==null){
+            throw new BizException("文件名为空，获取失败");
+        }
+        String suffix = StringUtils.substring(originalFileName, originalFileName.lastIndexOf("."), originalFileName.length());
+        OssClient storage = OssFactory.instance();
+        UploadResult uploadResult;
+        try {
+            uploadResult = storage.uploadSuffix(file.getBytes(), suffix, file.getContentType());
+        } catch (IOException e) {
+            throw new BizException(e.getMessage());
+        }
+        // 保存文件信息
+        SysOss oss = new SysOss();
+        oss.setUrl(uploadResult.getUrl());
+        oss.setFileSuffix(suffix);
+        oss.setFileName(uploadResult.getFilename());
+        oss.setOriginalName(originalFileName);
+        oss.setService(storage.getConfigKey());
+        sysOssData.save(oss);
 
-    @Value("${oss.region}")
-    private String region;
-    @Value("${oss.buckName}")
-    private String buckName;
-
-    public OtaPackageUploadVo uploadFile(MultipartFile file, String suffix) throws Exception {
-        InputStream inputStream = file.getInputStream();
-        long size = file.getSize();
-        String objectName = UUID.randomUUID().toString().replaceAll("-", "") + suffix;
-        ossTemplate.putObject(buckName, objectName, inputStream);
-        String url = "https://" + region + "/" + objectName;
         String md5 = md5OfFile(file);
         OtaPackageUploadVo otaPackageUploadVo = new OtaPackageUploadVo();
-        otaPackageUploadVo.setUrl(url);
-        otaPackageUploadVo.setSize(size);
+        otaPackageUploadVo.setUrl(uploadResult.getUrl());
+        otaPackageUploadVo.setSize(file.getSize());
         otaPackageUploadVo.setMd5(md5);
         return otaPackageUploadVo;
     }

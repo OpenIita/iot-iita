@@ -66,12 +66,6 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-component-oss</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
             <artifactId>iot-component-server</artifactId>
         </dependency>
 
@@ -88,6 +82,11 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-message-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-oss</artifactId>
         </dependency>
 
         <dependency>

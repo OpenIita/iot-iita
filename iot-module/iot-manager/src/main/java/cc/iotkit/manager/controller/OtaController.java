@@ -3,6 +3,7 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
+import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.manager.dto.bo.ota.DeviceOtaInfoBo;
 import cc.iotkit.manager.dto.bo.ota.DeviceUpgradeBo;
 import cc.iotkit.manager.dto.bo.ota.OtaPackageBo;
@@ -10,15 +11,13 @@ import cc.iotkit.manager.dto.vo.ota.DeviceOtaInfoVo;
 import cc.iotkit.manager.dto.vo.ota.OtaPackageUploadVo;
 import cc.iotkit.manager.service.OtaService;
 import cc.iotkit.model.ota.OtaPackage;
+import cn.hutool.core.util.ObjectUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -33,20 +32,18 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("/ota")
-public class OtaController {
+public class OtaController extends BaseController {
 
     @Resource
     private OtaService otaService;
 
     @ApiOperation("升级包上传")
-    @PostMapping("/package/upload")
-    public OtaPackageUploadVo packageUpload(MultipartFile file) throws Exception {
-        if (!file.isEmpty()) {
-            String fileName = file.getOriginalFilename();
-            String suffix = StringUtils.isEmpty(fileName) ? "" : fileName.substring(fileName.lastIndexOf("."));
-            return otaService.uploadFile(file, suffix);
+    @PostMapping(value = "/package/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public OtaPackageUploadVo packageUpload(@RequestPart("file") MultipartFile file, @RequestParam("requestId") String requestId) throws Exception {
+        if (ObjectUtil.isNull(file)) {
+            fail("上传文件不能为空");
         }
-        return null;
+        return otaService.uploadFile(file);
     }
 
     @ApiOperation("新增升级包")
