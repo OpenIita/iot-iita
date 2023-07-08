@@ -53,6 +53,7 @@ public class PlusWebInvokeTimeInterceptor implements HandlerInterceptor {
                 Map<String, String[]> parameterMap = request.getParameterMap();
                 if (MapUtil.isNotEmpty(parameterMap)) {
                     String parameters = JsonUtils.toJsonString(parameterMap);
+                    MDC.put("requestId",parameterMap.get("requestId")[0]);
                     log.debug("开始请求 => URL[{}],参数类型[param],参数:[{}]", url, parameters);
                 } else {
                     log.debug("开始请求 => URL[{}],无参数", url);
