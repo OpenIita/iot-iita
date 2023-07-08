@@ -28,12 +28,7 @@ import java.util.UUID;
 /**
  * @Author: 石恒
  * @Date: 2023/5/19 20:49
- * @Description: oss:
- * region: tb3321.oss-cn-shanghai.aliyuncs.com
- * endpoint: oss-cn-shanghai.aliyuncs.com
- * accessKey: LTAI5tAq5Db5eHt5DTYmXLF4
- * secretKey: bPbHQbeXPSRtyNxxCsw5uRVGJTxNHK
- * buckName: tb3321
+ * @Description:
  */
 @Slf4j
 @Service

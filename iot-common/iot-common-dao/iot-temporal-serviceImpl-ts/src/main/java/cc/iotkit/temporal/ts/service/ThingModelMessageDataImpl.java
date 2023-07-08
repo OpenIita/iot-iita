@@ -47,7 +47,7 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
         Condition whereConditions = field("device_id").eq(deviceId);
         SelectJoinStep<Record9<Object, Object, Object, Object, Object, Object, Object, Object, Object>> step = TableManager.getSqlBuilder().select(field("time"), field("mid"),
                 field("product_key"), field("device_name"), field("type"),
-                field(zhe "identifier"), field("code"), field("data"),
+                field("identifier"), field("code"), field("data"),
                 field("report_time")).from(table);
 
 
@@ -68,11 +68,11 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
         Long count = tsTemplate.queryForObject(countSql, Long.class);
 
         return new Paging<>(count, ruleLogs.stream().map(r ->
-                        new ThingModelMessage(r.getTime().toString(), r.getMid(),
-                                deviceId, r.getProductKey(), r.getDeviceName(),
-                                r.getUid(), r.getType(), r.getIdentifier(), r.getCode(),
-                                r.getData(),
-                                r.getTime().getTime(), r.getReportTime()))
+                new ThingModelMessage(r.getTime().toString(), r.getMid(),
+                        deviceId, r.getProductKey(), r.getDeviceName(),
+                        r.getUid(), r.getType(), r.getIdentifier(), r.getCode(),
+                        r.getData(),
+                        r.getTime().getTime(), r.getReportTime()))
                 .collect(Collectors.toList()));
     }
 
@@ -82,11 +82,11 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
         Table<Record> table = table("thing_model_message");
 
         Condition con = field("time").greaterOrEqual(new Date(start)).and(field("time").lessOrEqual(new Date(end)));
-        if(StringUtils.isNotBlank(uid)){
+        if (StringUtils.isNotBlank(uid)) {
             con.and(field("uid").eq(uid));
         }
 
-        String sql = TableManager.getSqlBuilder().select(field("date_trunc('hour', \"time\")").as("time"),field("count(*)").as("data"))
+        String sql = TableManager.getSqlBuilder().select(field("date_trunc('hour', \"time\")").as("time"), field("count(*)").as("data"))
                 .from(table).where(con).groupBy(field("date_trunc('hour', \"time\")")).orderBy(field("time").asc()).getSQL(ParamType.INLINED);
 
 
@@ -105,16 +105,16 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
         Table<Record> table = table("thing_model_message");
 
         String sql = TableManager.getSqlBuilder().insertInto(table,
-                        field("time"),
-                        field("device_id"),
-                        field("mid"),
-                        field("product_key"),
-                        field("device_name"),
-                        field("uid"),
-                        field("type"),
-                        field("identifier"),
-                        field("code"),
-                        field("data"), field("report_time"))
+                field("time"),
+                field("device_id"),
+                field("mid"),
+                field("product_key"),
+                field("device_name"),
+                field("uid"),
+                field("type"),
+                field("identifier"),
+                field("code"),
+                field("data"), field("report_time"))
                 .values(new Date(msg.getOccurred()), msg.getDeviceId(), msg.getMid(),
                         msg.getProductKey(), msg.getDeviceName(),
                         msg.getUid(), msg.getType(),

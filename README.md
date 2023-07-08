@@ -79,7 +79,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 ##### 时序数据库切换为TDengein方法
 
-1、注释掉iot-standalone/pom.xml中的 iot-temporal-serviceImpl-es，并打开iot-td-temporal-service的注释
+1、注释掉iot-starter/pom.xml中的 iot-temporal-serviceImpl-es，并打开iot-td-temporal-service的注释
 
 2、application.xml中注释掉elasticsearch配置，并打开td-datasource配置
 
@@ -90,6 +90,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 2、application.xml中打开rocketmq配置
 
 #### 项目结构
+```
 
 ├data	初始化数据
 │  ├components
@@ -135,6 +136,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 │  ├iot-test-mqtt
 │  ├iot-virtual-device
 
+```
 
 #### 运行步骤
 1、安装jdk11
@@ -145,11 +147,12 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 4、若出现报错，可能是数据没有初始化完或重复初始化，把项目根目录下.init文件和data/iotkit.xx文件删除后重启
 
-在配置好相应的jdk11环境后，推荐使用idea拉取代码，等待项目加载完成以后，先在Terminal里执行mvn clean install，然后在idea的maven操作框上点击下刷新![image-20230702173737805](doc\image-20230702173737805.png)
+在配置好相应的jdk11环境后，推荐使用idea拉取代码，等待项目加载完成以后，先在Terminal里执行mvn clean install，然后在idea的maven操作框上点击下刷新
+![1](doc/image-20230702173737805.png)
 
 然后就点击启动，看到如下所示日志即表示启动成功：
 
-![image-20230702174747305](doc\image-20230702174747305.png)
+![image-20230702174747305](doc/image-20230702174747305.png)
 
 #### 后端常见问题以及处理方式
 
@@ -157,7 +160,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 删除以下标红的几个文件以及文件夹后，重复下上面启动项目的操作：
 
-![image-20230702173852342](doc\image-20230702173852342.png)
+![image-20230702173852342](doc/image-20230702173852342.png)
 
 切换成外置中间件数据库时，也注意删除相关库以及数据。
 
@@ -165,7 +168,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 在Terminal里执行mvn clean install，再刷新下，这个出现的原因是因为采用了querydsl插件，打包时会生成相关的类，有可能idea的扫描不及时，导致未识别到
 
-![image-20230702173737805](doc\image-20230702173737805.png)
+![111](doc/image-20230702173737805.png)
 
 ##### 3，启动提示xxMapperxxx类bean重复
 
@@ -174,7 +177,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 #### 服务器部署
 
-执行maven打包在iot-standalone模块中将打包后的iot-standalone.xx.zip上传到服务器，解压后进入bin目录，执行start.sh或start.bat启动。
+执行maven打包在iot-starter模块中将打包后的iot-starter.xx.zip上传到服务器，解压后进入bin目录，执行start.sh或start.bat启动。
 
 
 #### 文档
