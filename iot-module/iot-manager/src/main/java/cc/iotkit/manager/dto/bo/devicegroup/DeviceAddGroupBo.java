@@ -1,16 +1,10 @@
 package cc.iotkit.manager.dto.bo.devicegroup;
 
 import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.model.device.DeviceGroup;
-import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 

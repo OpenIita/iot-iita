@@ -11,7 +11,6 @@ package cc.iotkit.manager.dto.bo.device;
 
 import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.model.device.DeviceInfo;
-import cc.iotkit.model.product.Category;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.github.linpeilie.annotations.AutoMapping;
 import io.github.linpeilie.annotations.ReverseAutoMapping;

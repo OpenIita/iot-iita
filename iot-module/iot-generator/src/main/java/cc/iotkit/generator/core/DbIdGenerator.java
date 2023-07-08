@@ -1,16 +1,8 @@
 package cc.iotkit.generator.core;
 
-import cn.hutool.core.net.NetUtil;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.github.yitter.contract.IdGeneratorOptions;
 import com.github.yitter.idgen.YitIdHelper;
-
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.Objects;
 
 /**
  * @author: Jay

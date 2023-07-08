@@ -1,21 +1,13 @@
 package cc.iotkit.generator.config;
 
 import cc.iotkit.generator.core.DbIdGenerator;
-import cc.iotkit.generator.factory.YmlPropertySourceFactory;
-import cn.hutool.core.net.NetUtil;
-import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-//import org.dromara.common.core.factory.YmlPropertySourceFactory;
-//import org.dromara.common.mybatis.handler.InjectionMetaObjectHandler;
-//import org.dromara.common.mybatis.interceptor.PlusDataPermissionInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**

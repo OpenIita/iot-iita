@@ -57,6 +57,7 @@ public class LuaScripter implements IScripter {
         }
     }
 
+    @Override
     public ThingModelMessage decode(TransparentMsg msg) {
         try {
             LuaTable table = new LuaTable();
@@ -76,6 +77,7 @@ public class LuaScripter implements IScripter {
         return null;
     }
 
+    @Override
     public TransparentMsg encode(ThingService<?> service) {
         try {
             LuaTable table = new LuaTable();

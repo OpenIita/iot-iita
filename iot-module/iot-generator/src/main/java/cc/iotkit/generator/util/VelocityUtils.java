@@ -3,14 +3,13 @@ package cc.iotkit.generator.util;
 import cc.iotkit.common.utils.DateUtils;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.generator.constant.GenConstants;
 import cc.iotkit.generator.core.DataBaseHelper;
+import cc.iotkit.generator.domain.GenTable;
+import cc.iotkit.generator.domain.GenTableColumn;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
-import cc.iotkit.generator.constant.GenConstants;
-
-import cc.iotkit.generator.domain.GenTable;
-import cc.iotkit.generator.domain.GenTableColumn;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.velocity.VelocityContext;
@@ -225,7 +224,7 @@ public class VelocityUtils {
      */
     public static HashSet<String> getImportList(GenTable genTable) {
         List<GenTableColumn> columns = genTable.getColumns();
-        HashSet<String> importList = new HashSet<String>();
+        HashSet<String> importList = new HashSet<>();
         for (GenTableColumn column : columns) {
             if (!column.isSuperColumn() && GenConstants.TYPE_DATE.equals(column.getJavaType())) {
                 importList.add("java.util.Date");

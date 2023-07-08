@@ -116,7 +116,7 @@ public class HttpBizComponent implements IComponent {
                 });
 
         backendServer.requestHandler(backendRouter)
-                .listen(httpConfig.getPort(), (http) -> {
+                .listen(httpConfig.getPort(), http -> {
                     if (http.succeeded()) {
                         log.info("http server create succeed,port:{}", httpConfig.getPort());
                     } else {

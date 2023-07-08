@@ -73,6 +73,7 @@ public class KafkaLink implements BaseSinkLink {
             );
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("kafka,topic[{}],发送异常:{}", msg.get(TOPIC), msg.get(PAYLOAD).toString(), e);
             consumer.accept(String.format("kafka,topic[%s],发送异常:%s", msg.get(TOPIC), msg.get(PAYLOAD).toString()));
         }
 

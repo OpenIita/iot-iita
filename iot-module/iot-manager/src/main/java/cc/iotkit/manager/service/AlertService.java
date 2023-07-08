@@ -10,10 +10,10 @@
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.data.manager.IAlertConfigData;
 import cc.iotkit.data.manager.IAlertRecordData;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.alert.AlertConfig;
 import cc.iotkit.model.alert.AlertRecord;
 import lombok.extern.slf4j.Slf4j;

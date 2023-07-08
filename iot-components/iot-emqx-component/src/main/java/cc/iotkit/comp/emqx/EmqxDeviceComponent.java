@@ -19,7 +19,6 @@ import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.DeviceState;
-
 import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
@@ -82,7 +81,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent implements Runn
                 countDownLatch.countDown();
                 log.info("start emqx auth component success");
             }));
-            future.onFailure((e) -> {
+            future.onFailure(e -> {
                 countDownLatch.countDown();
                 log.error("start emqx auth component failed", e);
             });

@@ -80,7 +80,7 @@ public class SysDictDataController {
         String dictType = bo.getData();
         List<SysDictDataVo> data = dictTypeService.selectDictDataByType(dictType);
         if (ObjectUtil.isNull(data)) {
-            data = new ArrayList<SysDictDataVo>();
+            data = new ArrayList<>();
         }
         return data;
     }

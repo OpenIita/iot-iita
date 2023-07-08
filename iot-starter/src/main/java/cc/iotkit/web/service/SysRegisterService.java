@@ -14,7 +14,6 @@ import cc.iotkit.system.dto.bo.SysUserBo;
 import cc.iotkit.system.service.ISysUserService;
 import cn.dev33.satoken.secure.BCrypt;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 
 /**
@@ -57,7 +56,7 @@ public class SysRegisterService {
         if (!regFlag) {
             throw new UserException( "注册失败" );
         }
-        recordLogininfor(tenantId, username, Constants.REGISTER, MessageUtils.message("user.register.success"));
+        recordLoginInfo(tenantId, username, Constants.REGISTER, MessageUtils.message("user.register.success"));
     }
 
     /**
@@ -72,15 +71,13 @@ public class SysRegisterService {
         String captcha = RedisUtils.getCacheObject(verifyKey);
         RedisUtils.deleteObject(verifyKey);
         if (captcha == null) {
-            recordLogininfor(tenantId, username, Constants.REGISTER, MessageUtils.message("user.jcaptcha.expire"));
+            recordLoginInfo(tenantId, username, Constants.REGISTER, MessageUtils.message("user.jcaptcha.expire"));
             throw new BizException("验证码过期");
 
         }
         if (!code.equalsIgnoreCase(captcha)) {
-            recordLogininfor(tenantId, username, Constants.REGISTER, MessageUtils.message("user.jcaptcha.error"));
+            recordLoginInfo(tenantId, username, Constants.REGISTER, MessageUtils.message("user.jcaptcha.error"));
             throw new BizException("验证码错误");
-
-//            throw new CaptchaException();
         }
     }
 
@@ -93,7 +90,7 @@ public class SysRegisterService {
      * @param message  消息内容
      * @return
      */
-    private void recordLogininfor(String tenantId, String username, String status, String message) {
+    private void recordLoginInfo(String tenantId, String username, String status, String message) {
 //        LogininforEvent logininforEvent = new LogininforEvent();
 //        logininforEvent.setTenantId(tenantId);
 //        logininforEvent.setUsername(username);

@@ -1,27 +1,14 @@
 package cc.iotkit.manager.dto.bo.protocolconverter;
 
-import cc.iotkit.model.protocol.ProtocolConverter;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-import jakarta.validation.constraints.Size;
-
-
-import java.io.Serializable;
-import java.util.Date;
-import java.math.BigDecimal;
-
 import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
-
+import cc.iotkit.model.protocol.ProtocolConverter;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

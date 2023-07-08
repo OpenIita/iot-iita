@@ -1,22 +1,19 @@
 package cc.iotkit.contribution.service.impl;
 
-import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.common.api.Request;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.contribution.data.IIotContributorData;
 import cc.iotkit.contribution.dto.bo.IotContributorBo;
 import cc.iotkit.contribution.dto.vo.IotContributorVo;
 import cc.iotkit.contribution.model.IotContributor;
 import cc.iotkit.contribution.service.IIotContributorService;
-import cc.iotkit.contribution.data.IIotContributorData;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Collection;
-import cc.iotkit.common.exception.BizException;
+import java.util.List;
 
 
 /**
@@ -44,8 +41,7 @@ public class IotContributorServiceImpl implements IIotContributorService {
      */
     @Override
     public Paging<IotContributorVo> queryPageList(PageRequest<IotContributorBo> pageQuery) {
-        Paging<IotContributorVo> result = baseData.findAll(pageQuery.to(IotContributor.class)).to(IotContributorVo.class);
-        return result;
+        return baseData.findAll(pageQuery.to(IotContributor.class)).to(IotContributorVo.class);
     }
 
     /**
@@ -79,10 +75,7 @@ public class IotContributorServiceImpl implements IIotContributorService {
         IotContributor update = MapstructUtils.convert(bo, IotContributor.class);
         validEntityBeforeSave(update);
         IotContributor ret = baseData.save(update);
-        if(ret == null){
-            return false;
-        }
-        return true;
+        return ret != null;
     }
 
     /**

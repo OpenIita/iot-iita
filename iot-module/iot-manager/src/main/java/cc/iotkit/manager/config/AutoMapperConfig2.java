@@ -1,6 +1,5 @@
 package cc.iotkit.manager.config;
 
-import io.github.linpeilie.annotations.ComponentModelConfig;
 import io.github.linpeilie.annotations.MapperConfig;
 
 /**

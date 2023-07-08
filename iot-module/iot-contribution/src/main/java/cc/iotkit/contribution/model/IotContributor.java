@@ -1,7 +1,7 @@
 package cc.iotkit.contribution.model;
 
-import cc.iotkit.model.Id;
 import cc.iotkit.model.BaseModel;
+import cc.iotkit.model.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

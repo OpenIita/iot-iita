@@ -14,11 +14,11 @@ import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.IDeviceComponent;
 import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.AuthInfo;
+import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.ReceiveResult;
 import cc.iotkit.comp.model.RegisterInfo;
-import cc.iotkit.converter.DeviceMessage;
-import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comps.service.DeviceBehaviourService;
+import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.converter.IConverter;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.script.IScriptEngine;
@@ -28,7 +28,10 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @Slf4j

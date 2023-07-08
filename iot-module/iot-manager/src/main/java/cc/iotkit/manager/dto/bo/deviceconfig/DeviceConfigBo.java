@@ -1,24 +1,11 @@
 package cc.iotkit.manager.dto.bo.deviceconfig;
 
+import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.model.device.DeviceConfig;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import jakarta.validation.constraints.Size;
-
+import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.math.BigDecimal;
-
-import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.common.validate.AddGroup;
-import cc.iotkit.common.validate.EditGroup;
-
-import io.github.linpeilie.annotations.AutoMapper;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

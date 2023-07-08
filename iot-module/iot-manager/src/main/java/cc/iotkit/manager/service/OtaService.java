@@ -116,9 +116,7 @@ public class OtaService {
      */
     public void startUpgrade(Long otaId, List<String> deviceIds) {
         OtaPackage otaPackage = iOtaPackageData.findById(otaId);
-        deviceIds.forEach(deviceId -> {
-            deviceService.otaUpgrade(deviceId, true, otaPackage);
-        });
+        deviceIds.forEach(deviceId -> deviceService.otaUpgrade(deviceId, true, otaPackage));
     }
 
     public Paging<DeviceOtaInfoVo> otaResult(PageRequest<DeviceOtaInfoBo> request) {

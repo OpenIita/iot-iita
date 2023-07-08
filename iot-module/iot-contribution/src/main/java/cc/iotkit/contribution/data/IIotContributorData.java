@@ -1,8 +1,7 @@
 package cc.iotkit.contribution.data;
 
-import cc.iotkit.data.ICommonData;
 import cc.iotkit.contribution.model.IotContributor;
-import java.util.List;
+import cc.iotkit.data.ICommonData;
 
 /**
  * 数据接口

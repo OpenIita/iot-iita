@@ -1,10 +1,8 @@
 package cc.iotkit.generator.service;
 
 
-
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.generator.core.PageQuery;
 import cc.iotkit.generator.domain.GenTable;
 import cc.iotkit.generator.domain.GenTableColumn;
 
