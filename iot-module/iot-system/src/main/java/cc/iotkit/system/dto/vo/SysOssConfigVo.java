@@ -24,7 +24,7 @@ public class SysOssConfigVo implements Serializable {
     /**
      * 主建
      */
-    private Long ossConfigId;
+    private Long id;
 
     /**
      * 配置key
