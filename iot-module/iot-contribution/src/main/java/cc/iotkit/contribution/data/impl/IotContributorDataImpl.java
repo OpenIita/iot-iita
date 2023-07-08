@@ -1,32 +1,25 @@
 package cc.iotkit.contribution.data.impl;
 
-import cc.iotkit.contribution.repository.IotContributorRepository;
-import cc.iotkit.data.ICommonData;
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.contribution.data.IIotContributorData;
 import cc.iotkit.contribution.data.model.TbIotContributor;
 import cc.iotkit.contribution.model.IotContributor;
-import java.util.List;
-
+import cc.iotkit.contribution.repository.IotContributorRepository;
 import cc.iotkit.data.util.PageBuilder;
+import cc.iotkit.data.util.PredicateBuilder;
 import com.google.common.collect.Lists;
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import cc.iotkit.data.util.PredicateBuilder;
 
-import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.api.Paging;
-import cc.iotkit.common.utils.StringUtils;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
-
-import cc.iotkit.common.utils.MapstructUtils;
-
 
 import static cc.iotkit.contribution.data.model.QTbIotContributor.tbIotContributor;
 /**
@@ -113,7 +106,6 @@ public class IotContributorDataImpl implements IIotContributorData {
     @Override
     public IotContributor findById(Long id) {
         TbIotContributor ret = jpaQueryFactory.select(tbIotContributor).from(tbIotContributor).where(tbIotContributor.id.eq(id)).fetchOne();
-        IotContributor convert = MapstructUtils.convert(ret, IotContributor.class);
-        return convert;
+        return MapstructUtils.convert(ret, IotContributor.class);
     }
 }

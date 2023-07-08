@@ -10,10 +10,10 @@
 package cc.iotkit.comps;
 
 
-import cc.iotkit.common.utils.ComponentClassLoader;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
+import cc.iotkit.common.utils.ComponentClassLoader;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.CompConfig;
 import cc.iotkit.comp.IComponent;

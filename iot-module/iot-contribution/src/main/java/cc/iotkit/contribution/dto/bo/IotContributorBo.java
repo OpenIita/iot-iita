@@ -1,17 +1,14 @@
 package cc.iotkit.contribution.dto.bo;
 
-import cc.iotkit.contribution.model.IotContributor;
 import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.api.Paging;
-import cc.iotkit.common.api.Request;
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
+import cc.iotkit.contribution.model.IotContributor;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import jakarta.validation.constraints.*;
 
 /**
  * 贡献者业务对象 iot_contributor

@@ -22,6 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class WebSocketClientVerticle extends AbstractDeviceVerticle {
 
+    public static final String DISCONNECT = "disconnect";
+
     private HttpClient httpClient;
 
     private WebSocket webSocketClient;
@@ -40,6 +42,7 @@ public class WebSocketClientVerticle extends AbstractDeviceVerticle {
         this.webSocketConfig = JsonUtils.parseObject(config, WebSocketClientConfig.class);
     }
 
+    @Override
     public void start() {
         WebSocketConnectOptions options = new WebSocketConnectOptions().setPort(webSocketConfig.getPort())
                 .setHost(webSocketConfig.getIp()).setURI(webSocketConfig.getUrl()).setSsl(webSocketConfig.isSsl());
@@ -49,9 +52,9 @@ public class WebSocketClientVerticle extends AbstractDeviceVerticle {
             log.info("webSocket client connect success!");
             ws.textMessageHandler(data -> {
                 log.info("webSocket client receive msg:" + data);
-                executor.onReceive(new HashMap<>(), null, data, (ret) -> {
+                executor.onReceive(new HashMap<>(), null, data, ret -> {
                     if (ret != null && ret.getData() instanceof RegisterInfo) {
-                        executor.onReceive(null, "connected", data, (r) -> {
+                        executor.onReceive(null, "connected", data, r -> {
                             if (!devices.containsKey(getDeviceKey(r))) {
                                 devices.put(getDeviceKey(r), new Device(r.getDeviceName(), r.getProductKey()));
                             }
@@ -61,13 +64,13 @@ public class WebSocketClientVerticle extends AbstractDeviceVerticle {
             });
             ws.closeHandler(e -> {
                 for (String deviceKey : devices.keySet()) {
-                    executor.onReceive(null, "disconnect", deviceKey);
+                    executor.onReceive(null, DISCONNECT, deviceKey);
                 }
                 log.warn("client connection closed!");
             });
             ws.exceptionHandler(e -> {
                 for (String deviceKey : devices.keySet()) {
-                    executor.onReceive(null, "disconnect", deviceKey);
+                    executor.onReceive(null, DISCONNECT, deviceKey);
                 }
                 log.error("webSocket client connect exception!");
             });
@@ -79,16 +82,15 @@ public class WebSocketClientVerticle extends AbstractDeviceVerticle {
                     executor.onReceive(new HashMap<>(), "ping", JsonUtils.toJsonString(webSocketConfig));
                 });
             }
-        }).onFailure(e -> {
-            log.info("webSocket client connect failed!");
-        });
+        }).onFailure(e -> log.info("webSocket client connect failed!"));
     }
 
     @SneakyThrows
+    @Override
     public void stop() {
         vertx.cancelTimer(timerID);
         for (String deviceKey : devices.keySet()) {
-            executor.onReceive(null, "disconnect", deviceKey);
+            executor.onReceive(null, DISCONNECT, deviceKey);
         }
         httpClient.close();
     }

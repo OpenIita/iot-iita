@@ -1,12 +1,9 @@
 package cc.iotkit.manager.dto.bo.device;
 
 import cc.iotkit.common.api.BaseDto;
-import io.github.linpeilie.annotations.AutoMapping;
-import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

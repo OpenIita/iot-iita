@@ -24,15 +24,14 @@ import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.temporal.IDbStructureData;
 import cn.hutool.core.lang.UUID;
-import cn.hutool.crypto.digest.MD5;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectResult;
-import com.amazonaws.util.Md5Utils;
 import com.github.yitter.idgen.YitIdHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -177,6 +176,9 @@ public class ProductServiceImpl implements IProductService {
 
     public String uploadImg(String productKey, MultipartFile file) {
         String fileName = file.getOriginalFilename();
+        if (StringUtils.isBlank(fileName)) {
+            throw new BizException(ErrCode.FILE_NAME_IS_NULL);
+        }
         String end = fileName.substring(fileName.lastIndexOf("."));
         if (ossClient == null) {
             // 创建OSSClient实例。

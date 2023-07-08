@@ -45,7 +45,7 @@ public class DeferredDataConsumer implements ConsumerHandler<ThingModelMessage>,
 
     @PostConstruct
     public void init() {
-        thingModelMessageConsumer.consume(Constants.THING_MODEL_MESSAGE_TOPIC,this);
+        thingModelMessageConsumer.consume(Constants.THING_MODEL_MESSAGE_TOPIC, this);
         Executors.newCachedThreadPool().submit(this);
     }
 
@@ -169,7 +169,10 @@ public class DeferredDataConsumer implements ConsumerHandler<ThingModelMessage>,
         @Override
         public int compareTo(Delayed o) {
             long diff = o.getDelay(TimeUnit.NANOSECONDS) - getDelay(TimeUnit.NANOSECONDS);
-            return diff == 0 ? 0 : (diff > 0 ? 1 : -1);
+            if (diff == 0) {
+                return 0;
+            }
+            return diff > 0 ? 1 : -1;
         }
     }
 

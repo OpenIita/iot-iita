@@ -57,7 +57,7 @@ public class DLT645Component extends AbstractDeviceComponent {
                 deployedId = s;
                 countDownLatch.countDown();
             }));
-            future.onFailure((e) -> {
+            future.onFailure(e -> {
                 countDownLatch.countDown();
                 log.error("start GLT645 component failed", e);
             });
@@ -68,6 +68,7 @@ public class DLT645Component extends AbstractDeviceComponent {
         }
     }
 
+    @Override
     @SneakyThrows
     public void stop() {
         DLT645Verticle.stop();

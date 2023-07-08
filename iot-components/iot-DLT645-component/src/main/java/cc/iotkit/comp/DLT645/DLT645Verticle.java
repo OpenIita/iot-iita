@@ -155,10 +155,10 @@ public class DLT645Verticle extends AbstractVerticle {
             dataMap.put("mac",clientKey.split("_")[1]);
             executor.onReceive(dataMap, "offline", "");
         }
-        if(entityList.size()>0){
+        if (!entityList.isEmpty()) {
             entityList.clear();
         }
-        if(!dinMap.isEmpty()){
+        if (!dinMap.isEmpty()) {
             dinMap.clear();
         }
         clientMap.clear();

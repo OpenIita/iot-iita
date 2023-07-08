@@ -48,7 +48,7 @@ public class OtaController extends BaseController {
 
     @ApiOperation("新增升级包")
     @PostMapping("/package/add")
-    public OtaPackage packageAdd(@RequestBody @Valid Request<OtaPackageBo> request) throws Exception {
+    public OtaPackage packageAdd(@RequestBody @Valid Request<OtaPackageBo> request) {
         return otaService.addOtaPackage(request.getData());
     }
 

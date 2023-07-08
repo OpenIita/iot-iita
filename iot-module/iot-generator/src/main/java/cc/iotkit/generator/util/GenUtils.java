@@ -1,17 +1,14 @@
 package cc.iotkit.generator.util;
 
-import cc.iotkit.common.utils.StringUtils;
-import cc.iotkit.generator.constant.GenConstants;
-
 import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.generator.config.GenConfig;
+import cc.iotkit.generator.constant.GenConstants;
 import cc.iotkit.generator.domain.GenTable;
 import cc.iotkit.generator.domain.GenTableColumn;
+import cn.hutool.core.util.ReUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import cn.hutool.core.util.ReUtil;
-
-
 
 import java.util.Arrays;
 

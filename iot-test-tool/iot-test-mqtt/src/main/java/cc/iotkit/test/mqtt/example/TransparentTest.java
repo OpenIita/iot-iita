@@ -14,14 +14,11 @@ import cc.iotkit.test.mqtt.model.Request;
 import cc.iotkit.test.mqtt.service.Gateway;
 import cc.iotkit.test.mqtt.service.ReportTask;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * 透传测试
@@ -48,7 +45,7 @@ public class TransparentTest {
                 "TEST_LIGHT_0001",
                 "M1");
 
-        gateway.onDeviceOnline((device) -> {
+        gateway.onDeviceOnline(device -> {
             String pk = device.getProductKey();
 
             //设备上线后添加上报定时任务

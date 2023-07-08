@@ -3,7 +3,6 @@ package cc.iotkit.comp.tcp.cilent;
 import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.tcp.parser.PayloadParser;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.net.NetClient;
 import io.vertx.core.net.NetSocket;
 import lombok.Getter;
 import lombok.Setter;
@@ -100,10 +99,9 @@ public class VertxTcpClient {
                     .handlePayload()
                     .onErrorContinue((err, res) -> {
                         log.error(err.getMessage(), err);
-                        System.out.println(err.getMessage());
                     })
                     .subscribe(buffer -> {
-                        System.out.println(buffer.toString());
+                        log.info(buffer.toString());
                         receiveHandler.accept(buffer);
                     });
         }
@@ -158,6 +156,7 @@ public class VertxTcpClient {
             log.warn("close tcp client error", e);
         }
     }
+
     /**
      * 是否有父设备
      */

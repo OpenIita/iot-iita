@@ -95,7 +95,8 @@ public enum ErrCode implements IEnum {
     STATE_ERROR(00000000, "状态错误"),
     RECORD_NOT_FOUND(00000000, "记录不存在"),
     ADD_PLATFORM_USER_ERROR(00000000, "添加平台用户失败"),
-    UPLOAD_FILE_ERROR(00000000, "上传文件失败");
+    UPLOAD_FILE_ERROR(00000000, "上传文件失败"),
+    FILE_NAME_IS_NULL(00000000, "文件名为空，获取文件名失败");
 
 
     private int code;

@@ -7,8 +7,6 @@ import cc.iotkit.manager.dto.bo.protocolcomponent.ProtocolComponentBo;
 import cc.iotkit.manager.dto.bo.protocolconverter.ProtocolConverterBo;
 import cc.iotkit.manager.dto.vo.protocolcomponent.ProtocolComponentVo;
 import cc.iotkit.manager.dto.vo.protocolconverter.ProtocolConverterVo;
-import cc.iotkit.model.protocol.ProtocolComponent;
-import cc.iotkit.model.protocol.ProtocolConverter;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

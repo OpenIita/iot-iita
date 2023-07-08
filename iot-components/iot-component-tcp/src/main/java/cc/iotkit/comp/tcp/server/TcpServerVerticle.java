@@ -180,9 +180,7 @@ public class TcpServerVerticle extends AbstractVerticle {
             client.setKeepAliveTimeoutMs(keepAliveTimeout);
             try {
                 // TCP异常和关闭处理
-                socket.exceptionHandler(err -> {
-                    log.error("tcp server client [{}] error", socket.remoteAddress(), err);
-                }).closeHandler((nil) -> {
+                socket.exceptionHandler(err -> log.error("tcp server client [{}] error", socket.remoteAddress(), err)).closeHandler(nil -> {
                     log.debug("tcp server client [{}] closed", socket.remoteAddress());
                     client.shutdown();
                 });
@@ -190,12 +188,10 @@ public class TcpServerVerticle extends AbstractVerticle {
                 client.setKeepAliveTimeoutMs(keepAliveTimeout);
                 client.setRecordParser(parserSupplier.get());
                 client.setSocket(socket);
-                client.onDisconnect(() -> {
-                    clientDisconnect(client.getDeviceName());
-                });
+                client.onDisconnect(() -> clientDisconnect(client.getDeviceName()));
                 // 设置收到消息处理
                 client.setReceiveHandler(buffer -> {
-                    System.out.println(buffer.toString());
+                    log.info(buffer.toString());
                     try {
                         executor.onReceive(null, "", buffer.toString(),
                                 result -> {

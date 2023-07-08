@@ -153,9 +153,9 @@ public class ContainerUtils {
 
             return uid2deviceMap;
         } catch (IllegalAccessException e) {
-            return null;
+            return Collections.emptyMap();
         } catch (InvocationTargetException e) {
-            return null;
+            return Collections.emptyMap();
         }
     }
 
@@ -171,15 +171,8 @@ public class ContainerUtils {
 
             // 使用方法返回对应的数组
             return ContainerUtils.buildMapByKey(objList, method);
-        } catch (NoSuchMethodException e) {
-            return new HashMap<K, T>();
-        } catch (SecurityException e) {
-            return new HashMap<K, T>();
-        } catch (IllegalAccessException e) {
-            return new HashMap<K, T>();
-        } catch (IllegalArgumentException e) {
-            return new HashMap<K, T>();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | IllegalArgumentException |
+                 SecurityException e) {
             return new HashMap<K, T>();
         }
     }
@@ -194,10 +187,8 @@ public class ContainerUtils {
             }
 
             return uid2deviceMap;
-        } catch (IllegalAccessException e) {
-            return null;
-        } catch (InvocationTargetException e) {
-            return null;
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            return Collections.emptyMap();
         }
     }
 
@@ -219,22 +210,13 @@ public class ContainerUtils {
                 Object keyObject = method.invoke(obj);
                 if (clazz.isInstance(keyObject)) {
                     K key = clazz.cast(keyObject);
-
-                    List<T> list = uid2deviceMap.get(key);
-                    if (list == null) {
-                        list = new ArrayList<>();
-                        uid2deviceMap.put(key, list);
-                    }
-
+                    List<T> list = uid2deviceMap.computeIfAbsent(key, k -> new ArrayList<>());
                     list.add(obj);
                 }
             }
-
             return uid2deviceMap;
-        } catch (IllegalAccessException e) {
-            return null;
-        } catch (InvocationTargetException e) {
-            return null;
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            return Collections.emptyMap();
         }
     }
 
@@ -285,16 +267,9 @@ public class ContainerUtils {
 
             // 使用方法返回对应的数组
             return ContainerUtils.buildMapByTypeAndFinalMethod(objList, clazz, method);
-        } catch (NoSuchMethodException e) {
-            return new HashMap<K, List<T>>();
-        } catch (SecurityException e) {
-            return new HashMap<K, List<T>>();
-        } catch (IllegalAccessException e) {
-            return new HashMap<K, List<T>>();
-        } catch (IllegalArgumentException e) {
-            return new HashMap<K, List<T>>();
-        } catch (InvocationTargetException e) {
-            return new HashMap<K, List<T>>();
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalArgumentException | IllegalAccessException |
+                 SecurityException e) {
+            return new HashMap<>();
         }
     }
 
@@ -360,11 +335,7 @@ public class ContainerUtils {
             }
 
             return null;
-        } catch (NoSuchMethodException e) {
-            return null;
-        } catch (IllegalAccessException e) {
-            return null;
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             return null;
         }
     }

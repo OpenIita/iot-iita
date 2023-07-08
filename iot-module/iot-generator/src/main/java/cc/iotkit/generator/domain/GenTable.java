@@ -1,13 +1,12 @@
 package cc.iotkit.generator.domain;
 
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.generator.constant.GenConstants;
 import cc.iotkit.generator.core.BaseEntity;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import cc.iotkit.generator.constant.GenConstants;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

@@ -4,6 +4,7 @@ import cc.iotkit.comp.DLT645.utils.ByteRef;
 import cc.iotkit.comp.DLT645.utils.BytesRef;
 import cc.iotkit.comp.DLT645.utils.ContainerUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,10 +80,10 @@ public class DLT645Analysis {
         // 检查:数据块的大小
         int iDataSize = arrData.length;
         if (iDataSize > 255) {
-            return null;
+            return new byte[0];
         }
         if (arrAddr.length != 6) {
-            return null;
+            return new byte[0];
         }
 
         // 初始化数组大小
@@ -268,7 +269,7 @@ public class DLT645Analysis {
         BytesRef byAddr = new BytesRef();
         BytesRef arrData = new BytesRef();
         if (!unPackCmd2Map(arrCmd, byAddr, byFun, arrData)) {
-            return null;
+            return Collections.emptyMap();
         }
 
         Map<String, Object> value = new HashMap<>();

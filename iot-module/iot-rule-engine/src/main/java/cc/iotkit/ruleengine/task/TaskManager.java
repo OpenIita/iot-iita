@@ -10,10 +10,10 @@
 package cc.iotkit.ruleengine.task;
 
 import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.data.manager.ITaskInfoData;
-import cc.iotkit.common.api.Paging;
 import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.rule.TaskLog;
 import cc.iotkit.temporal.ITaskLogData;
@@ -27,7 +27,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Lazy;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;

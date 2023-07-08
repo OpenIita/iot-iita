@@ -1,10 +1,9 @@
 package cc.iotkit.generator.mapper;
 
 import cc.iotkit.generator.core.BaseMapperPlus;
+import cc.iotkit.generator.domain.GenTable;
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
-import cc.iotkit.generator.domain.GenTable;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;

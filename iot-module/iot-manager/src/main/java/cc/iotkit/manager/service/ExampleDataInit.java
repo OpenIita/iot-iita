@@ -37,7 +37,6 @@ import cc.iotkit.model.space.SpaceDevice;
 import cc.iotkit.model.system.*;
 import cc.iotkit.temporal.IDbStructureData;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.base.Charsets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
@@ -47,6 +46,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -218,7 +218,7 @@ public class ExampleDataInit implements SmartInitializingSingleton {
 
                     log.info("init data finished.");
 
-                    FileUtils.write(initFile, "", Charsets.UTF_8);
+                    FileUtils.write(initFile, "", StandardCharsets.UTF_8);
                 } catch (
                         Throwable e) {
                     log.error("init error", e);
@@ -293,7 +293,7 @@ public class ExampleDataInit implements SmartInitializingSingleton {
 
     private <T> T initData(String name, ICommonData service, TypeReference<T> type) throws IOException {
         log.info("init {} data...", name);
-        String json = FileUtils.readFileToString(new File("./data/init/" + name + ".json"), Charsets.UTF_8);
+        String json = FileUtils.readFileToString(new File("./data/init/" + name + ".json"), StandardCharsets.UTF_8);
         List list = (List) JsonUtils.parseObject(json, type);
         for (Object obj : list) {
             service.save((Id) obj);

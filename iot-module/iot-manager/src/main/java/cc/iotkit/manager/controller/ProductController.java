@@ -74,8 +74,7 @@ public class ProductController {
     @ApiOperation("查看详情")
     @PostMapping(value = "/getDetail")
     public ProductVo getDetail(@RequestBody @Validated Request<String> request) {
-        ProductVo dto = productService.getDetail(request.getData());
-        return dto;
+        return productService.getDetail(request.getData());
     }
 
 

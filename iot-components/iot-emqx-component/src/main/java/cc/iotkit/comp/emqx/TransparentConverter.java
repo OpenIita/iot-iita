@@ -13,7 +13,6 @@ package cc.iotkit.comp.emqx;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
-
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.converter.Device;
 import cc.iotkit.converter.DeviceMessage;

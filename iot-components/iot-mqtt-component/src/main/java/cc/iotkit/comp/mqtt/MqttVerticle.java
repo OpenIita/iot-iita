@@ -55,7 +55,7 @@ public class MqttVerticle extends AbstractVerticle {
     }
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         MqttServerOptions options = new MqttServerOptions()
                 .setPort(config.getPort());
         if (config.isSsl()) {
@@ -103,7 +103,7 @@ public class MqttVerticle extends AbstractVerticle {
             endpoint.accept(false);
             endpoint.closeHandler((v) -> {
                 log.warn("client connection closed,clientId:{}", clientId);
-                if (!mqttConnectPool.get(clientId)) {
+                if (Boolean.FALSE.equals(mqttConnectPool.get(clientId))) {
                     return;
                 }
                 executor.onReceive(new HashMap<>(), "disconnect", clientId, (r) -> {
@@ -213,8 +213,6 @@ public class MqttVerticle extends AbstractVerticle {
         Future<Integer> result = endpoint.publish(topic, Buffer.buffer(msg),
                 MqttQoS.AT_LEAST_ONCE, false, false);
         result.onFailure(e -> log.error("public topic failed", e));
-        result.onSuccess(integer -> {
-            log.info("publish success,topic:{},payload:{}", topic, msg);
-        });
+        result.onSuccess(integer -> log.info("publish success,topic:{},payload:{}", topic, msg));
     }
 }

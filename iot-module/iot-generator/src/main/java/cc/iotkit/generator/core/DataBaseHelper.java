@@ -7,7 +7,6 @@ import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

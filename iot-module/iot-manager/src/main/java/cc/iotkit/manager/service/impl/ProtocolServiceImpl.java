@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.Objects;
 import java.util.UUID;
@@ -145,7 +146,7 @@ public class ProtocolServiceImpl implements IProtocolService {
         if (!StringUtils.hasText(script)) {
             try {
                 File file = getComponentScriptFile(id);
-                script = FileUtils.readFileToString(file, "UTF-8");
+                script = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             } catch (Throwable e) {
                 log.error("read converter script file error", e);
                 script = "";
@@ -163,7 +164,7 @@ public class ProtocolServiceImpl implements IProtocolService {
             // 保存到文件
             File file = getComponentScriptFile(id);
             String script = upReq.getScript();
-            FileUtils.writeStringToFile(file, script, "UTF-8", false);
+            FileUtils.writeStringToFile(file, script, StandardCharsets.UTF_8, false);
 
             // 保存到数据库,后续加版本号
             old.setScript(upReq.getScript());
@@ -253,7 +254,7 @@ public class ProtocolServiceImpl implements IProtocolService {
             try {
                 Path path = componentConfig.getConverterFilePath(id);
                 File file = path.resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile();
-                script = FileUtils.readFileToString(file, "UTF-8");
+                script = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             } catch (Throwable e) {
                 log.error("read converter script file error", e);
                 script = "";
@@ -273,7 +274,7 @@ public class ProtocolServiceImpl implements IProtocolService {
             Path path = componentConfig.getConverterFilePath(id);
             File file = path.resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile();
             String script = converter.getScript();
-            FileUtils.writeStringToFile(file, script, "UTF-8", false);
+            FileUtils.writeStringToFile(file, script, StandardCharsets.UTF_8, false);
 
             // 再存数据库
             protocolConverterData.save(converter);

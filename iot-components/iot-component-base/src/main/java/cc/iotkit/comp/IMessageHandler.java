@@ -12,7 +12,6 @@ package cc.iotkit.comp;
 import cc.iotkit.comp.model.ReceiveResult;
 
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 public interface IMessageHandler {

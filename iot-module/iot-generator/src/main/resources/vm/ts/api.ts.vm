@@ -1,48 +1,48 @@
 import request from '@/utils/request';
-import { AxiosPromise } from 'axios';
-import { ${BusinessName}VO, ${BusinessName}Form, ${BusinessName}Query } from './types';
+import {AxiosPromise} from 'axios';
+import {${BusinessName}Form, ${BusinessName}Query, ${BusinessName}VO} from './types';
 
 // 查询${functionName}列表
 export const list${BusinessName}(query: ${BusinessName}Query): AxiosPromise<${BusinessName}VO[]> {
-  return request({
-    url: '/${moduleName}/${businessName}/list',
-    method: 'post',
-    params: query
-  })
+    return request({
+        url: '/${moduleName}/${businessName}/list',
+        method: 'post',
+        params: query
+    })
 }
 
 // 查询${functionName}详细
-export const get${BusinessName}(${pkColumn.javaField}: string | number) : AxiosPromise<${BusinessName}VO> {
-  return request({
-    url: '/${moduleName}/${businessName}/getDetail',
-    method: 'post',
-    data: ${pkColumn.javaField}
-  })
+export const get${BusinessName}(${pkColumn.javaField}: string | number): AxiosPromise<${BusinessName}VO> {
+    return request({
+        url: '/${moduleName}/${businessName}/getDetail',
+        method: 'post',
+        data: ${pkColumn.javaField}
+    })
 }
 
 // 新增${functionName}
 export const add${BusinessName}(data: ${BusinessName}Form) {
-  return request({
-    url: '/${moduleName}/${businessName}/add',
-    method: 'post',
-    data
-  })
+    return request({
+        url: '/${moduleName}/${businessName}/add',
+        method: 'post',
+        data
+    })
 }
 
 // 修改${functionName}
 export const update${BusinessName}(data: ${BusinessName}Form) {
-  return request({
-    url: '/${moduleName}/${businessName}/edit',
-    method: 'post',
-    data: data
-  })
+    return request({
+        url: '/${moduleName}/${businessName}/edit',
+        method: 'post',
+        data: data
+    })
 }
 
 // 删除${functionName}
 export const del${BusinessName}(${pkColumn.javaField}: Array<string | number>) {
-  return request({
-    url: '/${moduleName}/${businessName}/' + ${pkColumn.javaField},
-    method: 'post',
-    data: ${pkColumn.javaField}
-  })
+    return request({
+        url: '/${moduleName}/${businessName}/' + ${pkColumn.javaField},
+        method: 'post',
+        data: ${pkColumn.javaField}
+    })
 }
