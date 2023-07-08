@@ -14,7 +14,6 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
 import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
@@ -34,7 +33,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Slf4j
 @Service

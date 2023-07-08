@@ -3,12 +3,10 @@ package cc.iotkit.system.service.impl;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.CacheNames;
-import cc.iotkit.common.oss.constant.OssConstant;
-
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.oss.constant.OssConstant;
 import cc.iotkit.common.redis.utils.CacheUtils;
 import cc.iotkit.common.redis.utils.RedisUtils;
-import cc.iotkit.common.tenant.core.TenantDto;
 import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
@@ -18,11 +16,11 @@ import cc.iotkit.data.system.ISysOssConfigData;
 import cc.iotkit.model.system.SysOssConfig;
 import cc.iotkit.system.dto.bo.SysOssConfigBo;
 import cc.iotkit.system.dto.vo.SysOssConfigVo;
+import cc.iotkit.system.service.ISysOssConfigService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import cc.iotkit.system.service.ISysOssConfigService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

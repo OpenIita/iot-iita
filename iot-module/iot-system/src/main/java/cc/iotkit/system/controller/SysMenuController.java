@@ -13,15 +13,18 @@ import cc.iotkit.system.dto.bo.SysMenuBo;
 import cc.iotkit.system.dto.vo.MenuTreeSelectVo;
 import cc.iotkit.system.dto.vo.RouterVo;
 import cc.iotkit.system.dto.vo.SysMenuVo;
+import cc.iotkit.system.service.ISysMenuService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.annotation.SaMode;
 import cn.hutool.core.lang.tree.Tree;
-import cc.iotkit.system.service.ISysMenuService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

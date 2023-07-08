@@ -10,7 +10,6 @@
 package cc.iotkit.test.mqtt.service;
 
 
-import cc.iotkit.common.constant.Constants;
 import cc.iotkit.test.mqtt.config.Mqtt;
 import cc.iotkit.test.mqtt.model.Request;
 import io.netty.handler.codec.mqtt.MqttQoS;

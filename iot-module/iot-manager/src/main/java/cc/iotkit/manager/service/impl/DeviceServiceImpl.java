@@ -165,8 +165,8 @@ public class DeviceServiceImpl implements IDeviceService {
             uid = AuthUtil.getUserId();
         }
         List<DeviceInfo> ret=deviceInfoData.findByProductNodeType(uid);
-        if(ret.size()>0){
-            pdv=ret.stream().map(r->ParentDeviceVo.builder().id(r.getId()).deviceName(r.getDeviceName()).build()).collect(Collectors.toList());
+        if (!ret.isEmpty()) {
+            pdv = ret.stream().map(r -> ParentDeviceVo.builder().id(r.getId()).deviceName(r.getDeviceName()).build()).collect(Collectors.toList());
         }
         return pdv;
     }

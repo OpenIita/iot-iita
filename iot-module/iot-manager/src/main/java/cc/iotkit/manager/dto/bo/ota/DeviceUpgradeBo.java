@@ -1,7 +1,6 @@
 package cc.iotkit.manager.dto.bo.ota;
 
 import cc.iotkit.common.api.BaseDto;
-import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

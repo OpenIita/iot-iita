@@ -10,11 +10,11 @@
 package cc.iotkit.manager.dto.bo.taskinfo;
 
 import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.rule.TaskLog;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @ApiModel(value = "TaskLogBo")
 @Data

@@ -3,25 +3,21 @@ package cc.iotkit.generator.controller;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
-import cc.iotkit.generator.dto.bo.ImportTableBo;
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.io.IoUtil;
-
-import cc.iotkit.common.web.core.BaseController;
-
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
+import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.generator.domain.GenTable;
 import cc.iotkit.generator.domain.GenTableColumn;
+import cc.iotkit.generator.dto.bo.ImportTableBo;
 import cc.iotkit.generator.service.IGenTableService;
-import io.swagger.annotations.ApiOperation;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.io.IoUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +58,7 @@ public class GenController extends BaseController {
         GenTable table = genTableService.selectGenTableById(tableId);
         List<GenTable> tables = genTableService.selectGenTableAll();
         List<GenTableColumn> list = genTableService.selectGenTableColumnListByTableId(tableId);
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("info", table);
         map.put("rows", list);
         map.put("tables", tables);
@@ -108,7 +104,6 @@ public class GenController extends BaseController {
         // 查询表信息
         List<GenTable> tableList = genTableService.selectDbTableListByNames(tables);
         genTableService.importGenTable(tableList);
-        return;
     }
 
     /**
@@ -122,7 +117,6 @@ public class GenController extends BaseController {
         GenTable genTable = bo.getData();
         genTableService.validateEdit(genTable);
         genTableService.updateGenTable(genTable);
-        return;
     }
 
     /**
@@ -136,7 +130,6 @@ public class GenController extends BaseController {
     @ApiOperation(value = "删除代码生成", notes = "删除代码生成")
     public void remove(@Validated @RequestBody Request<List<Long>> bo) {
         genTableService.deleteGenTableByIds(bo.getData());
-        return;
     }
 
     /**
@@ -175,7 +168,6 @@ public class GenController extends BaseController {
     @PostMapping("/genCode/{tableName}")
     public void genCode(@PathVariable("tableName") String tableName) {
         genTableService.generatorCode(tableName);
-        return ;
     }
 
     /**
@@ -188,7 +180,6 @@ public class GenController extends BaseController {
     @PostMapping("/synchDb")
     public void synchDb(@Validated @RequestBody Request<String> bo) {
         genTableService.synchDb(bo.getData());
-        return ;
     }
 
     /**

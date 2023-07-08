@@ -290,11 +290,11 @@ public class DLT645DataFormat {
         // 拆解成个位数列表
         List<String> list = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-            Integer l = data[start + i] & 0x0f;
-            Integer h = (data[start + i] & 0xf0) >> 4;
+            int l = data[start + i] & 0x0f;
+            int h = (data[start + i] & 0xf0) >> 4;
 
-            list.add(l.toString());
-            list.add(h.toString());
+            list.add(Integer.toString(l));
+            list.add(Integer.toString(h));
         }
 
         // 格式1
@@ -310,12 +310,10 @@ public class DLT645DataFormat {
             return result;
         }
         if (format.equals(FORMAT_hhmmss)) {
-            String result = list.get(5) + list.get(4) + "点" + list.get(3) + list.get(2) + "分" + list.get(1) + list.get(0) + "秒";
-            return result;
+            return list.get(5) + list.get(4) + "点" + list.get(3) + list.get(2) + "分" + list.get(1) + list.get(0) + "秒";
         }
         if (format.equals(FORMAT_mmmm)) {
-            String result = list.get(3) + list.get(2) + list.get(1) + list.get(0) + "分";
-            return result;
+            return list.get(3) + list.get(2) + list.get(1) + list.get(0) + "分";
         }
 
 
@@ -325,12 +323,10 @@ public class DLT645DataFormat {
             return result;
         }
         if (format.equals(FORMAT_DDhh)) {
-            String result = list.get(3) + list.get(2) + "号 " + list.get(1) + list.get(0) + "点";
-            return result;
+            return list.get(3) + list.get(2) + "号 " + list.get(1) + list.get(0) + "点";
         }
         if (format.equals(FORMAT_hhmm)) {
-            String result = list.get(3) + list.get(2) + "点 " + list.get(1) + list.get(0) + "分";
-            return result;
+            return list.get(3) + list.get(2) + "点 " + list.get(1) + list.get(0) + "分";
         }
 
 

@@ -1,16 +1,12 @@
 package cc.iotkit.manager.dto.bo;
 
 import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.model.protocol.ProtocolComponent;
-import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-
-import jakarta.validation.constraints.Size;
 
 
 @ApiModel(value = "ChangeStateBo")

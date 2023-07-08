@@ -1,7 +1,7 @@
 package cc.iotkit.system.dto.bo;
 
-import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.api.BaseDto;
+import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.model.system.SysRole;

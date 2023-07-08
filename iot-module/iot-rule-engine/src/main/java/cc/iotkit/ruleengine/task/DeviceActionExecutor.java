@@ -45,11 +45,7 @@ public class DeviceActionExecutor implements ActionExecutor<DeviceAction> {
         }
         //将执行的数据转换为动作配置
         Integer code = config.hashCode();
-        DeviceAction action = actionMap.get(code);
-        if (action == null) {
-            action = JsonUtils.parseObject(config, DeviceAction.class);
-            actionMap.put(code, action);
-        }
+        DeviceAction action = actionMap.computeIfAbsent(code, k -> JsonUtils.parseObject(config, DeviceAction.class));
 
         log.info("start device service invoke,{}", JsonUtils.toJsonString(action));
         for (DeviceActionService.Service service : action.getServices()) {

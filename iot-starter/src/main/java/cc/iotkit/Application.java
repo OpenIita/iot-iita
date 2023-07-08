@@ -36,7 +36,7 @@ public class Application {
         }
 
         SpringApplication.run(Application.class, args);
-        System.out.println("server start success!");
+        log.info("server start success!");
     }
 
 }

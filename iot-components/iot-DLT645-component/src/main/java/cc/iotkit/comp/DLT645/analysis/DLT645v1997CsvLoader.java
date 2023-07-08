@@ -53,7 +53,7 @@ public class DLT645v1997CsvLoader {
 
 
     @Data
-    static public class JDecoderValueParam implements Serializable {
+    public static class JDecoderValueParam implements Serializable {
         private String di1h;
         private String di1l;
         private String di0h;

@@ -1,6 +1,7 @@
 package cc.iotkit.contribution.data.model;
 
 import cc.iotkit.contribution.model.IotContributor;
+import cc.iotkit.data.model.BaseEntity;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,10 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import cc.iotkit.data.model.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 
 /**

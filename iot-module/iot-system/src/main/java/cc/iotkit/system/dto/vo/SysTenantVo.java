@@ -1,7 +1,5 @@
 package cc.iotkit.system.dto.vo;
 
-import java.util.Date;
-
 import cc.iotkit.common.excel.annotation.ExcelDictFormat;
 import cc.iotkit.common.excel.convert.ExcelDictConvert;
 import cc.iotkit.model.system.SysTenant;
@@ -11,6 +9,7 @@ import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**

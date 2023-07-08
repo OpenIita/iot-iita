@@ -3,8 +3,8 @@ package cc.iotkit.system.service.impl;
 import cc.iotkit.common.constant.TenantConstants;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.system.service.ISysMenuService;
-import cc.iotkit.system.service.ISysRoleService;
 import cc.iotkit.system.service.ISysPermissionService;
+import cc.iotkit.system.service.ISysRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

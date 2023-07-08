@@ -6,9 +6,10 @@ import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.model.system.SysTenantPackage;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.github.linpeilie.annotations.AutoMapping;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import jakarta.validation.constraints.*;
 
 /**
  * 租户套餐业务对象 sys_tenant_package

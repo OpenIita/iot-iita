@@ -52,7 +52,7 @@ public class RuleMessageHandler implements DeviceMessageHandler {
             //找出相同场景ID的规则删除
             entry.getValue().removeIf(s -> s != null && s.getId().equals(ruleId));
             //删除空的规则列表
-            if (entry.getValue().size() == 0) {
+            if (entry.getValue().isEmpty()) {
                 iterator.remove();
                 deviceRuleMap.remove(device);
             }

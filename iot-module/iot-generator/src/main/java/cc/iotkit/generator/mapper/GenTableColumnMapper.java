@@ -1,9 +1,8 @@
 package cc.iotkit.generator.mapper;
 
 import cc.iotkit.generator.core.BaseMapperPlus;
-import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
-
 import cc.iotkit.generator.domain.GenTableColumn;
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 
 import java.util.List;
 

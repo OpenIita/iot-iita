@@ -31,16 +31,16 @@ public class ScreenComponent {
     }
 
     public void debugMode(boolean state) {
-        apiHandle.debugMode=state;
+        apiHandle.debugMode = state;
     }
 
     public void create(int port, String packageName, ScreenConfig screenConfig) {
         vertx = Vertx.vertx();
-        screenVerticle = new ScreenVerticle(port,packageName,screenConfig);
+        screenVerticle = new ScreenVerticle(port, packageName, screenConfig);
     }
 
     public void setApiHandle(ScreenApiHandle screenApiHandle) {
-        this.apiHandle=screenApiHandle;
+        this.apiHandle = screenApiHandle;
     }
 
     public void previewApis(List<ScreenApi> screenApis) {
@@ -56,7 +56,7 @@ public class ScreenComponent {
                 deployedId = s;
                 countDownLatch.countDown();
             }));
-            future.onFailure((e) -> {
+            future.onFailure(e -> {
                 countDownLatch.countDown();
                 log.error("publish screen failed", e);
             });

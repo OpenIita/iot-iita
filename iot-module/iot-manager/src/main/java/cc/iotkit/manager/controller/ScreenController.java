@@ -78,7 +78,7 @@ public class ScreenController {
     @ApiOperation(value = "预览接口")
     @PostMapping("/previewApis")
     public void previewApis(@RequestBody  @Validated Request<List<ScreenApi>> screenApis) {
-        if (ObjectUtil.isNull(screenApis.getData())||screenApis.getData().size()==0) {
+        if (ObjectUtil.isNull(screenApis.getData()) || screenApis.getData().isEmpty()) {
             throw new BizException(ErrCode.API_LIST_BLANK);
         }
         screenService.previewApis(screenApis.getData());
@@ -87,7 +87,7 @@ public class ScreenController {
     @ApiOperation(value = "保存大屏接口")
     @PostMapping("/saveScreenApis")
     public void saveScreenApis(@RequestBody @Validated Request<List<ScreenApi>> screenApis) {
-        if (ObjectUtil.isNull(screenApis.getData())||screenApis.getData().size()==0) {
+        if (ObjectUtil.isNull(screenApis.getData()) || screenApis.getData().isEmpty()) {
             throw new BizException(ErrCode.API_LIST_BLANK);
         }
         screenService.saveScreenApis(screenApis.getData());
