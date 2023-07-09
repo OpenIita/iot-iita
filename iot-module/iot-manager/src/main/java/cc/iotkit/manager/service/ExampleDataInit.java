@@ -39,6 +39,7 @@ import cc.iotkit.temporal.IDbStructureData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -264,18 +265,13 @@ public class ExampleDataInit implements SmartInitializingSingleton {
         initData("sys_role", sysRoleData, new TypeReference<List<SysRole>>() {
         });
 
-        initData("sys_dept", sysDeptData, new TypeReference<List<SysDept>>() {
-        });
-
         initData("sys_role_dept", sysRoleDeptData, new TypeReference<List<SysRoleDept>>() {
         });
-
 
         initData("sys_role_menu", sysRoleMenuData, new TypeReference<List<SysRoleMenu>>() {
         });
 
-
-        initData("sys_tenant",sysTenantData , new TypeReference<List<SysTenant>>() {
+        initData("sys_tenant", sysTenantData, new TypeReference<List<SysTenant>>() {
         });
 
         initData("sys_tenant_package", sysTenantPackageData, new TypeReference<List<SysTenantPackage>>() {
@@ -293,6 +289,10 @@ public class ExampleDataInit implements SmartInitializingSingleton {
 
     private <T> T initData(String name, ICommonData service, TypeReference<T> type) throws IOException {
         log.info("init {} data...", name);
+        if (service.count() > 0) {
+            new RuntimeException("原数据库已存在" + name + "的旧数据，请清除后再重新初始化！").printStackTrace();
+            System.exit(0);
+        }
         String json = FileUtils.readFileToString(new File("./data/init/" + name + ".json"), StandardCharsets.UTF_8);
         List list = (List) JsonUtils.parseObject(json, type);
         for (Object obj : list) {
