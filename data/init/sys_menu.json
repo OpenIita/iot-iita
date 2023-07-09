@@ -2477,5 +2477,26 @@
       "remark": "",
       "status": "0",
       "visible": "0"
-    }
+    },{
+   "id": 2224,
+   "createBy": 1,
+   "createDept": 103,
+
+   "updateBy": 1,
+
+   "component": "contributor/index",
+   "icon": "color",
+   "isCache": "0",
+   "isFrame": "1",
+   "menuName": "平台建设",
+   "menuType": "C",
+   "orderNum": 1,
+   "parentId": 0,
+   "path": "contributor",
+   "perms": null,
+   "queryParam": null,
+   "remark": "",
+   "status": "0",
+   "visible": "0"
+ }
   ]
