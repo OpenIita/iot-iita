@@ -1,25 +1,25 @@
 package cc.iotkit.contribution.data.model;
 
 import cc.iotkit.contribution.model.IotContributor;
-import cc.iotkit.data.model.BaseEntity;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import cc.iotkit.data.model.BaseEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import javax.persistence.Table;
-
+import javax.persistence.Entity;
 
 /**
  * 贡献者对象 iot_contributor
  *
  * @author Lion Li
- * @date 2023-07-04
+ * @date 2023-07-09
  */
 @Data
 @NoArgsConstructor
@@ -32,12 +32,12 @@ public class TbIotContributor extends BaseEntity {
 
 
     /**
-     * 主键
+     * 
      */
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
-    @ApiModelProperty(value = "主键")
+    @ApiModelProperty(value = "")
     private Long id;
 
     /**
@@ -56,7 +56,7 @@ public class TbIotContributor extends BaseEntity {
      * 岗位(1前端开发,2后端开发,3全栈开发,4测试,5ui设计师,6产品经理,7架构师)
      */
     @ApiModelProperty(value = "岗位(1前端开发,2后端开发,3全栈开发,4测试,5ui设计师,6产品经理,7架构师)")
-    private Integer post;
+    private Long post;
 
     /**
      * 简介
@@ -81,6 +81,12 @@ public class TbIotContributor extends BaseEntity {
      */
     @ApiModelProperty(value = "详情")
     private String context;
+
+    /**
+     * 排序
+     */
+    @ApiModelProperty(value = "排序")
+    private Long score;
 
     /**
      * 帐号状态（0正常 1停用）

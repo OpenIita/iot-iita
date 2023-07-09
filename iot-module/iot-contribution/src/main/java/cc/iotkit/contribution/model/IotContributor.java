@@ -1,7 +1,7 @@
 package cc.iotkit.contribution.model;
 
-import cc.iotkit.model.BaseModel;
 import cc.iotkit.model.Id;
+import cc.iotkit.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +12,7 @@ import java.io.Serializable;
  * 贡献者对象 iot_contributor
  *
  * @author Lion Li
- * @date 2023-07-04
+ * @date 2023-07-09
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -21,7 +21,7 @@ public class IotContributor extends BaseModel implements Id<Long>, Serializable{
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * 
      */
     private Long id;
 
@@ -38,7 +38,7 @@ public class IotContributor extends BaseModel implements Id<Long>, Serializable{
     /**
      * 岗位(1前端开发,2后端开发,3全栈开发,4测试,5ui设计师,6产品经理,7架构师)
      */
-    private Integer post;
+    private Long post;
 
     /**
      * 简介
@@ -59,6 +59,11 @@ public class IotContributor extends BaseModel implements Id<Long>, Serializable{
      * 详情
      */
     private String context;
+
+    /**
+     * 排序
+     */
+    private Long score;
 
     /**
      * 帐号状态（0正常 1停用）

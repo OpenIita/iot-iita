@@ -1,20 +1,21 @@
 package cc.iotkit.contribution.dto.bo;
 
+import cc.iotkit.contribution.model.IotContributor;
 import cc.iotkit.common.api.BaseDto;
+
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
-import cc.iotkit.contribution.model.IotContributor;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import jakarta.validation.constraints.*;
 
 /**
  * 贡献者业务对象 iot_contributor
  *
  * @author Lion Li
- * @date 2023-07-04
+ * @date 2023-07-09
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -22,9 +23,10 @@ import lombok.EqualsAndHashCode;
 public class IotContributorBo extends BaseDto {
 
     /**
-     * 主键
+     * 
      */
-    @ApiModelProperty(value = "主键", required = false)
+    @NotNull(message = "不能为空", groups = { EditGroup.class })
+    @ApiModelProperty(value = "", required = true)
     private Long id;
 
     /**
@@ -44,7 +46,7 @@ public class IotContributorBo extends BaseDto {
      * 岗位(1前端开发,2后端开发,3全栈开发,4测试,5ui设计师,6产品经理,7架构师)
      */
     @ApiModelProperty(value = "岗位(1前端开发,2后端开发,3全栈开发,4测试,5ui设计师,6产品经理,7架构师)", required = false)
-    private Integer post;
+    private Long post;
 
     /**
      * 简介
@@ -69,6 +71,13 @@ public class IotContributorBo extends BaseDto {
      */
     @ApiModelProperty(value = "详情", required = false)
     private String context;
+
+    /**
+     * 排序
+     */
+    @NotNull(message = "排序不能为空", groups = { AddGroup.class, EditGroup.class })
+    @ApiModelProperty(value = "排序", required = true)
+    private Long score;
 
     /**
      * 帐号状态（0正常 1停用）
