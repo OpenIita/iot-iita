@@ -135,6 +135,19 @@ public class ProductServiceImpl implements IProductService {
         ThingModel oldData = thingModelData.findByProductKey(productKey);
         ThingModel thingModel = new ThingModel(YitIdHelper.nextId(), productKey, JsonUtils.parseObject(model, ThingModel.Model.class));
 
+        //验证物模型合法性
+        List<ThingModel.Property> properties = thingModel.getModel().getProperties();
+        for (ThingModel.Property property : properties) {
+            //属性标识符合法性校验
+            String identifier = property.getIdentifier();
+            if (StringUtils.isBlank(identifier)) {
+                throw new BizException("属性标识符不能为空");
+            }
+            if (!identifier.matches("^[a-zA-Z].*")) {
+                throw new BizException("属性标识符【" + identifier + "】不合法");
+            }
+        }
+
         if (oldData == null) {
             //定义时序数据库物模型数据结构
             dbStructureData.defineThingModel(thingModel);

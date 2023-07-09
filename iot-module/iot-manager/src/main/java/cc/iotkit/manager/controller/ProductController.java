@@ -58,9 +58,7 @@ public class ProductController {
     @PostMapping(value = "/add")
     @Log(title = "产品", businessType = BusinessType.INSERT)
     public ProductVo create(@Validated(AddGroup.class) @RequestBody Request<ProductBo> request) {
-
         return productService.addEntity(request.getData());
-
     }
 
     @ApiOperation(value = "编辑产品")
