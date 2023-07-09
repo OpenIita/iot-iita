@@ -273,7 +273,10 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
 
     @Override
     public boolean updateUserAvatar(Long userId, Long avatar) {
-        return false;
+        SysUser oldUser = sysUserData.findById(userId);
+        oldUser.setAvatar(avatar);
+        sysUserData.save(oldUser);
+        return Boolean.TRUE;
     }
 
     @Override

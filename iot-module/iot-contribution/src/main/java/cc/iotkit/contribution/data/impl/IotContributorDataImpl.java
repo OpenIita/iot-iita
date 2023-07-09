@@ -1,32 +1,36 @@
 package cc.iotkit.contribution.data.impl;
 
-import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.api.Paging;
-import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.contribution.repository.IotContributorRepository;
 import cc.iotkit.contribution.data.IIotContributorData;
 import cc.iotkit.contribution.data.model.TbIotContributor;
 import cc.iotkit.contribution.model.IotContributor;
-import cc.iotkit.contribution.repository.IotContributorRepository;
-import cc.iotkit.data.util.PageBuilder;
-import cc.iotkit.data.util.PredicateBuilder;
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import cc.iotkit.data.util.PredicateBuilder;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.StringUtils;
 import java.util.Collection;
-import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.data.util.PageBuilder;
+
 
 import static cc.iotkit.contribution.data.model.QTbIotContributor.tbIotContributor;
 /**
  * 数据实现接口
  *
  * @author Lion Li
- * @date 2023-07-04
+ * @date 2023-07-09
  */
 @Primary
 @Service
@@ -42,33 +46,19 @@ public class IotContributorDataImpl implements IIotContributorData {
         return PageBuilder.toPaging(baseRepository.findAll(buildQueryCondition(pageRequest.getData()), PageBuilder.toPageable(pageRequest))).to(IotContributor.class);
     }
 
-    @Override
-    public List<IotContributor> findAllByCondition(IotContributor data) {
-        Iterable<TbIotContributor> all = baseRepository.findAll(buildQueryCondition(data));
-        return MapstructUtils.convert(Lists.newArrayList(all), IotContributor.class);
-    }
-
-    @Override
-    public IotContributor findOneByCondition(IotContributor data) {
-        Optional<TbIotContributor> one = baseRepository.findOne(buildQueryCondition(data));
-        if(one.isPresent()){
-            return MapstructUtils.convert(one.get(), IotContributor.class);
-        }
-        return null;
-    }
-
     private Predicate buildQueryCondition(IotContributor bo) {
         PredicateBuilder builder = PredicateBuilder.instance();
+        if(Objects.nonNull(bo)) {
 
-                    builder.and(StringUtils.isNotBlank(bo.getContributor()), ()->tbIotContributor.contributor.eq(bo.getContributor()));
-                    builder.and(bo.getPost() != null, ()->tbIotContributor.post.eq(bo.getPost()));
-                    builder.and(StringUtils.isNotBlank(bo.getStatus()), ()->tbIotContributor.status.eq(bo.getStatus()));
+                        builder.and(StringUtils.isNotBlank(bo.getContributor()), () -> tbIotContributor.contributor.eq(bo.getContributor()));
+                        builder.and(bo.getPost() != null, () -> tbIotContributor.post.eq(bo.getPost()));
+        }
         return builder.build();
     }
 
     @Override
-    public List<IotContributor> findByIds(Collection<Long> id) {
-        List allById = baseRepository.findAllById(id);
+    public List<IotContributor> findByIds(Collection<Long> ids) {
+        List<TbIotContributor> allById = baseRepository.findAllById(ids);
         return MapstructUtils.convert(allById, IotContributor.class);
     }
 
@@ -94,6 +84,12 @@ public class IotContributorDataImpl implements IIotContributorData {
     }
 
     @Override
+    public IotContributor findById(Long id) {
+        TbIotContributor ret = jpaQueryFactory.select(tbIotContributor).from(tbIotContributor).where(tbIotContributor.id.eq(id)).fetchOne();
+        return MapstructUtils.convert(ret, IotContributor.class);
+    }
+
+    @Override
     public long count() {
         return baseRepository.count();
     }
@@ -104,8 +100,18 @@ public class IotContributorDataImpl implements IIotContributorData {
     }
 
     @Override
-    public IotContributor findById(Long id) {
-        TbIotContributor ret = jpaQueryFactory.select(tbIotContributor).from(tbIotContributor).where(tbIotContributor.id.eq(id)).fetchOne();
-        return MapstructUtils.convert(ret, IotContributor.class);
+    public List<IotContributor> findAllByCondition(IotContributor data) {
+        Iterable<TbIotContributor> all = baseRepository.findAll(buildQueryCondition(data));
+        return MapstructUtils.convert(Lists.newArrayList(all), IotContributor.class);
+    }
+
+    @Override
+    public IotContributor findOneByCondition(IotContributor data) {
+        Optional<TbIotContributor> one = baseRepository.findOne(buildQueryCondition(data));
+
+        if(one.isPresent()){
+            return MapstructUtils.convert(one.get(), IotContributor.class);
+        }
+        return null;
     }
 }

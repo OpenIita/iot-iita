@@ -1,26 +1,27 @@
 package cc.iotkit.contribution.service.impl;
 
+import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
-import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.contribution.data.IIotContributorData;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import cc.iotkit.contribution.dto.bo.IotContributorBo;
 import cc.iotkit.contribution.dto.vo.IotContributorVo;
 import cc.iotkit.contribution.model.IotContributor;
 import cc.iotkit.contribution.service.IIotContributorService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import cc.iotkit.contribution.data.IIotContributorData;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Collection;
+import cc.iotkit.common.exception.BizException;
 
 
 /**
  * 贡献者Service业务层处理
  *
  * @author Lion Li
- * @date 2023-07-04
+ * @date 2023-07-09
  */
 @RequiredArgsConstructor
 @Service
@@ -75,7 +76,10 @@ public class IotContributorServiceImpl implements IIotContributorService {
         IotContributor update = MapstructUtils.convert(bo, IotContributor.class);
         validEntityBeforeSave(update);
         IotContributor ret = baseData.save(update);
-        return ret != null;
+        if(ret == null){
+            return false;
+        }
+        return true;
     }
 
     /**
