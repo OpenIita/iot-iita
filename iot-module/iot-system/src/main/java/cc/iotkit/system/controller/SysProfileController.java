@@ -113,7 +113,8 @@ public class SysProfileController extends BaseController {
     @ApiOperation(value = "头像上传", notes = "头像上传")
     @Log(title = "用户头像", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public AvatarVo avatar(@RequestPart("avatarfile") MultipartFile avatarfile) {
+    public AvatarVo avatar(@RequestPart("avatarfile") MultipartFile avatarfile,
+                           @RequestParam("requestId") String requestId) {
         if (!avatarfile.isEmpty()) {
             String extension = FileUtil.extName(avatarfile.getOriginalFilename());
             if (!StringUtils.equalsAnyIgnoreCase(extension, MimeTypeUtils.IMAGE_EXTENSION)) {
