@@ -5,6 +5,7 @@ import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.web.filter.RepeatedlyRequestWrapper;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.map.MapUtil;
 import com.alibaba.ttl.TransmittableThreadLocal;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * web的调用时间统计拦截器
@@ -53,7 +55,10 @@ public class PlusWebInvokeTimeInterceptor implements HandlerInterceptor {
                 Map<String, String[]> parameterMap = request.getParameterMap();
                 if (MapUtil.isNotEmpty(parameterMap)) {
                     String parameters = JsonUtils.toJsonString(parameterMap);
-                    MDC.put("requestId",parameterMap.get("requestId")[0]);
+                    String[] requestIds = parameterMap.get("requestId");
+                    if(Objects.nonNull(requestIds) && requestIds.length> 0){
+                        MDC.put("requestId",requestIds[0]);
+                    }
                     log.debug("开始请求 => URL[{}],参数类型[param],参数:[{}]", url, parameters);
                 } else {
                     log.debug("开始请求 => URL[{}],无参数", url);
