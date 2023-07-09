@@ -6,7 +6,6 @@ import java.util.List;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
@@ -49,7 +48,7 @@ public class ${ClassName}Controller extends BaseController {
         return ${className}Service.queryPageList(pageQuery);
     }
 #elseif($table.tree)
-    public List<${ClassName}Vo> list(Request<${ClassName}Bo> query) {
+    public List<${ClassName}Vo> list(@RequestBody Request<${ClassName}Bo> query) {
         List<${ClassName}Vo> list = ${className}Service.queryList(query.getData());
         return list;
     }

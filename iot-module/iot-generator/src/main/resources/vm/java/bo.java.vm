@@ -2,9 +2,6 @@ package ${packageName}.dto.bo;
 
 import ${packageName}.model.${ClassName};
 import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.api.Paging;
-import cc.iotkit.common.api.Request;
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import io.github.linpeilie.annotations.AutoMapper;
