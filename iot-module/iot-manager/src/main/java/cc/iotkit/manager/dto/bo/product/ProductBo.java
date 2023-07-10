@@ -55,4 +55,8 @@ public class ProductBo extends BaseDto {
     @Size(max = 255, message = "用户ID长度不正确")
     private String uid;
 
+    @ApiModelProperty(value = "产品密钥")
+    @Size(max = 255, message = "产品密钥长度不正确")
+    private String productSecret;
+
 }
