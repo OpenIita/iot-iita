@@ -1120,7 +1120,7 @@
     "model": {
       "properties": [
         {
-          "identifier": "9010",
+          "identifier": "p9010",
           "dataType": {
             "type": "text",
             "specs": {
@@ -1131,7 +1131,7 @@
           "accessMode": "r"
         },
         {
-          "identifier": "9410",
+          "identifier": "p9410",
           "dataType": {
             "type": "text",
             "specs": {
