@@ -184,5 +184,17 @@
     "isOpenLocate": false,
     "transparent": false,
     "createAt": 1649653149339
-  }
+  },{
+  "id": 1,
+  "productKey": "openiitagateway01",
+  "productSecret": "openiitasecret01",
+  "name": "铱塔智联智能网关01",
+  "category": "OpenIitaGateway",
+  "nodeType": 0,
+  "uid": "1",
+  "isOpenLocate": 1,
+  "transparent": false,
+  "locateUpdateType": "manual",
+  "createAt": 1649653149339
+}
 ]

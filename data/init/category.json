@@ -48,5 +48,10 @@
     "id": "SmartMeter",
     "name": "智能电表",
     "createAt": 1681444312184
+  },
+  {
+    "id": "OpenIitaGateway",
+    "name": "铱塔智联智能网关",
+    "createAt": 1688969826383
   }
 ]
