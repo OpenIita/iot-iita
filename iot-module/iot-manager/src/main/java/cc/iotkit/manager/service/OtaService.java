@@ -65,13 +65,15 @@ public class OtaService {
         oss.setFileName(uploadResult.getFilename());
         oss.setOriginalName(originalFileName);
         oss.setService(storage.getConfigKey());
-        sysOssData.save(oss);
+        oss = sysOssData.save(oss);
 
         String md5 = md5OfFile(file);
         OtaPackageUploadVo otaPackageUploadVo = new OtaPackageUploadVo();
         otaPackageUploadVo.setUrl(uploadResult.getUrl());
         otaPackageUploadVo.setSize(file.getSize());
         otaPackageUploadVo.setMd5(md5);
+        otaPackageUploadVo.setOriginalName(originalFileName);
+        otaPackageUploadVo.setOssId(oss.getId());
         return otaPackageUploadVo;
     }
 
