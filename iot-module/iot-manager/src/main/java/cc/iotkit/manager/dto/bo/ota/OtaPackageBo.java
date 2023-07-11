@@ -72,4 +72,8 @@ public class OtaPackageBo extends BaseDto {
      * 扩展数据
      */
     private String extData;
+    /**
+     * 产品key
+     */
+    private String productKey;
 }

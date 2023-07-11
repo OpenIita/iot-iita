@@ -80,4 +80,9 @@ public class OtaPackage implements Id<Long> {
      * 创建时间
      */
     private Long createAt;
+
+    /**
+     * 产品key
+     */
+    private String productKey;
 }
