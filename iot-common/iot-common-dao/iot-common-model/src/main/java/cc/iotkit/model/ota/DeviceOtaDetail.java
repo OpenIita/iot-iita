@@ -1,7 +1,10 @@
 package cc.iotkit.model.ota;
 
 import cc.iotkit.model.Id;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @Author: 石恒
@@ -13,9 +16,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeviceOtaInfo implements Id<Long> {
+public class DeviceOtaDetail implements Id<Long> {
 
     private Long id;
+
+    private Integer step;
+
+    private String taskId;
 
     private String desc;
 
@@ -23,8 +30,11 @@ public class DeviceOtaInfo implements Id<Long> {
 
     private String module;
 
-    private Integer counts;
+    private String deviceId;
 
     private String productKey;
 
+    private String deviceName;
+
+    private Long otaInfoId;
 }
