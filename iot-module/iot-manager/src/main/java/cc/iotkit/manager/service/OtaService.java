@@ -2,6 +2,7 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.oss.core.OssClient;
 import cc.iotkit.common.oss.factory.OssFactory;
@@ -36,6 +37,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author: 石恒
@@ -135,6 +137,9 @@ public class OtaService {
      */
     public void startUpgrade(Long otaId, List<String> deviceIds) {
         OtaPackage otaPackage = iOtaPackageData.findById(otaId);
+        if(Objects.isNull(otaPackage)){
+            throw new BizException(ErrCode.DATA_NOT_EXIST);
+        }
         DeviceOtaInfo deviceOtaInfo = deviceOtaInfoData.save(DeviceOtaInfo.builder()
                 .counts(deviceIds.size())
                 .productKey(otaPackage.getProductKey())
