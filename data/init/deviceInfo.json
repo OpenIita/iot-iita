@@ -1946,5 +1946,53 @@
     "property": {},
     "tag": {},
     "createAt": 1646522674443
+  },
+  {
+    "id": "16891445583920testpump0100000010f",
+    "deviceId": "16891445583920testpump0100000010f",
+    "productKey": "openiitapump01",
+    "deviceName": "testpump01",
+    "model": null,
+    "secret": "8cB3W8NzjP3rFY6W",
+    "parentId": "16891443313530testgateway0100013d",
+    "uid": "1",
+    "subUid": null,
+    "locate": {
+      "longitude": null,
+      "latitude": null
+    },
+    "state": {
+      "online": false,
+      "onlineTime": 0,
+      "offlineTime": 0
+    },
+    "property": null,
+    "tag": null,
+    "group": {},
+    "createAt": 1689144558392
+  },
+  {
+    "id": "16891443313530testgateway0100013d",
+    "deviceId": "16891443313530testgateway0100013d",
+    "productKey": "openiitagateway01",
+    "deviceName": "testgateway01",
+    "model": null,
+    "secret": "bnw2Z6zNxxdBtm6N",
+    "parentId": null,
+    "uid": "1",
+    "subUid": null,
+    "locate": {
+      "longitude": "113.865453",
+      "latitude": "22.583686"
+    },
+    "state": {
+      "online": false,
+      "onlineTime": 0,
+      "offlineTime": 0
+    },
+    "property": null,
+    "tag": null,
+    "group": {},
+    "createAt": 1689144331356
   }
 ]
