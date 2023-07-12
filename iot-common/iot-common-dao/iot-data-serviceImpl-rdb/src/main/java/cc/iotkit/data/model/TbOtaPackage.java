@@ -44,6 +44,8 @@ public class TbOtaPackage {
 
     private String module;
 
+    private String productKey;
+
     private String extData;
 
     private Long createAt;
