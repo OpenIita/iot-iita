@@ -53,5 +53,10 @@
     "id": "OpenIitaGateway",
     "name": "铱塔智联智能网关",
     "createAt": 1688969826383
+  },
+  {
+    "id": "OpenIitaPump",
+    "name": "铱塔智联水泵",
+    "createAt": 1688969826383
   }
 ]

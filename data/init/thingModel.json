@@ -1145,5 +1145,174 @@
       "services": [],
       "events": []
     }
+  },
+  {
+    "id": 17,
+    "productKey": "openiitapump01",
+    "model": {
+      "properties": [
+        {
+          "identifier": "status",
+          "dataType": {
+            "type": "bool",
+            "specs": {
+              "0": "关",
+              "1": "开"
+            }
+          },
+          "name": "状态",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "pressure",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "压力",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "model",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "自动模式",
+              "1": "手动模式",
+              "2": "定时模式",
+              "3": "防锈模式",
+              "4": "防冻模式"
+            }
+          },
+          "name": "模式",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "slave_id",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "255"
+            }
+          },
+          "name": "连接配置-从机地址",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "baud",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "连接配置-波特率",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "verify",
+          "dataType": {
+            "type": "int32",
+            "specs": {
+              "min": "0",
+              "max": "1"
+            }
+          },
+          "name": "连接配置-奇偶校验",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "retain",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "连接配置-保留位",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "data_len",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "连接配置-数据位",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "alarm",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "故障信息",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "vol",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "电压",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "elect",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "电流",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "power",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "功率",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "spd",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "转速",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "realPre",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "实时压力1",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "runStat",
+          "dataType": {
+            "type": "int32",
+            "specs": {}
+          },
+          "name": "实时状态",
+          "accessMode": "r"
+        },
+        {
+          "identifier": "mcuVersion",
+          "dataType": {
+            "type": "text",
+            "specs": {}
+          },
+          "name": "MCU版本",
+          "accessMode": "r"
+        }
+      ],
+      "services": [],
+      "events": []
+    }
   }
 ]

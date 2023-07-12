@@ -196,5 +196,17 @@
   "transparent": false,
   "locateUpdateType": "manual",
   "createAt": 1649653149339
+}, {
+  "id": 2,
+  "productKey": "openiitapump01",
+  "productSecret": "openiitapump01",
+  "name": "铱塔智联-单泵01",
+  "category": "OpenIitaPump",
+  "nodeType": 1,
+  "uid": "1",
+  "isOpenLocate": 0,
+  "transparent": false,
+  "locateUpdateType": "manual",
+  "createAt": 1649653149339
 }
 ]
