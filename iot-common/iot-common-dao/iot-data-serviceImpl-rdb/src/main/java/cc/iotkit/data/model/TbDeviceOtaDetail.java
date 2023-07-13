@@ -1,7 +1,9 @@
 package cc.iotkit.data.model;
 
-import cc.iotkit.model.ota.OtaPackage;
+import cc.iotkit.model.ota.DeviceOtaDetail;
+import cc.iotkit.model.ota.DeviceOtaInfo;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -9,44 +11,36 @@ import javax.persistence.*;
 
 /**
  * @Author: 石恒
- * @Date: 2023/5/19 21:25
+ * @Date: 2023/6/15 22:22
  * @Description:
  */
 @Data
 @Entity
-@Table(name = "ota_package")
-@AutoMapper(target = OtaPackage.class)
-public class TbOtaPackage {
-
+@Table(name = "device_ota_detail")
+@ApiModel(value = "设备升级明细")
+@AutoMapper(target = DeviceOtaDetail.class)
+public class TbDeviceOtaDetail {
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     private Long id;
 
-    private Long size;
+    private Integer step;
 
-    private String sign;
-
-    private Boolean isDiff;
-
-    private String md5;
-
-    private String name;
+    private String taskId;
 
     @Column(name = "[desc]")
     private String desc;
 
     private String version;
 
-    private String url;
-
-    private String signMethod;
-
     private String module;
+
+    private String deviceId;
 
     private String productKey;
 
-    private String extData;
+    private String deviceName;
 
-    private Long createAt;
+    private Long otaInfoId;
 }

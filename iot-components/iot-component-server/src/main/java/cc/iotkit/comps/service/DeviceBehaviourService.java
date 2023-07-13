@@ -17,12 +17,10 @@ import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.comp.model.DeviceState;
 import cc.iotkit.comp.model.RegisterInfo;
-import cc.iotkit.data.manager.IDeviceInfoData;
-import cc.iotkit.data.manager.IDeviceOtaInfoData;
-import cc.iotkit.data.manager.IProductData;
-import cc.iotkit.data.manager.IProductModelData;
+import cc.iotkit.data.manager.*;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.model.ota.DeviceOtaDetail;
 import cc.iotkit.model.ota.DeviceOtaInfo;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
@@ -45,7 +43,7 @@ public class DeviceBehaviourService {
     @Autowired
     private IProductModelData productModelData;
     @Autowired
-    private IDeviceOtaInfoData deviceOtaInfoData;
+    private IDeviceOtaDetailData deviceOtaDetailData;
 
     @Autowired
     @Qualifier("deviceInfoDataCache")
@@ -276,26 +274,26 @@ public class DeviceBehaviourService {
     }
 
     public void deviceOta(ThingModelMessage message) {
-        DeviceOtaInfo deviceOtaInfoTemp = JsonUtils.objectToJavaBean(message.getData(), DeviceOtaInfo.class);
-        if (Objects.isNull(deviceOtaInfoTemp)) {
+        DeviceOtaDetail deviceOtaDetailTemp = JsonUtils.objectToJavaBean(message.getData(), DeviceOtaDetail.class);
+        if (Objects.isNull(deviceOtaDetailTemp)) {
             log.debug("device ota upload data is null deviceId:{}", message.getDeviceId());
             return;
         }
-        deviceOtaInfoTemp.setTaskId(message.getMid());
-        deviceOtaInfoTemp.setDeviceId(message.getDeviceId());
-        deviceOtaInfoTemp.setDeviceName(message.getDeviceName());
-        deviceOtaInfoTemp.setProductKey(message.getProductKey());
-        DeviceOtaInfo deviceOtaInfo = deviceOtaInfoData.findOneByCondition(DeviceOtaInfo.builder()
+        deviceOtaDetailTemp.setTaskId(message.getMid());
+        deviceOtaDetailTemp.setDeviceId(message.getDeviceId());
+        deviceOtaDetailTemp.setDeviceName(message.getDeviceName());
+        deviceOtaDetailTemp.setProductKey(message.getProductKey());
+        DeviceOtaDetail deviceOtaDetail = deviceOtaDetailData.findOneByCondition(DeviceOtaDetail.builder()
                 .taskId(message.getMid())
                 .productKey(message.getProductKey())
                 .deviceName(message.getDeviceName())
                 .deviceId(message.getDeviceId()).build());
-        if (Objects.nonNull(deviceOtaInfo)) {
-            deviceOtaInfo.setStep(deviceOtaInfoTemp.getStep());
+        if (Objects.nonNull(deviceOtaDetail)) {
+            deviceOtaDetail.setStep(deviceOtaDetailTemp.getStep());
         } else {
-            deviceOtaInfo = deviceOtaInfoTemp;
+            deviceOtaDetail = deviceOtaDetailTemp;
         }
-        deviceOtaInfoData.save(deviceOtaInfo);
+        deviceOtaDetailData.save(deviceOtaDetail);
     }
 
     public Product getProductKey(String productKey) {

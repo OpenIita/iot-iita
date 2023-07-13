@@ -4,9 +4,11 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.common.web.core.BaseController;
+import cc.iotkit.manager.dto.bo.ota.DeviceOtaDetailBo;
 import cc.iotkit.manager.dto.bo.ota.DeviceOtaInfoBo;
 import cc.iotkit.manager.dto.bo.ota.DeviceUpgradeBo;
 import cc.iotkit.manager.dto.bo.ota.OtaPackageBo;
+import cc.iotkit.manager.dto.vo.ota.DeviceOtaDetailVo;
 import cc.iotkit.manager.dto.vo.ota.DeviceOtaInfoVo;
 import cc.iotkit.manager.dto.vo.ota.OtaPackageUploadVo;
 import cc.iotkit.manager.service.OtaService;
@@ -71,9 +73,15 @@ public class OtaController extends BaseController {
     }
 
     @ApiOperation("设备升级结果查询")
-    @PostMapping("/result")
-    public Paging<DeviceOtaInfoVo> otaResult(@RequestBody PageRequest<DeviceOtaInfoBo> request) {
-        return otaService.otaResult(request);
+    @PostMapping("/device/detail")
+    public Paging<DeviceOtaDetailVo> otaDeviceDetail(@RequestBody PageRequest<DeviceOtaDetailBo> request) {
+        return otaService.otaDeviceDetail(request);
+    }
+
+    @ApiOperation("设备升级批次查询")
+    @PostMapping("/device/info")
+    public Paging<DeviceOtaInfoVo> otaDeviceInfo(@RequestBody PageRequest<DeviceOtaInfoBo> request) {
+        return otaService.otaDeviceInfo(request);
     }
 
     @ApiOperation("ota升级测试")

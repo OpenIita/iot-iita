@@ -2,17 +2,22 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.oss.core.OssClient;
 import cc.iotkit.common.oss.factory.OssFactory;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.manager.IDeviceOtaDetailData;
 import cc.iotkit.data.manager.IDeviceOtaInfoData;
 import cc.iotkit.data.manager.IOtaPackageData;
 import cc.iotkit.data.system.ISysOssData;
+import cc.iotkit.manager.dto.bo.ota.DeviceOtaDetailBo;
 import cc.iotkit.manager.dto.bo.ota.DeviceOtaInfoBo;
 import cc.iotkit.manager.dto.bo.ota.OtaPackageBo;
+import cc.iotkit.manager.dto.vo.ota.DeviceOtaDetailVo;
 import cc.iotkit.manager.dto.vo.ota.DeviceOtaInfoVo;
 import cc.iotkit.manager.dto.vo.ota.OtaPackageUploadVo;
+import cc.iotkit.model.ota.DeviceOtaDetail;
 import cc.iotkit.model.ota.DeviceOtaInfo;
 import cc.iotkit.model.ota.OtaPackage;
 import cc.iotkit.model.system.SysOss;
@@ -20,15 +25,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import cc.iotkit.common.oss.entity.UploadResult;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author: 石恒
@@ -43,11 +52,12 @@ public class OtaService {
     private final IOtaPackageData iOtaPackageData;
     private final DeviceService deviceService;
     private final IDeviceOtaInfoData deviceOtaInfoData;
+    private final IDeviceOtaDetailData deviceOtaDetailData;
     private final ISysOssData sysOssData;
 
     public OtaPackageUploadVo uploadFile(MultipartFile file) throws Exception {
         String originalFileName = file.getOriginalFilename();
-        if(originalFileName ==null){
+        if (originalFileName == null) {
             throw new BizException("文件名为空，获取失败");
         }
         String suffix = StringUtils.substring(originalFileName, originalFileName.lastIndexOf("."), originalFileName.length());
@@ -127,10 +137,37 @@ public class OtaService {
      */
     public void startUpgrade(Long otaId, List<String> deviceIds) {
         OtaPackage otaPackage = iOtaPackageData.findById(otaId);
-        deviceIds.forEach(deviceId -> deviceService.otaUpgrade(deviceId, true, otaPackage));
+        if(Objects.isNull(otaPackage)){
+            throw new BizException(ErrCode.DATA_NOT_EXIST);
+        }
+        DeviceOtaInfo deviceOtaInfo = deviceOtaInfoData.save(DeviceOtaInfo.builder()
+                .counts(deviceIds.size())
+                .productKey(otaPackage.getProductKey())
+                .module(otaPackage.getModule())
+                .desc(otaPackage.getDesc())
+                .version(otaPackage.getVersion())
+                .build());
+
+        List<DeviceOtaDetail> deviceOtaDetails = new ArrayList<>();
+        deviceIds.forEach(deviceId -> {
+            String taskId = deviceService.otaUpgrade(deviceId, true, otaPackage);
+            deviceOtaDetails.add(DeviceOtaDetail.builder()
+                    .taskId(taskId)
+                    .otaInfoId(deviceOtaInfo.getId())
+                    .module(otaPackage.getModule())
+                    .version(otaPackage.getVersion())
+                    .step(0)
+                    .deviceId(deviceId)
+                    .build());
+        });
+        deviceOtaDetailData.batchSave(deviceOtaDetails);
     }
 
-    public Paging<DeviceOtaInfoVo> otaResult(PageRequest<DeviceOtaInfoBo> request) {
+    public Paging<DeviceOtaDetailVo> otaDeviceDetail(PageRequest<DeviceOtaDetailBo> request) {
+        return deviceOtaDetailData.findAll(request.to(DeviceOtaDetail.class)).to(DeviceOtaDetailVo.class);
+    }
+
+    public Paging<DeviceOtaInfoVo> otaDeviceInfo(PageRequest<DeviceOtaInfoBo> request) {
         return deviceOtaInfoData.findAll(request.to(DeviceOtaInfo.class)).to(DeviceOtaInfoVo.class);
     }
 
