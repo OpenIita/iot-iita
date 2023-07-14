@@ -1,4 +1,4 @@
-package cc.iotkit.common.tenant.dao.entiry;
+package cc.iotkit.common.tenant.dao;
 
 public interface TenantAware {
     void setTenantId(String tenantId);

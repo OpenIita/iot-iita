@@ -1,4 +1,4 @@
-package cc.iotkit.common.tenant.interceptor;
+package cc.iotkit.common.tenant.Config;
 
 
 import cc.iotkit.common.tenant.util.TenantContext;
@@ -12,17 +12,19 @@ import org.springframework.web.context.request.WebRequestInterceptor;
  * 类描述...
  *
  * @author Tiger Chen
- * created on 2023/7/14 20:51
+ * created on 2023/7/14 21:51
  */
 
+
 @Component
-public class TenantInterceptor implements WebRequestInterceptor {
+public class TenantConfig implements WebRequestInterceptor {
+
 
     public static final String TENANT_ID = "tenantId";
 
     @Override
     public void preHandle(WebRequest request) {
-        System.out.println("TenantInterceptor: preHandle");
+        System.out.println("dsdfsd");
         if (request.getHeader(TENANT_ID) != null) {
             String tenantId = request.getHeader(TENANT_ID);
             TenantContext.setTenantId(tenantId);
@@ -38,4 +40,6 @@ public class TenantInterceptor implements WebRequestInterceptor {
     public void afterCompletion(@NonNull WebRequest request, Exception ex) {
 
     }
+
 }
+

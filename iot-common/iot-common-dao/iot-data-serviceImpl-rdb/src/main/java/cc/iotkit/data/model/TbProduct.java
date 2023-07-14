@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.AbstractBaseEntity;
 import cc.iotkit.model.product.Product;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
@@ -26,7 +27,7 @@ import javax.persistence.Table;
 @ApiModel(value = "产品")
 @Table(name = "product")
 @AutoMapper(target = Product.class)
-public class TbProduct {
+public class TbProduct extends AbstractBaseEntity {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")

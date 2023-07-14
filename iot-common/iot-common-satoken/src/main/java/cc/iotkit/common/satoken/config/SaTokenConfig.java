@@ -2,15 +2,12 @@ package cc.iotkit.common.satoken.config;
 
 import cc.iotkit.common.satoken.core.dao.PlusSaTokenDao;
 import cc.iotkit.common.satoken.core.service.SaPermissionImpl;
-import cc.iotkit.common.tenant.interceptor.TenantInterceptor;
 import cn.dev33.satoken.dao.SaTokenDao;
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.stp.StpInterface;
 import cn.dev33.satoken.stp.StpLogic;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -18,13 +15,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  *
  * @author Lion Li
  */
-
-@RequiredArgsConstructor
 @AutoConfiguration
 public class SaTokenConfig implements WebMvcConfigurer {
-    
-    private final TenantInterceptor tenantInterceptor;
-
     @Bean
     public StpLogic getStpLogicJwt() {
         // Sa-Token 整合 jwt (简单模式)
@@ -46,11 +38,5 @@ public class SaTokenConfig implements WebMvcConfigurer {
     public SaTokenDao saTokenDao() {
         return new PlusSaTokenDao();
     }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addWebRequestInterceptor(tenantInterceptor);
-    }
-
 
 }

@@ -26,8 +26,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class Application {
 
     public static void main(String[] args) {
-        //System.setProperty("disabledEmbeddedEs","true");
-        //System.setProperty("disabledEmbeddedRedis","true");
+        System.setProperty("disabledEmbeddedEs", "true");
+        System.setProperty("disabledEmbeddedRedis", "true");
         if (EmbeddedElasticSearchConfig.embeddedEnable()) {
             EmbeddedElasticSearchConfig.startEmbeddedElasticSearch();
         }

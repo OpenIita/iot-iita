@@ -26,8 +26,17 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-common-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-tenant</artifactId>
         </dependency>
 
     </dependencies>

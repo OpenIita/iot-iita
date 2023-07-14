@@ -57,7 +57,8 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public Boolean insertByBo(SysTenantBo bo) {
-        return false;
+        SysTenant save = sysTenantData.save(bo.to(SysTenant.class));
+        return true;
     }
 
     @Override
@@ -82,7 +83,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public boolean checkCompanyNameUnique(SysTenantBo bo) {
-        return false;
+        return true;
     }
 
     @Override
