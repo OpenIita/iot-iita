@@ -1,7 +1,7 @@
 package cc.iotkit.common.tenant.aspect;
 
 
-import cc.iotkit.common.tenant.util.TenantContext;
+import cc.iotkit.common.satoken.utils.LoginHelper;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -24,7 +24,7 @@ public class TenantFilterAspect {
     @AfterReturning(pointcut = "openSession()", returning = "session")
     public void afterOpenSession(Object session) {
         if (session != null && Session.class.isInstance(session)) {
-            final String tenantId = TenantContext.getTenantId();
+            String tenantId = LoginHelper.getTenantId();
             if (tenantId != null) {
                 org.hibernate.Filter filter = ((Session) session).enableFilter("tenantFilter");
                 filter.setParameter("tenantId", tenantId);
