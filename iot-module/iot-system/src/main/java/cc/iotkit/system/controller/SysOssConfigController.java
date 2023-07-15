@@ -14,11 +14,9 @@ import cc.iotkit.system.service.ISysOssConfigService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +30,8 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @RestController
+@Controller
+@ResponseBody
 @RequestMapping("/resource/oss/config")
 public class SysOssConfigController extends BaseController {
 
