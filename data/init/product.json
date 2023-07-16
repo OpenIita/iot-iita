@@ -208,5 +208,17 @@
   "transparent": false,
   "locateUpdateType": "manual",
   "createAt": 1649653149339
+}, {
+  "id": 3,
+  "productKey": "dzxYwDHswecMP3pf",
+  "productSecret": "730d1137b05b41f280cebbdd47782dd6",
+  "name": "NB水泵",
+  "category": "OpenIitaPump",
+  "nodeType": 1,
+  "uid": "1",
+  "isOpenLocate": 0,
+  "transparent": false,
+  "locateUpdateType": "manual",
+  "createAt": 1649653149339
 }
 ]
