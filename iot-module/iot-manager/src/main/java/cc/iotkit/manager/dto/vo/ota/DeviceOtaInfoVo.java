@@ -30,4 +30,6 @@ public class DeviceOtaInfoVo implements Serializable {
     private Integer counts;
 
     private String productKey;
+
+    private Long createAt;
 }

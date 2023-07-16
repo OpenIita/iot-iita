@@ -27,4 +27,6 @@ public class DeviceOtaInfo implements Id<Long> {
 
     private String productKey;
 
+    private Long createAt;
+
 }

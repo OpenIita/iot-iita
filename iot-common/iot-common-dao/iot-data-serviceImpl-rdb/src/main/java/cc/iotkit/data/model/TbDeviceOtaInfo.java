@@ -3,6 +3,7 @@ package cc.iotkit.data.model;
 import cc.iotkit.model.ota.DeviceOtaInfo;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -34,4 +35,6 @@ public class TbDeviceOtaInfo {
     private Integer counts;
 
     private String productKey;
+
+    private Long createAt;
 }

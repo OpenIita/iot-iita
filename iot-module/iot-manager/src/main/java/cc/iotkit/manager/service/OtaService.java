@@ -137,7 +137,7 @@ public class OtaService {
      */
     public void startUpgrade(Long otaId, List<String> deviceIds) {
         OtaPackage otaPackage = iOtaPackageData.findById(otaId);
-        if(Objects.isNull(otaPackage)){
+        if (Objects.isNull(otaPackage)) {
             throw new BizException(ErrCode.DATA_NOT_EXIST);
         }
         DeviceOtaInfo deviceOtaInfo = deviceOtaInfoData.save(DeviceOtaInfo.builder()
@@ -146,6 +146,7 @@ public class OtaService {
                 .module(otaPackage.getModule())
                 .desc(otaPackage.getDesc())
                 .version(otaPackage.getVersion())
+                .createAt(System.currentTimeMillis())
                 .build());
 
         List<DeviceOtaDetail> deviceOtaDetails = new ArrayList<>();
