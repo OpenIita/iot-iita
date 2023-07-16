@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 对象存储配置Service业务层处理
@@ -49,7 +50,9 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
     @Override
     public void init() {
         List<SysOssConfig> list = baseData.findAll();
-        Map<String, List<SysOssConfig>> map = StreamUtils.groupByKey(list, SysOssConfig::getTenantId);
+
+        List<SysOssConfig> notEmptyTenantIdList = list.stream().filter(item -> StringUtils.isNotBlank(item.getTenantId())).collect(Collectors.toList());
+        Map<String, List<SysOssConfig>> map = StreamUtils.groupByKey(notEmptyTenantIdList, SysOssConfig::getTenantId);
         try {
 
             for (Map.Entry<String, List<SysOssConfig>> stringListEntry : map.entrySet()) {
@@ -110,7 +113,7 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if (Objects.equals(Boolean.TRUE, isValid) && CollUtil.containsAny(ids, OssConstant.SYSTEM_DATA_IDS)) {
-                throw new BizException("系统内置, 不可删除!");
+            throw new BizException("系统内置, 不可删除!");
         }
         List<SysOssConfig> list = CollUtil.newArrayList();
         for (Long configId : ids) {

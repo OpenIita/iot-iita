@@ -1,17 +1,19 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.system.SysDictType;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 字典类型表 sys_dict_type
@@ -25,7 +27,10 @@ import javax.persistence.Table;
 @Table(name = "sys_dict_type")
 @AutoMapper(target = SysDictType.class)
 @ApiModel(value = "字典类型表")
-public class TbSysDictType extends BaseEntity {
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+@EntityListeners(TenantListener.class)
+public class TbSysDictType extends BaseEntity implements TenantAware {
 
     /**
      * 字典主键

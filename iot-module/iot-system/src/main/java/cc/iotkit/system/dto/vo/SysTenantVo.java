@@ -2,6 +2,7 @@ package cc.iotkit.system.dto.vo;
 
 import cc.iotkit.common.excel.annotation.ExcelDictFormat;
 import cc.iotkit.common.excel.convert.ExcelDictConvert;
+import cc.iotkit.model.BaseModel;
 import cc.iotkit.model.system.SysTenant;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -20,7 +21,7 @@ import java.util.Date;
 @Data
 @ExcelIgnoreUnannotated
 @AutoMapper(target = SysTenant.class)
-public class SysTenantVo implements Serializable {
+public class SysTenantVo extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

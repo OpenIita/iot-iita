@@ -210,7 +210,10 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Transactional(rollbackFor = Exception.class)
     public int insertRole(SysRoleBo bo) {
         SysRole role = iSysRoleData.save(bo.to(SysRole.class));
-        return insertRoleMenu(bo);
+        //TODO 后面再晚上插入菜单的，目前不知道逻辑
+        //return insertRoleMenu(bo);
+
+        return 1;
     }
 
     /**

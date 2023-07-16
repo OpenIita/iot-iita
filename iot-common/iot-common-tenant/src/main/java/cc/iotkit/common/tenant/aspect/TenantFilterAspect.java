@@ -25,7 +25,7 @@ public class TenantFilterAspect {
     public void afterOpenSession(Object session) {
         if (session != null && Session.class.isInstance(session)) {
             String tenantId = LoginHelper.getTenantId();
-            if (tenantId != null) {
+            if (tenantId != null && !tenantId.equals("000000")) {
                 org.hibernate.Filter filter = ((Session) session).enableFilter("tenantFilter");
                 filter.setParameter("tenantId", tenantId);
             }
