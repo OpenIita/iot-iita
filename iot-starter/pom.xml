@@ -254,6 +254,12 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${spring-boot.version}</version>
+        <configuration>
+          <agents>
+            <agent>${project.build.directory}/spring-instrument-${spring-framework.version}.jar</agent>
+            <agent>${project.build.directory}/aspectjweaver-${aspectj.version}.jar</agent>
+          </agents>
+        </configuration>
         <executions>
           <execution>
             <goals>
@@ -288,18 +294,6 @@
           </execution>
         </executions>
       </plugin>
-
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <agents>
-            <agent>${project.build.directory}/spring-instrument-${spring-framework.version}.jar</agent>
-            <agent>${project.build.directory}/aspectjweaver-${aspectj.version}.jar</agent>
-          </agents>
-        </configuration>
-      </plugin>
-
     </plugins>
   </build>
 
