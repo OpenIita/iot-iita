@@ -1,9 +1,11 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.data.dao.DeviceOtaDetailRepository;
 import cc.iotkit.data.dao.DeviceOtaInfoRepository;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IDeviceOtaDetailData;
 import cc.iotkit.data.manager.IDeviceOtaInfoData;
+import cc.iotkit.data.model.TbDeviceOtaDetail;
 import cc.iotkit.data.model.TbDeviceOtaInfo;
 import cc.iotkit.model.ota.DeviceOtaDetail;
 import cc.iotkit.model.ota.DeviceOtaInfo;
@@ -23,22 +25,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DeviceOtaDetailDataImpl implements IDeviceOtaDetailData, IJPACommData<DeviceOtaDetail, Long> {
 
-    private final DeviceOtaInfoRepository deviceOtaInfoRepository;
+    private final DeviceOtaDetailRepository deviceOtaDetailRepository;
 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public JpaRepository getBaseRepository() {
-        return deviceOtaInfoRepository;
+        return deviceOtaDetailRepository;
     }
 
     @Override
     public Class getJpaRepositoryClass() {
-        return TbDeviceOtaInfo.class;
+        return TbDeviceOtaDetail.class;
     }
 
     @Override
     public Class getTClass() {
-        return DeviceOtaInfo.class;
+        return DeviceOtaDetail.class;
     }
 }
