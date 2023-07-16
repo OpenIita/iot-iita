@@ -206,11 +206,33 @@
 
     <dependency>
       <groupId>cc.iotkit</groupId>
-       <artifactId>iot-data-serviceImpl-cache</artifactId>
+      <artifactId>iot-data-serviceImpl-cache</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
 
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjtools</artifactId>
 
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+
+    </dependency>
 
   </dependencies>
 
@@ -266,6 +288,18 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <agents>
+            <agent>${project.build.directory}/spring-instrument-${spring-framework.version}.jar</agent>
+            <agent>${project.build.directory}/aspectjweaver-${aspectj.version}.jar</agent>
+          </agents>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 

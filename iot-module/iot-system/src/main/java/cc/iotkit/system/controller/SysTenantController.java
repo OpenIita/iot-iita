@@ -91,7 +91,8 @@ public class SysTenantController extends BaseController {
         if (!tenantService.checkCompanyNameUnique(data)) {
             fail("新增租户'" + data.getCompanyName() + "'失败，企业名称已存在");
         }
-        //TenantHelper.ignore(() -> tenantService.insertByBo(bo));
+        tenantService.insertByBo(data);
+
     }
 
     /**

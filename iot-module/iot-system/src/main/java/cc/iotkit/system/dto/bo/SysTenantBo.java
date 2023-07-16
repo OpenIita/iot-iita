@@ -26,7 +26,6 @@ public class SysTenantBo extends BaseDto {
     /**
      * id
      */
-    @NotNull(message = "id不能为空", groups = { EditGroup.class })
     private Long id;
 
     /**

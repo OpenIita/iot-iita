@@ -21,6 +21,7 @@ spring:
     init:
       schema-locations: classpath:sql/schema.sql
       mode: ALWAYS
+      platform: h2
   datasource:
     url: jdbc:h2:./data/iotkit;MODE=MySQL
     username: sa
@@ -58,7 +59,6 @@ spring:
           password: 123456
 
   # 内置h2 web console设置
-    platform: h2
   h2:
     console:
       enabled: true

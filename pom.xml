@@ -3,11 +3,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.11</version>
+        <relativePath/>
+    </parent>
+
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
     <version>${revision}</version>
     <name>${project.artifactId}</name>
-    <description>奇特物联是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能, 能帮助你快速搭建自己的物联网相关业务平台。</description>
+    <description>奇特物联是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能,
+        能帮助你快速搭建自己的物联网相关业务平台。
+    </description>
     <url>https://gitee.com/iotkit-open-source/iotkit-parent</url>
     <packaging>pom</packaging>
 

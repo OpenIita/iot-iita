@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 租户Service业务层处理
@@ -42,7 +43,8 @@ public class SysTenantServiceImpl implements ISysTenantService {
     @Cacheable(cacheNames = CacheNames.SYS_TENANT, key = "#tenantId")
     @Override
     public SysTenantVo queryByTenantId(String tenantId) {
-        return MapstructUtils.convert(sysTenantData.findById(Long.valueOf(tenantId)),SysTenantVo.class);
+        SysTenant tenant = sysTenantData.findById(Long.valueOf(tenantId));
+        return MapstructUtils.convert(tenant,SysTenantVo.class);
     }
 
     @Override
@@ -57,16 +59,28 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public Boolean insertByBo(SysTenantBo bo) {
-        return false;
+        List<SysTenant> all = sysTenantData.findAll();
+        List<String> tenantIds = all.stream().map(SysTenant::getTenantId).sorted().collect(Collectors.toList());
+        long tenantId = Long.parseLong(tenantIds.get(tenantIds.size() - 1)) + 1;
+        bo.setTenantId(String.format("%06d",tenantId));
+        sysTenantData.save(bo.to(SysTenant.class));
+        return true;
     }
 
     @Override
     public Boolean updateByBo(SysTenantBo bo) {
-        return false;
+        SysTenant tenantDataById = sysTenantData.findById(bo.getId());
+        String tenantId = tenantDataById.getTenantId();
+        bo.setTenantId(tenantId);
+        sysTenantData.updateTenant(bo.to(SysTenant.class));
+        return true;
     }
 
     @Override
     public int updateTenantStatus(SysTenantBo bo) {
+        SysTenant tenantDataById = sysTenantData.findById(bo.getId());
+        tenantDataById.setStatus(bo.getStatus());
+        sysTenantData.updateTenant(tenantDataById);
         return 0;
     }
 
@@ -82,7 +96,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public boolean checkCompanyNameUnique(SysTenantBo bo) {
-        return false;
+        return true;
     }
 
     @Override

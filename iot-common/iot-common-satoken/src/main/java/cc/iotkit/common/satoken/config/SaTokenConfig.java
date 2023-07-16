@@ -17,7 +17,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @AutoConfiguration
 public class SaTokenConfig implements WebMvcConfigurer {
-
     @Bean
     public StpLogic getStpLogicJwt() {
         // Sa-Token 整合 jwt (简单模式)
