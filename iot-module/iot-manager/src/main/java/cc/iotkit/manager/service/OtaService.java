@@ -7,6 +7,7 @@ import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.oss.core.OssClient;
 import cc.iotkit.common.oss.factory.OssFactory;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IDeviceOtaDetailData;
 import cc.iotkit.data.manager.IDeviceOtaInfoData;
 import cc.iotkit.data.manager.IOtaPackageData;
@@ -17,6 +18,7 @@ import cc.iotkit.manager.dto.bo.ota.OtaPackageBo;
 import cc.iotkit.manager.dto.vo.ota.DeviceOtaDetailVo;
 import cc.iotkit.manager.dto.vo.ota.DeviceOtaInfoVo;
 import cc.iotkit.manager.dto.vo.ota.OtaPackageUploadVo;
+import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.ota.DeviceOtaDetail;
 import cc.iotkit.model.ota.DeviceOtaInfo;
 import cc.iotkit.model.ota.OtaPackage;
@@ -25,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import cc.iotkit.common.oss.entity.UploadResult;
@@ -38,6 +39,7 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @Author: 石恒
@@ -52,6 +54,7 @@ public class OtaService {
     private final IOtaPackageData iOtaPackageData;
     private final DeviceService deviceService;
     private final IDeviceOtaInfoData deviceOtaInfoData;
+    private final IDeviceInfoData deviceInfoData;
     private final IDeviceOtaDetailData deviceOtaDetailData;
     private final ISysOssData sysOssData;
 
@@ -135,7 +138,7 @@ public class OtaService {
     /**
      * 开始升级
      */
-    public void startUpgrade(Long otaId, List<String> deviceIds) {
+    public String startUpgrade(Long otaId, List<String> deviceIds) {
         OtaPackage otaPackage = iOtaPackageData.findById(otaId);
         if (Objects.isNull(otaPackage)) {
             throw new BizException(ErrCode.DATA_NOT_EXIST);
@@ -150,18 +153,28 @@ public class OtaService {
                 .build());
 
         List<DeviceOtaDetail> deviceOtaDetails = new ArrayList<>();
+        AtomicReference<Integer> success = new AtomicReference<>(0);
+        AtomicReference<Integer> fail = new AtomicReference<>(0);
         deviceIds.forEach(deviceId -> {
-            String taskId = deviceService.otaUpgrade(deviceId, true, otaPackage);
-            deviceOtaDetails.add(DeviceOtaDetail.builder()
-                    .taskId(taskId)
-                    .otaInfoId(deviceOtaInfo.getId())
-                    .module(otaPackage.getModule())
-                    .version(otaPackage.getVersion())
-                    .step(0)
-                    .deviceId(deviceId)
-                    .build());
+            try {
+                DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
+                String taskId = deviceService.otaUpgrade(deviceId, true, otaPackage);
+                deviceOtaDetails.add(DeviceOtaDetail.builder()
+                        .taskId(taskId)
+                        .deviceName(deviceInfo.getDeviceName())
+                        .otaInfoId(deviceOtaInfo.getId())
+                        .module(otaPackage.getModule())
+                        .version(otaPackage.getVersion())
+                        .step(0)
+                        .deviceId(deviceId)
+                        .build());
+                success.getAndSet(success.get() + 1);
+            } catch (Exception ex) {
+                fail.getAndSet(success.get() + 1);
+            }
         });
         deviceOtaDetailData.batchSave(deviceOtaDetails);
+        return "发起升级【" + success + "】条,失败【" + fail + "】条";
     }
 
     public Paging<DeviceOtaDetailVo> otaDeviceDetail(PageRequest<DeviceOtaDetailBo> request) {

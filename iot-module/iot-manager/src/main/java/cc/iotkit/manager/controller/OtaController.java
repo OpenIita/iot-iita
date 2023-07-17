@@ -68,8 +68,8 @@ public class OtaController extends BaseController {
 
     @ApiOperation("OTA升级")
     @PostMapping("/device/upgrade")
-    public void deviceUpgrade(@RequestBody Request<DeviceUpgradeBo> request) {
-        otaService.startUpgrade(request.getData().getOtaId(), request.getData().getDeviceIds());
+    public String deviceUpgrade(@RequestBody Request<DeviceUpgradeBo> request) {
+        return otaService.startUpgrade(request.getData().getOtaId(), request.getData().getDeviceIds());
     }
 
     @ApiOperation("设备升级结果查询")
