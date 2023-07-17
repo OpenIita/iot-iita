@@ -212,13 +212,13 @@
   "id": 3,
   "productKey": "dzxYwDHswecMP3pf",
   "productSecret": "730d1137b05b41f280cebbdd47782dd6",
-  "name": "NB水泵",
+  "name": "NB透传水泵",
   "category": "OpenIitaPump",
-  "nodeType": 1,
+  "nodeType": 2,
   "uid": "1",
-  "isOpenLocate": 0,
-  "transparent": false,
-  "locateUpdateType": "manual",
+  "isOpenLocate": 1,
+  "transparent": true,
+  "locateUpdateType": "device",
   "createAt": 1649653149339
 }
 ]

@@ -1994,5 +1994,29 @@
     "tag": null,
     "group": {},
     "createAt": 1689144331356
+  },
+  {
+    "id": "16895701241450testnbpump010000125",
+    "deviceId": "16895701241450testnbpump010000125",
+    "productKey": "openiitanbpump01",
+    "deviceName": "testnbpump01",
+    "model": null,
+    "secret": "eY45WnZEWRryR2xt",
+    "parentId": null,
+    "uid": "1",
+    "subUid": null,
+    "locate": {
+      "longitude": "113.865453",
+      "latitude": "22.583686"
+    },
+    "state": {
+      "online": false,
+      "onlineTime": 0,
+      "offlineTime": 0
+    },
+    "property": null,
+    "tag": null,
+    "group": {},
+    "createAt": 1689570124148
   }
 ]
