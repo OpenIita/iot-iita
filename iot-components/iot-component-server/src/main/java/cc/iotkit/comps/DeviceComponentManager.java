@@ -46,10 +46,12 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -126,7 +128,7 @@ public class DeviceComponentManager {
             scriptEngine = ScriptEngineFactory.getScriptEngine(component.getScriptTyp());
 
             String componentScript = FileUtils.readFileToString(path.
-                    resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile(), "UTF-8");
+                    resolve(ProtocolComponent.SCRIPT_FILE_NAME).toFile(), StandardCharsets.UTF_8);
             componentInstance.setScript(componentScript);
             register(id, componentInstance);
         } catch (IOException e) {
@@ -141,7 +143,7 @@ public class DeviceComponentManager {
         // 从文件方式内容
         Path converterPath = componentConfig.getConverterFilePath(component.getConverter());
         String converterScript = FileUtils.readFileToString(converterPath.
-                resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile(), "UTF-8");
+                resolve(ProtocolConverter.SCRIPT_FILE_NAME).toFile(), StandardCharsets.UTF_8);
 
 //        scriptConverter.setScript(protocolConvert.getScript());  // 从数据库加载,以后可以加版本号
         scriptConverter.setScript(converterScript);
@@ -224,7 +226,11 @@ public class DeviceComponentManager {
 
         //构建必要的设备信息
         Map<String, Object> tag = new HashMap<>();
-        deviceInfo.getTag().forEach((k, v) -> tag.put(k, v.getValue()));
+        Map<String, DeviceInfo.Tag> tagMap = deviceInfo.getTag();
+        if(Objects.nonNull(tagMap) && !tagMap.isEmpty()){
+            tagMap.forEach((k, v) -> tag.put(k, v.getValue()));
+        }
+
         Device device = new Device(deviceInfo.getDeviceId(),
                 deviceInfo.getModel(),
                 deviceInfo.getProperty(),

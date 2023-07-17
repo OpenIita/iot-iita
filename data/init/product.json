@@ -210,15 +210,15 @@
   "createAt": 1649653149339
 }, {
   "id": 3,
-  "productKey": "dzxYwDHswecMP3pf",
-  "productSecret": "730d1137b05b41f280cebbdd47782dd6",
-  "name": "NB水泵",
+  "productKey": "openiitanbpump01",
+  "productSecret": "openiitanbpump01",
+  "name": "NB透传水泵",
   "category": "OpenIitaPump",
-  "nodeType": 1,
+  "nodeType": 2,
   "uid": "1",
-  "isOpenLocate": 0,
+  "isOpenLocate": 1,
   "transparent": false,
-  "locateUpdateType": "manual",
+  "locateUpdateType": "device",
   "createAt": 1649653149339
 }
 ]
