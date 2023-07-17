@@ -217,7 +217,7 @@
   "nodeType": 2,
   "uid": "1",
   "isOpenLocate": 1,
-  "transparent": true,
+  "transparent": false,
   "locateUpdateType": "device",
   "createAt": 1649653149339
 }
