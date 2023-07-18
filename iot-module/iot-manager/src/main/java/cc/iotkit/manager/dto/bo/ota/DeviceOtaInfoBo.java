@@ -18,6 +18,8 @@ import lombok.EqualsAndHashCode;
 @AutoMapper(target = DeviceOtaInfo.class, reverseConvertGenerate = false)
 public class DeviceOtaInfoBo extends BaseDto {
 
+    private Long id;
+
     private String taskId;
 
     private String version;
