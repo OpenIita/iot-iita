@@ -160,11 +160,11 @@ public class OtaService {
         AtomicReference<Integer> fail = new AtomicReference<>(0);
         deviceIds.forEach(deviceId -> {
             try {
-                //DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
+                DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
                 String taskId = deviceService.otaUpgrade(deviceId, true, otaPackage);
                 deviceOtaDetails.add(DeviceOtaDetail.builder()
                         .taskId(taskId)
-                        //.deviceName(deviceInfo.getDeviceName())
+                        .deviceName(deviceInfo.getDeviceName())
                         .otaInfoId(deviceOtaInfo.getId())
                         .module(otaPackage.getModule())
                         .version(otaPackage.getVersion())
