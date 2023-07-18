@@ -32,7 +32,11 @@ public class TbDeviceOtaInfo {
 
     private String module;
 
-    private Integer counts;
+    private Integer total;
+
+    private Integer success;
+
+    private Integer fail;
 
     private String productKey;
 

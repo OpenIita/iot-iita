@@ -147,7 +147,7 @@ public class OtaService {
             throw new BizException(ErrCode.DATA_NOT_EXIST);
         }
         DeviceOtaInfo deviceOtaInfo = deviceOtaInfoData.save(DeviceOtaInfo.builder()
-                .counts(deviceIds.size())
+                .total(deviceIds.size())
                 .productKey(otaPackage.getProductKey())
                 .module(otaPackage.getModule())
                 .desc(otaPackage.getDesc())
@@ -173,12 +173,15 @@ public class OtaService {
                         .build());
                 success.getAndSet(success.get() + 1);
             } catch (Exception ex) {
-                log.error("add device upgrade error: ",ex);
+                log.error("add device upgrade error: ", ex);
                 fail.getAndSet(success.get() + 1);
             }
         });
         deviceOtaDetailData.batchSave(deviceOtaDetails);
-        return "发起升级【" + success + "】条,失败【" + fail + "】条";
+        deviceOtaInfo.setSuccess(success.get());
+        deviceOtaInfo.setFail(fail.get());
+        deviceOtaInfoData.save(deviceOtaInfo);
+        return "发起升级【" + success.get() + "】条,失败【" + fail.get() + "】条";
     }
 
     public Paging<DeviceOtaDetailVo> otaDeviceDetail(PageRequest<DeviceOtaDetailBo> request) {

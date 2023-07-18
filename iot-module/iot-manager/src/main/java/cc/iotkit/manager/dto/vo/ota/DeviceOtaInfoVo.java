@@ -27,7 +27,11 @@ public class DeviceOtaInfoVo implements Serializable {
 
     private String module;
 
-    private Integer counts;
+    private Integer total;
+
+    private Integer success;
+
+    private Integer fail;
 
     private String productKey;
 
