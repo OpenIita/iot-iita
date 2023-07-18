@@ -10,6 +10,7 @@ import cc.iotkit.manager.dto.bo.ota.DeviceUpgradeBo;
 import cc.iotkit.manager.dto.bo.ota.OtaPackageBo;
 import cc.iotkit.manager.dto.vo.ota.DeviceOtaDetailVo;
 import cc.iotkit.manager.dto.vo.ota.DeviceOtaInfoVo;
+import cc.iotkit.manager.dto.vo.ota.DeviceUpgradeVo;
 import cc.iotkit.manager.dto.vo.ota.OtaPackageUploadVo;
 import cc.iotkit.manager.service.OtaService;
 import cc.iotkit.model.ota.OtaPackage;
@@ -68,8 +69,9 @@ public class OtaController extends BaseController {
 
     @ApiOperation("OTA升级")
     @PostMapping("/device/upgrade")
-    public String deviceUpgrade(@RequestBody Request<DeviceUpgradeBo> request) {
-        return otaService.startUpgrade(request.getData().getOtaId(), request.getData().getDeviceIds());
+    public DeviceUpgradeVo deviceUpgrade(@RequestBody Request<DeviceUpgradeBo> request) {
+        String result = otaService.startUpgrade(request.getData().getOtaId(), request.getData().getDeviceIds());
+        return DeviceUpgradeVo.builder().result(result).build();
     }
 
     @ApiOperation("设备升级结果查询")

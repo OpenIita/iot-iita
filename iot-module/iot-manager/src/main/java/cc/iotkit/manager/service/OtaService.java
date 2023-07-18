@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import cc.iotkit.common.oss.entity.UploadResult;
@@ -53,7 +54,9 @@ public class OtaService {
 
     private final IOtaPackageData iOtaPackageData;
     private final DeviceService deviceService;
+
     private final IDeviceOtaInfoData deviceOtaInfoData;
+    @Qualifier("deviceInfoDataCache")
     private final IDeviceInfoData deviceInfoData;
     private final IDeviceOtaDetailData deviceOtaDetailData;
     private final ISysOssData sysOssData;
@@ -157,11 +160,11 @@ public class OtaService {
         AtomicReference<Integer> fail = new AtomicReference<>(0);
         deviceIds.forEach(deviceId -> {
             try {
-                DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
+                //DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
                 String taskId = deviceService.otaUpgrade(deviceId, true, otaPackage);
                 deviceOtaDetails.add(DeviceOtaDetail.builder()
                         .taskId(taskId)
-                        .deviceName(deviceInfo.getDeviceName())
+                        //.deviceName(deviceInfo.getDeviceName())
                         .otaInfoId(deviceOtaInfo.getId())
                         .module(otaPackage.getModule())
                         .version(otaPackage.getVersion())
@@ -170,6 +173,7 @@ public class OtaService {
                         .build());
                 success.getAndSet(success.get() + 1);
             } catch (Exception ex) {
+                log.error("add device upgrade error: ",ex);
                 fail.getAndSet(success.get() + 1);
             }
         });
