@@ -21,6 +21,8 @@ public class DeviceOtaInfoVo implements Serializable {
 
     private Long id;
 
+    private Long packageId;
+
     private String desc;
 
     private String version;

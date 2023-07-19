@@ -20,6 +20,8 @@ public class DeviceOtaInfoBo extends BaseDto {
 
     private Long id;
 
+    private Long packageId;
+
     private String taskId;
 
     private String version;

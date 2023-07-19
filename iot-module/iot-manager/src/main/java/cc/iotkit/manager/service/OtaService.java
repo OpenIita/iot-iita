@@ -141,13 +141,14 @@ public class OtaService {
     /**
      * 开始升级
      */
-    public String startUpgrade(Long otaId, List<String> deviceIds) {
-        OtaPackage otaPackage = iOtaPackageData.findById(otaId);
+    public String startUpgrade(Long otaPackageId, List<String> deviceIds) {
+        OtaPackage otaPackage = iOtaPackageData.findById(otaPackageId);
         if (Objects.isNull(otaPackage)) {
             throw new BizException(ErrCode.DATA_NOT_EXIST);
         }
         DeviceOtaInfo deviceOtaInfo = deviceOtaInfoData.save(DeviceOtaInfo.builder()
                 .total(deviceIds.size())
+                        .packageId(otaPackageId)
                 .productKey(otaPackage.getProductKey())
                 .module(otaPackage.getModule())
                 .desc(otaPackage.getDesc())
@@ -173,8 +174,8 @@ public class OtaService {
                         .build());
                 success.getAndSet(success.get() + 1);
             } catch (Exception ex) {
-                log.error("add device upgrade error: ", ex);
-                fail.getAndSet(success.get() + 1);
+                log.error("add device upgrade error deviceId:{} ", deviceId, ex);
+                fail.getAndSet(fail.get() + 1);
             }
         });
         deviceOtaDetailData.batchSave(deviceOtaDetails);
@@ -206,5 +207,4 @@ public class OtaService {
                 .build();
         deviceService.otaUpgrade(deviceId, true, otaPackage);
     }
-
 }

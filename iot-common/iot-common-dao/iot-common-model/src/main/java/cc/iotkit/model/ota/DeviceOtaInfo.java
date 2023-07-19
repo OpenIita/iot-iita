@@ -17,6 +17,8 @@ public class DeviceOtaInfo implements Id<Long> {
 
     private Long id;
 
+    private Long packageId;
+
     private String desc;
 
     private String version;

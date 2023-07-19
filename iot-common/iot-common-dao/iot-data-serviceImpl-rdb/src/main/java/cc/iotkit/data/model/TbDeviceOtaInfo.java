@@ -25,6 +25,8 @@ public class TbDeviceOtaInfo {
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
     private Long id;
 
+    private Long packageId;
+
     @Column(name = "[desc]")
     private String desc;
 
