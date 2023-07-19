@@ -18,6 +18,6 @@ public interface RuleLogRepository extends ElasticsearchRepository<DocRuleLog, S
 
     void deleteByRuleId(String ruleId);
 
-    Page<DocRuleLog> findByRuleId(String ruleId, Pageable pageable);
+    Page<DocRuleLog> findByRuleIdOrderByLogAtDesc(String ruleId, Pageable pageable);
 
 }

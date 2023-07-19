@@ -9,16 +9,19 @@
  */
 package cc.iotkit.manager.dto.vo.taskinfo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import cc.iotkit.model.rule.TaskLog;
+import io.github.linpeilie.annotations.AutoMapper;
+import io.swagger.annotations.ApiModel;
+import lombok.*;
 
+import java.io.Serializable;
+
+
+@ApiModel(value = "TaskLogVo")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class TaskLogVo {
+@AutoMapper(target = TaskLog.class)
+public class TaskLogVo implements Serializable {
+    private static final long serialVersionUID = -1L;
 
     private String id;
 

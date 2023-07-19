@@ -20,19 +20,15 @@ public class RuleLogBo extends BaseDto  {
 	private Long time;
 
 	@ApiModelProperty(value="规则id")
-
 	private String ruleId;
 
 	@ApiModelProperty(value="状态")
-
 	private String state1;
 
 	@ApiModelProperty(value="内容")
-
 	private String content;
 
 	@ApiModelProperty(value="是否成功")
-
 	private Boolean success;
 
     }
