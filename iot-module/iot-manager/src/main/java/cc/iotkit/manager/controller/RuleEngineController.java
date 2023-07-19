@@ -44,14 +44,14 @@ public class RuleEngineController {
     @PostMapping("/list")
     public Paging<RuleInfoVo> rules(
             @Validated @RequestBody
-            PageRequest<RuleInfoBo> request
+                    PageRequest<RuleInfoBo> request
     ) {
         return ruleEngineService.selectPageList(request);
     }
 
     @ApiOperation("保存规则")
     @PostMapping("/edit")
-    public boolean saveRule(@RequestBody @Validated  Request<RuleInfoBo> ruleInfoBo) {
+    public boolean saveRule(@RequestBody @Validated Request<RuleInfoBo> ruleInfoBo) {
         return ruleEngineService.saveRule(ruleInfoBo.getData());
     }
 
@@ -80,7 +80,7 @@ public class RuleEngineController {
     @ApiOperation("规则日志")
     @PostMapping("/ruleLog/list")
     public Paging<RuleLogVo> getRuleLogs(
-           @Validated @RequestBody PageRequest<RuleLogBo> request
+            @Validated @RequestBody PageRequest<RuleLogBo> request
     ) {
         return ruleEngineService.selectRuleLogPageList(request);
     }
@@ -102,7 +102,7 @@ public class RuleEngineController {
     @ApiOperation("保存定时任务")
     @PostMapping("/task/save")
     public boolean saveTask(@Validated @RequestBody Request<TaskInfoBo> taskInfo) {
-       return ruleEngineService.saveTask(taskInfo.getData());
+        return ruleEngineService.saveTask(taskInfo.getData());
     }
 
     @ApiOperation("停止定时任务")
@@ -122,7 +122,7 @@ public class RuleEngineController {
     @PostMapping("/task/renew")
     public boolean renewTask(@Validated @RequestBody Request<String> request) {
         String taskId = request.getData();
-       return ruleEngineService.renewTask(taskId);
+        return ruleEngineService.renewTask(taskId);
 
     }
 
@@ -140,13 +140,12 @@ public class RuleEngineController {
             @Validated @RequestBody PageRequest<TaskLogBo> request
     ) {
         return ruleEngineService.selectTaskLogPageList(request);
-
     }
 
     @ApiOperation("清除定时任务日志")
     @PostMapping("/taskLogs/clear")
-    public boolean clearTaskLogs( @Validated @RequestBody Request<String> request) {
-       return ruleEngineService.clearTaskLogs(request.getData());
+    public boolean clearTaskLogs(@Validated @RequestBody Request<String> request) {
+        return ruleEngineService.clearTaskLogs(request.getData());
     }
 
 }

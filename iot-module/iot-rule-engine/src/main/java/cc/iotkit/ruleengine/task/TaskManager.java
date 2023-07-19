@@ -55,7 +55,7 @@ public class TaskManager implements ApplicationContextAware {
         int idx = 1;
         while (true) {
             PageRequest<TaskInfo> pageRequest = new PageRequest<>();
-            pageRequest.setPageNum(idx+=1);
+            pageRequest.setPageNum(idx);
             pageRequest.setPageSize(100);
             Paging<TaskInfo> all = taskInfoData.findAll(pageRequest);
             List<TaskInfo> tasks = all.getRows();
@@ -134,7 +134,7 @@ public class TaskManager implements ApplicationContextAware {
         TriggerKey triggerKey = new TriggerKey(task.getId(), task.getUid());
         Trigger oldTrigger = getScheduler().getTrigger(triggerKey);
         if (oldTrigger == null) {
-            log.warn("task isn't exists,to add");
+            log.warn("saveTask:trigger does not exist");
             addTask(task);
             return;
         }
@@ -147,9 +147,6 @@ public class TaskManager implements ApplicationContextAware {
     }
 
     public void renewTask(TaskInfo task) throws SchedulerException {
-        if (!TaskInfo.TYPE_DELAY.equals(task.getType())) {
-            throw new BizException(ErrCode.TASK_NOT_SUPPORT_RENEW);
-        }
         saveTask(task);
     }
 

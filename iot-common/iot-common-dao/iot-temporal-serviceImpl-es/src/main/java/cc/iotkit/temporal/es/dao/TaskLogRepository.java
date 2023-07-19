@@ -18,6 +18,6 @@ public interface TaskLogRepository extends ElasticsearchRepository<DocTaskLog, S
 
     void deleteByTaskId(String taskId);
 
-    Page<DocTaskLog> findByTaskId(String taskId, Pageable pageable);
+    Page<DocTaskLog> findByTaskIdOrderByLogAtDesc(String taskId, Pageable pageable);
 
 }

@@ -9,13 +9,15 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
-import cc.iotkit.data.manager.ITaskInfoData;
 import cc.iotkit.data.dao.TaskInfoRepository;
+import cc.iotkit.data.manager.ITaskInfoData;
 import cc.iotkit.data.model.TbTaskInfo;
-import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.TaskInfo;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +80,15 @@ public class TaskInfoDataImpl implements ITaskInfoData, IJPACommData<TaskInfo, S
     @Override
     public TaskInfo findById(String s) {
         return to(taskInfoRepository.findById(s).orElse(null));
+    }
+
+    @Override
+    public Paging<TaskInfo> findAll(PageRequest<TaskInfo> pageRequest) {
+        Page<TbTaskInfo> ret = taskInfoRepository.findAll(PageBuilder.toPageable(pageRequest));
+        return new Paging<>(ret.getTotalElements(),
+                ret.getContent().stream().map(this::to)
+                        .collect(Collectors.toList())
+        );
     }
 
     @Override

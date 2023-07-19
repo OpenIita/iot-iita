@@ -9,6 +9,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
@@ -16,6 +17,8 @@ import cc.iotkit.data.manager.IRuleInfoData;
 import cc.iotkit.data.dao.RuleInfoRepository;
 import cc.iotkit.data.model.TbRuleInfo;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.data.model.TbTaskInfo;
+import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.model.rule.FilterConfig;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
@@ -103,6 +106,12 @@ public class RuleInfoDataImpl implements IRuleInfoData, IJPACommData<RuleInfo, S
     @Override
     public List<RuleInfo> findByIds(Collection<String> id) {
         return null;
+    }
+
+    @Override
+    public Paging<RuleInfo> findAll(PageRequest<RuleInfo> pageRequest) {
+        Page<TbRuleInfo> ret = ruleInfoRepository.findAll(PageBuilder.toPageable(pageRequest));
+        return new Paging<>(ret.getTotalElements(), fromTb(ret.getContent()));
     }
 
     @Override

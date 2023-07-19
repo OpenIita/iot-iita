@@ -35,7 +35,7 @@ public class RuleLogDataImpl implements IRuleLogData {
 
     @Override
     public Paging<RuleLog> findByRuleId(String ruleId, int page, int size) {
-        Page<DocRuleLog> paged = ruleLogRepository.findByRuleId(ruleId, Pageable.ofSize(size).withPage(page - 1));
+        Page<DocRuleLog> paged = ruleLogRepository.findByRuleIdOrderByLogAtDesc(ruleId, Pageable.ofSize(size).withPage(page - 1));
         return new Paging<>(paged.getTotalElements(),
                 paged.getContent().stream().map(o -> MapstructUtils.convert(o, RuleLog.class))
                         .collect(Collectors.toList()));
