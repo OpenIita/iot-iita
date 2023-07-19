@@ -11,10 +11,9 @@ function getMid() {
 this.decode = function (msg) {
     var content = msg.content;
     var topic = content.topic;
-    var bytes = CRC.strToByte(content.payload);
-
+    var bytes = arrayGroup(content.payload.params,2);
+    var byteData=content.payload.params;
     if (topic.endsWith("/thing/model/up_raw")) {
-        var byteData = ab2hex(bytes)
         var data = arrayGroup(byteData, 2);
         var params = {};
         var uint8Array = new Uint8Array(bytes.length);
@@ -170,7 +169,12 @@ this.encode = function (service, device) {
     var method = "thing.service.";
     var topic = "/sys/" + service.productKey + "/" + service.deviceName + "/thing/model/down_raw";
     var params = {};
-
+    var payloadArray = [];
+    var deviceArray = [];;
+    var totalArray =[];
+    var totalItemArray = [];
+    var itemArray = [];
+    var outFFIndex = ''
     var type = service.type;
     var identifier = service.identifier;
     if (type == "property" && identifier == "get") {
@@ -195,6 +199,7 @@ this.encode = function (service, device) {
         for (var p in service.params) {
             params[p] = service.params[p];
         }
+        var paramsArr = Object.keys(params)
         //站地址
         if (paramsArr.includes('query')) {
             let queryHexData = arrayGroup(params['query'],2)
@@ -465,14 +470,14 @@ CRC.ToModbusCRC16 = function (str) {
 };
 
 CRC.strToByte = function (str) {
-    var tmp = str.split(''),
+    var tmp = str.split(""),
         arr = [];
     for (var i = 0, c = tmp.length; i < c; i++) {
         var j = encodeURI(tmp[i]);
         if (j.length == 1) {
             arr.push(j.charCodeAt());
         } else {
-            var b = j.split('%');
+            var b = j.split("%");
             for (var m = 1; m < b.length; m++) {
                 arr.push(parseInt('0x' + b[m]));
             }
@@ -482,7 +487,7 @@ CRC.strToByte = function (str) {
 };
 
 CRC.convertChinese = function (str) {
-    var tmp = str.split(''),
+    var tmp = str.split(""),
         arr = [];
     for (var i = 0, c = tmp.length; i < c; i++) {
         var s = tmp[i].charCodeAt();
@@ -496,7 +501,7 @@ CRC.convertChinese = function (str) {
 };
 
 CRC.filterChinese = function (str) {
-    var tmp = str.split(''),
+    var tmp = str.split(""),
         arr = [];
     for (var i = 0, c = tmp.length; i < c; i++) {
         var s = tmp[i].charCodeAt();

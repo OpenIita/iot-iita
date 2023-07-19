@@ -127,7 +127,7 @@ function register(payload) {
     var pwd = md5(product.getProductSecret() + auth.clientid);
 
     if (pwd.toLocaleLowerCase() != auth.password.toLocaleLowerCase()) {
-        throw new Error("incorrect password" + "pwd->" + pwd + " productSecret->" + product.productSecret);
+        throw new Error("incorrect password" + "pwd->" + pwd + " productSecret->" + product.getProductSecret());
     }
     return {
         type: "register",
