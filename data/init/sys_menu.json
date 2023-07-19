@@ -2498,5 +2498,24 @@
    "remark": "",
    "status": "0",
    "visible": "0"
- }
+ },
+   {
+   "id": 2225,
+   "menuName": "OTA",
+   "parentId": 0,
+   "orderNum": 1,
+   "path": "upgradePack",
+   "component": "iot/ota/upgradePack/index",
+   "queryParam": null,
+   "isFrame": "1",
+   "isCache": "0",
+   "menuType": "C",
+   "visible": "0",
+   "status": "0",
+   "perms": null,
+   "icon": "",
+     "createBy": 1,
+     "createDept": 103,
+     "updateBy": 1
+   }
   ]
