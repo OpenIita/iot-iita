@@ -1,5 +1,5 @@
 var mid = 1;
-
+var COMMAD_UNKOWN = 0xff;    //未知的命令
 function getMid() {
     mid++;
     if (mid > 10000) {
@@ -11,10 +11,9 @@ function getMid() {
 this.decode = function (msg) {
     var content = msg.content;
     var topic = content.topic;
-    var bytes = CRC.strToByte(content.payload);
-
+    var bytes = arrayGroup(content.payload.params,2);
+    var byteData=content.payload.params;
     if (topic.endsWith("/thing/model/up_raw")) {
-        var byteData = ab2hex(bytes)
         var data = arrayGroup(byteData, 2);
         var params = {};
         var uint8Array = new Uint8Array(bytes.length);
@@ -170,7 +169,12 @@ this.encode = function (service, device) {
     var method = "thing.service.";
     var topic = "/sys/" + service.productKey + "/" + service.deviceName + "/thing/model/down_raw";
     var params = {};
-
+    var payloadArray = [];
+    var deviceArray = [];;
+    var totalArray =[];
+    var totalItemArray = [];
+    var itemArray = [];
+    var outFFIndex = ''
     var type = service.type;
     var identifier = service.identifier;
     if (type == "property" && identifier == "get") {
@@ -195,6 +199,7 @@ this.encode = function (service, device) {
         for (var p in service.params) {
             params[p] = service.params[p];
         }
+        var paramsArr = Object.keys(params)
         //站地址
         if (paramsArr.includes('query')) {
             let queryHexData = arrayGroup(params['query'],2)
@@ -289,12 +294,12 @@ this.encode = function (service, device) {
         // payloadArray = payloadArray.concat(buffer_float32(prop_float)); //属性'prop_float'的值。
 
     }else if (method ==  'thing.event.property.post') { //设备上报数据返回结果,如果不需要回复,可以去除该内容
-        var code = json['code'];
-        payloadArray = payloadArray.concat(buffer_uint8(COMMAND_REPORT_REPLY)); //command字段
-        payloadArray = payloadArray.concat(buffer_int32(parseInt(id))); // ALink JSON格式 'id'
-        payloadArray = payloadArray.concat(buffer_uint8(code));
+        // var code = json['code'];
+        // payloadArray = payloadArray.concat(buffer_uint8(COMMAND_REPORT_REPLY)); //command字段
+        // payloadArray = payloadArray.concat(buffer_int32(parseInt(id))); // ALink JSON格式 'id'
+        // payloadArray = payloadArray.concat(buffer_uint8(code));
     } else { //未知命令，对于有些命令不做处理
-        var code = json['code'];
+        var code = "FF";
         payloadArray = payloadArray.concat(buffer_uint8(COMMAD_UNKOWN)); //command字段
         payloadArray = payloadArray.concat(buffer_int32(parseInt(id))); // ALink JSON格式 'id'
         payloadArray = payloadArray.concat(buffer_uint8(code));
@@ -308,7 +313,7 @@ this.encode = function (service, device) {
             payload: JSON.stringify({
                 id: deviceMid,
                 method: method += "property." + identifier,
-                params: payloadArray
+                params: ab2hex(payloadArray).toUpperCase()
             })
         }
     }
@@ -465,14 +470,14 @@ CRC.ToModbusCRC16 = function (str) {
 };
 
 CRC.strToByte = function (str) {
-    var tmp = str.split(''),
+    var tmp = str.split(""),
         arr = [];
     for (var i = 0, c = tmp.length; i < c; i++) {
         var j = encodeURI(tmp[i]);
         if (j.length == 1) {
             arr.push(j.charCodeAt());
         } else {
-            var b = j.split('%');
+            var b = j.split("%");
             for (var m = 1; m < b.length; m++) {
                 arr.push(parseInt('0x' + b[m]));
             }
@@ -482,7 +487,7 @@ CRC.strToByte = function (str) {
 };
 
 CRC.convertChinese = function (str) {
-    var tmp = str.split(''),
+    var tmp = str.split(""),
         arr = [];
     for (var i = 0, c = tmp.length; i < c; i++) {
         var s = tmp[i].charCodeAt();
@@ -496,7 +501,7 @@ CRC.convertChinese = function (str) {
 };
 
 CRC.filterChinese = function (str) {
-    var tmp = str.split(''),
+    var tmp = str.split(""),
         arr = [];
     for (var i = 0, c = tmp.length; i < c; i++) {
         var s = tmp[i].charCodeAt();

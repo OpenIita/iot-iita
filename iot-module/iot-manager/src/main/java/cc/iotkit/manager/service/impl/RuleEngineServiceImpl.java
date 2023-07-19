@@ -257,9 +257,7 @@ public class RuleEngineServiceImpl implements IRuleEngineService {
 
     @Override
     public Paging<TaskLogVo> selectTaskLogPageList(PageRequest<TaskLogBo> request) {
-
         TaskLog taskLog = request.getData().to(TaskLog.class);
-
         Paging<TaskLog> byTaskId = taskLogData.findByTaskId(taskLog.getTaskId(), request.getPageNum(), request.getPageSize());
         return byTaskId.to(TaskLogVo.class);
     }

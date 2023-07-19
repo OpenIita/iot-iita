@@ -78,7 +78,7 @@ public class RuleManager {
         int idx = 1;
         while (true) {
             PageRequest<RuleInfo> pageRequest = new PageRequest<>();
-            pageRequest.setPageNum(idx += 1);
+            pageRequest.setPageNum(idx);
             pageRequest.setPageSize(100);
             Paging<RuleInfo> all = ruleInfoData.findAll(pageRequest);
             List<RuleInfo> rules = all.getRows();
