@@ -50,7 +50,9 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 #### 系统生态
 
-**前端项目见：** https://gitee.com/openiita/iita-iot-web-admin
+**前端项目：** 
+
+<img src="https://gitee.com/open-iita/iita-iot-web-admin/widgets/widget_card.svg?colors=393222,ebdfc1,fffae5,d8ca9f,393222,a28b40">
 
  **演示地址：** [点击访问](http://159.75.222.119:16808)
 
@@ -77,7 +79,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 2、启动时指定active: --spring.profiles.active=mysql
 
-##### 时序数据库切换为TDengein方法
+##### 时序数据库切换为TDengin(版本：2.6x)方法
 
 1、注释掉iot-starter/pom.xml中的 iot-temporal-serviceImpl-es，并打开iot-td-temporal-service的注释
 
