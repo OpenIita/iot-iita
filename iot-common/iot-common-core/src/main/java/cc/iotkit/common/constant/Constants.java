@@ -95,10 +95,6 @@ public interface Constants {
 
     String CACHE_OAUTH_CLIENT = "oauth_client_cache";
 
-    String WECHAT_APP_ID = "wx791cb7bf75950e0c";
-
-    String WECHAT_APP_SECRET = "eeef73ce71f1a722ad6298985d859844";
-
     String APP_DESIGN_CACHE = "app_design_cache";
 
     String CACHE_PRODUCT_SCRIPT = "product_script_cache";

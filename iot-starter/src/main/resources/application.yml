@@ -57,7 +57,7 @@ spring:
           username: sa
           password: 123456
 
-  # 内置h2 web console设置
+    # 内置h2 web console设置
     platform: h2
   h2:
     console:
@@ -69,22 +69,22 @@ spring:
 
 
   # <<==========mysql配置开始==============
-#  datasource:
-#    url: jdbc:mysql://127.0.0.1:3306/iotkit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
-#    driverClassName: com.mysql.cj.jdbc.Driver
-#    username: root
-#    password: 123456
-#    validationQuery: SELECT 1
-#    testOnBorrow: true
-#  jpa:
-#    database: MySQL
-#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-##    show-sql: true
-#    hibernate:
-#      ddl-auto: update
-#    properties:
-#      hibernate:
-#        format_sql: true
+  #  datasource:
+  #    url: jdbc:mysql://127.0.0.1:3306/iotkit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+  #    driverClassName: com.mysql.cj.jdbc.Driver
+  #    username: root
+  #    password: 123456
+  #    validationQuery: SELECT 1
+  #    testOnBorrow: true
+  #  jpa:
+  #    database: MySQL
+  #    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  ##    show-sql: true
+  #    hibernate:
+  #      ddl-auto: update
+  #    properties:
+  #      hibernate:
+  #        format_sql: true
   # ============mysql配置结束============>>
 
   #<<================es时序数据配置开始===============
@@ -99,11 +99,11 @@ spring:
   #================es时序数据配置结束===============>>
 
   #<<===========tdengine时序数据库配置开始============
-#  td-datasource:
-#    url: jdbc:TAOS-RS://127.0.0.1:6041/iotkit?timezone=UTC-8&charset=UTF-8&locale=en_US.UTF-8
-#    username: root
-#    password: taosdata
-#    driverClassName: com.taosdata.jdbc.rs.RestfulDriver
+  #  td-datasource:
+  #    url: jdbc:TAOS-RS://127.0.0.1:6041/iotkit?timezone=UTC-8&charset=UTF-8&locale=en_US.UTF-8
+  #    username: root
+  #    password: taosdata
+  #    driverClassName: com.taosdata.jdbc.rs.RestfulDriver
   #===========tdengine时序数据库配置开始============>>
 
 
@@ -148,11 +148,6 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: false
-
-#认证中心地址
-oauth2:
-  auth-server-url: http://127.0.0.1:8086
-
 
 # 多租户配置
 tenant:
