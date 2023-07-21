@@ -19,8 +19,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-redis</artifactId>
         </dependency>
 
         <dependency>
