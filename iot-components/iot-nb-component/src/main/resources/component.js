@@ -271,7 +271,6 @@ this.onReceive = function (head, type, payload) {
     }
     var pk = arr[2];
     var dn = arr[3];
-    payload = JSON.parse(payload);
 
     //子设备注册
     if (topic.endsWith('/register')) {
@@ -283,12 +282,12 @@ this.onReceive = function (head, type, payload) {
         {
             productKey: pk,
             deviceName: dn,
-            mid: payload.id,
+            // mid: payload.id,
             content: {
                 topic: topic.replace("/s/", "/c/") + "_reply",
                 payload: JSON.stringify({
-                    id: payload.id,
-                    method: payload.method + "_reply",
+                    // id: payload.id,
+                    method: "thing.event.property.post",
                     code: 0,
                 })
             }
@@ -308,7 +307,7 @@ this.onReceive = function (head, type, payload) {
         data: {
             productKey: pk,
             deviceName: dn,
-            mid: payload.id,
+            mid: "3",
             content: {
                 topic: topic,
                 payload: payload

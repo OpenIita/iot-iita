@@ -1,5 +1,5 @@
 var mid = 1;
-
+var COMMAD_UNKOWN = 0xff;    //未知的命令
 function getMid() {
     mid++;
     if (mid > 10000) {
@@ -11,8 +11,8 @@ function getMid() {
 this.decode = function (msg) {
     var content = msg.content;
     var topic = content.topic;
-    var bytes = arrayGroup(content.payload.params,2);
-    var byteData=content.payload.params;
+    var bytes = arrayGroup(content.payload,2);
+    var byteData=content.payload;
     if (topic.endsWith("/thing/model/up_raw")) {
         var data = arrayGroup(byteData, 2);
         var params = {};
@@ -149,16 +149,6 @@ this.decode = function (msg) {
             time: new Date().getTime(), //时间戳，消息上报时间
             data: params,
         };
-    }  else if (topic.indexOf("/event/") > 0) {
-        //事件上报
-    } else if (topic.endsWith("/service/property/set_reply")) {
-        //属性设置回复
-    } else if (topic.endsWith("/config/set_reply")) {
-        //设备配置设置回复
-    } else if (topic.endsWith("/config/get")) {
-        //设备配置获取
-    } else if (topic.endsWith("_reply")) {
-        //服务回复
     }
     return null;
 };
@@ -294,12 +284,12 @@ this.encode = function (service, device) {
         // payloadArray = payloadArray.concat(buffer_float32(prop_float)); //属性'prop_float'的值。
 
     }else if (method ==  'thing.event.property.post') { //设备上报数据返回结果,如果不需要回复,可以去除该内容
-        var code = json['code'];
-        payloadArray = payloadArray.concat(buffer_uint8(COMMAND_REPORT_REPLY)); //command字段
-        payloadArray = payloadArray.concat(buffer_int32(parseInt(id))); // ALink JSON格式 'id'
-        payloadArray = payloadArray.concat(buffer_uint8(code));
+        // var code = json['code'];
+        // payloadArray = payloadArray.concat(buffer_uint8(COMMAND_REPORT_REPLY)); //command字段
+        // payloadArray = payloadArray.concat(buffer_int32(parseInt(id))); // ALink JSON格式 'id'
+        // payloadArray = payloadArray.concat(buffer_uint8(code));
     } else { //未知命令，对于有些命令不做处理
-        var code = json['code'];
+        var code = "FF";
         payloadArray = payloadArray.concat(buffer_uint8(COMMAD_UNKOWN)); //command字段
         payloadArray = payloadArray.concat(buffer_int32(parseInt(id))); // ALink JSON格式 'id'
         payloadArray = payloadArray.concat(buffer_uint8(code));
@@ -313,7 +303,7 @@ this.encode = function (service, device) {
             payload: JSON.stringify({
                 id: deviceMid,
                 method: method += "property." + identifier,
-                params: payloadArray
+                params: ab2hex(payloadArray).toUpperCase()
             })
         }
     }

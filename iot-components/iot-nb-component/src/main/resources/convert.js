@@ -11,8 +11,8 @@ function getMid() {
 this.decode = function (msg) {
     var content = msg.content;
     var topic = content.topic;
-    var bytes = arrayGroup(content.payload.params,2);
-    var byteData=content.payload.params;
+    var bytes = arrayGroup(content.payload,2);
+    var byteData=content.payload;
     if (topic.endsWith("/thing/model/up_raw")) {
         var data = arrayGroup(byteData, 2);
         var params = {};
@@ -149,16 +149,6 @@ this.decode = function (msg) {
             time: new Date().getTime(), //时间戳，消息上报时间
             data: params,
         };
-    }  else if (topic.indexOf("/event/") > 0) {
-        //事件上报
-    } else if (topic.endsWith("/service/property/set_reply")) {
-        //属性设置回复
-    } else if (topic.endsWith("/config/set_reply")) {
-        //设备配置设置回复
-    } else if (topic.endsWith("/config/get")) {
-        //设备配置获取
-    } else if (topic.endsWith("_reply")) {
-        //服务回复
     }
     return null;
 };

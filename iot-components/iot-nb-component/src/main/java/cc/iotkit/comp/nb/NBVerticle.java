@@ -23,6 +23,7 @@ import io.vertx.core.net.PemKeyCertOptions;
 import io.vertx.mqtt.*;
 import io.vertx.mqtt.messages.codes.MqttSubAckReasonCode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.Charset;
@@ -148,7 +149,7 @@ public class NBVerticle extends AbstractVerticle {
                 // ack the subscriptions request
                 endpoint.unsubscribeAcknowledge(unsubscribe.messageId());
             }).publishHandler(message -> {
-                String payload = message.payload().toString(Charset.defaultCharset());
+                String payload =  Hex.encodeHexString(message.payload().getBytes());
                 log.info("Received message:{}, with QoS {}", payload,
                         message.qosLevel());
                 if (StringUtils.isBlank(payload)) {
