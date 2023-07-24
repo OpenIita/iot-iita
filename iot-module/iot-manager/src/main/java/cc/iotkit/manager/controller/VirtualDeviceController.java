@@ -25,6 +25,7 @@ import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.device.VirtualDeviceLog;
 import cc.iotkit.temporal.IVirtualDeviceLogData;
 import cc.iotkit.virtualdevice.VirtualManager;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,7 @@ public class VirtualDeviceController {
     private IVirtualDeviceLogData virtualDeviceLogData;
 
     @ApiOperation("获取虚拟设备列表")
+    @SaCheckPermission("iot:virtualDevice:query")
     @PostMapping("/list")
     public Paging<VirtualDevice> getDevices(PageRequest<VirtualDevice> pageRequest) {
         return virtualDeviceData.findAll(pageRequest);
@@ -62,6 +64,7 @@ public class VirtualDeviceController {
      * 添加虚拟设备
      */
     @ApiOperation("添加虚拟设备")
+    @SaCheckPermission("iot:virtualDevice:add")
     @PostMapping("/add")
     public void add(@Validated @RequestBody VirtualDevice virtualDevice) {
         virtualDeviceData.save(virtualDevice);
@@ -71,6 +74,7 @@ public class VirtualDeviceController {
      * 修改虚拟设备
      */
     @ApiOperation("修改虚拟设备")
+    @SaCheckPermission("iot:virtualDevice:edit")
     @PostMapping("/modify")
     public void modify(@Validated @RequestBody Request<VirtualDevice> bo) {
         VirtualDevice virtualDevice = bo.getData();
@@ -85,6 +89,7 @@ public class VirtualDeviceController {
      * 获取虚拟设备详情
      */
     @ApiOperation("获取虚拟设备详情")
+    @SaCheckPermission("iot:virtualDevice:query")
     @PostMapping("/getDetail")
     public VirtualDevice detail(@Validated @RequestBody Request<String> bo) {
         return checkOwner(bo.getData());
@@ -94,6 +99,7 @@ public class VirtualDeviceController {
      * 设置虚拟设备状态
      */
     @ApiOperation("设置虚拟设备状态")
+    @SaCheckPermission("iot:virtualDevice:edit")
     @PostMapping("/setState")
     public void setState(@Validated @RequestBody Request<ChangeStateBo> bo) {
         ChangeStateBo data = bo.getData();
@@ -117,6 +123,7 @@ public class VirtualDeviceController {
      * 删除
      */
     @ApiOperation("删除虚拟设备")
+    @SaCheckPermission("iot:virtualDevice:remove")
     @PostMapping("/delete")
     public void delete(@Validated @RequestBody Request<String> bo) {
         String id = bo.getData();
@@ -128,6 +135,7 @@ public class VirtualDeviceController {
      * 删除
      */
     @ApiOperation("批量删除虚拟设备")
+    @SaCheckPermission("iot:virtualDevice:remove")
     @PostMapping("/batchDelete")
     public void batchDelete(@Validated @RequestBody Request<List<String>> ids) {
         virtualDeviceData.deleteByIds(ids.getData());
@@ -137,6 +145,7 @@ public class VirtualDeviceController {
      * 保存脚本
      */
     @ApiOperation("保存脚本")
+    @SaCheckPermission("iot:virtualDevice:edit")
     @PostMapping("/saveScript")
     public void saveScript(@Validated @RequestBody Request<DeviceSaveScriptBo> bo) {
         DeviceSaveScriptBo data = bo.getData();
@@ -151,6 +160,7 @@ public class VirtualDeviceController {
      * 保存关联设备
      */
     @ApiOperation("保存关联设备")
+    @SaCheckPermission("iot:virtualDevice:edit")
     @PostMapping("/saveDevices")
     public void saveDevices(@Validated @RequestBody Request<VirtualSaveDevicesBo> bo) {
         VirtualSaveDevicesBo data = bo.getData();
@@ -165,6 +175,7 @@ public class VirtualDeviceController {
      * 手动执行虚拟设备
      */
     @ApiOperation("手动执行虚拟设备")
+    @SaCheckPermission("iot:virtualDevice:query")
     @PostMapping("/run")
     public void run(@Validated @RequestBody Request<String> bo) {
         String id = bo.getData();
@@ -176,6 +187,7 @@ public class VirtualDeviceController {
      * 取虚拟设备执行日志
      */
     @ApiOperation("取虚拟设备执行日志")
+    @SaCheckPermission("iot:virtualDevice:query")
     @PostMapping("/logs/list")
     public Paging<VirtualDeviceLog> getLogs(
             @Validated @RequestBody PageRequest<DeviceLogQueryBo> bo) {

@@ -21,6 +21,7 @@ import cc.iotkit.manager.dto.vo.ruleinfo.RuleLogVo;
 import cc.iotkit.manager.dto.vo.taskinfo.TaskInfoVo;
 import cc.iotkit.manager.dto.vo.taskinfo.TaskLogVo;
 import cc.iotkit.manager.service.IRuleEngineService;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,7 @@ public class RuleEngineController {
     IRuleEngineService ruleEngineService;
 
     @ApiOperation("规则列表")
+    @SaCheckPermission("iot:rule:query")
     @PostMapping("/list")
     public Paging<RuleInfoVo> rules(
             @Validated @RequestBody
@@ -50,12 +52,14 @@ public class RuleEngineController {
     }
 
     @ApiOperation("保存规则")
+    @SaCheckPermission("iot:rule:eidt")
     @PostMapping("/edit")
     public boolean saveRule(@RequestBody @Validated Request<RuleInfoBo> ruleInfoBo) {
         return ruleEngineService.saveRule(ruleInfoBo.getData());
     }
 
     @ApiOperation("暂停规则")
+    @SaCheckPermission("iot:rule:edit")
     @PostMapping("/pause")
     public boolean pauseRule(@Validated @RequestBody Request<String> request) {
         String ruleId = request.getData();
@@ -63,6 +67,7 @@ public class RuleEngineController {
     }
 
     @ApiOperation("恢复规则")
+    @SaCheckPermission("iot:rule:edit")
     @PostMapping("/resume")
     public boolean resumeRule(@Validated @RequestBody Request<String> request) {
         String ruleId = request.getData();
@@ -71,6 +76,7 @@ public class RuleEngineController {
     }
 
     @ApiOperation("删除规则")
+    @SaCheckPermission("iot:rule:remove")
     @PostMapping("/delete")
     public boolean deleteRule(@Validated @RequestBody Request<String> request) {
         String ruleId = request.getData();
@@ -78,6 +84,7 @@ public class RuleEngineController {
     }
 
     @ApiOperation("规则日志")
+    @SaCheckPermission("iot:rule:query")
     @PostMapping("/ruleLog/list")
     public Paging<RuleLogVo> getRuleLogs(
             @Validated @RequestBody PageRequest<RuleLogBo> request
@@ -86,6 +93,7 @@ public class RuleEngineController {
     }
 
     @ApiOperation("清理日志")
+    @SaCheckPermission("iot:rule:remove")
     @PostMapping("/ruleLog/clear")
     public boolean clearRuleLogs(@Validated @RequestBody Request<String> request) {
         String ruleId = request.getData();
@@ -94,18 +102,21 @@ public class RuleEngineController {
     }
 
     @ApiOperation("定时任务列表")
+    @SaCheckPermission("iot:task:query")
     @PostMapping("/tasks/list")
     public Paging<TaskInfoVo> tasks(@Validated @RequestBody PageRequest<TaskInfoBo> request) {
         return ruleEngineService.selectTaskPageList(request);
     }
 
     @ApiOperation("保存定时任务")
+    @SaCheckPermission("iot:task:edit")
     @PostMapping("/task/save")
     public boolean saveTask(@Validated @RequestBody Request<TaskInfoBo> taskInfo) {
         return ruleEngineService.saveTask(taskInfo.getData());
     }
 
     @ApiOperation("停止定时任务")
+    @SaCheckPermission("iot:task:edit")
     @PostMapping("/task/pause")
     public boolean pauseTask(@Validated @RequestBody Request<String> request) {
         String taskId = request.getData();
@@ -113,12 +124,14 @@ public class RuleEngineController {
     }
 
     @ApiOperation("恢复定时任务")
+    @SaCheckPermission("iot:task:edit")
     @PostMapping("/task/resume")
     public boolean resumeTask(@Validated @RequestBody Request<String> request) {
         return ruleEngineService.resumeTask(request.getData());
     }
 
     @ApiOperation("更新定时任务")
+    @SaCheckPermission("iot:task:edit")
     @PostMapping("/task/renew")
     public boolean renewTask(@Validated @RequestBody Request<String> request) {
         String taskId = request.getData();
@@ -127,6 +140,7 @@ public class RuleEngineController {
     }
 
     @ApiOperation("删除定时任务")
+    @SaCheckPermission("iot:task:remove")
     @PostMapping("/task/delete")
     public boolean deleteTask(@Validated @RequestBody Request<String> request) {
         String taskId = request.getData();
@@ -135,6 +149,7 @@ public class RuleEngineController {
     }
 
     @ApiOperation("定时任务日志list")
+    @SaCheckPermission("iot:task:query")
     @PostMapping("/taskLogs/list")
     public Paging<TaskLogVo> getTaskLogs(
             @Validated @RequestBody PageRequest<TaskLogBo> request
@@ -143,6 +158,7 @@ public class RuleEngineController {
     }
 
     @ApiOperation("清除定时任务日志")
+    @SaCheckPermission("iot:task:remove")
     @PostMapping("/taskLogs/clear")
     public boolean clearTaskLogs(@Validated @RequestBody Request<String> request) {
         return ruleEngineService.clearTaskLogs(request.getData());

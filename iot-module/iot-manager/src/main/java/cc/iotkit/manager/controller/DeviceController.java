@@ -31,6 +31,7 @@ import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -61,42 +62,49 @@ public class DeviceController {
 
 
     @ApiOperation(value = "服务调用", notes = "服务调用", httpMethod = "POST")
+    @SaCheckPermission("iot:device:ctrl")
     @PostMapping("/service/invoke")
     public InvokeResult invokeService(@RequestBody @Validated Request<ServiceInvokeBo> request) {
         return new InvokeResult(deviceService.invokeService(request.getData().getDeviceId(), request.getData().getService(), request.getData().getArgs()));
     }
 
     @ApiOperation(value = "属性获取", notes = "属性获取", httpMethod = "POST")
+    @SaCheckPermission("iot:device:ctrl")
     @PostMapping("/service/property/get")
     public InvokeResult invokeServicePropertySet(@RequestBody @Validated  Request<GetDeviceServicePorpertyBo> request) {
         return new InvokeResult(deviceService.getProperty(request.getData().getDeviceId(), request.getData().getPropertyNames(), true));
     }
 
     @ApiOperation(value = "属性设置", notes = "属性设置", httpMethod = "POST")
+    @SaCheckPermission("iot:device:ctrl")
     @PostMapping("/service/property/set")
     public InvokeResult setProperty(@RequestBody @Validated Request<SetDeviceServicePorpertyBo> request) {
         return new InvokeResult(deviceService.setProperty(request.getData().getDeviceId(), request.getData().getArgs()));
     }
 
     @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "POST")
+    @SaCheckPermission("iot:device:query")
     @PostMapping("/list")
     public Paging<DeviceInfo> getDevices(@Validated @RequestBody PageRequest<DeviceQueryBo> pageRequest) {
         return deviceServiceImpl.getDevices(pageRequest);
     }
 
     @ApiOperation(value = "创建设备")
+    @SaCheckPermission("iot:device:add")
     @PostMapping("/add")
     public boolean createDevice(@RequestBody @Validated Request<DeviceInfoBo> bo) {
         return deviceServiceImpl.addDevice(bo.getData());
     }
 
     @ApiOperation(value = "保存设备")
+    @SaCheckPermission("iot:device:edit")
     @PostMapping("/save")
     public boolean saveDevice(@RequestBody @Validated Request<DeviceInfoBo> bo) {
         return deviceServiceImpl.saveDevice(bo.getData());
     }
 
     @ApiOperation(value = "获取子设备", notes = "获取子设备")
+    @SaCheckPermission("iot:device:query")
     @PostMapping("/children/list")
     public List<DeviceInfoVo> getChildren(@Validated @RequestBody PageRequest<String> request) {
         String deviceId = request.getData();
@@ -104,42 +112,49 @@ public class DeviceController {
     }
 
     @ApiOperation("获取网关设备")
+    @SaCheckPermission("iot:device:query")
     @PostMapping("/getParentDevices")
     public List<ParentDeviceVo> getParentDevices() {
         return deviceServiceImpl.getParentDevices();
     }
 
     @ApiOperation("获取设备详情")
+    @SaCheckPermission("iot:device:query")
     @PostMapping("/detail")
     public DeviceInfo getDetail(@RequestBody @Validated Request<String> request) {
         return deviceServiceImpl.getDetail(request.getData());
     }
 
     @ApiOperation("获取设备详情")
+    @SaCheckPermission("iot:device:query")
     @PostMapping("/getByPkDn")
     public DeviceInfo getByPkDn(@Validated @RequestBody Request<DeviceQueryByPkDnBo> query) {
         return deviceServiceImpl.getByPkDn(query.getData().getPk(), query.getData().getDn());
     }
 
     @ApiOperation("删除设备")
+    @SaCheckPermission("iot:device:remove")
     @PostMapping("/delete")
     public boolean deleteDevice(@Validated @RequestBody Request<String> request) {
         return deviceServiceImpl.deleteDevice(request.getData());
     }
 
     @ApiOperation("批量删除设备")
+    @SaCheckPermission("iot:device:remove")
     @PostMapping("/batchDelete")
     public boolean batchDelete(@Validated @RequestBody Request<List<String>> request) {
         return deviceServiceImpl.batchDeleteDevice(request.getData());
     }
 
     @ApiOperation("设备物模型日志")
+    @SaCheckPermission("iot:deviceLog:query")
     @PostMapping("/deviceLogs/list")
     public Paging<ThingModelMessage> logs(@Validated @RequestBody PageRequest<DeviceLogQueryBo> request) {
         return deviceServiceImpl.logs(request);
     }
 
     @ApiOperation("设备属性日志")
+    @SaCheckPermission("iot:deviceLog:query")
     @PostMapping("/deviceProperty/log/list")
     public List<DeviceProperty> getPropertyHistory(@Validated @RequestBody
                                                    Request<DevicePropertyLogQueryBo> query) {
@@ -152,12 +167,14 @@ public class DeviceController {
     }
 
     @ApiOperation("设备解绑")
+    @SaCheckPermission("iot:device:edit")
     @PostMapping("/unbind")
     public boolean unbindDevice(@Validated @RequestBody Request<String> request) {
         return deviceServiceImpl.unbindDevice(request.getData());
     }
 
     @ApiOperation("获取设备物模型")
+    @SaCheckPermission("iot:thingModel:query")
     @PostMapping("/getThingModel")
     public ThingModelVo getThingModel(@Validated @RequestBody Request<String> request) {
         String deviceId = request.getData();
@@ -166,12 +183,14 @@ public class DeviceController {
     }
 
     @ApiOperation("添加标签")
+    @SaCheckPermission("iot:device:edit")
     @PostMapping("/tag/add")
     public boolean addTag(@Validated @RequestBody Request<DeviceTagAddBo> bo) {
         return deviceServiceImpl.addTag(bo.getData());
     }
 
     @ApiOperation("模拟设备上报")
+    @SaCheckPermission("iot:device:query")
     @PostMapping("/simulateSend")
     public boolean simulateSend(
             @Validated @RequestBody Request<ThingModelMessageBo> bo) {
@@ -183,6 +202,7 @@ public class DeviceController {
      * 消费设备信息消息（实时推送设备信息）
      */
     @ApiOperation("消费设备信息消息（实时推送设备信息）")
+    @SaCheckPermission("iot:device:query")
     @PostMapping("/consumer")
     public DeferredResult<ThingModelMessage> consumerDeviceInfo(
             @Validated @RequestBody Request<DeviceConsumerBo> bo
@@ -195,6 +215,7 @@ public class DeviceController {
      * 获取分组列表
      */
     @ApiOperation(value = "获取分组列表")
+    @SaCheckPermission("iot:deviceGroup:query")
     @PostMapping("/groups/list")
     public Paging<DeviceGroupVo> getDeviceGroups(
             @Validated @RequestBody PageRequest<DeviceGroupBo> pageRequest) {
@@ -205,6 +226,7 @@ public class DeviceController {
      * 添加设备分组
      */
     @ApiOperation(value = "添加设备分组")
+    @SaCheckPermission("iot:deviceGroup:add")
     @PostMapping("/group/add")
     public boolean addGroup(@Validated @RequestBody Request<DeviceGroupBo> group) {
         return deviceServiceImpl.addGroup(group.getData().to(DeviceGroup.class));
@@ -214,6 +236,7 @@ public class DeviceController {
      * 修改设备分组
      */
     @ApiOperation(value = "修改设备分组")
+    @SaCheckPermission("iot:deviceGroup:edit")
     @PostMapping("/group/edit")
     public boolean editGroup(@RequestBody @Validated Request<DeviceGroupBo> bo) {
         return deviceServiceImpl.updateGroup(bo.getData());
@@ -224,6 +247,7 @@ public class DeviceController {
      * 删除分组
      */
     @ApiOperation(value = "删除分组")
+    @SaCheckPermission("iot:deviceGroup:remove")
     @PostMapping("/group/delete")
     public boolean deleteGroup(@Validated @RequestBody Request<String> request) {
         String id = request.getData();
@@ -234,6 +258,7 @@ public class DeviceController {
      * 清空组下所有设备
      */
     @ApiOperation(value = "清空组下所有设备")
+    @SaCheckPermission("iot:deviceGroup:remove")
     @PostMapping("/group/clear")
     public boolean clearGroup(@Validated @RequestBody Request<String> request) {
         String id = request.getData();
@@ -244,6 +269,7 @@ public class DeviceController {
      * 添加设备到组
      */
     @ApiOperation(value = "添加设备到组")
+    @SaCheckPermission("iot:deviceGroup:edit")
     @PostMapping("/group/addDevices")
     public boolean addToGroup(@Validated @RequestBody Request<DeviceAddGroupBo> bo) {
         return deviceServiceImpl.addDevice2Group(bo.getData());
@@ -253,6 +279,7 @@ public class DeviceController {
      * 将设备从组中移除
      */
     @ApiOperation(value = "将设备从组中移除")
+    @SaCheckPermission("iot:deviceGroup:edit")
     @PostMapping("/group/removeDevices")
     public boolean removeDevices(@Validated @RequestBody Request<DeviceAddGroupBo> bo) {
         DeviceAddGroupBo data = bo.getData();
@@ -263,6 +290,7 @@ public class DeviceController {
      * 保存设备配置
      */
     @ApiOperation(value = "保存设备配置")
+    @SaCheckPermission("iot:device:edit")
     @PostMapping("/config/save")
     public boolean saveConfig(@Validated @RequestBody Request<DeviceConfigAddBo> request) {
         DeviceConfig data = request.getData().to(DeviceConfig.class);
@@ -273,6 +301,7 @@ public class DeviceController {
      * 获取设备配置
      */
     @ApiOperation(value = "获取设备配置")
+    @SaCheckPermission("iot:device:query")
     @PostMapping("/config/get")
     public DeviceConfigVo getConfig(@Validated @RequestBody Request<String> request) {
         String deviceId = request.getData();
@@ -283,6 +312,7 @@ public class DeviceController {
      * 设备配置下发
      */
     @ApiOperation(value = "设备配置下发")
+    @SaCheckPermission("iot:device:ctrl")
     @PostMapping("/config/send")
     public InvokeResult sendConfig(@Validated @RequestBody Request<String> bo) {
         String deviceId = bo.getData();

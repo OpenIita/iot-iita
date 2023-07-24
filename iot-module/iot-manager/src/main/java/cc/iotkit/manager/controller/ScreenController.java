@@ -10,6 +10,7 @@ import cc.iotkit.manager.dto.bo.screen.PublishChangeBo;
 import cc.iotkit.manager.service.IScreenService;
 import cc.iotkit.model.screen.Screen;
 import cc.iotkit.model.screen.ScreenApi;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.ObjectUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,12 +36,14 @@ public class ScreenController {
     private IScreenService screenService;
 
     @ApiOperation(value = "获取大屏列表", httpMethod = "POST")
+    @SaCheckPermission("iot:screen:list")
     @PostMapping("/getScreens")
     public Paging<Screen> getBigScreens(@Validated @RequestBody PageRequest<Screen> request) {
         return screenService.getBigScreens(request);
     }
 
     @ApiOperation(value = "上传大屏资源包")
+    @SaCheckPermission("iot:screen:add")
     @PostMapping("/uploadResourceFile")
     public Long uploadResourceFile(@RequestParam("file") MultipartFile file,
                                    @RequestBody @Validated Request<Long> id){
@@ -52,6 +55,7 @@ public class ScreenController {
     }
 
     @ApiOperation(value = "获取大屏接口")
+    @SaCheckPermission("iot:screen:list")
     @PostMapping("/getScreenApis")
     public List<ScreenApi> getScreenApis(@RequestBody @Validated Request<Long> id) {
         if (ObjectUtil.isEmpty(id.getData())) {
@@ -61,12 +65,14 @@ public class ScreenController {
     }
 
     @ApiOperation(value = "获取默认大屏")
+    @SaCheckPermission("iot:screen:query")
     @PostMapping("/getDefaultScreen")
     public Screen getDefaultScreen() {
         return screenService.getDefaultScreen();
     }
 
     @ApiOperation(value = "同步资源包接口")
+    @SaCheckPermission("iot:screen:query")
     @PostMapping("/syncResourceApis")
     public List<ScreenApi> syncResourceApis(@RequestBody @Validated Request<Long> id) {
         if (ObjectUtil.isEmpty(id.getData())) {
@@ -76,6 +82,7 @@ public class ScreenController {
     }
 
     @ApiOperation(value = "预览接口")
+    @SaCheckPermission("iot:screen:query")
     @PostMapping("/previewApis")
     public void previewApis(@RequestBody  @Validated Request<List<ScreenApi>> screenApis) {
         if (ObjectUtil.isNull(screenApis.getData()) || screenApis.getData().isEmpty()) {
@@ -85,6 +92,7 @@ public class ScreenController {
     }
 
     @ApiOperation(value = "保存大屏接口")
+    @SaCheckPermission("iot:screen:edit")
     @PostMapping("/saveScreenApis")
     public void saveScreenApis(@RequestBody @Validated Request<List<ScreenApi>> screenApis) {
         if (ObjectUtil.isNull(screenApis.getData()) || screenApis.getData().isEmpty()) {
@@ -94,30 +102,35 @@ public class ScreenController {
     }
 
     @ApiOperation(value = "调试模式转换")
+    @SaCheckPermission("iot:screen:edit")
     @PostMapping("/debugModeChange")
     public void debugMode(@RequestBody @Validated Request<DebugChangeBo> debugChange) {
         screenService.debugModeChange(debugChange.getData());
     }
 
     @ApiOperation(value = "添加大屏")
+    @SaCheckPermission("iot:screen:add")
     @PostMapping("/addScreen")
     public void addScreen(@RequestBody @Validated Request<Screen> screen) {
         screenService.addBigScreen(screen.getData());
     }
 
     @ApiOperation(value = "保存大屏")
+    @SaCheckPermission("iot:screen:edit")
     @PostMapping("/saveScreen")
     public void saveScreen(@RequestBody @Validated Request<Screen> screen) {
         screenService.saveBigScreen(screen.getData());
     }
 
     @ApiOperation(value = "发布状态改变")
+    @SaCheckPermission("iot:screen:edit")
     @PostMapping("/publishStatusChange")
     public void publishStatusChange(@RequestBody @Validated Request<PublishChangeBo> req) {
         screenService.publishStatusChange(req.getData());
     }
 
     @ApiOperation(value = "设置默认大屏")
+    @SaCheckPermission("iot:screen:edit")
     @PostMapping("/setDefaultScreen")
     public void setDefaultScreen(@RequestBody @Validated Request<Long> id) {
         if (ObjectUtil.isEmpty(id.getData())) {
@@ -127,6 +140,7 @@ public class ScreenController {
     }
 
     @ApiOperation(value = "删除大屏", httpMethod = "POST")
+    @SaCheckPermission("iot:screen:remove")
     @PostMapping("/deleteScreen")
     public void deleteScreen(@RequestBody @Validated Request<Long> id) {
         if (ObjectUtil.isEmpty(id.getData())) {

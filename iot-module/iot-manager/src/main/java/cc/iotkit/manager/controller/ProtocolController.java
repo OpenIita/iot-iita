@@ -20,6 +20,7 @@ import cc.iotkit.manager.dto.bo.protocolconverter.ProtocolConverterBo;
 import cc.iotkit.manager.dto.vo.protocolcomponent.ProtocolComponentVo;
 import cc.iotkit.manager.dto.vo.protocolconverter.ProtocolConverterVo;
 import cc.iotkit.manager.service.IProtocolService;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class ProtocolController {
     private IProtocolService protocolService;
 
     @ApiOperation("上传Jar包")
+    @SaCheckPermission("iot:component:add")
     @PostMapping("/uploadJar")
     public String uploadJar(
             @RequestParam("id") String id,
@@ -44,12 +46,14 @@ public class ProtocolController {
     }
 
     @ApiOperation("添加组件")
+    @SaCheckPermission("iot:component:add")
     @PostMapping("/addComponent")
     public boolean addComponent(@RequestBody @Validated Request<ProtocolComponentBo> bo) {
         return protocolService.addComponent(bo.getData());
     }
 
     @ApiOperation("修改组件")
+    @SaCheckPermission("iot:component:edit")
     @PostMapping("/editComponent")
     public boolean saveComponent(@RequestBody @Validated Request<ProtocolComponentBo> bo) {
         protocolService.saveComponent(bo.getData());
@@ -57,6 +61,7 @@ public class ProtocolController {
     }
 
     @ApiOperation("获取组件详情")
+    @SaCheckPermission("iot:component:query")
     @PostMapping("/getComponentDetail")
     public ProtocolComponentVo getComponentScript(@Validated @RequestBody Request<String> req) {
         String id = req.getData();
@@ -65,6 +70,7 @@ public class ProtocolController {
     }
 
     @ApiOperation("保存组件脚本")
+    @SaCheckPermission("iot:component:edit")
     @PostMapping("/saveComponentScript")
     public boolean saveComponentScript(@Validated
                                        @RequestBody Request<ProtocolComponentBo> upReq) {
@@ -73,12 +79,14 @@ public class ProtocolController {
 
 
     @ApiOperation("删除组件")
+    @SaCheckPermission("iot:component:remove")
     @PostMapping("/delete")
     public boolean deleteComponent(@Validated @RequestBody Request<String> req) {
         return protocolService.deleteComponent(req.getData());
     }
 
     @ApiOperation("获取组件列表")
+    @SaCheckPermission("iot:component:query")
     @PostMapping("/list")
     public Paging<ProtocolComponentVo> getComponents(@Validated @RequestBody
                                                      PageRequest<ProtocolComponentBo> query) {
@@ -86,24 +94,28 @@ public class ProtocolController {
     }
 
     @ApiOperation("获取转换脚本列表")
+    @SaCheckPermission("iot:converter:query")
     @PostMapping("/converters/list")
     public Paging<ProtocolConverterVo> getConverters(@Validated @RequestBody PageRequest<ProtocolConverterBo> query) {
         return protocolService.selectConvertersPageList(query);
     }
 
     @ApiOperation("新增转换脚本")
+    @SaCheckPermission("iot:converter:add")
     @PostMapping("/converter/add")
     public boolean addConverter(@Validated(AddGroup.class) @RequestBody Request<ProtocolConverterBo> converter) {
         return protocolService.addConverter(converter.getData());
     }
 
     @ApiOperation("修改转换脚本")
+    @SaCheckPermission("iot:converter:edit")
     @PostMapping("/converter/edit")
     public boolean editConverter(@Validated(EditGroup.class) @RequestBody Request<ProtocolConverterBo> req) {
         return protocolService.editConverter(req.getData());
     }
 
     @ApiOperation("获取转换脚本详情")
+    @SaCheckPermission("iot:converter:query")
     @PostMapping("/getConverterScript")
     public ProtocolConverterVo getConverter(@RequestBody Request<String> req) {
         String id = req.getData();
@@ -111,6 +123,7 @@ public class ProtocolController {
     }
 
     @PostMapping("/converterScript/edit")
+    @SaCheckPermission("iot:converter:edit")
     @ApiOperation("保存转换脚本")
     public boolean saveConverterScript(
             @Validated @RequestBody Request<ProtocolConverterBo> req) {
@@ -119,6 +132,7 @@ public class ProtocolController {
     }
 
     @PostMapping("/converter/delete")
+    @SaCheckPermission("iot:converter:remove")
     @ApiOperation("删除转换脚本")
     public boolean deleteConverter(@RequestBody @Validated Request<String> req) {
         String id = req.getData();
@@ -126,6 +140,7 @@ public class ProtocolController {
     }
 
     @PostMapping("/component/changeState")
+    @SaCheckPermission("iot:component:edit")
     @ApiOperation("组件启用/禁用")
     public boolean changeComponentState(@RequestBody @Validated Request<ChangeStateBo> req) {
         return protocolService.changeComponentState(req.getData());
