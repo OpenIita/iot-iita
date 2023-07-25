@@ -20,6 +20,13 @@ public enum ErrCode implements IEnum {
     DATA_NOT_EXIST(10000010, "数据不存在"),
 
     /**
+     * openapi通用异常段
+     */
+    IDENTIFIER_ERROR(00000000, "签名验证失败"),
+    API_LOGIN_ERROR(00000000, "登录验证失败"),
+
+
+    /**
      * 组件通用异常段
      */
     GET_COMPONENT_INSTANCE_ERROR(00000000, "获取通讯组件实例失败"),
@@ -70,6 +77,7 @@ public enum ErrCode implements IEnum {
     DEVICE_NOT_FOUND(00000000, "设备不存在"),
     DEVICE_OFFLINE(00000000, "设备已离线"),
     DEVICE_ALREADY(00000000, "设备已存在"),
+    MODEL_DEVICE_ALREADY(00000000, "设备DN已存在"),
 
     DEVICE_HAS_ASSOCIATED(00000000, "设备已关联"),
     MODEL_ALREADY(00000000, "型号已存在"),
@@ -97,6 +105,7 @@ public enum ErrCode implements IEnum {
     ADD_PLATFORM_USER_ERROR(00000000, "添加平台用户失败"),
     UPLOAD_FILE_ERROR(00000000, "上传文件失败"),
     FILE_NAME_IS_NULL(00000000, "文件名为空，获取文件名失败");
+
 
 
     private int code;
