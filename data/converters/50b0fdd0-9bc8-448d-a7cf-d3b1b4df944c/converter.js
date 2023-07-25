@@ -300,11 +300,7 @@ this.encode = function (service, device) {
         mid: deviceMid,
         content: {
             topic: topic,
-            payload: JSON.stringify({
-                id: deviceMid,
-                method: method += "property." + identifier,
-                params: ab2hex(payloadArray).toUpperCase()
-            })
+            payload: ab2hex(payloadArray).toUpperCase()
         }
     }
 };
