@@ -207,13 +207,12 @@ public class NBVerticle extends AbstractVerticle {
         return endpointMap.containsKey(getEndpointKey(productKey, deviceName));
     }
 
-    public void publish(String productKey, String deviceName, String topic, String msg) {
+    public void publish(String productKey, String deviceName, String topic, Buffer msg) {
         MqttEndpoint endpoint = endpointMap.get(getEndpointKey(productKey, deviceName));
         if (endpoint == null) {
             throw new BizException(ErrCode.SEND_DESTINATION_NOT_FOUND);
         }
-        byte[] bytes = HexUtil.hexStringToByteArray(msg);
-        Future<Integer> result = endpoint.publish(topic, Buffer.buffer(bytes),
+        Future<Integer> result = endpoint.publish(topic, msg,
                 MqttQoS.AT_LEAST_ONCE, false, false);
         result.onFailure(e -> log.error("public topic failed", e));
         result.onSuccess(integer -> log.info("publish success,topic:{},payload:{}", topic, msg));

@@ -12,6 +12,7 @@ package cc.iotkit.comp.nb;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.thing.ThingService;
+import cc.iotkit.common.utils.HexUtil;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.comp.AbstractDeviceComponent;
 import cc.iotkit.comp.CompConfig;
@@ -20,11 +21,13 @@ import cc.iotkit.converter.DeviceMessage;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -115,9 +118,18 @@ public class NBDeviceComponent extends AbstractDeviceComponent {
         } catch (Throwable e) {
             throw new BizException(ErrCode.DATA_FORMAT_ERROR);
         }
-        log.info("publish topic:{},payload:{}", msg.getTopic(), msg.getPayload());
+        Buffer content = null;
+        String topic = msg.getTopic();
+        String payload = msg.getPayload();
+        if (topic.endsWith("thing/model/down_raw")) {
+            content = Buffer.buffer(HexUtil.hexStringToByteArray(payload));
+        }else {
+            content = Buffer.buffer(payload);
+        }
+
+        log.info("publish topic:{},content:{}", topic, content);
         NBVerticle.publish(parent.getProductKey(), parent.getDeviceName(),
-                msg.getTopic(), msg.getPayload());
+                topic, content);
 
         return message;
     }

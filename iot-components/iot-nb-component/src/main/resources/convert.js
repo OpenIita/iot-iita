@@ -294,13 +294,16 @@ this.encode = function (service, device) {
         payloadArray = payloadArray.concat(buffer_int32(parseInt(id))); // ALink JSON格式 'id'
         payloadArray = payloadArray.concat(buffer_uint8(code));
     }
+    var hexstr = ab2hex(payloadArray);
+    console.log("hexstr:" + hexstr);
+
     return {
         productKey: service.productKey,
         deviceName: service.deviceName,
         mid: deviceMid,
         content: {
             topic: topic,
-            payload: ab2hex(payloadArray).toUpperCase()
+            payload: hexstr
         }
     }
 };
