@@ -11,6 +11,7 @@ package cc.iotkit.comp.nb;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.utils.HexUtil;
 import cc.iotkit.comp.IMessageHandler;
 import cc.iotkit.comp.model.ReceiveResult;
 import io.netty.handler.codec.mqtt.MqttConnectReturnCode;
@@ -211,7 +212,8 @@ public class NBVerticle extends AbstractVerticle {
         if (endpoint == null) {
             throw new BizException(ErrCode.SEND_DESTINATION_NOT_FOUND);
         }
-        Future<Integer> result = endpoint.publish(topic, Buffer.buffer(msg),
+        byte[] bytes = HexUtil.hexStringToByteArray(msg);
+        Future<Integer> result = endpoint.publish(topic, Buffer.buffer(bytes),
                 MqttQoS.AT_LEAST_ONCE, false, false);
         result.onFailure(e -> log.error("public topic failed", e));
         result.onSuccess(integer -> log.info("publish success,topic:{},payload:{}", topic, msg));
