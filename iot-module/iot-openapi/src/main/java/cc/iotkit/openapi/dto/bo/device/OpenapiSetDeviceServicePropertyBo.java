@@ -5,13 +5,20 @@ import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-@ApiModel(value = "OpenapiDeviceBo")
+import java.util.Map;
+/**
+ * @author: dsy
+ * @description:
+ * @date:created in 2023/7/25 14:17
+ * @modificed by:
+ */
+@ApiModel(value = "OpenapiSetDeviceServicePropertyBo")
 @Data
-public class OpenapiDeviceBo {
-    private static final long serialVersionUID = -1L;
+public class OpenapiSetDeviceServicePropertyBo {
 
-    @ApiModelProperty(value = "父级ID")
-    private String parentId;
+    /*@ApiModelProperty(value="设备id",required = true)
+    @NotBlank
+    private String deviceId;*/
 
     @NotBlank(message = "deviceName不能为空")
     @ApiModelProperty(value = "产品名称")
@@ -20,4 +27,7 @@ public class OpenapiDeviceBo {
     @NotBlank(message = "productKey不能为空")
     @ApiModelProperty(value = "产品key")
     private String productKey;
+
+    @ApiModelProperty(value="参数")
+    private Map<String, Object> args;
 }

@@ -3,6 +3,8 @@ package cc.iotkit.openapi.service;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
 
+import java.util.Map;
+
 /**
  * @Author: dsy
  * @Date: 2023/7/24 11:05
@@ -11,4 +13,13 @@ import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
  */
 public interface OpenDeviceService {
     DeviceInfo getDetail(OpenapiDeviceBo bo);
+
+    boolean addDevice(OpenapiDeviceBo bo);
+
+    boolean deleteDevice(OpenapiDeviceBo bo);
+
+    /**
+     * 设备属性设置
+     */
+    String setProperty(String productKey, String deviceName, Map<String, Object> properties);
 }
