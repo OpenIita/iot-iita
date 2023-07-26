@@ -120,7 +120,11 @@ public class DeviceServiceImpl implements IDeviceService {
         if (product == null) {
             throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
-
+        //同产品不可重复设备名
+        DeviceInfo deviceRepetition = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
+        if (deviceRepetition != null) {
+            throw new BizException(ErrCode.MODEL_DEVICE_ALREADY);
+        }
         //生成设备密钥
         String chars = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";
         int maxPos = chars.length();

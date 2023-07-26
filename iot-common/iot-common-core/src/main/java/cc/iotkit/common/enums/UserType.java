@@ -21,6 +21,11 @@ public enum UserType {
     SYS_USER("sys_user"),
 
     /**
+     * 第三方api
+     */
+    API_USER("api_user"),
+
+    /**
      * app端
      */
     APP_USER("app_user");

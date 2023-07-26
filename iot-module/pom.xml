@@ -20,6 +20,7 @@
         <module>iot-generator</module>
         <module>iot-screen</module>
         <module>iot-contribution</module>
+        <module>iot-openapi</module>
     </modules>
 
 
