@@ -4,7 +4,6 @@ import cc.iotkit.common.api.Request;
 import cc.iotkit.model.InvokeResult;
 import cc.iotkit.openapi.dto.bo.TokenVerifyBo;
 import cc.iotkit.openapi.service.OpenBaseService;
-import cc.iotkit.openapi.service.OpenDeviceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

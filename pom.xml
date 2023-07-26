@@ -552,6 +552,12 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
+                <artifactId>iot-openapi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
                 <artifactId>iot-baetyl</artifactId>
                 <version>${project.version}</version>
             </dependency>

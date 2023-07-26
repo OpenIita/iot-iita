@@ -166,6 +166,10 @@
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-generator</artifactId>
     </dependency>
+    <dependency>
+      <groupId>cc.iotkit</groupId>
+      <artifactId>iot-openapi</artifactId>
+    </dependency>
  <!--   <dependency>
       <groupId>cc.iotkit</groupId>
       <artifactId>iot-baetyl</artifactId>

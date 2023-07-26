@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * sa-token 配置
  *
@@ -39,8 +42,20 @@ public class SaTokenConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
+
+        List<String> swaggerUrls = List.of("/doc.html","/favicon.ico", "/webjars/**", "/resources/**"
+                , "/swagger-resources/**", "/swagger-ui.html/**");
+
+        List loginUrls = List.of("/code", "/auth/tenant/list", "/auth/login");
+        List<String> openApiUrls = List.of( "/openapi/v1/getToken");
+
+        List<String> excludeUrls = new ArrayList<>();
+        excludeUrls.addAll(loginUrls);
+        excludeUrls.addAll(swaggerUrls);
+        excludeUrls.addAll(openApiUrls);
+
         registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))
                 .addPathPatterns("/**")
-                .excludePathPatterns("/code", "/auth/tenant/list", "/auth/login");
+                .excludePathPatterns(excludeUrls);
     }
 }

@@ -13,36 +13,12 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>it.ozimov</groupId>
-            <artifactId>embedded-redis</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-simple</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <dependency>
             <groupId>cc.iotkit</groupId>
@@ -59,20 +35,6 @@
             <artifactId>iot-rule-engine</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-screen</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-component-server</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-component-converter</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>cc.iotkit</groupId>
