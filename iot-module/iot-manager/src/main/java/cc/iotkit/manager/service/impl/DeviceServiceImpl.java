@@ -415,6 +415,11 @@ public class DeviceServiceImpl implements IDeviceService {
         DeviceInfo di=data.to(DeviceInfo.class);
         di.setLocate(new DeviceInfo.Locate(data.getLongitude(),data.getLatitude()));
         di.setState(data.getState());
+        //同产品不可重复设备名
+        DeviceInfo deviceRepetition = deviceInfoData.findByProductKeyAndDeviceName(data.getProductKey(), data.getDeviceName());
+        if (deviceRepetition != null && !deviceRepetition.getDeviceId().equals(di.getDeviceId())) {
+            throw new BizException(ErrCode.MODEL_DEVICE_ALREADY);
+        }
         return deviceInfoData.save(di)!=null;
     }
 

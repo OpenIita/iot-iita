@@ -38,7 +38,7 @@ public class OpenDeviceController {
     }
 
     @ApiOperation(value = "单个设备注册")
-    @PostMapping("/v1/registerDevice ")
+    @PostMapping("/v1/registerDevice")
     public boolean createDevice(@RequestBody @Validated Request<OpenapiDeviceBo> bo) {
         return openDeviceService.addDevice(bo.getData());
     }
@@ -50,7 +50,7 @@ public class OpenDeviceController {
     }
 
     @ApiOperation(value = "设置设备的属性", notes = "设置设备的属性", httpMethod = "POST")
-    @PostMapping("/v1/setDeviceProperty ")
+    @PostMapping("/v1/setDeviceProperty")
     public InvokeResult setProperty(@RequestBody @Validated Request<OpenapiSetDeviceServicePropertyBo> request) {
         return new InvokeResult(openDeviceService.setProperty(request.getData().getProductKey(), request.getData().getDeviceName(), request.getData().getArgs()));
     }

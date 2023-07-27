@@ -52,7 +52,8 @@ public class OpenBaseServiceImpl implements OpenBaseService {
 
         // 校验租户
         checkTenant(bo.getTenantId());
-
+        System.out.println("boAppid + password + boTimeStamp = " + boAppid + password + boTimeStamp);
+        System.out.println("boIdentifier = " + boIdentifier);
         if (!CodecUtil.md5Str(boAppid + password + boTimeStamp).equals(boIdentifier)){
             throw new BizException(ErrCode.IDENTIFIER_ERROR);
         }
