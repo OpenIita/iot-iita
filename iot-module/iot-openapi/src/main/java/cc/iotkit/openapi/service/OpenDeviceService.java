@@ -2,6 +2,7 @@ package cc.iotkit.openapi.service;
 
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
+import cc.iotkit.openapi.dto.vo.OpenDevicePropertyVo;
 
 import java.util.Map;
 
@@ -22,4 +23,6 @@ public interface OpenDeviceService {
      * 设备属性设置
      */
     String setProperty(String productKey, String deviceName, Map<String, Object> properties);
+
+    OpenDevicePropertyVo getDevicePropertyStatus(OpenapiDeviceBo data);
 }

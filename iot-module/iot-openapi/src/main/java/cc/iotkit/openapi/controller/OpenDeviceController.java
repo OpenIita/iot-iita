@@ -5,6 +5,7 @@ import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
 import cc.iotkit.openapi.dto.bo.device.OpenapiSetDeviceServicePropertyBo;
+import cc.iotkit.openapi.dto.vo.OpenDevicePropertyVo;
 import cc.iotkit.openapi.service.OpenBaseService;
 import cc.iotkit.openapi.service.OpenDeviceService;
 import io.swagger.annotations.Api;
@@ -57,7 +58,7 @@ public class OpenDeviceController {
 
     @ApiOperation("查询指定设备的属性快照")
     @PostMapping("/v1/queryDevicePropertyStatus")
-    public Map<String, Object> getDevicePropertyStatus(@RequestBody @Validated Request<OpenapiDeviceBo> bo) {
-        return openDeviceService.getDetail(bo.getData()).getProperty();
+    public OpenDevicePropertyVo getDevicePropertyStatus(@RequestBody @Validated Request<OpenapiDeviceBo> bo) {
+        return openDeviceService.getDevicePropertyStatus(bo.getData());
     }
 }

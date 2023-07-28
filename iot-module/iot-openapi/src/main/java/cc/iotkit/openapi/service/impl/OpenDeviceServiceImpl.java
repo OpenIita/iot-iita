@@ -3,13 +3,18 @@ package cc.iotkit.openapi.service.impl;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
+import cc.iotkit.data.manager.IThingModelData;
+import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.service.DeviceService;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
+import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
+import cc.iotkit.openapi.dto.vo.OpenDevicePropertyVo;
 import cc.iotkit.openapi.service.OpenDeviceService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +36,10 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
     @Autowired
     @Qualifier("productDataCache")
     private IProductData productData;
+
+    @Autowired
+    @Qualifier("thingModelDataCache")
+    private IThingModelData thingModelData;
 
     @Autowired
     private DeviceService deviceService;
@@ -96,6 +105,17 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
     public String setProperty(String productKey, String deviceName, Map<String, Object> args) {
         DeviceInfo deviceRepetition = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
         return deviceService.setProperty(deviceRepetition.getDeviceId(), args, true);
+    }
+
+    @Override
+    public OpenDevicePropertyVo getDevicePropertyStatus(OpenapiDeviceBo bo) {
+        ThingModel thingModel = thingModelData.findByProductKey(bo.getProductKey());
+        OpenDevicePropertyVo propertyVo = MapstructUtils.convert(thingModel, OpenDevicePropertyVo.class);
+        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(bo.getProductKey(), bo.getDeviceName());
+        if (propertyVo != null){
+            propertyVo.setProperty(deviceInfoData.getProperties(deviceInfo.getDeviceId()));
+        }
+        return propertyVo;
     }
 
 
