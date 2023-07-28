@@ -1,8 +1,10 @@
 package cc.iotkit.openapi.controller;
 
 import cc.iotkit.common.api.Request;
+import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
+import cc.iotkit.openapi.dto.bo.device.OpenapiSetDeviceServicePropertyBo;
 import cc.iotkit.openapi.service.OpenBaseService;
 import cc.iotkit.openapi.service.OpenDeviceService;
 import io.swagger.annotations.Api;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @Api(tags = {"openapi-设备"})
 @Slf4j
 @RestController
-@RequestMapping("/openapi/v1/device")
+@RequestMapping("/openapi/device")
 public class OpenDeviceController {
 
     @Autowired
@@ -27,10 +31,33 @@ public class OpenDeviceController {
     @Autowired
     private OpenDeviceService openDeviceService;
 
-    @ApiOperation("获取设备详情")
-    @PostMapping("/detail")
-    public DeviceInfo getDetail(@RequestBody @Validated Request<OpenapiDeviceBo> request) {
-        return openDeviceService.getDetail(request.getData());
+    @ApiOperation("查询单个设备详情")
+    @PostMapping("/v1/detail")
+    public DeviceInfo getDetail(@RequestBody @Validated Request<OpenapiDeviceBo> bo) {
+        return openDeviceService.getDetail(bo.getData());
     }
 
+    @ApiOperation(value = "单个设备注册")
+    @PostMapping("/v1/registerDevice")
+    public boolean createDevice(@RequestBody @Validated Request<OpenapiDeviceBo> bo) {
+        return openDeviceService.addDevice(bo.getData());
+    }
+
+    @ApiOperation("单个设备删除")
+    @PostMapping("/v1/deleteDevice")
+    public boolean deleteDevice(@Validated @RequestBody Request<OpenapiDeviceBo> bo) {
+        return openDeviceService.deleteDevice(bo.getData());
+    }
+
+    @ApiOperation(value = "设置设备的属性", notes = "设置设备的属性", httpMethod = "POST")
+    @PostMapping("/v1/setDeviceProperty")
+    public InvokeResult setProperty(@RequestBody @Validated Request<OpenapiSetDeviceServicePropertyBo> request) {
+        return new InvokeResult(openDeviceService.setProperty(request.getData().getProductKey(), request.getData().getDeviceName(), request.getData().getArgs()));
+    }
+
+    @ApiOperation("查询指定设备的属性快照")
+    @PostMapping("/v1/queryDevicePropertyStatus")
+    public Map<String, Object> getDevicePropertyStatus(@RequestBody @Validated Request<OpenapiDeviceBo> bo) {
+        return openDeviceService.getDetail(bo.getData()).getProperty();
+    }
 }

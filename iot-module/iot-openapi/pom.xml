@@ -14,6 +14,7 @@
     <dependencies>
 
 
+
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
@@ -95,6 +96,10 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-system</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-manager</artifactId>
         </dependency>
     </dependencies>
 

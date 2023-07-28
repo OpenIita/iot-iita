@@ -4,6 +4,8 @@ import cc.iotkit.common.api.Request;
 import cc.iotkit.model.InvokeResult;
 import cc.iotkit.openapi.dto.bo.TokenVerifyBo;
 import cc.iotkit.openapi.service.OpenBaseService;
+import cc.iotkit.openapi.service.OpenDeviceService;
+import cn.dev33.satoken.annotation.SaIgnore;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class OpenBaseController {
     @Autowired
     private OpenBaseService openBaseService;
 
+    @SaIgnore
     @ApiOperation(value = "token获取", notes = "token获取", httpMethod = "POST")
     @PostMapping("/v1/getToken")
     public InvokeResult OpenApiGetToken(@RequestBody @Validated Request<TokenVerifyBo> request) {
