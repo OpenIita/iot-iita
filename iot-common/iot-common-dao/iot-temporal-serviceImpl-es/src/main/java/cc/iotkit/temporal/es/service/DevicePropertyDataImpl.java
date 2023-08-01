@@ -13,6 +13,7 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
+import cc.iotkit.model.device.message.DevicePropertyCache;
 import cc.iotkit.temporal.IDevicePropertyData;
 import cc.iotkit.temporal.es.document.DocDeviceProperty;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -63,9 +64,11 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
     @Override
     public void addProperties(String deviceId, Map<String, Object> properties, long time) {
         properties.forEach((key, val) -> {
+            DevicePropertyCache propertyCache = (DevicePropertyCache) val;
             String index = getIndex(deviceId, key);
+            long occurred =  Objects.nonNull( propertyCache.getOccurred() )? propertyCache.getOccurred() : time;
             template.save(
-                    new DocDeviceProperty(UUID.randomUUID().toString(), deviceId, key, val, time),
+                    new DocDeviceProperty(UUID.randomUUID().toString(), deviceId, key, propertyCache.getValue(), occurred),
                     IndexCoordinates.of(index)
             );
         });

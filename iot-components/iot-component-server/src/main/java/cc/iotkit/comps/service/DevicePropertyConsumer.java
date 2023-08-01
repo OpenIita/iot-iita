@@ -15,6 +15,7 @@ import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.device.message.DevicePropertyCache;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.mq.ConsumerHandler;
@@ -78,10 +79,14 @@ public class DevicePropertyConsumer implements ConsumerHandler<ThingModelMessage
                 ThingModel.Property::getIdentifier, ThingModel.Property::getDataType));
 
         Map<String, Object> addProperties = new HashMap<>();
+        Long occurred = msg.getOccurred();
         //删除非属性字段
         properties.forEach((key,val)->{
             if (thingModelProperties.containsKey(key)) {
-                addProperties.put(key,val);
+                DevicePropertyCache propertyCache = new DevicePropertyCache();
+                propertyCache.setValue(val);
+                propertyCache.setOccurred(occurred);
+                addProperties.put(key,propertyCache);
                 handleLocate(deviceInfo,val,thingModelProperties.get(key));
             }
         });
@@ -91,11 +96,12 @@ public class DevicePropertyConsumer implements ConsumerHandler<ThingModelMessage
 
         //保存属性记录
         try {
-            devicePropertyData.addProperties(deviceId, addProperties, msg.getOccurred());
+            devicePropertyData.addProperties(deviceId, addProperties, occurred);
         } catch (Throwable e) {
             log.warn("save property data error", e);
         }
     }
+
 
     private  void handleLocate(DeviceInfo deviceInfo,Object data,ThingModel.DataType dataType){
         if("position".equals(dataType.getType())){//如果是定位属性需要做一些处理
