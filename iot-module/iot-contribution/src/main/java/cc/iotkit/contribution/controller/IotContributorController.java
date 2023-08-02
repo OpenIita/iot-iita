@@ -40,7 +40,7 @@ public class IotContributorController extends BaseController {
     /**
      * 查询贡献者列表
      */
-    @SaCheckPermission("contribution:contributor:list")
+//    @SaCheckPermission("contribution:contributor:list")
     @PostMapping("/list")
     @ApiOperation("查询贡献者列表")
     public Paging<IotContributorVo> list( PageRequest<IotContributorBo> pageQuery) {
@@ -63,7 +63,7 @@ public class IotContributorController extends BaseController {
      * 获取贡献者详细信息
      *
      */
-    @SaCheckPermission("contribution:contributor:query")
+//    @SaCheckPermission("contribution:contributor:query")
     @PostMapping("/getDetail")
     @ApiOperation("获取贡献者详细信息")
     public IotContributorVo getDetail(@Validated @RequestBody Request<Long> request) {

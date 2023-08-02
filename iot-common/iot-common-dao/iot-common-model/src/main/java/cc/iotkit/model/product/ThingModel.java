@@ -62,6 +62,12 @@ public class ThingModel extends TenantModel implements Id<Long>, Serializable {
         private DataType dataType;
         private String name;
         private String accessMode = "rw";
+
+        // 描述
+        private String description;
+
+        // 单位
+        private String unit;
     }
 
     @Data

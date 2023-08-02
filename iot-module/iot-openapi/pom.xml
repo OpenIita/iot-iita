@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iot-module</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.4.5-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -103,6 +103,12 @@
             <groupId>io.github.linpeilie</groupId>
             <artifactId>mapstruct-plus-spring-boot-starter</artifactId>
             <version>${mapstruct-plus.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.83</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

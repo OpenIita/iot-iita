@@ -29,5 +29,5 @@ public class OpenapiSetDeviceServicePropertyBo {
     private String productKey;
 
     @ApiModelProperty(value="参数")
-    private Map<String, Object> args;
+    private String args;
 }

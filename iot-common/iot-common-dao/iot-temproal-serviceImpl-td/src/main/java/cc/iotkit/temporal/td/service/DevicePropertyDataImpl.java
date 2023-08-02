@@ -12,6 +12,7 @@ package cc.iotkit.temporal.td.service;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
+import cc.iotkit.model.device.message.DevicePropertyCache;
 import cc.iotkit.temporal.IDevicePropertyData;
 import cc.iotkit.temporal.td.config.Constants;
 import cc.iotkit.temporal.td.dao.TdTemplate;
@@ -22,9 +23,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -65,10 +64,15 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
         if (device == null) {
             return;
         }
+        Map<String, Object> propertiesMap = new HashMap<>();
+        properties.forEach((key, val) -> {
+            DevicePropertyCache propertyCache = (DevicePropertyCache) val;
+            propertiesMap.put(key, propertyCache.getValue());
+        });
         //获取设备旧属性
         Map<String, Object> oldProperties = deviceInfoData.getProperties(deviceId);
         //用新属性覆盖
-        oldProperties.putAll(properties);
+        oldProperties.putAll(propertiesMap);
 
         StringBuilder sbFieldNames = new StringBuilder();
         StringBuilder sbFieldPlaces = new StringBuilder();
