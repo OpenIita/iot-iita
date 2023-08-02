@@ -3,6 +3,7 @@ package cc.iotkit.openapi.service.impl;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
+import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
@@ -17,8 +18,7 @@ import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
 import cc.iotkit.openapi.dto.vo.OpenDevicePropertyVo;
 import cc.iotkit.openapi.dto.vo.OpenPropertyVo;
 import cc.iotkit.openapi.service.OpenDeviceService;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -107,7 +107,7 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
     @Override
     public String setProperty(String productKey, String deviceName, String args) {
         DeviceInfo deviceRepetition = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
-        return deviceService.setProperty(deviceRepetition.getDeviceId(), JSON.parseObject(args,Map.class), true);
+        return deviceService.setProperty(deviceRepetition.getDeviceId(), JsonUtils.parseObject(args,Map.class), true);
     }
 
     @Override
