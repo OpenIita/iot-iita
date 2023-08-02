@@ -1,14 +1,13 @@
 package cc.iotkit.openapi.dto.vo;
 
-import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.model.product.ThingModel;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+
 
 @ApiModel(value = "OpenDevicePropertyVo")
 @Data
@@ -16,7 +15,7 @@ import java.util.Map;
 public class OpenDevicePropertyVo {
 
     @ApiModelProperty(value="设备属性")
-    private Map<String, Object> property = new HashMap<>();
+    private List<OpenPropertyVo> property;
 
     @ApiModelProperty(value = "主键")
     private String id;

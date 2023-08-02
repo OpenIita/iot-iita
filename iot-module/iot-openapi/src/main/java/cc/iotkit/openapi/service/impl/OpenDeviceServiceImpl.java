@@ -15,16 +15,19 @@ import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
 import cc.iotkit.openapi.dto.vo.OpenDevicePropertyVo;
+import cc.iotkit.openapi.dto.vo.OpenPropertyVo;
 import cc.iotkit.openapi.service.OpenDeviceService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import static cc.iotkit.common.enums.ErrCode.DEVICE_NOT_FOUND;
-import static cc.iotkit.common.enums.ErrCode.DEVICE_OFFLINE;
 
 @Service
 public class OpenDeviceServiceImpl implements OpenDeviceService {
@@ -102,9 +105,9 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
     }
 
     @Override
-    public String setProperty(String productKey, String deviceName, Map<String, Object> args) {
+    public String setProperty(String productKey, String deviceName, String args) {
         DeviceInfo deviceRepetition = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
-        return deviceService.setProperty(deviceRepetition.getDeviceId(), args, true);
+        return deviceService.setProperty(deviceRepetition.getDeviceId(), JSON.parseObject(args,Map.class), true);
     }
 
     @Override
@@ -112,11 +115,21 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
         ThingModel thingModel = thingModelData.findByProductKey(bo.getProductKey());
         OpenDevicePropertyVo propertyVo = MapstructUtils.convert(thingModel, OpenDevicePropertyVo.class);
         DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(bo.getProductKey(), bo.getDeviceName());
+        List<OpenPropertyVo> openPropertyVos = new ArrayList<>();
         if (propertyVo != null){
-            propertyVo.setProperty(deviceInfoData.getProperties(deviceInfo.getDeviceId()));
+            Map<String, Object> properties = deviceInfoData.getProperties(deviceInfo.getDeviceId());
+            for (ThingModel.Property property : propertyVo.getModel().getProperties()) {
+                OpenPropertyVo openPropertyVo = new OpenPropertyVo(property.getIdentifier(), property.getDataType(), property.getName(), property.getAccessMode(), property.getDescription(), property.getUnit());
+                Map<String,Object> map = (Map<String, Object>) properties.get(openPropertyVo.getIdentifier());
+                if (map != null){
+                    openPropertyVo.setTime(String.valueOf(map.get("occurred")));
+                    openPropertyVo.setValue(String.valueOf(map.get("value")));
+                }
+                openPropertyVos.add(openPropertyVo);
+            }
+            propertyVo.setProperty(openPropertyVos);
         }
         return propertyVo;
     }
-
 
 }

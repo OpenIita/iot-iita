@@ -22,7 +22,7 @@ public interface OpenDeviceService {
     /**
      * 设备属性设置
      */
-    String setProperty(String productKey, String deviceName, Map<String, Object> properties);
+    String setProperty(String productKey, String deviceName, String properties);
 
     OpenDevicePropertyVo getDevicePropertyStatus(OpenapiDeviceBo data);
 }
