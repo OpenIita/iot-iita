@@ -1,0 +1,25 @@
+version: "3"
+services:
+  iita-app:
+    container_name: iita-app
+    # 改成你自己的镜像
+    image: 75509151/iita-app:0.5.4
+    # 构建镜像时使用
+    build:
+      context: ""
+      dockerfile: Dockerfile
+
+    restart: always
+    # 使用主机端口
+    network_mode: "host"
+    volumes:
+#      - ./admin-service.jar:/admin-service.jar
+      - /app/data:/app/data/
+      - /app/config:/app/config/
+      - /app/log:/app/log/
+    command:
+      - /bin/sh
+      - -c
+      - |
+        echo "Asia/Shanghai" > /etc/timezone
+        java -DdisabledEmbeddedRedis=true -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -server -Xmx512m -Xms512m -Xmn256m -Xss256k -Dlogging.path=/app/log/ -Dspring.config.location=/app/config/  -jar /app/app.jar
