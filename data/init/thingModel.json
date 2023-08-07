@@ -101,7 +101,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "数据",
@@ -143,7 +143,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "数据",
@@ -1305,7 +1305,10 @@
           "identifier": "mcuVersion",
           "dataType": {
             "type": "text",
-            "specs": {}
+            "type": "text",
+            "specs": {
+              "length": "255"
+            }
           },
           "name": "MCU版本",
           "accessMode": "r"
@@ -1564,7 +1567,7 @@
           "dataType": {
             "type": "text",
             "specs": {
-              "length": "10240"
+              "length": "255"
             }
           },
           "name": "查询",
@@ -1600,7 +1603,7 @@
           "dataType": {
             "type": "text",
             "specs": {
-              "length": "10240"
+              "length": "255"
             }
           },
           "name": "警告信息",
@@ -1611,7 +1614,7 @@
           "dataType": {
             "type": "text",
             "specs": {
-              "length": "10240"
+              "length": "255"
             }
           },
           "name": "激活时间",
@@ -1673,7 +1676,7 @@
           "dataType": {
             "type": "text",
             "specs": {
-              "length": "10240"
+              "length": "255"
             }
           },
           "name": "历史上报",
@@ -1684,7 +1687,7 @@
           "dataType": {
             "type": "text",
             "specs": {
-              "length": "10240"
+              "length": "255"
             }
           },
           "name": "设备型号",
@@ -1782,7 +1785,7 @@
           "dataType": {
             "type": "text",
             "specs": {
-              "length": "10240"
+              "length": "255"
             }
           },
           "name": "水流开关设置",
@@ -1805,7 +1808,7 @@
           "dataType": {
             "type": "text",
             "specs": {
-              "length": "10240"
+              "length": "255"
             }
           },
           "name": "温控上下限设置",
@@ -1840,7 +1843,7 @@
           "dataType": {
             "type": "text",
             "specs": {
-              "length": "10240"
+              "length": "255"
             }
           },
           "name": "时间戳",
@@ -1851,7 +1854,7 @@
           "dataType": {
             "type": "text",
             "specs": {
-              "length": "10240"
+              "length": "255"
             }
           },
           "name": "定时模式时间设置",
@@ -1862,7 +1865,7 @@
           "dataType": {
             "type": "text",
             "specs": {
-              "length": "10240"
+              "length": "255"
             }
           },
           "name": "Mcu版本号",
@@ -1981,7 +1984,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "查询",
@@ -1992,7 +1995,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "激活时间",
@@ -2141,7 +2144,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "水流开关设置",
@@ -2164,7 +2167,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "温控上下限设置",
@@ -2199,7 +2202,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "时间戳",
@@ -2210,7 +2213,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "定时模式时间设置",
@@ -2221,7 +2224,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "Mcu版本号",
@@ -2489,7 +2492,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "查询",
@@ -2525,7 +2528,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "警告信息",
@@ -2536,7 +2539,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "激活时间",
@@ -2598,7 +2601,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "历史上报",
@@ -2609,7 +2612,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "设备型号",
@@ -2707,7 +2710,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "水流开关设置",
@@ -2730,7 +2733,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "温控上下限设置",
@@ -2765,7 +2768,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "时间戳",
@@ -2776,7 +2779,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "定时模式时间设置",
@@ -2787,7 +2790,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "Mcu版本号",
@@ -3044,7 +3047,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "查询",
@@ -3080,7 +3083,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "警告信息",
@@ -3091,7 +3094,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "激活时间",
@@ -3153,7 +3156,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "历史上报",
@@ -3164,7 +3167,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "设备型号",
@@ -3262,7 +3265,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "水流开关设置",
@@ -3285,7 +3288,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "温控上下限设置",
@@ -3320,7 +3323,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "时间戳",
@@ -3331,7 +3334,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "定时模式时间设置",
@@ -3342,7 +3345,7 @@
               "dataType": {
                 "type": "text",
                 "specs": {
-                  "length": "10240"
+                  "length": "255"
                 }
               },
               "name": "Mcu版本号",

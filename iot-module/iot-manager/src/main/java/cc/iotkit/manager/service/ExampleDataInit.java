@@ -43,6 +43,7 @@ import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -55,6 +56,9 @@ import java.util.TimerTask;
 @Slf4j
 @Service
 public class ExampleDataInit implements SmartInitializingSingleton {
+
+    @Value("${iita.init.data:true}")
+    private boolean initDataFlg;
 
     @Autowired
     private IOauthClientData oauthClientData;
@@ -169,6 +173,9 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                         return;
                     }
 
+                    if (!initDataFlg) {
+                        return;
+                    }
                     initData("category", categoryData, new TypeReference<List<Category>>() {
                     });
                     initData("deviceGroup", deviceGroupData, new TypeReference<List<DeviceGroup>>() {
