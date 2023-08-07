@@ -56,7 +56,6 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
 
     private final DeviceTagRepository deviceTagRepository;
 
-    private final JdbcTemplate jdbcTemplate;
 
     @Qualifier("productDataCache")
     private final IProductData productData;
@@ -194,9 +193,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
 
     @Override
     public List<String> findSubDeviceIds(String parentId) {
-        return jdbcTemplate.queryForList(
-                "select device_id from device_info " +
-                        "where parent_id=?", String.class, parentId);
+        return jpaQueryFactory.select(tbDeviceInfo.deviceId).from(tbDeviceInfo)
+                .where(tbDeviceInfo.parentId.eq(parentId)).fetch();
     }
 
     @Override
@@ -283,20 +281,19 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     @Override
     public List<DataItem> getDeviceStatsByCategory(String uid) {
         //先按产品统计设备数量
-        String sql = "SELECT COUNT(*) as value,product_key as name from " +
-                "device_info %s GROUP BY product_key";
-        List<Object> args = new ArrayList<>();
+        JPAQuery<DataItem> query = jpaQueryFactory.select(Projections.bean(DataItem.class,
+                        tbDeviceInfo.productKey,
+                        tbDeviceInfo.count()))
+                .from(tbDeviceInfo)
+                .groupBy(tbDeviceInfo.productKey);
+
         if (StringUtils.isNotBlank(uid)) {
-            sql = String.format(sql, "where uid=:uid");
-            args.add(uid);
-        } else {
-            sql = String.format(sql, "");
+            query.where(tbDeviceInfo.uid.eq(uid));
         }
+
         List<DataItem> stats = new ArrayList<>();
 
-        List<DataItem> rst = jdbcTemplate.query(sql,
-                new BeanPropertyRowMapper<>(DataItem.class),
-                args.toArray());
+        List<DataItem> rst = query.fetch();
         for (DataItem item : rst) {
             //找到产品对应的品类取出品类名
             Product product = productData.findByProductKey(item.getName());
@@ -349,8 +346,10 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     @Override
     @Transactional
     public void removeGroup(String deviceId, String groupId) {
-        jdbcTemplate.update("delete from device_group_mapping " +
-                "where device_id=? and group_id=?", deviceId, groupId);
+        jpaQueryFactory.delete(tbDeviceGroupMapping)
+                .where(tbDeviceGroupMapping.deviceId.eq(deviceId)
+                        .and(tbDeviceGroupMapping.groupId.eq(groupId)))
+                .execute();
         //更新设备数量
         updateGroupDeviceCount(groupId);
     }
@@ -358,8 +357,9 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     @Override
     @Transactional
     public void removeGroup(String groupId) {
-        jdbcTemplate.update("delete from device_group_mapping " +
-                "where group_id=?", groupId);
+        jpaQueryFactory.delete(tbDeviceGroupMapping)
+                .where(tbDeviceGroupMapping.groupId.eq(groupId))
+                .execute();
         //更新设备数量
         updateGroupDeviceCount(groupId);
     }
