@@ -1,18 +1,20 @@
 package cc.iotkit.data.model;
 
 import cc.iotkit.common.constant.UserConstants;
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.system.SysUser;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -27,7 +29,10 @@ import java.util.Date;
 @Entity
 @Table(name = "sys_user")
 @AutoMapper(target = SysUser.class)
-public class TbSysUser extends BaseEntity {
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+@EntityListeners(TenantListener.class)
+public class TbSysUser extends BaseEntity implements TenantAware {
 
     /**
      * 用户ID

@@ -13,11 +13,12 @@
 
     <dependencies>
 
-        <!-- RuoYi Common Core-->
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-common-core</artifactId>
         </dependency>
+
+        <!--====================第三方库===================-->
 
         <!--redisson-->
         <dependency>

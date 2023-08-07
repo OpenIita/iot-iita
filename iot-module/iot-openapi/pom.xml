@@ -14,61 +14,10 @@
     <dependencies>
 
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common-model</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-message-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-temporal-service</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-data-serviceImpl-cache</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common-doc</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common-excel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common-log</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.linpeilie</groupId>
-            <artifactId>mapstruct-plus-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-system</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.github.linpeilie</groupId>
-            <artifactId>mapstruct-plus-spring-boot-starter</artifactId>
-            <version>${mapstruct-plus.version}</version>
-        </dependency>
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-manager</artifactId>

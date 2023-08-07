@@ -15,6 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static cc.iotkit.data.model.QTbSysTenant.tbSysTenant;
 
@@ -48,7 +49,8 @@ public class SysTenantDataImpl implements ISysTenantData, IJPACommData<SysTenant
 
     @Override
     public SysTenant findById(Long aLong) {
-        return MapstructUtils.convert(sysTenantRepository.findById(aLong),SysTenant.class);
+        Optional<TbSysTenant> tenantOptional = sysTenantRepository.findById(aLong);
+        return tenantOptional.map(sysTenant -> MapstructUtils.convert(sysTenant, SysTenant.class)).orElse(null);
     }
 
 
@@ -69,5 +71,12 @@ public class SysTenantDataImpl implements ISysTenantData, IJPACommData<SysTenant
                 .and(StringUtils.isNotBlank(data.getStatus()),()->tbSysTenant.status.eq(data.getStatus()))
                 .build()).fetch();
         return MapstructUtils.convert(ret, SysTenant.class);
+    }
+
+    @Override
+    public void updateTenant(SysTenant tenant) {
+        TbSysTenant tbSysTenant = MapstructUtils.convert(tenant, TbSysTenant.class);
+        assert tbSysTenant != null;
+        sysTenantRepository.save(tbSysTenant);
     }
 }

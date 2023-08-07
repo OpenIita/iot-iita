@@ -25,11 +25,6 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common-satoken</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
             <artifactId>iot-common-log</artifactId>
         </dependency>
 
@@ -45,7 +40,7 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-             <artifactId>iot-common-model</artifactId>
+            <artifactId>iot-common-model</artifactId>
         </dependency>
 
         <dependency>
@@ -67,6 +62,8 @@
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-common-satoken</artifactId>
         </dependency>
+
+        <!--====================第三方库===================-->
 
         <dependency>
             <groupId>io.github.linpeilie</groupId>

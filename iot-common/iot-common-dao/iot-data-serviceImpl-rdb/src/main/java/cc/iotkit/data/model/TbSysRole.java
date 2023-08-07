@@ -1,18 +1,20 @@
 package cc.iotkit.data.model;
 
 import cc.iotkit.common.constant.UserConstants;
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.system.SysRole;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 角色表 sys_role
@@ -26,7 +28,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sys_role")
 @AutoMapper(target = SysRole.class)
-public class TbSysRole extends BaseEntity {
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+@EntityListeners(TenantListener.class)
+public class TbSysRole extends BaseEntity implements TenantAware {
 
     /**
      * 角色ID

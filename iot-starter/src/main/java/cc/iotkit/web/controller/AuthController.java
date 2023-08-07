@@ -164,7 +164,7 @@ public class AuthController {
         // 返回对象
         LoginTenantVo vo = new LoginTenantVo();
         vo.setVoList(CollUtil.isNotEmpty(list) ? list : voList);
-        vo.setTenantEnabled(TenantHelper.isEnable());
+        vo.setTenantEnabled(true);
         return vo;
     }
 

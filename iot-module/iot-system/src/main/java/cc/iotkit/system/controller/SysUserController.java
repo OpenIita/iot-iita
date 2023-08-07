@@ -108,7 +108,7 @@ public class SysUserController extends BaseController {
     public UserInfoVo getInfo() {
         UserInfoVo userInfoVo = new UserInfoVo();
         LoginUser loginUser = LoginHelper.getLoginUser();
-        if (TenantHelper.isEnable() && LoginHelper.isSuperAdmin()) {
+        if (LoginHelper.isSuperAdmin()) {
             // 超级管理员 如果重新加载用户信息需清除动态租户
             TenantHelper.clearDynamic();
         }
@@ -158,7 +158,7 @@ public class SysUserController extends BaseController {
         } else if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user)) {
             fail("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
-        if (TenantHelper.isEnable() && !tenantService.checkAccountBalance(TenantHelper.getTenantId())) {
+        if (!tenantService.checkAccountBalance(TenantHelper.getTenantId())) {
             fail("当前租户下用户名额不足，请联系管理员");
         }
         user.setPassword(BCrypt.hashpw(user.getPassword()));

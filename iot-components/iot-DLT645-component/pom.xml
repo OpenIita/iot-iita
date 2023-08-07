@@ -14,6 +14,18 @@
     <dependencies>
 
         <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-component-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-core</artifactId>
+        </dependency>
+
+        <!--====================第三方库===================-->
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
@@ -24,20 +36,8 @@
         </dependency>
 
         <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-component-base</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common-core</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-core</artifactId>
-            <version>5.8.3</version>
-            <scope>compile</scope>
         </dependency>
 
     </dependencies>

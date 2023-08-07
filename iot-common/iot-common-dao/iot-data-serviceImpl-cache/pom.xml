@@ -14,23 +14,13 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-core</artifactId>
         </dependency>
 
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-common-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-common-core</artifactId>
         </dependency>
 
         <dependency>
@@ -41,6 +31,18 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-data-service</artifactId>
+        </dependency>
+
+        <!--====================第三方库===================-->
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
 
     </dependencies>

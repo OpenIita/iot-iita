@@ -25,7 +25,7 @@
     </properties>
 
     <dependencies>
-        <!-- 通用工具-->
+
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-common-core</artifactId>
@@ -34,11 +34,6 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-common-doc</artifactId>
-        </dependency>
-        <!--常用工具类 -->
-        <dependency>
-            <groupId>com.github.yitter</groupId>
-            <artifactId>yitter-idgenerator</artifactId>
         </dependency>
 
         <dependency>
@@ -49,6 +44,14 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-common-log</artifactId>
+        </dependency>
+
+        <!--====================第三方库===================-->
+
+        <!--常用工具类 -->
+        <dependency>
+            <groupId>com.github.yitter</groupId>
+            <artifactId>yitter-idgenerator</artifactId>
         </dependency>
 
         <!--velocity代码生成使用模板 -->
@@ -63,8 +66,6 @@
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
             <version>${dynamic-ds.version}</version>
         </dependency>
-
-
 
         <dependency>
             <groupId>com.baomidou</groupId>

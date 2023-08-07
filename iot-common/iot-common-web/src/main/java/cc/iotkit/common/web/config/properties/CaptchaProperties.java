@@ -4,6 +4,7 @@ import cc.iotkit.common.web.enums.CaptchaCategory;
 import cc.iotkit.common.web.enums.CaptchaType;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * 验证码 配置属性
@@ -12,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "captcha")
+@Component
 public class CaptchaProperties {
 
     private Boolean enable;

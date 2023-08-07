@@ -149,21 +149,6 @@ sa-token:
   # 是否输出操作日志
   is-log: false
 
-# 多租户配置
-tenant:
-  # 是否开启
-  enable: false
-  # 排除表
-  excludes:
-    - sys_menu
-    - sys_tenant
-    - sys_tenant_package
-    - sys_role_dept
-    - sys_role_menu
-    - sys_user_post
-    - sys_user_role
-
-
 captcha:
   enable: true
   # 页面 <参数设置> 可开启关闭 验证码校验
@@ -188,7 +173,6 @@ user:
 openapi:
   appid: 123456789
   password: 123456
-
 
 oss:
   region: xxxxx

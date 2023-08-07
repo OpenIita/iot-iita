@@ -72,7 +72,9 @@
         <appender-ref ref="console"/>
     </logger>
 
-<!--    <logger name="org.springframework" level="debug" additivity="false">-->
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace"/>
+
+    <!--    <logger name="org.springframework" level="debug" additivity="false">-->
 <!--        <appender-ref ref="info"/>-->
 <!--        <appender-ref ref="error"/>-->
 <!--        <appender-ref ref="console"/>-->

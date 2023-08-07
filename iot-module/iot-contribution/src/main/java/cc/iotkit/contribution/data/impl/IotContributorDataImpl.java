@@ -4,9 +4,9 @@ import cc.iotkit.contribution.repository.IotContributorRepository;
 import cc.iotkit.contribution.data.IIotContributorData;
 import cc.iotkit.contribution.data.model.TbIotContributor;
 import cc.iotkit.contribution.model.IotContributor;
-import java.util.List;
 
-import com.google.common.collect.Lists;
+import java.util.*;
+
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +17,13 @@ import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.StringUtils;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
 
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.util.PageBuilder;
 
 
 import static cc.iotkit.contribution.data.model.QTbIotContributor.tbIotContributor;
+
 /**
  * 数据实现接口
  *
@@ -48,10 +46,10 @@ public class IotContributorDataImpl implements IIotContributorData {
 
     private Predicate buildQueryCondition(IotContributor bo) {
         PredicateBuilder builder = PredicateBuilder.instance();
-        if(Objects.nonNull(bo)) {
+        if (Objects.nonNull(bo)) {
 
-                        builder.and(StringUtils.isNotBlank(bo.getContributor()), () -> tbIotContributor.contributor.eq(bo.getContributor()));
-                        builder.and(bo.getPost() != null, () -> tbIotContributor.post.eq(bo.getPost()));
+            builder.and(StringUtils.isNotBlank(bo.getContributor()), () -> tbIotContributor.contributor.eq(bo.getContributor()));
+            builder.and(bo.getPost() != null, () -> tbIotContributor.post.eq(bo.getPost()));
         }
         return builder.build();
     }
@@ -102,14 +100,14 @@ public class IotContributorDataImpl implements IIotContributorData {
     @Override
     public List<IotContributor> findAllByCondition(IotContributor data) {
         Iterable<TbIotContributor> all = baseRepository.findAll(buildQueryCondition(data));
-        return MapstructUtils.convert(Lists.newArrayList(all), IotContributor.class);
+        return MapstructUtils.convert(Arrays.asList(all), IotContributor.class);
     }
 
     @Override
     public IotContributor findOneByCondition(IotContributor data) {
         Optional<TbIotContributor> one = baseRepository.findOne(buildQueryCondition(data));
 
-        if(one.isPresent()){
+        if (one.isPresent()) {
             return MapstructUtils.convert(one.get(), IotContributor.class);
         }
         return null;

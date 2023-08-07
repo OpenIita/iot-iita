@@ -142,7 +142,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
      */
     @Override
     public long selectNormalChildrenDeptById(Long deptId) {
-        return  sysDeptData.selectNormalChildrenDeptById(deptId);
+        return sysDeptData.selectNormalChildrenDeptById(deptId);
     }
 
     /**
@@ -175,7 +175,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
      */
     @Override
     public boolean checkDeptNameUnique(SysDeptBo dept) {
-        return sysDeptData.checkDeptNameUnique( dept.getDeptName(), dept.getParentId(), dept.getId());
+        return sysDeptData.checkDeptNameUnique(dept.getDeptName(), dept.getParentId(), dept.getId());
     }
 
     /**
@@ -210,6 +210,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
             throw new BizException("部门停用，不允许新增");
         }
         SysDept dept = MapstructUtils.convert(bo, SysDept.class);
+        dept.setTenantId(LoginHelper.getTenantId());
         dept.setAncestors(parent.getAncestors() + StringUtils.SEPARATOR + dept.getParentId());
         sysDeptData.save(dept);
     }
@@ -225,7 +226,7 @@ public class SysDeptServiceImpl implements ISysDeptService, DeptService {
     public void updateDept(SysDeptBo bo) {
         SysDept dept = MapstructUtils.convert(bo, SysDept.class);
         SysDept oldDept = sysDeptData.findById(bo.getId());
-        if(oldDept==null){
+        if (oldDept == null) {
             throw new BizException(ErrCode.DATA_NOT_EXIST);
         }
 

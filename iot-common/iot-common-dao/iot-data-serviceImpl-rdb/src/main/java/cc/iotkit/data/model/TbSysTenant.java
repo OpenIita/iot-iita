@@ -1,6 +1,7 @@
 package cc.iotkit.data.model;
 
 import cc.iotkit.common.constant.UserConstants;
+import cc.iotkit.common.tenant.dao.TenantAware;
 import cc.iotkit.model.system.SysTenant;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
@@ -24,7 +25,7 @@ import java.util.Date;
 @Entity
 @Table(name = "sys_tenant")
 @AutoMapper(target = SysTenant.class)
-public class TbSysTenant extends BaseEntity {
+public class TbSysTenant extends BaseEntity implements TenantAware {
     private static final long serialVersionUID = 1L;
 
     /**

@@ -11,12 +11,14 @@ import cc.iotkit.model.system.SysTenant;
 import cc.iotkit.system.dto.bo.SysTenantBo;
 import cc.iotkit.system.dto.vo.SysTenantVo;
 import cc.iotkit.system.service.ISysTenantService;
+import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 租户Service业务层处理
@@ -42,7 +44,8 @@ public class SysTenantServiceImpl implements ISysTenantService {
     @Cacheable(cacheNames = CacheNames.SYS_TENANT, key = "#tenantId")
     @Override
     public SysTenantVo queryByTenantId(String tenantId) {
-        return MapstructUtils.convert(sysTenantData.findById(Long.valueOf(tenantId)),SysTenantVo.class);
+        SysTenant tenant = sysTenantData.findById(Long.valueOf(tenantId));
+        return MapstructUtils.convert(tenant,SysTenantVo.class);
     }
 
     @Override
@@ -56,17 +59,24 @@ public class SysTenantServiceImpl implements ISysTenantService {
     }
 
     @Override
-    public Boolean insertByBo(SysTenantBo bo) {
-        return false;
+    public void insertByBo(SysTenantBo bo) {
+        bo.setTenantId(IdUtil.simpleUUID());
+        sysTenantData.save(bo.to(SysTenant.class));
     }
 
     @Override
-    public Boolean updateByBo(SysTenantBo bo) {
-        return false;
+    public void updateByBo(SysTenantBo bo) {
+        SysTenant tenantDataById = sysTenantData.findById(bo.getId());
+        String tenantId = tenantDataById.getTenantId();
+        bo.setTenantId(tenantId);
+        sysTenantData.updateTenant(bo.to(SysTenant.class));
     }
 
     @Override
     public int updateTenantStatus(SysTenantBo bo) {
+        SysTenant tenantDataById = sysTenantData.findById(bo.getId());
+        tenantDataById.setStatus(bo.getStatus());
+        sysTenantData.updateTenant(tenantDataById);
         return 0;
     }
 
@@ -76,13 +86,13 @@ public class SysTenantServiceImpl implements ISysTenantService {
     }
 
     @Override
-    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        return false;
+    public void deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
+        sysTenantData.deleteByIds(ids);
     }
 
     @Override
     public boolean checkCompanyNameUnique(SysTenantBo bo) {
-        return false;
+        return true;
     }
 
     @Override

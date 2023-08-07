@@ -7,12 +7,15 @@ import cc.iotkit.common.enums.UserType;
 import cc.iotkit.common.undefined.LoginUser;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.context.model.SaStorage;
+import cn.dev33.satoken.exception.InvalidContextException;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -27,6 +30,7 @@ import java.util.Set;
  *
  * @author Lion Li
  */
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoginHelper {
 
@@ -103,17 +107,29 @@ public class LoginHelper {
      * 获取租户ID
      */
     public static String getTenantId() {
-        String tenantId;
         try {
-            tenantId = (String) SaHolder.getStorage().get(TENANT_KEY);
-            if (ObjectUtil.isNull(tenantId)) {
-                tenantId = (String) StpUtil.getExtra(TENANT_KEY);
-                SaHolder.getStorage().set(TENANT_KEY, tenantId);
+            LoginUser loginUser = getLoginUser();
+            if (loginUser == null) {
+                Object tenantId = SaHolder.getStorage().get(TENANT_KEY);
+                if (tenantId == null) {
+                    return null;
+                }
+                return tenantId.toString();
             }
+            return loginUser.getTenantId();
         } catch (Exception e) {
-            return null;
+            //skip
         }
-        return tenantId;
+        return null;
+    }
+
+    /**
+     * 设置租户ID
+     *
+     * @param tenantId 租户ID
+     */
+    public static void setTenantId(String tenantId) {
+        SaHolder.getStorage().set(TENANT_KEY, tenantId);
     }
 
     /**

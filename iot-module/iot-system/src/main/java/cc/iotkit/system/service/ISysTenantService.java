@@ -38,12 +38,12 @@ public interface ISysTenantService {
     /**
      * 新增租户
      */
-    Boolean insertByBo(SysTenantBo bo);
+    void insertByBo(SysTenantBo bo);
 
     /**
      * 修改租户
      */
-    Boolean updateByBo(SysTenantBo bo);
+    void updateByBo(SysTenantBo bo);
 
     /**
      * 修改租户状态
@@ -58,7 +58,7 @@ public interface ISysTenantService {
     /**
      * 校验并批量删除租户信息
      */
-    Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+    void deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
     /**
      * 校验企业名称是否唯一

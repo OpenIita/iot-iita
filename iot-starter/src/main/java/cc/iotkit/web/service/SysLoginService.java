@@ -75,7 +75,10 @@ public class SysLoginService {
         // 校验租户
         checkTenant(tenantId);
 
+        //未登录前临时设置租户id
+        LoginHelper.setTenantId(tenantId);
         SysUserVo user = loadUserByUsername(tenantId, username);
+        user.setTenantId(tenantId);
         checkLogin(LoginType.PASSWORD, tenantId, username, () -> !BCrypt.checkpw(password, user.getPassword()));
         // 此处可根据登录用户的数据不同 自行创建 loginUser
         LoginUser loginUser = buildLoginUser(user);
@@ -152,7 +155,7 @@ public class SysLoginService {
     public void logout() {
         try {
             LoginUser loginUser = LoginHelper.getLoginUser();
-            if (TenantHelper.isEnable() && LoginHelper.isSuperAdmin()) {
+            if (LoginHelper.isSuperAdmin()) {
                 // 超级管理员 登出清除动态租户
                 TenantHelper.clearDynamic();
             }
@@ -228,10 +231,6 @@ public class SysLoginService {
     private SysUserVo loadUserByUsername(String tenantId, String username) {
         SysUser query = new SysUser();
         query.setUserName(username);
-        if(TenantHelper.isEnable()){
-            query.setTenantId(tenantId);
-        }
-
         SysUser user = userData.findOneByCondition(query);
 
         if (ObjectUtil.isNull(user)) {
@@ -241,11 +240,6 @@ public class SysLoginService {
             log.info("登录用户：{} 已被停用.", username);
             throw new UserException("用户被停用");
         }
-        if (TenantHelper.isEnable()) {
-            SysUser sysUser = userData.selectTenantUserByUserName(username, tenantId);
-            return MapstructUtils.convert(sysUser, SysUserVo.class);
-
-        }
         SysUser sysUser = userData.selectUserByUserName(username);
         return MapstructUtils.convert(sysUser, SysUserVo.class);
     }
@@ -253,9 +247,6 @@ public class SysLoginService {
     private SysUserVo loadUserByPhonenumber(String tenantId, String phonenumber) {
         SysUser query = new SysUser();
         query.setPhonenumber(phonenumber);
-        if(TenantHelper.isEnable()){
-            query.setTenantId(tenantId);
-        }
 
         SysUser user = userData.findOneByCondition(query);
         if (ObjectUtil.isNull(user)) {
@@ -266,21 +257,13 @@ public class SysLoginService {
             throw new UserException("用户被停用");
         }
 
-        if (TenantHelper.isEnable()) {
-            SysUser sysUser = userData.selectTenantUserByPhonenumber(phonenumber, tenantId);
-            return MapstructUtils.convert(sysUser, SysUserVo.class);
-        }
-        SysUser userFind =  userData.selectByPhonenumber(phonenumber);
-        return MapstructUtils.convert(userFind, SysUserVo.class);
+        SysUser sysUser = userData.selectTenantUserByPhonenumber(phonenumber, tenantId);
+        return MapstructUtils.convert(sysUser, SysUserVo.class);
     }
 
     private SysUserVo loadUserByEmail(String tenantId, String email) {
         SysUser query = new SysUser();
         query.setEmail(email);
-        if(TenantHelper.isEnable()){
-            query.setTenantId(tenantId);
-        }
-
         SysUser user = userData.findOneByCondition(query);
 
         if (ObjectUtil.isNull(user)) {
@@ -289,10 +272,6 @@ public class SysLoginService {
         } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", email);
             throw new UserException("用户被停用");
-        }
-        if (TenantHelper.isEnable()) {
-            SysUser sysUser = userData.selectTenantUserByEmail(email, tenantId);
-            return MapstructUtils.convert(sysUser, SysUserVo.class);
         }
         SysUser sysUser = userData.selectUserByEmail(email);
         return MapstructUtils.convert(sysUser, SysUserVo.class);
@@ -356,7 +335,7 @@ public class SysLoginService {
         // 锁定时间内登录 则踢出
         if (ObjectUtil.isNotNull(errorNumber) && errorNumber.equals(maxRetryCount)) {
             recordLoginInfo(tenantId, username, loginFail, MessageUtils.message(loginType.getRetryLimitExceed(), maxRetryCount, lockTime));
-            throw new UserException("重试达到最大限制" );
+            throw new UserException("重试达到最大限制");
         }
 
         if (supplier.get()) {
@@ -366,13 +345,13 @@ public class SysLoginService {
             if (errorNumber.equals(maxRetryCount)) {
                 RedisUtils.setCacheObject(errorKey, errorNumber, Duration.ofMinutes(lockTime));
                 recordLoginInfo(tenantId, username, loginFail, MessageUtils.message(loginType.getRetryLimitExceed(), maxRetryCount, lockTime));
-                throw new UserException( "重试达到最大限制" );
+                throw new UserException("重试达到最大限制");
 
             } else {
                 // 未达到规定错误次数 则递增
                 RedisUtils.setCacheObject(errorKey, errorNumber);
                 recordLoginInfo(tenantId, username, loginFail, MessageUtils.message(loginType.getRetryLimitCount(), errorNumber));
-                throw new UserException( String.format("错误次数:%s", errorNumber) );
+                throw new UserException(String.format("错误次数:%s", errorNumber));
 
             }
         }

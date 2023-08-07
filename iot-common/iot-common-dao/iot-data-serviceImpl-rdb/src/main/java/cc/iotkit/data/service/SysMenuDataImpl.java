@@ -96,8 +96,6 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
         sysMenuRepository.deleteAllByIdInBatch(ids);
     }
 
-
-
     @Override
     public List<SysMenu> selectMenuList(SysMenu menu, Long userId, boolean isSuperAdmin) {
 

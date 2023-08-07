@@ -77,9 +77,6 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
     public boolean selectRegisterEnabled(String tenantId) {
         SysConfig query = new SysConfig();
         query.setConfigKey("sys.account.registerUser");
-        if(TenantHelper.isEnable()){
-            query.setTenantId(tenantId);
-        }
         SysConfig retConfig = sysConfigData.findOneByCondition(query);
 
         if (ObjectUtil.isNull(retConfig)) {

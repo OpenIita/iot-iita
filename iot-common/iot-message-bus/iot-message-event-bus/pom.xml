@@ -14,18 +14,20 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-message-core</artifactId>
         </dependency>
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-             <artifactId>iot-common-model</artifactId>
+            <artifactId>iot-common-model</artifactId>
+        </dependency>
+
+        <!--====================第三方库===================-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
 
     </dependencies>

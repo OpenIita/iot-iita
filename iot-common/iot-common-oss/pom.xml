@@ -11,20 +11,23 @@
 
     <artifactId>iot-common-oss</artifactId>
     <dependencies>
-    <dependency>
-        <groupId>com.amazonaws</groupId>
-        <artifactId>aws-java-sdk-s3</artifactId>
-    </dependency>
 
-    <dependency>
-        <groupId>cc.iotkit</groupId>
-        <artifactId>iot-common-redis</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-redis</artifactId>
+        </dependency>
 
-    <dependency>
-        <groupId>cc.iotkit</groupId>
-        <artifactId>iot-common-core</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-core</artifactId>
+        </dependency>
+
+        <!--====================第三方库===================-->
+
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

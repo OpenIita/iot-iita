@@ -40,6 +40,7 @@ public class PlusWebInvokeTimeInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!prodProfile.equals(SpringUtils.getActiveProfile())) {
             String url = request.getMethod() + " " + request.getRequestURI();
+            log.info("request handler:{}, threadId:{}", url, Thread.currentThread().getId());
 
             // 打印请求参数
             if (isJsonRequest(request)) {
@@ -47,8 +48,8 @@ public class PlusWebInvokeTimeInterceptor implements HandlerInterceptor {
                 if (request instanceof RepeatedlyRequestWrapper) {
                     BufferedReader reader = request.getReader();
                     jsonParam = IoUtil.read(reader);
-                    Request req = JsonUtils.parseObject(jsonParam,Request.class);
-                    MDC.put("requestId",req.getRequestId());
+                    Request req = JsonUtils.parseObject(jsonParam, Request.class);
+                    MDC.put("requestId", req.getRequestId());
                 }
                 log.debug("开始请求 => URL[{}],参数类型[json],参数:[{}]", url, jsonParam);
             } else {
@@ -56,8 +57,8 @@ public class PlusWebInvokeTimeInterceptor implements HandlerInterceptor {
                 if (MapUtil.isNotEmpty(parameterMap)) {
                     String parameters = JsonUtils.toJsonString(parameterMap);
                     String[] requestIds = parameterMap.get("requestId");
-                    if(Objects.nonNull(requestIds) && requestIds.length> 0){
-                        MDC.put("requestId",requestIds[0]);
+                    if (Objects.nonNull(requestIds) && requestIds.length > 0) {
+                        MDC.put("requestId", requestIds[0]);
                     }
                     log.debug("开始请求 => URL[{}],参数类型[param],参数:[{}]", url, parameters);
                 } else {

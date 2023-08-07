@@ -27,13 +27,6 @@ public class TenantHelper {
     private static final ThreadLocal<String> TEMP_DYNAMIC_TENANT = new TransmittableThreadLocal<>();
 
     /**
-     * 租户功能是否启用
-     */
-    public static boolean isEnable() {
-        return Convert.toBool(SpringUtils.getProperty("tenant.enable"), false);
-    }
-
-    /**
      * 设置动态租户(一直有效 需要手动清理)
      * <p>
      * 如果为非web环境 那么只在当前线程内生效

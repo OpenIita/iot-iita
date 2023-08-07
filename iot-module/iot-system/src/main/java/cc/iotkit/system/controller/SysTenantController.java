@@ -67,7 +67,6 @@ public class SysTenantController extends BaseController {
 
     /**
      * 获取租户详细信息
-     *
      */
     @ApiOperation("获取租户详细信息")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
@@ -91,7 +90,7 @@ public class SysTenantController extends BaseController {
         if (!tenantService.checkCompanyNameUnique(data)) {
             fail("新增租户'" + data.getCompanyName() + "'失败，企业名称已存在");
         }
-        //TenantHelper.ignore(() -> tenantService.insertByBo(bo));
+        tenantService.insertByBo(data);
     }
 
     /**
@@ -126,20 +125,18 @@ public class SysTenantController extends BaseController {
 
     /**
      * 删除租户
-     *
      */
     @ApiOperation("删除租户")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:remove")
     @Log(title = "租户", businessType = BusinessType.DELETE)
     @PostMapping("/delete")
-    public void remove(@Validated @RequestBody Request<Long[]> bo) {
-        tenantService.deleteWithValidByIds(List.of(bo.getData()), true);
+    public void remove(@Validated @RequestBody Request<List<Long>> bo) {
+        tenantService.deleteWithValidByIds(bo.getData(), true);
     }
 
     /**
      * 动态切换租户
-     *
      */
     @ApiOperation("动态切换租户")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
