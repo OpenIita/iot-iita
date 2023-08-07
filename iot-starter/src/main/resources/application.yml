@@ -19,7 +19,8 @@ spring:
         format_sql: true
   sql:
     init:
-      schema-locations: classpath:sql/schema.sql
+#      schema-locations: classpath:sql/schema.sql
+      schema-locations: classpath:sql/schema-postgre.sql
       mode: ALWAYS
 #  datasource:
 #    url: jdbc:h2:./data/iotkit;MODE=MySQL
