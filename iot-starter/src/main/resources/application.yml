@@ -10,7 +10,13 @@ spring:
   profiles:
     active: postgres
 
-
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
 
 # https://baomidou.com/config/
 mybatis-plus:
