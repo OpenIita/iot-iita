@@ -10,10 +10,15 @@ import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.model.*;
 import cc.iotkit.data.util.PageBuilder;
+import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.stats.DataItem;
+import cn.hutool.core.collection.CollectionUtil;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +34,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static cc.iotkit.data.model.QTbDeviceGroup.tbDeviceGroup;
+import static cc.iotkit.data.model.QTbDeviceGroupMapping.tbDeviceGroupMapping;
 import static cc.iotkit.data.model.QTbDeviceInfo.tbDeviceInfo;
+import static cc.iotkit.data.model.QTbDeviceSubUser.tbDeviceSubUser;
 import static cc.iotkit.data.model.QTbProduct.tbProduct;
 
 @Primary
@@ -48,7 +56,6 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
 
     private final DeviceTagRepository deviceTagRepository;
 
-    private final JdbcTemplate jdbcTemplate;
 
     @Qualifier("productDataCache")
     private final IProductData productData;
@@ -186,9 +193,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
 
     @Override
     public List<String> findSubDeviceIds(String parentId) {
-        return jdbcTemplate.queryForList(
-                "select device_id from device_info " +
-                        "where parent_id=?", String.class, parentId);
+        return jpaQueryFactory.select(tbDeviceInfo.deviceId).from(tbDeviceInfo)
+                .where(tbDeviceInfo.parentId.eq(parentId)).fetch();
     }
 
     @Override
@@ -213,130 +219,44 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
                                                String productKey, String groupId,
                                                String state, String keyword,
                                                int page, int size) {
-        String sql = "SELECT\n" +
-                "a.id,\n" +
-                "a.device_id,\n" +
-                "a.product_key,\n" +
-                "a.device_name,\n" +
-                "a.model,\n" +
-                "a.secret,\n" +
-                "a.parent_id,\n" +
-                "a.longitude,\n" +
-                "a.latitude,\n" +
-                "a.uid,\n" +
-                "a.state,\n" +
-                "a.online_time,\n" +
-                "a.offline_time,\n" +
-                "a.create_at\n" +
-                "FROM device_info a ";
+        JPAQuery<TbDeviceInfo> query = jpaQueryFactory.selectFrom(tbDeviceInfo);
 
-        if (StringUtils.isNotBlank(groupId)) {
-            sql += " JOIN device_group_mapping b  on a.device_id=b.device_id\n" +
-                    " JOIN device_group c on b.group_id=c.id ";
-        }
-        if (StringUtils.isNotBlank(subUid)) {
-            sql += " JOIN device_sub_user d on d.device_id=a.device_id ";
-        }
-
-        List<Object> args = new ArrayList<>();
-        sql += " where 1=1 ";
-        if (StringUtils.isNotBlank(groupId)) {
-            sql += "and c.id=? ";
-            args.add(groupId);
+        if (StringUtils.isNotBlank(uid)) {
+            query.where(tbDeviceInfo.uid.eq(uid));
         }
 
         if (StringUtils.isNotBlank(subUid)) {
-            sql += "and d.uid=? ";
-            args.add(subUid);
-        } else if (StringUtils.isNotBlank(uid)) {
-            sql += "and a.uid=? ";
-            args.add(uid);
+            query.join(tbDeviceSubUser).on(tbDeviceSubUser.deviceId.eq(tbDeviceInfo.deviceId));
+            query.where(tbDeviceSubUser.uid.eq(subUid));
         }
 
         if (StringUtils.isNotBlank(productKey)) {
-            sql += "and a.product_key=? ";
-            args.add(productKey);
+            query.where(tbDeviceInfo.productKey.eq(productKey));
         }
 
         if (StringUtils.isNotBlank(state)) {
-            sql += "and a.state=? ";
-            args.add(state);
+            query.where(tbDeviceInfo.state.eq(state));
         }
 
         if (StringUtils.isNotBlank(keyword)) {
-            keyword = "%" + keyword.trim() + "%";
-            sql += "and (a.device_id like ? or a.device_name like ?) ";
-            args.add(keyword);
-            args.add(keyword);//两个参数
+            query.where(tbDeviceInfo.deviceId.like("%" + keyword + "%")
+                    .or(tbDeviceInfo.deviceName.like("%" + keyword + "%")));
         }
 
-        sql += String.format("order by create_at desc limit %d,%d", (page - 1) * size, size);
+        query.orderBy(tbDeviceInfo.createAt.desc());
+        query.offset((page - 1) * size).limit(size);
 
-        List<DeviceInfo> list = jdbcTemplate.query(sql, (rs, rowNum) -> DeviceInfo.builder()
-                .id(rs.getString("id"))
-                .deviceId(rs.getString("device_id"))
-                .deviceName(rs.getString("device_name"))
-                .productKey(rs.getString("product_key"))
-                .model(rs.getString("model"))
-                .secret(rs.getString("secret"))
-                .parentId(rs.getString("parent_id"))
-                .locate(new DeviceInfo.Locate(rs.getString("longitude"), rs.getString("latitude")))
-                .uid(rs.getString("uid"))
-                .state(new DeviceInfo.State(
-                        "online".equals(rs.getString("state")),
-                        rs.getLong("online_time"),
-                        rs.getLong("offline_time")
-                ))
-                .createAt(rs.getLong("create_at"))
-                .build(), args.toArray());
-
-        sql = sql.replaceAll("SELECT[\\s\\S]+FROM", "SELECT count(*) FROM ");
-        sql = sql.replaceAll("order by create_at desc limit.*", "");
-        Long total = jdbcTemplate.queryForObject(sql, Long.class, args.toArray());
-
-        //把当前页的deviceId串连起来作为in的参数
-        String deviceIds = list.stream().map(d -> "'" + d.getDeviceId() + "'").collect(Collectors.joining(","));
-
-        //取设备所属分组
-        List<DeviceIdGroup> groups = list.isEmpty() ? new ArrayList<>() :
-                jdbcTemplate.query("SELECT \n" +
-                        "a.id,\n" +
-                        "a.name, \n" +
-                        "b.device_id as deviceId \n" +
-                        "FROM\n" +
-                        "device_group a \n" +
-                        "JOIN device_group_mapping b on a.id=b.group_id\n" +
-                        String.format("WHERE b.device_id in(%s)", deviceIds), new BeanPropertyRowMapper<>(DeviceIdGroup.class));
-
-        //取设备标签
-//        List<TbDeviceTag> tags = list.size() == 0 ? new ArrayList<>() :
-//                jdbcTemplate.query("\n" +
-//                        "SELECT\n" +
-//                        "a.id,\n" +
-//                        "a.code,\n" +
-//                        "a.name,\n" +
-//                        "a.value\n" +
-//                        "FROM device_tag a " +
-//                        String.format("WHERE a.device_id IN(%s)", deviceIds), new BeanPropertyRowMapper<>(TbDeviceTag.class));
-
-        for (DeviceInfo device : list) {
-            //设置设备分组
-            Map<String, DeviceInfo.Group> groupMap = new HashMap<>();
-            groups.stream().filter(g -> device.getDeviceId().equals(g.getDeviceId()))
-                    .forEach(g -> groupMap.put(g.getId(),
-                            new DeviceInfo.Group(g.getId(), g.getName())));
-            device.setGroup(groupMap);
-
-            //设置设备标签
-//            Map<String, DeviceInfo.Tag> tagMap = new HashMap<>();
-//            tags.stream().filter(t -> device.getDeviceId().equals(t.getDeviceId()))
-//                    .forEach(t -> tagMap.put(t.getCode(),
-//                            new DeviceInfo.Tag(t.getCode(), t.getName(), t.getValue())));
-//            device.setTag(tagMap);
+        List<TbDeviceInfo> tbDeviceInfos = query.fetch();
+        long total = query.fetchCount();
+        List<DeviceInfo> deviceInfos = new ArrayList<>(tbDeviceInfos.size());
+        for (TbDeviceInfo tbDeviceInfo : tbDeviceInfos) {
+            DeviceInfo deviceInfo = MapstructUtils.convert(tbDeviceInfo, DeviceInfo.class);
+            fillDeviceInfo(tbDeviceInfo.getDeviceId(), tbDeviceInfo, deviceInfo);
+            deviceInfos.add(deviceInfo);
         }
-
-        return new Paging<>(total, list);
+        return new Paging<>(total, deviceInfos);
     }
+
 
     @Override
     public void updateTag(String deviceId, DeviceInfo.Tag tag) {
@@ -361,20 +281,19 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     @Override
     public List<DataItem> getDeviceStatsByCategory(String uid) {
         //先按产品统计设备数量
-        String sql = "SELECT COUNT(*) as value,product_key as name from " +
-                "device_info %s GROUP BY product_key";
-        List<Object> args = new ArrayList<>();
+        JPAQuery<DataItem> query = jpaQueryFactory.select(Projections.bean(DataItem.class,
+                        tbDeviceInfo.productKey,
+                        tbDeviceInfo.count()))
+                .from(tbDeviceInfo)
+                .groupBy(tbDeviceInfo.productKey);
+
         if (StringUtils.isNotBlank(uid)) {
-            sql = String.format(sql, "where uid=:uid");
-            args.add(uid);
-        } else {
-            sql = String.format(sql, "");
+            query.where(tbDeviceInfo.uid.eq(uid));
         }
+
         List<DataItem> stats = new ArrayList<>();
 
-        List<DataItem> rst = jdbcTemplate.query(sql,
-                new BeanPropertyRowMapper<>(DataItem.class),
-                args.toArray());
+        List<DataItem> rst = query.fetch();
         for (DataItem item : rst) {
             //找到产品对应的品类取出品类名
             Product product = productData.findByProductKey(item.getName());
@@ -427,8 +346,10 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     @Override
     @Transactional
     public void removeGroup(String deviceId, String groupId) {
-        jdbcTemplate.update("delete from device_group_mapping " +
-                "where device_id=? and group_id=?", deviceId, groupId);
+        jpaQueryFactory.delete(tbDeviceGroupMapping)
+                .where(tbDeviceGroupMapping.deviceId.eq(deviceId)
+                        .and(tbDeviceGroupMapping.groupId.eq(groupId)))
+                .execute();
         //更新设备数量
         updateGroupDeviceCount(groupId);
     }
@@ -436,8 +357,9 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     @Override
     @Transactional
     public void removeGroup(String groupId) {
-        jdbcTemplate.update("delete from device_group_mapping " +
-                "where group_id=?", groupId);
+        jpaQueryFactory.delete(tbDeviceGroupMapping)
+                .where(tbDeviceGroupMapping.groupId.eq(groupId))
+                .execute();
         //更新设备数量
         updateGroupDeviceCount(groupId);
     }
