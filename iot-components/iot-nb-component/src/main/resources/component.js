@@ -177,6 +177,20 @@ function subRegister(topic, parent, payload) {
     };
 }
 
+function deviceStateChangeByClientId(head, clientId, state) {
+
+    var device = getPkDn(clientId);
+
+    return {
+        type: "state",
+        data: {
+            productKey: device.pk,
+            deviceName: device.dn,
+            state: state
+        }
+    }
+}
+
 function deviceStateChange(head, clientId, state) {
     var topic = head.topic;
     var device = getPkDn(clientId);
@@ -243,20 +257,24 @@ this.onReceive = function (head, type, payload) {
     if (type == 'auth') {
         return register(payload);
     }
-
-    if (type == 'subscribe') {
-        return deviceStateChange(head, payload, 'online');
+    else if (type == 'online') {
+        return deviceStateChangeByClientId(head, payload, 'online');
+    }
+    else if (type == 'subscribe') {
+        // 此产品无需通过订阅来确认是否上线
+        return {};
     }
 
-    if (type == 'unsubscribe') {
-        return deviceStateChange(head, payload, 'offline');
+    else if (type == 'unsubscribe') {
+        // 此产品无需通过订阅来确认是否下线
+        return {};
     }
 
-    if (type == 'disconnect') {
+    else if (type == 'disconnect') {
         return disconnect(payload);
     }
 
-    if (type == 'ota') {
+    else if (type == 'ota') {
         return ota(head, payload);
     }
 
