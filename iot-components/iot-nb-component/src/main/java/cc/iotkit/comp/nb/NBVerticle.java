@@ -90,6 +90,8 @@ public class NBVerticle extends AbstractVerticle {
                         endpoint.reject(MqttConnectReturnCode.CONNECTION_REFUSED_NOT_AUTHORIZED);
                         return;
                     }
+                    // 固定协议,不需要订阅,直接认为上线
+                    executor.onReceive(null, "online", clientId);
                     //保存设备与连接关系
                     endpointMap.put(getEndpointKey(r), endpoint);
                     mqttConnectPool.put(clientId, true);
