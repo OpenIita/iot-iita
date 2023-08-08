@@ -44,7 +44,9 @@ public class SysTenantServiceImpl implements ISysTenantService {
     @Cacheable(cacheNames = CacheNames.SYS_TENANT, key = "#tenantId")
     @Override
     public SysTenantVo queryByTenantId(String tenantId) {
-        SysTenant tenant = sysTenantData.findById(Long.valueOf(tenantId));
+        SysTenant sysTenant = new SysTenant();
+        sysTenant.setTenantId(tenantId);
+        SysTenant tenant = sysTenantData.findOneByCondition(sysTenant);
         return MapstructUtils.convert(tenant,SysTenantVo.class);
     }
 
@@ -97,7 +99,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public boolean checkAccountBalance(String tenantId) {
-        SysTenantVo tenant = SpringUtils.getAopProxy(this).queryByTenantId(tenantId);
+        SysTenantVo tenant = this.queryByTenantId(tenantId);
         // 如果余额为-1代表不限制
         if (tenant.getAccountCount() == -1) {
             return true;
