@@ -215,7 +215,7 @@ public class NBVerticle extends AbstractVerticle {
             throw new BizException(ErrCode.SEND_DESTINATION_NOT_FOUND);
         }
         Future<Integer> result = endpoint.publish(topic, msg,
-                MqttQoS.AT_LEAST_ONCE, false, false);
+                MqttQoS.AT_MOST_ONCE, false, false);
         result.onFailure(e -> log.error("public topic failed", e));
         result.onSuccess(integer -> log.info("publish success,topic:{},payload:{}", topic, msg));
     }
