@@ -331,7 +331,7 @@ this.onReceive = function (head, type, payload) {
                 payload: payload
             }
         },
-        action: action
+        action: {}
     }
 }
 
