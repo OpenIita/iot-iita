@@ -200,6 +200,11 @@ http://iotkit-open-source.gitee.io/document/
 ![输入图片说明](doc/ma.png) 
 
 
+#### 开源生态
+
+1. [mybatis-plus版数据服务](https://gitee.com/openiot/iotkit-parent-mybatis)（直接替换iot-data-serviceImpl-rdb就能从jpa切换成mybatis-plus）
+
+
 ### 项目规划
 
 见：《[开源项目管理](https://open-iita.feishu.cn/base/G4owbWqkbaoI0LsYVnWcreXVnnc)》
