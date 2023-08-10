@@ -1,10 +1,10 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.constant.Constants;
-import cc.iotkit.data.manager.IUserInfoData;
-import cc.iotkit.data.cache.UserInfoCacheEvict;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.constant.Constants;
+import cc.iotkit.data.cache.UserInfoCacheEvict;
+import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,12 +40,12 @@ public class UserInfoDataCache implements IUserInfoData {
     }
 
     @Override
-    public UserInfo findById(String s) {
+    public UserInfo findById(Long s) {
         return userInfoData.findById(s);
     }
 
     @Override
-    public List<UserInfo> findByIds(Collection<String> id) {
+    public List<UserInfo> findByIds(Collection<Long> id) {
         return null;
     }
 
@@ -63,12 +63,12 @@ public class UserInfoDataCache implements IUserInfoData {
     }
 
     @Override
-    public void deleteById(String s) {
+    public void deleteById(Long s) {
         userInfoData.deleteById(s);
     }
 
     @Override
-    public void deleteByIds(Collection<String> strings) {
+    public void deleteByIds(Collection<Long> longs) {
 
     }
 

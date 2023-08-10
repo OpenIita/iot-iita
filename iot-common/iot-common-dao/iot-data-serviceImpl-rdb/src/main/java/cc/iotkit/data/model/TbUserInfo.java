@@ -22,7 +22,7 @@ public class TbUserInfo {
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
-    private String id;
+    private Long id;
 
     /**
      * 用户账号

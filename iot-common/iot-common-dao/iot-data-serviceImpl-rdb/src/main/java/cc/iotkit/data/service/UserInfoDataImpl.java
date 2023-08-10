@@ -16,20 +16,17 @@ import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.model.TbUserInfo;
 import cc.iotkit.model.UserInfo;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Primary
 @Service
 @RequiredArgsConstructor
-public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, String> {
+public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, Long> {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -63,41 +60,6 @@ public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, S
     public Class getTClass() {
         return UserInfo.class;
     }
-
-    @Override
-    public UserInfo findById(String s) {
-        return MapstructUtils.convert(userInfoRepository.findById(s).orElse(null), UserInfo.class);
-    }
-
-    @Override
-    public List<UserInfo> findByIds(Collection<String> id) {
-        return null;
-    }
-
-    @Override
-    public UserInfo save(UserInfo data) {
-        if (StringUtils.isBlank(data.getId())) {
-            data.setId(UUID.randomUUID().toString());
-            data.setCreateAt(System.currentTimeMillis());
-        }
-        userInfoRepository.save(MapstructUtils.convert(data, TbUserInfo.class));
-        return data;
-    }
-
-
-    @Override
-    public void deleteById(String s) {
-        userInfoRepository.deleteById(s);
-    }
-
-
-
-    @Override
-    public List<UserInfo> findAll() {
-        return MapstructUtils.convert(userInfoRepository.findAll(), UserInfo.class);
-    }
-
-
 
 
 }

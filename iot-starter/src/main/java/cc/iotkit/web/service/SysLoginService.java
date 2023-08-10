@@ -5,10 +5,12 @@ import cc.iotkit.common.constant.GlobalConstants;
 import cc.iotkit.common.enums.DeviceType;
 import cc.iotkit.common.enums.LoginType;
 import cc.iotkit.common.enums.UserStatus;
+import cc.iotkit.common.enums.UserType;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.exception.user.UserException;
 import cc.iotkit.common.log.event.LogininforEvent;
 import cc.iotkit.common.redis.utils.RedisUtils;
+import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.undefined.LoginUser;
@@ -17,7 +19,9 @@ import cc.iotkit.common.undefined.XcxLoginUser;
 import cc.iotkit.common.utils.*;
 import cc.iotkit.common.web.config.properties.CaptchaProperties;
 import cc.iotkit.common.web.utils.ServletUtils;
+import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.system.ISysUserData;
+import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.system.SysUser;
 import cc.iotkit.system.dto.vo.SysUserVo;
 import cc.iotkit.system.service.ISysPermissionService;
@@ -33,6 +37,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -47,6 +52,7 @@ import java.util.function.Supplier;
 public class SysLoginService {
 
     private final ISysUserData userData;
+    private final IUserInfoData userInfoData;
     private final CaptchaProperties captchaProperties;
     private final ISysPermissionService permissionService;
     private final ISysTenantService tenantService;
@@ -56,6 +62,15 @@ public class SysLoginService {
 
     @Value("${user.password.lockTime}")
     private Integer lockTime;
+
+    @Value("${weixin.appid}")
+    private String appid;
+
+    @Value("${weixin.secret}")
+    private String secret;
+
+    @Value("${weixin.authUrl}")
+    private String authUrl;
 
     /**
      * 登录验证
@@ -127,25 +142,29 @@ public class SysLoginService {
 
     public String xcxLogin(String xcxCode) {
         // xcxCode 为 小程序调用 wx.login 授权后获取
-        // todo 以下自行实现
-        // 校验 appid + appsrcret + xcxCode 调用登录凭证校验接口 获取 session_key 与 openid
-        String openid = "";
-        SysUserVo user = loadUserByOpenid(openid);
+        String url=authUrl+"?appid="+appid+"&secret="+secret+"&js_code="+xcxCode+"&grant_type=authorization_code";
+        String ret=WeChatUtil.httpRequest(url,"GET",null);
+        String openid = JsonUtils.parseMap(ret).getStr("openid");;
+        UserInfo user = null;
+        try {
+            user = loadUserByOpenid(openid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // 校验租户
-        checkTenant(user.getTenantId());
+//        checkTenant(user.getTenantId());
 
         // 此处可根据登录用户的数据不同 自行创建 loginUser
         XcxLoginUser loginUser = new XcxLoginUser();
-        loginUser.setTenantId(user.getTenantId());
         loginUser.setUserId(user.getId());
-        loginUser.setUsername(user.getUserName());
-        loginUser.setUserType(user.getUserType());
+        loginUser.setUsername(user.getNickName());
+        loginUser.setUserType(UserType.APP_USER.getUserType());
         loginUser.setOpenid(openid);
         // 生成token
         LoginHelper.loginByDevice(loginUser, DeviceType.XCX);
 
-        recordLoginInfo(loginUser.getTenantId(), user.getUserName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
-        recordLoginInfo(user.getId());
+        recordLoginInfo(loginUser.getTenantId(), user.getNickName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
+//        recordLoginInfo(user.getId());
         return StpUtil.getTokenValue();
     }
 
@@ -278,16 +297,18 @@ public class SysLoginService {
 
     }
 
-    private SysUserVo loadUserByOpenid(String openid) {
+    private UserInfo loadUserByOpenid(String openid) throws Exception {
         // 使用 openid 查询绑定用户 如未绑定用户 则根据业务自行处理 例如 创建默认用户
-        // todo 自行实现 userService.selectUserByOpenid(openid);
-        SysUserVo user = new SysUserVo();
+        UserInfo user=userInfoData.findByUid(openid);
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", openid);
-            // todo 用户不存在 业务逻辑自行实现
-        } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
-            log.info("登录用户：{} 已被停用.", openid);
-            // todo 用户已被停用 业务逻辑自行实现
+            user=new UserInfo();
+            user.setType(UserInfo.USER_TYPE_CLIENT);
+            user.setUid(openid);
+            user.setRoles(Collections.singletonList(Constants.ROLE_CLIENT));
+            user.setCreateAt(System.currentTimeMillis());
+            user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_CLIENT_USER));
+            user = userInfoData.save(user);
         }
         return user;
     }

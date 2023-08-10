@@ -40,9 +40,9 @@ public class ScreenVerticle extends AbstractVerticle {
     public void start() {
         httpServer = vertx.createHttpServer();
         Router router = Router.router(vertx);
-        router.route(screenConfig.screenAdmin + "/*").handler(StaticHandler.create(screenConfig.getScreenDir()+"/"+apiHandler.getScreenId()+"/"+packageName));
+        router.route(screenConfig.screenAdmin + "/*").handler(StaticHandler.create(screenConfig.getScreenDir() + "/" + apiHandler.getScreenId() + "/" + packageName));
         router.get(screenConfig.screenAdmin).handler(ctx -> {
-            ctx.response().sendFile(screenConfig.getScreenDir()+"/"+apiHandler.getScreenId() +"/"+packageName+ "/index.html");
+            ctx.response().sendFile(screenConfig.getScreenDir() + "/" + apiHandler.getScreenId() + "/" + packageName + "/index.html");
         });
         router.get("/*").handler(ctx -> {
             String res = apiHandler.httpReq(ctx.request(), ctx.response());

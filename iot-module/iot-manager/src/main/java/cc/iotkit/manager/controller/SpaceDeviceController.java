@@ -242,7 +242,7 @@ public class SpaceDeviceController {
         }
 
         String uid = AuthUtil.getUserId();
-        UserInfo userInfo = userInfoData.findById(uid);
+        UserInfo userInfo = userInfoData.findById(Long.valueOf(uid));
         if (userInfo == null) {
             throw new BizException(ErrCode.USER_NOT_FOUND);
         }
@@ -275,7 +275,7 @@ public class SpaceDeviceController {
 
         spaceDeviceData.deleteById(spaceDevice.getId());
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
-        UserInfo userInfo = userInfoData.findById(uid);
+        UserInfo userInfo = userInfoData.findById(Long.valueOf(uid));
         if (userInfo == null) {
             throw new BizException(ErrCode.USER_NOT_FOUND);
         }
