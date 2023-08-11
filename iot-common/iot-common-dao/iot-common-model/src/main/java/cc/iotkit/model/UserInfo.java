@@ -23,12 +23,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo implements Id<String> {
+public class UserInfo implements Id<Long> {
 
     public static final int USER_TYPE_PLATFORM = 0;
     public static final int USER_TYPE_CLIENT = 1;
 
-    private String id;
+    private Long id;
 
     /**
      * 用户账号

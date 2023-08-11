@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 @Api(tags = {"用户"})
 @RestController
@@ -61,7 +60,7 @@ public class UserInfoController {
     @PostMapping("/platform/user/add")
     public void addPlatformUser(@RequestBody UserInfo user) {
         try {
-            user.setId(UUID.randomUUID().toString());
+//            user.setId(UUID.randomUUID().toString());
             user.setType(UserInfo.USER_TYPE_PLATFORM);
             user.setOwnerId(AuthUtil.getUserId());
             user.setRoles(Collections.singletonList(Constants.ROLE_SYSTEM));
@@ -118,7 +117,7 @@ public class UserInfoController {
                 .address("")
                 .deviceNum(0)
                 .spaceNum(0)
-                .uid(user.getId())
+//                .uid(user.getId())
                 .current(true)
                 .build());
 
@@ -127,14 +126,14 @@ public class UserInfoController {
             spaceData.save(Space.builder()
                     .homeId(home.getId())
                     .name(name)
-                    .uid(user.getId())
+//                    .uid(user.getId())
                     .createAt(System.currentTimeMillis())
                     .build());
         }
     }
 
     @PostMapping("/client/user/{id}/delete")
-    public void deleteClientUser(@PathVariable("id") String id) {
+    public void deleteClientUser(@PathVariable("id") Long id) {
         UserInfo user = userInfoData.findById(id);
         if (user == null) {
             throw new BizException(ErrCode.USER_NOT_FOUND);

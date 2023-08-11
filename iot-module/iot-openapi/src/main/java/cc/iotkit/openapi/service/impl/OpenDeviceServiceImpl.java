@@ -15,6 +15,7 @@ import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
+import cc.iotkit.openapi.dto.vo.OpenDeviceInfoVo;
 import cc.iotkit.openapi.dto.vo.OpenDevicePropertyVo;
 import cc.iotkit.openapi.dto.vo.OpenPropertyVo;
 import cc.iotkit.openapi.service.OpenDeviceService;
@@ -55,7 +56,7 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
     }
 
     @Override
-    public boolean addDevice(OpenapiDeviceBo bo) {
+    public OpenDeviceInfoVo addDevice(OpenapiDeviceBo bo) {
         String productKey = bo.getProductKey();
         String deviceName = bo.getDeviceName();
         String parentId = bo.getParentId();
@@ -91,7 +92,7 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
             device.setParentId(parentId);
         }
         deviceInfoData.save(device);
-        return true;
+        return MapstructUtils.convert(device, OpenDeviceInfoVo.class);
     }
 
     @Override

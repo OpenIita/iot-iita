@@ -5,6 +5,7 @@ import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
 import cc.iotkit.openapi.dto.bo.device.OpenapiSetDeviceServicePropertyBo;
+import cc.iotkit.openapi.dto.vo.OpenDeviceInfoVo;
 import cc.iotkit.openapi.dto.vo.OpenDevicePropertyVo;
 import cc.iotkit.openapi.service.OpenBaseService;
 import cc.iotkit.openapi.service.OpenDeviceService;
@@ -40,7 +41,7 @@ public class OpenDeviceController {
 
     @ApiOperation(value = "单个设备注册")
     @PostMapping("/v1/registerDevice")
-    public boolean createDevice(@RequestBody @Validated Request<OpenapiDeviceBo> bo) {
+    public OpenDeviceInfoVo createDevice(@RequestBody @Validated Request<OpenapiDeviceBo> bo) {
         return openDeviceService.addDevice(bo.getData());
     }
 

@@ -14,7 +14,7 @@ import cc.iotkit.model.UserInfo;
 
 import java.util.List;
 
-public interface IUserInfoData extends ICommonData<UserInfo, String> {
+public interface IUserInfoData extends ICommonData<UserInfo, Long> {
 
     UserInfo findByUid(String uid);
 
