@@ -1562,17 +1562,7 @@
           "name": "水温度",
           "accessMode": "r"
         },
-        {
-          "identifier": "query",
-          "dataType": {
-            "type": "text",
-            "specs": {
-              "length": "255"
-            }
-          },
-          "name": "查询",
-          "accessMode": "rw"
-        },
+
         {
           "identifier": "McuStatus",
           "dataType": {
@@ -1838,17 +1828,7 @@
           "name": "实时运行状态",
           "accessMode": "rw"
         },
-        {
-          "identifier": "Time",
-          "dataType": {
-            "type": "text",
-            "specs": {
-              "length": "255"
-            }
-          },
-          "name": "时间戳",
-          "accessMode": "rw"
-        },
+
         {
           "identifier": "TimeModeSet",
           "dataType": {
