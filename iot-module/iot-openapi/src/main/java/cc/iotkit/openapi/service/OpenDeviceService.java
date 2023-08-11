@@ -2,6 +2,7 @@ package cc.iotkit.openapi.service;
 
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
+import cc.iotkit.openapi.dto.vo.OpenDeviceInfoVo;
 import cc.iotkit.openapi.dto.vo.OpenDevicePropertyVo;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
 public interface OpenDeviceService {
     DeviceInfo getDetail(OpenapiDeviceBo bo);
 
-    boolean addDevice(OpenapiDeviceBo bo);
+    OpenDeviceInfoVo addDevice(OpenapiDeviceBo bo);
 
     boolean deleteDevice(OpenapiDeviceBo bo);
 
