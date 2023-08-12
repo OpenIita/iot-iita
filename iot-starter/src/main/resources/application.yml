@@ -200,3 +200,9 @@ mybatis-plus:
       # AUTO 自增 NONE 空 INPUT 用户输入 ASSIGN_ID 雪花 ASSIGN_UUID 唯一 UUID
       # 如需改为自增 需要将数据库表全部设置为自增
       idType: ASSIGN_ID
+
+#微信小程序配置
+weixin:
+  appid: xx
+  secret: xx
+  authUrl: xx
