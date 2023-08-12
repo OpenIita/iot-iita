@@ -173,6 +173,7 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
                         tbSysMenu.parentId, tbSysMenu.menuName, tbSysMenu.path, tbSysMenu.component, tbSysMenu.queryParam,
                         tbSysMenu.visible, tbSysMenu.status, tbSysMenu.perms, tbSysMenu.isFrame, tbSysMenu.isCache, tbSysMenu.menuType,
                         tbSysMenu.icon, tbSysMenu.orderNum, tbSysMenu.createTime))
+                .distinct()
                 .from(tbSysMenu)
                 .leftJoin(tbSysRoleMenu).on(tbSysMenu.id.eq(tbSysRoleMenu.menuId))
                 .leftJoin(tbSysUserRole).on(tbSysRoleMenu.roleId.eq(tbSysUserRole.roleId))
