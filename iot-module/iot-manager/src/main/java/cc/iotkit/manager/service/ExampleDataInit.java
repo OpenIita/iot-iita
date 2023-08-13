@@ -260,7 +260,6 @@ public class ExampleDataInit implements SmartInitializingSingleton {
         initData("sys_oper_log", sysOperLogData, new TypeReference<List<SysOperLog>>() {
         });
 
-
         initData("sys_oss", sysOssData, new TypeReference<List<SysOss>>() {
         });
 
@@ -294,18 +293,23 @@ public class ExampleDataInit implements SmartInitializingSingleton {
         });
     }
 
-    private <T> T initData(String name, ICommonData service, TypeReference<T> type) throws IOException {
-        log.info("init {} data...", name);
-        if (service.count() > 0) {
-            new RuntimeException("原数据库已存在" + name + "的旧数据，请清除后再重新初始化！").printStackTrace();
-            System.exit(0);
+    private <T> T initData(String name, ICommonData service, TypeReference<T> type) {
+        try {
+            log.info("init {} data...", name);
+            if (service.count() > 0) {
+                new RuntimeException("原数据库已存在" + name + "的旧数据，请清除后再重新初始化！").printStackTrace();
+                System.exit(0);
+            }
+            String json = FileUtils.readFileToString(new File("./data/init/" + name + ".json"), StandardCharsets.UTF_8);
+            List list = (List) JsonUtils.parseObject(json, type);
+            for (Object obj : list) {
+                service.save((Id) obj);
+            }
+            return (T) list;
+        } catch (Exception e) {
+            log.error("initData error", e);
+            return null;
         }
-        String json = FileUtils.readFileToString(new File("./data/init/" + name + ".json"), StandardCharsets.UTF_8);
-        List list = (List) JsonUtils.parseObject(json, type);
-        for (Object obj : list) {
-            service.save((Id) obj);
-        }
-        return (T) list;
     }
 
 }

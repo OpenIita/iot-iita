@@ -13,6 +13,7 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.device.message.DevicePropertyCache;
 import cc.iotkit.model.stats.DataItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -90,12 +91,12 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
-    public void saveProperties(String deviceId, Map<String, Object> properties) {
+    public void saveProperties(String deviceId, Map<String, DevicePropertyCache> properties) {
         deviceInfoData.saveProperties(deviceId, properties);
     }
 
     @Override
-    public Map<String, Object> getProperties(String deviceId) {
+    public Map<String, DevicePropertyCache> getProperties(String deviceId) {
         return deviceInfoData.getProperties(deviceId);
     }
 

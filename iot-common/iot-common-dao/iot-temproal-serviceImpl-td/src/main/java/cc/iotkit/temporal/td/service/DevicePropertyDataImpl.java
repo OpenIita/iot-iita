@@ -36,7 +36,8 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
     @Qualifier("deviceInfoDataCache")
     private IDeviceInfoData deviceInfoData;
 
-    public List<DeviceProperty> findDevicePropertyHistory(String deviceId, String name, long start, long end) {
+    @Override
+    public List<DeviceProperty> findDevicePropertyHistory(String deviceId, String name, long start, long end, int size) {
         DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
         if (device == null) {
             return new ArrayList<>();
@@ -44,7 +45,8 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
 
         String tbName = Constants.getProductPropertySTableName(device.getProductKey());
         List<TbDeviceProperty> deviceProperties = tdTemplate.query(String.format(
-                "select time,%s as value,device_id from %s where device_id=? and time>=? and time<=?",
+                "select time,%s as `value`,device_id from %s where device_id=? and time>=? and time<=? " +
+                        "order by time asc limit 0," + size,
                 name.toLowerCase(), tbName),
                 new BeanPropertyRowMapper<>(TbDeviceProperty.class),
                 deviceId, start, end
@@ -59,20 +61,15 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
     }
 
     @Override
-    public void addProperties(String deviceId, Map<String, Object> properties, long time) {
+    public void addProperties(String deviceId, Map<String, DevicePropertyCache> properties, long time) {
         DeviceInfo device = deviceInfoData.findByDeviceId(deviceId);
         if (device == null) {
             return;
         }
-        Map<String, Object> propertiesMap = new HashMap<>();
-        properties.forEach((key, val) -> {
-            DevicePropertyCache propertyCache = (DevicePropertyCache) val;
-            propertiesMap.put(key, propertyCache.getValue());
-        });
         //获取设备旧属性
-        Map<String, Object> oldProperties = deviceInfoData.getProperties(deviceId);
+        Map<String, DevicePropertyCache> oldProperties = deviceInfoData.getProperties(deviceId);
         //用新属性覆盖
-        oldProperties.putAll(propertiesMap);
+        oldProperties.putAll(properties);
 
         StringBuilder sbFieldNames = new StringBuilder();
         StringBuilder sbFieldPlaces = new StringBuilder();
@@ -84,7 +81,7 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
             sbFieldNames.append(key)
                     .append(",");
             sbFieldPlaces.append("?,");
-            args.add(val);
+            args.add(val.getValue());
         });
         sbFieldNames.deleteCharAt(sbFieldNames.length() - 1);
         sbFieldPlaces.deleteCharAt(sbFieldPlaces.length() - 1);

@@ -78,7 +78,7 @@ public class DevicePropertyConsumer implements ConsumerHandler<ThingModelMessage
                 getProperties().stream().collect(Collectors.toMap(
                 ThingModel.Property::getIdentifier, ThingModel.Property::getDataType));
 
-        Map<String, Object> addProperties = new HashMap<>();
+        Map<String, DevicePropertyCache> addProperties = new HashMap<>();
         Long occurred = msg.getOccurred();
         //删除非属性字段
         properties.forEach((key,val)->{
@@ -131,7 +131,7 @@ public class DevicePropertyConsumer implements ConsumerHandler<ThingModelMessage
     /**
      * 更新设备当前属性
      */
-    private void updateDeviceCurrentProperties(String deviceId, Map<String, Object> properties) {
+    private void updateDeviceCurrentProperties(String deviceId, Map<String, DevicePropertyCache> properties) {
         try {
             log.info("save device property,deviceId:{},property:{}", deviceId, JsonUtils.toJsonString(properties));
             deviceInfoData.saveProperties(deviceId, properties);

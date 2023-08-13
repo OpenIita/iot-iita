@@ -92,7 +92,7 @@
         <!--        </dependency>-->
 
         <!--打开注释 启用tdengine数据库-->
-        <!--        <dependency>-->
+<!--        <dependency>-->
         <!--            <groupId>cc.iotkit</groupId>-->
         <!--            <artifactId>iot-temproal-serviceImpl-td</artifactId>-->
         <!--        </dependency>-->

@@ -21,6 +21,7 @@ import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.document.Document;
@@ -44,7 +45,8 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
 
     private final Set<String> indexSet = new HashSet<>();
 
-    public List<DeviceProperty> findDevicePropertyHistory(String deviceId, String name, long start, long end) {
+    @Override
+    public List<DeviceProperty> findDevicePropertyHistory(String deviceId, String name, long start, long end, int size) {
         String index = getIndex(deviceId, name);
         NativeSearchQuery query = new NativeSearchQueryBuilder()
                 .withQuery(
@@ -54,6 +56,7 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
                                         .from(start, true).to(end, true))
                 )
                 .withSorts(new FieldSortBuilder("time").order(SortOrder.ASC))
+                .withPageable(Pageable.ofSize(size))
                 .build();
         SearchHits<DocDeviceProperty> result = template.search(query, DocDeviceProperty.class, IndexCoordinates.of(index));
         return result.getSearchHits().stream()
@@ -62,11 +65,11 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
     }
 
     @Override
-    public void addProperties(String deviceId, Map<String, Object> properties, long time) {
+    public void addProperties(String deviceId, Map<String, DevicePropertyCache> properties, long time) {
         properties.forEach((key, val) -> {
             DevicePropertyCache propertyCache = (DevicePropertyCache) val;
             String index = getIndex(deviceId, key);
-            long occurred =  Objects.nonNull( propertyCache.getOccurred() )? propertyCache.getOccurred() : time;
+            long occurred = Objects.nonNull(propertyCache.getOccurred()) ? propertyCache.getOccurred() : time;
             template.save(
                     new DocDeviceProperty(UUID.randomUUID().toString(), deviceId, key, propertyCache.getValue(), occurred),
                     IndexCoordinates.of(index)

@@ -118,7 +118,7 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
         DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(bo.getProductKey(), bo.getDeviceName());
         List<OpenPropertyVo> openPropertyVos = new ArrayList<>();
         if (propertyVo != null){
-            Map<String, Object> properties = deviceInfoData.getProperties(deviceInfo.getDeviceId());
+            Map<String, ?> properties = deviceInfoData.getProperties(deviceInfo.getDeviceId());
             for (ThingModel.Property property : propertyVo.getModel().getProperties()) {
                 OpenPropertyVo openPropertyVo = new OpenPropertyVo(property.getIdentifier(), property.getDataType(), property.getName(), property.getAccessMode(), property.getDescription(), property.getUnit());
                 Map<String,Object> map = (Map<String, Object>) properties.get(openPropertyVo.getIdentifier());

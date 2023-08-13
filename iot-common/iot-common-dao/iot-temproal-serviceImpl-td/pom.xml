@@ -13,10 +13,8 @@
 
     <description>
         时序数据库服务接口的TDengine实现
-        支持版本：v0.4.1
-        TDengine版本：2.6.0.12
+        TDengine版本：3.x
     </description>
-
 
     <dependencies>
 
@@ -45,7 +43,7 @@
         <dependency>
             <groupId>com.taosdata.jdbc</groupId>
             <artifactId>taos-jdbcdriver</artifactId>
-            <version>2.0.40</version>
+            <version>3.2.4</version>
         </dependency>
 
         <dependency>

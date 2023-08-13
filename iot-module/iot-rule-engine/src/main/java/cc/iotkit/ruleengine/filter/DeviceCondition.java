@@ -54,7 +54,7 @@ public class DeviceCondition {
         }
         Object left = null;
         if ("property".equals(type)) {
-            Map<String, Object> properties = deviceInfo.getProperty();
+            Map<String, ?> properties = deviceInfo.getProperty();
             left = properties.get(identifier);
         } else if ("state".equals(type)) {
             DeviceInfo.State state = deviceInfo.getState();
