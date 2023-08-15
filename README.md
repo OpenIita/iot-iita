@@ -73,15 +73,15 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 **注：** es版本为7.15.2，mysql版本为8.0+
 
-##### 关系数据库切换为mysql方法（其它数据库同理）
+##### H2数据库切换为mysql方法（其它数据库同理）
 1、删掉.init、iotkit.mv.db、iotkit.trace.db文件
 
 2、将iot-data-serviceImpl-rdb/pom.xml中的mysql驱动注释放开
 
-3、启动时指定active: --spring.profiles.active=mysql
+3、application.yml 注释掉内置H2数据库，打开mysql配置注释
 
-##### 时序数据库切换为TDengine(版本：3.x)方法
-1、删掉.init和数据文件
+##### es切换为TDengine(版本：3.x)方法
+1、删掉.init和关系数据库数据
 
 2、注释掉iot-starter/pom.xml中的 iot-temporal-serviceImpl-es，并打开iot-td-temporal-service的注释
 
