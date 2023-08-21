@@ -15,13 +15,13 @@ public class RuleLogVo implements Serializable {
     private static final long serialVersionUID = -1L;
 
     @ApiModelProperty(value = "时间")
-    private Long time;
+    private Long logAt;
 
     @ApiModelProperty(value = "规则id")
     private String ruleId;
 
     @ApiModelProperty(value = "状态")
-    private String state1;
+    private String state;
 
     @ApiModelProperty(value = "内容")
     private String content;
