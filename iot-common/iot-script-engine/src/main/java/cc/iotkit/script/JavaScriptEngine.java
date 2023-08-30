@@ -52,19 +52,13 @@ public class JavaScriptEngine implements IScriptEngine {
     public <T> T invokeMethod(TypeReference<T> type, String methodName, Object... args) {
         Value member = jsScript.getMember("invoke");
 
-        StringBuilder sbArgs = new StringBuilder("[");
-        //将入参转成json
-        for (int i = 0; i < args.length; i++) {
-            args[i] = JsonUtils.toJsonString(args[i]);
-            sbArgs.append(i == args.length - 1 ? "," : "").append(args[i]);
-        }
-        sbArgs.append("]");
+        StringBuilder sbArgs = formatArgs(args);
 
         //通过调用invoke方法将目标方法返回结果转成json
         Value rst = member.execute(methodName, args);
 
         String json = rst.asString();
-        log.info("invoke script {},args:{}, result:{}", methodName, sbArgs, json);
+        log.info("invoke script={}, args={}, result={}", methodName, sbArgs, json);
 
         //没有返回值
         if (json == null || "null".equals(json)) {
@@ -72,6 +66,17 @@ public class JavaScriptEngine implements IScriptEngine {
         }
 
         return JsonUtils.parseObject(json, type);
+    }
+
+    private static StringBuilder formatArgs(Object[] args) {
+        StringBuilder sbArgs = new StringBuilder("[");
+        //将入参转成json
+        for (int i = 0; i < args.length; i++) {
+            args[i] = JsonUtils.toJsonString(args[i]);
+            sbArgs.append(args[i]).append(i != args.length - 1 ? "," : "");
+        }
+        sbArgs.append("]");
+        return sbArgs;
     }
 
 }

@@ -54,7 +54,7 @@ public class PageBuilder {
     Map<String,String> sortMap = pageRequest.getSortMap();
     if (CollUtil.isNotEmpty(sortMap)){
       sortMap.forEach((k,v) -> {
-        orders.add(new Order(Direction.ASC, k));
+        orders.add(new Order(Direction.fromString("desc"), k));
       });
     }
     return orders;
