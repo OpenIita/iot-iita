@@ -25,9 +25,9 @@ public class Device {
 
     private String model;
 
-    private Map<String, Object> property = new HashMap<>();
+    private Map<String, ?> property = new HashMap<>();
 
-    private Map<String, Object> tag = new HashMap<>();
+    private Map<String, ?> tag = new HashMap<>();
 
     /**
      * 是否透传

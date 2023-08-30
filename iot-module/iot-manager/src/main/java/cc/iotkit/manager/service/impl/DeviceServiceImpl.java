@@ -141,7 +141,7 @@ public class DeviceServiceImpl implements IDeviceService {
         device.setDeviceName(deviceName);
         device.setSecret(secret.toString());
         device.setState(new DeviceInfo.State(false, null, null));
-        device.setLocate(new DeviceInfo.Locate(deviceInfo.getLongitude(),deviceInfo.getLatitude()));
+        device.setLocate(new DeviceInfo.Locate(deviceInfo.getLongitude(), deviceInfo.getLatitude()));
         device.setCreateAt(System.currentTimeMillis());
         if (StringUtils.isNotBlank(parentId)) {
             device.setParentId(parentId);
@@ -168,7 +168,7 @@ public class DeviceServiceImpl implements IDeviceService {
         if (!AuthUtil.isAdmin()) {
             uid = AuthUtil.getUserId();
         }
-        List<DeviceInfo> ret=deviceInfoData.findByProductNodeType(uid);
+        List<DeviceInfo> ret = deviceInfoData.findByProductNodeType(uid);
         if (!ret.isEmpty()) {
             pdv = ret.stream().map(r -> ParentDeviceVo.builder().id(r.getId()).deviceName(r.getDeviceName()).build()).collect(Collectors.toList());
         }
@@ -211,8 +211,8 @@ public class DeviceServiceImpl implements IDeviceService {
     }
 
     @Override
-    public List<DeviceProperty> getPropertyHistory(String deviceId, String name, long start, long end) {
-        return devicePropertyData.findDevicePropertyHistory(deviceId, name, start, end);
+    public List<DeviceProperty> getPropertyHistory(String deviceId, String name, long start, long end, int size) {
+        return devicePropertyData.findDevicePropertyHistory(deviceId, name, start, end, size);
     }
 
     @Override
@@ -412,15 +412,15 @@ public class DeviceServiceImpl implements IDeviceService {
 
     @Override
     public boolean saveDevice(DeviceInfoBo data) {
-        DeviceInfo di=data.to(DeviceInfo.class);
-        di.setLocate(new DeviceInfo.Locate(data.getLongitude(),data.getLatitude()));
+        DeviceInfo di = data.to(DeviceInfo.class);
+        di.setLocate(new DeviceInfo.Locate(data.getLongitude(), data.getLatitude()));
         di.setState(data.getState());
         //同产品不可重复设备名
         DeviceInfo deviceRepetition = deviceInfoData.findByProductKeyAndDeviceName(data.getProductKey(), data.getDeviceName());
         if (deviceRepetition != null && !deviceRepetition.getDeviceId().equals(di.getDeviceId())) {
             throw new BizException(ErrCode.MODEL_DEVICE_ALREADY);
         }
-        return deviceInfoData.save(di)!=null;
+        return deviceInfoData.save(di) != null;
     }
 
 

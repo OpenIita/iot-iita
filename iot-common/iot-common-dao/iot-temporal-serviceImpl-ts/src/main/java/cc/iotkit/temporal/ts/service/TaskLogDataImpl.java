@@ -39,7 +39,7 @@ public class TaskLogDataImpl implements ITaskLogData {
 
     @Override
     public void deleteByTaskId(String taskId) {
-        tsTemplate.update("delete from task_log where task_id=?", taskId);
+        tsTemplate.update("delete from task_log where task_id=? and time<=NOW()", taskId);
     }
 
     @Override

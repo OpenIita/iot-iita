@@ -128,6 +128,8 @@ public class DbStructureDataImpl implements IDbStructureData {
     @Override
     @PostConstruct
     public void initDbStructure() {
+        tdRestApi.execSql("CREATE DATABASEIF NOT EXISTS iotkit KEEP 365 DURATION 10 BUFFER 16 WAL_LEVEL 1;");
+
         //创建规则日志超级表
         String sql = TableManager.getCreateSTableSql("rule_log", List.of(
                 new TdField("state1", "NCHAR", 32),

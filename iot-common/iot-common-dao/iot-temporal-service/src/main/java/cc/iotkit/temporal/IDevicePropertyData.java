@@ -11,6 +11,7 @@ package cc.iotkit.temporal;
 
 
 import cc.iotkit.model.device.message.DeviceProperty;
+import cc.iotkit.model.device.message.DevicePropertyCache;
 
 import java.util.List;
 import java.util.Map;
@@ -27,8 +28,9 @@ public interface IDevicePropertyData {
      * @param name     属性名称
      * @param start    开始时间戳
      * @param end      结束时间戳
+     * @param size     取时间范围内的数量
      */
-    List<DeviceProperty> findDevicePropertyHistory(String deviceId, String name, long start, long end);
+    List<DeviceProperty> findDevicePropertyHistory(String deviceId, String name, long start, long end, int size);
 
     /**
      * 添加多个属性
@@ -37,6 +39,6 @@ public interface IDevicePropertyData {
      * @param properties 属性
      * @param time       属性上报时间
      */
-    void addProperties(String deviceId, Map<String, Object> properties, long time);
+    void addProperties(String deviceId, Map<String, DevicePropertyCache> properties, long time);
 
 }

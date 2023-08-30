@@ -30,7 +30,7 @@ public class RuleLogDataImpl implements IRuleLogData {
 
     @Override
     public void deleteByRuleId(String ruleId) {
-        tdTemplate.update("delete from rule_log where rule_id=?", ruleId);
+        tdTemplate.update("delete from rule_log where rule_id=? and time<=NOW()", ruleId);
     }
 
     @Override

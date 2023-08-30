@@ -46,7 +46,7 @@ public interface IDeviceService {
 
     Paging<ThingModelMessage> logs(PageRequest<DeviceLogQueryBo> request);
 
-    List<DeviceProperty> getPropertyHistory(String deviceId, String name, long start, long end);
+    List<DeviceProperty> getPropertyHistory(String deviceId, String name, long start, long end,int size);
 
     boolean unbindDevice(String data);
 

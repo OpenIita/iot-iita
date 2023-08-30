@@ -10,13 +10,11 @@ import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.model.*;
 import cc.iotkit.data.util.PageBuilder;
-import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.device.message.DevicePropertyCache;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.stats.DataItem;
-import cn.hutool.core.collection.CollectionUtil;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -26,15 +24,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cc.iotkit.data.model.QTbDeviceGroup.tbDeviceGroup;
 import static cc.iotkit.data.model.QTbDeviceGroupMapping.tbDeviceGroupMapping;
 import static cc.iotkit.data.model.QTbDeviceInfo.tbDeviceInfo;
 import static cc.iotkit.data.model.QTbDeviceSubUser.tbDeviceSubUser;
@@ -81,11 +76,11 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     }
 
     @Override
-    public void saveProperties(String deviceId, Map<String, Object> properties) {
+    public void saveProperties(String deviceId, Map<String, DevicePropertyCache> properties) {
     }
 
     @Override
-    public Map<String, Object> getProperties(String deviceId) {
+    public Map<String, DevicePropertyCache> getProperties(String deviceId) {
         return new HashMap<>();
     }
 

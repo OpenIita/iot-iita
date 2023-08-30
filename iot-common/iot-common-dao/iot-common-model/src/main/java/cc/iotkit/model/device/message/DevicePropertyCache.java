@@ -21,10 +21,14 @@ import java.util.Map;
 public class DevicePropertyCache {
 
 
-    // 属性值
+    /**
+     * 属性值
+     */
     private Object value;
 
-    // 属性值时间: 设备上报时间
+    /**
+     * 属性值时间: 设备上报时间
+     */
     private Long occurred;
 
 

@@ -72,7 +72,7 @@ public class DeviceInfo implements Owned<String> {
     /**
      * 设备属性
      */
-    private Map<String, Object> property = new HashMap<>();
+    private Map<String, ?> property = new HashMap<>();
 
     /**
      * 设备标签

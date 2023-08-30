@@ -71,7 +71,7 @@ public class DeviceController {
     @ApiOperation(value = "属性获取", notes = "属性获取", httpMethod = "POST")
     @SaCheckPermission("iot:device:ctrl")
     @PostMapping("/service/property/get")
-    public InvokeResult invokeServicePropertySet(@RequestBody @Validated  Request<GetDeviceServicePorpertyBo> request) {
+    public InvokeResult invokeServicePropertySet(@RequestBody @Validated Request<GetDeviceServicePorpertyBo> request) {
         return new InvokeResult(deviceService.getProperty(request.getData().getDeviceId(), request.getData().getPropertyNames(), true));
     }
 
@@ -153,17 +153,17 @@ public class DeviceController {
         return deviceServiceImpl.logs(request);
     }
 
-    @ApiOperation("设备属性日志")
+    @ApiOperation("获取设备属性历史数据")
     @SaCheckPermission("iot:deviceLog:query")
     @PostMapping("/deviceProperty/log/list")
     public List<DeviceProperty> getPropertyHistory(@Validated @RequestBody
-                                                   Request<DevicePropertyLogQueryBo> query) {
+                                                           Request<DevicePropertyLogQueryBo> query) {
         DevicePropertyLogQueryBo data = query.getData();
         String deviceId = data.getDeviceId();
         String name = data.getName();
         long start = data.getStart();
         long end = data.getEnd();
-        return deviceServiceImpl.getPropertyHistory(deviceId, name, start, end);
+        return deviceServiceImpl.getPropertyHistory(deviceId, name, start, end, 10000);
     }
 
     @ApiOperation("设备解绑")
@@ -283,7 +283,7 @@ public class DeviceController {
     @PostMapping("/group/removeDevices")
     public boolean removeDevices(@Validated @RequestBody Request<DeviceAddGroupBo> bo) {
         DeviceAddGroupBo data = bo.getData();
-       return deviceServiceImpl.removeDevices(data.getGroup(), data.getDevices());
+        return deviceServiceImpl.removeDevices(data.getGroup(), data.getDevices());
     }
 
     /**

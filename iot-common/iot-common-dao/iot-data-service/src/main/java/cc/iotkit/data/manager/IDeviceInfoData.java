@@ -12,6 +12,7 @@ package cc.iotkit.data.manager;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.IOwnedData;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.device.message.DevicePropertyCache;
 import cc.iotkit.model.stats.DataItem;
 
 import java.util.List;
@@ -25,14 +26,14 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
      * @param deviceId   设备id
      * @param properties 设备属性map
      */
-    void saveProperties(String deviceId, Map<String, Object> properties);
+    void saveProperties(String deviceId, Map<String, DevicePropertyCache> properties);
 
     /**
      * 获取设备属性map
      *
      * @param deviceId 设备id
      */
-    Map<String, Object> getProperties(String deviceId);
+    Map<String, DevicePropertyCache> getProperties(String deviceId);
 
     /**
      * 根据设备ID取设备信息
