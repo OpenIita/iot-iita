@@ -63,13 +63,13 @@ public class SysLoginService {
     @Value("${user.password.lockTime}")
     private Integer lockTime;
 
-    @Value("${weixin.appid}")
+    @Value("${weixin.appid:}")
     private String appid;
 
-    @Value("${weixin.secret}")
+    @Value("${weixin.secret:}")
     private String secret;
 
-    @Value("${weixin.authUrl}")
+    @Value("${weixin.authUrl:}")
     private String authUrl;
 
     /**
