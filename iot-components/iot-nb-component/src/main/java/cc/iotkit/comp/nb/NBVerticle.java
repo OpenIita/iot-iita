@@ -114,6 +114,7 @@ public class NBVerticle extends AbstractVerticle {
                     //删除设备与连接关系
                     endpointMap.remove(getEndpointKey(r));
                 });
+                 endpoint.close();
             }).disconnectMessageHandler(disconnectMessage -> {
                 log.info("Received disconnect from client, reason code = {}", disconnectMessage.code());
                 executor.onReceive(new HashMap<>(), "disconnect", clientId, (r) -> {
