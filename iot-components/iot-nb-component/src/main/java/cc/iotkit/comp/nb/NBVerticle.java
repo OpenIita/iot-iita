@@ -108,15 +108,19 @@ public class NBVerticle extends AbstractVerticle {
             endpoint.accept(false);
             endpoint.closeHandler((v) -> {
                 log.warn("client connection closed,clientId:{}", clientId);
-                if (Boolean.FALSE.equals(mqttConnectPool.get(clientId))) {
+                if (!mqttConnectPool.get(clientId)) {
                     return;
                 }
                 executor.onReceive(new HashMap<>(), "disconnect", clientId, (r) -> {
                     //删除设备与连接关系
                     endpointMap.remove(getEndpointKey(r));
+                    mqttConnectPool.put(clientId, false);
                 });
             }).disconnectMessageHandler(disconnectMessage -> {
                 log.info("Received disconnect from client, reason code = {}", disconnectMessage.code());
+                if (!mqttConnectPool.get(clientId)) {
+                    return;
+                }
                 executor.onReceive(new HashMap<>(), "disconnect", clientId, (r) -> {
                     //删除设备与连接关系
                     endpointMap.remove(getEndpointKey(r));
@@ -159,7 +163,7 @@ public class NBVerticle extends AbstractVerticle {
                 if (StringUtils.isBlank(payload)) {
                     return;
                 }
-                if(Boolean.FALSE.equals(mqttConnectPool.get(clientId))){
+                if(! mqttConnectPool.get(clientId)){
                     executor.onReceive(null, "online", clientId);
                     //保存设备与连接关系
                     String productKey = getProductKey(clientId);
@@ -168,8 +172,6 @@ public class NBVerticle extends AbstractVerticle {
                     mqttConnectPool.put(clientId, true);
                     log.info("mqtt client reconnect success,clientId:{}",clientId);
                 }
-
-
 
                 try {
                     Map<String, Object> head = new HashMap<>();
