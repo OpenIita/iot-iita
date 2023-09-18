@@ -87,6 +87,11 @@ public class ProductServiceImpl implements IProductService {
 
         String secret = UUID.randomUUID().toString(true);
         product.setProductSecret(secret);
+        String productKey = data.getProductKey();
+        Product oldProduct = productData.findByProductKey(productKey);
+        if(oldProduct != null){
+            throw new BizException(ErrCode.PRODUCT_KEY_EXIST);
+        }
 
         productData.save(product);
         return MapstructUtils.convert(product, ProductVo.class);
