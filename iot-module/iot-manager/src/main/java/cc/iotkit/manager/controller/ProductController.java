@@ -108,7 +108,6 @@ public class ProductController {
         return productService.deleteThingModel(id.getData());
     }
 
-
     @ApiOperation("产品品类分页展示")
     @SaCheckPermission("iot:category:query")
     @PostMapping("/category/list")
@@ -124,21 +123,17 @@ public class ProductController {
     }
 
     @ApiOperation("品类编辑")
-    @SaCheckRole("iot_admin")
     @SaCheckPermission("iot:category:edit")
     @PostMapping("/category/edit")
     public boolean saveCategory(@Validated @RequestBody Request<CategoryBo> req) {
-
         return productService.editCategory(req.getData());
     }
 
     @ApiOperation("删除品类")
-    @SaCheckRole("iot_admin")
     @SaCheckPermission("iot:category:remove")
     @PostMapping("/category/delete")
     public boolean delCategory(@Validated @RequestBody Request<String> req) {
         return productService.deleteCategory(req.getData());
-
     }
 
     @ApiOperation("上传产品图片")

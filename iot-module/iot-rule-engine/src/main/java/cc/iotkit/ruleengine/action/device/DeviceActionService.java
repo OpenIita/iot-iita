@@ -9,9 +9,9 @@
  */
 package cc.iotkit.ruleengine.action.device;
 
+import cc.iotkit.common.service.DeviceService;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.UniqueIdUtil;
-import cc.iotkit.comps.DeviceComponentManager;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import java.util.Map;
 public class DeviceActionService {
 
     @Autowired
-    private DeviceComponentManager deviceComponentManager;
+    private DeviceService deviceService;
 
     public String invoke(Service service) {
         String[] pkDn = service.getDevice().split("/");
@@ -36,7 +36,7 @@ public class DeviceActionService {
         thingService.setType(service.getType());
         thingService.setIdentifier(service.getIdentifier());
         thingService.setParams(service.parseInputData());
-        deviceComponentManager.send(thingService);
+        deviceService.invoke(thingService);
         return thingService.getMid();
     }
 

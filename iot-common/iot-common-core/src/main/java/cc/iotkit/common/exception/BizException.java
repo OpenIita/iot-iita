@@ -54,6 +54,7 @@ public class BizException extends RuntimeException {
 
     public BizException(ErrCode errCode, Throwable cause) {
         super(cause);
+        this.code = errCode.getKey();
         this.message = errCode.getValue();
     }
 

@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class OtaService {
 
     private final IOtaPackageData iOtaPackageData;
-    private final DeviceService deviceService;
+    private final DeviceCtrlService deviceCtrlService;
 
     private final IDeviceOtaInfoData deviceOtaInfoData;
     @Qualifier("deviceInfoDataCache")
@@ -162,7 +162,7 @@ public class OtaService {
         deviceIds.forEach(deviceId -> {
             try {
                 DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
-                String taskId = deviceService.otaUpgrade(deviceId, true, otaPackage);
+                String taskId = deviceCtrlService.otaUpgrade(deviceId, true, otaPackage);
                 deviceOtaDetails.add(DeviceOtaDetail.builder()
                         .taskId(taskId)
                         .deviceName(deviceInfo.getDeviceName())
@@ -205,6 +205,6 @@ public class OtaService {
                 .url("http://www.baidu.com/resource/test.jpg")
                 .version("1.2.1")
                 .build();
-        deviceService.otaUpgrade(deviceId, true, otaPackage);
+        deviceCtrlService.otaUpgrade(deviceId, true, otaPackage);
     }
 }

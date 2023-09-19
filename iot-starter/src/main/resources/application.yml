@@ -5,8 +5,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 10MB
-      max-request-size: 12MB
+      max-file-size: 100MB
+      max-request-size: 100MB
 
   #注： 切换数据库时需要将项目根目录中的.init文件删除再重启
   # <<=======内置H2数据库连接设置开始==========
@@ -205,3 +205,11 @@ weixin:
   appid: xx
   secret: xx
   authUrl: xx
+
+# 插件配置
+plugin:
+  runMode: prod
+  mainPackage: cc.iotkit
+  # 如果配置是 windows 下路径, mac、linux 自行修改
+  pluginPath:
+    - ./data/plugins

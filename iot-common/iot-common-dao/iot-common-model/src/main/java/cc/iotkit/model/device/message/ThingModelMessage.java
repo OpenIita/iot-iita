@@ -37,6 +37,7 @@ public class ThingModelMessage {
     public static final String TYPE_CONFIG = "config";
     public static final String ID_PROPERTY_GET = "get";
     public static final String ID_PROPERTY_SET = "set";
+    public static final String ID_PROPERTY_REPORT = "report";
     public static final String ID_CONFIG_GET = "get";
     public static final String ID_CONFIG_SET = "set";
     public static final String ID_DEREGISTER = "deregister";

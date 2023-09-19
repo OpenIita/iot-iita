@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iot-module</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>${revision}</version>
+        <version>0.5.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,11 +29,6 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-data-service</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-component-server</artifactId>
         </dependency>
 
         <!--====================第三方库===================-->

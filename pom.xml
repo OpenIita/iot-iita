@@ -12,7 +12,7 @@
 
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
-    <version>${revision}</version>
+    <version>0.5.0-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>奇特物联是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能,
         能帮助你快速搭建自己的物联网相关业务平台。
@@ -29,7 +29,7 @@
     </modules>
 
     <properties>
-        <revision>0.4.5-SNAPSHOT</revision>
+        <revision>0.5.0-SNAPSHOT</revision>
         <java.version>11</java.version>
         <spring-boot.version>2.7.11</spring-boot.version>
         <spring-cloud.version>2021.0.7</spring-cloud.version>
@@ -56,6 +56,7 @@
         <validateion.version>1.1.0.Final</validateion.version>
         <lombok.version>1.18.26</lombok.version>
         <yitter.version>1.0.6</yitter.version>
+        <spring-brick.version>3.1.2</spring-brick.version>
     </properties>
 
     <dependencyManagement>
@@ -356,11 +357,39 @@
                 </exclusions>
             </dependency>
 
+            <dependency>
+                <groupId>com.gitee.starblues</groupId>
+                <artifactId>spring-brick</artifactId>
+                <version>${spring-brick.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gitee.starblues</groupId>
+                <artifactId>spring-brick-bootstrap</artifactId>
+                <version>${spring-brick.version}</version>
+            </dependency>
+
             <!-- 离线IP地址定位库 ip2region -->
             <dependency>
                 <groupId>org.lionsoul</groupId>
                 <artifactId>ip2region</artifactId>
                 <version>${ip2region.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.biyanwen</groupId>
+                <artifactId>jpa-comment-spring-boot-starter</artifactId>
+                <version>${jap-comment.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validateion.version}</version>
             </dependency>
 
             <!-- iot-common -->
@@ -507,12 +536,6 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-component-server</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
                 <artifactId>iot-mqtt-component</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -561,6 +584,12 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
+                <artifactId>iot-message-bus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
                 <artifactId>iot-openapi</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -581,26 +610,25 @@
                 <artifactId>iot-virtual-device</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-plugin-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-plugin-main</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
             <!-- velocity代码生成使用模板 -->
             <dependency>
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.biyanwen</groupId>
-                <artifactId>jpa-comment-spring-boot-starter</artifactId>
-                <version>${jap-comment.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>${validateion.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

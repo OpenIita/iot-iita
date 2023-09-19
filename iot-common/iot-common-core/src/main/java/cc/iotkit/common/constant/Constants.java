@@ -67,16 +67,6 @@ public interface Constants {
      */
     Integer CAPTCHA_EXPIRATION = 2;
 
-    /**
-     * 令牌
-     */
-    String TOKEN = "token";
-
-    /**
-     * 顶级部门id
-     */
-    Long TOP_PARENT_ID = 0L;
-
     String ACCOUNT_SECRET = "3n1z33kzvpgz1foijpkepyd3e8tw84us";
 
     String CACHE_PRODUCT = "product_cache";
@@ -94,8 +84,6 @@ public interface Constants {
     String CACHE_USER_INFO = "user_info_cache";
 
     String CACHE_OAUTH_CLIENT = "oauth_client_cache";
-
-    String APP_DESIGN_CACHE = "app_design_cache";
 
     String CACHE_PRODUCT_SCRIPT = "product_script_cache";
 
@@ -140,11 +128,6 @@ public interface Constants {
     String DEVICE_PROPERTY_REPORT_TOPIC = "device_property_report";
 
     /**
-     * 不含消息内容的设备上报记录的topic，用于统计
-     */
-    String DEVICE_REPORT_RECORD_TOPIC = "device_report_record";
-
-    /**
      * 设备配置消息topic
      */
     String DEVICE_CONFIG_TOPIC = "device_config";
@@ -158,6 +141,11 @@ public interface Constants {
      * 写权限
      */
     String PERMISSION_WRITE = "write";
+
+    /**
+     * 设备属性缓存key
+     */
+    String PROPERTY_CACHE_KEY = "str:iotkit:device:property:%s";
 
     /**
      * 三方平台类型
@@ -290,8 +278,5 @@ public interface Constants {
         String SET_OPEN_UID = "/setOpenUid";
     }
 
-    interface MQTT {
-        String DEVICE_SUBSCRIBE_TOPIC = "^/sys/.+/.+/c/#$";
-    }
 }
 

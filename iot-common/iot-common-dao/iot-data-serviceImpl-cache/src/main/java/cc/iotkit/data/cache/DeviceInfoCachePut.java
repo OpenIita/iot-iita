@@ -24,8 +24,8 @@ public class DeviceInfoCachePut {
         return deviceInfo;
     }
 
-    @CachePut(value = Constants.CACHE_DEVICE_INFO, key = "#root.method.name+#productKey+#deviceName")
-    public DeviceInfo findByProductKeyAndDeviceName(String productKey, String deviceName, DeviceInfo deviceInfo) {
+    @CachePut(value = Constants.CACHE_DEVICE_INFO, key = "#root.method.name+#deviceName")
+    public DeviceInfo findByDeviceName(String deviceName, DeviceInfo deviceInfo) {
         return deviceInfo;
     }
 

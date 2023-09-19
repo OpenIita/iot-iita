@@ -9,15 +9,20 @@
  */
 package cc.iotkit.virtualdevice;
 
+import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.comps.service.DeviceBehaviourService;
+import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IVirtualDeviceData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.device.VirtualDeviceLog;
 import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.mq.MqProducer;
+import cc.iotkit.plugin.core.thing.IThingService;
+import cc.iotkit.plugin.core.thing.actions.DeviceState;
+import cc.iotkit.plugin.core.thing.actions.up.DeviceStateChange;
 import cc.iotkit.script.IScriptEngine;
 import cc.iotkit.script.ScriptEngineFactory;
 import cc.iotkit.temporal.IVirtualDeviceLogData;
@@ -28,7 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Slf4j
@@ -44,22 +51,18 @@ public class VirtualManager {
     @Autowired
     private Scheduler scheduler;
     @Autowired
-    private DeviceBehaviourService deviceBehaviourService;
-    @Autowired
     private IVirtualDeviceLogData virtualDeviceLogData;
+    @Autowired
+    private IThingService thingService;
+    @Autowired
+    private MqProducer<ThingModelMessage> producer;
 
-
-//    @PostConstruct
+    @Scheduled(initialDelay = 8000)
     public void init() {
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                List<VirtualDevice> virtualDevices = getAllVirtualDevices();
-                for (VirtualDevice virtualDevice : virtualDevices) {
-                    addTask(virtualDevice);
-                }
-            }
-        }, 8000);
+        List<VirtualDevice> virtualDevices = getAllVirtualDevices();
+        for (VirtualDevice virtualDevice : virtualDevices) {
+            addTask(virtualDevice);
+        }
     }
 
     /**
@@ -74,7 +77,7 @@ public class VirtualManager {
      */
     @SneakyThrows
     public void send(ThingService<?> service) {
-        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(service.getProductKey(), service.getDeviceName());
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceName(service.getDeviceName());
         String deviceId = deviceInfo.getDeviceId();
 
         //根据设备Id取虚拟设备列表
@@ -92,7 +95,6 @@ public class VirtualManager {
             log.info("virtual device send result:{}", JsonUtils.toJsonString(result));
         }
     }
-
 
     /**
      * 添加虚拟设备
@@ -244,9 +246,9 @@ public class VirtualManager {
     /**
      * 处理js上报方法返回结果
      */
-    private void processReport(ThingModelMessage modelMessage) {
+    private void processReport(ThingModelMessage message) {
         try {
-            deviceBehaviourService.reportMessage(modelMessage);
+            producer.publish(Constants.THING_MODEL_MESSAGE_TOPIC, message);
         } catch (Throwable e) {
             log.error("process js data error", e);
         }
@@ -275,7 +277,13 @@ public class VirtualManager {
         DeviceInfo.State state = device.getState();
         if (state == null || !state.isOnline()) {
             //设备离线，产生上线消息
-            deviceBehaviourService.deviceStateChange(device.getProductKey(), device.getDeviceName(), true);
+            thingService.post("NONE", DeviceStateChange.builder()
+                    .id(UniqueIdUtil.newRequestId())
+                    .productKey(device.getProductKey())
+                    .deviceName(device.getDeviceName())
+                    .state(DeviceState.ONLINE)
+                    .time(System.currentTimeMillis())
+                    .build());
         }
     }
 

@@ -10,10 +10,8 @@ public interface DeviceInfoRepository extends JpaRepository<TbDeviceInfo, String
 
     TbDeviceInfo findByDeviceId(String deviceId);
 
-    TbDeviceInfo findByProductKeyAndDeviceName(String productKey, String deviceName);
-
     List<TbDeviceInfo> findByParentId(String parentId);
 
-    List<TbDeviceInfo> findByDeviceName(String deviceName);
+    TbDeviceInfo findByDeviceName(String deviceName);
 
 }

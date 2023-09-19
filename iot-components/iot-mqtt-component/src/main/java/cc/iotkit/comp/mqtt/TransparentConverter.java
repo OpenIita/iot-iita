@@ -58,7 +58,7 @@ public class TransparentConverter {
         TransparentMsg transparentMsg = scripters.get(productKey).encode(service);
         //转换成网关消息
         String deviceName = service.getDeviceName();
-        DeviceInfo gateway = getGatewayInfo(productKey, deviceName);
+        DeviceInfo gateway = getGatewayInfo(deviceName);
         DeviceMessage message = new DeviceMessage();
         message.setProductKey(gateway.getProductKey());
         message.setDeviceName(gateway.getDeviceName());
@@ -76,12 +76,12 @@ public class TransparentConverter {
         return productModelData.findByModel(model);
     }
 
-    private DeviceInfo getGatewayInfo(String subPk, String subDn) {
+    private DeviceInfo getGatewayInfo(String subDn) {
         if (deviceInfoData == null) {
             deviceInfoData = SpringUtils.getBean("deviceInfoDataCache");
         }
 
-        String parentId = deviceInfoData.findByProductKeyAndDeviceName(subPk, subDn).getParentId();
+        String parentId = deviceInfoData.findByDeviceName(subDn).getParentId();
         return deviceInfoData.findByDeviceId(parentId);
     }
 

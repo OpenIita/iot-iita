@@ -14,7 +14,7 @@ import cc.iotkit.model.device.DeviceConfig;
 
 public interface IDeviceConfigData extends ICommonData<DeviceConfig, String> {
 
-    DeviceConfig findByProductKeyAndDeviceName(String productKey, String deviceName);
+    DeviceConfig findByDeviceName(String deviceName);
 
     DeviceConfig findByDeviceId(String deviceId);
 

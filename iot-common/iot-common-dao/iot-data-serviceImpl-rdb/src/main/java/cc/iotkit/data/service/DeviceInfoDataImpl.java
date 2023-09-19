@@ -177,8 +177,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     }
 
     @Override
-    public DeviceInfo findByProductKeyAndDeviceName(String productKey, String deviceName) {
-        return parseVoToDto(deviceInfoRepository.findByProductKeyAndDeviceName(productKey, deviceName));
+    public DeviceInfo findByDeviceName(String deviceName) {
+        return parseVoToDto(deviceInfoRepository.findByDeviceName(deviceName));
     }
 
     @Override
@@ -190,11 +190,6 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     public List<String> findSubDeviceIds(String parentId) {
         return jpaQueryFactory.select(tbDeviceInfo.deviceId).from(tbDeviceInfo)
                 .where(tbDeviceInfo.parentId.eq(parentId)).fetch();
-    }
-
-    @Override
-    public List<DeviceInfo> findByDeviceName(String deviceName) {
-        return parseVoToDto(deviceInfoRepository.findByDeviceName(deviceName));
     }
 
     @Override

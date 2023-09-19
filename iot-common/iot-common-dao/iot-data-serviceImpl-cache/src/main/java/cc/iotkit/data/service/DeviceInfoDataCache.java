@@ -34,8 +34,6 @@ import java.util.*;
 @Qualifier("deviceInfoDataCache")
 public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSingleton {
 
-    private static final String PROPERTY_CACHE_KEY = "str:iotkit:device:property:%s";
-
     @Autowired
     private StringRedisTemplate redisTemplate;
 
@@ -73,7 +71,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
                     for (DeviceInfo device : devices) {
                         //装载设备信息缓存
                         deviceInfoCachePut.findByDeviceId(device.getDeviceId(), device);
-                        deviceInfoCachePut.findByProductKeyAndDeviceName(device.getProductKey(), device.getDeviceName(), device);
+                        deviceInfoCachePut.findByDeviceName(device.getDeviceName(), device);
                         String parentId = device.getParentId();
                         if (StringUtils.isBlank(parentId)) {
                             parentIds.add(parentId);
@@ -89,7 +87,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     private String getPropertyCacheKey(String deviceId) {
-        return String.format(PROPERTY_CACHE_KEY, deviceId);
+        return String.format(Constants.PROPERTY_CACHE_KEY, deviceId);
     }
 
     @Override
@@ -123,9 +121,9 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
-    @Cacheable(value = Constants.CACHE_DEVICE_INFO, key = "#root.method.name+#productKey+#deviceName", unless = "#result == null")
-    public DeviceInfo findByProductKeyAndDeviceName(String productKey, String deviceName) {
-        return deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
+    @Cacheable(value = Constants.CACHE_DEVICE_INFO, key = "#root.method.name+#deviceName", unless = "#result == null")
+    public DeviceInfo findByDeviceName(String deviceName) {
+        return deviceInfoData.findByDeviceName(deviceName);
     }
 
     @Override
@@ -146,11 +144,6 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     @Override
     public List<String> findSubDeviceIds(String parentId) {
         return deviceInfoData.findSubDeviceIds(parentId);
-    }
-
-    @Override
-    public List<DeviceInfo> findByDeviceName(String deviceName) {
-        return deviceInfoData.findByDeviceName(deviceName);
     }
 
     @Override
@@ -247,7 +240,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
         deviceInfoData.deleteById(s);
         //清除缓存
         deviceInfoCacheEvict.findByDeviceId(device.getDeviceId());
-        deviceInfoCacheEvict.findByProductKeyAndDeviceName(device.getProductKey(), device.getDeviceName());
+        deviceInfoCacheEvict.findByDeviceName(device.getDeviceName());
         //清除属性缓存
         clearProperties(device.getDeviceId());
         //更新子设备列表缓存
@@ -259,7 +252,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
         List<DeviceInfo> deviceInfos = deviceInfoData.findByIds(ids);
         deviceInfos.forEach(device -> {
             deviceInfoCacheEvict.findByDeviceId(device.getDeviceId());
-            deviceInfoCacheEvict.findByProductKeyAndDeviceName(device.getProductKey(), device.getDeviceName());
+            deviceInfoCacheEvict.findByDeviceName(device.getDeviceName());
             //清除属性缓存
             clearProperties(device.getDeviceId());
             //更新子设备列表缓存
@@ -298,7 +291,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
      */
     private void putDeviceInfo(DeviceInfo data) {
         deviceInfoCachePut.findByDeviceId(data.getDeviceId(), data);
-        deviceInfoCachePut.findByProductKeyAndDeviceName(data.getProductKey(), data.getDeviceName(), data);
+        deviceInfoCachePut.findByDeviceName(data.getDeviceName(), data);
     }
 
     /**

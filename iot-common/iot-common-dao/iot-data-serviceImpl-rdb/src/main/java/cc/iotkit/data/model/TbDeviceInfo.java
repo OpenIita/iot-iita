@@ -38,7 +38,7 @@ public class TbDeviceInfo {
     @ApiModelProperty(value = "设备类型")
     private String model;
 
-    @ApiModelProperty(value = "设备描述")
+    @ApiModelProperty(value = "设备密钥")
     private String secret;
 
     @ApiModelProperty(value = "父级id")

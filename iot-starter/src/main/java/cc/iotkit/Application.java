@@ -11,10 +11,12 @@ package cc.iotkit;
 
 import cc.iotkit.config.EmbeddedElasticSearchConfig;
 import cc.iotkit.config.EmbeddedRedisConfig;
+import com.gitee.starblues.loader.DevelopmentMode;
+import com.gitee.starblues.loader.launcher.SpringBootstrap;
+import com.gitee.starblues.loader.launcher.SpringMainBootstrap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -24,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableTransactionManagement
 @EnableWebMvc
 @EnableFeignClients(basePackages = {"cc.iotkit.baetyl.feign"})
-public class Application extends SpringBootServletInitializer {
+public class Application implements SpringBootstrap {
 
     public static void main(String[] args) {
 //        System.setProperty("disabledEmbeddedEs", "true");
@@ -36,8 +38,17 @@ public class Application extends SpringBootServletInitializer {
             EmbeddedRedisConfig.startEmbeddedRedisServer();
         }
 
-        SpringApplication.run(Application.class, args);
+        SpringMainBootstrap.launch(Application.class, args);
         log.info("server start success!");
     }
 
+    @Override
+    public void run(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+
+    @Override
+    public String developmentMode() {
+        return DevelopmentMode.ISOLATION;
+    }
 }

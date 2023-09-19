@@ -3,6 +3,9 @@ package cc.iotkit.script;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+/**
+ * @author sjg
+ */
 public class ScriptEngineFactory {
 
     public static IScriptEngine getScriptEngine(String type) {

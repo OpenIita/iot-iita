@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iot-module</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>${revision}</version>
+        <version>0.5.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -31,11 +31,6 @@
         <dependency>
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-screen</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-component-converter</artifactId>
         </dependency>
 
         <dependency>
@@ -111,6 +106,11 @@
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.linpeilie</groupId>
+            <artifactId>mapstruct-plus</artifactId>
         </dependency>
 
     </dependencies>

@@ -102,7 +102,7 @@ public class DeviceBehaviourService {
             throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
         String uid = product.getUid();
-        DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(pk, info.getDeviceName());
+        DeviceInfo device = deviceInfoData.findByDeviceName(info.getDeviceName());
         boolean reportMsg = false;
 
         if (device != null) {
@@ -163,7 +163,7 @@ public class DeviceBehaviourService {
                            String deviceName,
                            String productSecret,
                            String deviceSecret) {
-        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceName(deviceName);
         if (deviceInfo == null) {
             throw new BizException(ErrCode.DEVICE_NOT_FOUND);
         }
@@ -186,7 +186,7 @@ public class DeviceBehaviourService {
 
     public boolean isOnline(String productKey,
                             String deviceName) {
-        DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
+        DeviceInfo device = deviceInfoData.findByDeviceName(deviceName);
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(device.getDeviceId());
         return deviceInfo.getState().isOnline();
     }
@@ -194,7 +194,7 @@ public class DeviceBehaviourService {
     public void deviceStateChange(String productKey,
                                   String deviceName,
                                   boolean online) {
-        DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
+        DeviceInfo device = deviceInfoData.findByDeviceName(deviceName);
         if (device == null) {
             log.warn("productKey: {},deviceName:{},online: {}", productKey, deviceName, online);
             throw new BizException(ErrCode.DEVICE_NOT_FOUND);
@@ -246,8 +246,7 @@ public class DeviceBehaviourService {
 
     public void reportMessage(ThingModelMessage message) {
         try {
-            DeviceInfo device = deviceInfoData.findByProductKeyAndDeviceName(
-                    message.getProductKey(), message.getDeviceName());
+            DeviceInfo device = deviceInfoData.findByDeviceName(message.getDeviceName());
             if (device == null) {
                 return;
             }

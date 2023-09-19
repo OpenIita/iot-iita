@@ -25,7 +25,7 @@ public interface IProductData extends ICommonData<Product, Long> {
     List<Product> findByCategory(String category);
 
 
-    Product findByProductKey(String name);
+    Product findByProductKey(String productKey);
 
     void delByProductKey(String productKey);
 }

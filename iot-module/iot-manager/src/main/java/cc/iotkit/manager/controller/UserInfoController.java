@@ -21,7 +21,6 @@ import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
-import cn.dev33.satoken.annotation.SaCheckRole;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +46,6 @@ public class UserInfoController {
     /**
      * 平台用户列表
      */
-    @SaCheckRole("iot_admin")
     @PostMapping("/platform/users")
     public List<UserInfo> getPlatformUsers() {
         return userInfoData.findByType(UserInfo.USER_TYPE_PLATFORM);
@@ -56,7 +54,6 @@ public class UserInfoController {
     /**
      * 添加平台用户
      */
-    @SaCheckRole("iot_admin")
     @PostMapping("/platform/user/add")
     public void addPlatformUser(@RequestBody UserInfo user) {
         try {
@@ -76,7 +73,6 @@ public class UserInfoController {
     /**
      * 重置平台用户密码
      */
-    @SaCheckRole("iot_admin")
     @PostMapping("/platform/user/{uid}/resetPwd")
     public void resetPlatformUserPwd(@PathVariable("uid") String uid) {
         try {

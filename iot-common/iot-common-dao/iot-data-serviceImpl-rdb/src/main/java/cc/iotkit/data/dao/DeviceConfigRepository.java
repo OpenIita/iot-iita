@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DeviceConfigRepository extends JpaRepository<TbDeviceConfig, String> {
 
-    TbDeviceConfig findByProductKeyAndDeviceName(String productKey, String deviceName);
+    TbDeviceConfig findByDeviceName(String deviceName);
 
     TbDeviceConfig findByDeviceId(String deviceId);
 

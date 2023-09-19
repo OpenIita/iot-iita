@@ -20,8 +20,8 @@ public class DeviceInfoCacheEvict {
     public void findByDeviceId(String deviceId) {
     }
 
-    @CacheEvict(value = Constants.CACHE_DEVICE_INFO, key = "#root.method.name+#productKey+#deviceName")
-    public void findByProductKeyAndDeviceName(String productKey, String deviceName) {
+    @CacheEvict(value = Constants.CACHE_DEVICE_INFO, key = "#root.method.name+#deviceName")
+    public void findByDeviceName(String deviceName) {
     }
 
 }

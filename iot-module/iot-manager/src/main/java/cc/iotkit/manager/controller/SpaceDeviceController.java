@@ -77,18 +77,17 @@ public class SpaceDeviceController {
      */
     @PostMapping(Constants.API_SPACE.GET_COLLECT_DEVICES)
     public List<SpaceDeviceVo> getCollectDevices() {
-        Home home=homeData.findByUidAndCurrent(AuthUtil.getUserId(), true);
-        List<SpaceDevice> spaceDevices = spaceDeviceData.findByHomeIdAndCollect(home.getId(),true);
+        Home home = homeData.findByUidAndCurrent(AuthUtil.getUserId(), true);
+        List<SpaceDevice> spaceDevices = spaceDeviceData.findByHomeIdAndCollect(home.getId(), true);
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
 
     /**
-     *
      * 收藏/取消收藏设备
      */
     @PostMapping(Constants.API_SPACE.COLLECT_DEVICE)
     public void collectDevice(SpaceDevice spaceDevice) {
-        SpaceDevice oldSpaceDevice=spaceDeviceData.findByDeviceId(spaceDevice.getDeviceId());
+        SpaceDevice oldSpaceDevice = spaceDeviceData.findByDeviceId(spaceDevice.getDeviceId());
         oldSpaceDevice.setCollect(spaceDevice.getCollect());
         spaceDeviceData.save(oldSpaceDevice);
     }
@@ -162,26 +161,27 @@ public class SpaceDeviceController {
         }
 
         List<FindDeviceVo> findDeviceVos = new ArrayList<>();
-        List<DeviceInfo> devices = deviceInfoData.findByDeviceName(mac);
-        if (devices == null) {
+        DeviceInfo device = deviceInfoData.findByDeviceName(mac);
+        if (device == null) {
             return findDeviceVos;
         }
+        List<DeviceInfo> devices = new ArrayList<>();
+        devices.add(device);
 
         //查找网关下子设备
         List<DeviceInfo> subDevices = new ArrayList<>();
-        for (DeviceInfo device : devices) {
-            if (device.getParentId() == null) {
-                subDevices = deviceInfoData.findByParentId(device.getDeviceId());
-            }
+        if (device.getParentId() == null) {
+            subDevices = deviceInfoData.findByParentId(device.getDeviceId());
         }
+
         devices.addAll(subDevices);
 
         //查找空间设备
-        for (DeviceInfo device : devices) {
-            SpaceDevice spaceDevice = spaceDeviceData.findByDeviceId(device.getDeviceId());
+        for (DeviceInfo d : devices) {
+            SpaceDevice spaceDevice = spaceDeviceData.findByDeviceId(d.getDeviceId());
             if (spaceDevice == null) {
                 //没有被其它人占用
-                findDeviceVos.add(getFindDeviceVo(device));
+                findDeviceVos.add(getFindDeviceVo(d));
             }
         }
         return findDeviceVos;
@@ -202,7 +202,8 @@ public class SpaceDeviceController {
         return findDeviceVo;
     }
 
-    /**REMOVE_DEVICE
+    /**
+     * REMOVE_DEVICE
      * 往指定房间中添加设备
      */
     @PostMapping(Constants.API_SPACE.ADD_DEVICE)

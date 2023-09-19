@@ -22,8 +22,8 @@ import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.ParentDeviceVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
-import cc.iotkit.manager.service.DeviceService;
-import cc.iotkit.manager.service.IDeviceService;
+import cc.iotkit.manager.service.DeviceCtrlService;
+import cc.iotkit.manager.service.IDeviceManagerService;
 import cc.iotkit.manager.service.IProductService;
 import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.device.DeviceConfig;
@@ -56,30 +56,30 @@ public class DeviceController {
     IProductService productService;
 
     @Autowired
-    private DeviceService deviceService;
+    private DeviceCtrlService deviceCtrlService;
     @Autowired
-    private IDeviceService deviceServiceImpl;
+    private IDeviceManagerService deviceServiceImpl;
 
 
     @ApiOperation(value = "服务调用", notes = "服务调用", httpMethod = "POST")
     @SaCheckPermission("iot:device:ctrl")
     @PostMapping("/service/invoke")
     public InvokeResult invokeService(@RequestBody @Validated Request<ServiceInvokeBo> request) {
-        return new InvokeResult(deviceService.invokeService(request.getData().getDeviceId(), request.getData().getService(), request.getData().getArgs()));
+        return new InvokeResult(deviceCtrlService.invokeService(request.getData().getDeviceId(), request.getData().getService(), request.getData().getArgs()));
     }
 
     @ApiOperation(value = "属性获取", notes = "属性获取", httpMethod = "POST")
     @SaCheckPermission("iot:device:ctrl")
     @PostMapping("/service/property/get")
     public InvokeResult invokeServicePropertySet(@RequestBody @Validated Request<GetDeviceServicePorpertyBo> request) {
-        return new InvokeResult(deviceService.getProperty(request.getData().getDeviceId(), request.getData().getPropertyNames(), true));
+        return new InvokeResult(deviceCtrlService.getProperty(request.getData().getDeviceId(), request.getData().getPropertyNames(), true));
     }
 
     @ApiOperation(value = "属性设置", notes = "属性设置", httpMethod = "POST")
     @SaCheckPermission("iot:device:ctrl")
     @PostMapping("/service/property/set")
     public InvokeResult setProperty(@RequestBody @Validated Request<SetDeviceServicePorpertyBo> request) {
-        return new InvokeResult(deviceService.setProperty(request.getData().getDeviceId(), request.getData().getArgs()));
+        return new InvokeResult(deviceCtrlService.setProperty(request.getData().getDeviceId(), request.getData().getArgs()));
     }
 
     @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "POST")
@@ -316,7 +316,7 @@ public class DeviceController {
     @PostMapping("/config/send")
     public InvokeResult sendConfig(@Validated @RequestBody Request<String> bo) {
         String deviceId = bo.getData();
-        return new InvokeResult(deviceService.sendConfig(deviceId));
+        return new InvokeResult(deviceCtrlService.sendConfig(deviceId));
     }
 
 }

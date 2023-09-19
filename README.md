@@ -114,22 +114,11 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 │  ├iot-common-websocket
 │  ├iot-message-bus
 │  ├iot-script-engine
-├iot-components	通讯组件
-│  ├iot-component-base	
-│  ├iot-component-converter
-│  ├iot-component-oss
-│  ├iot-component-server
-│  ├iot-component-tcp
-│  ├iot-ctwing-component
-│  ├iot-DLT645-component
-│  ├iot-emqx-component
-│  ├iot-http-biz-component
-│  ├iot-mqtt-component
-│  ├iot-websocket-component
 ├iot-module	业务模块
 │  ├iot-generator	代码生成
 │  ├iot-manager	管理业务
 │  ├iot-message-notify	消息转发
+│  ├iot-plugin-core	插件包
 │  ├iot-rule-engine	规则引擎
 │  ├iot-screen	数据大屏
 │  ├iot-system	通用菜单权限管理

@@ -31,8 +31,8 @@ public class DeviceConfigDataImpl implements IDeviceConfigData, IJPACommData<Dev
     private DeviceConfigRepository deviceConfigRepository;
 
     @Override
-    public DeviceConfig findByProductKeyAndDeviceName(String productKey, String deviceName) {
-        return MapstructUtils.convert(deviceConfigRepository.findByProductKeyAndDeviceName(productKey, deviceName), DeviceConfig.class);
+    public DeviceConfig findByDeviceName(String deviceName) {
+        return MapstructUtils.convert(deviceConfigRepository.findByDeviceName(deviceName), DeviceConfig.class);
     }
 
     @Override

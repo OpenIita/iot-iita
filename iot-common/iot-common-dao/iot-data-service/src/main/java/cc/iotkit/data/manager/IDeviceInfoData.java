@@ -43,11 +43,6 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
     DeviceInfo findByDeviceId(String deviceId);
 
     /**
-     * 按productKey和deviceName取设备信息
-     */
-    DeviceInfo findByProductKeyAndDeviceName(String productKey, String deviceName);
-
-    /**
      * 根据父设备ID取子设备列表
      *
      * @param parentId 父设备ID
@@ -64,7 +59,7 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
     /**
      * 根据deviceName查找设备
      */
-    List<DeviceInfo> findByDeviceName(String deviceName);
+    DeviceInfo findByDeviceName(String deviceName);
 
     /**
      * 按条件搜索设备

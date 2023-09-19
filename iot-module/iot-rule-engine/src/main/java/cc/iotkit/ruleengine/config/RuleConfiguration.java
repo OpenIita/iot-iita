@@ -12,19 +12,16 @@ package cc.iotkit.ruleengine.config;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.mq.MqConsumer;
 import cc.iotkit.ruleengine.handler.RuleDeviceConsumer;
-import cc.iotkit.ruleengine.rule.RuleMessageHandler;
 import cc.iotkit.ruleengine.task.TaskManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Collections;
 
 @Configuration
 public class RuleConfiguration {
 
     @Bean
-    public RuleDeviceConsumer getConsumer(MqConsumer<ThingModelMessage> consumer, RuleMessageHandler ruleMessageHandler) {
-        return new RuleDeviceConsumer(consumer, Collections.singletonList(ruleMessageHandler));
+    public RuleDeviceConsumer getConsumer(MqConsumer<ThingModelMessage> consumer) {
+        return new RuleDeviceConsumer(consumer);
     }
 
     @Bean

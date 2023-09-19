@@ -1,6 +1,5 @@
 package cc.iotkit.screen;
 
-import cc.iotkit.comps.ApiTool;
 import cc.iotkit.data.manager.IScreenApiData;
 import cc.iotkit.data.manager.IScreenData;
 import cc.iotkit.model.screen.Screen;
@@ -70,7 +69,6 @@ public class ScreenManager {
             return;
         }
         ScreenApiHandle screenApiHandle=new ScreenApiHandle(id,screenApiData.findByScreenId(id));
-        screenApiHandle.putScriptEnv("apiTool", new ApiTool());
         screenComponent.setApiHandle(screenApiHandle);
         screenComponent.publish();
         states.put(id, true);

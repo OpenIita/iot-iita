@@ -17,6 +17,9 @@ import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Value;
 
+/**
+ * @author sjg
+ */
 @Slf4j
 public class JavaScriptEngine implements IScriptEngine {
 

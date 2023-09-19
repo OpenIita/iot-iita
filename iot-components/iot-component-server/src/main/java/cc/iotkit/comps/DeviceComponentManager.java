@@ -83,7 +83,7 @@ public class DeviceComponentManager {
 
     private IScriptEngine scriptEngine;
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         List<ProtocolComponent> componentList = protocolComponentData.findByStateAndType(
                 ProtocolComponent.STATE_RUNNING, ProtocolComponent.TYPE_DEVICE);
@@ -172,7 +172,6 @@ public class DeviceComponentManager {
             return;
         }
 
-
         DeviceMessageHandler messageHandler = new DeviceMessageHandler(
                 this, component,
                 scriptEngine,
@@ -206,7 +205,7 @@ public class DeviceComponentManager {
             throw new BizException(ErrCode.COMPONENT_NOT_FOUND);
         }
 
-        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(service.getProductKey(), service.getDeviceName());
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceName(service.getDeviceName());
         Product product = productData.findByProductKey(service.getProductKey());
         String linkPk = service.getProductKey();
         String linkDn = service.getDeviceName();

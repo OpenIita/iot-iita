@@ -108,8 +108,8 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
-    public DeviceInfo findByProductKeyAndDeviceName(String productKey, String deviceName) {
-        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
+    public DeviceInfo findByDeviceName(String deviceName) {
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceName(deviceName);
         if (deviceInfo == null) {
             return null;
         }
@@ -125,11 +125,6 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     @Override
     public List<String> findSubDeviceIds(String parentId) {
         return deviceInfoData.findSubDeviceIds(parentId);
-    }
-
-    @Override
-    public List<DeviceInfo> findByDeviceName(String deviceName) {
-        return deviceInfoData.findByDeviceName(deviceName);
     }
 
     @Override

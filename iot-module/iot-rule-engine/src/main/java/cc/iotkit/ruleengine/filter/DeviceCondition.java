@@ -31,6 +31,7 @@ public class DeviceCondition {
 
     private IDeviceInfoData deviceInfoData;
 
+    @Override
     public DeviceCondition clone() {
         DeviceCondition con = new DeviceCondition();
         con.setDevice(device);
@@ -50,7 +51,7 @@ public class DeviceCondition {
             deviceInfo = deviceInfoData.findByDeviceId(device);
         } else {
             //用pk/dn取
-            deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(pkDn[0], pkDn[1]);
+            deviceInfo = deviceInfoData.findByDeviceName(pkDn[1]);
         }
         Object left = null;
         if ("property".equals(type)) {

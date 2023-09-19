@@ -12,24 +12,37 @@ package cc.iotkit.ruleengine.handler;
 
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.common.utils.ThreadUtil;
 import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.mq.ConsumerHandler;
 import cc.iotkit.mq.MqConsumer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Slf4j
-public class RuleDeviceConsumer implements ConsumerHandler<ThingModelMessage> {
+public class RuleDeviceConsumer implements ConsumerHandler<ThingModelMessage>, ApplicationContextAware {
 
     private final List<DeviceMessageHandler> handlers = new ArrayList<>();
+    private ScheduledThreadPoolExecutor messageHandlerPool;
 
     @SneakyThrows
-    public RuleDeviceConsumer(MqConsumer<ThingModelMessage> consumer, List<DeviceMessageHandler> handlers) {
-        this.handlers.addAll(handlers);
+    public RuleDeviceConsumer(MqConsumer<ThingModelMessage> consumer) {
         consumer.consume(Constants.THING_MODEL_MESSAGE_TOPIC, this);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        Map<String, DeviceMessageHandler> handlerMap = applicationContext.getBeansOfType(DeviceMessageHandler.class);
+        messageHandlerPool = ThreadUtil.newScheduled(handlerMap.size(), "messageHandler");
+        this.handlers.addAll(handlerMap.values());
     }
 
     @SneakyThrows
@@ -38,7 +51,13 @@ public class RuleDeviceConsumer implements ConsumerHandler<ThingModelMessage> {
         log.info("received thing model message:{}", JsonUtils.toJsonString(msg));
         try {
             for (DeviceMessageHandler handler : this.handlers) {
-                handler.handle(msg);
+                messageHandlerPool.submit(() -> {
+                    try {
+                        handler.handle(msg);
+                    } catch (Throwable e) {
+                        log.error("handler message error", e);
+                    }
+                });
             }
         } catch (Throwable e) {
             log.error("rule device message process error", e);

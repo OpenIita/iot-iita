@@ -1,16 +1,10 @@
 package cc.iotkit.model.system;
 
-import cc.iotkit.common.tenant.dao.TenantAware;
-import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.BaseModel;
 import cc.iotkit.model.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.EntityListeners;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -21,10 +15,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
-@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
-@EntityListeners(TenantListener.class)
-public class SysDept extends BaseModel implements Id<Long>, Serializable, TenantAware {
+public class SysDept extends BaseModel implements Id<Long>, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

@@ -201,7 +201,7 @@ public class EmqxDeviceComponent extends AbstractDeviceComponent implements Runn
         }
         IDeviceInfoData deviceInfoService = SpringUtils.getBean("deviceInfoDataCache");
 
-        DeviceInfo deviceInfo = deviceInfoService.findByProductKeyAndDeviceName(state.getProductKey(), state.getDeviceName());
+        DeviceInfo deviceInfo = deviceInfoService.findByDeviceName(state.getDeviceName());
         if (deviceInfo != null) {
             boolean isOnline = DeviceState.STATE_ONLINE.equals(state.getState());
             deviceInfo.getState().setOnline(isOnline);

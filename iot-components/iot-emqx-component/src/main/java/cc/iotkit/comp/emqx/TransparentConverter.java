@@ -81,7 +81,7 @@ public class TransparentConverter {
             deviceInfoData = SpringUtils.getBean("deviceInfoDataCache");
         }
 
-        String parentId = deviceInfoData.findByProductKeyAndDeviceName(subPk, subDn).getParentId();
+        String parentId = deviceInfoData.findByDeviceName(subDn).getParentId();
         return deviceInfoData.findByDeviceId(parentId);
     }
 

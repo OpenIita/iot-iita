@@ -8,10 +8,8 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.manager.IThingModelData;
-import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
-import cc.iotkit.manager.service.DeviceService;
+import cc.iotkit.manager.service.DeviceCtrlService;
 import cc.iotkit.model.device.DeviceInfo;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
@@ -46,11 +44,11 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
     private IThingModelData thingModelData;
 
     @Autowired
-    private DeviceService deviceService;
+    private DeviceCtrlService deviceCtrlService;
 
     @Override
     public DeviceInfo getDetail(OpenapiDeviceBo data) {
-        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(data.getProductKey(), data.getDeviceName());
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceName(data.getDeviceName());
         deviceInfo.setProperty(deviceInfoData.getProperties(deviceInfo.getDeviceId()));
         return deviceInfo;
     }
@@ -66,7 +64,7 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
             throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
         //同产品不可重复设备名
-        DeviceInfo deviceRepetition = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
+        DeviceInfo deviceRepetition = deviceInfoData.findByDeviceName(deviceName);
         if (deviceRepetition != null) {
             throw new BizException(ErrCode.MODEL_DEVICE_ALREADY);
         }
@@ -97,7 +95,7 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
 
     @Override
     public boolean deleteDevice(OpenapiDeviceBo bo) {
-        DeviceInfo deviceRepetition = deviceInfoData.findByProductKeyAndDeviceName(bo.getProductKey(), bo.getDeviceName());
+        DeviceInfo deviceRepetition = deviceInfoData.findByDeviceName(bo.getDeviceName());
         if (deviceRepetition == null){
             throw new BizException(ErrCode.DEVICE_NOT_FOUND);
         }
@@ -107,15 +105,15 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
 
     @Override
     public String setProperty(String productKey, String deviceName, String args) {
-        DeviceInfo deviceRepetition = deviceInfoData.findByProductKeyAndDeviceName(productKey, deviceName);
-        return deviceService.setProperty(deviceRepetition.getDeviceId(), JsonUtils.parseObject(args,Map.class), true);
+        DeviceInfo deviceRepetition = deviceInfoData.findByDeviceName(deviceName);
+        return deviceCtrlService.setProperty(deviceRepetition.getDeviceId(), JsonUtils.parseObject(args,Map.class), true);
     }
 
     @Override
     public OpenDevicePropertyVo getDevicePropertyStatus(OpenapiDeviceBo bo) {
         ThingModel thingModel = thingModelData.findByProductKey(bo.getProductKey());
         OpenDevicePropertyVo propertyVo = MapstructUtils.convert(thingModel, OpenDevicePropertyVo.class);
-        DeviceInfo deviceInfo = deviceInfoData.findByProductKeyAndDeviceName(bo.getProductKey(), bo.getDeviceName());
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceName(bo.getDeviceName());
         List<OpenPropertyVo> openPropertyVos = new ArrayList<>();
         if (propertyVo != null){
             Map<String, ?> properties = deviceInfoData.getProperties(deviceInfo.getDeviceId());
