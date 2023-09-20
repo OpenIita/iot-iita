@@ -46,7 +46,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
         List<String> swaggerUrls = List.of("/doc.html","/favicon.ico", "/webjars/**", "/resources/**"
                 , "/swagger-resources/**", "/swagger-ui.html/**");
 
-        List loginUrls = List.of("/code", "/auth/tenant/list", "/auth/login");
+        List loginUrls = List.of("/code", "/auth/tenant/list", "/auth/login", "/auth/logout");
         List<String> openApiUrls = List.of( "/openapi/v1/getToken");
 
         List<String> excludeUrls = new ArrayList<>();
