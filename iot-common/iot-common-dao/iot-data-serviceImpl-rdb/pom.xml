@@ -48,10 +48,10 @@
             <artifactId>yitter-idgenerator</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.h2database</groupId>-->
-<!--            <artifactId>h2</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
 
 <!--        <dependency>-->
 <!--            <groupId>mysql</groupId>-->
@@ -59,11 +59,11 @@
 <!--            <version>8.0.32</version>-->
 <!--        </dependency>-->
 <!--        -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.9</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.postgresql</groupId>-->
+<!--            <artifactId>postgresql</artifactId>-->
+<!--            <version>42.2.9</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>commons-io</groupId>
