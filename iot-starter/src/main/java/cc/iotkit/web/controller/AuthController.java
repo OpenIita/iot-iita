@@ -2,7 +2,6 @@ package cc.iotkit.web.controller;
 
 import cc.iotkit.common.api.Request;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.undefined.EmailLoginBody;
 import cc.iotkit.common.undefined.LoginBody;
 import cc.iotkit.common.undefined.RegisterBody;
@@ -22,7 +21,6 @@ import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.collection.CollUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -101,22 +99,6 @@ public class AuthController {
         LoginVo loginVo = new LoginVo();
         // 生成令牌
         String token = loginService.emailLogin(body.getTenantId(), body.getEmail(), body.getEmailCode());
-        loginVo.setToken(token);
-        return loginVo;
-    }
-
-    /**
-     * 小程序登录(示例)
-     *
-     * @param xcxCode 小程序code
-     * @return 结果
-     */
-    @ApiOperation("小程序登录")
-    @PostMapping("/xcxLogin")
-    public LoginVo xcxLogin(@NotBlank(message = "{xcx.code.not.blank}") String xcxCode) {
-        LoginVo loginVo = new LoginVo();
-        // 生成令牌
-        String token = loginService.xcxLogin(xcxCode);
         loginVo.setToken(token);
         return loginVo;
     }

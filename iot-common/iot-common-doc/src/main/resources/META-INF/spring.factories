@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cc.iotkit.swagger.config.SwaggerAutoConfiguration,\
-  cc.iotkit.swagger.config.SwaggerWebConfiguration

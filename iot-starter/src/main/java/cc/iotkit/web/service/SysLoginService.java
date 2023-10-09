@@ -5,7 +5,6 @@ import cc.iotkit.common.constant.GlobalConstants;
 import cc.iotkit.common.enums.DeviceType;
 import cc.iotkit.common.enums.LoginType;
 import cc.iotkit.common.enums.UserStatus;
-import cc.iotkit.common.enums.UserType;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.exception.user.UserException;
 import cc.iotkit.common.log.event.LogininforEvent;
@@ -15,7 +14,6 @@ import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.undefined.LoginUser;
 import cc.iotkit.common.undefined.RoleDTO;
-import cc.iotkit.common.undefined.XcxLoginUser;
 import cc.iotkit.common.utils.*;
 import cc.iotkit.common.web.config.properties.CaptchaProperties;
 import cc.iotkit.common.web.utils.ServletUtils;
@@ -62,15 +60,6 @@ public class SysLoginService {
 
     @Value("${user.password.lockTime}")
     private Integer lockTime;
-
-    @Value("${weixin.appid}")
-    private String appid;
-
-    @Value("${weixin.secret}")
-    private String secret;
-
-    @Value("${weixin.authUrl}")
-    private String authUrl;
 
     /**
      * 登录验证
@@ -136,35 +125,6 @@ public class SysLoginService {
 
         recordLoginInfo(loginUser.getTenantId(), user.getUserName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
         recordLoginInfo(user.getId());
-        return StpUtil.getTokenValue();
-    }
-
-
-    public String xcxLogin(String xcxCode) {
-        // xcxCode 为 小程序调用 wx.login 授权后获取
-        String url=authUrl+"?appid="+appid+"&secret="+secret+"&js_code="+xcxCode+"&grant_type=authorization_code";
-        String ret=WeChatUtil.httpRequest(url,"GET",null);
-        String openid = JsonUtils.parseMap(ret).getStr("openid");;
-        UserInfo user = null;
-        try {
-            user = loadUserByOpenid(openid);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // 校验租户
-//        checkTenant(user.getTenantId());
-
-        // 此处可根据登录用户的数据不同 自行创建 loginUser
-        XcxLoginUser loginUser = new XcxLoginUser();
-        loginUser.setUserId(user.getId());
-        loginUser.setUsername(user.getNickName());
-        loginUser.setUserType(UserType.APP_USER.getUserType());
-        loginUser.setOpenid(openid);
-        // 生成token
-        LoginHelper.loginByDevice(loginUser, DeviceType.XCX);
-
-        recordLoginInfo(loginUser.getTenantId(), user.getNickName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
-//        recordLoginInfo(user.getId());
         return StpUtil.getTokenValue();
     }
 

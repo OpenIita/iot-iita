@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * 插件接口调用入口
+ *
  * @author sjg
  */
 @Slf4j

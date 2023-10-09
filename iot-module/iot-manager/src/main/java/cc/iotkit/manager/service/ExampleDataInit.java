@@ -27,8 +27,6 @@ import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.model.product.ThingModel;
-import cc.iotkit.model.protocol.ProtocolComponent;
-import cc.iotkit.model.protocol.ProtocolConverter;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.space.Home;
@@ -39,7 +37,6 @@ import cc.iotkit.temporal.IDbStructureData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -75,10 +72,6 @@ public class ExampleDataInit implements SmartInitializingSingleton {
     private IProductData productData;
     @Autowired
     private IProductModelData productModelData;
-    @Autowired
-    private IProtocolComponentData protocolComponentData;
-    @Autowired
-    private IProtocolConverterData protocolConverterData;
     @Autowired
     private IRuleInfoData ruleInfoData;
     @Autowired
@@ -189,10 +182,6 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                     initData("product", productData, new TypeReference<List<Product>>() {
                     });
                     initData("productModel", productModelData, new TypeReference<List<ProductModel>>() {
-                    });
-                    initData("protocolComponent", protocolComponentData, new TypeReference<List<ProtocolComponent>>() {
-                    });
-                    initData("protocolConverter", protocolConverterData, new TypeReference<List<ProtocolConverter>>() {
                     });
                     initData("ruleInfo", ruleInfoData, new TypeReference<List<RuleInfo>>() {
                     });

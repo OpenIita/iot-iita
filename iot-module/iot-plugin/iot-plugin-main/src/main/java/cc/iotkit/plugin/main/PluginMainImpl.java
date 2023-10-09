@@ -15,7 +15,6 @@ import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.plugin.PluginInfo;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.mq.MqProducer;
-import cc.iotkit.plugin.core.IPluginConfig;
 import cc.iotkit.plugin.core.thing.IDevice;
 import cc.iotkit.plugin.core.thing.IThingService;
 import cc.iotkit.plugin.core.thing.actions.ActionResult;
@@ -117,6 +116,7 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
             throw new BizException(ErrCode.PLUGIN_ROUTER_NOT_FOUND);
         }
 
+        //获取插件中的设备服务接口
         List<IDevice> deviceServices = pluginUser.getBeanByInterface(router.getPluginId(), IDevice.class);
         if (deviceServices.isEmpty()) {
             throw new BizException(ErrCode.PLUGIN_SERVICE_NOT_FOUND);
@@ -141,6 +141,7 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
                     .name(service.getIdentifier())
                     .params(params)
                     .build();
+            //调用插件设备服务接口
             result = deviceService.serviceInvoke(action);
             publish(service, result.getCode());
         } else if (ThingService.TYPE_PROPERTY.equals(type)) {
@@ -152,6 +153,7 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
                         .deviceName(linkDn)
                         .params(params)
                         .build();
+                //调用插件设备服务接口
                 result = deviceService.propertySet(action);
                 publish(service, result.getCode());
             } else if ("get".equals(identifier)) {
@@ -162,6 +164,7 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
                         .deviceName(linkDn)
                         .keys(new ArrayList<>(params.keySet()))
                         .build();
+                //调用插件设备服务接口
                 result = deviceService.propertyGet(action);
                 publish(service, result.getCode());
             }
@@ -173,7 +176,7 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
     }
 
     private void publish(ThingService<?> service, int code) {
-        //产生下发消息
+        //产生下发消息作为下行日志保存
         ThingModelMessage message = ThingModelMessage.builder()
                 .mid(service.getMid())
                 .productKey(service.getProductKey())

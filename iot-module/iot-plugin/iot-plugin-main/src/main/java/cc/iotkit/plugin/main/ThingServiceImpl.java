@@ -5,6 +5,7 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.DeviceUtil;
 import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
@@ -142,9 +143,13 @@ public class ThingServiceImpl implements IThingService {
     }
 
     private void registerDevice(DeviceInfo device, DeviceRegister register) {
-        Product product = getProduct(register.getProductKey());
-        if (product == null) {
-            throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
+        String productKey = register.getProductKey();
+        //指定了pk需验证
+        if (StringUtils.isNotBlank(productKey)) {
+            Product product = getProduct(productKey);
+            if (product == null) {
+                throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
+            }
         }
 
         if (device != null) {
@@ -155,10 +160,10 @@ public class ThingServiceImpl implements IThingService {
             device = new DeviceInfo();
             device.setId(DeviceUtil.newDeviceId(register.getDeviceName()));
             device.setDeviceId(device.getId());
-            device.setProductKey(register.getProductKey());
+            device.setProductKey(productKey);
             device.setDeviceName(register.getDeviceName());
             device.setModel(register.getModel());
-            device.setSecret(RandomStringUtils.random(16));
+            device.setSecret(RandomStringUtils.randomAlphabetic(16));
             //默认离线
             device.setState(new DeviceInfo.State(false, null, null));
             device.setCreateAt(System.currentTimeMillis());
@@ -228,4 +233,5 @@ public class ThingServiceImpl implements IThingService {
             log.error("send thing model message error", e);
         }
     }
+
 }

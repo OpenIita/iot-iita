@@ -5,7 +5,6 @@ import cc.iotkit.openapi.dto.bo.device.OpenapiDeviceBo;
 import cc.iotkit.openapi.dto.vo.OpenDeviceInfoVo;
 import cc.iotkit.openapi.dto.vo.OpenDevicePropertyVo;
 
-import java.util.Map;
 
 /**
  * @Author: dsy

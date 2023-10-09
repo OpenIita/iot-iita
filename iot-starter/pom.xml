@@ -47,21 +47,6 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
-            <artifactId>iot-contribution</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-baetyl</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-generator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.iotkit</groupId>
             <artifactId>iot-openapi</artifactId>
         </dependency>
         <!--   <dependency>
@@ -97,11 +82,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
         <dependency>

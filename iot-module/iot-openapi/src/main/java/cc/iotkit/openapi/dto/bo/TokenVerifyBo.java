@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-@ApiModel(value = "DeviceConsumerBo")
+@ApiModel(value = "TokenVerifyBo")
 @Data
 public class TokenVerifyBo {
     private static final long serialVersionUID = -1L;
@@ -14,9 +14,9 @@ public class TokenVerifyBo {
     @ApiModelProperty(value = "appid")
     private String appid;
 
-    @NotBlank(message = "timeStamp不能为空")
+    @NotBlank(message = "timestamp不能为空")
     @ApiModelProperty(value = "时间戳")
-    private String timeStamp;
+    private String timestamp;
 
     @NotBlank(message = "identifier不能为空")
     @ApiModelProperty(value = "标识符")
@@ -25,6 +25,5 @@ public class TokenVerifyBo {
     @NotBlank(message = "{tenant.number.not.blank}")
     @ApiModelProperty(value = "租户ID")
     private String tenantId;
-
 
 }

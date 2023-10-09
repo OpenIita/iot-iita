@@ -24,9 +24,6 @@ import cc.iotkit.model.product.ProductModel;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.temporal.IDbStructureData;
 import cn.hutool.core.lang.UUID;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.model.PutObjectResult;
 import com.github.yitter.idgen.YitIdHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -75,8 +72,6 @@ public class ProductServiceImpl implements IProductService {
 
     @Autowired
     private IDeviceInfoData deviceInfoData;
-
-    private OSS ossClient;
 
     @Override
     public ProductVo addEntity(ProductBo data) {
@@ -186,26 +181,8 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     @SneakyThrows
-
     public String uploadImg(String productKey, MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        if (StringUtils.isBlank(fileName)) {
-            throw new BizException(ErrCode.FILE_NAME_IS_NULL);
-        }
-        String end = fileName.substring(fileName.lastIndexOf("."));
-        if (ossClient == null) {
-            // 创建OSSClient实例。
-            ossClient = new OSSClientBuilder().build(aliyunConfig.getEndpoint(),
-                    aliyunConfig.getAccessKeyId(), aliyunConfig.getAccessKeySecret());
-        }
-
-        fileName = "product/" + productKey + "/cover" + end;
-        String bucket = aliyunConfig.getBucketId();
-        // 填写Bucket名称和Object完整路径。Object完整路径中不能包含Bucket名称。
-        PutObjectResult result = ossClient.putObject(bucket, fileName,
-                file.getInputStream());
-        return ossClient.generatePresignedUrl(bucket, fileName,
-                new Date(System.currentTimeMillis() + 3600L * 1000 * 24 * 365 * 10)).toString();
+        return "";
     }
 
     @Override

@@ -3,7 +3,6 @@ package cc.iotkit.openapi.service.impl;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.enums.DeviceType;
 import cc.iotkit.common.enums.ErrCode;
-import cc.iotkit.common.enums.LoginType;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.log.event.LogininforEvent;
 import cc.iotkit.common.satoken.utils.LoginHelper;
@@ -19,7 +18,6 @@ import cc.iotkit.model.system.SysUser;
 import cc.iotkit.openapi.dto.bo.TokenVerifyBo;
 import cc.iotkit.openapi.service.OpenBaseService;
 import cc.iotkit.system.service.ISysPermissionService;
-import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -48,7 +46,7 @@ public class OpenBaseServiceImpl implements OpenBaseService {
     public String getToken(TokenVerifyBo bo) {
         String boAppid = bo.getAppid();
         String boIdentifier = bo.getIdentifier();
-        String boTimeStamp = bo.getTimeStamp();
+        String boTimeStamp = bo.getTimestamp();
 
         // 校验租户
         checkTenant(bo.getTenantId());
