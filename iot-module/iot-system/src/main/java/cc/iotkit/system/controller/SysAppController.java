@@ -80,6 +80,9 @@ public class SysAppController extends BaseController {
     @PostMapping(value = "/add")
     @ApiOperation("新增应用信息")
     public Long add(@Validated(AddGroup.class) @RequestBody Request<SysAppBo> request) {
+        if (sysAppService.checkAppIdUnique(request.getData().getAppId())) {
+            fail("新增应用'" + request.getData().getAppName() + "'失败，APPID已存在");
+        }
         return sysAppService.insertByBo(request.getData());
     }
 
@@ -102,7 +105,7 @@ public class SysAppController extends BaseController {
     @Log(title = "应用信息", businessType = BusinessType.DELETE)
     @PostMapping("/delete")
     @ApiOperation("删除应用信息")
-    public boolean remove(@Validated @RequestBody Request<List<Long>> query) {
-        return sysAppService.deleteWithValidByIds(query.getData(), true);
+    public boolean remove(@Validated @RequestBody Request<Long> query) {
+        return sysAppService.deleteById(query.getData());
     }
 }

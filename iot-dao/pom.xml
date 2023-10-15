@@ -21,8 +21,8 @@
         <module>iot-data-serviceImpl-cache</module>
         <module>iot-data-serviceImpl-rdb</module>
         <module>iot-temporal-service</module>
+        <module>iot-temporal-serviceImpl-td</module>
         <module>iot-temporal-serviceImpl-es</module>
-        <module>iot-temproal-serviceImpl-td</module>
     </modules>
 
     <artifactId>iot-dao</artifactId>

@@ -16,19 +16,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface HomeRepository extends JpaRepository<TbHome, String> {
+public interface HomeRepository extends JpaRepository<TbHome, Long> {
 
-    TbHome findByUidAndCurrent(String uid, boolean current);
+    TbHome findByUserIdAndCurrent(Long userId, boolean current);
 
-    TbHome findByUidAndId(String uid, String id);
+    List<TbHome> findByUserId(Long userId);
 
-    List<TbHome> findByUid(String uid);
+    Page<TbHome> findByUserId(Long userId, Pageable pageable);
 
-    Page<TbHome> findByUid(String uid, Pageable pageable);
+    long countByUserId(Long userId);
 
-    long countByUid(String uid);
-
-    void deleteById(String s);
+    void deleteById(Long s);
 
     long count();
 

@@ -9,13 +9,13 @@
  */
 package cc.iotkit.ruleengine.handler.sys;
 
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IThingModelData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DevicePropertyCache;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.ThingModel;
 import cc.iotkit.ruleengine.handler.DeviceMessageHandler;
 import cc.iotkit.temporal.IDevicePropertyData;

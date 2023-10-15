@@ -10,7 +10,8 @@
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.service.DeviceService;
+import cc.iotkit.common.thing.DeviceService;
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
@@ -18,7 +19,6 @@ import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceConfig;
 import cc.iotkit.model.device.DeviceInfo;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.temporal.IThingModelMessageData;
 import cc.iotkit.virtualdevice.VirtualManager;
 import lombok.extern.slf4j.Slf4j;

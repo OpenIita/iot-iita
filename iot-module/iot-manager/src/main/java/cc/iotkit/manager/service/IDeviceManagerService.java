@@ -2,6 +2,7 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.manager.dto.bo.device.DeviceInfoBo;
 import cc.iotkit.manager.dto.bo.device.DeviceLogQueryBo;
 import cc.iotkit.manager.dto.bo.device.DeviceQueryBo;
@@ -16,7 +17,6 @@ import cc.iotkit.model.device.DeviceConfig;
 import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;

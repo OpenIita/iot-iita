@@ -20,6 +20,4 @@ public interface UserInfoRepository extends JpaRepository<TbUserInfo, String> {
 
     List<TbUserInfo> findByType(int type);
 
-    List<TbUserInfo> findByTypeAndOwnerId(int type, String ownerId);
-
 }

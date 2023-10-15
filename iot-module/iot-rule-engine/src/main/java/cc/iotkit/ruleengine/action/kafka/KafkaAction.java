@@ -1,6 +1,6 @@
 package cc.iotkit.ruleengine.action.kafka;
 
-import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.ruleengine.action.Action;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -11,7 +11,6 @@ package cc.iotkit.temporal.ts.service;
 
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.stats.TimeData;
 import cc.iotkit.temporal.IThingModelMessageData;
 import cc.iotkit.temporal.ts.dao.TsTemplate;

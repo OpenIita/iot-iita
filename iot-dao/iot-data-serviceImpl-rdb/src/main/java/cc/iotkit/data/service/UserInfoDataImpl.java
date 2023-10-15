@@ -42,11 +42,6 @@ public class UserInfoDataImpl implements IUserInfoData, IJPACommData<UserInfo, L
     }
 
     @Override
-    public List<UserInfo> findByTypeAndOwnerId(int type, String ownerId) {
-        return MapstructUtils.convert(userInfoRepository.findByTypeAndOwnerId(type, ownerId), UserInfo.class);
-    }
-
-    @Override
     public JpaRepository getBaseRepository() {
         return userInfoRepository;
     }

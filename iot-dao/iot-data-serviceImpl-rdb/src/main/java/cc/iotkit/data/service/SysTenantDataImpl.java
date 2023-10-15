@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import static cc.iotkit.data.model.QTbSysTenant.tbSysTenant;
 
@@ -47,12 +47,6 @@ public class SysTenantDataImpl implements ISysTenantData, IJPACommData<SysTenant
         return SysTenant.class;
     }
 
-    @Override
-    public SysTenant findById(Long aLong) {
-        Optional<TbSysTenant> tenantOptional = sysTenantRepository.findById(aLong);
-        return tenantOptional.map(sysTenant -> MapstructUtils.convert(sysTenant, SysTenant.class)).orElse(null);
-    }
-
 
     @Override
     public List<SysTenant> findAllByCondition(SysTenant data) {
@@ -74,9 +68,12 @@ public class SysTenantDataImpl implements ISysTenantData, IJPACommData<SysTenant
     }
 
     @Override
-    public void updateTenant(SysTenant tenant) {
-        TbSysTenant tbSysTenant = MapstructUtils.convert(tenant, TbSysTenant.class);
-        assert tbSysTenant != null;
-        sysTenantRepository.save(tbSysTenant);
+    public boolean checkCompanyNameUnique(SysTenant tenant) {
+        final TbSysTenant ret = jpaQueryFactory.select(tbSysTenant).from(tbSysTenant)
+                .where(PredicateBuilder.instance()
+                        .and(tbSysTenant.companyName.eq(tenant.getCompanyName()))
+                        .and(Objects.nonNull(tenant.getId()), () -> tbSysTenant.id.ne(tenant.getId()))
+                        .build()).fetchOne();
+        return Objects.isNull(ret);
     }
 }

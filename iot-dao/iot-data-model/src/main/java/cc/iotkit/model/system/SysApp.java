@@ -26,6 +26,11 @@ public class SysApp extends TenantModel implements Id<Long>, Serializable{
     private Long id;
 
     /**
+     * 应用名称
+     */
+    private String appName;
+
+    /**
      * appId
      */
     private String appId;

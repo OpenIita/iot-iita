@@ -2,26 +2,34 @@ package cc.iotkit.web.service;
 
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.constant.GlobalConstants;
-import cc.iotkit.common.enums.DeviceType;
-import cc.iotkit.common.enums.LoginType;
-import cc.iotkit.common.enums.UserStatus;
+import cc.iotkit.common.constant.TenantConstants;
+import cc.iotkit.common.enums.*;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.exception.user.UserException;
 import cc.iotkit.common.log.event.LogininforEvent;
+import cc.iotkit.common.model.LoginUser;
+import cc.iotkit.common.model.RoleDTO;
 import cc.iotkit.common.redis.utils.RedisUtils;
 import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.tenant.helper.TenantHelper;
-import cc.iotkit.common.undefined.LoginUser;
-import cc.iotkit.common.undefined.RoleDTO;
 import cc.iotkit.common.utils.*;
 import cc.iotkit.common.web.config.properties.CaptchaProperties;
 import cc.iotkit.common.web.utils.ServletUtils;
 import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.data.system.ISysUserData;
+import cc.iotkit.manager.dto.bo.space.HomeBo;
+import cc.iotkit.manager.service.IHomeService;
+import cc.iotkit.manager.service.ISpaceService;
 import cc.iotkit.model.UserInfo;
+import cc.iotkit.model.space.Home;
+import cc.iotkit.model.space.Space;
 import cc.iotkit.model.system.SysUser;
+import cc.iotkit.model.wx.XcxLoginUser;
+import cc.iotkit.system.dto.vo.SysAppVo;
+import cc.iotkit.system.dto.vo.SysTenantVo;
 import cc.iotkit.system.dto.vo.SysUserVo;
+import cc.iotkit.system.service.ISysAppService;
 import cc.iotkit.system.service.ISysPermissionService;
 import cc.iotkit.system.service.ISysTenantService;
 import cn.dev33.satoken.exception.NotLoginException;
@@ -36,6 +44,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -54,12 +63,17 @@ public class SysLoginService {
     private final CaptchaProperties captchaProperties;
     private final ISysPermissionService permissionService;
     private final ISysTenantService tenantService;
+    private final ISysAppService appService;
+    private final ISpaceService spaceService;
+    private final IHomeService homeService;
 
     @Value("${user.password.maxRetryCount}")
     private Integer maxRetryCount;
 
     @Value("${user.password.lockTime}")
     private Integer lockTime;
+
+    private String authUrl="https://api.weixin.qq.com/sns/jscode2session";
 
     /**
      * 登录验证
@@ -128,12 +142,50 @@ public class SysLoginService {
         return StpUtil.getTokenValue();
     }
 
+
+    public String xcxLogin(String appId,String xcxCode) {
+        // xcxCode 为 小程序调用 wx.login 授权后获取
+        SysAppVo sysApp=appService.queryByAppId(appId);
+        if(sysApp==null){
+            throw new BizException("该应用未授权注册");
+        }
+        String url=authUrl+"?appid="+appId+"&secret="+sysApp.getAppSecret()+"&js_code="+xcxCode+"&grant_type=authorization_code";
+        String ret=WeChatUtil.httpRequest(url,"GET",null);
+        String openid = JsonUtils.parseMap(ret).getStr("openid");
+        UserInfo user = null;
+        LoginHelper.setTenantId(sysApp.getTenantId());
+        try {
+            user = loadUserByOpenid(openid,sysApp.getTenantId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 校验租户
+//        checkTenant(user.getTenantId());
+
+        // 此处可根据登录用户的数据不同 自行创建 loginUser
+        XcxLoginUser loginUser = new XcxLoginUser();
+        loginUser.setUserId(user.getId());
+        loginUser.setUsername(user.getNickName());
+        loginUser.setUserType(UserType.APP_USER.getUserType());
+        loginUser.setOpenid(openid);
+        loginUser.setTenantId(sysApp.getTenantId());
+        // 生成token
+        LoginHelper.loginByDevice(loginUser, DeviceType.XCX);
+
+//        recordLoginInfo(loginUser.getTenantId(), user.getNickName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
+//        recordLoginInfo(user.getId());
+        return StpUtil.getTokenValue();
+    }
+
     /**
      * 退出登录
      */
     public void logout() {
         try {
             LoginUser loginUser = LoginHelper.getLoginUser();
+            if(loginUser==null){
+                return;
+            }
             if (LoginHelper.isSuperAdmin()) {
                 // 超级管理员 登出清除动态租户
                 TenantHelper.clearDynamic();
@@ -208,9 +260,7 @@ public class SysLoginService {
     }
 
     private SysUserVo loadUserByUsername(String tenantId, String username) {
-        SysUser query = new SysUser();
-        query.setUserName(username);
-        SysUser user = userData.findOneByCondition(query);
+        SysUser user = userData.selectTenantUserByUserName(username,tenantId);
 
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", username);
@@ -218,6 +268,9 @@ public class SysLoginService {
         } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", username);
             throw new UserException("用户被停用");
+        }
+        if (TenantHelper.isEnable()) {
+            return user.to(SysUserVo.class);
         }
         SysUser sysUser = userData.selectUserByUserName(username);
         return MapstructUtils.convert(sysUser, SysUserVo.class);
@@ -257,7 +310,7 @@ public class SysLoginService {
 
     }
 
-    private UserInfo loadUserByOpenid(String openid) throws Exception {
+    private UserInfo loadUserByOpenid(String openid,String tenantId) throws Exception {
         // 使用 openid 查询绑定用户 如未绑定用户 则根据业务自行处理 例如 创建默认用户
         UserInfo user=userInfoData.findByUid(openid);
         if (ObjectUtil.isNull(user)) {
@@ -266,9 +319,26 @@ public class SysLoginService {
             user.setType(UserInfo.USER_TYPE_CLIENT);
             user.setUid(openid);
             user.setRoles(Collections.singletonList(Constants.ROLE_CLIENT));
-            user.setCreateAt(System.currentTimeMillis());
             user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_CLIENT_USER));
             user = userInfoData.save(user);
+            //添加默认家庭
+            Home home = homeService.save(HomeBo.builder()
+                    .name("我的家庭")
+                    .userId(user.getId())
+                    .address("")
+                    .deviceNum(0)
+                    .spaceNum(3)
+                    .current(true)
+                    .build());
+
+            //添加默认房间
+            for (String name : new String[]{"客厅", "卧室", "厨房"}) {
+                spaceService.save(Space.builder()
+                        .homeId(home.getId())
+                        .name(name)
+                        .deviceNum(0)
+                        .build());
+            }
         }
         return user;
     }
@@ -342,24 +412,24 @@ public class SysLoginService {
     }
 
     private void checkTenant(String tenantId) {
-//        if (!TenantHelper.isEnable()) {
-//            return;
-//        }
-//        if (TenantConstants.DEFAULT_TENANT_ID.equals(tenantId)) {
-//            return;
-//        }
-//        SysTenantVo tenant = tenantService.queryByTenantId(tenantId);
-//        if (ObjectUtil.isNull(tenant)) {
-//            log.info("登录租户：{} 不存在.", tenantId);
-//            throw new TenantException("tenant.not.exists");
-//        } else if (TenantStatus.DISABLE.getCode().equals(tenant.getStatus())) {
-//            log.info("登录租户：{} 已被停用.", tenantId);
-//            throw new TenantException("tenant.blocked");
-//        } else if (ObjectUtil.isNotNull(tenant.getExpireTime())
-//                && new Date().after(tenant.getExpireTime())) {
-//            log.info("登录租户：{} 已超过有效期.", tenantId);
-//            throw new TenantException("tenant.expired");
-//        }
+        if (!TenantHelper.isEnable()) {
+            return;
+        }
+        if (TenantConstants.DEFAULT_TENANT_ID.equals(tenantId)) {
+            return;
+        }
+        SysTenantVo tenant = tenantService.queryByTenantId(tenantId);
+        if (ObjectUtil.isNull(tenant)) {
+            log.info("登录租户：{} 不存在.", tenantId);
+            throw new BizException(ErrCode.TENANT_NOT_FOUND);
+        } else if (TenantConstants.DISABLE.equals(tenant.getStatus())) {
+            log.info("登录租户：{} 已被停用.", tenantId);
+            throw new BizException(ErrCode.TENANT_DISABLE);
+        } else if (ObjectUtil.isNotNull(tenant.getExpireTime())
+                && new Date().after(tenant.getExpireTime())) {
+            log.info("登录租户：{} 已超过有效期.", tenantId);
+            throw new BizException(ErrCode.TENANT_EXPIRE);
+        }
     }
 
 }

@@ -9,8 +9,8 @@
  */
 package cc.iotkit.ruleengine.action.device;
 
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.ruleengine.action.Action;
 import cc.iotkit.ruleengine.action.device.DeviceActionService.Service;
 import lombok.AllArgsConstructor;

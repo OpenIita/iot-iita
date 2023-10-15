@@ -94,6 +94,7 @@ public class SysDictDataImpl implements ISysDictData, IJPACommData<SysDictData, 
                 .and(dictData.getDictSort() != null, () -> tbSysDictData.dictSort.eq(dictData.getDictSort()))
                 .and(StringUtils.isNotEmpty(dictData.getDictLabel()), () -> tbSysDictData.dictLabel.like(dictData.getDictLabel()))
                 .and(StringUtils.isNotEmpty(dictData.getDictType()), () -> tbSysDictData.dictType.eq(dictData.getDictType()))
-                .and(StringUtils.isNotEmpty(dictData.getStatus()), () -> tbSysDictData.status.eq(dictData.getStatus())).build();
+                .and(StringUtils.isNotEmpty(dictData.getStatus()), () -> tbSysDictData.status.eq(dictData.getStatus()))
+                .and(StringUtils.isNotEmpty(dictData.getTenantId()), () -> tbSysDictData.tenantId.eq(dictData.getTenantId())).build();
     }
 }

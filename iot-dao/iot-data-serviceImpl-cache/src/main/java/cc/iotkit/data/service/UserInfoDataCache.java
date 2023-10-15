@@ -35,11 +35,6 @@ public class UserInfoDataCache implements IUserInfoData {
     }
 
     @Override
-    public List<UserInfo> findByTypeAndOwnerId(int type, String ownerId) {
-        return userInfoData.findByTypeAndOwnerId(type, ownerId);
-    }
-
-    @Override
     public UserInfo findById(Long s) {
         return userInfoData.findById(s);
     }

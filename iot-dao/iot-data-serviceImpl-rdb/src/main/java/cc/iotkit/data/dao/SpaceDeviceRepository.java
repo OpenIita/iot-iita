@@ -10,29 +10,19 @@
 package cc.iotkit.data.dao;
 
 import cc.iotkit.data.model.TbSpaceDevice;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SpaceDeviceRepository extends JpaRepository<TbSpaceDevice, String> {
+public interface SpaceDeviceRepository extends JpaRepository<TbSpaceDevice, Long> {
 
-    List<TbSpaceDevice> findByUid(String uid);
-
-    Page<TbSpaceDevice> findByUid(String uid, Pageable pageable);
-
-    List<TbSpaceDevice> findByUidOrderByUseAtDesc(String uid);
-
-    List<TbSpaceDevice> findByHomeIdAndCollect(String homeId,boolean collect);
-
-    List<TbSpaceDevice> findByUidOrderByAddAtDesc(String uid);
-
-    List<TbSpaceDevice> findBySpaceIdOrderByAddAtDesc(String spaceId);
-
-    List<TbSpaceDevice> findByUidAndSpaceIdOrderByAddAtDesc(String uid, String spaceId);
+    List<TbSpaceDevice> findByHomeIdAndCollect(Long homeId,boolean collect);
 
     TbSpaceDevice findByDeviceId(String deviceId);
 
-    TbSpaceDevice findByDeviceIdAndUid(String deviceId, String uid);
+    List<TbSpaceDevice> findByHomeId(Long homeId);
+
+    List<TbSpaceDevice> findBySpaceId(Long spaceId);
+
+    void deleteAllBySpaceId(Long spaceId);
 }

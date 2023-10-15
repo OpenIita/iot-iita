@@ -9,20 +9,18 @@
  */
 package cc.iotkit.data.manager;
 
-import cc.iotkit.data.IOwnedData;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.space.Home;
 
+import java.util.List;
 
-public interface IHomeData extends IOwnedData<Home, String> {
 
-    default Home findByUidAndCurrent(String uid, boolean current) {
-        return null;
+public interface IHomeData extends ICommonData<Home, Long> {
 
-    }
+    Home findByUserIdAndCurrent(Long userId, boolean current);
 
-    default Home findByUidAndId(String uid, String id) {
-        return null;
+    List<Home> findByUserId(Long userId);
 
-    }
+    boolean checkHomeNameUnique(Home home);
 
 }

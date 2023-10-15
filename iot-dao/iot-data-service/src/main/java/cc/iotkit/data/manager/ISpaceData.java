@@ -9,17 +9,13 @@
  */
 package cc.iotkit.data.manager;
 
-import cc.iotkit.data.IOwnedData;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.space.Space;
 
 import java.util.List;
 
-public interface ISpaceData extends IOwnedData<Space,String> {
+public interface ISpaceData extends ICommonData<Space,Long> {
 
-    List<Space> findByUidOrderByCreateAtDesc(String uid);
-
-    List<Space> findByUidAndHomeIdOrderByCreateAtDesc(String uid, String homeId);
-
-    List<Space> findByHomeId(String homeId);
+    List<Space> findByHomeId(Long homeId);
 
 }

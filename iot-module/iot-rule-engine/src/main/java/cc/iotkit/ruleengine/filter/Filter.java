@@ -9,7 +9,7 @@
  */
 package cc.iotkit.ruleengine.filter;
 
-import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.common.thing.ThingModelMessage;
 
 import java.util.List;
 

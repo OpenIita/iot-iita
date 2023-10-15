@@ -37,6 +37,11 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
+            <artifactId>iot-plugin-main</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
             <artifactId>iot-manager</artifactId>
         </dependency>
 

@@ -9,29 +9,27 @@
  */
 package cc.iotkit.model.space;
 
-import cc.iotkit.model.Owned;
+import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Space implements Owned<String> {
+public class Space extends TenantModel implements Id<Long>, Serializable {
 
-    private String id;
+    private Long id;
 
     /**
      * 关联家庭id
      */
-    private String homeId;
-
-    /**
-     * 关联用户id
-     */
-    private String uid;
+    private Long homeId;
 
     /**
      * 空间名称
@@ -42,6 +40,4 @@ public class Space implements Owned<String> {
      * 设备数量
      */
     private Integer deviceNum;
-
-    private Long createAt;
 }

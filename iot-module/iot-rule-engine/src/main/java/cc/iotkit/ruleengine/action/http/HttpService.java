@@ -11,8 +11,8 @@ package cc.iotkit.ruleengine.action.http;
 
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.ruleengine.action.ScriptService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;

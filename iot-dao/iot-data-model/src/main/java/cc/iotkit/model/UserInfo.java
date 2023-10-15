@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo implements Id<Long> {
+public class UserInfo extends TenantModel implements Id<Long>, Serializable {
 
     public static final int USER_TYPE_PLATFORM = 0;
     public static final int USER_TYPE_CLIENT = 1;
@@ -34,11 +35,6 @@ public class UserInfo implements Id<Long> {
      * 用户账号
      */
     private String uid;
-
-    /**
-     * 归属账号
-     */
-    private String ownerId;
 
     /**
      * 密钥（密码加密后的内容）
@@ -91,7 +87,5 @@ public class UserInfo implements Id<Long> {
      * 见:Constants.THIRD_PLATFORM
      */
     private List<String> usePlatforms = new ArrayList<>();
-
-    private Long createAt;
 
 }

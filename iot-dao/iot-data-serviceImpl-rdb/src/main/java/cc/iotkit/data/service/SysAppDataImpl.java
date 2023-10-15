@@ -1,10 +1,12 @@
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.dao.SysAppRepository;
 import cc.iotkit.data.model.TbSysApp;
 import cc.iotkit.data.system.ISysAppData;
 import cc.iotkit.model.system.SysApp;
+import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -58,5 +60,15 @@ public class SysAppDataImpl implements ISysAppData, IJPACommData<SysApp, Long> {
     @Override
     public Class getTClass() {
         return SysApp.class;
+    }
+
+    @Override
+    public SysApp findByAppId(String appId) {
+        TbSysApp ret=baseRepository.findByAppId(appId);
+        if(ObjectUtil.isNotNull(ret)){
+            return MapstructUtils.convert(ret,SysApp.class);
+        }else{
+            return null;
+        }
     }
 }

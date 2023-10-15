@@ -52,4 +52,6 @@ public interface IProductService {
     boolean editProductModel(ProductModelBo productModel);
 
     boolean deleteProductModel(String id);
+
+    ProductVo findByProductKey(String productKey);
 }

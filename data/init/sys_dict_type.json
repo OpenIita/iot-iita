@@ -102,5 +102,69 @@
       "updateBy": null,
       "updateTime": null,
       "remark": "登录状态列表"
-    }
+    },
+   {
+     "id": 452767972294725,
+     "tenantId": "452748015218757",
+     "dictName": "用户性别",
+     "dictType": "sys_user_sex",
+     "status": "0",
+     "remark": "用户性别列表"
+   },
+   {
+     "id": 452767972298821,
+     "tenantId": "452748015218757",
+     "dictName": "菜单状态",
+     "dictType": "sys_show_hide",
+     "status": "0",
+     "remark": "菜单状态列表"
+   },
+   {
+     "id": 452767972298822,
+     "tenantId": "452748015218757",
+     "dictName": "系统开关",
+     "dictType": "sys_normal_disable",
+     "status": "0",
+     "remark": "系统开关列表"
+   },
+   {
+     "id": 452767972298823,
+     "tenantId": "452748015218757",
+     "dictName": "系统是否",
+     "dictType": "sys_yes_no",
+     "status": "0",
+     "remark": "系统是否列表"
+   },
+   {
+     "id": 452767972298824,
+     "tenantId": "452748015218757",
+     "dictName": "通知类型",
+     "dictType": "sys_notice_type",
+     "status": "0",
+     "remark": "通知类型列表"
+   },
+   {
+     "id": 452767972298825,
+     "tenantId": "452748015218757",
+     "dictName": "通知状态",
+     "dictType": "sys_notice_status",
+     "status": "0",
+     "remark": "通知状态列表"
+   },
+   {
+     "id": 452767972302917,
+     "tenantId": "452748015218757",
+     "dictName": "操作类型",
+     "dictType": "sys_oper_type",
+     "status": "0",
+     "remark": "操作类型列表"
+   },
+   {
+     "id": 452767972302918,
+     "tenantId": "452748015218757",
+     "dictName": "登录状态",
+     "dictType": "sys_common_status",
+     "status": "0",
+     "remark": "登录状态列表"
+   }
   ]

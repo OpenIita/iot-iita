@@ -9,8 +9,8 @@
  */
 package cc.iotkit.ruleengine.rule;
 
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.rule.RuleLog;
 import cc.iotkit.ruleengine.action.Action;
 import cc.iotkit.ruleengine.filter.Filter;

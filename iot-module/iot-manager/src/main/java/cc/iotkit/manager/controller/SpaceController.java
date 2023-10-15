@@ -9,19 +9,21 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.satoken.utils.AuthUtil;
-import cc.iotkit.data.manager.IHomeData;
-import cc.iotkit.data.manager.ISpaceData;
+import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.manager.dto.bo.space.HomeBo;
 import cc.iotkit.manager.service.DataOwnerService;
+import cc.iotkit.manager.service.IHomeService;
+import cc.iotkit.manager.service.ISpaceService;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import io.swagger.annotations.Api;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,13 +32,12 @@ import java.util.List;
 @Api(tags = {"空间"})
 @RestController
 @RequestMapping("/space")
-@Deprecated
 public class SpaceController {
 
     @Autowired
-    private ISpaceData spaceData;
+    private ISpaceService spaceService;
     @Autowired
-    private IHomeData homeData;
+    private IHomeService homeService;
     @Autowired
     private DataOwnerService dataOwnerService;
 
@@ -45,7 +46,7 @@ public class SpaceController {
      */
     @PostMapping("/currentHome")
     public Home getCurrentHome() {
-        return homeData.findByUidAndCurrent(AuthUtil.getUserId(), true);
+        return homeService.findByUserIdAndCurrent(LoginHelper.getUserId(), true);
     }
 
     /**
@@ -53,88 +54,115 @@ public class SpaceController {
      */
     @PostMapping("/getUserHomes")
     public List<Home> getUserHomes() {
-        return homeData.findByUid(AuthUtil.getUserId());
+        return homeService.findByUserId(LoginHelper.getUserId());
     }
 
     /**
      * 切换用户当前家庭
      */
     @PostMapping("/changCurrentHome")
-    public void changCurrentHome(Home home) {
-        Home oldHome=homeData.findByUidAndCurrent(AuthUtil.getUserId(), true);
-        oldHome.setCurrent(false);
-        homeData.save(oldHome);
-        Home newHome=homeData.findById(home.getId());
-        newHome.setCurrent(true);
-        homeData.save(newHome);
+    public void changCurrentHome(@RequestBody @Validated Request<HomeBo> request) {
+        HomeBo home=request.getData();
+        checkHomeExist(home.getId());
+        homeService.changCurrentHome(home);
+    }
+
+    /**
+     * 添加家庭信息
+     */
+    @PostMapping("/addHome")
+    public void addHome(@RequestBody @Validated Request<HomeBo> request) {
+        HomeBo home = request.getData();
+        if (!homeService.checkHomeNameUnique(home)) {
+            throw new BizException("家庭'" + home.getName() + "'已存在");
+        }
+        home.setSpaceNum(3);
+        home.setUserId(LoginHelper.getUserId());
+        Home dbHome = homeService.save(home);
+        //添加默认房间
+        for (String name : new String[]{"客厅", "卧室", "厨房"}) {
+            spaceService.save(Space.builder()
+                    .homeId(dbHome.getId())
+                    .name(name)
+                    .deviceNum(0)
+                    .build());
+        }
     }
 
     /**
      * 保存家庭信息
      */
-    @PostMapping("/saveHome/{id}")
-    public void saveHome(@PathVariable("id") String id, Home home) {
-        Home oldHome = homeData.findById(id);
-        if (home==null) {
-            throw new BizException(ErrCode.HOME_NOT_FOUND);
-        }
-        dataOwnerService.checkOwner(oldHome);
-        if (StringUtils.isNotBlank(home.getName())) {
-            oldHome.setName(home.getName());
-        }
-        if (StringUtils.isNotBlank(home.getAddress())) {
-            oldHome.setName(home.getAddress());
-        }
-        homeData.save(oldHome);
+    @PostMapping("/saveHome")
+    public void saveHome(@RequestBody @Validated Request<HomeBo> request) {
+        HomeBo home=request.getData();
+        checkHomeExist(home.getId());
+        homeService.save(home);
+    }
+
+    /**
+     * 删除家庭信息
+     */
+    @PostMapping("/delHome")
+    public void delHome(@RequestBody @Validated Request<Long> request) {
+        Long id=request.getData();
+        checkHomeExist(id);
+        homeService.deleteById(id);
     }
 
     /**
      * 我的空间列表
      */
-    @PostMapping("/spaces/{homeId}")
-    public List<Space> getSpaces(@PathVariable("homeId") String homeId) {
-        return spaceData.findByUidAndHomeIdOrderByCreateAtDesc(AuthUtil.getUserId(), homeId);
+    @PostMapping("/getSpaces")
+    public List<Space> getSpaces(@RequestBody @Validated Request<Long> request) {
+        return spaceService.findByHomeId(request.getData());
     }
 
     /**
      * 在当前家庭中添加空间
      */
     @PostMapping("/addSpace")
-    public void addSpace(String name) {
-        String uid = AuthUtil.getUserId();
-        Home currHome = homeData.findByUidAndCurrent(uid, true);
+    public void addSpace(@RequestBody @Validated Request<Space> request) {
+        Long userId=LoginHelper.getUserId();
+        Home currHome = homeService.findByUserIdAndCurrent(userId, true);
         if (currHome == null) {
             throw new BizException(ErrCode.CURRENT_HOME_NOT_FOUND);
         }
-        spaceData.save(Space.builder()
+        spaceService.save(Space.builder()
                 .homeId(currHome.getId())
-                .name(name)
-                .uid(uid)
-                .createAt(System.currentTimeMillis())
+                .name(request.getData().getName())
+                .deviceNum(0)
                 .build());
     }
 
-    @PostMapping("/delSpace/{id}")
-    public void delSpace(@PathVariable("id") String id) {
-        checkExistAndOwner(id);
-        spaceData.deleteById(id);
+    @PostMapping("/delSpace")
+    public void delSpace(@RequestBody @Validated Request<Long> request) {
+        Long spaceId=request.getData();
+        checkExist(spaceId);
+        spaceService.deleteById(spaceId);
     }
 
-    @PostMapping("/saveSpace/{id}")
-    public void saveSpace(@PathVariable("id") String id, String name) {
-        Space oldSpace = checkExistAndOwner(id);
-        oldSpace.setName(name);
-        spaceData.save(oldSpace);
+    @PostMapping("/saveSpace")
+    public void saveSpace(@RequestBody @Validated Request<Space> request) {
+        Space space=request.getData();
+        Space oldSpace = checkExist(space.getId());
+        oldSpace.setName(space.getName());
+        spaceService.save(oldSpace);
     }
 
-    private Space checkExistAndOwner(String id) {
-        Space space = spaceData.findById(id);
+    private Space checkExist(Long id) {
+        Space space = spaceService.findById(id);
         if (space == null) {
             throw new BizException(ErrCode.SPACE_NOT_FOUND);
         }
-
-        dataOwnerService.checkOwner(space);
         return space;
+    }
+
+    private Home checkHomeExist(Long id) {
+        Home home = homeService.findById(id);
+        if (home == null) {
+            throw new BizException(ErrCode.HOME_NOT_FOUND);
+        }
+        return home;
     }
 
 }

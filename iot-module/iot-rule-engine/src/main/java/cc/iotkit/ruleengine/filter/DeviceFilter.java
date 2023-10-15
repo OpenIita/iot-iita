@@ -9,8 +9,8 @@
  */
 package cc.iotkit.ruleengine.filter;
 
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.data.manager.IDeviceInfoData;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 

@@ -9,24 +9,20 @@
  */
 package cc.iotkit.data.manager;
 
-import cc.iotkit.data.IOwnedData;
+import cc.iotkit.data.ICommonData;
 import cc.iotkit.model.space.SpaceDevice;
 
 import java.util.List;
 
-public interface ISpaceDeviceData extends IOwnedData<SpaceDevice, String> {
+public interface ISpaceDeviceData extends ICommonData<SpaceDevice, Long> {
 
-    List<SpaceDevice> findByUidOrderByUseAtDesc(String uid);
+    List<SpaceDevice> findByHomeIdAndCollect(Long homeId,boolean collect);
 
-    List<SpaceDevice> findByHomeIdAndCollect(String homeId,boolean collect);
+    List<SpaceDevice> findByHomeId(Long homeId);
 
-    List<SpaceDevice> findByUidOrderByAddAtDesc(String uid);
-
-    List<SpaceDevice> findBySpaceIdOrderByAddAtDesc(String spaceId);
-
-    List<SpaceDevice> findByUidAndSpaceIdOrderByAddAtDesc(String uid, String spaceId);
+    List<SpaceDevice> findBySpaceId(Long spaceId);
 
     SpaceDevice findByDeviceId(String deviceId);
 
-    SpaceDevice findByDeviceIdAndUid(String deviceId, String uid);
+    void deleteAllBySpaceId(Long spaceId);
 }

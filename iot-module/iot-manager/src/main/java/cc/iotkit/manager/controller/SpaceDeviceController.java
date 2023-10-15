@@ -9,18 +9,24 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.Request;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.AuthUtil;
-import cc.iotkit.data.manager.*;
+import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.data.manager.ICategoryData;
+import cc.iotkit.data.manager.IDeviceInfoData;
+import cc.iotkit.data.manager.IUserInfoData;
+import cc.iotkit.manager.dto.vo.product.ProductVo;
+import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
-import cc.iotkit.manager.service.DataOwnerService;
+import cc.iotkit.manager.service.*;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
-import cc.iotkit.model.product.Product;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
@@ -28,9 +34,11 @@ import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,25 +47,22 @@ import java.util.stream.Collectors;
 @Api(tags = {"空间设备"})
 @RestController
 @RequestMapping("/space")
-@Deprecated
 public class SpaceDeviceController {
 
     @Autowired
-    private ISpaceDeviceData spaceDeviceData;
+    private ISpaceDeviceService spaceDeviceService;
     @Autowired
     @Qualifier("deviceInfoDataCache")
     private IDeviceInfoData deviceInfoData;
     @Autowired
-    @Qualifier("productDataCache")
-    private IProductData productData;
+    private IProductService productService;
     @Autowired
     @Qualifier("categoryDataCache")
     private ICategoryData categoryData;
     @Autowired
-    @Qualifier("spaceDataCache")
-    private ISpaceData spaceData;
+    private ISpaceService spaceService;
     @Autowired
-    private IHomeData homeData;
+    private IHomeService homeService;
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
@@ -67,9 +72,10 @@ public class SpaceDeviceController {
      * 我最近使用的设备列表
      */
     @PostMapping(Constants.API_SPACE.RECENT_DEVICES)
-    public List<SpaceDeviceVo> getMyRecentDevices() {
-        List<SpaceDevice> spaceDevices = spaceDeviceData.findByUidOrderByUseAtDesc(AuthUtil.getUserId());
-        return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
+    public List<SpaceDeviceVo> getMyRecentDevices() {//TODO 老接口
+//        List<SpaceDevice> spaceDevices = spaceDeviceService.findByUserIdAndCollect(LoginHelper.getUserId(),true);
+//        return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
+        return null;
     }
 
     /**
@@ -77,8 +83,8 @@ public class SpaceDeviceController {
      */
     @PostMapping(Constants.API_SPACE.GET_COLLECT_DEVICES)
     public List<SpaceDeviceVo> getCollectDevices() {
-        Home home = homeData.findByUidAndCurrent(AuthUtil.getUserId(), true);
-        List<SpaceDevice> spaceDevices = spaceDeviceData.findByHomeIdAndCollect(home.getId(), true);
+        Home home = homeService.findByUserIdAndCurrent(LoginHelper.getUserId(), true);
+        List<SpaceDevice> spaceDevices = spaceDeviceService.findByHomeIdAndCollect(home.getId(), true);
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
 
@@ -86,36 +92,43 @@ public class SpaceDeviceController {
      * 收藏/取消收藏设备
      */
     @PostMapping(Constants.API_SPACE.COLLECT_DEVICE)
-    public void collectDevice(SpaceDevice spaceDevice) {
-        SpaceDevice oldSpaceDevice = spaceDeviceData.findByDeviceId(spaceDevice.getDeviceId());
+    public void collectDevice(@RequestBody @Validated Request<SpaceDevice> request) {
+        SpaceDevice spaceDevice = request.getData();
+        SpaceDevice oldSpaceDevice = spaceDeviceService.findByDeviceId(spaceDevice.getDeviceId());
         oldSpaceDevice.setCollect(spaceDevice.getCollect());
-        spaceDeviceData.save(oldSpaceDevice);
+        spaceDeviceService.save(oldSpaceDevice);
     }
 
     /**
      * 我的空间设备列表-按空间获取
      *
-     * @param spaceId 空间id
+     * @param request
      */
-    @PostMapping(Constants.API_SPACE.SPACE_DEVICES)
-    public List<SpaceDeviceVo> getMyDevices(@PathVariable("spaceId") String spaceId) {
-        String uid = AuthUtil.getUserId();
+    @PostMapping("/getSpaceDevices")
+    public List<SpaceDeviceVo> getMyDevices(@RequestBody @Validated Request<Long> request) {
         List<SpaceDevice> spaceDevices;
+        Long spaceId = request.getData();
         if ("all".equals(spaceId)) {
             //全部设备
-            spaceDevices = spaceDeviceData.findByUidOrderByUseAtDesc(uid);
+            Home home = homeService.findByUserIdAndCurrent(LoginHelper.getUserId(), true);
+            spaceDevices = spaceDeviceService.findByHomeId(home.getId());
         } else {
             //按空间获取
-            spaceDevices = spaceDeviceData.
-                    findByUidAndSpaceIdOrderByAddAtDesc(uid, spaceId);
+            spaceDevices = spaceDeviceService.findBySpaceId(spaceId);
         }
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
 
     private SpaceDeviceVo parseSpaceDevice(SpaceDevice sd) {
         DeviceInfo device = deviceInfoData.findByDeviceId(sd.getDeviceId());
-        Space space = spaceData.findById(sd.getSpaceId());
-        Product product = productData.findByProductKey(device.getProductKey());
+        Space space = spaceService.findById(sd.getSpaceId());
+        ProductVo product = productService.findByProductKey(device.getProductKey());
+        ThingModelVo tm = productService.getThingModelByProductKey(device.getProductKey());
+        Map<String, Object> property = new HashMap<>();
+        if (tm != null) {
+            tm.getModel().setEvents(null);
+            property = JsonUtils.parseObject(JsonUtils.toJsonString(tm), Map.class);
+        }
         Category category = categoryData.findById(product.getCategory());
         DeviceInfo.State state = device.getState();
 
@@ -132,8 +145,7 @@ public class SpaceDeviceController {
                 .categoryName(category.getName())
                 .picUrl(product.getImg())
                 .online(state != null && state.isOnline())
-                .property(device.getProperty())
-                .uid(sd.getUid())
+                .property(property)
                 .collect(sd.getCollect())
                 .build();
     }
@@ -142,8 +154,9 @@ public class SpaceDeviceController {
      * 获取用户所有设备列表
      */
     @PostMapping("/{userId}/devices")
-    public List<SpaceDeviceVo> getDevices(@PathVariable("userId") String userId) {
-        List<SpaceDevice> spaceDevices = spaceDeviceData.findByUid(userId);
+    public List<SpaceDeviceVo> getDevices(@PathVariable("userId") Long userId) {
+        Home curHome = homeService.findByUserIdAndCurrent(userId, true);
+        List<SpaceDevice> spaceDevices = spaceDeviceService.findByHomeId(curHome.getId());
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
 
@@ -151,7 +164,8 @@ public class SpaceDeviceController {
      * 搜索未添加过的设备
      */
     @PostMapping(Constants.API_SPACE.FIND_DEVICE)
-    List<FindDeviceVo> findDevice(String mac) {
+    public List<FindDeviceVo> findDevice(@RequestBody @Validated Request<String> request) {
+        String mac = request.getData();
         if (StringUtils.isBlank(mac)) {
             throw new BizException(ErrCode.DATA_BLANK);
         }
@@ -161,27 +175,21 @@ public class SpaceDeviceController {
         }
 
         List<FindDeviceVo> findDeviceVos = new ArrayList<>();
-        DeviceInfo device = deviceInfoData.findByDeviceName(mac);
-        if (device == null) {
-            return findDeviceVos;
-        }
-        List<DeviceInfo> devices = new ArrayList<>();
-        devices.add(device);
+        DeviceInfo findDevice = deviceInfoData.findByDeviceName(mac);
 
         //查找网关下子设备
         List<DeviceInfo> subDevices = new ArrayList<>();
-        if (device.getParentId() == null) {
-            subDevices = deviceInfoData.findByParentId(device.getDeviceId());
+        if (findDevice.getParentId() == null) {
+            subDevices = deviceInfoData.findByParentId(findDevice.getDeviceId());
         }
-
-        devices.addAll(subDevices);
+        List<DeviceInfo> devices = new ArrayList<>(subDevices);
 
         //查找空间设备
-        for (DeviceInfo d : devices) {
-            SpaceDevice spaceDevice = spaceDeviceData.findByDeviceId(d.getDeviceId());
+        for (DeviceInfo device : devices) {
+            SpaceDevice spaceDevice = spaceDeviceService.findByDeviceId(device.getDeviceId());
             if (spaceDevice == null) {
                 //没有被其它人占用
-                findDeviceVos.add(getFindDeviceVo(d));
+                findDeviceVos.add(getFindDeviceVo(device));
             }
         }
         return findDeviceVos;
@@ -194,7 +202,7 @@ public class SpaceDeviceController {
                 .productKey(device.getProductKey())
                 .build();
 
-        Product product = productData.findByProductKey(device.getProductKey());
+        ProductVo product = productService.findByProductKey(device.getProductKey());
         Category category = categoryData.findById(product.getCategory());
         findDeviceVo.setProductName(product.getName());
         findDeviceVo.setProductImg(product.getImg());
@@ -207,19 +215,20 @@ public class SpaceDeviceController {
      * 往指定房间中添加设备
      */
     @PostMapping(Constants.API_SPACE.ADD_DEVICE)
-    public void addDevice(SpaceDevice device) {
+    public void addDevice(@RequestBody @Validated Request<SpaceDevice> request) {
+        SpaceDevice device = request.getData();
         String deviceId = device.getDeviceId();
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
         if (deviceInfo == null) {
             throw new BizException(ErrCode.DEVICE_NOT_FOUND);
         }
-        String spaceId = device.getSpaceId();
-        Space space = spaceData.findById(spaceId);
+        Long spaceId = device.getSpaceId();
+        Space space = spaceService.findById(spaceId);
         if (space == null) {
             throw new BizException(ErrCode.SPACE_NOT_FOUND);
         }
 
-        SpaceDevice oldSpaceDevice = spaceDeviceData.findByDeviceId(deviceId);
+        SpaceDevice oldSpaceDevice = spaceDeviceService.findByDeviceId(deviceId);
         if (oldSpaceDevice != null) {
             throw new BizException(ErrCode.DEVICE_ALREADY);
         }
@@ -230,10 +239,8 @@ public class SpaceDeviceController {
                 .deviceId(deviceId)
                 .name(device.getName())
                 .homeId(space.getHomeId())
-                .uid(AuthUtil.getUserId())
-                .addAt(System.currentTimeMillis())
                 .build();
-        spaceDeviceData.save(spaceDevice);
+        spaceDeviceService.save(spaceDevice);
 
         //更新设备子用户列表
         List<String> subUid = deviceInfo.getSubUid();
@@ -267,23 +274,21 @@ public class SpaceDeviceController {
      */
     @DeleteMapping(Constants.API_SPACE.REMOVE_DEVICE)
     public void removeDevice(String deviceId) {
-        String uid = AuthUtil.getUserId();
-        SpaceDevice spaceDevice = spaceDeviceData.findByDeviceIdAndUid(deviceId, uid);
+        SpaceDevice spaceDevice = spaceDeviceService.findByDeviceId(deviceId);
         if (spaceDevice == null) {
             throw new BizException(ErrCode.SPACE_DEVICE_NOT_FOUND);
         }
-        dataOwnerService.checkOwner(spaceDevice);
 
-        spaceDeviceData.deleteById(spaceDevice.getId());
+        spaceDeviceService.deleteById(spaceDevice.getId());
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
-        UserInfo userInfo = userInfoData.findById(Long.valueOf(uid));
+        UserInfo userInfo = userInfoData.findById(LoginHelper.getUserId());
         if (userInfo == null) {
             throw new BizException(ErrCode.USER_NOT_FOUND);
         }
 
         List<String> platforms = userInfo.getUsePlatforms();
         List<String> subUid = deviceInfo.getSubUid();
-        subUid.remove(uid);
+        subUid.remove(LoginHelper.getUserId() + "");
         //删除设备标签
         for (String platform : platforms) {
             deviceInfo.getTag().remove(platform);
@@ -297,14 +302,13 @@ public class SpaceDeviceController {
      */
     @PostMapping(Constants.API_SPACE.SAVE_DEVICE)
     public void saveDevice(SpaceDevice spaceDevice) {
-        dataOwnerService.checkOwner(spaceDevice);
-        SpaceDevice oldData = spaceDeviceData.findById(spaceDevice.getId());
+        SpaceDevice oldData = spaceDeviceService.findById(spaceDevice.getId());
         if (oldData == null) {
             throw new BizException(ErrCode.SPACE_DEVICE_NOT_FOUND);
         }
         oldData.setName(spaceDevice.getName());
         oldData.setSpaceId(spaceDevice.getSpaceId());
-        spaceDeviceData.save(oldData);
+        spaceDeviceService.save(oldData);
     }
 
     /**
@@ -312,11 +316,7 @@ public class SpaceDeviceController {
      */
     @PostMapping(Constants.API_SPACE.GET_DEVICE)
     public SpaceDeviceVo getSpaceDevice(@PathVariable("deviceId") String deviceId) {
-        String uid = AuthUtil.getUserId();
-        SpaceDevice spaceDevice = spaceDeviceData.findByDeviceIdAndUid(deviceId, uid);
-        //更新设备使用时间
-        spaceDevice.setUseAt(System.currentTimeMillis());
-        spaceDeviceData.save(spaceDevice);
+        SpaceDevice spaceDevice = spaceDeviceService.findByDeviceId(deviceId);
         return parseSpaceDevice(spaceDevice);
     }
 
@@ -326,13 +326,10 @@ public class SpaceDeviceController {
      */
     @PostMapping(Constants.API_SPACE.SET_OPEN_UID)
     public void setOpenUid(String deviceId, String platform, String openUid) {
-        SpaceDevice spaceDevice = spaceDeviceData.findByDeviceId(deviceId);
+        SpaceDevice spaceDevice = spaceDeviceService.findByDeviceId(deviceId);
         if (spaceDevice == null) {
             throw new BizException(ErrCode.SPACE_DEVICE_NOT_FOUND);
         }
-
-        //只能修改自己的设备
-        dataOwnerService.checkOwner(spaceDevice);
 
         //找到设备
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);

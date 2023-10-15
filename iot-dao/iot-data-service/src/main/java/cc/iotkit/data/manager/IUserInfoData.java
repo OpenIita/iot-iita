@@ -19,6 +19,4 @@ public interface IUserInfoData extends ICommonData<UserInfo, Long> {
     UserInfo findByUid(String uid);
 
     List<UserInfo> findByType(int type);
-
-    List<UserInfo> findByTypeAndOwnerId(int type, String ownerId);
 }

@@ -6,7 +6,6 @@ import cc.iotkit.common.constant.CacheConstants;
 import cc.iotkit.common.constant.CacheNames;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
-import cc.iotkit.common.service.DictService;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StreamUtils;
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @Service
-public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService {
+public class SysDictTypeServiceImpl implements ISysDictTypeService {
 
     private final ISysDictTypeData sysDictTypeData;
     private final ISysDictData sysDictData;
@@ -183,7 +182,6 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
      * @return 字典标签
      */
     @SuppressWarnings("unchecked cast")
-    @Override
     public String getDictLabel(String dictType, String dictValue, String separator) {
         // 优先从本地缓存获取
         List<SysDictDataVo> datas = (List<SysDictDataVo>) SaHolder.getStorage().get(CacheConstants.SYS_DICT_KEY + dictType);
@@ -211,7 +209,6 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
      * @return 字典值
      */
     @SuppressWarnings("unchecked cast")
-    @Override
     public String getDictValue(String dictType, String dictLabel, String separator) {
         // 优先从本地缓存获取
         List<SysDictDataVo> datas = (List<SysDictDataVo>) SaHolder.getStorage().get(CacheConstants.SYS_DICT_KEY + dictType);

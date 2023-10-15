@@ -9,7 +9,7 @@
  */
 package cc.iotkit.ruleengine.handler.sys;
 
-import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.ruleengine.handler.DeviceMessageHandler;
 import cc.iotkit.temporal.IThingModelMessageData;
 import lombok.extern.slf4j.Slf4j;

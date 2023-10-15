@@ -1,6 +1,7 @@
 package cc.iotkit.ruleengine.handler;
 
-import cc.iotkit.model.device.message.ThingModelMessage;
+
+import cc.iotkit.common.thing.ThingModelMessage;
 
 public interface DeviceMessageHandler {
 

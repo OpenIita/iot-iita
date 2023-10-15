@@ -1,7 +1,7 @@
 package cc.iotkit.ruleengine.action.mqtt;
 
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.utils.FIUtil;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.ruleengine.action.ScriptService;
 import cc.iotkit.ruleengine.link.LinkFactory;
 import cc.iotkit.ruleengine.link.LinkService;

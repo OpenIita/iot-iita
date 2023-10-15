@@ -9,7 +9,7 @@
  */
 package cc.iotkit.ruleengine.config;
 
-import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.mq.MqConsumer;
 import cc.iotkit.ruleengine.handler.RuleDeviceConsumer;
 import cc.iotkit.ruleengine.task.TaskManager;

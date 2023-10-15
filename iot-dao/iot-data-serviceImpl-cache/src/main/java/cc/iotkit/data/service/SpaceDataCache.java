@@ -1,10 +1,10 @@
 package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
-import cc.iotkit.common.constant.Constants;
-import cc.iotkit.data.manager.ISpaceData;
-import cc.iotkit.data.cache.SpaceCacheEvict;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.constant.Constants;
+import cc.iotkit.data.cache.SpaceCacheEvict;
+import cc.iotkit.data.manager.ISpaceData;
 import cc.iotkit.model.space.Space;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,43 +24,18 @@ public class SpaceDataCache implements ISpaceData {
     private SpaceCacheEvict spaceCacheEvict;
 
     @Override
-    public List<Space> findByUidOrderByCreateAtDesc(String uid) {
-        return spaceData.findByUidOrderByCreateAtDesc(uid);
-    }
-
-    @Override
-    public List<Space> findByUidAndHomeIdOrderByCreateAtDesc(String uid, String homeId) {
-        return spaceData.findByUidAndHomeIdOrderByCreateAtDesc(uid, homeId);
-    }
-
-    @Override
-    public List<Space> findByHomeId(String homeId) {
+    public List<Space> findByHomeId(Long homeId) {
         return spaceData.findByHomeId(homeId);
     }
 
     @Override
-    public List<Space> findByUid(String uid) {
-        return spaceData.findByUid(uid);
-    }
-
-    @Override
-    public Paging<Space> findByUid(String uid, int page, int size) {
-        return spaceData.findByUid(uid, page, size);
-    }
-
-    @Override
-    public long countByUid(String uid) {
-        return spaceData.countByUid(uid);
-    }
-
-    @Override
     @Cacheable(value = Constants.CACHE_SPACE, key = "#root.method.name+#s", unless = "#result == null")
-    public Space findById(String s) {
+    public Space findById(Long s) {
         return spaceData.findById(s);
     }
 
     @Override
-    public List<Space> findByIds(Collection<String> id) {
+    public List<Space> findByIds(Collection<Long> id) {
         return null;
     }
 
@@ -77,12 +52,12 @@ public class SpaceDataCache implements ISpaceData {
     }
 
     @Override
-    public void deleteById(String s) {
+    public void deleteById(Long s) {
         spaceData.deleteById(s);
     }
 
     @Override
-    public void deleteByIds(Collection<String> strings) {
+    public void deleteByIds(Collection<Long> strings) {
 
     }
 

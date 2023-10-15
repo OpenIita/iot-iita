@@ -188,6 +188,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.github.biyanwen</groupId>
+                <artifactId>jpa-comment-spring-boot-starter</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>2.0.9</version>
@@ -203,6 +209,12 @@
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-common-core</artifactId>
+                <version>${iot-iita-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-common-thing</artifactId>
                 <version>${iot-iita-core.version}</version>
             </dependency>
 
@@ -254,6 +266,31 @@
                 <version>${iot-iita-core.version}</version>
             </dependency>
 
+            <!--message-bus-->
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-message-core</artifactId>
+                <version>${iot-iita-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-message-event-bus</artifactId>
+                <version>${iot-iita-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-message-rocketmq</artifactId>
+                <version>${iot-iita-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.iotkit</groupId>
+                <artifactId>iot-script-engine</artifactId>
+                <version>${iot-iita-core.version}</version>
+            </dependency>
+
             <!--iot-data-->
             <dependency>
                 <groupId>cc.iotkit</groupId>
@@ -293,33 +330,8 @@
 
             <dependency>
                 <groupId>cc.iotkit</groupId>
-                <artifactId>iot-temproal-serviceImpl-td</artifactId>
+                <artifactId>iot-temporal-serviceImpl-td</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-
-            <!--message-bus-->
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-message-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-message-event-bus</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-message-rocketmq</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cc.iotkit</groupId>
-                <artifactId>iot-script-engine</artifactId>
-                <version>${iot-iita-core.version}</version>
             </dependency>
 
             <dependency>

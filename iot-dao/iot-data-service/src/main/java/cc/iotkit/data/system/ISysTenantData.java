@@ -10,6 +10,6 @@ import cc.iotkit.model.system.SysTenant;
  */
 public interface ISysTenantData  extends ICommonData<SysTenant, Long> {
 
-    void updateTenant(SysTenant tenant);
+    boolean checkCompanyNameUnique(SysTenant to);
 
 }

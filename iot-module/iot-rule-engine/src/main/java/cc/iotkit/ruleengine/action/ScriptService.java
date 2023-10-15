@@ -9,9 +9,9 @@
  */
 package cc.iotkit.ruleengine.action;
 
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.script.IScriptEngine;
 import cc.iotkit.script.ScriptEngineFactory;
 import com.fasterxml.jackson.core.type.TypeReference;

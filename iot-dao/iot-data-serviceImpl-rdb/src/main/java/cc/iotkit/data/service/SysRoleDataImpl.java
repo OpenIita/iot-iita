@@ -182,6 +182,7 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
                 .and(StringUtils.isNotBlank(role.getRoleName()), () -> tbSysRole.roleName.like(role.getRoleName()))
                 .and(StringUtils.isNotBlank(role.getStatus()), () -> tbSysRole.roleName.eq(role.getStatus()))
                 .and(StringUtils.isNotBlank(role.getRoleKey()), () -> tbSysRole.roleKey.like(role.getRoleKey()))
+                .and(StringUtils.isNotBlank(role.getTenantId()), () -> tbSysRole.tenantId.eq(role.getTenantId()))
                 .build();
 
     }

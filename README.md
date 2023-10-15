@@ -1,7 +1,7 @@
 
 
 <p align="center">
-<img alt="logo" src="https://xiwasong.github.io/img/logo.png" width="100">
+<img alt="logo" src="http://www.openiita.com/logo.png">
 </p>
 <p align="center"><img  src="https://img.shields.io/badge/JDK-11+-important.svg">  <img  src="https://img.shields.io/badge/Redis-5.0-important.svg"> <img  src="https://img.shields.io/badge/SpringBoot-2.6.2-blue.svg"> <img  src="https://img.shields.io/badge/Elasticsearch-7.15.2-red.svg">  <img  src="https://img.shields.io/badge/Satoken-1.30.0-yellow.svg"> 
 </p>
@@ -73,17 +73,19 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 **注：** es版本为7.15.2，mysql版本为8.0+
 
-##### 关系数据库切换为mysql方法（其它数据库同理）
+##### H2数据库切换为mysql方法（其它数据库同理）
+1、删掉.init、iotkit.mv.db、iotkit.trace.db文件
 
-1、将iot-data-serviceImpl-rdb/pom.xml中的mysql驱动注释放开
+2、将iot-data-serviceImpl-rdb/pom.xml中的mysql驱动注释放开
 
-2、启动时指定active: --spring.profiles.active=mysql
+3、application.yml 注释掉内置H2数据库，打开mysql配置注释
 
-##### 时序数据库切换为TDengin(版本：2.6x)方法
+##### es切换为TDengine(版本：3.x)方法
+1、删掉.init和关系数据库数据
 
-1、注释掉iot-starter/pom.xml中的 iot-temporal-serviceImpl-es，并打开iot-td-temporal-service的注释
+2、注释掉iot-starter/pom.xml中的 iot-temporal-serviceImpl-es，并打开iot-td-temporal-service的注释
 
-2、application.xml中注释掉elasticsearch配置，并打开td-datasource配置
+3、注解掉iot-starter下application.xml中的elasticsearch配置，并打开td-datasource配置
 
 ##### 消息总线切换为RocketMq方法
 

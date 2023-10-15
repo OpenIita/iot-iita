@@ -6,7 +6,6 @@ import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.LoginHelper;
-import cc.iotkit.common.service.UserService;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.data.system.*;
@@ -35,7 +34,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Service
-public class SysUserServiceImpl implements ISysUserService, UserService {
+public class SysUserServiceImpl implements ISysUserService {
 
     @Autowired
     private ISysUserData sysUserData;
@@ -56,7 +55,6 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     private ISysUserPostData sysUserPostData;
 
 
-    @Override
     public String selectUserNameById(Long userId) {
         return null;
     }

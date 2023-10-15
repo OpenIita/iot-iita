@@ -22,7 +22,10 @@ import io.swagger.annotations.ApiOperation;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -84,7 +87,7 @@ public class SysTenantController extends BaseController {
     @SaCheckPermission("system:tenant:add")
     @Log(title = "租户", businessType = BusinessType.INSERT)
     @Lock4j
-    @PostMapping()
+    @PostMapping("/add")
     public void add(@Validated(AddGroup.class) @RequestBody Request<SysTenantBo> bo) {
         SysTenantBo data = bo.getData();
         if (!tenantService.checkCompanyNameUnique(data)) {
@@ -100,7 +103,7 @@ public class SysTenantController extends BaseController {
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:edit")
     @Log(title = "租户", businessType = BusinessType.UPDATE)
-    @PutMapping()
+    @PostMapping("/edit")
     public void edit(@Validated(EditGroup.class) @RequestBody Request<SysTenantBo> bo) {
         SysTenantBo data = bo.getData();
         tenantService.checkTenantAllowed(data.getTenantId());
@@ -116,7 +119,7 @@ public class SysTenantController extends BaseController {
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:edit")
     @Log(title = "租户", businessType = BusinessType.UPDATE)
-    @PutMapping("/changeStatus")
+    @PostMapping("/changeStatus")
     public void changeStatus(@RequestBody Request<SysTenantBo> bo) {
         SysTenantBo data = bo.getData();
         tenantService.checkTenantAllowed(data.getTenantId());
@@ -131,8 +134,8 @@ public class SysTenantController extends BaseController {
     @SaCheckPermission("system:tenant:remove")
     @Log(title = "租户", businessType = BusinessType.DELETE)
     @PostMapping("/delete")
-    public void remove(@Validated @RequestBody Request<List<Long>> bo) {
-        tenantService.deleteWithValidByIds(bo.getData(), true);
+    public void remove(@Validated @RequestBody Request<Long> bo) {
+        tenantService.deleteById(bo.getData());
     }
 
     /**

@@ -9,11 +9,11 @@
  */
 package cc.iotkit.ruleengine.handler.sys;
 
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.IDeviceConfigData;
 import cc.iotkit.model.device.DeviceConfig;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.ruleengine.handler.DeviceMessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

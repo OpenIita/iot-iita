@@ -12,7 +12,6 @@ import cc.iotkit.system.service.ISysAppService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 
 
@@ -34,6 +33,17 @@ public class SysAppServiceImpl implements ISysAppService {
     @Override
     public SysAppVo queryById(Long id){
         return MapstructUtils.convert(baseData.findById(id), SysAppVo.class);
+    }
+
+    @Override
+    public SysAppVo queryByAppId(String appId) {
+        SysApp ret=baseData.findByAppId(appId);
+        return ret!=null?MapstructUtils.convert(ret,SysAppVo.class):null;
+    }
+
+    @Override
+    public boolean checkAppIdUnique(String appId) {
+        return baseData.findByAppId(appId)!=null;
     }
 
     /**
@@ -60,7 +70,6 @@ public class SysAppServiceImpl implements ISysAppService {
     @Override
     public Long insertByBo(SysAppBo bo) {
         SysApp add = MapstructUtils.convert(bo, SysApp.class);
-        validEntityBeforeSave(add);
         baseData.save(add);
         if (add == null) {
             throw new BizException("新增失败");
@@ -86,18 +95,14 @@ public class SysAppServiceImpl implements ISysAppService {
      * 保存前的数据校验
      */
     private void validEntityBeforeSave(SysApp entity){
-        //TODO 做一些数据校验,如唯一约束
     }
 
     /**
      * 批量删除应用信息
      */
     @Override
-    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
-            //TODO 做一些业务上的校验,判断是否需要校验
-        }
-        baseData.deleteByIds(ids);
+    public Boolean deleteById(Long id) {
+        baseData.deleteById(id);
         return true;
     }
 }

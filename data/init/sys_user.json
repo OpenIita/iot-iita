@@ -4,9 +4,9 @@
       "tenantId": "000000",
       "deptId": 103,
       "userName": "admin",
-      "nickName": "疯狂的狮子Li",
+      "nickName": "admin",
       "userType": "sys_user",
-      "email": "crazyLionLi@163.com",
+      "email": "xw2sy@163.com",
       "phonenumber": "15888888888",
       "sex": "1",
       "avatar": null,
@@ -62,6 +62,23 @@
      "status": "0",
      "tenantId": "000000",
      "userName": "openiita",
+     "userType": "sys_user"
+   },
+   {
+     "id": 452767971950661,
+     "avatar": null,
+     "delFlag": "0",
+     "deptId": 452767971254341,
+     "email": null,
+     "loginIp": null,
+     "nickName": "test",
+     "password": "$2a$10$4Myxy0yK7OUh.y65DNcnKuG9lf3L934CJteU8mx5.Al5PsrIvTnuW",
+     "phonenumber": "18888888888",
+     "remark": "管理员",
+     "sex": null,
+     "status": "0",
+     "tenantId": "452748015218757",
+     "userName": "test",
      "userType": "sys_user"
    }
   ]

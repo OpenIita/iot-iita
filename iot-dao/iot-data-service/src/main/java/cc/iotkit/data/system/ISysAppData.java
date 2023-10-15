@@ -11,5 +11,6 @@ import cc.iotkit.model.system.SysApp;
  */
 public interface ISysAppData extends ICommonData<SysApp, Long> {
 
+    SysApp findByAppId(String appId);
 
 }

@@ -10,7 +10,7 @@
 package cc.iotkit.manager.dto.bo.thingmodel;
 
 import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.model.device.message.ThingModelMessage;
+import cc.iotkit.common.thing.ThingModelMessage;
 import io.github.linpeilie.annotations.AutoMapper;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

@@ -113,7 +113,7 @@ public class TbSysTenant extends BaseEntity implements TenantAware {
      * 租户状态（0正常 1停用）
      */
     @ApiModelProperty(value = "租户状态（0正常 1停用）")
-    private String status;
+    private String status=UserConstants.DICT_ABNORMAL;
 
     /**
      * 删除标志（0代表存在 2代表删除）

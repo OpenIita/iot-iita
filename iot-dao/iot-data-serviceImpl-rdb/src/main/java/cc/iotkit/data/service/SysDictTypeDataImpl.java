@@ -97,7 +97,8 @@ public class SysDictTypeDataImpl implements ISysDictTypeData, IJPACommData<SysDi
         return PredicateBuilder.instance()
                 .and(StringUtils.isNotEmpty(dictType.getDictName()), () -> tbSysDictType.dictName.like(dictType.getDictName()))
                 .and(StringUtils.isNotEmpty(dictType.getDictType()), () -> tbSysDictType.dictType.like(dictType.getDictType()))
-                .and(StringUtils.isNotEmpty(dictType.getStatus()), () -> tbSysDictType.status.eq(dictType.getStatus())).build();
+                .and(StringUtils.isNotEmpty(dictType.getStatus()), () -> tbSysDictType.status.eq(dictType.getStatus()))
+                .and(StringUtils.isNotEmpty(dictType.getTenantId()), () -> tbSysDictType.tenantId.eq(dictType.getTenantId())).build();
     }
 
 

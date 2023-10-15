@@ -11,5 +11,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
  * @date 2023-08-10
  */
 public interface SysAppRepository extends JpaRepository<TbSysApp, Long>, QuerydslPredicateExecutor<TbSysApp> {
-
+    TbSysApp findByAppId(String appId);
 }

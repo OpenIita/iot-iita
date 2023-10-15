@@ -37,6 +37,12 @@ public class SysAppVo implements Serializable {
     private String tenantId;
 
     /**
+     * 应用名称
+     */
+    @ApiModelProperty(value = "应用名称")
+    private String appName;
+
+    /**
      * appId
      */
     @ApiModelProperty(value = "appId")

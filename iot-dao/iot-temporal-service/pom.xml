@@ -15,6 +15,11 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-thing</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
             <artifactId>iot-data-model</artifactId>
         </dependency>
 

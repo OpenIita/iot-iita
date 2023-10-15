@@ -1,65 +1,47 @@
 [
   {
-    "id": "62a6a897f60ef7500d1a916b",
-    "homeId": "6238a49fecf37861bed7ad11",
-    "uid": "04c6722f-9a6d-40f3-ac9b-cd791b4c8933",
-    "name": "123",
-    "createAt": 1655089303228
+    "id": 1,
+    "homeId": 1,
+    "name": "123"
   },
   {
-    "id": "62a6a894f60ef7500d1a916a",
-    "homeId": "6238a49fecf37861bed7ad11",
-    "uid": "04c6722f-9a6d-40f3-ac9b-cd791b4c8933",
-    "name": "123",
-    "createAt": 1655089300741
+    "id": 2,
+    "homeId": 1,
+    "name": "123"
   },
   {
-    "id": "629e233be0dc6d4171e1a023",
-    "homeId": "629e1d80a176d816952f1e82",
-    "uid": "629e1d7fa176d816952f1e81",
-    "name": "客厅",
-    "createAt": 1654530875839
+    "id": 3,
+    "homeId": 1,
+    "name": "客厅"
   },
   {
-    "id": "629e18fee0dc6d4171e1a021",
-    "homeId": "629e18e96b16ad6a3e158645",
-    "uid": "629daa3de5a005209d182876",
-    "name": "卧室",
-    "createAt": 1654528254438
+    "id": 4,
+    "homeId": 1,
+    "name": "卧室"
   },
   {
-    "id": "629e18f3e0dc6d4171e1a020",
-    "homeId": "629e18e96b16ad6a3e158645",
-    "uid": "629daa3de5a005209d182876",
-    "name": "客厅",
-    "createAt": 1654528243058
+    "id": 5,
+    "homeId": 1,
+    "name": "客厅"
   },
   {
-    "id": "62794a820b0776663635e636",
-    "homeId": "6238a49fecf37861bed7ad11",
-    "uid": "04c6722f-9a6d-40f3-ac9b-cd791b4c8933",
-    "name": "阳台",
-    "createAt": 1652116098020
+    "id": 6,
+    "homeId": 1,
+    "name": "阳台"
   },
   {
-    "id": "62794a7d0b0776663635e635",
-    "homeId": "6238a49fecf37861bed7ad11",
-    "uid": "04c6722f-9a6d-40f3-ac9b-cd791b4c8933",
-    "name": "厨房",
-    "createAt": 1652116093323
+    "id": 7,
+    "homeId": 1,
+    "name": "厨房"
   },
   {
-    "id": "62794a740b0776663635e634",
-    "homeId": "6238a49fecf37861bed7ad11",
-    "uid": "04c6722f-9a6d-40f3-ac9b-cd791b4c8933",
-    "name": "卧室",
-    "createAt": 1652116084721
+    "id": 8,
+    "homeId": 1,
+    "name": "卧室"
   },
   {
-    "id": "62794a5c0b0776663635e633",
-    "homeId": "6238a49fecf37861bed7ad11",
-    "uid": "04c6722f-9a6d-40f3-ac9b-cd791b4c8933",
-    "name": "客厅",
-    "createAt": 1652116060926
+    "id": 9,
+    "homeId": 1,
+    "name": "客厅"
   }
 ]

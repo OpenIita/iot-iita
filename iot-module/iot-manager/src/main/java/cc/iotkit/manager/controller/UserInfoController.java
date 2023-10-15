@@ -31,7 +31,6 @@ import java.util.List;
 @Api(tags = {"用户"})
 @RestController
 @RequestMapping("/user")
-@Deprecated
 public class UserInfoController {
 
     @Autowired
@@ -57,12 +56,9 @@ public class UserInfoController {
     @PostMapping("/platform/user/add")
     public void addPlatformUser(@RequestBody UserInfo user) {
         try {
-//            user.setId(UUID.randomUUID().toString());
             user.setType(UserInfo.USER_TYPE_PLATFORM);
-            user.setOwnerId(AuthUtil.getUserId());
             user.setRoles(Collections.singletonList(Constants.ROLE_SYSTEM));
             user.setPermissions(Collections.singletonList(Constants.PERMISSION_WRITE));
-            user.setCreateAt(System.currentTimeMillis());
             user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_SYSTEM_USER));
             userInfoData.save(user);
         } catch (Throwable e) {
@@ -92,7 +88,7 @@ public class UserInfoController {
      */
     @PostMapping("/client/users")
     public List<UserInfo> clientUsers() {
-        return userInfoData.findByTypeAndOwnerId(UserInfo.USER_TYPE_CLIENT, AuthUtil.getUserId());
+        return userInfoData.findByType(UserInfo.USER_TYPE_CLIENT);
     }
 
     /**
@@ -101,9 +97,7 @@ public class UserInfoController {
     @PostMapping("/client/user/add")
     public void addClientUser(@RequestBody UserInfo user) throws Exception {
         user.setType(UserInfo.USER_TYPE_CLIENT);
-        user.setOwnerId(AuthUtil.getUserId());
         user.setRoles(Collections.singletonList(Constants.ROLE_CLIENT));
-        user.setCreateAt(System.currentTimeMillis());
         user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_CLIENT_USER));
         user = userInfoData.save(user);
 
@@ -113,7 +107,6 @@ public class UserInfoController {
                 .address("")
                 .deviceNum(0)
                 .spaceNum(0)
-//                .uid(user.getId())
                 .current(true)
                 .build());
 
@@ -122,8 +115,6 @@ public class UserInfoController {
             spaceData.save(Space.builder()
                     .homeId(home.getId())
                     .name(name)
-//                    .uid(user.getId())
-                    .createAt(System.currentTimeMillis())
                     .build());
         }
     }
@@ -142,9 +133,6 @@ public class UserInfoController {
         UserInfo oldUser = userInfoData.findById(user.getId());
         if (oldUser == null) {
             return;
-        }
-        if (!AuthUtil.getUserId().equals(oldUser.getOwnerId())) {
-            throw new BizException(ErrCode.UNAUTHORIZED_EXCEPTION);
         }
         ReflectUtil.copyNoNulls(user, oldUser);
         userInfoData.save(oldUser);

@@ -23,12 +23,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class SpaceDeviceVo {
 
-    private String id;
-
-    /**
-     * 关联用户id
-     */
-    private String uid;
+    private Long id;
 
     /**
      * 空间中的设备id
@@ -53,7 +48,7 @@ public class SpaceDeviceVo {
     /**
      * 空间ID
      */
-    private String spaceId;
+    private Long spaceId;
 
     /**
      * 空间名称
@@ -68,7 +63,7 @@ public class SpaceDeviceVo {
     /**
      * 设备属性
      */
-    private Map<String, ?> property = new HashMap<>();
+    private Map<String, Object> property = new HashMap<>();
 
     /**
      * 产品key

@@ -5,7 +5,6 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysAppBo;
 import cc.iotkit.system.dto.vo.SysAppVo;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -20,6 +19,16 @@ public interface ISysAppService {
      * 查询应用信息
      */
     SysAppVo queryById(Long id);
+
+    /**
+     * 根据appid查询应用信息
+     */
+    SysAppVo queryByAppId(String appId);
+
+    /**
+     * 根据appid查询应用信息是否存在
+     */
+    boolean checkAppIdUnique(String appId);
 
     /**
      * 查询应用信息列表
@@ -42,7 +51,7 @@ public interface ISysAppService {
     Boolean updateByBo(SysAppBo bo);
 
     /**
-     * 校验并批量删除应用信息信息
+     * 删除应用信息信息
      */
-    Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+    Boolean deleteById(Long id);
 }

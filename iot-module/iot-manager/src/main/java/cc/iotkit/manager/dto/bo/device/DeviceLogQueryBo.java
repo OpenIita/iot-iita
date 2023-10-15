@@ -23,12 +23,12 @@ import lombok.EqualsAndHashCode;
 @AutoMapper(target = DeviceLog.class, reverseConvertGenerate = false)
 public class DeviceLogQueryBo extends BaseDto {
 
-
     @ApiModelProperty(value="设备id")
     private String deviceId;
 
     @ApiModelProperty(value="类型")
     private String type;
+
     @ApiModelProperty(value="属性名")
     private String identifier;
 }

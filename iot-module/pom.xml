@@ -13,12 +13,12 @@
     <packaging>pom</packaging>
     <modules>
         <module>iot-system</module>
-        <module>iot-manager</module>
         <module>iot-rule-engine</module>
         <module>iot-message-notify</module>
         <module>iot-screen</module>
         <module>iot-openapi</module>
         <module>iot-plugin</module>
+        <module>iot-manager</module>
     </modules>
 
 </project>

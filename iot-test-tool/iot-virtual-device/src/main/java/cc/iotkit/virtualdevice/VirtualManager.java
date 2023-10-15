@@ -10,6 +10,7 @@
 package cc.iotkit.virtualdevice;
 
 import cc.iotkit.common.constant.Constants;
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.UniqueIdUtil;
@@ -18,7 +19,6 @@ import cc.iotkit.data.manager.IVirtualDeviceData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.VirtualDevice;
 import cc.iotkit.model.device.VirtualDeviceLog;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.mq.MqProducer;
 import cc.iotkit.plugin.core.thing.IThingService;
 import cc.iotkit.plugin.core.thing.actions.DeviceState;

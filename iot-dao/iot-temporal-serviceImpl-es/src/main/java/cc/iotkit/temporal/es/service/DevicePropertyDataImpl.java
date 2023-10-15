@@ -21,7 +21,6 @@ import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.document.Document;
@@ -56,7 +55,6 @@ public class DevicePropertyDataImpl implements IDevicePropertyData {
                                         .from(start, true).to(end, true))
                 )
                 .withSorts(new FieldSortBuilder("time").order(SortOrder.ASC))
-                .withPageable(Pageable.ofSize(size))
                 .build();
         SearchHits<DocDeviceProperty> result = template.search(query, DocDeviceProperty.class, IndexCoordinates.of(index));
         return result.getSearchHits().stream()

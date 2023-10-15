@@ -9,9 +9,9 @@
  */
 package cc.iotkit.manager.service;
 
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.data.manager.IThingModelData;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.model.product.ThingModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

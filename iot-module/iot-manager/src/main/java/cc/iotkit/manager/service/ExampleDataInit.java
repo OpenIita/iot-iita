@@ -153,6 +153,9 @@ public class ExampleDataInit implements SmartInitializingSingleton {
     @Autowired
     private ISysUserRoleData sysUserRoleData;
 
+    @Autowired
+    private ISysAppData sysAppData;
+
     @Override
     public void afterSingletonsInstantiated() {
         //等redis实例化后再执行
@@ -279,6 +282,9 @@ public class ExampleDataInit implements SmartInitializingSingleton {
         });
 
         initData("sys_user_role", sysUserRoleData, new TypeReference<List<SysUserRole>>() {
+        });
+
+        initData("sys_app", sysAppData, new TypeReference<List<SysApp>>() {
         });
     }
 

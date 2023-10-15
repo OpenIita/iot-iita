@@ -27,6 +27,12 @@ public class SysAppBo extends BaseDto {
     private Long id;
 
     /**
+     * 应用名称
+     */
+    @ApiModelProperty(value = "应用名称", required = true)
+    private String appName;
+
+    /**
      * appId
      */
     @NotBlank(message = "appId不能为空", groups = { AddGroup.class, EditGroup.class })

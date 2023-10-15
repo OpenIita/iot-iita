@@ -1,23 +1,34 @@
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.UserInfo;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.github.linpeilie.annotations.AutoMapping;
 import io.github.linpeilie.annotations.ReverseAutoMapping;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
+@NoArgsConstructor
 @Table(name = "user_info")
 @AutoMapper(target = UserInfo.class)
-public class TbUserInfo {
+@ApiModel(value = "用户信息表")
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+@EntityListeners(TenantListener.class)
+public class TbUserInfo extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -31,10 +42,10 @@ public class TbUserInfo {
     private String uid;
 
     /**
-     * 归属账号
+     * 租户编号
      */
-    @ApiModelProperty(value = "归属账号")
-    private String ownerId;
+    @ApiModelProperty(value = "租户编号")
+    private String tenantId;
 
     /**
      * 密钥（密码加密后的内容）
@@ -105,8 +116,5 @@ public class TbUserInfo {
     @ReverseAutoMapping(ignore = true)
     @AutoMapping(ignore = true)
     private String usePlatforms;
-
-    @ApiModelProperty(value="创建时间")
-    private Long createAt;
 
 }

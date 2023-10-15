@@ -9,10 +9,10 @@
  */
 package cc.iotkit.ruleengine.action.device;
 
-import cc.iotkit.common.service.DeviceService;
+import cc.iotkit.common.thing.DeviceService;
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.UniqueIdUtil;
-import cc.iotkit.model.device.message.ThingModelMessage;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

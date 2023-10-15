@@ -178,5 +178,18 @@
 
       "updateBy": null,
       "updateTime": null
-    }
+    },
+   {
+     "id": 452767971254341,
+     "tenantId": "452748015218757",
+     "parentId": 0,
+     "ancestors": "0",
+     "deptName": "测试租户有限公司",
+     "orderNum": null,
+     "leader": "test",
+     "phone": "18888888888",
+     "email": null,
+     "status": "0",
+     "delFlag": "0"
+   }
   ]

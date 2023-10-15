@@ -1,52 +1,75 @@
-version: '3'
+version: "3.4"
+
 services:
+  mysql:
+    container_name: iot-mysql
+    image: mysql:8
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-iotkit}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
+    volumes:
+      - mysql:/var/lib/mysql/
+
+
   redis:
-    image: redis:5.0.8
-    container_name: iotkit-ce-redis
+    container_name: iot-redis
+    image: redis:6-alpine
+    restart: unless-stopped
     ports:
-      - 6379:6379
+      - "6379:6379"
     volumes:
-      - "redis-volume:/data"
-    command: redis-server --appendonly yes
+      - redis:/data
+
+  server:
+    container_name: iot-server
+    build:
+      context: ./
+    image: iot-server
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
     environment:
-      - TZ=Asia/Shanghai
-  elasticsearch:
-    image: elasticsearch:7.12.0
-    container_name: iotkit-ce-elasticsearch
-    environment:
-      ES_JAVA_OPTS: -Djava.net.preferIPv4Stack=true -Xms1g -Xmx1g
-      transport.host: 0.0.0.0
-      discovery.type: single-node
-      bootstrap.memory_lock: "true"
-    ports:
-      - 9200:9200
-      - 9300:9300
-    volumes:
-      - "elasticsearch-volume:/usr/share/elasticsearch/data"
-  ui:
-    image: uncleregan/iotkit-ui:0.3.4
-    container_name: iotkit-ce-ui
-    ports:
-      - 80:80
-    links:
-      - iotkit:iotkit
-    volumes:
-      - "iotkit-volume:/usr/share/nginx/html/upload"
-  iotkit:
-    image: uncleregan/iotkit:0.3.4
-    container_name: iotkit-ce
-    restart: on-failure
-    ports:
-      - 8086:8086 # API端口
-      - 1883-1890:1883-1890 # 预留
-      - 8000-8010:8000-8010 # 预留
-    links:
-      - redis:redis
-      - elasticsearch:elasticsearch
+      # https://github.com/polovyivan/docker-pass-configs-to-container
+      SPRING_PROFILES_ACTIVE: local
+      JAVA_OPTS:
+        ${JAVA_OPTS:-
+        -Xms512m
+        -Xmx512m
+        -Djava.security.egd=file:/dev/./urandom
+        }
+      ARGS:
+        --spring.datasource.dynamic.datasource.master.url=${MASTER_DATASOURCE_URL:-jdbc:mysql://iot-mysql:3306/iotkit?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true}
+        --spring.datasource.dynamic.datasource.master.username=${MASTER_DATASOURCE_USERNAME:-root}
+        --spring.datasource.dynamic.datasource.master.password=${MASTER_DATASOURCE_PASSWORD:-123456}
+        --spring.datasource.dynamic.datasource.slave.url=${SLAVE_DATASOURCE_URL:-jdbc:mysql://iot-mysql:3306/iotkit?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true}
+        --spring.datasource.dynamic.datasource.slave.username=${SLAVE_DATASOURCE_USERNAME:-root}
+        --spring.datasource.dynamic.datasource.slave.password=${SLAVE_DATASOURCE_PASSWORD:-123456}
+        --spring.redis.host=${REDIS_HOST:-iot-redis}
     depends_on:
-      - elasticsearch
       - redis
+
+  admin:
+    container_name: iot-admin
+    build:
+      context: ./iot-ui-admin
+      args:
+        NODE_ENV:
+          ENV=${NODE_ENV:-production}
+          PUBLIC_PATH=${PUBLIC_PATH:-/}
+          VUE_APP_TITLE=${VUE_APP_TITLE:-openiita管理系统}
+    image: iot-admin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - server
+
 volumes:
-  redis-volume:
-  elasticsearch-volume:
-  iotkit-volume:
+  mysql:
+    driver: local
+  redis:
+    driver: local

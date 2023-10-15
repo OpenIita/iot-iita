@@ -5,7 +5,6 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysTenantBo;
 import cc.iotkit.system.dto.vo.SysTenantVo;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -56,9 +55,9 @@ public interface ISysTenantService {
     void checkTenantAllowed(String tenantId);
 
     /**
-     * 校验并批量删除租户信息
+     * 删除租户信息
      */
-    void deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+    void deleteById(Long id);
 
     /**
      * 校验企业名称是否唯一

@@ -3,6 +3,7 @@ package cc.iotkit.data.service;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.UserConstants;
+import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
@@ -172,9 +173,25 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
         TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
                 .where(PredicateBuilder.instance()
                         .and(tbSysUser.userName.eq(username))
-                        .and(tbSysUser.tenantId.eq(tenantId))
+                        .and(TenantHelper.isEnable(),() -> tbSysUser.tenantId.eq(tenantId))
                         .build()).fetchOne();
-        return MapstructUtils.convert(ret, SysUser.class);
+        if(Objects.nonNull(ret)){
+            SysUser convert = MapstructUtils.convert(ret, SysUser.class);
+            Long deptId = ret.getDeptId();
+            if (Objects.nonNull(deptId)) {
+                // 获取部门信息
+                SysDept sysDept = sysDeptData.findById(deptId);
+                convert.setDept(sysDept);
+                // 获取角色信息
+                List<SysRole> sysRoles = sysRoleData.findByUserId(ret.getId());
+
+                convert.setRoles(sysRoles);
+            }
+            return MapstructUtils.convert(ret, SysUser.class);
+        }else{
+            return null;
+        }
+
     }
 
     @Override

@@ -96,6 +96,7 @@ public class SysConfigDataImpl implements ISysConfigData, IJPACommData<SysConfig
     public List<SysConfig> findAllByCondition(SysConfig data) {
         Predicate predicate = PredicateBuilder.instance()
                 .and(StringUtils.isNotEmpty(data.getConfigKey()), () -> tbSysConfig.configKey.eq(data.getConfigKey()))
+                .and(StringUtils.isNotEmpty(data.getTenantId()), () -> tbSysConfig.tenantId.eq(data.getTenantId()))
                 .build();
         Iterator<TbSysConfig> iterator = baseRepository.findAll(predicate).iterator();
         return MapstructUtils.convert(IteratorUtils.toList(iterator), SysConfig.class);

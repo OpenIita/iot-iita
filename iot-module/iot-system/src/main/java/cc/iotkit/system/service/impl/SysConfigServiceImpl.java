@@ -6,8 +6,6 @@ import cc.iotkit.common.constant.CacheNames;
 import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
-import cc.iotkit.common.service.ConfigService;
-import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StringUtils;
@@ -31,7 +29,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Service
-public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
+public class SysConfigServiceImpl implements ISysConfigService {
 
     @Autowired
     private ISysConfigData sysConfigData;
@@ -177,7 +175,6 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      * @param configKey 参数 key
      * @return 参数值
      */
-    @Override
     public String getConfigValue(String configKey) {
         return SpringUtils.getAopProxy(this).selectConfigByKey(configKey);
     }

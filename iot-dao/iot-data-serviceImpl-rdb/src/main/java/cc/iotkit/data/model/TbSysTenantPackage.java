@@ -8,10 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 租户套餐对象 sys_tenant_package
@@ -42,6 +39,7 @@ public class TbSysTenantPackage extends BaseEntity {
     /**
      * 关联菜单id
      */
+    @Column(columnDefinition = "text")
     @ApiModelProperty(value = "关联菜单id")
     private String menuIds;
     /**

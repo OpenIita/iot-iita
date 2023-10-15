@@ -2,12 +2,10 @@ package cc.iotkit.web.controller;
 
 import cc.iotkit.common.api.Request;
 import cc.iotkit.common.exception.BizException;
-import cc.iotkit.common.undefined.EmailLoginBody;
-import cc.iotkit.common.undefined.LoginBody;
-import cc.iotkit.common.undefined.RegisterBody;
-import cc.iotkit.common.undefined.SmsLoginBody;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.system.dto.LoginBody;
+import cc.iotkit.system.dto.RegisterBody;
 import cc.iotkit.system.dto.bo.SysTenantBo;
 import cc.iotkit.system.dto.vo.SysTenantVo;
 import cc.iotkit.system.service.ISysConfigService;
@@ -71,37 +69,6 @@ public class AuthController {
         return loginVo;
     }
 
-    /**
-     * 短信登录
-     *
-     * @param body 登录信息
-     * @return 结果
-     */
-    @ApiOperation("短信登录")
-    @PostMapping("/smsLogin")
-    public LoginVo smsLogin(@Validated @RequestBody SmsLoginBody body) {
-        LoginVo loginVo = new LoginVo();
-        // 生成令牌
-        String token = loginService.smsLogin(body.getTenantId(), body.getPhonenumber(), body.getSmsCode());
-        loginVo.setToken(token);
-        return loginVo;
-    }
-
-    /**
-     * 邮件登录
-     *
-     * @param body 登录信息
-     * @return 结果
-     */
-    @ApiOperation("邮件登录")
-    @PostMapping("/emailLogin")
-    public LoginVo emailLogin(@Validated @RequestBody EmailLoginBody body) {
-        LoginVo loginVo = new LoginVo();
-        // 生成令牌
-        String token = loginService.emailLogin(body.getTenantId(), body.getEmail(), body.getEmailCode());
-        loginVo.setToken(token);
-        return loginVo;
-    }
 
     /**
      * 退出登录
