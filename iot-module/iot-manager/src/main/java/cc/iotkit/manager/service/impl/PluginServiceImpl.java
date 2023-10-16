@@ -6,6 +6,7 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.common.utils.file.FileUtils;
 import cc.iotkit.data.manager.IPluginInfoData;
 import cc.iotkit.manager.dto.bo.plugin.PluginInfoBo;
 import cc.iotkit.manager.dto.vo.plugin.PluginInfoVo;
@@ -55,6 +56,8 @@ public class PluginServiceImpl implements IPluginService {
                         pluginOperator.stop(pluginId);
                     }
                     pluginOperator.uninstall(pluginId, true, false);
+                    //兼容相同版本包，先删除，再上传
+                    FileUtils.del(pluginInfo.getPluginDescriptor().getPluginPath());
                 }
             }
 
@@ -147,6 +150,10 @@ public class PluginServiceImpl implements IPluginService {
         if (old == null) {
             throw new BizException(ErrCode.DATA_NOT_EXIST);
         }
+        if (StringUtils.isBlank(old.getFile())) {
+            throw new BizException(ErrCode.DATA_BLANK, "插件包为空");
+        }
+
         String pluginId = old.getPluginId();
 
         com.gitee.starblues.core.PluginInfo pluginInfo = pluginOperator.getPluginInfo(pluginId);
