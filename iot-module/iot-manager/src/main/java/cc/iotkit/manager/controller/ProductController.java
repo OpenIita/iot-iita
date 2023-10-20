@@ -124,7 +124,6 @@ public class ProductController {
     }
 
     @ApiOperation("品类编辑")
-    @SaCheckRole("iot_admin")
     @SaCheckPermission("iot:category:edit")
     @PostMapping("/category/edit")
     public boolean saveCategory(@Validated @RequestBody Request<CategoryBo> req) {
@@ -133,7 +132,6 @@ public class ProductController {
     }
 
     @ApiOperation("删除品类")
-    @SaCheckRole("iot_admin")
     @SaCheckPermission("iot:category:remove")
     @PostMapping("/category/delete")
     public boolean delCategory(@Validated @RequestBody Request<String> req) {
