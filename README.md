@@ -79,7 +79,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 2、将iot-data-serviceImpl-rdb/pom.xml中的mysql驱动注释放开
 
-3、application.yml 注释掉内置H2数据库，打开mysql配置注释
+3、application.yml 注释掉内置H2数据库，打开mysql配置注释（先建好库）
 
 ##### es切换为TDengine(版本：3.x)方法
 1、删掉.init和关系数据库数据
