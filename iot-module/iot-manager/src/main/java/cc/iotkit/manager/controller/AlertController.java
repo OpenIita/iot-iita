@@ -41,21 +41,21 @@ public class AlertController {
     @SaCheckPermission("iot:alertConfig:add")
     @PostMapping("/createAlertConfig")
     public AlertConfig createAlertConfig(@RequestBody @Validated Request<AlertConfig> request) {
-        return alertService.createAlertConfig(request);
+        return alertService.createAlertConfig(request.getData());
     }
 
     @ApiOperation("编辑告警中心配置")
     @SaCheckPermission("iot:alertConfig:edit")
     @PostMapping("/updateAlertConfig")
     public AlertConfig updateAlertConfig(@RequestBody @Validated Request<AlertConfig> request) {
-        return alertService.updateAlertConfig(request);
+        return alertService.updateAlertConfig(request.getData());
     }
 
     @ApiOperation("删除告警中心配置")
     @SaCheckPermission("iot:alertConfig:remove")
     @PostMapping("/deleteAlertConfigById")
-    public Boolean deleteAlertConfigById(@RequestBody @Validated Request<Long> request) {
-        return alertService.deleteAlertConfigById(request);
+    public void deleteAlertConfigById(@RequestBody @Validated Request<Long> request) {
+        alertService.deleteAlertConfigById(request.getData());
     }
 
     @ApiOperation("查询告警中心配置分页")

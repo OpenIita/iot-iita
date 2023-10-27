@@ -72,7 +72,6 @@ public class RuleEngineController {
     public boolean resumeRule(@Validated @RequestBody Request<String> request) {
         String ruleId = request.getData();
         return ruleEngineService.resumeRule(ruleId);
-
     }
 
     @ApiOperation("删除规则")

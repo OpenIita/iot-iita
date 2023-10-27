@@ -23,7 +23,7 @@ import java.util.List;
 @Data
 public class AlertAction implements Action<AlertService<?>> {
 
-    public static final String TYPE = "http";
+    public static final String TYPE = "alarm";
 
     private String type;
 

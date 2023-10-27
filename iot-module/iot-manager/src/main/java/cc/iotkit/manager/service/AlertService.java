@@ -29,17 +29,16 @@ public class AlertService {
     @Autowired
     private IAlertRecordData alertRecordData;
 
-    public AlertConfig createAlertConfig(Request<AlertConfig> request) {
-        return alertConfigData.save(request.getData());
+    public AlertConfig createAlertConfig(AlertConfig alertConfig) {
+        return alertConfigData.save(alertConfig);
     }
 
-    public AlertConfig updateAlertConfig(Request<AlertConfig> request) {
-        return alertConfigData.save(request.getData());
+    public AlertConfig updateAlertConfig(AlertConfig alertConfig) {
+        return alertConfigData.save(alertConfig);
     }
 
-    public Boolean deleteAlertConfigById(Request<Long> request) {
-         alertConfigData.deleteById(request.getData());
-        return Boolean.TRUE;
+    public void deleteAlertConfigById(Long id) {
+         alertConfigData.deleteById(id);
     }
 
     public Paging<AlertConfig> selectAlertConfigPage(PageRequest<AlertConfig> request) {

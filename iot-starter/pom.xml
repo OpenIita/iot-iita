@@ -54,10 +54,6 @@
             <groupId>cc.iotkit</groupId>
             <artifactId>iot-openapi</artifactId>
         </dependency>
-        <!--   <dependency>
-             <groupId>cc.iotkit</groupId>
-             <artifactId>iot-baetyl</artifactId>
-           </dependency>-->
 
         <dependency>
             <groupId>cc.iotkit</groupId>

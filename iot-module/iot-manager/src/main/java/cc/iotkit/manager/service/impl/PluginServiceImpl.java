@@ -82,6 +82,16 @@ public class PluginServiceImpl implements IPluginService {
                 log.info("configJson:{}", configJson);
             }
 
+            //读取script.js脚本
+            String scriptFile = "classes/script.js";
+            JarEntry scriptEntity = jarFile.getJarEntry(scriptFile);
+            String script = "";
+            if (scriptEntity != null) {
+                //读取脚本文件
+                script = IoUtil.read(jarFile.getInputStream(scriptEntity), Charset.defaultCharset());
+                log.info("script:{}", script);
+            }
+
             PluginState pluginState = pluginInfo.getPluginState();
             if (pluginState == PluginState.STARTED) {
                 plugin.setState(PluginInfo.STATE_RUNNING);
@@ -89,6 +99,7 @@ public class PluginServiceImpl implements IPluginService {
             plugin.setPluginId(pluginInfo.getPluginId());
             plugin.setFile(file.getOriginalFilename());
             plugin.setConfigSchema(configJson);
+            plugin.setScript(script);
 
             PluginDescriptor pluginDescriptor = pluginInfo.getPluginDescriptor();
             plugin.setVersion(pluginDescriptor.getPluginVersion());
