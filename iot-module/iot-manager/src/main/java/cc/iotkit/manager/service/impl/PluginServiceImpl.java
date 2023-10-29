@@ -92,10 +92,7 @@ public class PluginServiceImpl implements IPluginService {
                 log.info("script:{}", script);
             }
 
-            PluginState pluginState = pluginInfo.getPluginState();
-            if (pluginState == PluginState.STARTED) {
-                plugin.setState(PluginInfo.STATE_RUNNING);
-            }
+            plugin.setState(PluginInfo.STATE_STOPPED);
             plugin.setPluginId(pluginInfo.getPluginId());
             plugin.setFile(file.getOriginalFilename());
             plugin.setConfigSchema(configJson);
@@ -105,6 +102,9 @@ public class PluginServiceImpl implements IPluginService {
             plugin.setVersion(pluginDescriptor.getPluginVersion());
             plugin.setDescription(pluginDescriptor.getDescription());
             pluginInfoData.save(plugin);
+
+            //默认停止
+            pluginOperator.stop(pluginId);
         } catch (Exception e) {
             throw new BizException(ErrCode.PLUGIN_INSTALL_FAILED, e);
         }
@@ -166,14 +166,15 @@ public class PluginServiceImpl implements IPluginService {
         }
 
         String pluginId = old.getPluginId();
-
         com.gitee.starblues.core.PluginInfo pluginInfo = pluginOperator.getPluginInfo(pluginId);
-        if (state.equals(PluginInfo.STATE_RUNNING) && pluginInfo != null && pluginInfo.getPluginState() != PluginState.STARTED) {
-            //停止插
-            pluginOperator.start(pluginId);
-        } else if (state.equals(PluginInfo.STATE_STOPPED) && pluginInfo != null && pluginInfo.getPluginState() == PluginState.STARTED) {
-            //停止插件
-            pluginOperator.stop(pluginId);
+        if (pluginInfo != null) {
+            if (state.equals(PluginInfo.STATE_RUNNING) && pluginInfo.getPluginState() != PluginState.STARTED) {
+                //启动插件
+                pluginOperator.start(pluginId);
+            } else if (state.equals(PluginInfo.STATE_STOPPED) && pluginInfo.getPluginState() == PluginState.STARTED) {
+                //停止插件
+                pluginOperator.stop(pluginId);
+            }
         }
 
         old.setState(state);
