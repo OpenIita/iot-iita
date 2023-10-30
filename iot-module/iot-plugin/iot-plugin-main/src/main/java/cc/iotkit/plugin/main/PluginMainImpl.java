@@ -67,17 +67,13 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
     @Autowired
     private MqProducer<ThingModelMessage> producer;
 
-    private static final Map<String, IScriptEngine> SCRIPT_ENGINE_MAP = new HashMap<>();
-
     public IScriptEngine initScriptEngine(String pluginId) {
         PluginInfo pluginInfo = pluginInfoData.findByPluginId(pluginId);
         if (pluginInfo == null) {
-            SCRIPT_ENGINE_MAP.put(pluginId, null);
             return null;
         }
         String script = pluginInfo.getScript();
         if (StringUtils.isBlank(script)) {
-            SCRIPT_ENGINE_MAP.put(pluginId, null);
             return null;
         }
 
@@ -88,7 +84,7 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
 
     @Override
     public IScriptEngine getScriptEngine(String pluginId) {
-        return SCRIPT_ENGINE_MAP.put(pluginId, initScriptEngine(pluginId));
+        return initScriptEngine(pluginId);
     }
 
     @Override

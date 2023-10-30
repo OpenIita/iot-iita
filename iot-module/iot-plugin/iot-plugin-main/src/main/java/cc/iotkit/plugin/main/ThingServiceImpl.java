@@ -155,6 +155,9 @@ public class ThingServiceImpl implements IThingService {
         if (device != null) {
             log.info("device already registered");
             device.setModel(register.getModel());
+            device.setProductKey(register.getProductKey());
+            device.setSecret(RandomStringUtils.randomAlphabetic(16));
+            deviceInfoData.save(device);
         } else {
             //不存在,注册新设备
             device = new DeviceInfo();

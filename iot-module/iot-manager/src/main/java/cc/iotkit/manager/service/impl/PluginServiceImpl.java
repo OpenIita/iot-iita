@@ -92,7 +92,10 @@ public class PluginServiceImpl implements IPluginService {
                 log.info("script:{}", script);
             }
 
-            plugin.setState(PluginInfo.STATE_STOPPED);
+            PluginState pluginState = pluginInfo.getPluginState();
+            if (pluginState == PluginState.STARTED) {
+                plugin.setState(PluginInfo.STATE_RUNNING);
+            }
             plugin.setPluginId(pluginInfo.getPluginId());
             plugin.setFile(file.getOriginalFilename());
             plugin.setConfigSchema(configJson);
@@ -102,9 +105,6 @@ public class PluginServiceImpl implements IPluginService {
             plugin.setVersion(pluginDescriptor.getPluginVersion());
             plugin.setDescription(pluginDescriptor.getDescription());
             pluginInfoData.save(plugin);
-
-            //默认停止
-            pluginOperator.stop(pluginId);
         } catch (Exception e) {
             throw new BizException(ErrCode.PLUGIN_INSTALL_FAILED, e);
         }
