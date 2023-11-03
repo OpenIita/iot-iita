@@ -192,10 +192,6 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public Paging<ProductVo> selectPageList(PageRequest<ProductBo> request) {
-//        if (!AuthUtil.isAdmin()) {
-//            return productData.findByUid(AuthUtil.getUserId(), request.getPageNum(), request.getPageSize()).to(ProductVo.class);
-//        }
-
         return productData.findAll(request.to(Product.class)).to(ProductVo.class);
     }
 

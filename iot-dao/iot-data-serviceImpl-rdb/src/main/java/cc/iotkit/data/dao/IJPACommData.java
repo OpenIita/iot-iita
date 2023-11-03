@@ -9,6 +9,7 @@ import cc.iotkit.model.Id;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -127,12 +128,13 @@ public interface IJPACommData<T extends Id<ID>, ID> extends ICommonData<T, ID> {
         return null;
     }
 
-
     default Example genExample(T data) {
         if (Objects.isNull(data)) {
             return null;
         }
-        return Example.of(MapstructUtils.convert(data, getJpaRepositoryClass()));
+        return Example.of(MapstructUtils.convert(data, getJpaRepositoryClass()),
+                ExampleMatcher.matching().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+        );
     }
 
 

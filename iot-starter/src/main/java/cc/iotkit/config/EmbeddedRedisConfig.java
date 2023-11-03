@@ -9,8 +9,10 @@
  */
 package cc.iotkit.config;
 
+import lombok.extern.slf4j.Slf4j;
 import redis.embedded.RedisServer;
 
+@Slf4j
 public class EmbeddedRedisConfig {
 
     public static boolean embeddedEnable() {
@@ -28,7 +30,14 @@ public class EmbeddedRedisConfig {
         } else {
             redisServer = new RedisServer();
         }
-        redisServer.start();
+        try {
+            redisServer.start();
+        } catch (Exception e) {
+            if(e.getMessage().contains("Address already in use")){
+                throw new RuntimeException("redis端口被占用，请先停止本地的redis服务");
+            }
+            log.error("start redis server failed", e);
+        }
     }
 
 }
