@@ -7,6 +7,7 @@ import cc.iotkit.data.ICommonData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.model.Id;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -21,7 +22,7 @@ import java.util.Optional;
  * @Version: V1.0
  * @Description: 基础数据操作接口
  */
-public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID> {
+public interface IJPACommData<T extends Id<ID>, ID> extends ICommonData<T, ID> {
 
 
     JpaRepository getBaseRepository();
@@ -73,15 +74,15 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
     }
 
     @Override
-    default Paging<T>  findAll(PageRequest<T> pageRequest) {
+    default Paging<T> findAll(PageRequest<T> pageRequest) {
         Example example = genExample(pageRequest.getData());
         Page<T> all = null;
-        if(Objects.isNull(example)){
+        if (Objects.isNull(example)) {
             all = getBaseRepository().findAll(PageBuilder.toPageable(pageRequest));
-        }else{
-            all =getBaseRepository().findAll(example, PageBuilder.toPageable(pageRequest));
+        } else {
+            all = getBaseRepository().findAll(example, PageBuilder.toPageable(pageRequest));
         }
-        return  PageBuilder.toPaging(all, getTClass());
+        return PageBuilder.toPaging(all, getTClass());
     }
 
     /**
@@ -91,11 +92,11 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
     default List<T> findAllByCondition(T data) {
         Example example = genExample(data);
         List all = null;
-        if(Objects.isNull(example)){
-             all = getBaseRepository().findAll();
+        if (Objects.isNull(example)) {
+            all = getBaseRepository().findAll();
 
-        }else{
-             all = getBaseRepository().findAll(example);
+        } else {
+            all = getBaseRepository().findAll(example);
 
         }
         return MapstructUtils.convert(all, getTClass());
@@ -109,7 +110,7 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
         Example example = genExample(data);
 
         Optional one = getBaseRepository().findOne(example);
-        if(one.isPresent()){
+        if (one.isPresent()) {
             return (T) MapstructUtils.convert(one.get(), getTClass());
         }
         return null;
@@ -117,11 +118,12 @@ public  interface IJPACommData< T extends Id<ID>, ID> extends ICommonData<T , ID
 
 
     default Example genExample(T data) {
-        if(Objects.isNull(data)){
+        if (Objects.isNull(data)) {
             return null;
         }
-        return Example.of(MapstructUtils.convert(data, getJpaRepositoryClass()));
+        return Example.of(MapstructUtils.convert(data, getJpaRepositoryClass()),
+                ExampleMatcher.matching().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+        );
     }
-
 
 }
