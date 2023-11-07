@@ -24,6 +24,8 @@ import cc.iotkit.model.device.message.ThingModelMessage;
 import cc.iotkit.script.IScriptEngine;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +37,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @Slf4j
-@Data
+@Getter
+@Setter
 public class DeviceMessageHandler implements IMessageHandler {
 
 
