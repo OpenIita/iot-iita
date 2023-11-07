@@ -3,10 +3,7 @@ package cc.iotkit.plugin.core.thing.actions.up;
 
 import cc.iotkit.plugin.core.thing.actions.AbstractAction;
 import cc.iotkit.plugin.core.thing.actions.ActionType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -19,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@ToString(callSuper = true)
 public class DeviceRegister extends AbstractAction {
 
     /**

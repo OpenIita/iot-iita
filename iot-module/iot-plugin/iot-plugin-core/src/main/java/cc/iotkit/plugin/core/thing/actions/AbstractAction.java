@@ -1,6 +1,7 @@
 package cc.iotkit.plugin.core.thing.actions;
 
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -8,6 +9,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
+@ToString(callSuper = true)
 public abstract class AbstractAction implements IDeviceAction {
 
     protected String id;

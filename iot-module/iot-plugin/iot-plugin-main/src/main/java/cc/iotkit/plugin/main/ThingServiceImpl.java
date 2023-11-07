@@ -50,10 +50,16 @@ public class ThingServiceImpl implements IThingService {
     @Override
     public ActionResult post(String pluginId, IDeviceAction action) {
         try {
-            //添加设备路由
-            deviceRouter.putRouter(action.getDeviceName(), new PluginRouter(IPluginMain.MAIN_ID, pluginId));
+            String deviceName = action.getDeviceName();
 
-            DeviceInfo device = getDevice(action.getDeviceName());
+            //添加设备路由
+            deviceRouter.putRouter(deviceName, new PluginRouter(IPluginMain.MAIN_ID, pluginId));
+
+            DeviceInfo device = getDevice(deviceName);
+            if (device == null) {
+                log.warn("device:{} is not found.", deviceName);
+            }
+
             ActionType type = action.getType();
             switch (type) {
                 case REGISTER:
