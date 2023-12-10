@@ -15,14 +15,18 @@ import cc.iotkit.model.plugin.PluginInfo;
 import cn.hutool.core.io.IoUtil;
 import com.gitee.starblues.core.PluginState;
 import com.gitee.starblues.core.descriptor.PluginDescriptor;
+import com.gitee.starblues.integration.AutoIntegrationConfiguration;
 import com.gitee.starblues.integration.operator.PluginOperator;
 import com.gitee.starblues.integration.operator.upload.UploadParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -32,6 +36,9 @@ import java.util.jar.JarFile;
 @Slf4j
 @Service
 public class PluginServiceImpl implements IPluginService {
+
+    @Autowired
+    private AutoIntegrationConfiguration autoIntegrationConfiguration;
 
     @Autowired
     private IPluginInfoData pluginInfoData;
@@ -58,6 +65,17 @@ public class PluginServiceImpl implements IPluginService {
                     pluginOperator.uninstall(pluginId, true, false);
                     //兼容相同版本包，先删除，再上传
                     FileUtils.del(pluginInfo.getPluginDescriptor().getPluginPath());
+                } else {
+                    //删除对应插件的所有包
+                    for (String pluginPath : autoIntegrationConfiguration.getPluginPath()) {
+                        List<String> fileNames = FileUtils.listFileNames(new File(pluginPath).getAbsolutePath());
+                        for (String fileName : fileNames) {
+                            if (!fileName.startsWith(pluginId)) {
+                                continue;
+                            }
+                            FileUtils.del(new File(pluginPath + "/" + fileName));
+                        }
+                    }
                 }
             }
 
@@ -175,10 +193,16 @@ public class PluginServiceImpl implements IPluginService {
                 //停止插件
                 pluginOperator.stop(pluginId);
             }
+        } else {
+            //已经停止，未获取到插件
+            if (PluginInfo.STATE_RUNNING.equals(state)) {
+                throw new BizException(ErrCode.PLUGIN_INSTALL_FAILED, "插件启动失败");
+            }
         }
 
         old.setState(state);
         pluginInfoData.save(old);
+
     }
 
 }

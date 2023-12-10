@@ -7,7 +7,6 @@ import cc.iotkit.common.thing.DeviceService;
 import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.thing.ThingService;
 import cc.iotkit.common.utils.JsonUtils;
-import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IPluginInfoData;
 import cc.iotkit.data.manager.IProductData;
@@ -21,8 +20,8 @@ import cc.iotkit.plugin.core.thing.actions.ActionResult;
 import cc.iotkit.plugin.core.thing.actions.down.PropertyGet;
 import cc.iotkit.plugin.core.thing.actions.down.PropertySet;
 import cc.iotkit.plugin.core.thing.actions.down.ServiceInvoke;
+import cc.iotkit.plugin.main.script.PluginScriptServer;
 import cc.iotkit.script.IScriptEngine;
-import cc.iotkit.script.ScriptEngineFactory;
 import com.gitee.starblues.integration.user.PluginUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,29 +66,16 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
     @Autowired
     private MqProducer<ThingModelMessage> producer;
 
-    public IScriptEngine initScriptEngine(String pluginId) {
-        PluginInfo pluginInfo = pluginInfoData.findByPluginId(pluginId);
-        if (pluginInfo == null) {
-            return null;
-        }
-        String script = pluginInfo.getScript();
-        if (StringUtils.isBlank(script)) {
-            return null;
-        }
-
-        IScriptEngine scriptEngine = ScriptEngineFactory.getScriptEngine("js");
-        scriptEngine.setScript(script);
-        return scriptEngine;
-    }
+    @Autowired
+    private PluginScriptServer pluginScriptServer;
 
     @Override
     public IScriptEngine getScriptEngine(String pluginId) {
-        return initScriptEngine(pluginId);
+        return pluginScriptServer.getScriptEngine(pluginId);
     }
 
     @Override
     public void reloadScript(String pluginId) {
-        initScriptEngine(pluginId);
     }
 
     @Override

@@ -35,8 +35,7 @@ public class LocalPluginScript implements IPluginScript {
             return null;
         }
 
-        scriptEngine = ScriptEngineFactory.getScriptEngine("js");
-        scriptEngine.setScript(script);
+        scriptEngine = ScriptEngineFactory.getJsEngine(script);
         return scriptEngine;
     }
 
