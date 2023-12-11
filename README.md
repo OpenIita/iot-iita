@@ -135,7 +135,9 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 #### 服务器部署
 
-执行maven打包在iot-starter模块中将打包后的iot-starter.xx.zip上传到服务器，解压后进入bin目录，执行start.sh或start.bat启动。
+执行maven打包在iot-starter模块中将打包后的iot-starter.xx.zip上传到服务器  
+解压后先执行： java -jar lib/iot-start.xxx.jar，确认成功后续可使用  bin/start.sh或bin/start.bat启动。
+
 
 
 #### 文档
