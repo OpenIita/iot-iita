@@ -93,52 +93,17 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 2、application.xml中打开rocketmq配置
 
-#### 项目结构
-```
-
-├data	初始化数据
-│  ├components
-│  ├converters
-│  ├init
-├doc
-├docker-compose
-├iot-common	基础框架
-│  ├iot-common-core
-│  ├iot-common-dao
-│  ├iot-common-doc
-│  ├iot-common-excel
-│  ├iot-common-log
-│  ├iot-common-oss
-│  ├iot-common-redis
-│  ├iot-common-satoken
-│  ├iot-common-tenant
-│  ├iot-common-web
-│  ├iot-common-websocket
-│  ├iot-message-bus
-│  ├iot-script-engine
-├iot-module	业务模块
-│  ├iot-generator	代码生成
-│  ├iot-manager	管理业务
-│  ├iot-message-notify	消息转发
-│  ├iot-plugin-core	插件包
-│  ├iot-rule-engine	规则引擎
-│  ├iot-screen	数据大屏
-│  ├iot-system	通用菜单权限管理
-├iot-starter	启动包
-├iot-test-tool	测试模块
-│  ├iot-test-mqtt
-│  ├iot-virtual-device
-
-```
 
 #### 运行步骤
 1、安装jdk11
 
-2、clone代码，在idea中导入项目
+2、clone代码([核心库](https://gitee.com/open-iita/iot-iita-core),[主项目库](https://gitee.com/open-iita/iotkit-parent),[插件库](https://gitee.com/open-iita/iot-iita-plugins))，在idea中导入项目
 
-3、在iot-starter模块的Application类上右键运行
+3、先install核心库，在主项目库的iot-starter模块的Application类上右键运行
 
 4、若出现报错，可能是数据没有初始化完或重复初始化，把项目根目录下.init文件和data/iotkit.xx文件删除后重启
+
+5、插件使用说明见：[插件使用说明](https://iotkit-open-source.gitee.io/document/pages/plugin/howtouse/)
 
 在配置好相应的jdk11环境后，推荐使用idea拉取代码，等待项目加载完成以后，先在Terminal里执行mvn clean install，然后在idea的maven操作框上点击下刷新
 ![1](doc/image-20230702173737805.png)
@@ -170,7 +135,9 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 #### 服务器部署
 
-执行maven打包在iot-starter模块中将打包后的iot-starter.xx.zip上传到服务器，解压后进入bin目录，执行start.sh或start.bat启动。
+执行maven打包在iot-starter模块中将打包后的iot-starter.xx.zip上传到服务器  
+解压后先执行： java -jar lib/iot-start.xxx.jar，确认成功后续可使用  bin/start.sh或bin/start.bat启动。
+
 
 
 #### 文档
@@ -189,16 +156,4 @@ http://iotkit-open-source.gitee.io/document/
 微信群(添加我微信备注"进群"):
 
 ![输入图片说明](doc/ma.png) 
-
-
-#### 开源生态
-
-1. [mybatis-plus版数据服务](https://gitee.com/openiot/iotkit-parent-mybatis)（直接替换iot-data-serviceImpl-rdb就能从jpa切换成mybatis-plus）
-
-
-### 项目规划
-
-见：《[开源项目管理](https://open-iita.feishu.cn/base/G4owbWqkbaoI0LsYVnWcreXVnnc)》
-
-![输入图片说明](https://foruda.gitee.com/images/1686571717085038365/f1bd636b_504690.png "proj.png")
 
