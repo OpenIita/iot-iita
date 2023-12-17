@@ -72,12 +72,9 @@ public class VertxTcpClient {
     }
 
     public void sendMessage(Buffer buffer) {
-        log.info("wirte data:{}", buffer.toString());
         socket.write(buffer, r -> {
             keepAlive();
-            if (r.succeeded()) {
-                log.info("client msg send success");
-            } else {
+            if (!r.succeeded()) {
                 log.error("client msg send failed", r.cause());
             }
         });

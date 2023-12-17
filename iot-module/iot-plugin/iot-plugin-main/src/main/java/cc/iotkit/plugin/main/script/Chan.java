@@ -1,6 +1,5 @@
 package cc.iotkit.plugin.main.script;
 
-import cc.iotkit.common.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.locks.LockSupport;
@@ -34,7 +33,6 @@ public class Chan<T> {
         if (t == null) {
             return;
         }
-        log.debug("put message data:{}", JsonUtils.toJsonString(data));
         LockSupport.unpark(t);
     }
 

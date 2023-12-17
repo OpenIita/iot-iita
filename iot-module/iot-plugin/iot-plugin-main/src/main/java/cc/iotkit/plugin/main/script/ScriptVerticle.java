@@ -1,5 +1,6 @@
 package cc.iotkit.plugin.main.script;
 
+import cc.iotkit.common.utils.CodecUtil;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.manager.IPluginInfoData;
 import cc.iotkit.model.plugin.PluginInfo;
@@ -15,12 +16,14 @@ import io.vertx.core.parsetools.RecordParser;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -29,6 +32,8 @@ public class ScriptVerticle extends AbstractVerticle {
     private final Map<String, VertxTcpClient> clientMap = new ConcurrentHashMap<>();
 
     private static final Map<String, IScriptEngine> PLUGIN_SCRIPT_ENGINES = new HashMap<>();
+
+    private final Map<String, String> pluginScripts = new HashMap<>();
 
     @Setter
     private long keepAliveTimeout = Duration.ofSeconds(30).toMillis();
@@ -46,6 +51,9 @@ public class ScriptVerticle extends AbstractVerticle {
             return null;
         }
 
+        //缓存脚本md5，用于判断是否需要更新脚本
+        pluginScripts.put(pluginId, CodecUtil.md5Str(script));
+
         IScriptEngine jsEngine = ScriptEngineFactory.getJsEngine(script);
         PLUGIN_SCRIPT_ENGINES.put(pluginId, ScriptEngineFactory.getJsEngine(script));
         return jsEngine;
@@ -56,6 +64,27 @@ public class ScriptVerticle extends AbstractVerticle {
             return initScriptEngine(pluginId);
         }
         return PLUGIN_SCRIPT_ENGINES.get(pluginId);
+    }
+
+    @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.SECONDS)
+    public void checkScriptUpdate() {
+        //定时检查脚本是否需要更新
+        pluginScripts.forEach((k, v) -> {
+            PluginInfo pluginInfo = pluginInfoData.findByPluginId(k);
+            if (pluginInfo == null) {
+                return;
+            }
+            String md5 = CodecUtil.md5Str(pluginInfo.getScript());
+            if (v.equals(md5)) {
+                return;
+            }
+            IScriptEngine scriptEngine = PLUGIN_SCRIPT_ENGINES.get(k);
+            if (scriptEngine == null) {
+                return;
+            }
+            pluginScripts.put(k, md5);
+            scriptEngine.setScript(pluginInfo.getScript());
+        });
     }
 
     @Override
@@ -112,9 +141,9 @@ public class ScriptVerticle extends AbstractVerticle {
                     String pluginId = data.getPluginId();
                     clientMap.put(pluginId, client);
                     IScriptEngine scriptEngine = getScriptEngine(pluginId);
-                    if(scriptEngine==null){
+                    if (scriptEngine == null) {
                         data.setResult("");
-                    }else {
+                    } else {
                         //调用执行脚本方法返回结果
                         String result = scriptEngine.invokeMethod(data.getMethod(), data.getArgs());
                         data.setResult(result);

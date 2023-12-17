@@ -60,7 +60,6 @@ public class ScriptClientVerticle extends AbstractVerticle {
 
     public String send(DataPackage data) {
         Buffer buffer = DataEncoder.encode(data);
-        log.info("send data:{}", HexUtil.encodeHexStr(buffer.getBytes()));
         socket.write(buffer);
         Chan<DataPackage> chan = Chan.getInstance();
         DataPackage receiver = chan.get(data.getMid());
@@ -74,7 +73,6 @@ public class ScriptClientVerticle extends AbstractVerticle {
     }
 
     public void handle(Buffer buffer) {
-        log.info("receive server data:{}", buffer.toString());
         DataPackage data = DataDecoder.decode(buffer);
         Chan<DataPackage> chan = Chan.getInstance();
         chan.put(data);

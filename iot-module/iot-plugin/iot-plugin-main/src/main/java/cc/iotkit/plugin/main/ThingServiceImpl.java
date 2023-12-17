@@ -50,6 +50,7 @@ public class ThingServiceImpl implements IThingService {
     @Override
     public ActionResult post(String pluginId, IDeviceAction action) {
         try {
+            log.info("receive plugin:{}, action:{}", pluginId, action);
             String deviceName = action.getDeviceName();
 
             //添加设备路由
@@ -160,10 +161,6 @@ public class ThingServiceImpl implements IThingService {
 
         if (device != null) {
             log.info("device already registered");
-            device.setModel(register.getModel());
-            device.setProductKey(register.getProductKey());
-            device.setSecret(RandomStringUtils.randomAlphabetic(16));
-            deviceInfoData.save(device);
         } else {
             //不存在,注册新设备
             device = new DeviceInfo();
@@ -237,6 +234,7 @@ public class ThingServiceImpl implements IThingService {
                 message.setData(new HashMap<>(0));
             }
 
+            log.info("publish thingModel msg:{}", message);
             producer.publish(Constants.THING_MODEL_MESSAGE_TOPIC, message);
         } catch (Throwable e) {
             log.error("send thing model message error", e);
