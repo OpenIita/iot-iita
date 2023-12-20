@@ -66,7 +66,7 @@ public class TbSysApp extends TenantModel implements TenantAware {
      * 备注
      */
     @ApiModelProperty(value = "备注")
-    private String REMARK;
+    private String remark;
 
 
 }

@@ -39,7 +39,6 @@ import cc.iotkit.temporal.IDbStructureData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -159,6 +158,9 @@ public class ExampleDataInit implements SmartInitializingSingleton {
 
     @Autowired
     private ISysUserRoleData sysUserRoleData;
+
+    @Autowired
+    private ISysAppData sysAppData;
 
     @Override
     public void afterSingletonsInstantiated() {
@@ -290,6 +292,9 @@ public class ExampleDataInit implements SmartInitializingSingleton {
         });
 
         initData("sys_user_role", sysUserRoleData, new TypeReference<List<SysUserRole>>() {
+        });
+
+        initData("sys_app", sysAppData, new TypeReference<List<SysApp>>() {
         });
     }
 
