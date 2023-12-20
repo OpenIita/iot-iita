@@ -137,5 +137,4 @@ public interface IJPACommData<T extends Id<ID>, ID> extends ICommonData<T, ID> {
         );
     }
 
-
 }
