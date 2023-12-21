@@ -33,10 +33,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class VirtualManager {
@@ -57,7 +58,11 @@ public class VirtualManager {
     @Autowired
     private MqProducer<ThingModelMessage> producer;
 
-    @Scheduled(initialDelay = 8000)
+    public VirtualManager(){
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+        executorService.schedule(this::init, 8, TimeUnit.SECONDS);
+    }
+
     public void init() {
         List<VirtualDevice> virtualDevices = getAllVirtualDevices();
         for (VirtualDevice virtualDevice : virtualDevices) {
