@@ -13,12 +13,19 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.StringUtils;
-import cc.iotkit.data.manager.IDeviceInfoData;
-import cc.iotkit.data.manager.IRuleInfoData;
+import cc.iotkit.data.manager.*;
+import cc.iotkit.message.model.Message;
+import cc.iotkit.message.service.MessageService;
+import cc.iotkit.model.alert.AlertConfig;
+import cc.iotkit.model.notify.Channel;
+import cc.iotkit.model.notify.ChannelConfig;
+import cc.iotkit.model.notify.ChannelTemplate;
 import cc.iotkit.model.rule.FilterConfig;
 import cc.iotkit.model.rule.RuleAction;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.ruleengine.action.Action;
+import cc.iotkit.ruleengine.action.alert.AlertAction;
+import cc.iotkit.ruleengine.action.alert.AlertService;
 import cc.iotkit.ruleengine.action.device.DeviceAction;
 import cc.iotkit.ruleengine.action.device.DeviceActionService;
 import cc.iotkit.ruleengine.action.http.HttpAction;
@@ -36,6 +43,8 @@ import cc.iotkit.ruleengine.link.LinkFactory;
 import cc.iotkit.ruleengine.listener.DeviceListener;
 import cc.iotkit.ruleengine.listener.Listener;
 import cn.hutool.core.collection.CollectionUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +53,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -67,6 +77,21 @@ public class RuleManager {
 
     @Autowired
     private DeviceActionService deviceActionService;
+
+    @Autowired
+    private IAlertConfigData alertConfigData;
+
+    @Autowired
+    private IChannelTemplateData channelTemplateData;
+
+    @Autowired
+    private IChannelConfigData channelConfigData;
+
+    @Autowired
+    private IChannelData channelData;
+
+    @Autowired
+    private MessageService messageService;
 
     public RuleManager() {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
@@ -196,6 +221,36 @@ public class RuleManager {
                 service.initLink(ruleId);
             }
             return tcpAction;
+        } else if (AlertAction.TYPE.equals(type)) {
+            List<AlertConfig> alertConfigs = alertConfigData.findAllByCondition(AlertConfig.builder()
+                    .ruleInfoId(ruleId)
+                    .build());
+
+            AlertAction alertAction = parse(config, AlertAction.class);
+            String script = alertAction.getServices().get(0).getScript();
+
+            List<AlertService> alertServices = new ArrayList<>();
+            for (AlertConfig alertConfig : alertConfigs) {
+                AlertService service = new AlertService();
+                service.setScript(script);
+                service.setDeviceInfoData(deviceInfoData);
+                service.setMessageService(messageService);
+
+                ChannelTemplate channelTemplate = channelTemplateData.findById(alertConfig.getMessageTemplateId());
+                ChannelConfig channelConfig = channelConfigData.findById(channelTemplate.getChannelConfigId());
+                Channel channel = channelData.findById(channelConfig.getChannelId());
+
+                service.setMessage(Message.builder()
+                        .channel(channel.getCode())
+                        .channelId(channel.getId())
+                        .channelConfig(channelConfig.getParam())
+                        .content(channelTemplate.getContent())
+                        .alertConfigId(alertConfig.getId())
+                        .build());
+                alertServices.add(service);
+            }
+            alertAction.setServices(alertServices);
+            return alertAction;
         }
         return null;
     }

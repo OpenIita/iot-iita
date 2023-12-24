@@ -49,7 +49,7 @@ public class AlertConfig implements Owned<Long> {
     /**
      * 关联消息转发模板ID
      */
-    private String messageTemplateId;
+    private Long messageTemplateId;
 
     /**
      * 描述

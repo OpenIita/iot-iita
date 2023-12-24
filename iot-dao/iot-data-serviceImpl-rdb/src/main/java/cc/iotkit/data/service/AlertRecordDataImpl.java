@@ -3,17 +3,27 @@ package cc.iotkit.data.service;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.AlertRecordRepository;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IAlertRecordData;
 import cc.iotkit.data.model.TbAlertRecord;
+import cc.iotkit.data.util.PageBuilder;
+import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.alert.AlertRecord;
+import cc.iotkit.model.system.SysLoginInfo;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import static cc.iotkit.data.model.QTbAlertRecord.tbAlertRecord;
 
 @Primary
 @Service
@@ -22,6 +32,8 @@ public class AlertRecordDataImpl implements IAlertRecordData, IJPACommData<Alert
     @Autowired
     private AlertRecordRepository alertRecordRepository;
 
+    @Autowired
+    private JPAQueryFactory jpaQueryFactory;
 
     @Override
     public JpaRepository getBaseRepository() {
@@ -38,12 +50,19 @@ public class AlertRecordDataImpl implements IAlertRecordData, IJPACommData<Alert
         return AlertRecord.class;
     }
 
+    private static Predicate genPredicate(AlertRecord data) {
+        return PredicateBuilder.instance()
+                .and(StringUtils.isNotBlank(data.getName()), () -> tbAlertRecord.name.like(data.getName()))
+                .and(StringUtils.isNotBlank(data.getLevel()), () -> tbAlertRecord.level.eq(data.getLevel()))
+                .build();
+    }
 
     @Override
     public Paging<AlertRecord> selectAlertConfigPage(PageRequest<AlertRecord> request) {
-        Page<TbAlertRecord> alertRecordPage = alertRecordRepository.findAll(Pageable.ofSize(request.getPageSize())
-                .withPage(request.getPageNum() - 1));
-        return new Paging<>(alertRecordPage.getTotalElements(),
-                MapstructUtils.convert(alertRecordPage.getContent(), AlertRecord.class));
+        QueryResults<TbAlertRecord> results = jpaQueryFactory.selectFrom(tbAlertRecord).where(genPredicate(request.getData()))
+                .orderBy(tbAlertRecord.id.desc())
+                .limit(request.getPageSize())
+                .offset(request.getOffset()).fetchResults();
+        return new Paging<>(results.getTotal(), results.getResults()).to(AlertRecord.class);
     }
 }

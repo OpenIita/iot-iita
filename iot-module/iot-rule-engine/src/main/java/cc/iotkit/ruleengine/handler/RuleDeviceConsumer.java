@@ -48,7 +48,7 @@ public class RuleDeviceConsumer implements ConsumerHandler<ThingModelMessage>, A
     @SneakyThrows
     @Override
     public void handler(ThingModelMessage msg) {
-        log.info("received thing model message:{}", JsonUtils.toJsonString(msg));
+        log.info("received thing model message:{}", msg);
         try {
             for (DeviceMessageHandler handler : this.handlers) {
                 messageHandlerPool.submit(() -> {
