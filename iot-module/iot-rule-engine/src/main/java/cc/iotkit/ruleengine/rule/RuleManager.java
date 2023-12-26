@@ -231,22 +231,32 @@ public class RuleManager {
 
             List<AlertService> alertServices = new ArrayList<>();
             for (AlertConfig alertConfig : alertConfigs) {
+                if(alertConfig.getEnable()!=null && !alertConfig.getEnable()){
+                    continue;
+                }
+
                 AlertService service = new AlertService();
                 service.setScript(script);
                 service.setDeviceInfoData(deviceInfoData);
                 service.setMessageService(messageService);
 
                 ChannelTemplate channelTemplate = channelTemplateData.findById(alertConfig.getMessageTemplateId());
-                ChannelConfig channelConfig = channelConfigData.findById(channelTemplate.getChannelConfigId());
-                Channel channel = channelData.findById(channelConfig.getChannelId());
+                Long channelConfigId = channelTemplate.getChannelConfigId();
 
-                service.setMessage(Message.builder()
-                        .channel(channel.getCode())
-                        .channelId(channel.getId())
-                        .channelConfig(channelConfig.getParam())
+                Message message = Message.builder()
                         .content(channelTemplate.getContent())
                         .alertConfigId(alertConfig.getId())
-                        .build());
+                        .build();
+
+                if(channelConfigId!=null) {
+                    ChannelConfig channelConfig = channelConfigData.findById(channelTemplate.getChannelConfigId());
+                    Channel channel = channelData.findById(channelConfig.getChannelId());
+                    message.setChannel(channel.getCode());
+                    message.setChannelId(channel.getId());
+                    message.setChannelConfig(channelConfig.getParam());
+                }
+
+                service.setMessage(message);
                 alertServices.add(service);
             }
             alertAction.setServices(alertServices);
