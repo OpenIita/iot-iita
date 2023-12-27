@@ -104,17 +104,16 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
             throw new BizException(ErrCode.PLUGIN_SERVICE_NOT_FOUND);
         }
 
-        if (!(service.getParams() instanceof Map)) {
-            throw new BizException(ErrCode.PARAMS_EXCEPTION);
-        }
-        Map<String, ?> params = (Map<String, ?>) service.getParams();
-
         IDevice deviceService = deviceServices.get(0);
         String type = service.getType();
         String identifier = service.getIdentifier();
         ActionResult result = null;
 
         if (ThingService.TYPE_SERVICE.equals(type)) {
+            if (!(service.getParams() instanceof Map)) {
+                throw new BizException(ErrCode.PARAMS_EXCEPTION);
+            }
+            Map<String, ?> params = (Map<String, ?>) service.getParams();
             //服务调用
             ServiceInvoke action = ServiceInvoke.builder()
                     .id(service.getMid())
@@ -128,6 +127,10 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
             publish(service, result.getCode());
         } else if (ThingService.TYPE_PROPERTY.equals(type)) {
             if ("set".equals(identifier)) {
+                if (!(service.getParams() instanceof Map)) {
+                    throw new BizException(ErrCode.PARAMS_EXCEPTION);
+                }
+                Map<String, ?> params = (Map<String, ?>) service.getParams();
                 //属性设置
                 PropertySet action = PropertySet.builder()
                         .id(service.getMid())
@@ -144,7 +147,7 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
                         .id(service.getMid())
                         .productKey(linkPk)
                         .deviceName(linkDn)
-                        .keys(new ArrayList<>(params.keySet()))
+                        .keys((List<String>) service.getParams())
                         .build();
                 //调用插件设备服务接口
                 result = deviceService.propertyGet(action);

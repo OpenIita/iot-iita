@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -53,6 +54,9 @@ public class RuleDeviceConsumer implements ConsumerHandler<ThingModelMessage>, A
             for (DeviceMessageHandler handler : this.handlers) {
                 messageHandlerPool.submit(() -> {
                     try {
+                        if (!(msg.getData() instanceof Map)) {
+                            msg.setData(new HashMap<>());
+                        }
                         handler.handle(msg);
                     } catch (Throwable e) {
                         log.error("handler message error", e);
