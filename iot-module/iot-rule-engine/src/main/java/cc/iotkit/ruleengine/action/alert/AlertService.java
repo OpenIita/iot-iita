@@ -10,8 +10,9 @@
 package cc.iotkit.ruleengine.action.alert;
 
 import cc.iotkit.common.thing.ThingModelMessage;
+import cc.iotkit.message.model.Message;
+import cc.iotkit.message.service.MessageService;
 import cc.iotkit.ruleengine.action.ScriptService;
-import cc.iotkit.ruleengine.alert.Alerter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,13 +21,17 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
+/**
+ * @author sjg
+ */
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
 @Data
-public class AlertService<T extends Alerter> extends ScriptService {
-    private String configId;
+public class AlertService extends ScriptService {
 
-    private T alert;
+    private Message message;
+
+    private MessageService messageService;
 
     @SneakyThrows
     public String execute(ThingModelMessage msg) {
@@ -37,6 +42,8 @@ public class AlertService<T extends Alerter> extends ScriptService {
             log.warn("execScript result is null");
             return "execScript result is null";
         }
-        return alert.send(result);
+        message.setParam(result);
+        messageService.sendMessage(message);
+        return "ok";
     }
 }

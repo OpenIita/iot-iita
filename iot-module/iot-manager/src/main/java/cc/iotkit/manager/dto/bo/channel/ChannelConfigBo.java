@@ -3,7 +3,6 @@ package cc.iotkit.manager.dto.bo.channel;
 import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.model.notify.ChannelConfig;
 import io.github.linpeilie.annotations.AutoMapper;
-import io.github.linpeilie.annotations.AutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @ApiModel(value = "ChannelConfigBo")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = ChannelConfig.class, reverseConvertGenerate = false)
+@AutoMapper(target = ChannelConfig.class)
 public class ChannelConfigBo extends BaseDto  {
 
 	private static final long serialVersionUID = -1L;
@@ -28,7 +27,6 @@ public class ChannelConfigBo extends BaseDto  {
 	private String title;
 
 	@ApiModelProperty(value="通道配置参数")
-	@AutoMapping(target = "param", expression = "java(cc.iotkit.common.utils.JsonUtils.parse(source.getParam(), ChannelConfig.ChannelParam.class))")
 	private String param;
 
 	@ApiModelProperty(value="创建时间")

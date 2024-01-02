@@ -1,8 +1,6 @@
 package cc.iotkit.message.listener;
 
-import cc.iotkit.message.model.Message;
-
-import java.util.Map;
+import cc.iotkit.message.event.MessageEvent;
 
 /**
  * author: 石恒
@@ -11,14 +9,6 @@ import java.util.Map;
  **/
 public interface MessageEventListener {
 
-    void doEvent(Message message);
+    void doEvent(MessageEvent event);
 
-    default String getContent(Message message) {
-        String content = message.getContent();
-        Map<String, String> param = message.getParam();
-        for (String key : param.keySet()) {
-            content = content.replaceAll("${" + key + "}", param.get(key));
-        }
-        return content;
-    }
 }

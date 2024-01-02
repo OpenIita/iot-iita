@@ -5,7 +5,6 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.dao.ChannelConfigRepository;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IChannelConfigData;
-import cc.iotkit.data.model.ChannelConfigMapper;
 import cc.iotkit.data.model.TbChannelConfig;
 import cc.iotkit.model.notify.ChannelConfig;
 import org.springframework.context.annotation.Primary;
@@ -15,7 +14,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.stream.Collectors;
 
 /**
  * author: 石恒
@@ -28,9 +26,6 @@ public class ChannelConfigDataImpl implements IChannelConfigData, IJPACommData<C
 
     @Resource
     private ChannelConfigRepository channelConfigRepository;
-
-    @Resource
-    private ChannelConfigMapper channelConfigMapper;
 
     @Override
     public JpaRepository getBaseRepository() {
@@ -53,8 +48,6 @@ public class ChannelConfigDataImpl implements IChannelConfigData, IJPACommData<C
         return new Paging<>(
                 tbChannelConfigs.getTotalElements(),
                 tbChannelConfigs.getContent()
-                        .stream().map(channelConfigMapper::toDto)
-                        .collect(Collectors.toList())
-        );
+        ).to(ChannelConfig.class);
     }
 }

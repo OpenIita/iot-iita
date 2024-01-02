@@ -18,16 +18,19 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author sjg
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class AlertAction implements Action<AlertService<?>> {
+public class AlertAction implements Action<AlertService> {
 
-    public static final String TYPE = "alarm";
+    public static final String TYPE = "alert";
 
     private String type;
 
-    private List<AlertService<?>> services;
+    private List<AlertService> services;
 
     @Override
     public String getType() {
@@ -37,7 +40,7 @@ public class AlertAction implements Action<AlertService<?>> {
     @Override
     public List<String> execute(ThingModelMessage msg) {
         List<String> results = new ArrayList<>();
-        for (AlertService<?> service : services) {
+        for (AlertService service : services) {
             results.add(service.execute(msg));
         }
         return results;

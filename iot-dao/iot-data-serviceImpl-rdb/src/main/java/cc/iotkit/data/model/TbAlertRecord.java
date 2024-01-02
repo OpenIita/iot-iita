@@ -1,6 +1,6 @@
 package cc.iotkit.data.model;
 
-import cc.iotkit.model.alert.AlertConfig;
+import cc.iotkit.model.alert.AlertRecord;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,9 +13,8 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-//@ApiModel(value = "告警记录")
 @Table(name = "alert_record")
-@AutoMapper(target= AlertConfig.class)
+@AutoMapper(target = AlertRecord.class)
 public class TbAlertRecord {
 
     @Id

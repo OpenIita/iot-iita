@@ -30,6 +30,7 @@ public class ScriptService {
     private IDeviceInfoData deviceInfoData;
 
     public void setScript(String script) {
+        this.script=script;
         scriptEngine.setScript(script);
     }
 

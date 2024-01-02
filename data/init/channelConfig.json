@@ -19,8 +19,7 @@
     "channelId": 1,
     "title": "告警钉钉配置",
     "param": {
-        "dingTalkWebhook":"xxxxxxxxxxxxxxxx",
-        "dingTalkSecret":"xxxx"
+        "dingTalkWebhook":"xxxxxxxxxxxxxxxx"
     },
     "createAt": 1683816661690
   },

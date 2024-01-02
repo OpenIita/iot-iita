@@ -11,7 +11,8 @@ package cc.iotkit.data.dao;
 
 import cc.iotkit.data.model.TbAlertRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-public interface AlertRecordRepository extends JpaRepository<TbAlertRecord, Long> {
+public interface AlertRecordRepository extends JpaRepository<TbAlertRecord, Long>, QuerydslPredicateExecutor<TbAlertRecord> {
 
 }

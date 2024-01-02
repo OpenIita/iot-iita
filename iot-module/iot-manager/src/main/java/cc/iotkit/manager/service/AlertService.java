@@ -38,7 +38,7 @@ public class AlertService {
     }
 
     public void deleteAlertConfigById(Long id) {
-         alertConfigData.deleteById(id);
+        alertConfigData.deleteById(id);
     }
 
     public Paging<AlertConfig> selectAlertConfigPage(PageRequest<AlertConfig> request) {
@@ -47,5 +47,15 @@ public class AlertService {
 
     public Paging<AlertRecord> selectAlertRecordPage(PageRequest<AlertRecord> request) {
         return alertRecordData.selectAlertConfigPage(request);
+    }
+
+    public void addAlert(AlertConfig config, String content) {
+        alertRecordData.save(AlertRecord.builder()
+                .level(config.getLevel())
+                .name(config.getName())
+                .readFlg(false)
+                .alertTime(System.currentTimeMillis())
+                .details(content)
+                .build());
     }
 }
