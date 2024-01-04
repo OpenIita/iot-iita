@@ -19,6 +19,7 @@ import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.collection.CollUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,6 +66,22 @@ public class AuthController {
                 loginBody.getTenantId(),
                 loginBody.getUsername(), loginBody.getPassword(),
                 loginBody.getCode(), loginBody.getUuid());
+        loginVo.setToken(token);
+        return loginVo;
+    }
+
+    /**
+     * 小程序登录(示例)
+     *
+     * @param xcxCode 小程序code
+     * @return 结果
+     */
+    @ApiOperation("小程序登录")
+    @PostMapping("/xcxLogin")
+    public LoginVo xcxLogin(@NotBlank(message = "{xcx.appId.not.blank}") String appId,@NotBlank(message = "{xcx.code.not.blank}") String xcxCode) {
+        LoginVo loginVo = new LoginVo();
+        // 生成令牌
+        String token = loginService.xcxLogin(appId,xcxCode);
         loginVo.setToken(token);
         return loginVo;
     }
