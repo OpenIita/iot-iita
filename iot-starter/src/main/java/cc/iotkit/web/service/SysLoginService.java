@@ -172,7 +172,7 @@ public class SysLoginService {
         // 生成token
         LoginHelper.loginByDevice(loginUser, DeviceType.XCX);
 
-//        recordLoginInfo(loginUser.getTenantId(), user.getNickName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
+        recordLoginInfo(loginUser.getTenantId(), user.getNickName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
 //        recordLoginInfo(user.getId());
         return StpUtil.getTokenValue();
     }
