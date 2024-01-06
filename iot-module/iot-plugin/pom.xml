@@ -15,7 +15,6 @@
     <modules>
         <module>iot-plugin-core</module>
         <module>iot-plugin-main</module>
-        <module>spring-brick-maven-packager</module>
     </modules>
 
 </project>

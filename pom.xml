@@ -37,7 +37,7 @@
         <lang3.version>3.7</lang3.version>
         <hutool.version>5.8.18</hutool.version>
         <mapstruct-plus.version>1.3.1</mapstruct-plus.version>
-        <spring-brick.version>3.1.2</spring-brick.version>
+        <spring-brick.version>3.1.3</spring-brick.version>
     </properties>
 
     <dependencyManagement>
