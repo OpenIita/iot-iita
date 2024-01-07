@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static cc.iotkit.data.model.QTbSysDept.tbSysDept;
@@ -102,9 +103,12 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
 
     @Override
     public SysUser findById(Long id) {
-        TbSysUser sysUser = jpaQueryFactory.select(tbSysUser).from(tbSysUser).where(tbSysUser.id.eq(id)).fetchOne();
+        Optional<TbSysUser> optUser = userRepository.findById(id);
+        if (optUser.isEmpty()) {
+            return null;
+        }
 
-        SysUser convert = MapstructUtils.convert(sysUser, SysUser.class);
+        SysUser convert = MapstructUtils.convert(optUser.get(), SysUser.class);
         List<SysRole> sysRoles = sysRoleData.findByUserId(id);
         convert.setRoles(sysRoles);
 

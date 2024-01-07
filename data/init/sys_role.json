@@ -35,17 +35,4 @@
       "updateTime": null,
       "remark": "普通角色"
     },
-   {
-     "id": 452767970971717,
-     "tenantId": "452748015218757",
-     "roleName": "管理员",
-     "roleKey": "admin",
-     "roleSort": 1,
-     "data_scope": null,
-     "menuCheck_strictly": null,
-     "deptCheck_strictly": null,
-     "status": "0",
-     "delFlag": "0",
-     "remark": "管理员"
-   }
   ]
