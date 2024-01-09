@@ -1839,17 +1839,6 @@
           "accessMode": "rw"
         },
         {
-          "identifier": "Time",
-          "dataType": {
-            "type": "text",
-            "specs": {
-              "length": "255"
-            }
-          },
-          "name": "时间戳",
-          "accessMode": "rw"
-        },
-        {
           "identifier": "TimeModeSet",
           "dataType": {
             "type": "text",
@@ -2195,17 +2184,6 @@
                 }
               },
               "name": "实时运行状态",
-              "required": false
-            },
-            {
-              "identifier": "Time",
-              "dataType": {
-                "type": "text",
-                "specs": {
-                  "length": "255"
-                }
-              },
-              "name": "时间戳",
               "required": false
             },
             {
@@ -2764,17 +2742,6 @@
               "required": false
             },
             {
-              "identifier": "Time",
-              "dataType": {
-                "type": "text",
-                "specs": {
-                  "length": "255"
-                }
-              },
-              "name": "时间戳",
-              "required": false
-            },
-            {
               "identifier": "TimeModeSet",
               "dataType": {
                 "type": "text",
@@ -3316,17 +3283,6 @@
                 }
               },
               "name": "实时运行状态",
-              "required": false
-            },
-            {
-              "identifier": "Time",
-              "dataType": {
-                "type": "text",
-                "specs": {
-                  "length": "255"
-                }
-              },
-              "name": "时间戳",
               "required": false
             },
             {

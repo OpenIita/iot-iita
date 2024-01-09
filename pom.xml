@@ -373,7 +373,7 @@
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-message-bus</artifactId>
-                <version>${project.version}</version>
+                <version>${iot-iita-core.version}</version>
             </dependency>
 
             <dependency>

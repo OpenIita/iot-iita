@@ -99,14 +99,5 @@
     "configValue": "false",
     "remark": "是否开启注册用户功能（true开启，false关闭）",
     "tenantId": "452748015218757"
-  },
-  {
-    "id": 452767972708422,
-    "configKey": "sys.oss.previewListResource",
-    "configName": "OSS预览列表资源开关",
-    "configType": "Y",
-    "configValue": "true",
-    "remark": "true:开启, false:关闭",
-    "tenantId": "452748015218757"
   }
 ]
