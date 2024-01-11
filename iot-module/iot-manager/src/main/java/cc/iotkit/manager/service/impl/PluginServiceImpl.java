@@ -63,19 +63,6 @@ public class PluginServiceImpl implements IPluginService {
                         pluginOperator.stop(pluginId);
                     }
                     pluginOperator.uninstall(pluginId, true, false);
-                    //兼容相同版本包，先删除，再上传
-                    FileUtils.del(pluginInfo.getPluginDescriptor().getPluginPath());
-                } else {
-                    //删除对应插件的所有包
-                    for (String pluginPath : autoIntegrationConfiguration.getPluginPath()) {
-                        List<String> fileNames = FileUtils.listFileNames(new File(pluginPath).getAbsolutePath());
-                        for (String fileName : fileNames) {
-                            if (!fileName.startsWith(pluginId)) {
-                                continue;
-                            }
-                            FileUtils.del(new File(pluginPath + "/" + fileName));
-                        }
-                    }
                 }
             }
 
