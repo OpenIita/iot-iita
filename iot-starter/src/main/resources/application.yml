@@ -1,3 +1,4 @@
+
 server:
   port: 8086
 
@@ -120,7 +121,7 @@ spring:
     #使用内置redis的配置
     #host: redis
     host: 127.0.0.1
-    port: 6379
+    port: 6378
     database: 0
 
   mvc:
