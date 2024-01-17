@@ -24,7 +24,7 @@ public class EmbeddedRedisConfig {
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("windows")) {
             redisServer = RedisServer.builder().setting("maxheap 200m")
-                    .port(6379)
+                    .port(6378)
                     .setting("bind localhost")
                     .build();
         } else {

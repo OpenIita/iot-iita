@@ -11,6 +11,7 @@ package cc.iotkit.ruleengine.filter;
 
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.device.message.DevicePropertyCache;
 import cc.iotkit.ruleengine.expression.Expression;
 import lombok.Data;
 
@@ -56,7 +57,8 @@ public class DeviceCondition {
         Object left = null;
         if ("property".equals(type)) {
             Map<String, ?> properties = deviceInfo.getProperty();
-            left = properties.get(identifier);
+            DevicePropertyCache propertyCache = (DevicePropertyCache) properties.get(identifier);
+            left = propertyCache.getValue();
         } else if ("state".equals(type)) {
             DeviceInfo.State state = deviceInfo.getState();
             left = state != null && state.isOnline();

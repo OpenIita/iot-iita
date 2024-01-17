@@ -1,40 +1,4 @@
-[
-  {
-    "id": "6b253651-f4f9-44b9-a802-115b668b68e1",
-    "name": "天猫精灵设备属性和状态推送",
-    "type": "flow",
-    "listeners": [
-      {
-        "type": "device",
-        "config": "{\"id\":\"077319c3-325b-4bb6-8e07-dd2eed617f6f\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.6683545166149798,\"type\":\"property\",\"device\":\"cGCrkK7Ex4FESAwe/#\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"powerstate\",\"comparator\":\"*\"}]},{\"id\":0.6047040921280786,\"type\":\"state\",\"device\":\"cGCrkK7Ex4FESAwe/#\",\"identifier\":\"state:*\",\"parameters\":[]}]}"
-      },
-      {
-        "type": "device",
-        "config": "{\"id\":\"08d72321-39d4-4dcc-ba69-b09c4af187a3\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.7992853094329277,\"type\":\"event\",\"device\":\"KdJYpTp5ywNhmrmC/001\",\"identifier\":\"userDevicesChange\",\"parameters\":[{\"comparator\":\"*\"}]}]}"
-      },
-      {
-        "type": "device",
-        "config": "{\"id\":\"554aba1c-9684-4e36-8f72-cdb325f86712\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.9179545682030454,\"type\":\"property\",\"device\":\"PN3EDmkBZDD8whDd/#\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"doorStatus\",\"comparator\":\"*\"}]}]}"
-      }
-    ],
-    "filters": [
-      {
-        "type": "device",
-        "config": "{\"id\":\"0a8285df-f778-4e20-b26b-2b569fc1d3dd\",\"type\":\"device\",\"conditions\":[{\"id\":0.11425312074571847,\"device\":\"\",\"type\":\"tag\",\"identifier\":\"aligenie\",\"value\":\"是\",\"comparator\":\"==\"}]}"
-      }
-    ],
-    "actions": [
-      {
-        "type": "http",
-        "config": "{\"id\":\"de533da1-18cb-48ef-b913-22bdd96dcac9\",\"type\":\"http\",\"services\":[{\"url\":\"http://localhost:8087/aligenie/push\",\"script\":\"this.translate=function(msg){\\n  var data={};\\n  for(var p in msg.data){\\n\\tdata[p]=msg.data[p];\\n  }\\n  \\nreturn {\\n\\t//指定相对路径\\n    path:\\\"/\\\",\\n    method:\\\"post\\\",\\n    header:{\\n      //指定请求头\\n      contentType:\\\"application/json; charset=utf-8\\\"\\n    },\\n    body:JSON.stringify({\\n      deviceId:msg.deviceId,\\n      type:msg.type,\\n      identifier:msg.identifier,\\n      data:data\\n    })\\n  }\\n}\"}]}"
-      }
-    ],
-    "uid": "1",
-    "state": "stopped",
-    "desc": "ss",
-    "createAt": 1649218592640
-  },
-  {
+[{
     "id": "2c10229b-dcb2-439e-b411-5425b49657a1",
     "name": "小度设备属性更新推送",
     "type": "flow",
