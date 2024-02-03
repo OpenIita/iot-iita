@@ -23,6 +23,10 @@ public class DeviceFilter implements Filter<DeviceCondition> {
 
     private String type;
 
+    private String pk;
+
+    private String dn;
+
     private List<DeviceCondition> conditions;
 
     private IDeviceInfoData deviceInfoData;

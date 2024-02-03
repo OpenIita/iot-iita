@@ -28,12 +28,15 @@ public class EmbeddedRedisConfig {
                     .setting("bind localhost")
                     .build();
         } else {
-            redisServer = new RedisServer();
+            redisServer = RedisServer.builder()
+                    .port(6378)
+                    .setting("bind localhost")
+                    .build();
         }
         try {
             redisServer.start();
         } catch (Exception e) {
-            if(e.getMessage().contains("Address already in use")){
+            if (e.getMessage().contains("Address already in use")) {
                 throw new RuntimeException("redis端口被占用，请先停止本地的redis服务");
             }
             log.error("start redis server failed", e);

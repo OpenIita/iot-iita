@@ -40,6 +40,7 @@ import cc.iotkit.ruleengine.config.RuleConfiguration;
 import cc.iotkit.ruleengine.filter.DeviceFilter;
 import cc.iotkit.ruleengine.filter.Filter;
 import cc.iotkit.ruleengine.link.LinkFactory;
+import cc.iotkit.ruleengine.listener.DeviceCondition;
 import cc.iotkit.ruleengine.listener.DeviceListener;
 import cc.iotkit.ruleengine.listener.Listener;
 import cn.hutool.core.collection.CollectionUtil;
@@ -127,6 +128,9 @@ public class RuleManager {
     }
 
     public void add(RuleInfo ruleInfo) {
+        if(RuleInfo.STATE_STOPPED.equals(ruleInfo.getState())){
+            return;
+        }
         Rule rule = parseRule(ruleInfo);
         ruleMessageHandler.putRule(rule);
     }
@@ -175,7 +179,15 @@ public class RuleManager {
 
     private Listener<?> parseListener(String type, String config) {
         if (DeviceListener.TYPE.equals(type)) {
-            return parse(config, DeviceListener.class);
+            DeviceListener listener = parse(config, DeviceListener.class);
+            for (DeviceCondition condition : listener.getConditions()) {
+                String dn = "#";
+                if (StringUtils.isNotBlank(listener.getDn())) {
+                    dn = listener.getDn();
+                }
+                condition.setDevice(listener.getPk() + "/" + dn);
+            }
+            return listener;
         }
         return null;
     }
@@ -183,6 +195,13 @@ public class RuleManager {
     private Filter<?> parseFilter(String type, String config) {
         if (DeviceFilter.TYPE.equals(type)) {
             DeviceFilter filter = parse(config, DeviceFilter.class);
+            for (cc.iotkit.ruleengine.filter.DeviceCondition condition : filter.getConditions()) {
+                String dn = "#";
+                if (StringUtils.isNotBlank(filter.getDn())) {
+                    dn = filter.getDn();
+                }
+                condition.setDevice(filter.getPk() + "/" + dn);
+            }
             filter.setDeviceInfoData(deviceInfoData);
             return filter;
         }
@@ -231,7 +250,7 @@ public class RuleManager {
 
             List<AlertService> alertServices = new ArrayList<>();
             for (AlertConfig alertConfig : alertConfigs) {
-                if(alertConfig.getEnable()!=null && !alertConfig.getEnable()){
+                if (alertConfig.getEnable() != null && !alertConfig.getEnable()) {
                     continue;
                 }
 
@@ -248,7 +267,7 @@ public class RuleManager {
                         .alertConfigId(alertConfig.getId())
                         .build();
 
-                if(channelConfigId!=null) {
+                if (channelConfigId != null) {
                     ChannelConfig channelConfig = channelConfigData.findById(channelTemplate.getChannelConfigId());
                     Channel channel = channelData.findById(channelConfig.getChannelId());
                     message.setChannel(channel.getCode());

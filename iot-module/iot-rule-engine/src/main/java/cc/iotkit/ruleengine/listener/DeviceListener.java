@@ -24,6 +24,10 @@ public class DeviceListener implements Listener<DeviceCondition> {
 
     private String type;
 
+    private String pk;
+
+    private String dn;
+
     private List<DeviceCondition> conditions;
 
     @Override

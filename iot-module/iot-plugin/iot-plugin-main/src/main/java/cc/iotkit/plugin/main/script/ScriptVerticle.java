@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -69,22 +70,26 @@ public class ScriptVerticle extends AbstractVerticle {
     @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.SECONDS)
     public void checkScriptUpdate() {
         //定时检查脚本是否需要更新
-        pluginScripts.forEach((k, v) -> {
-            PluginInfo pluginInfo = pluginInfoData.findByPluginId(k);
-            if (pluginInfo == null) {
-                return;
+        List<PluginInfo> plugins = pluginInfoData.findAll();
+        for (PluginInfo plugin : plugins) {
+            String pluginId = plugin.getPluginId();
+            String oldMd5 = pluginScripts.get(pluginId);
+            String script = plugin.getScript();
+            if(script==null){
+                continue;
             }
-            String md5 = CodecUtil.md5Str(pluginInfo.getScript());
-            if (v.equals(md5)) {
-                return;
+            String md5 = CodecUtil.md5Str(script);
+            if (oldMd5 != null && oldMd5.equals(md5)) {
+                continue;
             }
-            IScriptEngine scriptEngine = PLUGIN_SCRIPT_ENGINES.get(k);
+
+            IScriptEngine scriptEngine = PLUGIN_SCRIPT_ENGINES.get(pluginId);
             if (scriptEngine == null) {
-                return;
+                continue;
             }
-            pluginScripts.put(k, md5);
-            scriptEngine.setScript(pluginInfo.getScript());
-        });
+            pluginScripts.put(pluginId, md5);
+            scriptEngine.setScript(script);
+        }
     }
 
     @Override
