@@ -24,9 +24,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -190,6 +193,32 @@ public class PluginServiceImpl implements IPluginService {
         old.setState(state);
         pluginInfoData.save(old);
 
+    }
+
+    @PostConstruct
+    public void init() {
+        Executors.newSingleThreadScheduledExecutor().schedule(this::startPlugins, 3, TimeUnit.SECONDS);
+    }
+
+    private void startPlugins() {
+        try {
+            while (!pluginOperator.inited()) {
+                Thread.sleep(1000L);
+            }
+
+            for (PluginInfo pluginInfo : pluginInfoData.findAll()) {
+                if (!PluginInfo.STATE_RUNNING.equals(pluginInfo.getState())) {
+                    continue;
+                }
+                log.info("start plugin:{}", pluginInfo.getPluginId());
+                com.gitee.starblues.core.PluginInfo plugin = pluginOperator.getPluginInfo(pluginInfo.getPluginId());
+                if (plugin != null) {
+                    pluginOperator.start(plugin.getPluginId());
+                }
+            }
+        } catch (Exception e) {
+            log.error("start plugins error", e);
+        }
     }
 
 }
