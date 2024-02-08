@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class DingTalkEventListener implements MessageEventListener {
+    WebClient client = WebClient.create(VertxManager.INSTANCE.getVertx());
 
     @Override
     @EventListener(classes = MessageEvent.class, condition = "#event.message.channel=='DingTalk'")
@@ -27,13 +28,14 @@ public class DingTalkEventListener implements MessageEventListener {
         String channelConfig = message.getChannelConfig();
         DingTalkConfig dingTalkConfig = JsonUtils.parse(channelConfig, DingTalkConfig.class);
 
-        WebClient client = WebClient.create(VertxManager.INSTANCE.getVertx());
         DingTalkMessage qyWechatMessage = DingTalkMessage.builder()
                 .msgtype("text")
                 .text(DingTalkMessage.MessageContent.builder().content(message.getFormatContent()).build())
                 .build();
-        client.post(dingTalkConfig.getDingTalkWebhook()).sendJson(qyWechatMessage)
+
+        client.getAbs(dingTalkConfig.getDingTalkWebhook()).sendJson(qyWechatMessage)
                 .onSuccess(response -> log.info("Received response with status code" + response.statusCode()))
                 .onFailure(err -> log.error("Something went wrong " + err.getMessage()));
     }
+
 }

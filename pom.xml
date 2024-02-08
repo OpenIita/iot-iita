@@ -12,7 +12,7 @@
 
     <groupId>cc.iotkit</groupId>
     <artifactId>iotkit-parent</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.5.2-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>奇特物联是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能,
         能帮助你快速搭建自己的物联网相关业务平台。
@@ -29,7 +29,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <iot-iita-core.version>1.0.1</iot-iita-core.version>
+        <iot-iita-core.version>1.0.2</iot-iita-core.version>
         <spring-boot.version>2.7.11</spring-boot.version>
         <vertx.version>4.2.2</vertx.version>
         <satoken.version>1.34.0</satoken.version>
@@ -37,7 +37,7 @@
         <lang3.version>3.7</lang3.version>
         <hutool.version>5.8.18</hutool.version>
         <mapstruct-plus.version>1.3.1</mapstruct-plus.version>
-        <spring-brick.version>3.1.3</spring-brick.version>
+        <spring-brick.version>3.1.4</spring-brick.version>
     </properties>
 
     <dependencyManagement>
@@ -391,7 +391,7 @@
             <dependency>
                 <groupId>cc.iotkit</groupId>
                 <artifactId>iot-plugin-core</artifactId>
-                <version>${project.version}</version>
+                <version>${iot-iita-core.version}</version>
             </dependency>
 
             <dependency>

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class QyWechatEventListener implements MessageEventListener {
+    WebClient client = WebClient.create(VertxManager.INSTANCE.getVertx());
 
     @Override
     @EventListener(classes = MessageEvent.class, condition = "#event.message.channel=='QyWechat'")
@@ -27,12 +28,12 @@ public class QyWechatEventListener implements MessageEventListener {
         String channelConfig = message.getChannelConfig();
         QyWechatConfig qyWechatConfig = JsonUtils.parse(channelConfig, QyWechatConfig.class);
 
-        WebClient client = WebClient.create(VertxManager.INSTANCE.getVertx());
         QyWechatMessage qyWechatMessage = QyWechatMessage.builder()
                 .msgtype("text")
                 .text(QyWechatMessage.MessageContent.builder().content(message.getFormatContent()).build())
                 .build();
-        client.post(qyWechatConfig.getQyWechatWebhook()).sendJson(qyWechatMessage)
+
+        client.getAbs(qyWechatConfig.getQyWechatWebhook()).sendJson(qyWechatMessage)
                 .onSuccess(response -> log.info("Received response with status code" + response.statusCode()))
                 .onFailure(err -> log.error("Something went wrong " + err.getMessage()));
     }

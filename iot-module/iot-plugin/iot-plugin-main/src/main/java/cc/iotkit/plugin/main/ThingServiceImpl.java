@@ -16,6 +16,8 @@ import cc.iotkit.mq.MqProducer;
 import cc.iotkit.plugin.core.thing.IThingService;
 import cc.iotkit.plugin.core.thing.actions.*;
 import cc.iotkit.plugin.core.thing.actions.up.*;
+import cc.iotkit.plugin.core.thing.model.ThingDevice;
+import cc.iotkit.plugin.core.thing.model.ThingProduct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +58,7 @@ public class ThingServiceImpl implements IThingService {
             //添加设备路由
             deviceRouter.putRouter(deviceName, new PluginRouter(IPluginMain.MAIN_ID, pluginId));
 
-            DeviceInfo device = getDevice(deviceName);
+            DeviceInfo device = getDeviceInfo(deviceName);
             if (device == null) {
                 log.warn("device:{} is not found.", deviceName);
             }
@@ -121,17 +123,26 @@ public class ThingServiceImpl implements IThingService {
     }
 
     @Override
-    public Product getProduct(String pk) {
+    public ThingProduct getProduct(String pk) {
         try {
-            return productData.findByProductKey(pk);
+            Product product = productData.findByProductKey(pk);
+            if(product==null){
+                return null;
+            }
+            return ThingProduct.builder()
+                    .category(product.getCategory())
+                    .productKey(product.getProductKey())
+                    .name(product.getName())
+                    .nodeType(product.getNodeType())
+                    .productSecret(product.getProductSecret())
+                    .build();
         } catch (Throwable e) {
             log.error("get product error", e);
             return null;
         }
     }
 
-    @Override
-    public DeviceInfo getDevice(String dn) {
+    public DeviceInfo getDeviceInfo(String dn) {
         try {
             return deviceInfoData.findByDeviceName(dn);
         } catch (Throwable e) {
@@ -141,8 +152,23 @@ public class ThingServiceImpl implements IThingService {
     }
 
     @Override
+    public ThingDevice getDevice(String dn) {
+        DeviceInfo deviceInfo = getDeviceInfo(dn);
+        if(deviceInfo==null){
+            return null;
+        }
+        return ThingDevice.builder()
+                .deviceId(deviceInfo.getDeviceId())
+                .deviceName(deviceInfo.getDeviceName())
+                .model(deviceInfo.getModel())
+                .productKey(deviceInfo.getProductKey())
+                .secret(deviceInfo.getSecret())
+                .build();
+    }
+
+    @Override
     public Map<String, ?> getProperty(String deviceName) {
-        DeviceInfo device = getDevice(deviceName);
+        DeviceInfo device = getDeviceInfo(deviceName);
         if (device == null) {
             return new HashMap<>(0);
         }
@@ -153,7 +179,7 @@ public class ThingServiceImpl implements IThingService {
         String productKey = register.getProductKey();
         //指定了pk需验证
         if (StringUtils.isNotBlank(productKey)) {
-            Product product = getProduct(productKey);
+            ThingProduct product = getProduct(productKey);
             if (product == null) {
                 throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
             }
@@ -163,21 +189,21 @@ public class ThingServiceImpl implements IThingService {
             log.info("device already registered");
         } else {
             //不存在,注册新设备
-            device = new DeviceInfo();
-            device.setId(DeviceUtil.newDeviceId(register.getDeviceName()));
-            device.setDeviceId(device.getId());
-            device.setProductKey(productKey);
-            device.setDeviceName(register.getDeviceName());
-            device.setModel(register.getModel());
-            device.setSecret(RandomStringUtils.randomAlphabetic(16));
+            DeviceInfo deviceInfo = new DeviceInfo();
+            deviceInfo.setId(DeviceUtil.newDeviceId(register.getDeviceName()));
+            deviceInfo.setDeviceId(deviceInfo.getId());
+            deviceInfo.setProductKey(productKey);
+            deviceInfo.setDeviceName(register.getDeviceName());
+            deviceInfo.setModel(register.getModel());
+            deviceInfo.setSecret(RandomStringUtils.randomAlphabetic(16));
             //默认离线
-            device.setState(new DeviceInfo.State(false, null, null));
-            device.setCreateAt(System.currentTimeMillis());
-            deviceInfoData.save(device);
+            deviceInfo.setState(new DeviceInfo.State(false, null, null));
+            deviceInfo.setCreateAt(System.currentTimeMillis());
+            deviceInfoData.save(deviceInfo);
 
             log.info("device registered:{}", JsonUtils.toJsonString(device));
             publishMsg(
-                    device,
+                    deviceInfo,
                     register,
                     ThingModelMessage.builder()
                             .type(ThingModelMessage.TYPE_LIFETIME)
@@ -210,7 +236,7 @@ public class ThingServiceImpl implements IThingService {
     private void deviceTopologyUpdate(DeviceInfo device, DeviceTopology topology) {
         //设备拓扑关系更新
         for (String deviceName : topology.getSubDevices()) {
-            DeviceInfo subDevice = getDevice(deviceName);
+            DeviceInfo subDevice = getDeviceInfo(deviceName);
             subDevice.setParentId(device.getDeviceId());
             deviceInfoData.save(subDevice);
         }

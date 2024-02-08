@@ -6,7 +6,6 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
-import cc.iotkit.common.utils.file.FileUtils;
 import cc.iotkit.data.manager.IPluginInfoData;
 import cc.iotkit.manager.dto.bo.plugin.PluginInfoBo;
 import cc.iotkit.manager.dto.vo.plugin.PluginInfoVo;
@@ -20,14 +19,11 @@ import com.gitee.starblues.integration.operator.PluginOperator;
 import com.gitee.starblues.integration.operator.upload.UploadParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarEntry;
@@ -53,10 +49,14 @@ public class PluginServiceImpl implements IPluginService {
     public void upload(MultipartFile file, Long id) {
         try {
             PluginInfo plugin = pluginInfoData.findById(id);
-            if (plugin == null) {
+            if (file == null || plugin == null) {
                 throw new BizException(ErrCode.DATA_NOT_EXIST);
             }
             String pluginId = plugin.getPluginId();
+
+            if (!file.getName().contains(pluginId)) {
+                throw new BizException(ErrCode.PLUGIN_INSTALL_FAILED, "文件名与原插件id不匹配");
+            }
 
             if (StringUtils.isNotBlank(pluginId)) {
                 //停止卸载旧的插件
@@ -78,26 +78,27 @@ public class PluginServiceImpl implements IPluginService {
                 throw new BizException(ErrCode.PLUGIN_INSTALL_FAILED);
             }
 
-            JarFile jarFile = new JarFile(pluginInfo.getPluginPath());
-            // 获取config文件在jar包中的路径
-            String configFile = "classes/config.json";
-            JarEntry configEntry = jarFile.getJarEntry(configFile);
             String configJson = "";
-
-            if (configEntry != null) {
-                //读取配置文件
-                configJson = IoUtil.read(jarFile.getInputStream(configEntry), Charset.defaultCharset());
-                log.info("configJson:{}", configJson);
-            }
-
-            //读取script.js脚本
-            String scriptFile = "classes/script.js";
-            JarEntry scriptEntity = jarFile.getJarEntry(scriptFile);
             String script = "";
-            if (scriptEntity != null) {
-                //读取脚本文件
-                script = IoUtil.read(jarFile.getInputStream(scriptEntity), Charset.defaultCharset());
-                log.info("script:{}", script);
+            try (JarFile jarFile = new JarFile(pluginInfo.getPluginPath())) {
+                // 获取config文件在jar包中的路径
+                String configFile = "classes/config.json";
+                JarEntry configEntry = jarFile.getJarEntry(configFile);
+
+                if (configEntry != null) {
+                    //读取配置文件
+                    configJson = IoUtil.read(jarFile.getInputStream(configEntry), Charset.defaultCharset());
+                    log.info("configJson:{}", configJson);
+                }
+
+                //读取script.js脚本
+                String scriptFile = "classes/script.js";
+                JarEntry scriptEntity = jarFile.getJarEntry(scriptFile);
+                if (scriptEntity != null) {
+                    //读取脚本文件
+                    script = IoUtil.read(jarFile.getInputStream(scriptEntity), Charset.defaultCharset());
+                    log.info("script:{}", script);
+                }
             }
 
             PluginState pluginState = pluginInfo.getPluginState();
@@ -113,6 +114,8 @@ public class PluginServiceImpl implements IPluginService {
             plugin.setVersion(pluginDescriptor.getPluginVersion());
             plugin.setDescription(pluginDescriptor.getDescription());
             pluginInfoData.save(plugin);
+        } catch (BizException e) {
+            throw e;
         } catch (Exception e) {
             throw new BizException(ErrCode.PLUGIN_INSTALL_FAILED, e);
         }
