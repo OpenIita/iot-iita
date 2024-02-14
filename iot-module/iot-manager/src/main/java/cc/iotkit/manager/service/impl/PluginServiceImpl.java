@@ -54,7 +54,7 @@ public class PluginServiceImpl implements IPluginService {
             }
             String pluginId = plugin.getPluginId();
 
-            if (!file.getName().contains(pluginId)) {
+            if (pluginId!=null && !file.getOriginalFilename().contains(pluginId)) {
                 throw new BizException(ErrCode.PLUGIN_INSTALL_FAILED, "文件名与原插件id不匹配");
             }
 
