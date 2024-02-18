@@ -1,59 +1,23 @@
-[{
-    "id": "2c10229b-dcb2-439e-b411-5425b49657a1",
-    "name": "小度设备属性更新推送",
-    "type": "flow",
-    "listeners": [
-      {
-        "type": "device",
-        "config": "{\"id\":\"11ae4827-d58b-44d7-8a4d-090bac2ddce8\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.5375444987425966,\"type\":\"property\",\"device\":\"cGCrkK7Ex4FESAwe/#\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"powerstate\",\"comparator\":\"*\"}]}]}"
-      },
-      {
-        "type": "device",
-        "config": "{\"id\":\"f0752ba9-38d8-4ee8-91cc-7f267875c358\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.20619179667807042,\"type\":\"property\",\"device\":\"Rf4QSjbm65X45753/#\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"powerstate\",\"comparator\":\"*\"}]}]}"
-      }
-    ],
-    "filters": [
-      {
-        "type": "device",
-        "config": "{\"id\":\"747eb070-92ed-4e60-9a39-3b9a71afee9e\",\"type\":\"device\",\"conditions\":[{\"id\":0.7199397992080254,\"device\":\"\",\"type\":\"tag\",\"comparator\":\"==\",\"identifier\":\"dueros\",\"value\":\"是\"}]}"
-      }
-    ],
-    "actions": [
-      {
-        "type": "http",
-        "config": "{\"id\":\"35781aae-360f-4931-9d72-69f27e326e68\",\"type\":\"http\",\"services\":[{\"url\":\"https://xiaodu.baidu.com/saiya/smarthome/changereport\",\"script\":\"this.translate=function(msg,device){\\n  var pk=msg.productKey;\\n  var attributeName=\\\"\\\";\\n  //插座/开关\\n  if(pk==\\\"cGCrkK7Ex4FESAwe\\\" || pk==\\\"Rf4QSjbm65X45753\\\"){\\n\\tattributeName=\\\"turnOnState\\\";\\n  }\\n  //取openUid\\n  var tag=device.tag;\\n  if(!tag || !tag.duerosOpenUid){\\n\\treturn null;\\n  }\\n  var openUid=tag.duerosOpenUid.value;\\n  \\n  return {\\n    \\\"path\\\":\\\"\\\",\\n    \\\"method\\\":\\\"post\\\",\\n    \\\"header\\\":{\\n      //指定请求头\\n      \\\"contentType\\\":\\\"application/json; charset=utf-8\\\"\\n    },\\n    \\\"body\\\":JSON.stringify({\\n\\t  \\\"header\\\": {\\n\\t\\t  \\\"namespace\\\": \\\"DuerOS.ConnectedHome.Control\\\",\\n\\t\\t  \\\"name\\\": \\\"ChangeReportRequest\\\",\\n\\t\\t  \\\"messageId\\\": new Date().getTime()+\\\"\\\",\\n\\t\\t  \\\"payloadVersion\\\": \\\"1\\\"\\n\\t  },\\n\\t  \\\"payload\\\": {\\n\\t\\t  \\\"botId\\\": \\\"eb20e515-f505-8d31-abef-46da3345f114\\\",\\n\\t\\t  \\\"openUid\\\": openUid,\\n\\t\\t  \\\"appliance\\\": {\\n\\t\\t\\t  \\\"applianceId\\\": msg.deviceId,\\n\\t\\t\\t  \\\"attributeName\\\": attributeName\\n\\t\\t  }\\n\\t  }\\n  \\t})\\n  }\\n}\"}]}"
-      }
-    ],
-    "uid": "1",
-    "state": "running",
-    "desc": "开关插座开关状态推送",
-    "createAt": 1652515471242
-  },
-  {
-    "id": "2820c218-660e-48ff-a234-c7b6793a5bb8",
-    "name": "测试场景1",
-    "type": "scene",
-    "listeners": [
-      {
-        "type": "device",
-        "config": "{\"id\":\"4ff98e8c-e6f6-4e96-8932-de488a0a4bfb\",\"type\":\"device\",\"topic\":\"\",\"conditions\":[{\"id\":0.8212160690052512,\"type\":\"property\",\"device\":\"Rf4QSjbm65X45753/ABC12400001\",\"identifier\":\"report\",\"parameters\":[{\"identifier\":\"powerstate\",\"comparator\":\">\",\"value\":\"0\"}]}]}"
-      }
-    ],
-    "filters": [
-      {
-        "type": "device",
-        "config": "{\"id\":\"24b4b975-d8ac-431d-881d-8c8b40e92861\",\"type\":\"device\",\"conditions\":[{\"id\":0.08981222614734863,\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"powerSwitch\",\"type\":\"property\",\"comparator\":\"==\",\"value\":\"0\"}]}"
-      }
-    ],
-    "actions": [
-      {
-        "type": "device",
-        "config": "{\"id\":\"fde024b5-5105-4639-8602-d04300613af9\",\"type\":\"device\",\"services\":[{\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"set\",\"inputData\":[{\"identifier\":\"powerSwitch\",\"value\":\"1\"}]},{\"device\":\"hdX3PCMcFrCYpesJ/ABD12300002\",\"identifier\":\"set\",\"inputData\":[{\"identifier\":\"windSpeed\",\"value\":\"20\"}]}]}"
-      }
-    ],
-    "uid": "1",
-    "state": "stopped",
-    "desc": "test",
-    "createAt": 1649167998895
-  }
-]
+[ {
+  "id" : "2c10229b-dcb2-439e-b411-5425b49657a1",
+  "name" : "小度设备属性更新推送",
+  "type" : "flow",
+  "listeners" : [ ],
+  "filters" : [ ],
+  "actions" : [ ],
+  "uid" : "1",
+  "state" : "running",
+  "desc" : "开关插座开关状态推送",
+  "createAt" : 1652515471242
+}, {
+  "id" : "2820c218-660e-48ff-a234-c7b6793a5bb8",
+  "name" : "测试场景1",
+  "type" : "scene",
+  "listeners" : [ ],
+  "filters" : [ ],
+  "actions" : [ ],
+  "uid" : "1",
+  "state" : "stopped",
+  "desc" : "test",
+  "createAt" : 1649167998895
+} ]

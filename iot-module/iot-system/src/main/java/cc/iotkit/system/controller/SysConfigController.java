@@ -9,13 +9,17 @@ import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
+import cc.iotkit.data.manager.ICategoryData;
+import cc.iotkit.model.product.Category;
 import cc.iotkit.system.dto.bo.SysConfigBo;
 import cc.iotkit.system.dto.vo.SysConfigVo;
 import cc.iotkit.system.service.ISysConfigService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.io.FileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -38,6 +43,8 @@ import java.util.List;
 public class SysConfigController extends BaseController {
 
   private final ISysConfigService configService;
+
+  private final ICategoryData categoryData;
 
 
   @ApiOperation("获取参数配置列表")
@@ -118,4 +125,14 @@ public class SysConfigController extends BaseController {
   public void refreshCache() {
     configService.resetConfigCache();
   }
+
+  @SneakyThrows
+  @ApiOperation("导出系统数据")
+  @Log(title = "导出系统数据", businessType = BusinessType.EXPORT)
+  @SaCheckPermission("system:config:exportSysData")
+  @PostMapping("/exportSysData")
+  public void exportSysData() {
+    configService.backupSysData();
+  }
+
 }

@@ -5,6 +5,7 @@ import cc.iotkit.common.api.Paging;
 import cc.iotkit.system.dto.bo.SysConfigBo;
 import cc.iotkit.system.dto.vo.SysConfigVo;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -84,4 +85,9 @@ public interface ISysConfigService {
      */
     boolean checkConfigKeyUnique(SysConfigBo config);
 
+    /**
+     * 将系统数据备份到文件中
+     * @return zip备份文件
+     */
+    File backupSysData();
 }

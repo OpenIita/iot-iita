@@ -1,38 +1,37 @@
- [
-    {
-      "id": 1,
-      "tenantId": "000000",
-      "roleName": "超级管理员",
-      "roleKey": "superadmin",
-      "roleSort": 1,
-      "data_scope": "1",
-      "menuCheck_strictly": 1,
-      "deptCheck_strictly": 1,
-      "status": "0",
-      "delFlag": "0",
-      "createDept": 103,
-      "createBy": 1,
-
-      "updateBy": null,
-      "updateTime": null,
-      "remark": "超级管理员"
-    },
-    {
-      "id": 2,
-      "tenantId": "000000",
-      "roleName": "普通角色",
-      "roleKey": "common",
-      "roleSort": 2,
-      "data_scope": "2",
-      "menuCheck_strictly": 1,
-      "deptCheck_strictly": 1,
-      "status": "0",
-      "delFlag": "0",
-      "createDept": 103,
-      "createBy": 1,
-
-      "updateBy": null,
-      "updateTime": null,
-      "remark": "普通角色"
-    }
-  ]
+[ {
+  "createDept" : 103,
+  "createBy" : 1,
+  "createTime" : 1708254322779,
+  "updateBy" : null,
+  "updateTime" : 1708254322779,
+  "tenantId" : "000000",
+  "id" : 1,
+  "roleName" : "超级管理员",
+  "roleKey" : "superadmin",
+  "roleSort" : 1,
+  "dataScope" : null,
+  "menuCheckStrictly" : null,
+  "deptCheckStrictly" : null,
+  "status" : "0",
+  "remark" : "超级管理员",
+  "flag" : false,
+  "superAdmin" : true
+}, {
+  "createDept" : 103,
+  "createBy" : 1,
+  "createTime" : 1708254322799,
+  "updateBy" : null,
+  "updateTime" : 1708254322799,
+  "tenantId" : "000000",
+  "id" : 2,
+  "roleName" : "普通角色",
+  "roleKey" : "common",
+  "roleSort" : 2,
+  "dataScope" : null,
+  "menuCheckStrictly" : null,
+  "deptCheckStrictly" : null,
+  "status" : "0",
+  "remark" : "普通角色",
+  "flag" : false,
+  "superAdmin" : false
+} ]

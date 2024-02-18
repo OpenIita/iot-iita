@@ -58,6 +58,9 @@ public class DeviceCondition {
         if ("property".equals(type)) {
             Map<String, ?> properties = deviceInfo.getProperty();
             DevicePropertyCache propertyCache = (DevicePropertyCache) properties.get(identifier);
+            if (propertyCache == null) {
+                return false;
+            }
             left = propertyCache.getValue();
         } else if ("state".equals(type)) {
             DeviceInfo.State state = deviceInfo.getState();
@@ -65,13 +68,9 @@ public class DeviceCondition {
         } else if ("tag".equals(type)) {
             //取设备标签判断
             Map<String, DeviceInfo.Tag> tags = deviceInfo.getTag();
-            if (tags == null) {
-                left = null;
-            } else {
+            if (tags != null) {
                 DeviceInfo.Tag tag = tags.get(identifier);
-                if (tag == null) {
-                    left = null;
-                } else {
+                if (tag != null) {
                     //设备标签值
                     left = tag.getValue();
                 }

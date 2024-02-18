@@ -1,10 +1,10 @@
- [
-    {
-      "userId": 1,
-      "postId": 1
-    },
-    {
-      "userId": 2,
-      "postId": 2
-    }
-  ]
+[ {
+  "createDept" : null,
+  "createBy" : null,
+  "createTime" : 1708254323498,
+  "updateBy" : null,
+  "updateTime" : 1708254323498,
+  "id" : 516579006476357,
+  "userId" : 1,
+  "postId" : 1
+} ]

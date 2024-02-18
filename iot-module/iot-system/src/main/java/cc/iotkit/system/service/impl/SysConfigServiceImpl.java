@@ -6,20 +6,29 @@ import cc.iotkit.common.constant.CacheNames;
 import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
-import cc.iotkit.common.utils.MapstructUtils;
-import cc.iotkit.common.utils.SpringUtils;
-import cc.iotkit.common.utils.StringUtils;
-import cc.iotkit.data.system.ISysConfigData;
+import cc.iotkit.common.utils.*;
+import cc.iotkit.data.ICommonData;
+import cc.iotkit.data.manager.*;
+import cc.iotkit.data.system.*;
 import cc.iotkit.model.system.SysConfig;
 import cc.iotkit.system.dto.bo.SysConfigBo;
 import cc.iotkit.system.dto.vo.SysConfigVo;
 import cc.iotkit.system.service.ISysConfigService;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ZipUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -179,4 +188,60 @@ public class SysConfigServiceImpl implements ISysConfigService {
         return SpringUtils.getAopProxy(this).selectConfigByKey(configKey);
     }
 
+    @Override
+    public File backupSysData() {
+        File fileDir = new File("./data/backup/" + DateUtils.dateTimeNow());
+        if (!fileDir.exists()) {
+            FileUtil.mkdir(fileDir);
+        }
+        writeData(fileDir, "category", SpringUtils.getBean(ICategoryData.class));
+        writeData(fileDir, "channel", SpringUtils.getBean(IChannelData.class));
+        writeData(fileDir, "channelConfig", SpringUtils.getBean(IChannelConfigData.class));
+        writeData(fileDir, "channelTemplate", SpringUtils.getBean(IChannelTemplateData.class));
+        writeData(fileDir, "deviceGroup", SpringUtils.getBean(IDeviceGroupData.class));
+        writeData(fileDir, "deviceInfo", SpringUtils.getBean(IDeviceInfoData.class));
+        writeData(fileDir, "home", SpringUtils.getBean(IHomeData.class));
+        writeData(fileDir, "notifyMessage", SpringUtils.getBean(INotifyMessageData.class));
+        writeData(fileDir, "product", SpringUtils.getBean(IProductData.class));
+        writeData(fileDir, "productModel", SpringUtils.getBean(IProductModelData.class));
+        writeData(fileDir, "ruleInfo", SpringUtils.getBean(IRuleInfoData.class));
+        writeData(fileDir, "space", SpringUtils.getBean(ISpaceData.class));
+        writeData(fileDir, "spaceDevice", SpringUtils.getBean(ISpaceDeviceData.class));
+        writeData(fileDir, "sys_app", SpringUtils.getBean(ISysAppData.class));
+        writeData(fileDir, "sys_config", SpringUtils.getBean(ISysConfigData.class));
+        writeData(fileDir, "sys_dept", SpringUtils.getBean(ISysDeptData.class));
+        writeData(fileDir, "sys_dict_data", SpringUtils.getBean(ISysDictData.class));
+        writeData(fileDir, "sys_dict_type", SpringUtils.getBean(ISysDictTypeData.class));
+        writeData(fileDir, "sys_logininfor", SpringUtils.getBean(ISysLogininforData.class));
+        writeData(fileDir, "sys_menu", SpringUtils.getBean(ISysMenuData.class));
+        writeData(fileDir, "sys_notice", SpringUtils.getBean(ISysNoticeData.class));
+        writeData(fileDir, "sys_oper_log", SpringUtils.getBean(ISysOperLogData.class));
+        writeData(fileDir, "sys_oss", SpringUtils.getBean(ISysOssData.class));
+        writeData(fileDir, "sys_oss_config", SpringUtils.getBean(ISysOssConfigData.class));
+        writeData(fileDir, "sys_post", SpringUtils.getBean(ISysPostData.class));
+        writeData(fileDir, "sys_role", SpringUtils.getBean(ISysRoleData.class));
+        writeData(fileDir, "sys_role_dept", SpringUtils.getBean(ISysRoleDeptData.class));
+        writeData(fileDir, "sys_role_menu", SpringUtils.getBean(ISysRoleMenuData.class));
+        writeData(fileDir, "sys_tenant", SpringUtils.getBean(ISysTenantData.class));
+        writeData(fileDir, "sys_tenant_package", SpringUtils.getBean(ISysTenantPackageData.class));
+        writeData(fileDir, "sys_user", SpringUtils.getBean(ISysUserData.class));
+        writeData(fileDir, "sys_user_post", SpringUtils.getBean(ISysUserPostData.class));
+        writeData(fileDir, "sys_user_role", SpringUtils.getBean(ISysUserRoleData.class));
+        writeData(fileDir, "taskInfo", SpringUtils.getBean(ITaskInfoData.class));
+        writeData(fileDir, "thingModel", SpringUtils.getBean(IThingModelData.class));
+        writeData(fileDir, "userInfo", SpringUtils.getBean(IUserInfoData.class));
+        writeData(fileDir, "virtualDevice", SpringUtils.getBean(IVirtualDeviceData.class));
+        String zipPath = fileDir.getAbsolutePath() + ".zip";
+        ZipUtil.zip(fileDir.getAbsolutePath(), zipPath);
+        return new File(zipPath);
+    }
+
+    @SneakyThrows
+    private void writeData(File dir, String name, ICommonData data) {
+        Path path = Paths.get(dir.getAbsolutePath(), name + ".json");
+        ObjectMapper mapper=new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        String formattedJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data.findAll());
+        FileUtil.writeString(formattedJson, path.toFile(), StandardCharsets.UTF_8);
+    }
 }

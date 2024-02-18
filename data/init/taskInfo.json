@@ -1,35 +1,23 @@
-[
-  {
-    "id": "97f79dde-bf3c-4d5b-bfd8-8102539002ad",
-    "name": "测试111",
-    "type": "timer",
-    "expression": "*/25 * * * * ? *",
-    "desc": "sss入网",
-    "actions": [
-      {
-        "type": "device",
-        "config": "{\"id\":\"f8de6282-771d-4cdb-9929-299db46f361d\",\"type\":\"device\",\"services\":[{\"device\":\"hbtgIA0SuVw9lxjB/AA:BB:CC:DD:11\",\"identifier\":\"allowJoin\",\"inputData\":[]}]}"
-      }
-    ],
-    "state": "stopped",
-    "uid": "1",
-    "createAt": 1645928016031,
-    "reason": "stop by 1"
-  },
-  {
-    "id": "667bbfa1-a7ed-4ce8-9ce0-cfa8cac90e6c",
-    "name": "2222",
-    "type": "delay",
-    "expression": "22",
-    "desc": "2222",
-    "actions": [
-      {
-        "type": "device",
-        "config": "{\"id\":\"24fd7df7-5c7d-4964-83af-a83d04b4db58\",\"type\":\"device\",\"services\":[{\"device\":\"Rf4QSjbm65X45753/ABC12300001\",\"identifier\":\"set\",\"inputData\":[{\"identifier\":\"powerstate\",\"value\":\"1\"}]}]}"
-      }
-    ],
-    "state": "stopped",
-    "createAt": 1645871966035,
-    "reason": "stop by 6286886077b91b031115e6a6"
-  }
-]
+[ {
+  "id" : "97f79dde-bf3c-4d5b-bfd8-8102539002ad",
+  "name" : "测试111",
+  "type" : "timer",
+  "expression" : "*/25 * * * * ? *",
+  "desc" : "sss入网",
+  "actions" : null,
+  "state" : "stopped",
+  "uid" : "1",
+  "createAt" : 1645928016031,
+  "reason" : "stop by 1"
+}, {
+  "id" : "667bbfa1-a7ed-4ce8-9ce0-cfa8cac90e6c",
+  "name" : "2222",
+  "type" : "delay",
+  "expression" : "22",
+  "desc" : "2222",
+  "actions" : null,
+  "state" : "stopped",
+  "uid" : null,
+  "createAt" : 1645871966035,
+  "reason" : "stop by 6286886077b91b031115e6a6"
+} ]
