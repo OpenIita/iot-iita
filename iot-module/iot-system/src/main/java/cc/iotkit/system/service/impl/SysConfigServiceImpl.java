@@ -231,6 +231,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
         writeData(fileDir, "thingModel", SpringUtils.getBean(IThingModelData.class));
         writeData(fileDir, "userInfo", SpringUtils.getBean(IUserInfoData.class));
         writeData(fileDir, "virtualDevice", SpringUtils.getBean(IVirtualDeviceData.class));
+        writeData(fileDir, "pluginInfo", SpringUtils.getBean(IPluginInfoData.class));
         String zipPath = fileDir.getAbsolutePath() + ".zip";
         ZipUtil.zip(fileDir.getAbsolutePath(), zipPath);
         return new File(zipPath);
