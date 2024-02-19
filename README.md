@@ -55,7 +55,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 [![OPENIITA/iita-iot-web-admin](https://gitee.com/open-iita/iita-iot-web-admin/widgets/widget_card.svg?colors=393222,ebdfc1,fffae5,d8ca9f,393222,a28b40)](https://gitee.com/open-iita/iita-iot-web-admin)
 
- **演示地址：** [点击访问](http://159.75.222.119:16808)
+ **演示地址：** [点击访问](http://117.72.13.229)
 
 
 **系统截图**
