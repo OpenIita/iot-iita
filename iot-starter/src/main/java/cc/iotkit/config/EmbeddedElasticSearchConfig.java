@@ -24,6 +24,11 @@ public class EmbeddedElasticSearchConfig {
     }
 
     public static boolean embeddedEnable() {
+        try {
+            Class.forName("cc.iotkit.temporal.es.config.ElasticsearchConfiguration");
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
         return !"true".equals(System.getProperty("disabledEmbeddedEs"));
     }
 
@@ -53,15 +58,15 @@ public class EmbeddedElasticSearchConfig {
         @SneakyThrows
         public EmbeddedElasticSearch(ConfigProperty properties) {
             super(InternalSettingsPreparer.prepareEnvironment(
-                    properties.applySetting(
-                            Settings.builder()
-                                    .put("node.name", "test")
-                                    .put("discovery.type", "single-node")
-                                    .put("transport.type", Netty4Plugin.NETTY_TRANSPORT_NAME)
-                                    .put("http.type", Netty4Plugin.NETTY_HTTP_TRANSPORT_NAME)
-                                    .put("network.host", "0.0.0.0")
-                                    .put("http.port", 9200)
-                    ).build(), Collections.emptyMap(), null, () -> "default"),
+                            properties.applySetting(
+                                    Settings.builder()
+                                            .put("node.name", "test")
+                                            .put("discovery.type", "single-node")
+                                            .put("transport.type", Netty4Plugin.NETTY_TRANSPORT_NAME)
+                                            .put("http.type", Netty4Plugin.NETTY_HTTP_TRANSPORT_NAME)
+                                            .put("network.host", "0.0.0.0")
+                                            .put("http.port", 9200)
+                            ).build(), Collections.emptyMap(), null, () -> "default"),
                     Collections.singleton(Netty4Plugin.class), false);
         }
     }

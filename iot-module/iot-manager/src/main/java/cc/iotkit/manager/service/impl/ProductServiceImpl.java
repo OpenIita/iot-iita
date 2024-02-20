@@ -4,6 +4,8 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
+import cc.iotkit.common.oss.entity.UploadResult;
+import cc.iotkit.common.oss.factory.OssFactory;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.*;
@@ -84,7 +86,7 @@ public class ProductServiceImpl implements IProductService {
         product.setProductSecret(secret);
         String productKey = data.getProductKey();
         Product oldProduct = productData.findByProductKey(productKey);
-        if(oldProduct != null){
+        if (oldProduct != null) {
             throw new BizException(ErrCode.PRODUCT_KEY_EXIST);
         }
 
@@ -187,7 +189,19 @@ public class ProductServiceImpl implements IProductService {
     @Override
     @SneakyThrows
     public String uploadImg(String productKey, MultipartFile file) {
-        return "";
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null) {
+            throw new BizException(ErrCode.PARAMS_EXCEPTION);
+        }
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.contains("image/")) {
+            throw new BizException(ErrCode.PARAMS_EXCEPTION, "上传的文件不是图片");
+        }
+
+        UploadResult upload = OssFactory.instance().upload(file.getInputStream(),
+                String.format("/product/%s%s", productKey, originalFilename.substring(originalFilename.lastIndexOf("."))),
+                contentType);
+        return upload.getUrl();
     }
 
     @Override

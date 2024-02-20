@@ -17,6 +17,7 @@ import com.gitee.starblues.core.descriptor.PluginDescriptor;
 import com.gitee.starblues.integration.AutoIntegrationConfiguration;
 import com.gitee.starblues.integration.operator.PluginOperator;
 import com.gitee.starblues.integration.operator.upload.UploadParam;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class PluginServiceImpl implements IPluginService {
             }
             String pluginId = plugin.getPluginId();
 
-            if (pluginId!=null && !file.getOriginalFilename().contains(pluginId)) {
+            if (pluginId != null && !file.getOriginalFilename().contains(pluginId)) {
                 throw new BizException(ErrCode.PLUGIN_INSTALL_FAILED, "文件名与原插件id不匹配");
             }
 
@@ -203,24 +204,25 @@ public class PluginServiceImpl implements IPluginService {
         Executors.newSingleThreadScheduledExecutor().schedule(this::startPlugins, 3, TimeUnit.SECONDS);
     }
 
+    @SneakyThrows
     private void startPlugins() {
-        try {
-            while (!pluginOperator.inited()) {
-                Thread.sleep(1000L);
-            }
+        while (!pluginOperator.inited()) {
+            Thread.sleep(1000L);
+        }
 
-            for (PluginInfo pluginInfo : pluginInfoData.findAll()) {
-                if (!PluginInfo.STATE_RUNNING.equals(pluginInfo.getState())) {
-                    continue;
-                }
-                log.info("start plugin:{}", pluginInfo.getPluginId());
+        for (PluginInfo pluginInfo : pluginInfoData.findAll()) {
+            if (!PluginInfo.STATE_RUNNING.equals(pluginInfo.getState())) {
+                continue;
+            }
+            log.info("start plugin:{}", pluginInfo.getPluginId());
+            try {
                 com.gitee.starblues.core.PluginInfo plugin = pluginOperator.getPluginInfo(pluginInfo.getPluginId());
                 if (plugin != null) {
                     pluginOperator.start(plugin.getPluginId());
                 }
+            } catch (Exception e) {
+                log.error("start plugin error", e);
             }
-        } catch (Exception e) {
-            log.error("start plugins error", e);
         }
     }
 

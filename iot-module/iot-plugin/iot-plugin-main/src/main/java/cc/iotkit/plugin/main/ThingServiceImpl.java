@@ -80,6 +80,7 @@ public class ThingServiceImpl implements IThingService {
                                     .type(ThingModelMessage.TYPE_EVENT)
                                     .identifier(eventReport.getName())
                                     .data(eventReport.getParams())
+                                    .time(eventReport.getTime())
                                     .build()
                     );
                     break;
@@ -91,6 +92,8 @@ public class ThingServiceImpl implements IThingService {
                                     .type(ThingModelMessage.TYPE_PROPERTY)
                                     .identifier(ThingModelMessage.ID_PROPERTY_REPORT)
                                     .data(propertyReport.getParams())
+                                    .time(propertyReport.getTime())
+                                    .occurred(propertyReport.getTime())
                                     .build()
                     );
                     break;
@@ -104,6 +107,7 @@ public class ThingServiceImpl implements IThingService {
                                     .mid(serviceReply.getReplyId())
                                     .code(serviceReply.getCode())
                                     .data(serviceReply.getParams())
+                                    .time(serviceReply.getTime())
                                     .build()
                     );
                     break;

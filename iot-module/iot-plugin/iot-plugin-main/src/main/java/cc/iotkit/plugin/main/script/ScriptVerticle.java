@@ -75,7 +75,7 @@ public class ScriptVerticle extends AbstractVerticle {
             String pluginId = plugin.getPluginId();
             String oldMd5 = pluginScripts.get(pluginId);
             String script = plugin.getScript();
-            if(script==null){
+            if (script == null) {
                 continue;
             }
             String md5 = CodecUtil.md5Str(script);
@@ -87,6 +87,7 @@ public class ScriptVerticle extends AbstractVerticle {
             if (scriptEngine == null) {
                 continue;
             }
+            log.info("plugin script has changed");
             pluginScripts.put(pluginId, md5);
             scriptEngine.setScript(script);
         }

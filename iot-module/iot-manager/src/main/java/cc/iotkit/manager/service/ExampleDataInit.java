@@ -10,6 +10,7 @@
 package cc.iotkit.manager.service;
 
 import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.data.manager.*;
 import cc.iotkit.data.system.*;
@@ -23,6 +24,7 @@ import cc.iotkit.model.notify.Channel;
 import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.ChannelTemplate;
 import cc.iotkit.model.notify.NotifyMessage;
+import cc.iotkit.model.plugin.PluginInfo;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ProductModel;
@@ -39,7 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -58,103 +59,7 @@ public class ExampleDataInit implements SmartInitializingSingleton {
     private boolean initDataFlg;
 
     @Autowired
-    private IOauthClientData oauthClientData;
-    @Autowired
-    private ICategoryData categoryData;
-    @Autowired
-    private IDeviceGroupData deviceGroupData;
-    @Autowired
-    @Qualifier("deviceInfoDataCache")
-    private IDeviceInfoData deviceInfoData;
-    @Autowired
-    private IHomeData homeData;
-    @Autowired
-    private IProductData productData;
-    @Autowired
-    private IProductModelData productModelData;
-    @Autowired
-    private IRuleInfoData ruleInfoData;
-    @Autowired
-    private ISpaceData spaceData;
-    @Autowired
-    private ISpaceDeviceData spaceDeviceData;
-    @Autowired
-    private ITaskInfoData taskInfoData;
-    @Autowired
-    private IThingModelData thingModelData;
-    @Autowired
-    private IUserInfoData userInfoData;
-    @Autowired
-    private IVirtualDeviceData virtualDeviceData;
-    @Autowired
     private IDbStructureData dbStructureData;
-    @Autowired
-    private IChannelData iChannelData;
-    @Autowired
-    private IChannelConfigData iChannelConfigData;
-    @Autowired
-    private IChannelTemplateData iChannelTemplateData;
-    @Autowired
-    private INotifyMessageData iNotifyMessageData;
-    @Autowired
-    private ISysDeptData sysDeptData;
-
-    @Autowired
-    private ISysMenuData sysMenuData;
-
-    @Autowired
-    private ISysPostData sysPostData;
-
-    @Autowired
-    private ISysRoleData sysRoleData;
-
-    @Autowired
-    private ISysUserData sysUserData;
-
-    @Autowired
-    private ISysTenantData sysTenantData;
-
-    @Autowired
-    private ISysConfigData sysConfigData;
-
-    @Autowired
-    private ISysDictData sysDictData;
-
-    @Autowired
-    private ISysDictTypeData sysDictTypeData;
-
-    @Autowired
-    private ISysLogininforData sysLogininforData;
-
-    @Autowired
-    private ISysNoticeData sysNoticeData;
-
-    @Autowired
-    private ISysOperLogData sysOperLogData;
-
-    @Autowired
-    private ISysOssData sysOssData;
-
-    @Autowired
-    private ISysOssConfigData sysOssConfigData;
-
-    @Autowired
-    private ISysRoleDeptData sysRoleDeptData;
-
-    @Autowired
-    private ISysRoleMenuData sysRoleMenuData;
-
-    @Autowired
-    private ISysTenantPackageData sysTenantPackageData;
-
-    @Autowired
-    private ISysUserPostData sysUserPostData;
-
-    @Autowired
-    private ISysUserRoleData sysUserRoleData;
-
-    @Autowired
-    private ISysAppData sysAppData;
 
     @Override
     public void afterSingletonsInstantiated() {
@@ -172,46 +77,48 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                     if (!initDataFlg) {
                         return;
                     }
-                    initData("category", categoryData, new TypeReference<List<Category>>() {
+                    initData("category", SpringUtils.getBean(ICategoryData.class), new TypeReference<List<Category>>() {
                     });
-                    initData("deviceGroup", deviceGroupData, new TypeReference<List<DeviceGroup>>() {
+                    initData("deviceGroup", SpringUtils.getBean(IDeviceGroupData.class), new TypeReference<List<DeviceGroup>>() {
                     });
-                    initData("deviceInfo", deviceInfoData, new TypeReference<List<DeviceInfo>>() {
+                    initData("deviceInfo", SpringUtils.getBean(IDeviceInfoData.class), new TypeReference<List<DeviceInfo>>() {
                     });
-                    initData("home", homeData, new TypeReference<List<Home>>() {
+                    initData("home", SpringUtils.getBean(IHomeData.class), new TypeReference<List<Home>>() {
                     });
-                    initData("oauthClient", oauthClientData, new TypeReference<List<OauthClient>>() {
+                    initData("oauthClient", SpringUtils.getBean(IOauthClientData.class), new TypeReference<List<OauthClient>>() {
                     });
-                    initData("product", productData, new TypeReference<List<Product>>() {
+                    initData("product", SpringUtils.getBean(IProductData.class), new TypeReference<List<Product>>() {
                     });
-                    initData("productModel", productModelData, new TypeReference<List<ProductModel>>() {
+                    initData("productModel", SpringUtils.getBean(IProductModelData.class), new TypeReference<List<ProductModel>>() {
                     });
-                    initData("ruleInfo", ruleInfoData, new TypeReference<List<RuleInfo>>() {
+                    initData("ruleInfo", SpringUtils.getBean(IRuleInfoData.class), new TypeReference<List<RuleInfo>>() {
                     });
-                    initData("space", spaceData, new TypeReference<List<Space>>() {
+                    initData("space", SpringUtils.getBean(ISpaceData.class), new TypeReference<List<Space>>() {
                     });
-                    initData("spaceDevice", spaceDeviceData, new TypeReference<List<SpaceDevice>>() {
+                    initData("spaceDevice", SpringUtils.getBean(ISpaceDeviceData.class), new TypeReference<List<SpaceDevice>>() {
                     });
-                    initData("taskInfo", taskInfoData, new TypeReference<List<TaskInfo>>() {
+                    initData("taskInfo", SpringUtils.getBean(ITaskInfoData.class), new TypeReference<List<TaskInfo>>() {
                     });
-                    List<ThingModel> thingModels = initData("thingModel", thingModelData, new TypeReference<>() {
+                    List<ThingModel> thingModels = initData("thingModel", SpringUtils.getBean(IThingModelData.class), new TypeReference<>() {
                     });
                     //初始化物模型时序数据结构
                     for (ThingModel thingModel : thingModels) {
                         dbStructureData.defineThingModel(thingModel);
                     }
 
-                    initData("userInfo", userInfoData, new TypeReference<List<UserInfo>>() {
+                    initData("userInfo", SpringUtils.getBean(IUserInfoData.class), new TypeReference<List<UserInfo>>() {
                     });
-                    initData("virtualDevice", virtualDeviceData, new TypeReference<List<VirtualDevice>>() {
+                    initData("virtualDevice", SpringUtils.getBean(IVirtualDeviceData.class), new TypeReference<List<VirtualDevice>>() {
                     });
-                    initData("channel", iChannelData, new TypeReference<List<Channel>>() {
+                    initData("channel", SpringUtils.getBean(IChannelData.class), new TypeReference<List<Channel>>() {
                     });
-                    initData("channelConfig", iChannelConfigData, new TypeReference<List<ChannelConfig>>() {
+                    initData("channelConfig", SpringUtils.getBean(IChannelConfigData.class), new TypeReference<List<ChannelConfig>>() {
                     });
-                    initData("channelTemplate", iChannelTemplateData, new TypeReference<List<ChannelTemplate>>() {
+                    initData("channelTemplate", SpringUtils.getBean(IChannelTemplateData.class), new TypeReference<List<ChannelTemplate>>() {
                     });
-                    initData("notifyMessage", iNotifyMessageData, new TypeReference<List<NotifyMessage>>() {
+                    initData("notifyMessage", SpringUtils.getBean(INotifyMessageData.class), new TypeReference<List<NotifyMessage>>() {
+                    });
+                    initData("pluginInfo", SpringUtils.getBean(IPluginInfoData.class), new TypeReference<List<PluginInfo>>() {
                     });
 
                     initSysData();
@@ -220,7 +127,7 @@ public class ExampleDataInit implements SmartInitializingSingleton {
 
                     FileUtils.write(initFile, "", StandardCharsets.UTF_8);
                 } catch (
-                        Throwable e) {
+                        Exception e) {
                     log.error("init error", e);
                 }
             }
@@ -229,62 +136,62 @@ public class ExampleDataInit implements SmartInitializingSingleton {
     }
 
     private void initSysData() throws IOException {
-        initData("sys_config", sysConfigData, new TypeReference<List<SysConfig>>() {
+        initData("sys_config", SpringUtils.getBean(ISysConfigData.class), new TypeReference<List<SysConfig>>() {
         });
 
-        initData("sys_dept", sysDeptData, new TypeReference<List<SysDept>>() {
+        initData("sys_dept", SpringUtils.getBean(ISysDeptData.class), new TypeReference<List<SysDept>>() {
         });
 
-        initData("sys_dict_data", sysDictData, new TypeReference<List<SysDictData>>() {
+        initData("sys_dict_data", SpringUtils.getBean(ISysDictData.class), new TypeReference<List<SysDictData>>() {
         });
 
-        initData("sys_dict_type", sysDictTypeData, new TypeReference<List<SysDictType>>() {
+        initData("sys_dict_type", SpringUtils.getBean(ISysDictTypeData.class), new TypeReference<List<SysDictType>>() {
         });
 
-        initData("sys_logininfor", sysLogininforData, new TypeReference<List<SysLoginInfo>>() {
+        initData("sys_logininfor", SpringUtils.getBean(ISysLogininforData.class), new TypeReference<List<SysLoginInfo>>() {
         });
-        initData("sys_menu", sysMenuData, new TypeReference<List<SysMenu>>() {
-        });
-
-        initData("sys_notice", sysNoticeData, new TypeReference<List<SysNotice>>() {
+        initData("sys_menu", SpringUtils.getBean(ISysMenuData.class), new TypeReference<List<SysMenu>>() {
         });
 
-        initData("sys_oper_log", sysOperLogData, new TypeReference<List<SysOperLog>>() {
+        initData("sys_notice", SpringUtils.getBean(ISysNoticeData.class), new TypeReference<List<SysNotice>>() {
         });
 
-        initData("sys_oss", sysOssData, new TypeReference<List<SysOss>>() {
+        initData("sys_oper_log", SpringUtils.getBean(ISysOperLogData.class), new TypeReference<List<SysOperLog>>() {
         });
 
-        initData("sys_oss_config", sysOssConfigData, new TypeReference<List<SysOssConfig>>() {
+        initData("sys_oss", SpringUtils.getBean(ISysOssData.class), new TypeReference<List<SysOss>>() {
         });
 
-        initData("sys_post", sysPostData, new TypeReference<List<SysPost>>() {
-        });
-        initData("sys_role", sysRoleData, new TypeReference<List<SysRole>>() {
+        initData("sys_oss_config", SpringUtils.getBean(ISysOssConfigData.class), new TypeReference<List<SysOssConfig>>() {
         });
 
-        initData("sys_role_dept", sysRoleDeptData, new TypeReference<List<SysRoleDept>>() {
+        initData("sys_post", SpringUtils.getBean(ISysPostData.class), new TypeReference<List<SysPost>>() {
+        });
+        initData("sys_role", SpringUtils.getBean(ISysRoleData.class), new TypeReference<List<SysRole>>() {
         });
 
-        initData("sys_role_menu", sysRoleMenuData, new TypeReference<List<SysRoleMenu>>() {
+        initData("sys_role_dept", SpringUtils.getBean(ISysRoleDeptData.class), new TypeReference<List<SysRoleDept>>() {
         });
 
-        initData("sys_tenant", sysTenantData, new TypeReference<List<SysTenant>>() {
+        initData("sys_role_menu", SpringUtils.getBean(ISysRoleMenuData.class), new TypeReference<List<SysRoleMenu>>() {
         });
 
-        initData("sys_tenant_package", sysTenantPackageData, new TypeReference<List<SysTenantPackage>>() {
+        initData("sys_tenant", SpringUtils.getBean(ISysTenantData.class), new TypeReference<List<SysTenant>>() {
         });
 
-        initData("sys_user", sysUserData, new TypeReference<List<SysUser>>() {
+        initData("sys_tenant_package", SpringUtils.getBean(ISysTenantPackageData.class), new TypeReference<List<SysTenantPackage>>() {
         });
 
-        initData("sys_user_post", sysUserPostData, new TypeReference<List<SysUserPost>>() {
+        initData("sys_user", SpringUtils.getBean(ISysUserData.class), new TypeReference<List<SysUser>>() {
         });
 
-        initData("sys_user_role", sysUserRoleData, new TypeReference<List<SysUserRole>>() {
+        initData("sys_user_post", SpringUtils.getBean(ISysUserPostData.class), new TypeReference<List<SysUserPost>>() {
         });
 
-        initData("sys_app", sysAppData, new TypeReference<List<SysApp>>() {
+        initData("sys_user_role", SpringUtils.getBean(ISysUserRoleData.class), new TypeReference<List<SysUserRole>>() {
+        });
+
+        initData("sys_app", SpringUtils.getBean(ISysAppData.class), new TypeReference<List<SysApp>>() {
         });
     }
 

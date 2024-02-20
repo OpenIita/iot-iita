@@ -1563,17 +1563,6 @@
           "accessMode": "r"
         },
         {
-          "identifier": "query",
-          "dataType": {
-            "type": "text",
-            "specs": {
-              "length": "255"
-            }
-          },
-          "name": "查询",
-          "accessMode": "rw"
-        },
-        {
           "identifier": "McuStatus",
           "dataType": {
             "type": "enum",
@@ -1966,17 +1955,6 @@
                 }
               },
               "name": "防冻",
-              "required": false
-            },
-            {
-              "identifier": "query",
-              "dataType": {
-                "type": "text",
-                "specs": {
-                  "length": "255"
-                }
-              },
-              "name": "查询",
               "required": false
             },
             {
@@ -2463,17 +2441,6 @@
                 }
               },
               "name": "水温度",
-              "required": false
-            },
-            {
-              "identifier": "query",
-              "dataType": {
-                "type": "text",
-                "specs": {
-                  "length": "255"
-                }
-              },
-              "name": "查询",
               "required": false
             },
             {
@@ -3007,17 +2974,6 @@
                 }
               },
               "name": "水温度",
-              "required": false
-            },
-            {
-              "identifier": "query",
-              "dataType": {
-                "type": "text",
-                "specs": {
-                  "length": "255"
-                }
-              },
-              "name": "查询",
               "required": false
             },
             {

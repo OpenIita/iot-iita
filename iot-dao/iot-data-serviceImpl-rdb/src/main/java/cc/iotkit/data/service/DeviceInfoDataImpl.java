@@ -437,11 +437,6 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     }
 
     @Override
-    public List<DeviceInfo> findAll() {
-        return new ArrayList<>();
-    }
-
-    @Override
     public Paging<DeviceInfo> findAll(PageRequest<DeviceInfo> pageRequest) {
         Page<TbDeviceInfo> ret = deviceInfoRepository.findAll(PageBuilder.toPageable(pageRequest));
         return new Paging<>(ret.getTotalElements(), MapstructUtils.convert(ret.getContent(), DeviceInfo.class));
