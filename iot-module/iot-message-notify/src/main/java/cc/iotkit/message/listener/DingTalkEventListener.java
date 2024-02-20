@@ -33,7 +33,7 @@ public class DingTalkEventListener implements MessageEventListener {
                 .text(DingTalkMessage.MessageContent.builder().content(message.getFormatContent()).build())
                 .build();
 
-        client.getAbs(dingTalkConfig.getDingTalkWebhook()).sendJson(qyWechatMessage)
+        client.postAbs(dingTalkConfig.getDingTalkWebhook()).sendJson(qyWechatMessage)
                 .onSuccess(response -> log.info("Received response with status code" + response.statusCode()))
                 .onFailure(err -> log.error("Something went wrong " + err.getMessage()));
     }
