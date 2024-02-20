@@ -33,7 +33,7 @@ public class QyWechatEventListener implements MessageEventListener {
                 .text(QyWechatMessage.MessageContent.builder().content(message.getFormatContent()).build())
                 .build();
 
-        client.getAbs(qyWechatConfig.getQyWechatWebhook()).sendJson(qyWechatMessage)
+        client.postAbs(qyWechatConfig.getQyWechatWebhook()).sendJson(qyWechatMessage)
                 .onSuccess(response -> log.info("Received response with status code" + response.statusCode()))
                 .onFailure(err -> log.error("Something went wrong " + err.getMessage()));
     }
