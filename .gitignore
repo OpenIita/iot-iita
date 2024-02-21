@@ -32,3 +32,4 @@ data/elasticsearch
 .DS_Store
 dependency-reduced-pom.xml
 /data/plugins
+/data/dist

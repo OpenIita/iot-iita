@@ -7,7 +7,7 @@
 <p align="center"><img  src="https://img.shields.io/badge/JDK-11+-important.svg">  <img  src="https://img.shields.io/badge/Redis-5.0-important.svg"> <img  src="https://img.shields.io/badge/SpringBoot-2.6.2-blue.svg"> <img  src="https://img.shields.io/badge/Elasticsearch-7.15.2-red.svg">  <img  src="https://img.shields.io/badge/Satoken-1.30.0-yellow.svg"> 
 </p>
 <p align="center"><img  src="https://img.shields.io/badge/License-Apache2.0-lightgrey.svg"> 
-<img  src="https://img.shields.io/badge/Copyright-铱塔智联/openiita-60569f.svg"> <img  src="https://img.shields.io/badge/v0.4.5-60569f.svg">
+<img  src="https://img.shields.io/badge/Copyright-铱塔智联/openiita-60569f.svg"> <img  src="https://img.shields.io/badge/v0.5.2-60569f.svg">
 <img  src="https://img.shields.io/badge/物联网平台-f44e91.svg">
 </p>
 
@@ -94,8 +94,14 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 
 2、application.xml中打开rocketmq配置
 
+#### Docker运行
+docker pull iotkits/iot-iita:latest
 
-#### 运行步骤
+docker run -p 8082:8082  -p 8086:8086 -p 8130-8140:8130-8140 iotkits/iot-iita:latest
+
+启动后访问 http://localhost:8082/
+
+#### 源码运行步骤
 1、安装jdk11
 
 2、clone代码([核心库](https://gitee.com/open-iita/iot-iita-core),[主项目库](https://gitee.com/open-iita/iotkit-parent),[插件库](https://gitee.com/open-iita/iot-iita-plugins))，在idea中导入项目
