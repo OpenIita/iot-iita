@@ -66,8 +66,8 @@ public class VirtualDeviceController {
     @ApiOperation("添加虚拟设备")
     @SaCheckPermission("iot:virtualDevice:add")
     @PostMapping("/add")
-    public void add(@Validated @RequestBody VirtualDevice virtualDevice) {
-        virtualDeviceData.save(virtualDevice);
+    public void add(@Validated @RequestBody Request<VirtualDevice> bo) {
+        virtualDeviceData.save(bo.getData());
     }
 
     /**
