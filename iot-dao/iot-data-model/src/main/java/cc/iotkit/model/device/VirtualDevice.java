@@ -97,11 +97,11 @@ public class VirtualDevice implements Owned<String> {
     /**
      * 运行状态
      */
-    private String state = STATE_STOPPED;
+    private String state;
 
     /**
      * 创建时间
      */
-    private Long createAt = System.currentTimeMillis();
+    private Long createAt;
 
 }
