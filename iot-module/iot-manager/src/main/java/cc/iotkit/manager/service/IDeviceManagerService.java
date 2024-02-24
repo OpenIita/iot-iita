@@ -28,7 +28,7 @@ import java.util.List;
  * @Description: 设备服务接口
  */
 public interface IDeviceManagerService {
-    Paging<DeviceInfo> getDevices(PageRequest<DeviceQueryBo> pageRequest);
+    Paging<DeviceInfoVo> getDevices(PageRequest<DeviceQueryBo> pageRequest);
 
     boolean addDevice(DeviceInfoBo data);
 

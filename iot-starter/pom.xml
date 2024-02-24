@@ -71,10 +71,10 @@
         </dependency>
 
         <!--打开注释 启用es数据库-->
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-temporal-serviceImpl-es</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cc.iotkit</groupId>-->
+<!--            <artifactId>iot-temporal-serviceImpl-es</artifactId>-->
+<!--        </dependency>-->
 
         <!--打开注释 启用timescale数据库-->
         <!--        <dependency>-->
@@ -83,10 +83,10 @@
         <!--        </dependency>-->
 
         <!--打开注释 启用tdengine数据库-->
-<!--        <dependency>-->
-<!--            <groupId>cc.iotkit</groupId>-->
-<!--            <artifactId>iot-temporal-serviceImpl-td</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-temporal-serviceImpl-td</artifactId>
+        </dependency>
 
         <!--====================第三方库===================-->
 

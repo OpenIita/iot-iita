@@ -85,7 +85,7 @@ public class DeviceController {
     @ApiOperation(value = "设备列表", notes = "设备列表", httpMethod = "POST")
     @SaCheckPermission("iot:device:query")
     @PostMapping("/list")
-    public Paging<DeviceInfo> getDevices(@Validated @RequestBody PageRequest<DeviceQueryBo> pageRequest) {
+    public Paging<DeviceInfoVo> getDevices(@Validated @RequestBody PageRequest<DeviceQueryBo> pageRequest) {
         return deviceServiceImpl.getDevices(pageRequest);
     }
 

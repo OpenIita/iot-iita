@@ -83,19 +83,11 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
     private MqProducer<ThingModelMessage> producer;
 
     @Override
-    public Paging<DeviceInfo> getDevices(PageRequest<DeviceQueryBo> pageRequest) {
+    public Paging<DeviceInfoVo> getDevices(PageRequest<DeviceQueryBo> pageRequest) {
         DeviceQueryBo query = pageRequest.getData();
 
         String uid = "";
         String subUid = "";
-//        if (!AuthUtil.isAdmin()) {
-//            //客户端用户使用绑定子用户查询
-//            if (AuthUtil.isClientUser()) {
-//                subUid = AuthUtil.getUserId();
-//            } else {
-//                uid = AuthUtil.getUserId();
-//            }
-//        }
 
         String pk = query.getProductKey();
         //关键字查询
@@ -103,8 +95,12 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
         String group = query.getGroup();
         String state = query.getState();
 
-        return deviceInfoData.findByConditions(uid, subUid, pk, group,
-                state, keyword, pageRequest.getPageNum(), pageRequest.getPageSize());
+        Paging<DeviceInfoVo> result = MapstructUtils.convert(deviceInfoData.findByConditions(uid, subUid, pk, group,
+                state, keyword, pageRequest.getPageNum(), pageRequest.getPageSize()), DeviceInfoVo.class);
+        for (DeviceInfoVo row : result.getRows()) {
+            row.setProduct(productData.findByProductKey(row.getProductKey()));
+        }
+        return result;
     }
 
     @Override
@@ -156,7 +152,11 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
         }
 
         dataOwnerService.checkOwner(deviceInfo);
-        return MapstructUtils.convert(deviceInfoData.findByParentId(deviceId), DeviceInfoVo.class);
+        List<DeviceInfoVo> list = MapstructUtils.convert(deviceInfoData.findByParentId(deviceId), DeviceInfoVo.class);
+        for (DeviceInfoVo row : list) {
+            row.setProduct(productData.findByProductKey(row.getProductKey()));
+        }
+        return list;
     }
 
     @Override
@@ -413,7 +413,7 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
         DeviceInfo di = data.to(DeviceInfo.class);
         di.setLocate(new DeviceInfo.Locate(data.getLongitude(), data.getLatitude()));
         di.setState(data.getState());
-        if(StringUtils.isBlank(data.getSecret())){
+        if (StringUtils.isBlank(data.getSecret())) {
             data.setSecret(RandomStringUtils.random(16));
         }
         //deviceName不可重复
@@ -423,6 +423,5 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
         }
         return deviceInfoData.save(di) != null;
     }
-
 
 }

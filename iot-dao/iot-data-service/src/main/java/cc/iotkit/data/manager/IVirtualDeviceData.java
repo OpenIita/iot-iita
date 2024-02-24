@@ -9,8 +9,10 @@
  */
 package cc.iotkit.data.manager;
 
+import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.data.IOwnedData;
+import cc.iotkit.model.alert.AlertConfig;
 import cc.iotkit.model.device.VirtualDevice;
 
 import java.util.List;
@@ -22,5 +24,5 @@ public interface IVirtualDeviceData extends IOwnedData<VirtualDevice, String> {
     List<VirtualDevice> findByUidAndState(String uid, String state);
 
     List<VirtualDevice> findByTriggerAndState(String trigger, String state);
-
+    
 }

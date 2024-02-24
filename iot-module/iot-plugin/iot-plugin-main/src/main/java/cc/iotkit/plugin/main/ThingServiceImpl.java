@@ -67,7 +67,11 @@ public class ThingServiceImpl implements IThingService {
             switch (type) {
                 case REGISTER:
                     //设备注册
-                    registerDevice(device, (DeviceRegister) action);
+                    registerDevice(device, (DeviceRegister) action, null);
+                    break;
+                case SUB_REGISTER:
+                    //子设备注册
+                    subRegisterDevice(pluginId, device, (SubDeviceRegister) action);
                     break;
                 case STATE_CHANGE:
                     deviceStateChange(device, (DeviceStateChange) action);
@@ -130,7 +134,7 @@ public class ThingServiceImpl implements IThingService {
     public ThingProduct getProduct(String pk) {
         try {
             Product product = productData.findByProductKey(pk);
-            if(product==null){
+            if (product == null) {
                 return null;
             }
             return ThingProduct.builder()
@@ -158,7 +162,7 @@ public class ThingServiceImpl implements IThingService {
     @Override
     public ThingDevice getDevice(String dn) {
         DeviceInfo deviceInfo = getDeviceInfo(dn);
-        if(deviceInfo==null){
+        if (deviceInfo == null) {
             return null;
         }
         return ThingDevice.builder()
@@ -179,7 +183,7 @@ public class ThingServiceImpl implements IThingService {
         return device.getProperty();
     }
 
-    private void registerDevice(DeviceInfo device, DeviceRegister register) {
+    private String registerDevice(DeviceInfo device, DeviceRegister register, String parentId) {
         String productKey = register.getProductKey();
         //指定了pk需验证
         if (StringUtils.isNotBlank(productKey)) {
@@ -191,6 +195,11 @@ public class ThingServiceImpl implements IThingService {
 
         if (device != null) {
             log.info("device already registered");
+            if (parentId != null) {
+                device.setParentId(parentId);
+                deviceInfoData.save(device);
+            }
+            return device.getDeviceId();
         } else {
             //不存在,注册新设备
             DeviceInfo deviceInfo = new DeviceInfo();
@@ -199,6 +208,7 @@ public class ThingServiceImpl implements IThingService {
             deviceInfo.setProductKey(productKey);
             deviceInfo.setDeviceName(register.getDeviceName());
             deviceInfo.setModel(register.getModel());
+            deviceInfo.setParentId(parentId);
             deviceInfo.setSecret(RandomStringUtils.randomAlphabetic(16));
             //默认离线
             deviceInfo.setState(new DeviceInfo.State(false, null, null));
@@ -213,6 +223,36 @@ public class ThingServiceImpl implements IThingService {
                             .type(ThingModelMessage.TYPE_LIFETIME)
                             .identifier("register")
                             .build()
+            );
+            return deviceInfo.getDeviceId();
+        }
+    }
+
+    private void subRegisterDevice(String pluginId, DeviceInfo parent, SubDeviceRegister register) {
+        //先注册父设备
+        String parentId = registerDevice(parent,
+                DeviceRegister.builder()
+                        .productKey(register.getProductKey())
+                        .deviceName(register.getDeviceName())
+                        .model(register.getModel())
+                        .version(register.getVersion())
+                        .build(), null);
+
+        for (DeviceRegister sub : register.getSubs()) {
+            String productKey = sub.getProductKey();
+            String deviceName = sub.getDeviceName();
+            DeviceInfo subDevice = getDeviceInfo(sub.getDeviceName());
+            //添加设备路由
+            deviceRouter.putRouter(deviceName, new PluginRouter(IPluginMain.MAIN_ID, pluginId));
+            //注册子设备
+            registerDevice(subDevice,
+                    DeviceRegister.builder()
+                            .productKey(productKey)
+                            .deviceName(deviceName)
+                            .model(sub.getModel())
+                            .version(sub.getVersion())
+                            .build()
+                    , parentId
             );
         }
     }

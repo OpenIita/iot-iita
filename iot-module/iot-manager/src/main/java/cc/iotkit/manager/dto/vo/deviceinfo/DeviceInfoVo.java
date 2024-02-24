@@ -1,6 +1,7 @@
 package cc.iotkit.manager.dto.vo.deviceinfo;
 
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.product.Product;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import io.github.linpeilie.annotations.AutoMapper;
@@ -16,7 +17,7 @@ import java.io.Serializable;
 @ApiModel(value = "DeviceInfoVo")
 @Data
 @ExcelIgnoreUnannotated
-@AutoMapper(target = DeviceInfo.class)
+@AutoMapper(target = DeviceInfo.class,convertGenerate = false)
 public class DeviceInfoVo implements Serializable {
 
     private static final long serialVersionUID = -1L;
@@ -43,10 +44,14 @@ public class DeviceInfoVo implements Serializable {
 
     @ApiModelProperty(value = "设备离线时间")
     @ExcelProperty(value = "设备离线时间")
+    @ReverseAutoMapping(source = "state.offlineTime", target = "offlineTime")
+    @AutoMapping(ignore = true)
     private Long offlineTime;
 
     @ApiModelProperty(value = "设备在线时间")
     @ExcelProperty(value = "设备在线时间")
+    @ReverseAutoMapping(source = "state.onlineTime", target = "onlineTime")
+    @AutoMapping(ignore = true)
     private Long onlineTime;
 
     @ApiModelProperty(value = "父级id")
@@ -63,13 +68,11 @@ public class DeviceInfoVo implements Serializable {
 
     @ApiModelProperty(value = "设备状态")
     @ExcelProperty(value = "设备状态")
+    @ReverseAutoMapping(source = "state.online", target = "online")
     @AutoMapping(ignore = true)
-    @ReverseAutoMapping(ignore = true)
-    private String state;
+    private Boolean online;
 
-    @ApiModelProperty(value = "用户id")
-    @ExcelProperty(value = "用户id")
-    private String uid;
-
+    @ApiModelProperty(value = "所属产品信息")
+    private Product product;
 
 }
