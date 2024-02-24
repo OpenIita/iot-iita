@@ -15,7 +15,7 @@
 此仓库为铱塔智联(openiita)物联网平台开源项目。
 铱塔智联开源平台是一个开源的物联网基础开发平台，提供了物联网及相关业务开发的常见基础功能, 能帮助你快速搭建自己的物联网相关业务平台。
 
-系统包含了品类、物模型、消息转换、通讯组件（mqtt/EMQX通讯组件、小度音箱接入组件、onenet Studio接入组件）、modbus透传接入、云端低代码设备开发、设备管理、设备分组、规则引擎、第三方平台接入、数据流转（http/mqtt/kafka）、数据可视化、报警中心等模块和智能家居APP（小程序）。
+系统包含了品类、物模型、消息转换、插件管理（mqtt插件、EMQX插件、http插件、tcp插件、modbus插件等）、设备管理、设备分组、规则引擎、第三方平台接入、数据流转（http/mqtt/kafka）、数据可视化、告警中心等模块。
 
 #### 低配服务器万级设备接入能力
 
@@ -102,15 +102,7 @@ docker run -p 8082:8082  -p 8086:8086 -p 8130-8140:8130-8140 iotkits/iot-iita:la
 启动后访问 http://localhost:8082/
 
 #### 源码运行步骤
-1、安装jdk11
-
-2、clone代码([核心库](https://gitee.com/open-iita/iot-iita-core),[主项目库](https://gitee.com/open-iita/iotkit-parent),[插件库](https://gitee.com/open-iita/iot-iita-plugins))，在idea中导入项目
-
-3、先install核心库，在主项目库的iot-starter模块的Application类上右键运行
-
-4、若出现报错，可能是数据没有初始化完或重复初始化，把项目根目录下.init文件和data/iotkit.xx文件删除后重启
-
-5、插件使用说明见：[插件使用说明](https://iotkit-open-source.gitee.io/document/pages/plugin/howtouse/)
+在线文档:[知识库](https://open-iita.feishu.cn/wiki/Km67wBKNNiFMrMkldCJcxa6vnLe)
 
 在配置好相应的jdk11环境后，推荐使用idea拉取代码，等待项目加载完成以后，先在Terminal里执行mvn clean install，然后在idea的maven操作框上点击下刷新
 ![1](doc/image-20230702173737805.png)
@@ -149,7 +141,7 @@ docker run -p 8082:8082  -p 8086:8086 -p 8130-8140:8130-8140 iotkits/iot-iita:la
 
 #### 文档
 
-http://iotkit-open-source.gitee.io/document/
+https://open-iita.feishu.cn/wiki/Km67wBKNNiFMrMkldCJcxa6vnLe
 
 
 
