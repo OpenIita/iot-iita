@@ -10,26 +10,39 @@
 package cc.iotkit.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import redis.embedded.RedisServer;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
+@Component
 public class EmbeddedRedisConfig {
 
-    public static boolean embeddedEnable() {
-        return !"true".equals(System.getProperty("disabledEmbeddedRedis"));
-    }
+    @Value("${spring.redis.embedded.enabled}")
+    private  boolean embeddedRedisEnabled;
+    @Value("${spring.redis.port}")
+    private  Integer redisPort;
 
-    public static void startEmbeddedRedisServer() {
+    @PostConstruct
+    private void start(){
+        if (embeddedRedisEnabled) {
+            startEmbeddedRedisServer(redisPort);
+        }
+
+    }
+    public static void startEmbeddedRedisServer(Integer port) {
         RedisServer redisServer;
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("windows")) {
             redisServer = RedisServer.builder().setting("maxheap 200m")
-                    .port(6378)
+                    .port(port)
                     .setting("bind localhost")
                     .build();
         } else {
             redisServer = RedisServer.builder()
-                    .port(6378)
+                    .port(port)
                     .setting("bind localhost")
                     .build();
         }

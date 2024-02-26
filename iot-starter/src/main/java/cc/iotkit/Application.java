@@ -9,8 +9,6 @@
  */
 package cc.iotkit;
 
-import cc.iotkit.config.EmbeddedElasticSearchConfig;
-import cc.iotkit.config.EmbeddedRedisConfig;
 import com.gitee.starblues.loader.DevelopmentMode;
 import com.gitee.starblues.loader.launcher.SpringBootstrap;
 import com.gitee.starblues.loader.launcher.SpringMainBootstrap;
@@ -31,14 +29,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class Application implements SpringBootstrap {
 
     public static void main(String[] args) {
-//        System.setProperty("disabledEmbeddedEs", "true");
-//        System.setProperty("disabledEmbeddedRedis", "true");
-        if (EmbeddedElasticSearchConfig.embeddedEnable()) {
-            EmbeddedElasticSearchConfig.startEmbeddedElasticSearch();
-        }
-        if (EmbeddedRedisConfig.embeddedEnable()) {
-            EmbeddedRedisConfig.startEmbeddedRedisServer();
-        }
 
         SpringMainBootstrap.launch(Application.class, args);
         log.info("server start success!");
