@@ -20,9 +20,9 @@ import javax.annotation.PostConstruct;
 @Component
 public class EmbeddedRedisConfig {
 
-    @Value("${spring.redis.embedded.enabled}")
+    @Value("${spring.redis.embedded.enabled:false}")
     private  boolean embeddedRedisEnabled;
-    @Value("${spring.redis.port}")
+    @Value("${spring.redis.port:6378}")
     private  Integer redisPort;
 
     @PostConstruct

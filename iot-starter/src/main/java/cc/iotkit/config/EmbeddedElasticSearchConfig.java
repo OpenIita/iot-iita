@@ -23,10 +23,10 @@ import java.util.Collections;
 @Component
 public class EmbeddedElasticSearchConfig {
 
-    @Value("${spring.elasticsearch.embedded.enabled}")
+    @Value("${spring.elasticsearch.embedded.enabled:false}")
     private  boolean embeddedElasticsearchEnabled;
 
-    @Value("${spring.elasticsearch.embedded.port}")
+    @Value("${spring.elasticsearch.embedded.port:9200}")
     private  Integer esPort;
 
     @PostConstruct
