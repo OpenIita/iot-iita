@@ -205,3 +205,4 @@ plugin:
   mainPackage: cc.iotkit
   pluginPath:
     - ./data/plugins
+

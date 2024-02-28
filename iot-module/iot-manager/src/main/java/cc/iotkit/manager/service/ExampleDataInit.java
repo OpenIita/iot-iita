@@ -47,6 +47,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -55,8 +56,11 @@ import java.util.TimerTask;
 @Service
 public class ExampleDataInit implements SmartInitializingSingleton {
 
-    @Value("${iita.init.data:true}")
+    @Value("${init.data.flag:true}")
     private boolean initDataFlg;
+
+    @Value("${init.data.path:.}")
+    private String initDataPath;
 
     @Autowired
     private IDbStructureData dbStructureData;
@@ -199,10 +203,14 @@ public class ExampleDataInit implements SmartInitializingSingleton {
         try {
             log.info("init {} data...", name);
             if (service.count() > 0) {
-                new RuntimeException("原数据库已存在" + name + "的旧数据，请清除后再重新初始化！").printStackTrace();
+                log.error("原数据库已存在" + name + "的旧数据，请清除后再重新初始化！系统正在退出。。。");
                 System.exit(0);
             }
-            String json = FileUtils.readFileToString(new File("./data/init/" + name + ".json"), StandardCharsets.UTF_8);
+            String path = initDataPath;
+            if (initDataPath.equals(".")) {
+                path = "./data/init";
+            }
+            String json = FileUtils.readFileToString(Paths.get(path, name + ".json").toFile(), StandardCharsets.UTF_8);
             List list = (List) JsonUtils.parseObject(json, type);
             for (Object obj : list) {
                 service.save((Id) obj);
