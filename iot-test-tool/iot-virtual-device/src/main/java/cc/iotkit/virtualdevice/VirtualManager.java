@@ -59,8 +59,8 @@ public class VirtualManager {
     private MqProducer<ThingModelMessage> producer;
 
     public VirtualManager(){
-//        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-//        executorService.schedule(this::init, 8, TimeUnit.SECONDS);
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+        executorService.schedule(this::init, 8, TimeUnit.SECONDS);
     }
 
     public void init() {

@@ -82,6 +82,9 @@ public class VirtualDeviceController {
         VirtualDevice oldData = checkOwner(virtualDevice.getId());
         ReflectUtil.copyNoNulls(virtualDevice, oldData,
                 "name", "productKey", "type", "trigger", "triggerExpression");
+        if (VirtualDevice.STATE_RUNNING.equals(virtualDevice.getState())) {
+            virtualManager.remove(oldData);
+        }
         virtualDevice.setState(VirtualDevice.STATE_STOPPED);
         virtualDeviceData.save(virtualDevice);
     }
