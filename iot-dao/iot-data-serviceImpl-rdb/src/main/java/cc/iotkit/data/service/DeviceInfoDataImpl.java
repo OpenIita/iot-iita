@@ -211,6 +211,12 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
                                                int page, int size) {
         JPAQuery<TbDeviceInfo> query = jpaQueryFactory.selectFrom(tbDeviceInfo);
 
+        // 根据groupId, 如果groupId存在，则关联查询TbDeviceGroupMapping, 根据groupId,查询对应的devices
+        if (StringUtils.isNotBlank(groupId)) {
+            query.join(tbDeviceGroupMapping).on(tbDeviceGroupMapping.deviceId.eq(tbDeviceInfo.deviceId));
+            query.where(tbDeviceGroupMapping.groupId.eq(groupId));
+        }
+
         if (StringUtils.isNotBlank(uid)) {
             query.where(tbDeviceInfo.uid.eq(uid));
         }

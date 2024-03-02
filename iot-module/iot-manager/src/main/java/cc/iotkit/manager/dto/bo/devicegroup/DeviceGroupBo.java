@@ -19,6 +19,10 @@ public class DeviceGroupBo extends BaseDto {
 
     private static final long serialVersionUID = -1L;
 
+    @ApiModelProperty(value = "分组id")
+    @NotNull(message = "分组id不能为空")
+    private String id;
+
     @ApiModelProperty(value = "创建时间")
     @NotNull(message = "创建时间不能为空")
     private Long createAt;

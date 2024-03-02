@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Map;
 
 
 @ApiModel(value = "DeviceInfoVo")
@@ -74,5 +75,8 @@ public class DeviceInfoVo implements Serializable {
 
     @ApiModelProperty(value = "所属产品信息")
     private Product product;
+
+    @ApiModelProperty(value = "所属分组")
+    private Map<String, DeviceInfo.Group> group;
 
 }
