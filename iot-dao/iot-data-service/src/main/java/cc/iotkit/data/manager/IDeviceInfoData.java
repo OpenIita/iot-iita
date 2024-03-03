@@ -68,13 +68,13 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
      * @param subUid     子账号id
      * @param productKey 产品key
      * @param groupId    设备分组
-     * @param state      是否在线:online在线,offline离线
+     * @param online      是否在线:true在线,false离线
      * @param keyword    关键字
      * @param page       页码
      * @param size       分页大小
      */
     Paging<DeviceInfo> findByConditions(String uid, String subUid, String productKey,
-                                        String groupId, String state, String keyword,
+                                        String groupId, Boolean online, String keyword,
                                         int page, int size);
 
     /**

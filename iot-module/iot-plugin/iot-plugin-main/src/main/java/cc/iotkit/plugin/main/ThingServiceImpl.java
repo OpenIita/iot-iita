@@ -222,6 +222,7 @@ public class ThingServiceImpl implements IThingService {
                     ThingModelMessage.builder()
                             .type(ThingModelMessage.TYPE_LIFETIME)
                             .identifier("register")
+                            .time(System.currentTimeMillis())
                             .build()
             );
             return deviceInfo.getDeviceId();
@@ -273,6 +274,7 @@ public class ThingServiceImpl implements IThingService {
                 ThingModelMessage.builder()
                         .type(ThingModelMessage.TYPE_STATE)
                         .identifier(action.getState().getState())
+                        .time(System.currentTimeMillis())
                         .build()
         );
     }

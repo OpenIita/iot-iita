@@ -16,7 +16,7 @@
         <!-- 将assemblies/bin目录下的所有文件输出到打包后的bin目录中 -->
         <fileSet>
             <directory>${project.parent.basedir}/iot-starter/src/main/bin</directory>
-            <outputDirectory>/bin</outputDirectory>
+            <outputDirectory>${project.name}/bin</outputDirectory>
             <includes>
                 <include>**/*.bat</include>
                 <include>**/*.sh</include>
@@ -30,7 +30,7 @@
         <!-- 将/iot-standalone/src/main/resources下配置文件打包到config目录 -->
         <fileSet>
             <directory>${project.parent.basedir}/iot-starter/src/main/resources</directory>
-            <outputDirectory>/config</outputDirectory>
+            <outputDirectory>${project.name}/config</outputDirectory>
             <includes>
                 <include>**/*.xml</include>
                 <include>**/*.properties</include>
@@ -42,7 +42,7 @@
         <!-- 将项目启动jar打包到lib目录中 -->
         <fileSet>
             <directory>target</directory>
-            <outputDirectory>lib</outputDirectory>
+            <outputDirectory>${project.name}/lib</outputDirectory>
             <includes>
                 <include>*.jar</include>
             </includes>
@@ -51,7 +51,7 @@
         <!-- 将项目说明文档打包到docs目录中 -->
         <fileSet>
             <directory>${project.parent.basedir}</directory>
-            <outputDirectory>docs</outputDirectory>
+            <outputDirectory>${project.name}/docs</outputDirectory>
             <includes>
                 <include>*.md</include>
             </includes>
@@ -60,22 +60,8 @@
 
         <!--将初始化数据打包到data目录-->
         <fileSet>
-            <directory>${project.parent.basedir}/data/components</directory>
-            <outputDirectory>data/components</outputDirectory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>${project.parent.basedir}/data/converters</directory>
-            <outputDirectory>data/converters</outputDirectory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-        <fileSet>
             <directory>${project.parent.basedir}/data/init</directory>
-            <outputDirectory>data/init</outputDirectory>
+            <outputDirectory>${project.name}/data/init</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>

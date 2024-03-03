@@ -148,7 +148,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
 
     @Override
     public Paging<DeviceInfo> findByConditions(String uid, String subUid, String productKey,
-                                               String groupId, String state, String keyword, int page, int size) {
+                                               String groupId, Boolean state, String keyword, int page, int size) {
         return deviceInfoData.findByConditions(uid, subUid, productKey, groupId, state, keyword, page, size);
     }
 

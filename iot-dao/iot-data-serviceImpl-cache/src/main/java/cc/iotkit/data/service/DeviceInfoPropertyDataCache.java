@@ -128,8 +128,8 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
-    public Paging<DeviceInfo> findByConditions(String uid, String subUid, String productKey, String groupId, String state, String keyword, int page, int size) {
-        return deviceInfoData.findByConditions(uid, subUid, productKey, groupId, state, keyword, page, size);
+    public Paging<DeviceInfo> findByConditions(String uid, String subUid, String productKey, String groupId, Boolean online, String keyword, int page, int size) {
+        return deviceInfoData.findByConditions(uid, subUid, productKey, groupId, online, keyword, page, size);
     }
 
     @Override

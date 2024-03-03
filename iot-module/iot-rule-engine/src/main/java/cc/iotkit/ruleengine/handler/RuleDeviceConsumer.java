@@ -42,7 +42,7 @@ public class RuleDeviceConsumer implements ConsumerHandler<ThingModelMessage>, A
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         Map<String, DeviceMessageHandler> handlerMap = applicationContext.getBeansOfType(DeviceMessageHandler.class);
-        messageHandlerPool = ThreadUtil.newScheduled(handlerMap.size(), "messageHandler");
+        messageHandlerPool = ThreadUtil.newScheduled(handlerMap.size() * 2, "messageHandler");
         this.handlers.addAll(handlerMap.values());
     }
 

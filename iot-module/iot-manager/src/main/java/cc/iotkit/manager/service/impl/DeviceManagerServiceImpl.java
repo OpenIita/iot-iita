@@ -93,10 +93,10 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
         //关键字查询
         String keyword = query.getKeyword();
         String group = query.getGroup();
-        String state = query.getState();
+        Boolean online = query.getOnline();
 
         Paging<DeviceInfoVo> result = MapstructUtils.convert(deviceInfoData.findByConditions(uid, subUid, pk, group,
-                state, keyword, pageRequest.getPageNum(), pageRequest.getPageSize()), DeviceInfoVo.class);
+                online, keyword, pageRequest.getPageNum(), pageRequest.getPageSize()), DeviceInfoVo.class);
         for (DeviceInfoVo row : result.getRows()) {
             row.setProduct(productData.findByProductKey(row.getProductKey()));
         }

@@ -207,7 +207,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     @Override
     public Paging<DeviceInfo> findByConditions(String uid, String subUid,
                                                String productKey, String groupId,
-                                               String state, String keyword,
+                                               Boolean online, String keyword,
                                                int page, int size) {
         JPAQuery<TbDeviceInfo> query = jpaQueryFactory.selectFrom(tbDeviceInfo);
 
@@ -230,8 +230,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
             query.where(tbDeviceInfo.productKey.eq(productKey));
         }
 
-        if (StringUtils.isNotBlank(state)) {
-            query.where(tbDeviceInfo.state.eq(state));
+        if (online != null) {
+            query.where(tbDeviceInfo.state.eq(online ? "online" : "offline"));
         }
 
         if (StringUtils.isNotBlank(keyword)) {
@@ -384,7 +384,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
 
     @Override
     public List<DeviceInfo> findByIds(Collection<String> ids) {
-        return MapstructUtils.convert(deviceInfoRepository.findAllById(ids),DeviceInfo.class);
+        return MapstructUtils.convert(deviceInfoRepository.findAllById(ids), DeviceInfo.class);
     }
 
     @Override

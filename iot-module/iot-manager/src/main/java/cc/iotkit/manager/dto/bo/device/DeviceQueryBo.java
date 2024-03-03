@@ -23,7 +23,6 @@ import lombok.EqualsAndHashCode;
 @ApiModel(value = "DeviceQueryBo")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = DeviceInfo.class, reverseConvertGenerate = false)
 public class DeviceQueryBo extends BaseDto {
 
 
@@ -60,7 +59,7 @@ public class DeviceQueryBo extends BaseDto {
     @Size(max = 255, message = "设备状态长度不正确")
     @AutoMapping(ignore = true)
     @ReverseAutoMapping(ignore = true)
-    private String state;
+    private Boolean online;
 
     @ApiModelProperty(value="用户id")
     @Size(max = 255, message = "用户id长度不正确")
