@@ -21,7 +21,7 @@ import java.util.List;
 public class TdResponse {
 
     public static final int CODE_SUCCESS = 0;
-    public static final int CODE_TB_NOT_EXIST = 866;
+    public static final int CODE_TB_NOT_EXIST = 9731;
 
     private String status;
 

@@ -238,11 +238,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateRoleStatus(Long roleId, String status) {
-        SysRole sysRole = new SysRole();
-        sysRole.setId(roleId);
+        SysRole sysRole = iSysRoleData.findById(roleId);
         sysRole.setStatus(status);
         iSysRoleData.updateById(sysRole);
-
     }
 
     /**

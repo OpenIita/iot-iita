@@ -66,7 +66,13 @@ public class DbStructureDataImpl implements IDbStructureData {
             String tbName = Constants.getProductPropertySTableName(thingModel.getProductKey());
             String sql = TableManager.getDescTableSql(tbName);
             TdResponse response = tdRestApi.execSql(sql);
-            if (response.getCode() != TdResponse.CODE_SUCCESS) {
+            int code = response.getCode();
+            if (code != TdResponse.CODE_SUCCESS) {
+                if (TdResponse.CODE_TB_NOT_EXIST == code) {
+                    defineThingModel(thingModel);
+                    return;
+                }
+
                 throw new BizException("get des table error:" + JsonUtils.toJsonString(response));
             }
 
@@ -76,7 +82,7 @@ public class DbStructureDataImpl implements IDbStructureData {
 
             //找出新增的字段
             List<TdField> addFields = newFields.stream().filter((f) -> oldFields.stream()
-                    .noneMatch(old -> old.getName().equals(f.getName())))
+                            .noneMatch(old -> old.getName().equals(f.getName())))
                     .collect(Collectors.toList());
             if (!addFields.isEmpty()) {
                 sql = TableManager.getAddSTableColumnSql(tbName, addFields);
@@ -88,11 +94,11 @@ public class DbStructureDataImpl implements IDbStructureData {
 
             //找出修改的字段
             List<TdField> modifyFields = newFields.stream().filter((f) -> oldFields.stream()
-                    .anyMatch(old ->
-                            old.getName().equals(f.getName()) //字段名相同
-                                    //字段类型或长度不同
-                                    && (!old.getType().equals(f.getType()) || old.getLength() != f.getLength())
-                    ))
+                            .anyMatch(old ->
+                                    old.getName().equals(f.getName()) //字段名相同
+                                            //字段类型或长度不同
+                                            && (!old.getType().equals(f.getType()) || old.getLength() != f.getLength())
+                            ))
                     .collect(Collectors.toList());
 
             if (!modifyFields.isEmpty()) {
@@ -105,10 +111,10 @@ public class DbStructureDataImpl implements IDbStructureData {
 
             //找出删除的字段
             List<TdField> dropFields = oldFields.stream().filter((f) ->
-                    !"time".equals(f.getName()) &&
-                            !"device_id".equals(f.getName()) && newFields.stream()
-                            //字段名不是time且没有相同字段名的
-                            .noneMatch(n -> n.getName().equals(f.getName())))
+                            !"time".equals(f.getName()) &&
+                                    !"device_id".equals(f.getName()) && newFields.stream()
+                                    //字段名不是time且没有相同字段名的
+                                    .noneMatch(n -> n.getName().equals(f.getName())))
                     .collect(Collectors.toList());
             if (!dropFields.isEmpty()) {
                 sql = TableManager.getDropSTableColumnSql(tbName, dropFields);
