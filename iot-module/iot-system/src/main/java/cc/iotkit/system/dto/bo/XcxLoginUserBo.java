@@ -1,4 +1,4 @@
-package cc.iotkit.model.wx;
+package cc.iotkit.system.dto.bo;
 
 import cc.iotkit.common.model.LoginUser;
 import lombok.Data;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class XcxLoginUser extends LoginUser {
+public class XcxLoginUserBo extends LoginUser {
 
 
     private static final long serialVersionUID = 1L;

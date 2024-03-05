@@ -7,6 +7,7 @@ import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.system.dto.LoginBody;
 import cc.iotkit.system.dto.RegisterBody;
 import cc.iotkit.system.dto.bo.SysTenantBo;
+import cc.iotkit.system.dto.bo.XcxLoginBo;
 import cc.iotkit.system.dto.vo.SysTenantVo;
 import cc.iotkit.system.service.ISysConfigService;
 import cc.iotkit.system.service.ISysTenantService;
@@ -59,7 +60,7 @@ public class AuthController {
     @ApiOperation("登录")
     @PostMapping("/login")
     public LoginVo login(@Validated @RequestBody Request<LoginBody> body) {
-        LoginBody loginBody=body.getData();
+        LoginBody loginBody = body.getData();
         LoginVo loginVo = new LoginVo();
         // 生成令牌
         String token = loginService.login(
@@ -73,15 +74,16 @@ public class AuthController {
     /**
      * 小程序登录(示例)
      *
-     * @param xcxCode 小程序code
+     * @param body 小程序appid,code
      * @return 结果
      */
     @ApiOperation("小程序登录")
     @PostMapping("/xcxLogin")
-    public LoginVo xcxLogin(@NotBlank(message = "{xcx.appId.not.blank}") String appId,@NotBlank(message = "{xcx.code.not.blank}") String xcxCode) {
+    public LoginVo xcxLogin(@Validated @RequestBody Request<XcxLoginBo> body) {
         LoginVo loginVo = new LoginVo();
+        XcxLoginBo data = body.getData();
         // 生成令牌
-        String token = loginService.xcxLogin(appId,xcxCode);
+        String token = loginService.xcxLogin(data.getAppId(), data.getCode());
         loginVo.setToken(token);
         return loginVo;
     }

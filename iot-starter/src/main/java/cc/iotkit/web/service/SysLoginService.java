@@ -25,7 +25,7 @@ import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.system.SysUser;
-import cc.iotkit.model.wx.XcxLoginUser;
+import cc.iotkit.system.dto.bo.XcxLoginUserBo;
 import cc.iotkit.system.dto.vo.SysAppVo;
 import cc.iotkit.system.dto.vo.SysTenantVo;
 import cc.iotkit.system.dto.vo.SysUserVo;
@@ -163,7 +163,7 @@ public class SysLoginService {
 //        checkTenant(user.getTenantId());
 
         // 此处可根据登录用户的数据不同 自行创建 loginUser
-        XcxLoginUser loginUser = new XcxLoginUser();
+        XcxLoginUserBo loginUser = new XcxLoginUserBo();
         loginUser.setUserId(user.getId());
         loginUser.setUsername(user.getNickName());
         loginUser.setUserType(UserType.APP_USER.getUserType());

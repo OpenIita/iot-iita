@@ -1,4 +1,4 @@
-package cc.iotkit.model.wx;
+package cc.iotkit.system.dto.bo;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.Data;
  */
 
 @Data
-public class XcxLoginBody {
+public class XcxLoginBo {
 
     /**
      * appId
