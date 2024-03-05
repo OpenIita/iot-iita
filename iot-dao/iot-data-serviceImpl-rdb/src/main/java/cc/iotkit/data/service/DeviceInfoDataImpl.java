@@ -142,9 +142,9 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
      */
     private void parseStateToVo(DeviceInfo dto, TbDeviceInfo vo) {
         DeviceInfo.State state = dto.getState();
-        vo.setState(state.isOnline() ? "online" : "offline");
-        vo.setOfflineTime(state.getOfflineTime());
-        vo.setOnlineTime(state.getOnlineTime());
+        vo.setState(state != null && state.isOnline() ? "online" : "offline");
+        vo.setOfflineTime(state != null ? state.getOfflineTime() : null);
+        vo.setOnlineTime(state != null ? state.getOnlineTime() : null);
         DeviceInfo.Locate locate = dto.getLocate();
         vo.setLongitude(locate.getLongitude());
         vo.setLatitude(locate.getLatitude());

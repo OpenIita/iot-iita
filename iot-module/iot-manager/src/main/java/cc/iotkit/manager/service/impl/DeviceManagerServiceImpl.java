@@ -412,7 +412,6 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
     public boolean saveDevice(DeviceInfoBo data) {
         DeviceInfo di = data.to(DeviceInfo.class);
         di.setLocate(new DeviceInfo.Locate(data.getLongitude(), data.getLatitude()));
-        di.setState(data.getState());
         if (StringUtils.isBlank(data.getSecret())) {
             data.setSecret(RandomStringUtils.random(16));
         }

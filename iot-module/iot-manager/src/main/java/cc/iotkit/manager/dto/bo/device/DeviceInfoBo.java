@@ -61,12 +61,6 @@ public class DeviceInfoBo extends BaseDto {
     @ApiModelProperty(value = "纬度")
     private String latitude;
 
-    @ApiModelProperty(value = "设备状态")
-    @Size(max = 255, message = "设备状态长度不正确")
-    @AutoMapping(ignore = true)
-    @ReverseAutoMapping(ignore = true)
-    private DeviceInfo.State state;
-
     @ApiModelProperty(value = "用户id")
     @Size(max = 255, message = "用户id长度不正确")
     private String uid;
