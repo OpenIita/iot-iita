@@ -278,7 +278,7 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
 
     @Override
     public List<DeviceInfo> findAllByCondition(DeviceInfo data) {
-        return Collections.emptyList();
+        return deviceInfoData.findAllByCondition(data);
     }
 
     @Override

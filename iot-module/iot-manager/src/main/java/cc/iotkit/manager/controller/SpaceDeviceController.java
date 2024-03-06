@@ -31,6 +31,7 @@ import cc.iotkit.model.space.Home;
 import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -67,6 +68,8 @@ public class SpaceDeviceController {
     private DataOwnerService dataOwnerService;
     @Autowired
     private IUserInfoData userInfoData;
+    @Autowired
+    private IDeviceManagerService deviceServiceImpl;
 
     /**
      * 我最近使用的设备列表
@@ -127,7 +130,7 @@ public class SpaceDeviceController {
         Map<String, Object> property = new HashMap<>();
         if (tm != null) {
             tm.getModel().setEvents(null);
-            property = JsonUtils.parseObject(JsonUtils.toJsonString(tm), Map.class);
+            property = JsonUtils.parseObject(JsonUtils.toJsonString(tm.getModel()), Map.class);
         }
         Category category = categoryData.findById(product.getCategory());
         DeviceInfo.State state = device.getState();
@@ -175,14 +178,18 @@ public class SpaceDeviceController {
         }
 
         List<FindDeviceVo> findDeviceVos = new ArrayList<>();
-        DeviceInfo findDevice = deviceInfoData.findByDeviceName(mac);
-
-        //查找网关下子设备
-        List<DeviceInfo> subDevices = new ArrayList<>();
-        if (findDevice.getParentId() == null) {
-            subDevices = deviceInfoData.findByParentId(findDevice.getDeviceId());
+        DeviceInfo query=new DeviceInfo();
+        query.setDeviceName(mac);
+        List<DeviceInfo> devices = deviceInfoData.findAllByCondition(query);
+        if(devices == null){
+            return findDeviceVos;
         }
-        List<DeviceInfo> devices = new ArrayList<>(subDevices);
+        //查找网关下子设备
+//        List<DeviceInfo> subDevices = new ArrayList<>();
+//        if (findDevice.getParentId() == null) {//如果是网关设备
+//            subDevices = deviceInfoData.findByParentId(findDevice.getDeviceId());
+//        }
+//        List<DeviceInfo> devices = new ArrayList<>(subDevices);
 
         //查找空间设备
         for (DeviceInfo device : devices) {
@@ -208,6 +215,12 @@ public class SpaceDeviceController {
         findDeviceVo.setProductImg(product.getImg());
         findDeviceVo.setCategoryName(category.getName());
         return findDeviceVo;
+    }
+
+    @ApiOperation("获取设备详情")
+    @PostMapping("/detail")
+    public DeviceInfo getDetail(@RequestBody @Validated Request<String> request) {
+        return deviceServiceImpl.getDetail(request.getData());
     }
 
     /**
@@ -239,6 +252,7 @@ public class SpaceDeviceController {
                 .deviceId(deviceId)
                 .name(device.getName())
                 .homeId(space.getHomeId())
+                .collect(false)
                 .build();
         spaceDeviceService.save(spaceDevice);
 

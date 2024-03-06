@@ -51,6 +51,11 @@
 
         <dependency>
             <groupId>cc.iotkit</groupId>
+            <artifactId>iot-common-websocket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.iotkit</groupId>
             <artifactId>iot-temporal-service</artifactId>
         </dependency>
 

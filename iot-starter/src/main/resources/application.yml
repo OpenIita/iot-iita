@@ -199,6 +199,11 @@ weixin:
   secret: xx
   authUrl: xx
 
+websocket:
+  enabled: true
+  path: /websocket
+  allowedOrigins: '*'
+
 # 插件配置
 plugin:
   runMode: prod

@@ -314,12 +314,13 @@ public class SysLoginService {
         // 使用 openid 查询绑定用户 如未绑定用户 则根据业务自行处理 例如 创建默认用户
         UserInfo user=userInfoData.findByUid(openid);
         if (ObjectUtil.isNull(user)) {
-            log.info("登录用户：{} 不存在.", openid);
+            log.info("小程序用户：{} 不存在,开始初始化", openid);
             user=new UserInfo();
             user.setType(UserInfo.USER_TYPE_CLIENT);
             user.setUid(openid);
             user.setRoles(Collections.singletonList(Constants.ROLE_CLIENT));
             user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_CLIENT_USER));
+            user.setTenantId(tenantId);
             user = userInfoData.save(user);
             //添加默认家庭
             Home home = homeService.save(HomeBo.builder()

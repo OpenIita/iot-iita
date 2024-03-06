@@ -245,13 +245,13 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
 
     @Override
     public DeferredResult addConsumer(String deviceId, String clientId) {
-
+    //修改为通过websocket下发给app
         DeferredResult<ThingModelMessage> result = new DeferredResult<>(0L);
         String uid = AuthUtil.getUserId();
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
         dataOwnerService.checkOwner(deviceInfo);
 
-        //按用户+客户端ID订阅
+//        按用户+客户端ID订阅
         return deferredDataConsumer.newConsumer(uid + clientId,
                 Constants.HTTP_CONSUMER_DEVICE_INFO_TOPIC + deviceId);
     }

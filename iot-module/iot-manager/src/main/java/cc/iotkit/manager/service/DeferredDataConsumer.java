@@ -12,9 +12,13 @@ package cc.iotkit.manager.service;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.utils.JsonUtils;
+import cc.iotkit.common.websocket.holder.WebSocketSessionHolder;
+import cc.iotkit.common.websocket.utils.WebSocketUtils;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.model.space.SpaceDevice;
 import cc.iotkit.mq.ConsumerHandler;
 import cc.iotkit.mq.MqConsumer;
+import cn.hutool.core.util.ObjectUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,6 +43,9 @@ public class DeferredDataConsumer implements ConsumerHandler<ThingModelMessage>,
     private final Map<String, Set<String>> topicConsumers = new ConcurrentHashMap<>();
     private final Map<String, DeferredResultInfo> consumerDeferred = new ConcurrentHashMap<>();
     private final DelayQueue<DelayedPush> delayedPushes = new DelayQueue<>();
+
+    @Autowired
+    private ISpaceDeviceService deviceServiceImpl;
 
     @Autowired
     private MqConsumer<ThingModelMessage> thingModelMessageConsumer;
@@ -104,9 +111,17 @@ public class DeferredDataConsumer implements ConsumerHandler<ThingModelMessage>,
                 ThingModelMessage.TYPE_STATE.equals(type)) {
             publish(Constants.HTTP_CONSUMER_DEVICE_INFO_TOPIC + msg.getDeviceId(),
                     msg);
+            sendWebSocket(msg);
         }
     }
 
+    public void sendWebSocket(ThingModelMessage msg){
+        SpaceDevice deviceInfo=deviceServiceImpl.findByDeviceId(msg.getDeviceId());
+        if(ObjectUtil.isNotNull(deviceInfo)&&ObjectUtil.isNotNull(deviceInfo.getCreateBy())&&WebSocketSessionHolder.existSession(deviceInfo.getCreateBy())){
+            WebSocketUtils.sendMessage(deviceInfo.getCreateBy(),JsonUtils.toJsonString(msg));
+        }
+
+    }
 
     @Override
     public void run() {
