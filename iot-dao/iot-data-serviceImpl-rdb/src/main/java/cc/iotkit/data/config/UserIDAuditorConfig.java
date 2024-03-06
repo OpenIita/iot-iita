@@ -14,6 +14,6 @@ import java.util.Optional;
 public class UserIDAuditorConfig implements AuditorAware<Long> {
     @Override
     public Optional<Long> getCurrentAuditor() {
-        return Optional.of(LoginHelper.getUserId());
+        return Optional.of(LoginHelper.getUserId()==null?1l:LoginHelper.getUserId());
     }
 }
