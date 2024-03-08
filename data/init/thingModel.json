@@ -1003,10 +1003,10 @@
         {
           "identifier": "swing_modes",
           "dataType": {
-            "type": "enum",
+            "type": "bool",
             "specs": {
-              "off": "关",
-              "on": "开"
+              "0": "关",
+              "1": "开"
             }
           },
           "name": "扫风开关",
@@ -1017,10 +1017,10 @@
           "dataType": {
             "type": "enum",
             "specs": {
-              "heat": "制热",
-              "off": "关闭",
-              "cool": "制冷",
-              "fan_only": "送风"
+              "0": "制热",
+              "1": "关闭",
+              "2": "制冷",
+              "3": "送风"
             }
           },
           "name": "模式",
@@ -1031,12 +1031,25 @@
           "dataType": {
             "type": "enum",
             "specs": {
-              "high": "高",
-              "medium": "中",
-              "low": "低"
+              "0": "高",
+              "1": "中",
+              "2": "低"
             }
           },
           "name": "风模式",
+          "accessMode": "rw"
+        },
+        {
+          "identifier": "presets_modes",
+          "dataType": {
+            "type": "enum",
+            "specs": {
+              "0": "节能",
+              "1": "睡眠",
+              "2": "活动"
+            }
+          },
+          "name": "预设模式",
           "accessMode": "rw"
         }
       ],

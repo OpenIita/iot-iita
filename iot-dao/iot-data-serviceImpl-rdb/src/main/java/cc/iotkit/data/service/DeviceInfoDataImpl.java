@@ -449,11 +449,6 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     }
 
     @Override
-    public List<DeviceInfo> findAllByCondition(DeviceInfo data) {
-        return Collections.emptyList();
-    }
-
-    @Override
     public DeviceInfo findOneByCondition(DeviceInfo data) {
         return null;
     }
