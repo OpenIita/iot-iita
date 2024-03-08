@@ -4,6 +4,8 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.enums.ErrCode;
+import cc.iotkit.common.excel.core.ExcelResult;
+import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.thing.ThingModelMessage;
@@ -19,9 +21,11 @@ import cc.iotkit.manager.dto.bo.device.DeviceTagAddBo;
 import cc.iotkit.manager.dto.bo.devicegroup.DeviceAddGroupBo;
 import cc.iotkit.manager.dto.bo.devicegroup.DeviceGroupBo;
 import cc.iotkit.manager.dto.vo.deviceconfig.DeviceConfigVo;
+import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupImportVo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.ParentDeviceVo;
+import cc.iotkit.manager.listener.DeviceGroupImportListener;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceCtrlService;
@@ -34,13 +38,16 @@ import cc.iotkit.model.product.Product;
 import cc.iotkit.mq.MqProducer;
 import cc.iotkit.temporal.IDevicePropertyData;
 import cc.iotkit.temporal.IThingModelMessageData;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -422,5 +429,20 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
         }
         return deviceInfoData.save(di) != null;
     }
+
+
+    @SneakyThrows
+    @Override
+    public String importGroup(MultipartFile file) {
+        ExcelResult<DeviceGroupImportVo> result = ExcelUtil.importExcel(file.getInputStream(), DeviceGroupImportVo.class, new DeviceGroupImportListener(true));
+        return result.getAnalysis();
+    }
+
+    @Override
+    public DeviceGroupVo getDeviceGroup(String id) {
+        DeviceGroup deviceGroup = deviceGroupData.findById(id);
+        return MapstructUtils.convert(deviceGroup, DeviceGroupVo.class);
+    }
+
 
 }

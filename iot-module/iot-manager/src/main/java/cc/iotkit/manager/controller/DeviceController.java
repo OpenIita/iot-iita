@@ -12,6 +12,7 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
+import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.manager.dto.bo.device.*;
 import cc.iotkit.manager.dto.bo.deviceconfig.DeviceConfigAddBo;
@@ -19,6 +20,7 @@ import cc.iotkit.manager.dto.bo.devicegroup.DeviceAddGroupBo;
 import cc.iotkit.manager.dto.bo.devicegroup.DeviceGroupBo;
 import cc.iotkit.manager.dto.bo.thingmodel.ThingModelMessageBo;
 import cc.iotkit.manager.dto.vo.deviceconfig.DeviceConfigVo;
+import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupImportVo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.ParentDeviceVo;
@@ -37,12 +39,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(tags = {"设备"})
@@ -230,6 +232,26 @@ public class DeviceController {
     @PostMapping("/group/add")
     public boolean addGroup(@Validated @RequestBody Request<DeviceGroupBo> group) {
         return deviceServiceImpl.addGroup(group.getData().to(DeviceGroup.class));
+    }
+
+
+    /**
+     * 导入设备分组-批量添加设备分组
+     */
+    @ApiOperation(value = "导入设备分组")
+    @SaCheckPermission("iot:deviceGroup:add")
+    @PostMapping("/group/importData")
+    public String importGroup(@RequestPart("file") MultipartFile file, @RequestParam("requestId") String requestId) {
+        return deviceServiceImpl.importGroup(file);
+    }
+
+    /**
+     * 获取导入模板
+     */
+    @ApiOperation("下载设备分组模板")
+    @PostMapping("/group/exportData")
+    public void exportGroupTemplate(HttpServletResponse response) {
+        ExcelUtil.exportExcel(new ArrayList<>(), "设备分组", DeviceGroupImportVo.class, response);
     }
 
     /**
