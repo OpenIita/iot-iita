@@ -11,4 +11,8 @@ public class ProductCacheEvict {
     public void findById(Long id) {
     }
 
+    @CacheEvict(value = Constants.CACHE_PRODUCT, key = "#root.method.name+#productKey")
+    public void findByProductKey(String productKey) {
+    }
+
 }

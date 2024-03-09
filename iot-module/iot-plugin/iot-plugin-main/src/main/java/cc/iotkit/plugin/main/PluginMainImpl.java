@@ -89,6 +89,9 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
         if (product.isTransparent()) {
             //如果是透传设备，取父级设备进行链路查找
             DeviceInfo parent = deviceInfoData.findByDeviceId(deviceInfo.getParentId());
+            if(parent==null){
+                throw new BizException(ErrCode.DEVICE_NOT_FOUND,"未找到父级设备");
+            }
             linkPk = parent.getProductKey();
             linkDn = parent.getDeviceName();
         }
