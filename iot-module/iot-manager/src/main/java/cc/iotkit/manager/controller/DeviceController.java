@@ -12,6 +12,7 @@ package cc.iotkit.manager.controller;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
+import cc.iotkit.common.api.Response;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.manager.dto.bo.device.*;
@@ -34,6 +35,7 @@ import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.util.IdUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -241,8 +243,8 @@ public class DeviceController {
     @ApiOperation(value = "导入设备分组")
     @SaCheckPermission("iot:deviceGroup:add")
     @PostMapping("/group/importData")
-    public String importGroup(@RequestPart("file") MultipartFile file, @RequestParam("requestId") String requestId) {
-        return deviceServiceImpl.importGroup(file);
+    public Response importGroup(@RequestPart("file") MultipartFile file, @RequestParam("requestId") String requestId) {
+        return new Response(200, deviceServiceImpl.importGroup(file), null, requestId);
     }
 
     /**

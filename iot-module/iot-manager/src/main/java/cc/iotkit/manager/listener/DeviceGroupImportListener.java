@@ -5,6 +5,7 @@ import cc.iotkit.common.excel.core.ExcelResult;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.utils.SpringUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.manager.dto.bo.devicegroup.DeviceGroupBo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupImportVo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
@@ -69,6 +70,12 @@ public class DeviceGroupImportListener extends AnalysisEventListener<DeviceGroup
 
     @Override
     public void invoke(DeviceGroupImportVo deviceGroupImportVo, AnalysisContext analysisContext) {
+        if ( StringUtils.isEmpty(deviceGroupImportVo.getId()) || StringUtils.isEmpty(deviceGroupImportVo.getName()) ) {
+            failureNum++;
+            String msg = "<br/>第" + failureNum + "条分组导入失败：设备分组ID或名称不能为空";
+            return;
+        }
+
         DeviceGroupVo deviceGroupVo = this.deviceManagerService.getDeviceGroup(deviceGroupImportVo.getId());
         try {
             if (ObjectUtil.isNull(deviceGroupVo)) {
@@ -86,7 +93,7 @@ public class DeviceGroupImportListener extends AnalysisEventListener<DeviceGroup
             }
         } catch (Exception e) {
             failureNum++;
-            String msg = "<br/>第" + failureNum + "条分组： " + deviceGroupImportVo.getName() + " 导入失败：";
+            String msg = "<br/>第" + failureNum + "条分组： " + deviceGroupImportVo.getId() + " 导入失败：";
             failureMsg.append(msg).append(e.getMessage());
         }
     }
