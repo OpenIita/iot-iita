@@ -18,6 +18,7 @@ import cc.iotkit.model.device.DeviceGroup;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DeviceProperty;
 import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -75,4 +76,10 @@ public interface IDeviceManagerService {
     DeviceConfigVo getConfig(String deviceId);
 
     boolean saveDevice(DeviceInfoBo data);
+
+    String importGroup(MultipartFile file);
+
+    DeviceGroupVo getDeviceGroup(String id);
+
+    String importDevice(MultipartFile file);
 }
