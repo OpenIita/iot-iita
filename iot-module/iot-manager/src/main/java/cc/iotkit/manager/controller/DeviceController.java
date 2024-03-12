@@ -23,6 +23,7 @@ import cc.iotkit.manager.dto.bo.thingmodel.ThingModelMessageBo;
 import cc.iotkit.manager.dto.vo.deviceconfig.DeviceConfigVo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupImportVo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
+import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoImportVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.ParentDeviceVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
@@ -148,6 +149,26 @@ public class DeviceController {
     @PostMapping("/batchDelete")
     public boolean batchDelete(@Validated @RequestBody Request<List<String>> request) {
         return deviceServiceImpl.batchDeleteDevice(request.getData());
+    }
+
+
+    /**
+     * 导入设备-批量添加设备
+     */
+    @ApiOperation(value = "导入设备")
+    @SaCheckPermission("iot:device:add")
+    @PostMapping("/importData")
+    public Response importDevice(@RequestPart("file") MultipartFile file, @RequestParam("requestId") String requestId) {
+        return new Response(200, deviceServiceImpl.importDevice(file), null, requestId);
+    }
+
+    /**
+     * 获取导入设备模板
+     */
+    @ApiOperation("下载设备模板")
+    @PostMapping("/exportData")
+    public void exportDeviceTemplate(HttpServletResponse response) {
+        ExcelUtil.exportExcel(new ArrayList<>(), "设备分组", DeviceInfoImportVo.class, response);
     }
 
     @ApiOperation("设备物模型日志")

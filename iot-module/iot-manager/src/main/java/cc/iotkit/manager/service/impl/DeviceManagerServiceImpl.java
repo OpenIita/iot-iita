@@ -23,9 +23,11 @@ import cc.iotkit.manager.dto.bo.devicegroup.DeviceGroupBo;
 import cc.iotkit.manager.dto.vo.deviceconfig.DeviceConfigVo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupImportVo;
 import cc.iotkit.manager.dto.vo.devicegroup.DeviceGroupVo;
+import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoImportVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.DeviceInfoVo;
 import cc.iotkit.manager.dto.vo.deviceinfo.ParentDeviceVo;
 import cc.iotkit.manager.listener.DeviceGroupImportListener;
+import cc.iotkit.manager.listener.DeviceInfoImportListener;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.DeferredDataConsumer;
 import cc.iotkit.manager.service.DeviceCtrlService;
@@ -47,7 +49,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -442,6 +443,13 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
     public DeviceGroupVo getDeviceGroup(String id) {
         DeviceGroup deviceGroup = deviceGroupData.findById(id);
         return MapstructUtils.convert(deviceGroup, DeviceGroupVo.class);
+    }
+
+    @SneakyThrows
+    @Override
+    public String importDevice(MultipartFile file) {
+        ExcelResult<DeviceInfoImportVo> result = ExcelUtil.importExcel(file.getInputStream(), DeviceInfoImportVo.class, new DeviceInfoImportListener(true));
+        return result.getAnalysis();
     }
 
 

@@ -80,4 +80,6 @@ public interface IDeviceManagerService {
     String importGroup(MultipartFile file);
 
     DeviceGroupVo getDeviceGroup(String id);
+
+    String importDevice(MultipartFile file);
 }

@@ -72,7 +72,7 @@ public class DeviceGroupImportListener extends AnalysisEventListener<DeviceGroup
     public void invoke(DeviceGroupImportVo deviceGroupImportVo, AnalysisContext analysisContext) {
         if ( StringUtils.isEmpty(deviceGroupImportVo.getId()) || StringUtils.isEmpty(deviceGroupImportVo.getName()) ) {
             failureNum++;
-            String msg = "<br/>第" + failureNum + "条分组导入失败：设备分组ID或名称不能为空";
+            failureMsg.append("<br/>第").append(analysisContext.getCurrentRowNum()).append("行，设备分组ID或名称不能为空");
             return;
         }
 
@@ -83,18 +83,16 @@ public class DeviceGroupImportListener extends AnalysisEventListener<DeviceGroup
                 DeviceGroup deviceGroup = BeanUtil.toBean(deviceGroupImportVo, DeviceGroup.class);
                 deviceGroup.setUid(this.userId);
                 this.deviceManagerService.addGroup(deviceGroup);
-                successNum++;
             } else if (Boolean.TRUE.equals(isUpdateSupport)) {
                 // 修改
                 DeviceGroupBo deviceGroupBo = BeanUtil.toBean(deviceGroupImportVo, DeviceGroupBo.class);
                 deviceGroupBo.setUid(this.userId);
                 this.deviceManagerService.updateGroup(deviceGroupBo);
-                successNum++;
             }
+            successNum++;
         } catch (Exception e) {
             failureNum++;
-            String msg = "<br/>第" + failureNum + "条分组： " + deviceGroupImportVo.getId() + " 导入失败：";
-            failureMsg.append(msg).append(e.getMessage());
+            failureMsg.append("<br/>第").append(analysisContext.getCurrentRowNum()).append("行，导入失败:").append(e.getMessage());
         }
     }
 
