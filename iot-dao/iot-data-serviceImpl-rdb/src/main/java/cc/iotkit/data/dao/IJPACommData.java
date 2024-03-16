@@ -2,10 +2,15 @@ package cc.iotkit.data.dao;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
+import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.ICommonData;
+import cc.iotkit.data.model.BaseEntity;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import org.springframework.data.domain.Example;
@@ -54,6 +59,9 @@ public interface IJPACommData<T extends Id<ID>, ID> extends ICommonData<T, ID> {
             //只更新不为空的字段
             BeanUtil.copyProperties(tbData, dbObj, CopyOptions.create().ignoreNullValue());
             tbData = dbObj;
+        }
+        if (tbData instanceof TenantAware) {
+            ((TenantAware) tbData).setTenantId(TenantHelper.getTenantId());
         }
 
         Object o = getBaseRepository().save(tbData);
