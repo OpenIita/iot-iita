@@ -68,7 +68,7 @@ Vertx event-bus（内置）、RocketMQ，通过扩展模块可接入其它任意
 软件架构说明
 本系统采用springboot、jpa、vertx、redis、H2、mysql、elasticsearch、TDEngine、RocketMq、sa-token等框架和第三方软件，中间件采用模块化无侵入集成非常容易扩展和替换。
 
-默认使用内置的redis、h2数据库、es时序数据库和vertx消息总线以减小启动难度，可实现 **零配置一键启动** ，程序在第一次启动的时候会使用data/init目录的示例数据进行初始化。
+默认使用内置的redis、h2数据库、es时序数据库、vertx消息总线和oss以减小启动难度，可实现 **零配置一键启动** ，程序在第一次启动的时候会使用data/init目录的示例数据进行初始化。
 
 管理员账号密码：admin/admin123
 
