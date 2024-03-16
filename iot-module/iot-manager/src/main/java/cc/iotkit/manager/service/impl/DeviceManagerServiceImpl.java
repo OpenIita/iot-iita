@@ -285,7 +285,9 @@ public class DeviceManagerServiceImpl implements IDeviceManagerService {
         DeviceGroup group = bo.to(DeviceGroup.class);
         DeviceGroup dbGroup = deviceGroupData.findById(group.getId());
         if (dbGroup == null) {
-            throw new BizException(ErrCode.GROUP_NOT_FOUND);
+            // 如果不存在，则添加分组
+            return addGroup(group);
+//            throw new BizException(ErrCode.GROUP_NOT_FOUND);
         }
         dataOwnerService.checkOwner(dbGroup);
         ReflectUtil.copyNoNulls(group, dbGroup);
