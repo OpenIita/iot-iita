@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iotkit-parent</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.5.2-SNAPSHOT</version>
+        <version>0.5.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,6 +21,12 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.1</version>
         </dependency>
 
         <dependency>
@@ -40,10 +46,10 @@
         </dependency>
 
         <!--打开注释使用rocketmq消息总线-->
-<!--        <dependency>-->
-<!--            <groupId>cc.iotkit</groupId>-->
-<!--            <artifactId>iot-message-rocketmq</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>cc.iotkit</groupId>-->
+        <!--            <artifactId>iot-message-rocketmq</artifactId>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>cc.iotkit</groupId>
@@ -83,10 +89,16 @@
         <!--        </dependency>-->
 
         <!--打开注释 启用tdengine数据库-->
-<!--        <dependency>-->
-<!--            <groupId>cc.iotkit</groupId>-->
-<!--            <artifactId>iot-temporal-serviceImpl-td</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>cc.iotkit</groupId>-->
+        <!--            <artifactId>iot-temporal-serviceImpl-td</artifactId>-->
+        <!--        </dependency>-->
+
+        <!--内置oss-->
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-oss-embed</artifactId>
+        </dependency>
 
         <!--====================第三方库===================-->
 

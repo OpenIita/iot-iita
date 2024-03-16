@@ -33,3 +33,4 @@ data/elasticsearch
 dependency-reduced-pom.xml
 /data/plugins
 /data/dist
+/data/iot-oss

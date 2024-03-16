@@ -6,9 +6,9 @@
     <parent>
         <artifactId>iot-dao</artifactId>
         <groupId>cc.iotkit</groupId>
-        <version>0.5.2-SNAPSHOT</version>
+        <version>0.5.3</version>
     </parent>
-    <version>0.5.2-SNAPSHOT</version>
+    <version>0.5.3</version>
     <artifactId>iot-temporal-serviceImpl-ts</artifactId>
 
     <description>

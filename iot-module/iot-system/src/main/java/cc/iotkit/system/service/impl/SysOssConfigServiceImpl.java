@@ -21,13 +21,14 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -44,17 +45,23 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
 
     private final ISysOssConfigData baseData;
 
+    @Scheduled(fixedRate = 10, timeUnit = TimeUnit.SECONDS)
+    private void keepAlive() {
+        String configKey = RedisUtils.getCacheObject(OssConstant.DEFAULT_CONFIG_KEY);
+        if(configKey==null){
+            init();
+        }
+    }
+
     /**
      * 项目启动时，初始化参数到缓存，加载配置类
      */
     @Override
     public void init() {
         List<SysOssConfig> list = baseData.findAll();
-
         List<SysOssConfig> notEmptyTenantIdList = list.stream().filter(item -> StringUtils.isNotBlank(item.getTenantId())).collect(Collectors.toList());
         Map<String, List<SysOssConfig>> map = StreamUtils.groupByKey(notEmptyTenantIdList, SysOssConfig::getTenantId);
         try {
-
             for (Map.Entry<String, List<SysOssConfig>> stringListEntry : map.entrySet()) {
                 TenantHelper.setDynamic(stringListEntry.getKey());
                 for (SysOssConfig config : stringListEntry.getValue()) {
@@ -142,16 +149,11 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
      * 启用禁用状态
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int updateOssConfigStatus(SysOssConfigBo bo) {
-//        SysOssConfig sysOssConfig = MapstructUtils.convert(bo, SysOssConfig.class);
-//        int row = baseData.save(null, new LambdaUpdateWrapper<SysOssConfig>()
-//            .set(SysOssConfig::getStatus, "1"));
-//        row += baseMapper.updateById(sysOssConfig);
-//        if (row > 0) {
-//            RedisUtils.setCacheObject(OssConstant.DEFAULT_CONFIG_KEY, sysOssConfig.getConfigKey());
-//        }
-//        return row;
+        SysOssConfig old = baseData.findById(bo.getId());
+        old.setStatus(bo.getStatus());
+        baseData.save(old);
+        RedisUtils.deleteObject(OssConstant.DEFAULT_CONFIG_KEY);
         return 0;
     }
 
