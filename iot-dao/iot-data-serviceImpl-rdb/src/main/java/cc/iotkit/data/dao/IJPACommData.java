@@ -6,6 +6,7 @@ import cc.iotkit.common.tenant.dao.TenantAware;
 import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.ICommonData;
 import cc.iotkit.data.model.BaseEntity;
 import cc.iotkit.data.util.PageBuilder;
@@ -61,7 +62,15 @@ public interface IJPACommData<T extends Id<ID>, ID> extends ICommonData<T, ID> {
             tbData = dbObj;
         }
         if (tbData instanceof TenantAware) {
-            ((TenantAware) tbData).setTenantId(TenantHelper.getTenantId());
+            String sourceTid = null;
+            if (data instanceof TenantModel) {
+                sourceTid = ((TenantModel) data).getTenantId();
+            }
+            String tenantId = TenantHelper.getTenantId();
+            //未指定租户id,使用当前用户所属租户id
+            if (StringUtils.isBlank(sourceTid) && tenantId != null) {
+                ((TenantAware) tbData).setTenantId(tenantId);
+            }
         }
 
         Object o = getBaseRepository().save(tbData);
