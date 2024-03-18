@@ -7,6 +7,7 @@ import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.oss.core.OssClient;
 import cc.iotkit.common.oss.entity.UploadResult;
 import cc.iotkit.common.oss.enumd.AccessPolicyType;
+import cc.iotkit.common.oss.exception.OssException;
 import cc.iotkit.common.oss.factory.OssFactory;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
@@ -19,6 +20,7 @@ import cc.iotkit.system.service.ISysOssService;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +35,7 @@ import java.util.List;
  *
  * @author Lion Li
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SysOssServiceImpl implements ISysOssService {
@@ -81,7 +84,7 @@ public class SysOssServiceImpl implements ISysOssService {
     @Override
     public SysOssVo upload(MultipartFile file) {
         String originalFileName = file.getOriginalFilename();
-        if(originalFileName ==null){
+        if (originalFileName == null) {
             throw new BizException("文件名为空，获取失败");
         }
         String suffix = StringUtils.substring(originalFileName, originalFileName.lastIndexOf("."), originalFileName.length());
@@ -124,11 +127,16 @@ public class SysOssServiceImpl implements ISysOssService {
      * @return oss 匹配Url的OSS对象
      */
     private SysOssVo matchingUrl(SysOssVo oss) {
-        OssClient storage = OssFactory.instance(oss.getService());
-        // 仅修改桶类型为 private 的URL，临时URL时长为120s
-        if (AccessPolicyType.PRIVATE == storage.getAccessPolicy()) {
-            oss.setUrl(storage.getPrivateUrl(oss.getFileName(), 120));
+        try {
+            OssClient storage = OssFactory.instance(oss.getService());
+            // 仅修改桶类型为 private 的URL，临时URL时长为120s
+            if (AccessPolicyType.PRIVATE == storage.getAccessPolicy()) {
+                oss.setUrl(storage.getPrivateUrl(oss.getFileName(), 120));
+            }
+            return oss;
+        } catch (OssException e) {
+            log.error("matchingUrl error", e);
+            return new SysOssVo();
         }
-        return oss;
     }
 }

@@ -2,10 +2,16 @@ package cc.iotkit.data.dao;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
+import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.utils.MapstructUtils;
+import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.ICommonData;
+import cc.iotkit.data.model.BaseEntity;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import org.springframework.data.domain.Example;
@@ -54,6 +60,17 @@ public interface IJPACommData<T extends Id<ID>, ID> extends ICommonData<T, ID> {
             //只更新不为空的字段
             BeanUtil.copyProperties(tbData, dbObj, CopyOptions.create().ignoreNullValue());
             tbData = dbObj;
+        }
+        if (tbData instanceof TenantAware) {
+            String sourceTid = null;
+            if (data instanceof TenantModel) {
+                sourceTid = ((TenantModel) data).getTenantId();
+            }
+            String tenantId = TenantHelper.getTenantId();
+            //未指定租户id,使用当前用户所属租户id
+            if (StringUtils.isBlank(sourceTid) && tenantId != null) {
+                ((TenantAware) tbData).setTenantId(tenantId);
+            }
         }
 
         Object o = getBaseRepository().save(tbData);
