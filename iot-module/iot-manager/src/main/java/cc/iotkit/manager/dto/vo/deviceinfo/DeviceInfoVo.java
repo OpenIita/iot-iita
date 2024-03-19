@@ -79,4 +79,7 @@ public class DeviceInfoVo implements Serializable {
     @ApiModelProperty(value = "所属分组")
     private Map<String, DeviceInfo.Group> group;
 
+    @ApiModelProperty(value = "位置信息")
+    private DeviceInfo.Locate locate;
+
 }
