@@ -304,15 +304,15 @@ public class SpaceDeviceController {
     /**
      * 移除房间中的设备
      */
-    @DeleteMapping(Constants.API_SPACE.REMOVE_DEVICE)
-    public void removeDevice(String deviceId) {
-        SpaceDevice spaceDevice = spaceDeviceService.findByDeviceId(deviceId);
+    @PostMapping(Constants.API_SPACE.REMOVE_DEVICE)
+    public void removeDevice(@RequestBody @Validated Request<String> request) {
+        SpaceDevice spaceDevice = spaceDeviceService.findByDeviceId(request.getData());
         if (spaceDevice == null) {
             throw new BizException(ErrCode.SPACE_DEVICE_NOT_FOUND);
         }
 
         spaceDeviceService.deleteById(spaceDevice.getId());
-        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(request.getData());
         UserInfo userInfo = userInfoData.findById(LoginHelper.getUserId());
         if (userInfo == null) {
             throw new BizException(ErrCode.USER_NOT_FOUND);
