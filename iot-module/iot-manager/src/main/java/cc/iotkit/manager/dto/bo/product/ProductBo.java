@@ -5,6 +5,8 @@ import cc.iotkit.model.product.Product;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -58,5 +60,10 @@ public class ProductBo extends BaseDto {
     @ApiModelProperty(value = "产品密钥")
     @Size(max = 255, message = "产品密钥长度不正确")
     private String productSecret;
+
+    @ApiModelProperty(value = "保活时长")
+    @NotBlank(message = "保活时长不能为空")
+    @Min(value = 10, message = "保活时长(秒)必须大于10")
+    private Long keepAliveTime;
 
 }

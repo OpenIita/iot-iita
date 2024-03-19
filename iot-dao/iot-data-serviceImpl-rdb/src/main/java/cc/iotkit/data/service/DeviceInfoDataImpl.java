@@ -85,6 +85,11 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     }
 
     @Override
+    public long getPropertyUpdateTime(String deviceId) {
+        return 0;
+    }
+
+    @Override
     public DeviceInfo findByDeviceId(String deviceId) {
         TbDeviceInfo tbDeviceInfo = deviceInfoRepository.findByDeviceId(deviceId);
 
@@ -96,9 +101,9 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     /**
      * 填充设备其它信息
      */
-    private void fillDeviceInfo(String deviceId, TbDeviceInfo vo, DeviceInfo dto) {
+    private DeviceInfo fillDeviceInfo(String deviceId, TbDeviceInfo vo, DeviceInfo dto) {
         if (vo == null || dto == null) {
-            return;
+            return null;
         }
         //取子关联用户
         dto.setSubUid(deviceSubUserRepository.findByDeviceId(deviceId).stream()
@@ -126,6 +131,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
 
         //将设备状态从vo转为dto的
         parseStateToDto(vo, dto);
+        return dto;
     }
 
     /**
@@ -445,7 +451,11 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     @Override
     public Paging<DeviceInfo> findAll(PageRequest<DeviceInfo> pageRequest) {
         Page<TbDeviceInfo> ret = deviceInfoRepository.findAll(PageBuilder.toPageable(pageRequest));
-        return new Paging<>(ret.getTotalElements(), MapstructUtils.convert(ret.getContent(), DeviceInfo.class));
+        List<DeviceInfo> list = new ArrayList<>();
+        for (TbDeviceInfo deviceInfo : ret.getContent()) {
+            list.add(fillDeviceInfo(deviceInfo.getDeviceId(), deviceInfo, MapstructUtils.convert(deviceInfo, DeviceInfo.class)));
+        }
+        return new Paging<>(ret.getTotalElements(), list);
     }
 
     @Override

@@ -71,11 +71,14 @@ public class TbProduct implements TenantAware {
     @ApiModelProperty(value = "是否透传,true/false")
     private Boolean transparent;
 
-    @ApiModelProperty(value="是否开启设备定位,true/false")
+    @ApiModelProperty(value = "是否开启设备定位,true/false")
     private Boolean isOpenLocate;
 
-    @ApiModelProperty(value="定位更新方式")
+    @ApiModelProperty(value = "定位更新方式")
     private String locateUpdateType;
+
+    @ApiModelProperty(value = "保活时长（秒）")
+    private Long keepAliveTime;
 
     @ApiModelProperty(value = "创建时间")
     private Long createAt;

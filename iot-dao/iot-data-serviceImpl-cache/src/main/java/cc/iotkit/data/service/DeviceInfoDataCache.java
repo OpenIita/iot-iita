@@ -20,6 +20,9 @@ import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DevicePropertyCache;
 import cc.iotkit.model.stats.DataItem;
 import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +97,9 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     public void saveProperties(String deviceId, Map<String, DevicePropertyCache> properties) {
         Map<String, DevicePropertyCache> old = getProperties(deviceId);
         old.putAll(properties);
-        redisTemplate.opsForValue().set(getPropertyCacheKey(deviceId), JsonUtils.toJsonString(old));
+        redisTemplate.opsForValue().set(getPropertyCacheKey(deviceId),
+                JsonUtils.toJsonString(new PropertyCacheInfo(System.currentTimeMillis(), old))
+        );
     }
 
     /**
@@ -106,12 +111,21 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
 
     @Override
     public Map<String, DevicePropertyCache> getProperties(String deviceId) {
+        return getPropertyCacheInfo(deviceId).getProperties();
+    }
+
+    private PropertyCacheInfo getPropertyCacheInfo(String deviceId) {
         String json = redisTemplate.opsForValue().get(getPropertyCacheKey(deviceId));
         if (StringUtils.isBlank(json)) {
-            return new HashMap<>();
+            return new PropertyCacheInfo(0, new HashMap<>());
         }
         return JsonUtils.parseObject(json, new TypeReference<>() {
         });
+    }
+
+    @Override
+    public long getPropertyUpdateTime(String deviceId) {
+        return getPropertyCacheInfo(deviceId).getUpdateTime();
     }
 
     @Override
@@ -303,5 +317,16 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
         }
         List<String> subDeviceIds = deviceInfoData.findSubDeviceIds(parentId);
         deviceInfoCachePut.findSubDeviceIds(parentId, subDeviceIds);
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class PropertyCacheInfo {
+
+        private long updateTime;
+
+        private Map<String, DevicePropertyCache> properties;
+
     }
 }

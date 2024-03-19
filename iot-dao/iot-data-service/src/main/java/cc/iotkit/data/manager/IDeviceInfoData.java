@@ -36,6 +36,14 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
     Map<String, DevicePropertyCache> getProperties(String deviceId);
 
     /**
+     * 获取设备属性更新时间
+     *
+     * @param deviceId 设备id
+     * @return timestamp
+     */
+    long getPropertyUpdateTime(String deviceId);
+
+    /**
      * 根据设备ID取设备信息
      *
      * @param deviceId 设备ID
@@ -68,7 +76,7 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
      * @param subUid     子账号id
      * @param productKey 产品key
      * @param groupId    设备分组
-     * @param online      是否在线:true在线,false离线
+     * @param online     是否在线:true在线,false离线
      * @param keyword    关键字
      * @param page       页码
      * @param size       分页大小

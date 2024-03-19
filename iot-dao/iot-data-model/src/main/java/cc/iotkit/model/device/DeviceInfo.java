@@ -86,6 +86,10 @@ public class DeviceInfo implements Owned<String> {
 
     private Long createAt;
 
+    public boolean isOnline() {
+        return state != null && state.isOnline();
+    }
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -100,6 +104,7 @@ public class DeviceInfo implements Owned<String> {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     public static class State {
 
         private boolean online;

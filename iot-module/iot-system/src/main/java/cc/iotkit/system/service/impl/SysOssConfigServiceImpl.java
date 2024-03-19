@@ -46,7 +46,7 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
     private final ISysOssConfigData baseData;
 
     @Scheduled(fixedRate = 10, timeUnit = TimeUnit.SECONDS)
-    private void keepAlive() {
+    private void checkOssConfig() {
         String configKey = RedisUtils.getCacheObject(OssConstant.DEFAULT_CONFIG_KEY);
         if(configKey==null){
             init();

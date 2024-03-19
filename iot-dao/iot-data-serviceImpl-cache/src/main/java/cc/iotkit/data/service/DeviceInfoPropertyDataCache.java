@@ -101,6 +101,11 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
+    public long getPropertyUpdateTime(String deviceId) {
+        return deviceInfoData.getPropertyUpdateTime(deviceId);
+    }
+
+    @Override
     public DeviceInfo findByDeviceId(String deviceId) {
         DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
         deviceInfo.setProperty(getProperties(deviceId));

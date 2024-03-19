@@ -60,6 +60,11 @@ public class Product extends TenantModel implements Id<Long>, Serializable {
      */
     private String locateUpdateType;
 
+    /**
+     * 保活时长（秒）
+     */
+    private Long keepAliveTime;
+
     private Long createAt;
 
     public boolean isTransparent() {

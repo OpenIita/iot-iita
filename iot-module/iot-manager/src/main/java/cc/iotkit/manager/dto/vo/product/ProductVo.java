@@ -67,4 +67,8 @@ public class ProductVo implements Serializable {
     @ExcelProperty(value = "用户ID")
     private String uid;
 
+    @ApiModelProperty(value = "保活时长（秒）")
+    @ExcelProperty(value = "保活时长（秒）")
+    private Long keepAliveTime;
+
 }
