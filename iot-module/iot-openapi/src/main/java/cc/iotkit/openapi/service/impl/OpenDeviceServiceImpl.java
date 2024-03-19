@@ -106,6 +106,9 @@ public class OpenDeviceServiceImpl implements OpenDeviceService {
     @Override
     public String setProperty(String productKey, String deviceName, String args) {
         DeviceInfo deviceRepetition = deviceInfoData.findByDeviceName(deviceName);
+        if (deviceRepetition == null){
+            throw new BizException(ErrCode.DEVICE_NOT_FOUND);
+        }
         return deviceCtrlService.setProperty(deviceRepetition.getDeviceId(), JsonUtils.parseObject(args,Map.class), true);
     }
 
