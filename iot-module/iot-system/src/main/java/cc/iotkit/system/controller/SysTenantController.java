@@ -16,7 +16,6 @@ import cc.iotkit.system.dto.vo.SysTenantVo;
 import cc.iotkit.system.service.ISysTenantService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaCheckRole;
-import com.baomidou.lock.annotation.Lock4j;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.constraints.NotBlank;
@@ -86,7 +85,6 @@ public class SysTenantController extends BaseController {
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenant:add")
     @Log(title = "租户", businessType = BusinessType.INSERT)
-    @Lock4j
     @PostMapping("/add")
     public void add(@Validated(AddGroup.class) @RequestBody Request<SysTenantBo> bo) {
         SysTenantBo data = bo.getData();

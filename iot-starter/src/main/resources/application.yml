@@ -20,28 +20,17 @@ spring:
         format_sql: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    # 动态数据源文档 https://www.kancloud.cn/tracy5546/dynamic-datasource/content
-    dynamic:
-      hikari:
-        connection-timeout: 5000
-        idle-timeout: 30000 # 经过idle-timeout时间如果连接还处于空闲状态, 该连接会被回收
-        min-idle: 5 # 池中维护的最小空闲连接数, 默认为 10 个
-        max-pool-size: 16 # 池中最大连接数, 包括闲置和使用中的连接, 默认为 10 个
-        max-lifetime: 60000 # 如果一个连接超过了时长，且没有被使用, 连接会被回收
-        is-auto-commit: true
-      primary: master #设置默认的数据源或者数据源组,默认值即为master
-      strict: true #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
-      datasource:
-        # 主库数据源
-        master:
-          type: ${spring.datasource.type}
-          driverClassName: org.h2.Driver
-          # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562
-          # rewriteBatchedStatements=true 批处理优化 大幅提升批量插入更新删除性能(对数据库有性能损耗 使用批量操作应考虑性能问题)
-          url: jdbc:h2:./data/iotkit;MODE=MySQL
-          username: sa
-          password: 123456
-
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:./data/iotkit;MODE=MySQL
+    username: sa
+    password: 123456
+    hikari:
+      connection-timeout: 5000
+      idle-timeout: 30000 # 经过idle-timeout时间如果连接还处于空闲状态, 该连接会被回收
+      min-idle: 5 # 池中维护的最小空闲连接数, 默认为 10 个
+      max-pool-size: 16 # 池中最大连接数, 包括闲置和使用中的连接, 默认为 10 个
+      max-lifetime: 60000 # 如果一个连接超过了时长，且没有被使用, 连接会被回收
+      is-auto-commit: true
     # 内置h2 web console设置
     platform: h2
   h2:
@@ -64,25 +53,18 @@ spring:
 #        format_sql: true
 #  datasource:
 #    type: com.zaxxer.hikari.HikariDataSource
-#    dynamic:
-#      hikari:
-#        connection-timeout: 5000
-#        idle-timeout: 30000 # 经过idle-timeout时间如果连接还处于空闲状态, 该连接会被回收
-#        min-idle: 5 # 池中维护的最小空闲连接数, 默认为 10 个
-#        max-pool-size: 16 # 池中最大连接数, 包括闲置和使用中的连接, 默认为 10 个
-#        max-lifetime: 60000 # 如果一个连接超过了时长，且没有被使用, 连接会被回收
-#        is-auto-commit: true
-#      primary: master #设置默认的数据源或者数据源组,默认值即为master
-#      strict: true #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
-#      datasource:
-#        # 主库数据源
-#        master:
-#          type: ${spring.datasource.type}
-#          driverClassName: com.mysql.cj.jdbc.Driver
-#          # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562
-#          url: jdbc:mysql://127.0.0.1:3306/iotkit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
-#          username: root
-#          password: 123456
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562
+#    url: jdbc:mysql://127.0.0.1:3306/iotkit?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+#    username: root
+#    password: 123456
+#    hikari:
+#      connection-timeout: 5000
+#      idle-timeout: 30000 # 经过idle-timeout时间如果连接还处于空闲状态, 该连接会被回收
+#      min-idle: 5 # 池中维护的最小空闲连接数, 默认为 10 个
+#      max-pool-size: 16 # 池中最大连接数, 包括闲置和使用中的连接, 默认为 10 个
+#      max-lifetime: 60000 # 如果一个连接超过了时长，且没有被使用, 连接会被回收
+#      is-auto-commit: true
   # ============mysql配置结束============>>
 
   #<<================es时序数据配置开始===============
