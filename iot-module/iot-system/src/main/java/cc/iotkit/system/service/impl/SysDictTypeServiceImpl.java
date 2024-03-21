@@ -6,6 +6,7 @@ import cc.iotkit.common.constant.CacheConstants;
 import cc.iotkit.common.constant.CacheNames;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.redis.utils.CacheUtils;
+import cc.iotkit.common.service.DictService;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StreamUtils;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @Service
-public class SysDictTypeServiceImpl implements ISysDictTypeService {
+public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService {
 
     private final ISysDictTypeData sysDictTypeData;
     private final ISysDictData sysDictData;
