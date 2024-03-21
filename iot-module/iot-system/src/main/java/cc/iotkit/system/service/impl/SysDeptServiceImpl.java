@@ -4,6 +4,7 @@ import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.service.DeptService;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StringUtils;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @Service
-public class SysDeptServiceImpl implements ISysDeptService {
+public class SysDeptServiceImpl implements ISysDeptService, DeptService {
 
     private final ISysDeptData sysDeptData;
 
@@ -121,6 +122,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @param deptIds 部门ID串逗号分隔
      * @return 部门名称串逗号分隔
      */
+    @Override
     public String selectDeptNameByIds(String deptIds) {
         List<String> list = new ArrayList<>();
         for (Long id : StringUtils.splitTo(deptIds, Convert::toLong)) {

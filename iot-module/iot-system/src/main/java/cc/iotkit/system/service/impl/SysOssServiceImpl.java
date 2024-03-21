@@ -9,6 +9,7 @@ import cc.iotkit.common.oss.entity.UploadResult;
 import cc.iotkit.common.oss.enumd.AccessPolicyType;
 import cc.iotkit.common.oss.exception.OssException;
 import cc.iotkit.common.oss.factory.OssFactory;
+import cc.iotkit.common.service.OssService;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.SpringUtils;
 import cc.iotkit.common.utils.StringUtils;
@@ -38,7 +39,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class SysOssServiceImpl implements ISysOssService {
+public class SysOssServiceImpl implements ISysOssService, OssService {
 
     private final ISysOssData sysOssData;
 
@@ -60,6 +61,7 @@ public class SysOssServiceImpl implements ISysOssService {
         return list;
     }
 
+    @Override
     public String selectUrlByIds(String ossIds) {
         List<String> list = new ArrayList<>();
         for (Long id : StringUtils.splitTo(ossIds, Convert::toLong)) {

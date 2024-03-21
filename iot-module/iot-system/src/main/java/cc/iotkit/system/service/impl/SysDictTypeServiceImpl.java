@@ -183,6 +183,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
      * @return 字典标签
      */
     @SuppressWarnings("unchecked cast")
+    @Override
     public String getDictLabel(String dictType, String dictValue, String separator) {
         // 优先从本地缓存获取
         List<SysDictDataVo> datas = (List<SysDictDataVo>) SaHolder.getStorage().get(CacheConstants.SYS_DICT_KEY + dictType);
@@ -210,6 +211,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService, DictService 
      * @return 字典值
      */
     @SuppressWarnings("unchecked cast")
+    @Override
     public String getDictValue(String dictType, String dictLabel, String separator) {
         // 优先从本地缓存获取
         List<SysDictDataVo> datas = (List<SysDictDataVo>) SaHolder.getStorage().get(CacheConstants.SYS_DICT_KEY + dictType);
