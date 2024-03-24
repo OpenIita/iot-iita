@@ -183,6 +183,11 @@ public class DeviceInfoPropertyDataCache implements IDeviceInfoData {
     }
 
     @Override
+    public List<DeviceInfo> findNeverUsedDevices() {
+        return deviceInfoData.findNeverUsedDevices();
+    }
+
+    @Override
     public List<DeviceInfo> findByUid(String uid) {
         return deviceInfoData.findByUid(uid);
     }

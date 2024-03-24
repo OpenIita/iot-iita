@@ -14,6 +14,7 @@ import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.manager.model.stats.MainStats;
+import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.temporal.IThingModelMessageData;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,20 @@ public class StatsController {
             mainStats.setCategoryTotal(ICategoryData.count());
             mainStats.setProductTotal(productData.count());
             mainStats.setDeviceTotal(deviceInfoData.count());
+
+            DeviceInfo condition = new DeviceInfo();
+            DeviceInfo.State state = new DeviceInfo.State();
+            state.setOnline(true);
+            condition.setState(state);
+            mainStats.setOnlineTotal(deviceInfoData.findAllByCondition(condition).size());
+
+            state.setOnline(false);
+            condition.setState(state);
+            mainStats.setOfflineTotal(deviceInfoData.findAllByCondition(condition).size());
+
+            // 待激活设备
+            mainStats.setNeverOnlineTotal(deviceInfoData.findNeverUsedDevices().size());
+
             mainStats.setReportTotal(thingModelMessageData.count());
             //上报数据统计
             mainStats.setReportDataStats(thingModelMessageData.getDeviceMessageStatsWithUid(null, now - 48 * 3600 * 1000, now));

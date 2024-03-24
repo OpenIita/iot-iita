@@ -156,6 +156,11 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     }
 
     @Override
+    public List<DeviceInfo> findNeverUsedDevices() {
+        return deviceInfoData.findNeverUsedDevices();
+    }
+
+    @Override
     public List<String> findSubDeviceIds(String parentId) {
         return deviceInfoData.findSubDeviceIds(parentId);
     }

@@ -4,17 +4,24 @@ import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.ReflectUtil;
+import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.data.dao.*;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.data.model.*;
 import cc.iotkit.data.util.PageBuilder;
+import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.device.message.DevicePropertyCache;
 import cc.iotkit.model.product.Category;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.stats.DataItem;
+import cc.iotkit.model.system.SysDept;
+import cc.iotkit.model.system.SysUser;
+import cn.hutool.core.util.ObjectUtil;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,6 +41,8 @@ import static cc.iotkit.data.model.QTbDeviceGroupMapping.tbDeviceGroupMapping;
 import static cc.iotkit.data.model.QTbDeviceInfo.tbDeviceInfo;
 import static cc.iotkit.data.model.QTbDeviceSubUser.tbDeviceSubUser;
 import static cc.iotkit.data.model.QTbProduct.tbProduct;
+import static cc.iotkit.data.model.QTbSysDept.tbSysDept;
+import static cc.iotkit.data.model.QTbSysUser.tbSysUser;
 
 @Primary
 @Service
@@ -50,7 +59,6 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     private final DeviceGroupRepository deviceGroupRepository;
 
     private final DeviceTagRepository deviceTagRepository;
-
 
     @Qualifier("productDataCache")
     private final IProductData productData;
@@ -211,6 +219,14 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     }
 
     @Override
+    public List<DeviceInfo> findNeverUsedDevices() {
+        JPAQuery<TbDeviceInfo> query = jpaQueryFactory.selectFrom(tbDeviceInfo);
+        query.where(tbDeviceInfo.onlineTime.isNull());
+        List<TbDeviceInfo> devices = query.fetch();
+        return MapstructUtils.convert(devices, DeviceInfo.class);
+    }
+
+    @Override
     public Paging<DeviceInfo> findByConditions(String uid, String subUid,
                                                String productKey, String groupId,
                                                Boolean online, String keyword,
@@ -284,8 +300,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     public List<DataItem> getDeviceStatsByCategory(String uid) {
         //先按产品统计设备数量
         JPAQuery<DataItem> query = jpaQueryFactory.select(Projections.bean(DataItem.class,
-                        tbDeviceInfo.productKey,
-                        tbDeviceInfo.count()))
+                        tbDeviceInfo.productKey.as("name"),
+                        tbDeviceInfo.productKey.count().as("value")))
                 .from(tbDeviceInfo)
                 .groupBy(tbDeviceInfo.productKey);
 
@@ -463,5 +479,24 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
         return null;
     }
 
+    @Override
+    public List<DeviceInfo> findAllByCondition(DeviceInfo data) {
+        return buildQuery(buildQueryCondition(data));
+    }
+
+    private List<DeviceInfo> buildQuery(Predicate predicate) {
+        List<TbDeviceInfo> devices = jpaQueryFactory.select(Projections.bean(TbDeviceInfo.class,
+                tbDeviceInfo.deviceId, tbDeviceInfo.deviceName, tbDeviceInfo.state ))
+                .from(tbDeviceInfo)
+                .where(predicate).fetch();
+        return MapstructUtils.convert(devices, DeviceInfo.class);
+    }
+
+    private Predicate buildQueryCondition(DeviceInfo device) {
+        return PredicateBuilder.instance()
+                .and(ObjectUtil.isNotNull(device.getId()), () -> tbDeviceInfo.id.eq(device.getId()))
+                .and(ObjectUtil.isNotNull(device.getState().isOnline()), () -> tbDeviceInfo.state.eq(device.getState().isOnline() ? "online" : "offline"))
+                .build();
+    }
 
 }

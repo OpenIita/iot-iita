@@ -148,4 +148,10 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
      * @return
      */
     boolean existByProductKey(String productKey);
+
+    /**
+     * 查找待激活设备
+     * @return
+     */
+    List<DeviceInfo> findNeverUsedDevices();
 }

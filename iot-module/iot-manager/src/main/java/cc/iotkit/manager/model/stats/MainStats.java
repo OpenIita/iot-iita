@@ -42,6 +42,21 @@ public class MainStats {
     private long reportTotal;
 
     /**
+     * 在线数量
+     */
+    private long onlineTotal;
+
+    /**
+     * 离线数量
+     */
+    private long offlineTotal;
+
+    /**
+     * 待激活设备
+     */
+    private long neverOnlineTotal;
+
+    /**
      * 上报数据数量统计
      */
     private List<TimeData> reportDataStats;
@@ -50,5 +65,8 @@ public class MainStats {
      * 按品类统计的设备数量
      */
     private List<DataItem> deviceStatsOfCategory;
+
+
+
 
 }
