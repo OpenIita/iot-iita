@@ -9,6 +9,8 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.enums.ErrCode;
@@ -21,7 +23,9 @@ import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.manager.dto.bo.device.ServiceInvokeBo;
 import cc.iotkit.manager.dto.bo.device.SetDeviceServicePorpertyBo;
+import cc.iotkit.manager.dto.bo.ruleinfo.RuleInfoBo;
 import cc.iotkit.manager.dto.vo.product.ProductVo;
+import cc.iotkit.manager.dto.vo.ruleinfo.RuleInfoVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
@@ -69,6 +73,8 @@ public class SpaceDeviceController {
     private IHomeService homeService;
     @Autowired
     private DataOwnerService dataOwnerService;
+    @Autowired
+    private IRuleEngineService ruleEngineService;
     @Autowired
     private IUserInfoData userInfoData;
     @Autowired
@@ -227,6 +233,39 @@ public class SpaceDeviceController {
     @PostMapping("/detail")
     public DeviceInfo getDetail(@RequestBody @Validated Request<String> request) {
         return deviceServiceImpl.getDetail(request.getData());
+    }
+
+    @ApiOperation("保存规则")
+    @PostMapping("/saveRuleEngine")
+    public boolean saveRuleEngine(@RequestBody @Validated Request<RuleInfoBo> ruleInfoBo) {
+        return ruleEngineService.saveRule(ruleInfoBo.getData());
+    }
+
+    @ApiOperation("删除规则")
+    @PostMapping("/delRuleEngine")
+    public boolean delRuleEngine(@Validated @RequestBody Request<String> request) {
+        String ruleId = request.getData();
+        return ruleEngineService.deleteRule(ruleId);
+    }
+
+    @ApiOperation("停止规则")
+    @PostMapping("/stopRuleEngine")
+    public boolean stopRuleEngine(@Validated @RequestBody Request<String> request) {
+        String ruleId = request.getData();
+        return ruleEngineService.pauseRule(ruleId);
+    }
+
+    @ApiOperation("恢复规则")
+    @PostMapping("/startRuleEngine")
+    public boolean startRuleEngine(@Validated @RequestBody Request<String> request) {
+        String ruleId = request.getData();
+        return ruleEngineService.resumeRule(ruleId);
+    }
+
+    @ApiOperation("规则列表")
+    @PostMapping("/ruleEngineList")
+    public Paging<RuleInfoVo> ruleEngineList(@Validated @RequestBody PageRequest<RuleInfoBo> request) {
+        return ruleEngineService.selectPageList(request);
     }
 
     @ApiOperation("调用设备服务")
