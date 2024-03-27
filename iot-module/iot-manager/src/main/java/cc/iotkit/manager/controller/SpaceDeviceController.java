@@ -19,11 +19,14 @@ import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IUserInfoData;
+import cc.iotkit.manager.dto.bo.device.ServiceInvokeBo;
+import cc.iotkit.manager.dto.bo.device.SetDeviceServicePorpertyBo;
 import cc.iotkit.manager.dto.vo.product.ProductVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.manager.service.*;
+import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
@@ -70,6 +73,9 @@ public class SpaceDeviceController {
     private IUserInfoData userInfoData;
     @Autowired
     private IDeviceManagerService deviceServiceImpl;
+    //赋予应用端设备的服务和属性设置，关于应用的接口及相关权限设计后续完善，先打通链路
+    @Autowired
+    private DeviceCtrlService deviceCtrlService;
 
     /**
      * 我最近使用的设备列表
@@ -223,6 +229,18 @@ public class SpaceDeviceController {
         return deviceServiceImpl.getDetail(request.getData());
     }
 
+    @ApiOperation("调用设备服务")
+    @PostMapping("/invokeService")
+    public InvokeResult invokeService(@RequestBody @Validated Request<ServiceInvokeBo> request) {
+        return new InvokeResult(deviceCtrlService.invokeService(request.getData().getDeviceId(), request.getData().getService(), request.getData().getArgs()));
+    }
+
+    @ApiOperation(value = "设备属性设置")
+    @PostMapping("/setProperty")
+    public InvokeResult setProperty(@RequestBody @Validated Request<SetDeviceServicePorpertyBo> request) {
+        return new InvokeResult(deviceCtrlService.setProperty(request.getData().getDeviceId(), request.getData().getArgs()));
+    }
+
     /**
      * REMOVE_DEVICE
      * 往指定房间中添加设备
@@ -286,15 +304,15 @@ public class SpaceDeviceController {
     /**
      * 移除房间中的设备
      */
-    @DeleteMapping(Constants.API_SPACE.REMOVE_DEVICE)
-    public void removeDevice(String deviceId) {
-        SpaceDevice spaceDevice = spaceDeviceService.findByDeviceId(deviceId);
+    @PostMapping(Constants.API_SPACE.REMOVE_DEVICE)
+    public void removeDevice(@RequestBody @Validated Request<String> request) {
+        SpaceDevice spaceDevice = spaceDeviceService.findByDeviceId(request.getData());
         if (spaceDevice == null) {
             throw new BizException(ErrCode.SPACE_DEVICE_NOT_FOUND);
         }
 
         spaceDeviceService.deleteById(spaceDevice.getId());
-        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(request.getData());
         UserInfo userInfo = userInfoData.findById(LoginHelper.getUserId());
         if (userInfo == null) {
             throw new BizException(ErrCode.USER_NOT_FOUND);
