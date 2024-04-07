@@ -17,10 +17,12 @@ import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IUserInfoData;
+import cc.iotkit.manager.dto.bo.device.DeviceLogQueryBo;
 import cc.iotkit.manager.dto.bo.device.ServiceInvokeBo;
 import cc.iotkit.manager.dto.bo.device.SetDeviceServicePorpertyBo;
 import cc.iotkit.manager.dto.bo.ruleinfo.RuleInfoBo;
@@ -93,6 +95,12 @@ public class SpaceDeviceController {
         return null;
     }
 
+    @ApiOperation("设备日志")
+    @PostMapping("/deviceLogs")
+    public Paging<ThingModelMessage> logs(@Validated @RequestBody PageRequest<DeviceLogQueryBo> request) {
+        return deviceServiceImpl.logs(request);
+    }
+
     /**
      * 获取用户收藏设备列表
      */
@@ -152,6 +160,7 @@ public class SpaceDeviceController {
                 .deviceId(sd.getDeviceId())
                 .deviceName(device.getDeviceName())
                 .name(sd.getName())
+                .createTime(sd.getCreateTime())
                 .spaceId(sd.getSpaceId())
                 .spaceName(space.getName())
                 .productKey(device.getProductKey())
@@ -192,6 +201,7 @@ public class SpaceDeviceController {
         List<FindDeviceVo> findDeviceVos = new ArrayList<>();
         DeviceInfo query=new DeviceInfo();
         query.setDeviceName(mac);
+        query.setState(null);
         List<DeviceInfo> devices = deviceInfoData.findAllByCondition(query);
         if(devices == null){
             return findDeviceVos;
