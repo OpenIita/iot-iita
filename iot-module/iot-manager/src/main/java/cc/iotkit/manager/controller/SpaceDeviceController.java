@@ -98,7 +98,10 @@ public class SpaceDeviceController {
     @ApiOperation("设备日志")
     @PostMapping("/deviceLogs")
     public Paging<ThingModelMessage> logs(@Validated @RequestBody PageRequest<DeviceLogQueryBo> request) {
-        return deviceServiceImpl.logs(request);
+        Home home = homeService.findByUserIdAndCurrent(LoginHelper.getUserId(), true);
+        List<SpaceDevice> spaceDevices = spaceDeviceService.findByHomeId(home.getId());
+        List<String> devIds=spaceDevices.stream().map((spaceDevice->spaceDevice.getDeviceId())).collect(Collectors.toList());
+        return spaceDeviceService.findByTypeAndDeviceIds(devIds,request.getData().getType(),"",request.getPageNum(),request.getPageSize());
     }
 
     /**
@@ -110,6 +113,8 @@ public class SpaceDeviceController {
         List<SpaceDevice> spaceDevices = spaceDeviceService.findByHomeIdAndCollect(home.getId(), true);
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
+
+
 
     /**
      * 收藏/取消收藏设备
