@@ -149,9 +149,7 @@ public class SysLoginService {
         if(sysApp==null){
             throw new BizException("该应用未授权注册");
         }
-        String url=authUrl+"?appid="+appId+"&secret="+sysApp.getAppSecret()+"&js_code="+xcxCode+"&grant_type=authorization_code";
-        String ret=WeChatUtil.httpRequest(url,"GET",null);
-        String openid = JsonUtils.parseMap(ret).getStr("openid");
+        String openid = WeChatUtil.getOpenId(appId,sysApp.getAppSecret(),xcxCode);
         UserInfo user = null;
         LoginHelper.setTenantId(sysApp.getTenantId());
         try {
@@ -319,6 +317,7 @@ public class SysLoginService {
             user.setType(UserInfo.USER_TYPE_CLIENT);
             user.setUid(openid);
             user.setRoles(Collections.singletonList(Constants.ROLE_CLIENT));
+            user.setNickName("微信用户");
             user.setSecret(AuthUtil.enCryptPwd(Constants.PWD_CLIENT_USER));
             user.setTenantId(tenantId);
             user = userInfoData.save(user);

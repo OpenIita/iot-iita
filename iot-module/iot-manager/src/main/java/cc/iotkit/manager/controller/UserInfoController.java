@@ -13,6 +13,7 @@ import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.AuthUtil;
+import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.manager.IHomeData;
 import cc.iotkit.data.manager.ISpaceData;
@@ -126,6 +127,11 @@ public class UserInfoController {
             throw new BizException(ErrCode.USER_NOT_FOUND);
         }
         userInfoData.deleteById(id);
+    }
+
+    @PostMapping("/getUserInfo")
+    public UserInfo getUserInfo() {
+        return userInfoData.findById(LoginHelper.getUserId());
     }
 
     @PostMapping("/client/user/save")

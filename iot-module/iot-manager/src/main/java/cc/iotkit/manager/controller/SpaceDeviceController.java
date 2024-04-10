@@ -9,21 +9,30 @@
  */
 package cc.iotkit.manager.controller;
 
+import cc.iotkit.common.api.PageRequest;
+import cc.iotkit.common.api.Paging;
 import cc.iotkit.common.api.Request;
 import cc.iotkit.common.constant.Constants;
 import cc.iotkit.common.enums.ErrCode;
 import cc.iotkit.common.exception.BizException;
 import cc.iotkit.common.satoken.utils.AuthUtil;
 import cc.iotkit.common.satoken.utils.LoginHelper;
+import cc.iotkit.common.thing.ThingModelMessage;
 import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IUserInfoData;
+import cc.iotkit.manager.dto.bo.device.DeviceLogQueryBo;
+import cc.iotkit.manager.dto.bo.device.ServiceInvokeBo;
+import cc.iotkit.manager.dto.bo.device.SetDeviceServicePorpertyBo;
+import cc.iotkit.manager.dto.bo.ruleinfo.RuleInfoBo;
 import cc.iotkit.manager.dto.vo.product.ProductVo;
+import cc.iotkit.manager.dto.vo.ruleinfo.RuleInfoVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
 import cc.iotkit.manager.service.*;
+import cc.iotkit.model.InvokeResult;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
@@ -67,9 +76,14 @@ public class SpaceDeviceController {
     @Autowired
     private DataOwnerService dataOwnerService;
     @Autowired
+    private IRuleEngineService ruleEngineService;
+    @Autowired
     private IUserInfoData userInfoData;
     @Autowired
     private IDeviceManagerService deviceServiceImpl;
+    //赋予应用端设备的服务和属性设置，关于应用的接口及相关权限设计后续完善，先打通链路
+    @Autowired
+    private DeviceCtrlService deviceCtrlService;
 
     /**
      * 我最近使用的设备列表
@@ -81,6 +95,15 @@ public class SpaceDeviceController {
         return null;
     }
 
+    @ApiOperation("设备日志")
+    @PostMapping("/deviceLogs")
+    public Paging<ThingModelMessage> logs(@Validated @RequestBody PageRequest<DeviceLogQueryBo> request) {
+        Home home = homeService.findByUserIdAndCurrent(LoginHelper.getUserId(), true);
+        List<SpaceDevice> spaceDevices = spaceDeviceService.findByHomeId(home.getId());
+        List<String> devIds=spaceDevices.stream().map((spaceDevice->spaceDevice.getDeviceId())).collect(Collectors.toList());
+        return spaceDeviceService.findByTypeAndDeviceIds(devIds,request.getData().getType(),"",request.getPageNum(),request.getPageSize());
+    }
+
     /**
      * 获取用户收藏设备列表
      */
@@ -90,6 +113,8 @@ public class SpaceDeviceController {
         List<SpaceDevice> spaceDevices = spaceDeviceService.findByHomeIdAndCollect(home.getId(), true);
         return spaceDevices.stream().map((this::parseSpaceDevice)).collect(Collectors.toList());
     }
+
+
 
     /**
      * 收藏/取消收藏设备
@@ -140,6 +165,7 @@ public class SpaceDeviceController {
                 .deviceId(sd.getDeviceId())
                 .deviceName(device.getDeviceName())
                 .name(sd.getName())
+                .createTime(sd.getCreateTime())
                 .spaceId(sd.getSpaceId())
                 .spaceName(space.getName())
                 .productKey(device.getProductKey())
@@ -180,6 +206,7 @@ public class SpaceDeviceController {
         List<FindDeviceVo> findDeviceVos = new ArrayList<>();
         DeviceInfo query=new DeviceInfo();
         query.setDeviceName(mac);
+        query.setState(null);
         List<DeviceInfo> devices = deviceInfoData.findAllByCondition(query);
         if(devices == null){
             return findDeviceVos;
@@ -221,6 +248,51 @@ public class SpaceDeviceController {
     @PostMapping("/detail")
     public DeviceInfo getDetail(@RequestBody @Validated Request<String> request) {
         return deviceServiceImpl.getDetail(request.getData());
+    }
+
+    @ApiOperation("保存规则")
+    @PostMapping("/saveRuleEngine")
+    public boolean saveRuleEngine(@RequestBody @Validated Request<RuleInfoBo> ruleInfoBo) {
+        return ruleEngineService.saveRule(ruleInfoBo.getData());
+    }
+
+    @ApiOperation("删除规则")
+    @PostMapping("/delRuleEngine")
+    public boolean delRuleEngine(@Validated @RequestBody Request<String> request) {
+        String ruleId = request.getData();
+        return ruleEngineService.deleteRule(ruleId);
+    }
+
+    @ApiOperation("停止规则")
+    @PostMapping("/stopRuleEngine")
+    public boolean stopRuleEngine(@Validated @RequestBody Request<String> request) {
+        String ruleId = request.getData();
+        return ruleEngineService.pauseRule(ruleId);
+    }
+
+    @ApiOperation("恢复规则")
+    @PostMapping("/startRuleEngine")
+    public boolean startRuleEngine(@Validated @RequestBody Request<String> request) {
+        String ruleId = request.getData();
+        return ruleEngineService.resumeRule(ruleId);
+    }
+
+    @ApiOperation("规则列表")
+    @PostMapping("/ruleEngineList")
+    public Paging<RuleInfoVo> ruleEngineList(@Validated @RequestBody PageRequest<RuleInfoBo> request) {
+        return ruleEngineService.selectPageList(request);
+    }
+
+    @ApiOperation("调用设备服务")
+    @PostMapping("/invokeService")
+    public InvokeResult invokeService(@RequestBody @Validated Request<ServiceInvokeBo> request) {
+        return new InvokeResult(deviceCtrlService.invokeService(request.getData().getDeviceId(), request.getData().getService(), request.getData().getArgs()));
+    }
+
+    @ApiOperation(value = "设备属性设置")
+    @PostMapping("/setProperty")
+    public InvokeResult setProperty(@RequestBody @Validated Request<SetDeviceServicePorpertyBo> request) {
+        return new InvokeResult(deviceCtrlService.setProperty(request.getData().getDeviceId(), request.getData().getArgs()));
     }
 
     /**
@@ -286,15 +358,15 @@ public class SpaceDeviceController {
     /**
      * 移除房间中的设备
      */
-    @DeleteMapping(Constants.API_SPACE.REMOVE_DEVICE)
-    public void removeDevice(String deviceId) {
-        SpaceDevice spaceDevice = spaceDeviceService.findByDeviceId(deviceId);
+    @PostMapping(Constants.API_SPACE.REMOVE_DEVICE)
+    public void removeDevice(@RequestBody @Validated Request<String> request) {
+        SpaceDevice spaceDevice = spaceDeviceService.findByDeviceId(request.getData());
         if (spaceDevice == null) {
             throw new BizException(ErrCode.SPACE_DEVICE_NOT_FOUND);
         }
 
         spaceDeviceService.deleteById(spaceDevice.getId());
-        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(deviceId);
+        DeviceInfo deviceInfo = deviceInfoData.findByDeviceId(request.getData());
         UserInfo userInfo = userInfoData.findById(LoginHelper.getUserId());
         if (userInfo == null) {
             throw new BizException(ErrCode.USER_NOT_FOUND);
