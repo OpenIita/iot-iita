@@ -34,6 +34,16 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
     }
 
     @Override
+    public List<TimeData> getDeviceUpMessageStatsWithUid(String uid, Long start, Long end) {
+        return null;
+    }
+
+    @Override
+    public List<TimeData> getDeviceDownMessageStatsWithUid(String uid, Long start, Long end) {
+        return null;
+    }
+
+    @Override
     public void add(ThingModelMessage msg) {
     }
 

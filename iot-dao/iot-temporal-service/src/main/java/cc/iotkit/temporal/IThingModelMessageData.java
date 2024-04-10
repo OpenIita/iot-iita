@@ -38,6 +38,25 @@ public interface IThingModelMessageData {
      */
     List<TimeData> getDeviceMessageStatsWithUid(String uid, long start, long end);
 
+
+    /**
+     * 按用户统计时间段内上行消息
+     * @param uid   用户id
+     * @param start 开始时间戳
+     * @param end   结束时间戳
+     */
+    List<TimeData> getDeviceUpMessageStatsWithUid(String uid, Long start, Long end);
+
+    /**
+     * 按用户统计时间段内下行
+     * @param uid   用户id
+     * @param start 开始时间戳
+     * @param end   结束时间戳
+     */
+    List<TimeData> getDeviceDownMessageStatsWithUid(String uid, Long start, Long end);
+
+
+
     void add(ThingModelMessage msg);
 
     long count();

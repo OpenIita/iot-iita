@@ -61,6 +61,18 @@ public class MainStats {
      */
     private List<TimeData> reportDataStats;
 
+
+    /**
+     * 上行数据数量统计
+     */
+    private List<TimeData> deviceUpMessageStats;
+
+    /**
+     * 下行数据数量统计
+     */
+    private List<TimeData> deviceDownMessageStats;
+
+
     /**
      * 按品类统计的设备数量
      */

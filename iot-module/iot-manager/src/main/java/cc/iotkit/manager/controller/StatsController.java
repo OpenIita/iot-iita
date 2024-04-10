@@ -66,8 +66,10 @@ public class StatsController {
             mainStats.setNeverOnlineTotal(deviceInfoData.findNeverUsedDevices().size());
 
             mainStats.setReportTotal(thingModelMessageData.count());
-            //上报数据统计
-            mainStats.setReportDataStats(thingModelMessageData.getDeviceMessageStatsWithUid(null, now - 48 * 3600 * 1000, now));
+            //上行数据统计
+            mainStats.setDeviceUpMessageStats(thingModelMessageData.getDeviceUpMessageStatsWithUid(null, null, null));
+            // 下行数据统计
+            mainStats.setDeviceDownMessageStats(thingModelMessageData.getDeviceDownMessageStatsWithUid(null, null, null));
             //产品数量统计
             mainStats.setDeviceStatsOfCategory(deviceInfoData.getDeviceStatsByCategory(""));
         } else {

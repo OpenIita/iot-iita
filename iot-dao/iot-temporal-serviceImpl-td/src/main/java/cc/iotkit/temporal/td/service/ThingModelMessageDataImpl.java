@@ -16,6 +16,7 @@ import cc.iotkit.model.stats.TimeData;
 import cc.iotkit.temporal.IThingModelMessageData;
 import cc.iotkit.temporal.td.dao.TdTemplate;
 import cc.iotkit.temporal.td.model.TbThingModelMessage;
+import cn.hutool.core.util.ObjectUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -87,6 +88,56 @@ public class ThingModelMessageDataImpl implements IThingModelMessageData {
         }
 
         return tdTemplate.query(sql, new BeanPropertyRowMapper<>(TimeData.class), args.toArray());
+    }
+
+    @Override
+    public List<TimeData> getDeviceUpMessageStatsWithUid(String uid, Long start, Long end) {
+        String sql = "select time,count(*) as data from(" +
+                "select TIMETRUNCATE(time,1h) as time from thing_model_message " +
+                "where (type='property' and identifier='report') or type='event' ";
+        StringBuilder sqlBuffer = new StringBuilder();
+        sqlBuffer.append(sql);
+
+        List<Object> args = new ArrayList<>();
+        if (ObjectUtil.isNotEmpty(uid)) {
+            sqlBuffer.append(" and uid=?");
+            args.add(uid);
+        }
+
+        if (ObjectUtil.isNotEmpty(start) && ObjectUtil.isNotEmpty(end)) {
+            sqlBuffer.append(" and time>=? and time<=?");
+            args.add(start);
+            args.add(end);
+        }
+
+        sqlBuffer.append(") a group by time order by time asc");
+
+        return tdTemplate.query(sqlBuffer.toString(), new BeanPropertyRowMapper<>(TimeData.class), args.toArray());
+    }
+
+    @Override
+    public List<TimeData> getDeviceDownMessageStatsWithUid(String uid, Long start, Long end) {
+        String sql = "select time,count(*) as data from(" +
+                "select TIMETRUNCATE(time,1h) as time from thing_model_message " +
+                "where (type='property' and identifier!='report') or type='service' or type= 'config' ";
+        StringBuilder sqlBuffer = new StringBuilder();
+        sqlBuffer.append(sql);
+
+        List<Object> args = new ArrayList<>();
+        if (ObjectUtil.isNotEmpty(uid)) {
+            sqlBuffer.append(" and uid=?");
+            args.add(uid);
+        }
+
+        if (ObjectUtil.isNotEmpty(start) && ObjectUtil.isNotEmpty(end)) {
+            sqlBuffer.append(" and time>=? and time<=?");
+            args.add(start);
+            args.add(end);
+        }
+
+        sqlBuffer.append(") a group by time order by time asc");
+
+        return tdTemplate.query(sqlBuffer.toString(), new BeanPropertyRowMapper<>(TimeData.class), args.toArray());
     }
 
     @Override
