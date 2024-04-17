@@ -109,6 +109,7 @@ public class ThingModel extends TenantModel implements Id<Long>, Serializable {
             switch (type) {
                 case "bool":
                 case "enum":
+                    return val;
                 case "int":
                     return Integer.parseInt(val);
                 default:

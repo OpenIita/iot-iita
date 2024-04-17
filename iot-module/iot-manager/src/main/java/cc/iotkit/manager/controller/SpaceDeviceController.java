@@ -23,16 +23,14 @@ import cc.iotkit.data.manager.ICategoryData;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IUserInfoData;
 import cc.iotkit.manager.dto.bo.device.DeviceLogQueryBo;
-import cc.iotkit.manager.dto.bo.device.ServiceInvokeBo;
-import cc.iotkit.manager.dto.bo.device.SetDeviceServicePorpertyBo;
-import cc.iotkit.manager.dto.bo.ruleinfo.RuleInfoBo;
 import cc.iotkit.manager.dto.vo.product.ProductVo;
-import cc.iotkit.manager.dto.vo.ruleinfo.RuleInfoVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.model.vo.FindDeviceVo;
 import cc.iotkit.manager.model.vo.SpaceDeviceVo;
-import cc.iotkit.manager.service.*;
-import cc.iotkit.model.InvokeResult;
+import cc.iotkit.manager.service.IHomeService;
+import cc.iotkit.manager.service.IProductService;
+import cc.iotkit.manager.service.ISpaceDeviceService;
+import cc.iotkit.manager.service.ISpaceService;
 import cc.iotkit.model.UserInfo;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Category;
@@ -74,16 +72,7 @@ public class SpaceDeviceController {
     @Autowired
     private IHomeService homeService;
     @Autowired
-    private DataOwnerService dataOwnerService;
-    @Autowired
-    private IRuleEngineService ruleEngineService;
-    @Autowired
     private IUserInfoData userInfoData;
-    @Autowired
-    private IDeviceManagerService deviceServiceImpl;
-    //赋予应用端设备的服务和属性设置，关于应用的接口及相关权限设计后续完善，先打通链路
-    @Autowired
-    private DeviceCtrlService deviceCtrlService;
 
     /**
      * 我最近使用的设备列表
@@ -242,57 +231,6 @@ public class SpaceDeviceController {
         findDeviceVo.setProductImg(product.getImg());
         findDeviceVo.setCategoryName(category.getName());
         return findDeviceVo;
-    }
-
-    @ApiOperation("获取设备详情")
-    @PostMapping("/detail")
-    public DeviceInfo getDetail(@RequestBody @Validated Request<String> request) {
-        return deviceServiceImpl.getDetail(request.getData());
-    }
-
-    @ApiOperation("保存规则")
-    @PostMapping("/saveRuleEngine")
-    public boolean saveRuleEngine(@RequestBody @Validated Request<RuleInfoBo> ruleInfoBo) {
-        return ruleEngineService.saveRule(ruleInfoBo.getData());
-    }
-
-    @ApiOperation("删除规则")
-    @PostMapping("/delRuleEngine")
-    public boolean delRuleEngine(@Validated @RequestBody Request<String> request) {
-        String ruleId = request.getData();
-        return ruleEngineService.deleteRule(ruleId);
-    }
-
-    @ApiOperation("停止规则")
-    @PostMapping("/stopRuleEngine")
-    public boolean stopRuleEngine(@Validated @RequestBody Request<String> request) {
-        String ruleId = request.getData();
-        return ruleEngineService.pauseRule(ruleId);
-    }
-
-    @ApiOperation("恢复规则")
-    @PostMapping("/startRuleEngine")
-    public boolean startRuleEngine(@Validated @RequestBody Request<String> request) {
-        String ruleId = request.getData();
-        return ruleEngineService.resumeRule(ruleId);
-    }
-
-    @ApiOperation("规则列表")
-    @PostMapping("/ruleEngineList")
-    public Paging<RuleInfoVo> ruleEngineList(@Validated @RequestBody PageRequest<RuleInfoBo> request) {
-        return ruleEngineService.selectPageList(request);
-    }
-
-    @ApiOperation("调用设备服务")
-    @PostMapping("/invokeService")
-    public InvokeResult invokeService(@RequestBody @Validated Request<ServiceInvokeBo> request) {
-        return new InvokeResult(deviceCtrlService.invokeService(request.getData().getDeviceId(), request.getData().getService(), request.getData().getArgs()));
-    }
-
-    @ApiOperation(value = "设备属性设置")
-    @PostMapping("/setProperty")
-    public InvokeResult setProperty(@RequestBody @Validated Request<SetDeviceServicePorpertyBo> request) {
-        return new InvokeResult(deviceCtrlService.setProperty(request.getData().getDeviceId(), request.getData().getArgs()));
     }
 
     /**
