@@ -74,7 +74,14 @@ public class ThingServiceImpl implements IThingService {
                     subRegisterDevice(pluginId, device, (SubDeviceRegister) action);
                     break;
                 case STATE_CHANGE:
-                    deviceStateChange(device, (DeviceStateChange) action);
+                    publishMsg(
+                            device, action,
+                            ThingModelMessage.builder()
+                                    .type(ThingModelMessage.TYPE_STATE)
+                                    .identifier(((DeviceStateChange) action).getState().getState())
+                                    .time(System.currentTimeMillis())
+                                    .build()
+                    );
                     break;
                 case EVENT_REPORT:
                     EventReport eventReport = (EventReport) action;
@@ -256,27 +263,6 @@ public class ThingServiceImpl implements IThingService {
                     , parentId
             );
         }
-    }
-
-    private void deviceStateChange(DeviceInfo device, DeviceStateChange action) {
-        DeviceState state = action.getState();
-        if (state == DeviceState.ONLINE) {
-            device.getState().setOnline(true);
-            device.getState().setOnlineTime(System.currentTimeMillis());
-        } else {
-            device.getState().setOnline(false);
-            device.getState().setOfflineTime(System.currentTimeMillis());
-        }
-        deviceInfoData.save(device);
-
-        publishMsg(
-                device, action,
-                ThingModelMessage.builder()
-                        .type(ThingModelMessage.TYPE_STATE)
-                        .identifier(action.getState().getState())
-                        .time(System.currentTimeMillis())
-                        .build()
-        );
     }
 
     private void deviceTopologyUpdate(DeviceInfo device, DeviceTopology topology) {
