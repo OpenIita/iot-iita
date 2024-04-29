@@ -10,14 +10,17 @@
 package cc.iotkit.ruleengine.handler.sys;
 
 import cc.iotkit.common.thing.ThingModelMessage;
+import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.model.device.DeviceInfo;
+import cc.iotkit.plugin.core.thing.actions.DeviceState;
+import cc.iotkit.plugin.core.thing.actions.up.DeviceStateChange;
 import cc.iotkit.ruleengine.handler.DeviceMessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
+import cc.iotkit.plugin.core.thing.IThingService;
 
 /**
  * 设备状态检查
@@ -30,6 +33,8 @@ public class DeviceStateCheckHandler implements DeviceMessageHandler {
     @Qualifier("deviceInfoDataCache")
     private IDeviceInfoData deviceInfoData;
 
+    @Autowired
+    private IThingService thingService;
 
     @Override
     public void handle(ThingModelMessage msg) {
@@ -58,32 +63,25 @@ public class DeviceStateCheckHandler implements DeviceMessageHandler {
         //过滤oat消息
         if (ThingModelMessage.TYPE_CONFIG.equals(type) ||
                 ThingModelMessage.TYPE_OTA.equals(type) ||
-                ThingModelMessage.TYPE_LIFETIME.equals(type)) {
+                ThingModelMessage.TYPE_LIFETIME.equals(type) ||
+                ThingModelMessage.TYPE_STATE.equals(type)
+        ) {
             return;
         }
 
-        //当前设备状态
-        boolean online = false;
-        //在离线消息
-        if (ThingModelMessage.TYPE_STATE.equals(type)) {
-            online = ThingModelMessage.ID_ONLINE.equals(identifier);
-        } else {
-            //其它消息都认作为在线
-            online = true;
+        // 如果在线，则不处理
+        if( deviceInfo.getState().isOnline() ) {
+            return;
         }
 
-        DeviceInfo.State state = deviceInfo.getState();
-        if (state != null && state.isOnline() != online) {
-            //状态有变更
-            state.setOnline(online);
-            if (online) {
-                state.setOnlineTime(System.currentTimeMillis());
-            } else {
-                state.setOfflineTime(System.currentTimeMillis());
-            }
-        }
-        deviceInfoData.save(deviceInfo);
-
+        // 其他消息， 发送设备在线物模型消息
+        thingService.post("NONE", DeviceStateChange.builder()
+                .id(UniqueIdUtil.newRequestId())
+                .productKey(deviceInfo.getProductKey())
+                .deviceName(deviceInfo.getDeviceName())
+                .state(DeviceState.ONLINE)
+                .time(System.currentTimeMillis())
+                .build());
     }
 
 }

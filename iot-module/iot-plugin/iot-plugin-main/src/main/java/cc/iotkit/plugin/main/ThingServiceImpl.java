@@ -74,14 +74,7 @@ public class ThingServiceImpl implements IThingService {
                     subRegisterDevice(pluginId, device, (SubDeviceRegister) action);
                     break;
                 case STATE_CHANGE:
-                    publishMsg(
-                            device, action,
-                            ThingModelMessage.builder()
-                                    .type(ThingModelMessage.TYPE_STATE)
-                                    .identifier(((DeviceStateChange) action).getState().getState())
-                                    .time(System.currentTimeMillis())
-                                    .build()
-                    );
+                    deviceStateChange(device, (DeviceStateChange) action);
                     break;
                 case EVENT_REPORT:
                     EventReport eventReport = (EventReport) action;
@@ -189,6 +182,29 @@ public class ThingServiceImpl implements IThingService {
         }
         return device.getProperty();
     }
+
+
+    private void deviceStateChange(DeviceInfo device, DeviceStateChange action) {
+        DeviceState state = action.getState();
+        if (state == DeviceState.ONLINE) {
+            device.getState().setOnline(true);
+            device.getState().setOnlineTime(System.currentTimeMillis());
+        } else {
+            device.getState().setOnline(false);
+            device.getState().setOfflineTime(System.currentTimeMillis());
+        }
+        deviceInfoData.save(device);
+
+        publishMsg(
+                device, action,
+                ThingModelMessage.builder()
+                        .type(ThingModelMessage.TYPE_STATE)
+                        .identifier(action.getState().getState())
+                        .time(System.currentTimeMillis())
+                        .build()
+        );
+    }
+
 
     private String registerDevice(DeviceInfo device, DeviceRegister register, String parentId) {
         String productKey = register.getProductKey();

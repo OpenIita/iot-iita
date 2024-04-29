@@ -108,6 +108,10 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-kafka-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cc.iotkit</groupId>
+            <artifactId>iot-plugin-core</artifactId>
+        </dependency>
 
     </dependencies>
 

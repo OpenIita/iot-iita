@@ -11,10 +11,14 @@ package cc.iotkit.manager.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.utils.UniqueIdUtil;
 import cc.iotkit.data.manager.IDeviceInfoData;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.model.device.DeviceInfo;
 import cc.iotkit.model.product.Product;
+import cc.iotkit.plugin.core.thing.IThingService;
+import cc.iotkit.plugin.core.thing.actions.DeviceState;
+import cc.iotkit.plugin.core.thing.actions.up.DeviceStateChange;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,6 +41,9 @@ public class DeviceStateCheckTask {
     @Autowired
     @Qualifier("productDataCache")
     private IProductData productData;
+
+    @Autowired
+    private IThingService thingService;
 
     @Scheduled(fixedDelay = 10, initialDelay = 20, timeUnit = TimeUnit.SECONDS)
     public void syncState() {
@@ -61,11 +68,15 @@ public class DeviceStateCheckTask {
                         continue;
                     }
                     log.info("device state check offline,{}", deviceId);
-                    //更新为离线
-                    DeviceInfo.State state = realTimeDevice.getState();
-                    state.setOnline(false);
-                    state.setOfflineTime(System.currentTimeMillis());
-                    deviceInfoData.save(realTimeDevice);
+
+                    // 发送设备离线物模型消息
+                    thingService.post("NONE", DeviceStateChange.builder()
+                            .id(UniqueIdUtil.newRequestId())
+                            .productKey(realTimeDevice.getProductKey())
+                            .deviceName(realTimeDevice.getDeviceName())
+                            .state(DeviceState.OFFLINE)
+                            .time(System.currentTimeMillis())
+                            .build());
                 }
             }
 
