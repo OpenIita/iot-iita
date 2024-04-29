@@ -186,6 +186,11 @@ public class ThingServiceImpl implements IThingService {
 
     private void deviceStateChange(DeviceInfo device, DeviceStateChange action) {
         DeviceState state = action.getState();
+        if ( (device.getState().isOnline() && state == DeviceState.ONLINE) ||
+                (!device.getState().isOnline() && state == DeviceState.OFFLINE) ) {
+            return;
+        }
+
         if (state == DeviceState.ONLINE) {
             device.getState().setOnline(true);
             device.getState().setOnlineTime(System.currentTimeMillis());
