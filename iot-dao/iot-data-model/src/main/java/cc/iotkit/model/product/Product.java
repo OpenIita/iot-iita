@@ -45,6 +45,8 @@ public class Product extends TenantModel implements Id<Long>, Serializable {
 
     private String img;
 
+    private Long iconId;
+
     /**
      * 是否透传
      */

@@ -68,6 +68,10 @@ public class ThingModel extends TenantModel implements Id<Long>, Serializable {
 
         // 单位
         private String unit;
+        // 图标id
+        private Long iconId;
+        // 图标信息
+        private Icon icon;
     }
 
     @Data

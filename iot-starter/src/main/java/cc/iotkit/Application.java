@@ -34,7 +34,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class Application implements SpringBootstrap {
 
     public static void main(String[] args) {
-
         SpringMainBootstrap.launch(Application.class, args);
         log.info("server start success!");
     }

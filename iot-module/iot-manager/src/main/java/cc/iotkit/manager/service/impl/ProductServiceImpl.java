@@ -11,21 +11,23 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.*;
 import cc.iotkit.manager.config.AliyunConfig;
 import cc.iotkit.manager.dto.bo.category.CategoryBo;
+import cc.iotkit.manager.dto.bo.product.IconBo;
+import cc.iotkit.manager.dto.bo.product.IconTypeBo;
 import cc.iotkit.manager.dto.bo.product.ProductBo;
 import cc.iotkit.manager.dto.bo.productmodel.ProductModelBo;
 import cc.iotkit.manager.dto.bo.thingmodel.ThingModelBo;
 import cc.iotkit.manager.dto.vo.category.CategoryVo;
+import cc.iotkit.manager.dto.vo.product.IconTypeVo;
+import cc.iotkit.manager.dto.vo.product.IconVo;
 import cc.iotkit.manager.dto.vo.product.ProductVo;
 import cc.iotkit.manager.dto.vo.productmodel.ProductModelVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.service.DataOwnerService;
 import cc.iotkit.manager.service.IProductService;
-import cc.iotkit.model.product.Category;
-import cc.iotkit.model.product.Product;
-import cc.iotkit.model.product.ProductModel;
-import cc.iotkit.model.product.ThingModel;
+import cc.iotkit.model.product.*;
 import cc.iotkit.temporal.IDbStructureData;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.ObjectUtil;
 import com.github.yitter.idgen.YitIdHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -36,8 +38,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -74,6 +77,12 @@ public class ProductServiceImpl implements IProductService {
 
     @Autowired
     private IDeviceInfoData deviceInfoData;
+
+    @Autowired
+    private IIconTypeData iconTypeData;
+
+    @Autowired
+    private IIconData iconData;
 
     @Override
     public ProductVo addEntity(ProductBo data) {
@@ -127,6 +136,14 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ThingModelVo getThingModelByProductKey(String productKey) {
         ThingModel thingModel = thingModelData.findByProductKey(productKey);
+        if(ObjectUtil.isNotNull(thingModel)&&ObjectUtil.isNotNull(thingModel.getModel())&&
+                thingModel.getModel().getProperties().size()>0){
+            for (ThingModel.Property pro:thingModel.getModel().getProperties()){
+                if(ObjectUtil.isNotNull(pro.getIconId())){
+                    pro.setIcon(iconData.findById(pro.getIconId()));
+                }
+            }
+        }
         return MapstructUtils.convert(thingModel, ThingModelVo.class);
     }
 
@@ -206,7 +223,13 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public Paging<ProductVo> selectPageList(PageRequest<ProductBo> request) {
-        return productData.findAll(request.to(Product.class)).to(ProductVo.class);
+        Paging<ProductVo> result =productData.findAll(request.to(Product.class)).to(ProductVo.class);
+        for (ProductVo row : result.getRows()) {
+            if(ObjectUtil.isNotNull(row.getIconId())){
+                row.setIcon(iconData.findById(row.getIconId()));
+            }
+        }
+        return result;
     }
 
     @Override
@@ -237,6 +260,45 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ProductVo findByProductKey(String productKey) {
         return productData.findByProductKey(productKey).to(ProductVo.class);
+    }
+
+    @Override
+    public boolean saveIconType(IconTypeBo data) {
+        IconType iconType = data.to(IconType.class);
+        iconTypeData.save(iconType);
+        return true;
+    }
+
+    @Override
+    public boolean deleteIconType(Long data) {
+        iconTypeData.deleteById(data);
+        return true;
+    }
+
+    @Override
+    public boolean saveIcon(IconBo data) {
+        Icon icon = data.to(Icon.class);
+        iconData.save(icon);
+        return true;
+    }
+
+    @Override
+    public boolean deleteIcon(Long data) {
+        iconData.deleteById(data);
+        return true;
+    }
+
+    @Override
+    public List<IconTypeVo> selectIconTypeList() {
+        return MapstructUtils.convert(iconTypeData.findAll(), IconTypeVo.class);
+    }
+
+    @Override
+    public Paging<IconVo> selectIconPageList(PageRequest<IconBo> request) {
+        Map<String,String> sortMap = new HashMap<>();
+        sortMap.put("updateTime","desc");
+        request.setSortMap(sortMap);
+        return iconData.findAll(request.to(Icon.class)).to(IconVo.class);
     }
 
     @Override

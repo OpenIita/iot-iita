@@ -17,16 +17,19 @@ import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.manager.dto.bo.category.CategoryBo;
+import cc.iotkit.manager.dto.bo.product.IconBo;
+import cc.iotkit.manager.dto.bo.product.IconTypeBo;
 import cc.iotkit.manager.dto.bo.product.ProductBo;
 import cc.iotkit.manager.dto.bo.productmodel.ProductModelBo;
 import cc.iotkit.manager.dto.bo.thingmodel.ThingModelBo;
 import cc.iotkit.manager.dto.vo.category.CategoryVo;
+import cc.iotkit.manager.dto.vo.product.IconTypeVo;
+import cc.iotkit.manager.dto.vo.product.IconVo;
 import cc.iotkit.manager.dto.vo.product.ProductVo;
 import cc.iotkit.manager.dto.vo.productmodel.ProductModelVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
 import cc.iotkit.manager.service.IProductService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.dev33.satoken.annotation.SaCheckRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -70,6 +73,48 @@ public class ProductController {
     @Log(title = "产品", businessType = BusinessType.UPDATE)
     public boolean edit(@Validated(EditGroup.class) @RequestBody Request<ProductBo> request) {
         return productService.updateEntity(request.getData());
+    }
+
+    @ApiOperation("保存图标分类")
+    @SaCheckPermission("iot:iconType:edit")
+    @PostMapping("/icon/saveIconType")
+    public boolean saveIconType(@Validated @RequestBody Request<IconTypeBo> request) {
+        return productService.saveIconType(request.getData());
+    }
+
+    @ApiOperation("删除图标分类")
+    @SaCheckPermission("iot:iconType:remove")
+    @PostMapping("/icon/deleteIconType")
+    public boolean deleteIconType(@Validated @RequestBody Request<Long> request) {
+        return productService.deleteIconType(request.getData());
+    }
+
+    @ApiOperation("图标分类列表")
+    @SaCheckPermission("iot:iconType:query")
+    @PostMapping("/icon/getAllIconType")
+    public List<IconTypeVo> getAllIconType() {
+        return productService.selectIconTypeList();
+    }
+
+    @ApiOperation("保存图标")
+    @SaCheckPermission("iot:icon:edit")
+    @PostMapping("/icon/saveIcon")
+    public boolean saveIcon(@Validated @RequestBody Request<IconBo> request) {
+        return productService.saveIcon(request.getData());
+    }
+
+    @ApiOperation("删除图标")
+    @SaCheckPermission("iot:icon:remove")
+    @PostMapping("/icon/deleteIcon")
+    public boolean deleteIcon(@Validated @RequestBody Request<Long> request) {
+        return productService.deleteIcon(request.getData());
+    }
+
+    @ApiOperation("图标分页展示")
+    @SaCheckPermission("iot:icon:query")
+    @PostMapping("/icon/getAllIcon")
+    public Paging<IconVo> getAllIcon(@Validated @RequestBody PageRequest<IconBo> request) {
+        return productService.selectIconPageList(request);
     }
 
     @ApiOperation("查看详情")

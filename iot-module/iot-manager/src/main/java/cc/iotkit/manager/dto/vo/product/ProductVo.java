@@ -1,5 +1,6 @@
 package cc.iotkit.manager.dto.vo.product;
 
+import cc.iotkit.model.product.Icon;
 import cc.iotkit.model.product.Product;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -42,6 +43,13 @@ public class ProductVo implements Serializable {
     @ApiModelProperty(value = "图片")
     @ExcelProperty(value = "图片")
     private String img;
+
+    @ApiModelProperty(value = "产品图标ID")
+    @ExcelProperty(value = "图片")
+    private Long iconId;
+
+    @ApiModelProperty(value = "产品图标信息")
+    private Icon icon;
 
     @ApiModelProperty(value = "产品名称")
     @ExcelProperty(value = "产品名称")

@@ -25,10 +25,7 @@ import cc.iotkit.model.notify.ChannelConfig;
 import cc.iotkit.model.notify.ChannelTemplate;
 import cc.iotkit.model.notify.NotifyMessage;
 import cc.iotkit.model.plugin.PluginInfo;
-import cc.iotkit.model.product.Category;
-import cc.iotkit.model.product.Product;
-import cc.iotkit.model.product.ProductModel;
-import cc.iotkit.model.product.ThingModel;
+import cc.iotkit.model.product.*;
 import cc.iotkit.model.rule.RuleInfo;
 import cc.iotkit.model.rule.TaskInfo;
 import cc.iotkit.model.space.Home;
@@ -123,6 +120,10 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                     initData("notifyMessage", SpringUtils.getBean(INotifyMessageData.class), new TypeReference<List<NotifyMessage>>() {
                     });
                     initData("pluginInfo", SpringUtils.getBean(IPluginInfoData.class), new TypeReference<List<PluginInfo>>() {
+                    });
+                    initData("iconType", SpringUtils.getBean(IIconTypeData.class), new TypeReference<List<IconType>>() {
+                    });
+                    initData("icon", SpringUtils.getBean(IIconData.class), new TypeReference<List<Icon>>() {
                     });
 
                     initSysData();

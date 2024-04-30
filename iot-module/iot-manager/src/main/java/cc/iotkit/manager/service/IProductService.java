@@ -3,10 +3,14 @@ package cc.iotkit.manager.service;
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
 import cc.iotkit.manager.dto.bo.category.CategoryBo;
+import cc.iotkit.manager.dto.bo.product.IconBo;
+import cc.iotkit.manager.dto.bo.product.IconTypeBo;
 import cc.iotkit.manager.dto.bo.product.ProductBo;
 import cc.iotkit.manager.dto.bo.productmodel.ProductModelBo;
 import cc.iotkit.manager.dto.bo.thingmodel.ThingModelBo;
 import cc.iotkit.manager.dto.vo.category.CategoryVo;
+import cc.iotkit.manager.dto.vo.product.IconTypeVo;
+import cc.iotkit.manager.dto.vo.product.IconVo;
 import cc.iotkit.manager.dto.vo.product.ProductVo;
 import cc.iotkit.manager.dto.vo.productmodel.ProductModelVo;
 import cc.iotkit.manager.dto.vo.thingmodel.ThingModelVo;
@@ -54,4 +58,16 @@ public interface IProductService {
     boolean deleteProductModel(String id);
 
     ProductVo findByProductKey(String productKey);
+
+    boolean saveIconType(IconTypeBo data);
+
+    boolean deleteIconType(Long data);
+
+    boolean saveIcon(IconBo data);
+
+    boolean deleteIcon(Long data);
+
+    List<IconTypeVo> selectIconTypeList();
+
+    Paging<IconVo> selectIconPageList(PageRequest<IconBo> request);
 }

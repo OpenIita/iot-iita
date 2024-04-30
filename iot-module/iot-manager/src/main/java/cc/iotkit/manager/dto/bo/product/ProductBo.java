@@ -36,6 +36,9 @@ public class ProductBo extends BaseDto {
     @Size(max = 255, message = "图片长度不正确")
     private String img;
 
+    @ApiModelProperty(value = "产品图标ID")
+    private Long iconId;
+
     @ApiModelProperty(value = "产品名称")
     @Size(max = 255, message = "产品名称长度不正确")
     private String name;
