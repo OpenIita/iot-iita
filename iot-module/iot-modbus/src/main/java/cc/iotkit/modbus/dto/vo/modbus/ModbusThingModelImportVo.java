@@ -54,7 +54,7 @@ public class ModbusThingModelImportVo implements Serializable {
     private String unit;
     //数据顺序
     @ExcelProperty(value = "数据顺序")
-    private Integer sort;
+    private String sort;
 
 
 }

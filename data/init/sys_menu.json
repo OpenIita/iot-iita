@@ -3518,29 +3518,7 @@
   "icon" : "",
   "remark" : null,
   "children" : [ ]
-} , {
-  "createDept" : null,
-  "createBy" : null,
-  "createTime" : 1709365727999,
-  "updateBy" : null,
-  "updateTime" : 1709365772669,
-  "id" : 521131319332933,
-  "menuName" : "设备分组详情",
-  "parentId" : 2200,
-  "orderNum" : 17,
-  "path" : "deviceGroupDetail/:id",
-  "component" : "iot/equipment/devices/deviceGroupDetail",
-  "queryParam" : null,
-  "isFrame" : "1",
-  "isCache" : "1",
-  "menuType" : "C",
-  "visible" : "1",
-  "status" : "0",
-  "perms" : "iot:device:query",
-  "icon" : "",
-  "remark" : null,
-  "children" : [ ]
-}, {
+} ,  {
   "createDept" : null,
   "createBy" : null,
   "createTime" : 1709365727999,

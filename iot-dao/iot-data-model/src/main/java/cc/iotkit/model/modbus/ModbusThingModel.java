@@ -79,8 +79,11 @@ public class ModbusThingModel extends TenantModel implements Id<Long>, Serializa
         private Integer regAddr;
         //寄存器数量
         private Integer regNum;
+        //  * 处理公式
+        private String processor;
+        //数据顺序
         /**
-         * 处理公式
+
          * [
          *   { value: 'AB',  },
          *   { value: 'BA',  },
@@ -90,9 +93,7 @@ public class ModbusThingModel extends TenantModel implements Id<Long>, Serializa
          *   { value: 'BA DC',  },
          * ]
          */
-        private String processor;
-        //数据顺序
-        private Integer sort;
+        private String sort;
 
         private ModbusThingModel.DataType dataType;
 
