@@ -23,6 +23,7 @@ import cc.iotkit.model.modbus.ModbusInfo;
 import cc.iotkit.model.modbus.ModbusThingModel;
 import cc.iotkit.model.product.Product;
 import cc.iotkit.model.product.ThingModel;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcel;
@@ -208,8 +209,8 @@ public class ModbusInfoServiceImpl implements IModbusInfoService {
 
         if(CollectionUtil.isNotEmpty(modbusThingModel.getModel().getProperties())){
             properties = modbusThingModel.getModel().getProperties().stream().map(p -> {
-                ThingModel.Property property = MapstructUtils.convert(p, ThingModel.Property.class);
-                property.setProData(JSONUtil.toJsonStr(MapstructUtils.convert(p, ModbusThingModel.Property.class)));
+                ThingModel.Property property = BeanUtil.copyProperties(p, ThingModel.Property.class);
+                property.setProData(JSONUtil.toJsonStr(BeanUtil.copyProperties(p, ModbusThingModel.ProData.class)));
                 return property;
             }).collect(Collectors.toList());
         }
