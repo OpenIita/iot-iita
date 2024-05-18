@@ -103,6 +103,38 @@ public class ModbusThingModel extends TenantModel implements Id<Long>, Serializa
         private String unit;
     }
 
+
+    @Data
+    public static class ProData {
+        /**
+         * 寄存器类型
+         * [{value:'01',label:'线圈状态(RW)',},
+         * {value:'02',label:'离散输入(RO)',},
+         * {value:'03',label:'保持寄存器(RW)',},
+         * {value:'04',label:'输入寄存器(RO)',},]
+         */
+        private String regType;
+        //寄存器地址
+        private Integer regAddr;
+        //寄存器数量
+        private Integer regNum;
+        //  * 处理公式
+        private String processor;
+        //数据顺序
+        /**
+
+         * [
+         *   { value: 'AB',  },
+         *   { value: 'BA',  },
+         *   { value: 'AB CD',  },
+         *   { value: 'CD AB',  },
+         *   { value: 'DC BA',  },
+         *   { value: 'BA DC',  },
+         * ]
+         */
+        private String sort;
+    }
+
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Parameter {

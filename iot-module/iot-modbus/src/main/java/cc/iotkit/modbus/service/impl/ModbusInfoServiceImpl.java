@@ -9,6 +9,7 @@ import cc.iotkit.common.utils.JsonUtils;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.data.manager.IProductData;
 import cc.iotkit.manager.dto.bo.product.ProductBo;
+import cc.iotkit.manager.dto.bo.thingmodel.ThingModelBo;
 import cc.iotkit.manager.service.IProductService;
 import cc.iotkit.modbus.data.IModbusInfoData;
 import cc.iotkit.modbus.data.IModbusThingModelData;
@@ -21,7 +22,10 @@ import cc.iotkit.modbus.service.IModbusInfoService;
 import cc.iotkit.model.modbus.ModbusInfo;
 import cc.iotkit.model.modbus.ModbusThingModel;
 import cc.iotkit.model.product.Product;
+import cc.iotkit.model.product.ThingModel;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcel;
 import com.github.yitter.idgen.YitIdHelper;
 import lombok.SneakyThrows;
@@ -35,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Description: Modbus模版管理
@@ -65,7 +70,7 @@ public class ModbusInfoServiceImpl implements IModbusInfoService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public ModbusInfoVo addEntity(ModbusInfoBo data) {
         ModbusInfo modbusInfo = data.to(ModbusInfo.class);
 
@@ -155,6 +160,7 @@ public class ModbusInfoServiceImpl implements IModbusInfoService {
     }
 
     @Override
+    @Transactional
     public boolean saveThingModel(ModbusThingModelBo data) {
         String productKey = data.getProductKey();
 
@@ -193,12 +199,33 @@ public class ModbusInfoServiceImpl implements IModbusInfoService {
             throw new BizException(ErrCode.PRODUCT_NOT_FOUND);
         }
 
-        //ModbusThingModel thingModel = modbusThingModelData.findByProductKey(productKey);
+        ModbusThingModel modbusThingModel = modbusThingModelData.findByProductKey(productKey);
 
-        //同步物模型
-        //ThingModelBo tbspModel = new ThingModelBo();
 
-        //productService.saveThingModel(tbspModel);
+        ThingModel.Model model = new ThingModel.Model();
+
+        //将Property私有属性封装到proData中
+        List<ThingModel.Property> properties=new ArrayList<>();
+
+        if(CollectionUtil.isNotEmpty(modbusThingModel.getModel().getProperties())){
+            properties = modbusThingModel.getModel().getProperties().stream().map(p -> {
+                ThingModel.Property property = BeanUtil.copyProperties(p, ThingModel.Property.class);
+                property.setProData(JSONUtil.toJsonStr(BeanUtil.copyProperties(p, ModbusThingModel.ProData.class)));
+                return property;
+            }).collect(Collectors.toList());
+        }
+        model.setProperties(properties);
+
+        //services events 数据封装
+
+
+
+        ThingModelBo tbspModel = new ThingModelBo();
+        tbspModel.setProductKey(productKey);
+        tbspModel.setModel(JSONUtil.toJsonStr(model));
+
+
+        productService.saveThingModel(tbspModel);
 
 
         return true;

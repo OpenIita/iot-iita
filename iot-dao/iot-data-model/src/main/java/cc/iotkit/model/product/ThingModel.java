@@ -68,6 +68,7 @@ public class ThingModel extends TenantModel implements Id<Long>, Serializable {
 
         // 单位
         private String unit;
+        private String proData;
     }
 
     @Data
