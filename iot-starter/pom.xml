@@ -87,6 +87,12 @@
             <artifactId>iot-temporal-serviceImpl-es</artifactId>
         </dependency>
 
+        <!--        打开注释 启用代码生成器模块-->
+        <!--        <dependency>-->
+        <!--            <groupId>cc.iotkit</groupId>-->
+        <!--            <artifactId>iot-generator</artifactId>-->
+        <!--        </dependency>-->
+
         <!--打开注释 启用timescale数据库-->
         <!--        <dependency>-->
         <!--            <groupId>cc.iotkit</groupId>-->
