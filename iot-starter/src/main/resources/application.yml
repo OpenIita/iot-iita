@@ -1,5 +1,6 @@
 spring:
   profiles:
+#    active: dev,generator # 使用application-dev.yml和代码生成器模块application-generator.yml配置
     active: dev # 使用application-dev.yml 配置
 #    active: prd # 使用application-prd.yml 配置
 #    active: test # 使用application-test.yml 配置

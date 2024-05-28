@@ -1,0 +1,45 @@
+spring:
+
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      # mysql 初始化
+      #      schema-locations: classpath:sql/schema.sql
+      # postgrep 初始化
+      schema-locations: classpath:sql/schema-postgre.sql
+      mode: ALWAYS
+
+  datasource:
+    # 动态数据源文档 https://www.kancloud.cn/tracy5546/dynamic-datasource/content
+    dynamic:
+      primary: master #设置默认的数据源或者数据源组,默认值即为master
+      strict: true #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      datasource:
+        # 主库数据源
+        master:
+          type: ${spring.datasource.type}
+          driverClassName: ${spring.datasource.driverClassName}
+          # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562
+          # rewriteBatchedStatements=true 批处理优化 大幅提升批量插入更新删除性能(对数据库有性能损耗 使用批量操作应考虑性能问题)
+          url: ${spring.datasource.url}
+          username: ${spring.datasource.url}
+          password: ${spring.datasource.password}
+
+        # 从库数据源
+        slave:
+          lazy: true
+          type: ${spring.datasource.type}
+          driverClassName: ${spring.datasource.driverClassName}
+          # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562
+          # rewriteBatchedStatements=true 批处理优化 大幅提升批量插入更新删除性能(对数据库有性能损耗 使用批量操作应考虑性能问题)
+          url: ${spring.datasource.url}
+          username: ${spring.datasource.username}
+          password: ${spring.datasource.password}
