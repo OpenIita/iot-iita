@@ -6,8 +6,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 100MB
-      max-request-size: 100MB
+      max-file-size: 200MB
+      max-request-size: 200MB
 
   #注： 切换数据库时需要将项目根目录中的.init文件删除再重启
   # <<=======内置H2数据库连接设置开始==========
