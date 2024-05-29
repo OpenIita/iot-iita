@@ -85,12 +85,17 @@ public class ThingServiceImpl implements IThingService {
             if (device == null) {
                 log.warn("device:{} is not found.", deviceName);
             }
+            long lastTime = System.currentTimeMillis();
+            deviceUpdateLastTime(device, lastTime);
 
             ActionType type = action.getType();
             switch (type) {
                 case REGISTER:
                     //设备注册
                     registerDevice(device, (DeviceRegister) action, null);
+                    break;
+                case PING:
+                    // 设备心跳
                     break;
                 case SUB_REGISTER:
                     //子设备注册
@@ -151,6 +156,10 @@ public class ThingServiceImpl implements IThingService {
             log.error("action process error", e);
             return ActionResult.builder().code(1).reason(e.getMessage()).build();
         }
+    }
+
+    private void deviceUpdateLastTime(DeviceInfo device, long lastTime) {
+        deviceInfoData.setLastTime(device.getDeviceId(),lastTime);
     }
 
     @Override

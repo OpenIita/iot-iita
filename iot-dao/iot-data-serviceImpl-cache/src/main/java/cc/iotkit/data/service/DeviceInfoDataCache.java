@@ -106,12 +106,18 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
         return String.format(Constants.PROPERTY_CACHE_KEY, deviceId);
     }
 
+    private String getLastTimeCacheKey(String deviceId) {
+        return String.format(Constants.LAST_TIME_CACHE_KEY, deviceId);
+    }
+
+
     @Override
     public void saveProperties(String deviceId, Map<String, DevicePropertyCache> properties) {
         Map<String, DevicePropertyCache> old = getProperties(deviceId);
         old.putAll(properties);
+        long updateTime = System.currentTimeMillis();
         redisTemplate.opsForValue().set(getPropertyCacheKey(deviceId),
-                JsonUtils.toJsonString(new PropertyCacheInfo(System.currentTimeMillis(), old))
+                JsonUtils.toJsonString(new PropertyCacheInfo(updateTime, old))
         );
     }
 
@@ -139,6 +145,20 @@ public class DeviceInfoDataCache implements IDeviceInfoData, SmartInitializingSi
     @Override
     public long getPropertyUpdateTime(String deviceId) {
         return getPropertyCacheInfo(deviceId).getUpdateTime();
+    }
+
+    @Override
+    public long getLastTime(String deviceId) {
+         String last = redisTemplate.opsForValue().get( getLastTimeCacheKey(deviceId));
+         if(StringUtils.isBlank(last)){
+             return 0L;
+         }
+         return Long.valueOf(last);
+    }
+
+    @Override
+    public void setLastTime(String deviceId, long lastTime) {
+        redisTemplate.opsForValue().set(getLastTimeCacheKey(deviceId), String.valueOf(lastTime));
     }
 
     @Override

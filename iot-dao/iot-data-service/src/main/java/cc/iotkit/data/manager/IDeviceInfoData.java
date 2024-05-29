@@ -57,6 +57,21 @@ public interface IDeviceInfoData extends IOwnedData<DeviceInfo, String> {
     long getPropertyUpdateTime(String deviceId);
 
     /**
+     * 获取设备最新通讯时间
+     *
+     * @param deviceId 设备id
+     * @return timestamp
+     */
+    long getLastTime(String deviceId);
+    /**
+     * 设置设备最新通讯时间
+     *
+     * @param deviceId 设备id
+     * @return timestamp
+     */
+    void setLastTime(String deviceId, long lastTime);
+
+    /**
      * 根据设备ID取设备信息
      *
      * @param deviceId 设备ID

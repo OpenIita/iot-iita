@@ -115,6 +115,16 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     }
 
     @Override
+    public long getLastTime(String deviceId) {
+        return 0;
+    }
+
+    @Override
+    public void setLastTime(String deviceId, long lastTime) {
+
+    }
+
+    @Override
     public DeviceInfo findByDeviceId(String deviceId) {
         TbDeviceInfo tbDeviceInfo = deviceInfoRepository.findByDeviceId(deviceId);
 

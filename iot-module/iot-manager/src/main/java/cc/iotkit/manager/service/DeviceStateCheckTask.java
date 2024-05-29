@@ -73,9 +73,9 @@ public class DeviceStateCheckTask {
                     continue;
                 }
                 String deviceId = device.getDeviceId();
-                long updateTime = deviceInfoData.getPropertyUpdateTime(deviceId);
+                long lastTime = deviceInfoData.getLastTime(deviceId);
                 //最后更新时间超时保活时长1.1倍认为设备离线了
-                if (System.currentTimeMillis() - updateTime > keepAliveTime * 1000 * 1.1) {
+                if (System.currentTimeMillis() - lastTime > keepAliveTime * 1000 * 1.1) {
                     DeviceInfo realTimeDevice = deviceInfoData.findByDeviceId(deviceId);
                     if (!realTimeDevice.isOnline()) {
                         continue;
