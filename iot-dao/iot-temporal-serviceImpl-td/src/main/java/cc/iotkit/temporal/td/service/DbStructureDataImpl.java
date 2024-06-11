@@ -30,6 +30,7 @@ import cc.iotkit.temporal.td.config.Constants;
 import cc.iotkit.temporal.td.dm.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -42,6 +43,9 @@ public class DbStructureDataImpl implements IDbStructureData {
 
     @Autowired
     private TdRestApi tdRestApi;
+
+    @Value("${spring.td-datasource.db:iita_iot}")
+    private String dbName;
 
     /**
      * 根据物模型创建超级表
@@ -137,7 +141,7 @@ public class DbStructureDataImpl implements IDbStructureData {
                 }
             }
         } catch (Throwable e) {
-            log.error("update thingmodel stable failed", e);
+            throw e;
         }
     }
 
@@ -147,7 +151,7 @@ public class DbStructureDataImpl implements IDbStructureData {
     @Override
     @PostConstruct
     public void initDbStructure() {
-        tdRestApi.execSql("CREATE DATABASE IF NOT EXISTS iotkit KEEP 365 DURATION 10 BUFFER 16 WAL_LEVEL 1;");
+        tdRestApi.execSql(String.format("CREATE DATABASE IF NOT EXISTS %s KEEP 365 DURATION 10 BUFFER 16 WAL_LEVEL 1;", dbName));
 
         //创建规则日志超级表
         String sql = TableManager.getCreateSTableSql("rule_log", List.of(

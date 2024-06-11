@@ -22,6 +22,7 @@
  */
 package cc.iotkit.temporal.td.dm;
 
+import cc.iotkit.common.exception.BizException;
 import cc.iotkit.model.product.ThingModel;
 
 import java.util.List;
@@ -58,7 +59,14 @@ public class FieldParser {
         if (specs instanceof Map) {
             Object objLen = ((Map<?, ?>) specs).get("length");
             if (objLen != null) {
-                len = Integer.parseInt(objLen.toString());
+                try{
+                    len = Integer.parseInt(objLen.toString());
+                }catch (Exception e){
+                    throw new BizException(filedName+" 长度错误");
+                }
+                if("NCHAR".equals(fType) && len <1){
+                    throw new BizException(filedName+" 长度错误");
+                }
             }
         }
 
