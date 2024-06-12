@@ -84,9 +84,11 @@ public class ThingServiceImpl implements IThingService {
             DeviceInfo device = getDeviceInfo(deviceName);
             if (device == null) {
                 log.warn("device:{} is not found.", deviceName);
+            }else {
+                long lastTime = System.currentTimeMillis();
+                deviceUpdateLastTime(device, lastTime);
             }
-            long lastTime = System.currentTimeMillis();
-            deviceUpdateLastTime(device, lastTime);
+
 
             ActionType type = action.getType();
             switch (type) {
