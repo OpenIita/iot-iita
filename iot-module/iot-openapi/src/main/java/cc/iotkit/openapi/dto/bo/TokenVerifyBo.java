@@ -25,8 +25,10 @@ package cc.iotkit.openapi.dto.bo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotBlank;
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 @ApiModel(value = "TokenVerifyBo")
 @Data
@@ -45,7 +47,7 @@ public class TokenVerifyBo {
     @ApiModelProperty(value = "标识符")
     private String identifier;
 
-    @NotBlank(message = "{tenant.number.not.blank}")
+    @NotNull(message = "{tenant.number.not.blank}")
     @ApiModelProperty(value = "租户ID")
     private String tenantId;
 

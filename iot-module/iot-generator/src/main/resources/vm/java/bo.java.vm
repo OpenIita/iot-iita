@@ -8,7 +8,7 @@ import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 #foreach ($import in $importList)
 import ${import};
 #end

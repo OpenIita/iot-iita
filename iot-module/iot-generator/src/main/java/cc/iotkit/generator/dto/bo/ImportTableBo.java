@@ -2,7 +2,7 @@ package cc.iotkit.generator.dto.bo;
 
 import cc.iotkit.common.api.BaseDto;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.util.List;

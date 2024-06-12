@@ -23,8 +23,10 @@
 
 package cc.iotkit.system.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotBlank;
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 用户登录对象
@@ -38,8 +40,8 @@ public class LoginBody {
     /**
      * 租户ID
      */
-    @NotBlank(message = "{tenant.number.not.blank}")
-    private String tenantId;
+    @NotNull(message = "{tenant.number.not.blank}")
+    private Long tenantId;
 
     /**
      * 用户名

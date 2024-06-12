@@ -29,7 +29,7 @@ import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.model.system.SysApp;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

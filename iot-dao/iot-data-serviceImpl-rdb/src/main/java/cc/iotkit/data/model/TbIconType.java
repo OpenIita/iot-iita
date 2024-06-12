@@ -28,7 +28,7 @@ import cc.iotkit.model.product.IconType;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
@@ -53,7 +53,7 @@ public class TbIconType extends BaseEntity implements TenantAware {
     @ApiModelProperty(value = "主键id")
     private Long id;
 
-    @Size(max = 30)
+
     @Column(name = "tenant_id")
     private String tenantId;
 

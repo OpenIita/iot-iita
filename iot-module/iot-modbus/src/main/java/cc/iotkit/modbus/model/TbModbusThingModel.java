@@ -9,14 +9,20 @@
  */
 package cc.iotkit.modbus.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.modbus.ModbusThingModel;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.github.linpeilie.annotations.AutoMapping;
 import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.Size;
 import lombok.Data;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
 import javax.persistence.*;
 
@@ -30,7 +36,10 @@ import javax.persistence.*;
 @Table(name = "modbus_thing_model")
 @ApiModel(value = "modbus物模型")
 @AutoMapper(target = ModbusThingModel.class)
-public class TbModbusThingModel  {
+@EntityListeners(TenantListener.class)
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+public class TbModbusThingModel implements TenantAware {
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
@@ -49,4 +58,6 @@ public class TbModbusThingModel  {
     @ApiModelProperty(value = "更新时间")
     private Long updateAt;
 
+    @Column(name = "tenant_id")
+    private Long tenantId;
 }

@@ -24,7 +24,7 @@
 package cc.iotkit.manager.dto.bo.screen;
 
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotBlank;
 import lombok.Data;
 
 /**

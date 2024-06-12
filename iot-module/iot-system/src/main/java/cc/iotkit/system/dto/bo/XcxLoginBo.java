@@ -23,7 +23,8 @@
 
 package cc.iotkit.system.dto.bo;
 
-import jakarta.validation.constraints.NotBlank;
+import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -38,12 +39,14 @@ public class XcxLoginBo {
     /**
      * appId
      */
+    @ApiModelProperty("appId")
     @NotBlank(message = "appId不能为空")
     private String appId;
 
     /**
      * 授权码
      */
+    @ApiModelProperty("授权码")
     @NotBlank(message = "code不能为空")
     private String code;
 

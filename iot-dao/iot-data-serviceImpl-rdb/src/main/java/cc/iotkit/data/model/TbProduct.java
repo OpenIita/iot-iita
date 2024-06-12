@@ -28,7 +28,6 @@ import cc.iotkit.model.product.Product;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
@@ -53,7 +52,7 @@ public class TbProduct implements TenantAware {
     @ApiModelProperty(value = "产品id")
     private Long id;
 
-    @Size(max = 30)
+
     @Column(name = "tenant_id")
     private String tenantId;
 

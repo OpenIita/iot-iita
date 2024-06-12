@@ -25,7 +25,7 @@ package cc.iotkit.manager.dto.bo.thingmodel;
 import cc.iotkit.common.api.BaseDto;
 import cc.iotkit.common.thing.ThingModelMessage;
 import io.github.linpeilie.annotations.AutoMapper;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

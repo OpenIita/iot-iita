@@ -25,7 +25,7 @@ package cc.iotkit.openapi.dto.bo.device;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotBlank;
 import lombok.Data;
 
 import java.util.Map;

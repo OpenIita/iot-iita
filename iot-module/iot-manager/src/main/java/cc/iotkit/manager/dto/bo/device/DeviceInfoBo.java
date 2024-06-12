@@ -30,7 +30,8 @@ import io.github.linpeilie.annotations.AutoMapping;
 import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -72,6 +73,7 @@ public class DeviceInfoBo extends BaseDto {
 
     @ApiModelProperty(value = "产品key")
     @Size(max = 255, message = "产品key长度不正确")
+    @NotBlank(message = "产品Key不能为空")
     private String productKey;
 
     @ApiModelProperty(value = "设备描述")

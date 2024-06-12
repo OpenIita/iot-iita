@@ -26,7 +26,7 @@ package cc.iotkit.manager.dto.bo.virtualdevice;
 import cc.iotkit.common.api.BaseDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
