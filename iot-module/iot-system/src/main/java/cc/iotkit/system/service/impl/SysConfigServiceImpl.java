@@ -105,7 +105,7 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
      * @return true开启，false关闭
      */
     @Override
-    public boolean selectRegisterEnabled(String tenantId) {
+    public boolean selectRegisterEnabled(Long tenantId) {
         SysConfig query = new SysConfig();
         query.setConfigKey("sys.account.registerUser");
         SysConfig retConfig = sysConfigData.findOneByCondition(query);

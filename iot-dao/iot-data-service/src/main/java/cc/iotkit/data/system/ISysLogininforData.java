@@ -51,7 +51,7 @@ public interface ISysLogininforData extends ICommonData<SysLoginInfo, Long> {
      *
      * @param tenantId 租户id
      */
-    void deleteByTenantId(String tenantId);
+    void deleteByTenantId(Long tenantId);
 
     /**
      * 清除所有

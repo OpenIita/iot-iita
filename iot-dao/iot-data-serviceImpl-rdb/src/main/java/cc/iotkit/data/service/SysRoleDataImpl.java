@@ -34,6 +34,7 @@ import cc.iotkit.data.system.ISysRoleData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysRole;
+import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -205,7 +206,7 @@ public class SysRoleDataImpl implements ISysRoleData, IJPACommData<SysRole, Long
                 .and(StringUtils.isNotBlank(role.getRoleName()), () -> tbSysRole.roleName.like(role.getRoleName()))
                 .and(StringUtils.isNotBlank(role.getStatus()), () -> tbSysRole.roleName.eq(role.getStatus()))
                 .and(StringUtils.isNotBlank(role.getRoleKey()), () -> tbSysRole.roleKey.like(role.getRoleKey()))
-                .and(StringUtils.isNotBlank(role.getTenantId()), () -> tbSysRole.tenantId.eq(role.getTenantId()))
+                .and(ObjectUtil.isNotNull(role.getTenantId()), () -> tbSysRole.tenantId.eq(role.getTenantId()))
                 .build();
 
     }

@@ -92,7 +92,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
      */
     @Cacheable(cacheNames = CacheNames.SYS_TENANT, key = "#tenantId")
     @Override
-    public SysTenantVo queryByTenantId(String tenantId) {
+    public SysTenantVo queryByTenantId(Long tenantId) {
         SysTenant sysTenant = new SysTenant();
         sysTenant.setTenantId(tenantId);
         SysTenant tenant = sysTenantData.findOneByCondition(sysTenant);
@@ -111,7 +111,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public void insertByBo(SysTenantBo bo) {
-        bo.setTenantId(YitIdHelper.nextId()+"");
+        bo.setTenantId(YitIdHelper.nextId());
         SysTenant sysTenant=sysTenantData.save(bo.to(SysTenant.class));
         // 根据套餐创建角色
         Long roleId = createTenantRole(sysTenant.getTenantId(), bo.getPackageId());
@@ -157,7 +157,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
         userRole.setRoleId(roleId);
         sysUserRoleData.save(userRole);
 
-        String defaultTenantId = TenantConstants.DEFAULT_TENANT_ID;
+        Long defaultTenantId = TenantConstants.DEFAULT_TENANT_ID;
         SysDictType querySysDictType=new SysDictType();
         querySysDictType.setTenantId(defaultTenantId);
         List<SysDictType> dictTypeList = sysDictTypeData.findByConditions(querySysDictType);
@@ -193,7 +193,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
      * @param packageId 租户套餐id
      * @return 角色id
      */
-    private Long createTenantRole(String tenantId, Long packageId) {
+    private Long createTenantRole(Long tenantId, Long packageId) {
         // 获取租户套餐
         SysTenantPackage tenantPackage = sysTenantPackageData.findById(packageId);
         if (ObjectUtil.isNull(tenantPackage)) {
@@ -239,7 +239,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
     }
 
     @Override
-    public void checkTenantAllowed(String tenantId) {
+    public void checkTenantAllowed(Long tenantId) {
         if (ObjectUtil.isNotNull(tenantId) && TenantConstants.DEFAULT_TENANT_ID.equals(tenantId)) {
             throw new BizException(ErrCode.UNAUTHORIZED_TENANT);
         }
@@ -247,7 +247,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public void deleteById(Long id) {
-        String tenantId=LoginHelper.getTenantId();
+        Long tenantId=LoginHelper.getTenantId();
         //删除角色
         SysRole querySysRole=new SysRole();
         querySysRole.setTenantId(tenantId);
@@ -267,7 +267,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
     }
 
     @Override
-    public boolean checkAccountBalance(String tenantId) {
+    public boolean checkAccountBalance(Long tenantId) {
         SysTenantVo tenant = this.queryByTenantId(tenantId);
         // 如果余额为-1代表不限制
         if (tenant.getAccountCount() == -1) {
@@ -279,12 +279,12 @@ public class SysTenantServiceImpl implements ISysTenantService {
     }
 
     @Override
-    public boolean checkExpireTime(String tenantId) {
+    public boolean checkExpireTime(Long tenantId) {
         return false;
     }
 
     @Override
-    public Boolean syncTenantPackage(String tenantId, String packageId) {
+    public Boolean syncTenantPackage(Long tenantId, String packageId) {
         return false;
     }
 }

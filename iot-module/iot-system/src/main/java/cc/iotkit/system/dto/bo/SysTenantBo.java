@@ -54,7 +54,7 @@ public class SysTenantBo extends BaseDto {
     /**
      * 租户编号
      */
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 联系人

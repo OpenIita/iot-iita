@@ -70,7 +70,7 @@ public class TbSysDept extends BaseEntity implements TenantAware {
      * 租户编号
      */
     @ApiModelProperty(value = "租户ID")
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 父部门ID

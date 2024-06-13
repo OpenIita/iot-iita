@@ -51,7 +51,7 @@ public class SysOperLog extends BaseModel implements Id<Long>, Serializable {
     /**
      * 租户编号
      */
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 模块标题

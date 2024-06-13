@@ -55,7 +55,7 @@ public class SysRegisterService {
      * 注册
      */
     public void register(RegisterBody registerBody) {
-        String tenantId = registerBody.getTenantId();
+        Long tenantId = registerBody.getTenantId();
         String username = registerBody.getUsername();
         String password = registerBody.getPassword();
         // 校验用户类型是否存在
@@ -89,7 +89,7 @@ public class SysRegisterService {
      * @param code     验证码
      * @param uuid     唯一标识
      */
-    public void validateCaptcha(String tenantId, String username, String code, String uuid) {
+    public void validateCaptcha(Long tenantId, String username, String code, String uuid) {
         String verifyKey = GlobalConstants.CAPTCHA_CODE_KEY + StringUtils.defaultString(uuid, "");
         String captcha = RedisUtils.getCacheObject(verifyKey);
         RedisUtils.deleteObject(verifyKey);
@@ -113,7 +113,7 @@ public class SysRegisterService {
      * @param message  消息内容
      * @return
      */
-    private void recordLoginInfo(String tenantId, String username, String status, String message) {
+    private void recordLoginInfo(Long tenantId, String username, String status, String message) {
 //        LogininforEvent logininforEvent = new LogininforEvent();
 //        logininforEvent.setTenantId(tenantId);
 //        logininforEvent.setUsername(username);

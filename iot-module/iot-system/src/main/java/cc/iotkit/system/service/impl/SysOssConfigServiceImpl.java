@@ -82,10 +82,10 @@ public class SysOssConfigServiceImpl implements ISysOssConfigService {
     @Override
     public void init() {
         List<SysOssConfig> list = baseData.findAll();
-        List<SysOssConfig> notEmptyTenantIdList = list.stream().filter(item -> StringUtils.isNotBlank(item.getTenantId())).collect(Collectors.toList());
-        Map<String, List<SysOssConfig>> map = StreamUtils.groupByKey(notEmptyTenantIdList, SysOssConfig::getTenantId);
+        List<SysOssConfig> notEmptyTenantIdList = list.stream().filter(item -> ObjectUtil.isNotNull(item.getTenantId())).collect(Collectors.toList());
+        Map<Long, List<SysOssConfig>> map = StreamUtils.groupByKey(notEmptyTenantIdList, SysOssConfig::getTenantId);
         try {
-            for (Map.Entry<String, List<SysOssConfig>> stringListEntry : map.entrySet()) {
+            for (Map.Entry<Long, List<SysOssConfig>> stringListEntry : map.entrySet()) {
                 TenantHelper.setDynamic(stringListEntry.getKey());
                 for (SysOssConfig config : stringListEntry.getValue()) {
                     String configKey = config.getConfigKey();

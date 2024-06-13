@@ -37,6 +37,7 @@ import cc.iotkit.data.system.ISysConfigData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysConfig;
+import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -119,7 +120,7 @@ public class SysConfigDataImpl implements ISysConfigData, IJPACommData<SysConfig
     public List<SysConfig> findAllByCondition(SysConfig data) {
         Predicate predicate = PredicateBuilder.instance()
                 .and(StringUtils.isNotEmpty(data.getConfigKey()), () -> tbSysConfig.configKey.eq(data.getConfigKey()))
-                .and(StringUtils.isNotEmpty(data.getTenantId()), () -> tbSysConfig.tenantId.eq(data.getTenantId()))
+                .and(ObjectUtil.isNotNull(data.getTenantId()), () -> tbSysConfig.tenantId.eq(data.getTenantId()))
                 .build();
         Iterator<TbSysConfig> iterator = baseRepository.findAll(predicate).iterator();
         return MapstructUtils.convert(IteratorUtils.toList(iterator), SysConfig.class);

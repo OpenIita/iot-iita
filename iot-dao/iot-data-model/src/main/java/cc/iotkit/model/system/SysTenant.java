@@ -50,7 +50,7 @@ public class SysTenant extends BaseModel implements Id<Long>,Serializable {
     /**
      * 租户编号
      */
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 联系人

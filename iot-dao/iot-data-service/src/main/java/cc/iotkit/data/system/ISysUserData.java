@@ -52,13 +52,13 @@ public interface ISysUserData extends ICommonData<SysUser, Long> {
 
     SysUser selectByPhonenumber(String phonenumber);
 
-    SysUser selectTenantUserByPhonenumber(String phonenumber, String tenantId);
+    SysUser selectTenantUserByPhonenumber(String phonenumber, Long tenantId);
 
-    SysUser selectTenantUserByEmail(String email, String tenantId);
+    SysUser selectTenantUserByEmail(String email, Long tenantId);
 
     SysUser selectUserByEmail(String email);
 
-    SysUser selectTenantUserByUserName(String username, String tenantId);
+    SysUser selectTenantUserByUserName(String username, Long tenantId);
 
     SysUser selectUserByUserName(String username);
 

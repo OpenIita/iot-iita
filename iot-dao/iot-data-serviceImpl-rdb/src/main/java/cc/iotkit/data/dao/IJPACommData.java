@@ -85,13 +85,13 @@ public interface IJPACommData<T extends Id<ID>, ID> extends ICommonData<T, ID> {
             tbData = dbObj;
         }
         if (tbData instanceof TenantAware) {
-            String sourceTid = null;
+            Long sourceTid = null;
             if (data instanceof TenantModel) {
                 sourceTid = ((TenantModel) data).getTenantId();
             }
-            String tenantId = TenantHelper.getTenantId();
+            Long tenantId = TenantHelper.getTenantId();
             //未指定租户id,使用当前用户所属租户id
-            if (StringUtils.isBlank(sourceTid) && tenantId != null) {
+            if (Objects.isNull(sourceTid) && tenantId != null) {
                 ((TenantAware) tbData).setTenantId(tenantId);
             }
         }

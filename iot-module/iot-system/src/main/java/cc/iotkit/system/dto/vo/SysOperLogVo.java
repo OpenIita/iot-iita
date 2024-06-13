@@ -57,7 +57,7 @@ public class SysOperLogVo extends BaseDto implements Serializable {
     /**
      * 租户编号
      */
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 模块标题

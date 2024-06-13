@@ -38,6 +38,6 @@ public class TenantModel extends BaseModel {
     /**
      * 租户编号
      */
-    private String tenantId;
+    private Long tenantId;
 
 }

@@ -56,7 +56,7 @@ public class SysOperLogBo extends BaseDto {
     /**
      * 租户编号
      */
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 模块标题

@@ -57,7 +57,7 @@ public class SysTenantVo extends BaseModel implements Serializable {
      * 租户编号
      */
     @ExcelProperty(value = "租户编号")
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 联系人

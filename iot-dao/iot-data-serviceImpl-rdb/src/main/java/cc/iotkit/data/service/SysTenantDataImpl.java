@@ -31,6 +31,7 @@ import cc.iotkit.data.model.TbSysTenant;
 import cc.iotkit.data.system.ISysTenantData;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysTenant;
+import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -74,7 +75,7 @@ public class SysTenantDataImpl implements ISysTenantData, IJPACommData<SysTenant
     @Override
     public List<SysTenant> findAllByCondition(SysTenant data) {
         List<TbSysTenant> ret=jpaQueryFactory.selectFrom(tbSysTenant).where(PredicateBuilder.instance()
-                .and(StringUtils.isNotBlank(data.getTenantId()),()->tbSysTenant.tenantId.eq(data.getTenantId()))
+                .and(ObjectUtil.isNotNull(data.getTenantId()),()->tbSysTenant.tenantId.eq(data.getTenantId()))
                 .and(StringUtils.isNotBlank(data.getContactUserName()),()->tbSysTenant.contactUserName.like(data.getContactUserName()))
                 .and(StringUtils.isNotBlank(data.getContactPhone()),()->tbSysTenant.contactPhone.eq(data.getContactPhone()))
                 .and(StringUtils.isNotBlank(data.getCompanyName()),()->tbSysTenant.companyName.like(data.getCompanyName()))

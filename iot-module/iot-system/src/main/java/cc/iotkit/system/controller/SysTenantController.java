@@ -165,7 +165,7 @@ public class SysTenantController extends BaseController {
     @ApiOperation("动态切换租户")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @PostMapping("/dynamic")
-    public void dynamicTenant(@Validated @RequestBody Request<String> bo) {
+    public void dynamicTenant(@Validated @RequestBody Request<Long> bo) {
         TenantHelper.setDynamic(bo.getData());
     }
 
@@ -191,7 +191,7 @@ public class SysTenantController extends BaseController {
     @SaCheckPermission("system:tenant:edit")
     @Log(title = "租户", businessType = BusinessType.UPDATE)
     @PostMapping("/syncTenantPackage")
-    public void syncTenantPackage(@NotBlank(message = "租户ID不能为空") String tenantId, @NotBlank(message = "套餐ID不能为空") String packageId) {
+    public void syncTenantPackage(@NotBlank(message = "租户ID不能为空") Long tenantId, @NotBlank(message = "套餐ID不能为空") String packageId) {
         //TenantHelper.ignore(() -> tenantService.syncTenantPackage(tenantId, packageId));
     }
 

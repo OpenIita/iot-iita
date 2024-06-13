@@ -35,6 +35,7 @@ import cc.iotkit.data.system.ISysDictData;
 import cc.iotkit.data.util.PageBuilder;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysDictData;
+import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -118,6 +119,6 @@ public class SysDictDataImpl implements ISysDictData, IJPACommData<SysDictData, 
                 .and(StringUtils.isNotEmpty(dictData.getDictLabel()), () -> tbSysDictData.dictLabel.like(dictData.getDictLabel()))
                 .and(StringUtils.isNotEmpty(dictData.getDictType()), () -> tbSysDictData.dictType.eq(dictData.getDictType()))
                 .and(StringUtils.isNotEmpty(dictData.getStatus()), () -> tbSysDictData.status.eq(dictData.getStatus()))
-                .and(StringUtils.isNotEmpty(dictData.getTenantId()), () -> tbSysDictData.tenantId.eq(dictData.getTenantId())).build();
+                .and(ObjectUtil.isNotNull(dictData.getTenantId()), () -> tbSysDictData.tenantId.eq(dictData.getTenantId())).build();
     }
 }

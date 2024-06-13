@@ -99,7 +99,7 @@ public class SysDept extends BaseModel implements Id<Long>, Serializable {
     /**
      * 租户编号
      */
-    private String tenantId;
+    private Long tenantId;
 
 
 }

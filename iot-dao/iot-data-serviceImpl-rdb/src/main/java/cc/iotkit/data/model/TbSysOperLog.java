@@ -60,7 +60,7 @@ public class TbSysOperLog implements Serializable {
      * 租户编号
      */
     @ApiModelProperty(value = "租户编号")
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 操作模块

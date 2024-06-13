@@ -43,7 +43,7 @@ import lombok.NoArgsConstructor;
 @AutoMapper(target = SysTenantVo.class)
 public class TenantListVo {
 
-    private String tenantId;
+    private Long tenantId;
 
     private String companyName;
 

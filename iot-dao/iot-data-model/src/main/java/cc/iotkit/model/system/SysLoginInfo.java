@@ -47,7 +47,7 @@ public class SysLoginInfo implements Id<Long>,Serializable {
     /**
      * 租户编号
      */
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 用户账号

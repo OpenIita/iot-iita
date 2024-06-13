@@ -92,7 +92,7 @@ public class OpenBaseServiceImpl implements OpenBaseService {
         return StpUtil.getTokenValue();
     }
 
-    private void checkTenant(String tenantId) {
+    private void checkTenant(Long tenantId) {
 
     }
     /**
@@ -121,7 +121,7 @@ public class OpenBaseServiceImpl implements OpenBaseService {
      * @param status   状态
      * @param message  消息内容
      */
-    private void recordLoginInfo(String tenantId, String username, String status, String message) {
+    private void recordLoginInfo(Long tenantId, String username, String status, String message) {
         LogininforEvent logininforEvent = new LogininforEvent();
         logininforEvent.setTenantId(tenantId);
         logininforEvent.setUsername(username);

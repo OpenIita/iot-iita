@@ -249,7 +249,7 @@ public class SysUserServiceImpl implements ISysUserService, UserService {
     }
 
     @Override
-    public boolean registerUser(SysUserBo user, String tenantId) {
+    public boolean registerUser(SysUserBo user, Long tenantId) {
         return false;
     }
 

@@ -77,12 +77,12 @@ public class SysOperLogDataImpl implements ISysOperLogData, IJPACommData<SysOper
     }
 
     @Override
-    public Paging<SysOperLog> findByConditions(String tenantId, String title, Integer businessType, Integer status, int page, int size) {
+    public Paging<SysOperLog> findByConditions(Long tenantId, String title, Integer businessType, Integer status, int page, int size) {
         return null;
     }
 
     @Override
-    public void deleteByTenantId(String tenantId) {
+    public void deleteByTenantId(Long tenantId) {
 
     }
 

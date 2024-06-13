@@ -107,7 +107,7 @@ public class SysLoginService {
      * @param uuid     唯一标识
      * @return 结果
      */
-    public String login(String tenantId, String username, String password, String code, String uuid) {
+    public String login(Long tenantId, String username, String password, String code, String uuid) {
         boolean captchaEnabled = captchaProperties.getEnable();
         // 验证码开关
         if (captchaEnabled) {
@@ -131,7 +131,7 @@ public class SysLoginService {
         return StpUtil.getTokenValue();
     }
 
-    public String smsLogin(String tenantId, String phonenumber, String smsCode) {
+    public String smsLogin(Long tenantId, String phonenumber, String smsCode) {
         // 校验租户
         checkTenant(tenantId);
         // 通过手机号查找用户
@@ -148,7 +148,7 @@ public class SysLoginService {
         return StpUtil.getTokenValue();
     }
 
-    public String emailLogin(String tenantId, String email, String emailCode) {
+    public String emailLogin(Long tenantId, String email, String emailCode) {
         // 校验租户
         checkTenant(tenantId);
         // 通过手机号查找用户
@@ -225,7 +225,7 @@ public class SysLoginService {
      * @param status   状态
      * @param message  消息内容
      */
-    private void recordLoginInfo(String tenantId, String username, String status, String message) {
+    private void recordLoginInfo(Long tenantId, String username, String status, String message) {
         LogininforEvent logininforEvent = new LogininforEvent();
         logininforEvent.setTenantId(tenantId);
         logininforEvent.setUsername(username);
@@ -238,7 +238,7 @@ public class SysLoginService {
     /**
      * 校验短信验证码
      */
-    private boolean validateSmsCode(String tenantId, String phonenumber, String smsCode) {
+    private boolean validateSmsCode(Long tenantId, String phonenumber, String smsCode) {
         String code = RedisUtils.getCacheObject(GlobalConstants.CAPTCHA_CODE_KEY + phonenumber);
         if (StringUtils.isBlank(code)) {
             recordLoginInfo(tenantId, phonenumber, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.expire"));
@@ -250,7 +250,7 @@ public class SysLoginService {
     /**
      * 校验邮箱验证码
      */
-    private boolean validateEmailCode(String tenantId, String email, String emailCode) {
+    private boolean validateEmailCode(Long tenantId, String email, String emailCode) {
         String code = RedisUtils.getCacheObject(GlobalConstants.CAPTCHA_CODE_KEY + email);
         if (StringUtils.isBlank(code)) {
             recordLoginInfo(tenantId, email, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.expire"));
@@ -266,7 +266,7 @@ public class SysLoginService {
      * @param code     验证码
      * @param uuid     唯一标识
      */
-    public void validateCaptcha(String tenantId, String username, String code, String uuid) {
+    public void validateCaptcha(Long tenantId, String username, String code, String uuid) {
         String verifyKey = GlobalConstants.CAPTCHA_CODE_KEY + StringUtils.defaultString(uuid, "");
         String captcha = RedisUtils.getCacheObject(verifyKey);
         RedisUtils.deleteObject(verifyKey);
@@ -280,7 +280,7 @@ public class SysLoginService {
         }
     }
 
-    private SysUserVo loadUserByUsername(String tenantId, String username) {
+    private SysUserVo loadUserByUsername(Long tenantId, String username) {
         SysUser user = userData.selectTenantUserByUserName(username,tenantId);
 
         if (ObjectUtil.isNull(user)) {
@@ -297,7 +297,7 @@ public class SysLoginService {
         return MapstructUtils.convert(sysUser, SysUserVo.class);
     }
 
-    private SysUserVo loadUserByPhonenumber(String tenantId, String phonenumber) {
+    private SysUserVo loadUserByPhonenumber(Long tenantId, String phonenumber) {
         SysUser query = new SysUser();
         query.setPhonenumber(phonenumber);
 
@@ -314,7 +314,7 @@ public class SysLoginService {
         return MapstructUtils.convert(sysUser, SysUserVo.class);
     }
 
-    private SysUserVo loadUserByEmail(String tenantId, String email) {
+    private SysUserVo loadUserByEmail(Long tenantId, String email) {
         SysUser query = new SysUser();
         query.setEmail(email);
         SysUser user = userData.findOneByCondition(query);
@@ -331,7 +331,7 @@ public class SysLoginService {
 
     }
 
-    private UserInfo loadUserByOpenid(String openid,String tenantId) throws Exception {
+    private UserInfo loadUserByOpenid(String openid,Long tenantId) throws Exception {
         // 使用 openid 查询绑定用户 如未绑定用户 则根据业务自行处理 例如 创建默认用户
         UserInfo user=userInfoData.findByUid(openid);
         if (ObjectUtil.isNull(user)) {
@@ -400,7 +400,7 @@ public class SysLoginService {
     /**
      * 登录校验
      */
-    private void checkLogin(LoginType loginType, String tenantId, String username, Supplier<Boolean> supplier) {
+    private void checkLogin(LoginType loginType, Long tenantId, String username, Supplier<Boolean> supplier) {
         String errorKey = GlobalConstants.PWD_ERR_CNT_KEY + username;
         String loginFail = Constants.LOGIN_FAIL;
 
@@ -434,7 +434,7 @@ public class SysLoginService {
         RedisUtils.deleteObject(errorKey);
     }
 
-    private void checkTenant(String tenantId) {
+    private void checkTenant(Long tenantId) {
         if (!TenantHelper.isEnable()) {
             return;
         }

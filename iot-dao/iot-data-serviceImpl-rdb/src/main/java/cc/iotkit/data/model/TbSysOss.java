@@ -62,7 +62,7 @@ public class TbSysOss extends BaseEntity {
      * 租户编号
      */
     @ApiModelProperty(value = "租户编号")
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 文件名

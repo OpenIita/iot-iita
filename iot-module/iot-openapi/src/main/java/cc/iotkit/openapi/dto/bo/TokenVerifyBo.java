@@ -49,6 +49,6 @@ public class TokenVerifyBo {
 
     @NotNull(message = "{tenant.number.not.blank}")
     @ApiModelProperty(value = "租户ID")
-    private String tenantId;
+    private Long tenantId;
 
 }

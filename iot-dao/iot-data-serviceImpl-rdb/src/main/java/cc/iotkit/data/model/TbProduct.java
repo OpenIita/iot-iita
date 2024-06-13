@@ -54,7 +54,7 @@ public class TbProduct implements TenantAware {
 
 
     @Column(name = "tenant_id")
-    private String tenantId;
+    private Long tenantId;
 
     @ApiModelProperty(value = "产品key")
     private String productKey;

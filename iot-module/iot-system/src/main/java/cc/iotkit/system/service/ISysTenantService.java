@@ -45,7 +45,7 @@ public interface ISysTenantService {
     /**
      * 基于租户ID查询租户
      */
-    SysTenantVo queryByTenantId(String tenantId);
+    SysTenantVo queryByTenantId(Long tenantId);
 
     /**
      * 查询租户列表
@@ -75,7 +75,7 @@ public interface ISysTenantService {
     /**
      * 校验租户是否允许操作
      */
-    void checkTenantAllowed(String tenantId);
+    void checkTenantAllowed(Long tenantId);
 
     /**
      * 删除租户信息
@@ -90,15 +90,15 @@ public interface ISysTenantService {
     /**
      * 校验账号余额
      */
-    boolean checkAccountBalance(String tenantId);
+    boolean checkAccountBalance(Long tenantId);
 
     /**
      * 校验有效期
      */
-    boolean checkExpireTime(String tenantId);
+    boolean checkExpireTime(Long tenantId);
 
     /**
      * 同步租户套餐
      */
-    Boolean syncTenantPackage(String tenantId, String packageId);
+    Boolean syncTenantPackage(Long tenantId, String packageId);
 }

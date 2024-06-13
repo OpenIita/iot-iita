@@ -55,7 +55,7 @@ public class TbIconType extends BaseEntity implements TenantAware {
 
 
     @Column(name = "tenant_id")
-    private String tenantId;
+    private Long tenantId;
 
     @ApiModelProperty(value = "分类名称")
     private String typeName;

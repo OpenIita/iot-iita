@@ -167,7 +167,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     }
 
     @Override
-    public SysUser selectTenantUserByPhonenumber(String phonenumber, String tenantId) {
+    public SysUser selectTenantUserByPhonenumber(String phonenumber, Long tenantId) {
         TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
                 .where(PredicateBuilder.instance()
                         .and(tbSysUser.phonenumber.eq(phonenumber))
@@ -177,7 +177,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     }
 
     @Override
-    public SysUser selectTenantUserByEmail(String email, String tenantId) {
+    public SysUser selectTenantUserByEmail(String email, Long tenantId) {
         TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
                 .where(PredicateBuilder.instance()
                         .and(tbSysUser.email.eq(email))
@@ -196,7 +196,7 @@ public class SysUserDataImpl implements ISysUserData, IJPACommData<SysUser, Long
     }
 
     @Override
-    public SysUser selectTenantUserByUserName(String username, String tenantId) {
+    public SysUser selectTenantUserByUserName(String username, Long tenantId) {
         TbSysUser ret = jpaQueryFactory.select(tbSysUser).from(tbSysUser)
                 .where(PredicateBuilder.instance()
                         .and(tbSysUser.userName.eq(username))

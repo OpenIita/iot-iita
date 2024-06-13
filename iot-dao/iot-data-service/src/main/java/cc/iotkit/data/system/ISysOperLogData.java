@@ -37,7 +37,7 @@ public interface ISysOperLogData extends ICommonData<SysOperLog, Long> {
     /**
      * 按条件分页查询
      */
-    Paging<SysOperLog> findByConditions(String tenantId, String title, Integer businessType,
+    Paging<SysOperLog> findByConditions(Long tenantId, String title, Integer businessType,
                                         Integer status, int page, int size);
 
     /**
@@ -45,7 +45,7 @@ public interface ISysOperLogData extends ICommonData<SysOperLog, Long> {
      *
      * @param tenantId 租户id
      */
-    void deleteByTenantId(String tenantId);
+    void deleteByTenantId(Long tenantId);
 
     void deleteAll();
 }

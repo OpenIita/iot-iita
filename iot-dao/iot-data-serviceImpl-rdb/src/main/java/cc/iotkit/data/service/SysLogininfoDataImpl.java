@@ -103,7 +103,7 @@ public class SysLogininfoDataImpl implements ISysLogininforData, IJPACommData<Sy
     }
 
     @Override
-    public void deleteByTenantId(String tenantId) {
+    public void deleteByTenantId(Long tenantId) {
 
     }
 

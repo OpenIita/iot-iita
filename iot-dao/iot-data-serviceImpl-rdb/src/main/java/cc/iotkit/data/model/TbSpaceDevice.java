@@ -85,6 +85,6 @@ public class TbSpaceDevice extends BaseEntity implements TenantAware {
      * 租户编号
      */
     @ApiModelProperty(value = "租户编号")
-    private String tenantId;
+    private Long tenantId;
 
 }

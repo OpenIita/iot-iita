@@ -57,7 +57,7 @@ public class SysAppVo implements Serializable {
      * 租户id
      */
     @ApiModelProperty(value = "租户id")
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 应用名称

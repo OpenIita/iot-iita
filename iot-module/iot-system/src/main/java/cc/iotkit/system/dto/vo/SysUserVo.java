@@ -52,7 +52,7 @@ public class SysUserVo implements Serializable {
     /**
      * 租户ID
      */
-    private String tenantId;
+    private Long tenantId;
 
     /**
      * 部门ID
