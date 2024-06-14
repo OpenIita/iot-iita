@@ -24,6 +24,7 @@
 package cc.iotkit.system.dto.bo;
 
 import cc.iotkit.common.api.BaseDto;
+import cc.iotkit.common.utils.DateUtils;
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.model.system.SysTenant;
@@ -32,7 +33,9 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -120,6 +123,7 @@ public class SysTenantBo extends BaseDto {
     /**
      * 过期时间
      */
+    @DateTimeFormat(pattern = DateUtils.YYYY_MM_DD_HH_MM_SS)
     private Date expireTime;
 
     /**

@@ -159,4 +159,6 @@ public interface ISysMenuService {
      * @return 结果
      */
     boolean checkMenuNameUnique(SysMenuBo menu);
+
+    List<Long> selectMenuListByPackageId(Long data);
 }

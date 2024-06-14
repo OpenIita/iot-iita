@@ -114,7 +114,7 @@ public class SysTenantController extends BaseController {
         if (!tenantService.checkCompanyNameUnique(data)) {
             fail("新增租户'" + data.getCompanyName() + "'失败，企业名称已存在");
         }
-        tenantService.insertByBo(data);
+        TenantHelper.ignore(()->tenantService.insertByBo(data));
     }
 
     /**
@@ -131,7 +131,7 @@ public class SysTenantController extends BaseController {
         if (!tenantService.checkCompanyNameUnique(data)) {
             fail("修改租户'" + data.getCompanyName() + "'失败，公司名称已存在");
         }
-        tenantService.updateByBo(data);
+        TenantHelper.ignore(()->tenantService.updateByBo(data)); ;
     }
 
     /**

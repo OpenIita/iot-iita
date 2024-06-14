@@ -35,8 +35,11 @@ import cc.iotkit.data.model.TbSysMenu;
 import cc.iotkit.data.system.ISysMenuData;
 import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysMenu;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -228,5 +231,19 @@ public class SysMenuDataImpl implements ISysMenuData, IJPACommData<SysMenu, Long
                                 .and(ObjectUtil.isNotNull(menu.getId()), () -> QTbSysMenu.tbSysMenu.id.ne(menu.getId()))
                                 .build()).fetchOne();
         return Objects.isNull(tbSysMenu);
+    }
+
+    @Override
+    public List<Long> selectParentIdByMenuIds(List<Long> menuIds) {
+        return jpaQueryFactory.select(tbSysMenu.parentId).from(tbSysMenu).where(tbSysMenu.id.in(menuIds)).fetch();
+
+    }
+
+    @Override
+    public List<Long> findByMenuIdListAndNotParentIdList(List<Long> menuIds, List<Long> parentIds) {
+        Predicate build = PredicateBuilder.instance()
+                .and(tbSysMenu.id.in(menuIds))
+                .and(CollectionUtil.isNotEmpty(parentIds), () -> tbSysMenu.id.notIn(parentIds)).build();
+        return jpaQueryFactory.select(tbSysMenu.id).from(tbSysMenu).where(build).fetch();
     }
 }

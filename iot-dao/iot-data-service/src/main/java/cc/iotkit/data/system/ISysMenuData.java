@@ -67,4 +67,7 @@ public interface ISysMenuData extends ICommonData<SysMenu, Long> {
     boolean checkMenuNameUnique(SysMenu menu);
 
 
+    List<Long> selectParentIdByMenuIds(List<Long> menuIds);
+
+    List<Long> findByMenuIdListAndNotParentIdList(List<Long> menuIds, List<Long> parentIds);
 }

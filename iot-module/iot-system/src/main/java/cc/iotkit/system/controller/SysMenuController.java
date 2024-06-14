@@ -176,6 +176,22 @@ public class SysMenuController extends BaseController {
         menuService.updateMenu(menu);
     }
 
+
+    /**
+     * 加载对应租户套餐菜单列表树
+     *
+     * @param packageId 租户套餐ID
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @SaCheckPermission("system:menu:query")
+    @PostMapping(value = "/tenantPackageMenuTreeselect")
+    public MenuTreeSelectVo tenantPackageMenuTreeselect(@Validated @RequestBody Request<Long> bo) {
+        List<SysMenuVo> menus = menuService.selectMenuList(LoginHelper.getUserId());
+        MenuTreeSelectVo selectVo = new MenuTreeSelectVo();
+        selectVo.setCheckedKeys(menuService.selectMenuListByPackageId(bo.getData()));
+        selectVo.setMenus(menuService.buildMenuTreeSelect(menus));
+        return selectVo;
+    }
     /**
      * 删除菜单
      *

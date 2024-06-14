@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.data.dao.IJPACommData;
@@ -30,7 +32,10 @@ import cc.iotkit.data.dao.SysTenantRepository;
 import cc.iotkit.data.model.TbSysTenant;
 import cc.iotkit.data.system.ISysTenantData;
 import cc.iotkit.data.util.PredicateBuilder;
+import cc.iotkit.model.TenantModel;
 import cc.iotkit.model.system.SysTenant;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.ObjectUtil;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +45,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static cc.iotkit.data.model.QTbSysTenant.tbSysTenant;
 
@@ -100,4 +106,20 @@ public class SysTenantDataImpl implements ISysTenantData, IJPACommData<SysTenant
                         .build()).fetchOne();
         return Objects.isNull(ret);
     }
+    @Override
+    public SysTenant save(SysTenant data) {
+        Long id = data.getId();
+        Object tbData = MapstructUtils.convert(data, getJpaRepositoryClass());
+        Optional byId = id == null ? Optional.empty() : getBaseRepository().findById(id);
+        if (byId.isPresent()) {
+            Object dbObj = byId.get();
+            //只更新不为空的字段
+            BeanUtil.copyProperties(tbData, dbObj, CopyOptions.create().ignoreNullValue());
+            tbData = dbObj;
+        }
+
+        Object o = getBaseRepository().save(tbData);
+        return (SysTenant) MapstructUtils.convert(o, getTClass());
+    }
+
 }

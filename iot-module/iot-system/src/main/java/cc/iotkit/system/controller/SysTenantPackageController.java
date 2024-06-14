@@ -99,15 +99,14 @@ public class SysTenantPackageController extends BaseController {
     /**
      * 获取租户套餐详细信息
      *
-     * @param packageId 主键
+     * @param  主键
      */
     @ApiOperation("获取租户套餐详细信息")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenantPackage:query")
     @PostMapping("/getInfo")
-    public SysTenantPackageVo getInfo(@NotNull(message = "主键不能为空")
-                                      @PathVariable Long packageId) {
-        return tenantPackageService.queryById(packageId);
+    public SysTenantPackageVo getInfo(@RequestBody @Validated Request<Long> bo) {
+        return tenantPackageService.queryById(bo.getData());
     }
 
     /**
@@ -149,15 +148,13 @@ public class SysTenantPackageController extends BaseController {
     /**
      * 删除租户套餐
      *
-     * @param packageIds 主键串
      */
     @ApiOperation("删除租户套餐")
     @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
     @SaCheckPermission("system:tenantPackage:remove")
     @Log(title = "租户套餐", businessType = BusinessType.DELETE)
     @PostMapping("/delete")
-    public void remove(@NotEmpty(message = "主键不能为空")
-                       @PathVariable Long[] packageIds) {
-        tenantPackageService.deleteWithValidByIds(List.of(packageIds), true);
+    public void remove(@RequestBody Request<List<Long>> bo) {
+        tenantPackageService.deleteWithValidByIds(bo.getData(), true);
     }
 }

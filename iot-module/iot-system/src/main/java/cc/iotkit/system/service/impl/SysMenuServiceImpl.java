@@ -30,22 +30,33 @@ import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
 import cc.iotkit.common.utils.TreeBuildUtils;
+import cc.iotkit.data.dao.SysTenantPackageRepository;
 import cc.iotkit.data.system.ISysMenuData;
 import cc.iotkit.data.system.ISysRoleData;
 import cc.iotkit.data.system.ISysRoleMenuData;
+import cc.iotkit.data.system.ISysTenantPackageData;
+import cc.iotkit.data.util.PredicateBuilder;
 import cc.iotkit.model.system.SysMenu;
 import cc.iotkit.model.system.SysRole;
+import cc.iotkit.model.system.SysTenantPackage;
 import cc.iotkit.system.dto.bo.SysMenuBo;
 import cc.iotkit.system.dto.vo.MetaVo;
 import cc.iotkit.system.dto.vo.RouterVo;
 import cc.iotkit.system.dto.vo.SysMenuVo;
 import cc.iotkit.system.service.ISysMenuService;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.tree.Tree;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static cc.iotkit.data.model.QTbSysConfig.tbSysConfig;
+import static cc.iotkit.data.model.QTbSysMenu.tbSysMenu;
 
 /**
  * 菜单 业务层处理
@@ -59,6 +70,9 @@ public class SysMenuServiceImpl implements ISysMenuService {
     private final ISysMenuData sysMenuData;
     private final ISysRoleData sysRoleData;
     private final ISysRoleMenuData iSysRoleMenuData;
+
+
+    private final ISysTenantPackageData iSysTenantPackageData;
 
     /**
      * 根据用户查询系统菜单列表
@@ -381,6 +395,23 @@ public class SysMenuServiceImpl implements ISysMenuService {
     @Override
     public boolean checkMenuNameUnique(SysMenuBo bo) {
         return sysMenuData.checkMenuNameUnique(bo.to(SysMenu.class));
+    }
+
+    @Override
+    public List<Long> selectMenuListByPackageId(Long packageId) {
+        SysTenantPackage tenantPackage = iSysTenantPackageData.findById(packageId);
+        List<Long> menuIds = StringUtils.splitTo(tenantPackage.getMenuIds(), Convert::toLong);
+        if (CollUtil.isEmpty(menuIds)) {
+            return List.of();
+        }
+        List<Long> parentIds;
+        if (Objects.equals(tenantPackage.getMenuCheckStrictly(),true)) {
+            parentIds = sysMenuData.selectParentIdByMenuIds(menuIds);
+        } else {
+            parentIds = null;
+        }
+
+        return sysMenuData.findByMenuIdListAndNotParentIdList(menuIds, parentIds);
     }
 
     /**

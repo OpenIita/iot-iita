@@ -111,7 +111,9 @@ public class SysTenantServiceImpl implements ISysTenantService {
 
     @Override
     public void insertByBo(SysTenantBo bo) {
-        bo.setTenantId(YitIdHelper.nextId());
+        long tenantId = YitIdHelper.nextId();
+        bo.setId(tenantId);
+        bo.setTenantId(tenantId);
         SysTenant sysTenant=sysTenantData.save(bo.to(SysTenant.class));
         // 根据套餐创建角色
         Long roleId = createTenantRole(sysTenant.getTenantId(), bo.getPackageId());
@@ -131,6 +133,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
         SysRoleDept roleDept = new SysRoleDept();
         roleDept.setRoleId(roleId);
         roleDept.setDeptId(deptId);
+        roleDept.setTenantId(tenantId);
         sysRoleDeptData.save(roleDept);
 
         // 创建系统用户
@@ -155,6 +158,7 @@ public class SysTenantServiceImpl implements ISysTenantService {
         SysUserRole userRole = new SysUserRole();
         userRole.setUserId(retUser.getId());
         userRole.setRoleId(roleId);
+        userRole.setTenantId(tenantId);
         sysUserRoleData.save(userRole);
 
         Long defaultTenantId = TenantConstants.DEFAULT_TENANT_ID;
