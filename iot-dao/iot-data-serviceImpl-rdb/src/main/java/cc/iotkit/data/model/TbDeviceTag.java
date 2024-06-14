@@ -24,13 +24,17 @@ package cc.iotkit.data.model;
 
 import cc.iotkit.common.tenant.dao.TenantAware;
 import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
+import cc.iotkit.common.tenant.listener.TenantListener;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
 import javax.persistence.*;
 
@@ -41,6 +45,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "device_tag")
 @ApiModel(value = "设备标签")
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+@EntityListeners(TenantListener.class)
 public class TbDeviceTag extends BaseEntity implements TenantAware {
 
     @Id

@@ -24,21 +24,25 @@ package cc.iotkit.data.model;
 
 import cc.iotkit.common.tenant.dao.TenantAware;
 import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
+import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.product.Category;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
 @Table(name = "category")
 @AutoMapper(target = Category.class)
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+@EntityListeners(TenantListener.class)
 public class TbCategory extends BaseEntity implements TenantAware {
 
     @ApiModelProperty(value = "分类id")

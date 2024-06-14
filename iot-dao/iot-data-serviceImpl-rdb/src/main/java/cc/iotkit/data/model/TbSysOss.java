@@ -25,18 +25,19 @@ package cc.iotkit.data.model;
 
 import cc.iotkit.common.tenant.dao.TenantAware;
 import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
+import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.system.SysOss;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * OSS对象存储对象
@@ -49,6 +50,9 @@ import javax.persistence.Table;
 @Table(name = "sys_oss")
 @ApiModel(value = "OSS对象存储对象")
 @AutoMapper(target = SysOss.class)
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+@EntityListeners(TenantListener.class)
 public class TbSysOss extends BaseEntity implements TenantAware {
 
     /**

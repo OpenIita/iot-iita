@@ -43,7 +43,9 @@ import javax.persistence.*;
 @ApiModel(value = "图标")
 @Table(name = "icon")
 @AutoMapper(target = Icon.class)
-
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+@EntityListeners(TenantListener.class)
 public class TbIcon extends BaseEntity implements TenantAware {
 
     @Id

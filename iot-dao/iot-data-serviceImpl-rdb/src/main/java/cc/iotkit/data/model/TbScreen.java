@@ -23,15 +23,16 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.screen.Screen;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @Author：tfd
@@ -41,6 +42,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "screen")
 @AutoMapper(target = Screen.class)
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+@EntityListeners(TenantListener.class)
 public class TbScreen {
 
     @Id

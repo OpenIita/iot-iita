@@ -48,6 +48,8 @@ import javax.persistence.*;
 @Table(name = "device_ota_detail")
 @ApiModel(value = "设备升级明细")
 @AutoMapper(target = DeviceOtaDetail.class)
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
 public class TbDeviceOtaDetail extends BaseEntity implements TenantAware {
     @Id
