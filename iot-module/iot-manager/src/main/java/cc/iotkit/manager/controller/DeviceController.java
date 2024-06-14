@@ -28,6 +28,7 @@ import cc.iotkit.common.api.Request;
 import cc.iotkit.common.api.Response;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.thing.ThingModelMessage;
+import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.manager.dto.bo.device.*;
 import cc.iotkit.manager.dto.bo.deviceconfig.DeviceConfigAddBo;
 import cc.iotkit.manager.dto.bo.devicegroup.DeviceAddGroupBo;
@@ -187,7 +188,7 @@ public class DeviceController {
     @ApiOperation("设备物模型日志")
     @SaCheckPermission("iot:deviceLog:query")
     @PostMapping("/deviceLogs/list")
-    public Paging<ThingModelMessage> logs(@Validated @RequestBody PageRequest<DeviceLogQueryBo> request) {
+    public Paging<ThingModelMessage> logs(@Validated(QueryGroup.class) @RequestBody PageRequest<DeviceLogQueryBo> request) {
         return deviceServiceImpl.logs(request);
     }
 

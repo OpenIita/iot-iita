@@ -36,6 +36,7 @@ import cc.iotkit.common.tenant.helper.TenantHelper;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.StreamUtils;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
@@ -172,7 +173,7 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
-    public void add(@Validated(EditGroup.class) @RequestBody Request<SysUserBo> reqUser) {
+    public void add(@Validated(AddGroup.class) @RequestBody Request<SysUserBo> reqUser) {
         SysUserBo user = reqUser.getData();
         if (!userService.checkUserNameUnique(user)) {
             fail("新增用户'" + user.getUserName() + "'失败，登录账号已存在");

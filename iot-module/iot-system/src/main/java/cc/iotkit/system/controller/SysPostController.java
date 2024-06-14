@@ -29,6 +29,7 @@ import cc.iotkit.common.api.Request;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
+import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
@@ -103,7 +104,7 @@ public class SysPostController extends BaseController {
     @SaCheckPermission("system:post:add")
     @Log(title = "岗位管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
-    public void add(@RequestBody @Validated(EditGroup.class) Request<SysPostBo> post) {
+    public void add(@RequestBody @Validated(AddGroup.class) Request<SysPostBo> post) {
         if (!postService.checkPostNameUnique(post.getData())) {
             fail("新增岗位'" + post.getData().getPostName() + "'失败，岗位名称已存在");
         } else if (!postService.checkPostCodeUnique(post.getData())) {

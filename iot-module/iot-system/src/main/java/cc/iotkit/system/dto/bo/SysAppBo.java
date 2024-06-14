@@ -33,6 +33,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 应用信息业务对象 SYS_APP
  *
@@ -45,7 +47,7 @@ import lombok.EqualsAndHashCode;
 public class SysAppBo extends BaseDto {
 
 
-    @NotBlank(message = "id不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotNull(message = "id不能为空", groups = {  EditGroup.class })
     @ApiModelProperty(value = "id", required = true)
     private Long id;
 

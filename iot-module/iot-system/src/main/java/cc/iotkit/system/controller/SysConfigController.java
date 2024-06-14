@@ -29,6 +29,7 @@ import cc.iotkit.common.api.Request;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
+import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
@@ -107,7 +108,7 @@ public class SysConfigController extends BaseController {
   @SaCheckPermission("system:config:add")
   @Log(title = "参数管理", businessType = BusinessType.INSERT)
   @PostMapping(value = "/add")
-  public void add(@RequestBody @Validated(EditGroup.class) Request<SysConfigBo> request) {
+  public void add(@RequestBody @Validated(AddGroup.class) Request<SysConfigBo> request) {
     if (!configService.checkConfigKeyUnique(request.getData())) {
       fail("新增参数'" + request.getData().getConfigName() + "'失败，参数键名已存在");
     }

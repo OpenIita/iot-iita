@@ -1,5 +1,6 @@
 [
   {
+    "tenantId" : 0,
     "id": "16552595723210menci0001008000012f",
     "deviceId": "16552595723210menci0001008000012f",
     "productKey": "PN3EDmkBZDD8whDd",
@@ -152,6 +153,7 @@
     }
   },
   {
+    "tenantId" : 0,
     "id": "16552594863210linght001005000012c",
     "deviceId": "16552594863210linght001005000012c",
     "productKey": "xpsYHExTKPFaQMS7",
@@ -214,6 +216,7 @@
     }
   },
   {
+    "tenantId" : 0,
     "id": "16552594646210pulg0a0010160000122",
     "deviceId": "16552594646210pulg0a0010160000122",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -243,6 +246,7 @@
     "createAt": 1655259464621
   },
   {
+    "tenantId" : 0,
     "id": "16552594604220pulg0a0010150000127",
     "deviceId": "16552594604220pulg0a0010150000127",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -272,6 +276,7 @@
     "createAt": 1655259460422
   },
   {
+    "tenantId" : 0,
     "id": "16552594572370pulg0a001014000012e",
     "deviceId": "16552594572370pulg0a001014000012e",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -301,6 +306,7 @@
     "createAt": 1655259457237
   },
   {
+    "tenantId" : 0,
     "id": "16552594542310pulg0a0010130000123",
     "deviceId": "16552594542310pulg0a0010130000123",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -330,6 +336,7 @@
     "createAt": 1655259454231
   },
   {
+    "tenantId" : 0,
     "id": "16552594511210pulg0a001012000012c",
     "deviceId": "16552594511210pulg0a001012000012c",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -359,6 +366,7 @@
     "createAt": 1655259451121
   },
   {
+    "tenantId" : 0,
     "id": "16552594475270pulg0a0010110000125",
     "deviceId": "16552594475270pulg0a0010110000125",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -446,6 +454,7 @@
     "createAt": 1655259440522
   },
   {
+    "tenantId" : 0,
     "id": "16552594368340pulg0a0010080000126",
     "deviceId": "16552594368340pulg0a0010080000126",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -475,6 +484,7 @@
     "createAt": 1655259436834
   },
   {
+    "tenantId" : 0,
     "id": "16552594320310pulg0a0010070000126",
     "deviceId": "16552594320310pulg0a0010070000126",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -504,6 +514,7 @@
     "createAt": 1655259432067
   },
   {
+    "tenantId" : 0,
     "id": "16542484163750d60ee9025d8430e327",
     "deviceId": "16542484163750d60ee9025d8430e327",
     "productKey": "Eit3kmGJtxSHfCKT",
@@ -526,6 +537,7 @@
     "createAt": 1654248416391
   },
   {
+    "tenantId" : 0,
     "id": "16538390924670pulg0a001006000012a",
     "deviceId": "16538390924670pulg0a001006000012a",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -568,6 +580,7 @@
     "createAt": 1653839092467
   },
   {
+    "tenantId" : 0,
     "id": "16538390885690pulg0a0010050000126",
     "deviceId": "16538390885690pulg0a0010050000126",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -620,6 +633,7 @@
     }
   },
   {
+    "tenantId" : 0,
     "id": "16538390820760pulg0a0010030000127",
     "deviceId": "16538390820760pulg0a0010030000127",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -643,6 +657,7 @@
     "createAt": 1653839082076
   },
   {
+    "tenantId" : 0,
     "id": "16538390787670pulg0a0010020000124",
     "deviceId": "16538390787670pulg0a0010020000124",
     "productKey": "cGCrkK7Ex4FESAwe",
@@ -701,6 +716,7 @@
     }
   },
   {
+    "tenantId" : 0,
     "id": "16538390097670switch0300100500143",
     "deviceId": "16538390097670switch0300100500143",
     "productKey": "eDhXKwEzwFybM5R7",
@@ -732,6 +748,7 @@
     }
   },
   {
+    "tenantId" : 0,
     "id": "16538390048670switch0300100400141",
     "deviceId": "16538390048670switch0300100400141",
     "productKey": "eDhXKwEzwFybM5R7",
@@ -763,6 +780,7 @@
     }
   },
   {
+    "tenantId" : 0,
     "id": "16538390008670switch0300100300145",
     "deviceId": "16538390008670switch0300100300145",
     "productKey": "eDhXKwEzwFybM5R7",
@@ -794,6 +812,7 @@
     }
   },
   {
+    "tenantId" : 0,
     "id": "16538389971670switch0300100200140",
     "deviceId": "16538389971670switch0300100200140",
     "productKey": "eDhXKwEzwFybM5R7",
@@ -825,6 +844,7 @@
     }
   },
   {
+    "tenantId" : 0,
     "id": "16538389915670switch030010010014c",
     "deviceId": "16538389915670switch030010010014c",
     "productKey": "eDhXKwEzwFybM5R7",
@@ -850,6 +870,7 @@
     "createAt": 1653838991567
   },
   {
+    "tenantId" : 0,
     "id": "16538383943670wenshidu01008000139",
     "deviceId": "16538383943670wenshidu01008000139",
     "productKey": "6kYp6jszrDns2yh4",
@@ -873,6 +894,7 @@
     "createAt": 1653838394367
   },
   {
+    "tenantId" : 0,
     "id": "16538383910670wenshidu01007000136",
     "deviceId": "16538383910670wenshidu01007000136",
     "productKey": "6kYp6jszrDns2yh4",
@@ -896,6 +918,7 @@
     "createAt": 1653838391067
   },
   {
+    "tenantId" : 0,
     "id": "16538383880670wenshidu0100600013b",
     "deviceId": "16538383880670wenshidu0100600013b",
     "productKey": "6kYp6jszrDns2yh4",

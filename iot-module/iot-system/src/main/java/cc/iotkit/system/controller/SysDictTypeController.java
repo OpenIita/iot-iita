@@ -29,6 +29,7 @@ import cc.iotkit.common.api.Request;
 import cc.iotkit.common.excel.utils.ExcelUtil;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
+import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
@@ -101,7 +102,7 @@ public class SysDictTypeController extends BaseController {
     @SaCheckPermission("system:dict:add")
     @Log(title = "字典类型", businessType = BusinessType.INSERT)
     @PostMapping("/add")
-    public void add(@Validated(EditGroup.class) @RequestBody Request<SysDictTypeBo> dict) {
+    public void add(@Validated(AddGroup.class) @RequestBody Request<SysDictTypeBo> dict) {
         if (!dictTypeService.checkDictTypeUnique(dict.getData())) {
             fail("新增字典'" + dict.getData().getDictName() + "'失败，字典类型已存在");
         }
