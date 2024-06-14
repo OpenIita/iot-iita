@@ -21,37 +21,32 @@
  * /
  */
 
-package cc.iotkit.manager.dto.bo.thingmodel;
+package cc.iotkit.manager.dto.bo.product;
 
 import cc.iotkit.common.api.BaseDto;
-import cc.iotkit.model.product.ThingModel;
+import cc.iotkit.model.product.Product;
 import io.github.linpeilie.annotations.AutoMapper;
-import io.github.linpeilie.annotations.AutoMapping;
-import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.Size;
 
-@ApiModel(value = "ThingModelBo")
+
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = ThingModel.class, reverseConvertGenerate = false)
-public class ThingModelBo extends BaseDto {
+@AutoMapper(target = ProductBo.class, reverseConvertGenerate = false)
+public class ProductListReqBo extends BaseDto {
+
     private static final long serialVersionUID = -1L;
 
-    @ApiModelProperty(value = "模型内容")
-    @Size(max = 65535, message = "模型内容长度不正确")
-    @AutoMapping(ignore = true)
-    @ReverseAutoMapping(ignore = true)
-    private String model;
 
-    @ApiModelProperty(value = "产品key")
-    @NotBlank(message = "产品Key不许为空")
+    @ApiModelProperty(value = "productKey")
     private String productKey;
+
+    @ApiModelProperty(value = "产品名称")
+    @Size(max = 255, message = "产品名称长度不正确")
+    private String name;
 
 }

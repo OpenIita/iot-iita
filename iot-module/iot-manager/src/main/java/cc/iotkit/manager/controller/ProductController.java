@@ -29,6 +29,7 @@ import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.validate.AddGroup;
 import cc.iotkit.common.validate.EditGroup;
+import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.manager.dto.bo.category.CategoryBo;
 import cc.iotkit.manager.dto.bo.product.IconBo;
 import cc.iotkit.manager.dto.bo.product.IconTypeBo;
@@ -67,7 +68,7 @@ public class ProductController {
     @ApiOperation("列表")
     @SaCheckPermission("iot:product:query")
     @PostMapping("/list")
-    public Paging<ProductVo> getProducts(@Validated @RequestBody
+    public Paging<ProductVo> getProducts(@Validated(QueryGroup.class) @RequestBody
                                          PageRequest<ProductBo> request) {
         return productService.selectPageList(request);
     }

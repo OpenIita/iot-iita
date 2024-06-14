@@ -24,12 +24,16 @@
 package cc.iotkit.manager.dto.bo.product;
 
 import cc.iotkit.common.api.BaseDto;
+import cc.iotkit.common.validate.AddGroup;
+import cc.iotkit.common.validate.EditGroup;
 import cc.iotkit.model.product.Product;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Min;
 import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -70,7 +74,6 @@ public class ProductBo extends BaseDto {
     private Integer nodeType;
 
     @ApiModelProperty(value = "是否透传,true/false")
-    @Size(max = 255, message = "是否透传,true/false长度不正确")
     private Boolean transparent;
 
     @ApiModelProperty(value = "是否开启设备定位,true/false")
@@ -88,7 +91,7 @@ public class ProductBo extends BaseDto {
     private String productSecret;
 
     @ApiModelProperty(value = "保活时长")
-    @NotBlank(message = "保活时长不能为空")
+    @NotNull(message = "保活时长不能为空",groups = { AddGroup.class, EditGroup.class })
     @Min(value = 10, message = "保活时长(秒)必须大于10")
     private Long keepAliveTime;
 

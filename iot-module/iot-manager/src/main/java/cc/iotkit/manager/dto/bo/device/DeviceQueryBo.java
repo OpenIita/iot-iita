@@ -69,7 +69,6 @@ public class DeviceQueryBo extends BaseDto {
 
 
     @ApiModelProperty(value="设备状态")
-    @Size(max = 255, message = "设备状态长度不正确")
     @AutoMapping(ignore = true)
     @ReverseAutoMapping(ignore = true)
     private Boolean online;

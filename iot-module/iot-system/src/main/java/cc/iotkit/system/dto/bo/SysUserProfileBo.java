@@ -26,6 +26,9 @@ package cc.iotkit.system.dto.bo;
 import cc.iotkit.common.api.BaseDto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+
+import cc.iotkit.common.validate.AddGroup;
+import cc.iotkit.common.validate.EditGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -55,7 +58,7 @@ public class SysUserProfileBo extends BaseDto {
     /**
      * 用户邮箱
      */
-    @Email(message = "邮箱格式不正确")
+   // @Email(message = "邮箱格式不正确")
     @Size(min = 0, max = 50, message = "邮箱长度不能超过{max}个字符")
     private String email;
 

@@ -29,6 +29,7 @@ import cc.iotkit.common.constant.UserConstants;
 import cc.iotkit.common.log.annotation.Log;
 import cc.iotkit.common.log.enums.BusinessType;
 import cc.iotkit.common.utils.StringUtils;
+import cc.iotkit.common.validate.QueryGroup;
 import cc.iotkit.common.web.core.BaseController;
 import cc.iotkit.system.dto.bo.SysDeptBo;
 import cc.iotkit.system.dto.vo.SysDeptVo;
@@ -64,7 +65,7 @@ public class SysDeptController extends BaseController {
     @SaCheckPermission("system:dept:list")
     @ApiOperation("获取部门列表")
     @PostMapping("/list")
-    public List<SysDeptVo> list(@RequestBody @Validated PageRequest<SysDeptBo> dept) {
+    public List<SysDeptVo> list(@RequestBody @Validated(QueryGroup.class) PageRequest<SysDeptBo> dept) {
         return deptService.selectDeptList(dept.getData());
     }
 
