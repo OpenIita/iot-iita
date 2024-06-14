@@ -23,6 +23,7 @@
 package cc.iotkit.model.device;
 
 import cc.iotkit.model.Owned;
+import cc.iotkit.model.TenantModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,7 +39,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VirtualDevice implements Owned<String> {
+public class VirtualDevice  extends TenantModel implements Owned<String> {
 
     public static final String STATE_STOPPED = "stopped";
     public static final String STATE_RUNNING = "running";

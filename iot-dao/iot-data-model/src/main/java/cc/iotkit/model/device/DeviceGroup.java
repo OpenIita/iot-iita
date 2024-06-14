@@ -23,13 +23,14 @@
 package cc.iotkit.model.device;
 
 import cc.iotkit.model.Owned;
+import cc.iotkit.model.TenantModel;
 import lombok.Data;
 
 /**
  * 设备分组
  */
 @Data
-public class DeviceGroup implements Owned<String> {
+public class DeviceGroup  extends TenantModel implements Owned<String> {
 
     /**
      * 分组id

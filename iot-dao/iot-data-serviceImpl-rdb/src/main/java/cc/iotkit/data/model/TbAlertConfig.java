@@ -28,6 +28,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.alert.AlertConfig;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,7 +40,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "alert_config")
 @AutoMapper(target = AlertConfig.class)
-public class TbAlertConfig {
+public class TbAlertConfig extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -93,5 +95,7 @@ public class TbAlertConfig {
      */
     @ApiModelProperty(value = "创建时间")
     private Long createAt;
+
+    private Long tenantId;
 
 }

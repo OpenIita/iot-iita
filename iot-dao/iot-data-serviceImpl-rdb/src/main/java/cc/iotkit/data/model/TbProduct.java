@@ -23,6 +23,7 @@
 package cc.iotkit.data.model;
 
 import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.product.Product;
 import io.github.linpeilie.annotations.AutoMapper;
@@ -44,7 +45,7 @@ import javax.persistence.*;
 @FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
-public class TbProduct implements TenantAware {
+public class TbProduct extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")

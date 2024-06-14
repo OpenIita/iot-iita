@@ -24,6 +24,7 @@
 package cc.iotkit.model.system;
 
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
@@ -36,7 +37,7 @@ import java.util.Date;
  * @date 2023-02-07
  */
 @Data
-public class SysLoginInfo implements Id<Long>,Serializable {
+public class SysLoginInfo  extends TenantModel implements Id<Long>,Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

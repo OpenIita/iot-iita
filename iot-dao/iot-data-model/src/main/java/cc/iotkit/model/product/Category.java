@@ -23,10 +23,11 @@
 package cc.iotkit.model.product;
 
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import lombok.Data;
 
 @Data
-public class Category implements Id<String> {
+public class Category  extends TenantModel implements Id<String> {
 
     private String id;
 

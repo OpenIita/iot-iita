@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.device.DeviceInfo;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.github.linpeilie.annotations.AutoMapping;
@@ -30,19 +32,22 @@ import io.github.linpeilie.annotations.ReverseAutoMapping;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
 @Table(name = "device_info")
 @ApiModel(value = "设备信息")
 @AutoMapper(target = DeviceInfo.class)
-public class TbDeviceInfo {
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+@EntityListeners(TenantListener.class)
+public class TbDeviceInfo extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -89,5 +94,11 @@ public class TbDeviceInfo {
 
     @ApiModelProperty(value = "创建时间")
     private Long createAt;
+
+    /**
+     * 租户编号
+     */
+    @ApiModelProperty(value = "租户编号")
+    private Long tenantId;
 
 }

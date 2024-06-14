@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,7 +41,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table(name = "device_group_mapping")
-public class TbDeviceGroupMapping {
+public class TbDeviceGroupMapping extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -53,4 +55,5 @@ public class TbDeviceGroupMapping {
     @ApiModelProperty(value = "设备组id")
     private String groupId;
 
+    private Long tenantId;
 }

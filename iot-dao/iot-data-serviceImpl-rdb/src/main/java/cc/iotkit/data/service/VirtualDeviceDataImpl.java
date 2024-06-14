@@ -22,6 +22,7 @@
  */
 package cc.iotkit.data.service;
 
+import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.data.dao.IJPACommData;
 import cc.iotkit.data.manager.IVirtualDeviceData;
 import cc.iotkit.data.dao.VirtualDeviceMappingRepository;
@@ -130,7 +131,7 @@ public class VirtualDeviceDataImpl implements IVirtualDeviceData, IJPACommData<V
                 data.getDevices().stream().map(d -> new TbVirtualDeviceMapping(
                         IdUtil.simpleUUID(),
                         data.getId(),
-                        d
+                        d, LoginHelper.getTenantId()
                 )).collect(Collectors.toList())
         );
         return data;

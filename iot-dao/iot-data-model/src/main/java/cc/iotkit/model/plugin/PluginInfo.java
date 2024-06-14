@@ -25,6 +25,7 @@ package cc.iotkit.model.plugin;
 
 import cc.iotkit.model.BaseModel;
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -37,7 +38,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PluginInfo extends BaseModel implements Id<Long>, Serializable {
+public class PluginInfo  extends TenantModel implements Id<Long>, Serializable {
 
     /**
      * 插件状态-停止

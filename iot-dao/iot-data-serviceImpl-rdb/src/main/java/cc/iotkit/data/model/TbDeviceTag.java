@@ -22,6 +22,8 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -39,7 +41,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "device_tag")
 @ApiModel(value = "设备标签")
-public class TbDeviceTag {
+public class TbDeviceTag extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -69,4 +71,5 @@ public class TbDeviceTag {
     @Column(name = "[value]")
     private String value;
 
+    private Long tenantId;
 }

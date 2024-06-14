@@ -23,6 +23,7 @@
 
 package cc.iotkit.model.ota;
 
+import cc.iotkit.model.TenantModel;
 import lombok.Data;
 
 /**
@@ -31,7 +32,7 @@ import lombok.Data;
  * @Description:
  */
 @Data
-public class DeviceOta {
+public class DeviceOta  extends TenantModel {
     private String currentVersion;
     private String deviceId;
 }

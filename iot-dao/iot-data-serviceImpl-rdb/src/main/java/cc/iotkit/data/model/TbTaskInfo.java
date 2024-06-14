@@ -22,6 +22,8 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.rule.TaskInfo;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.github.linpeilie.annotations.AutoMapping;
@@ -36,7 +38,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "task_info")
 @AutoMapper(target = TaskInfo.class)
-public class TbTaskInfo {
+public class TbTaskInfo extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -97,5 +99,7 @@ public class TbTaskInfo {
      */
     @ApiModelProperty(value = "操作备注")
     private String reason;
+
+    private Long tenantId;
 
 }

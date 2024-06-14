@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.system.SysRoleDept;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
@@ -44,7 +46,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sys_role_dept")
 @AutoMapper(target = SysRoleDept.class)
-public class TbSysRoleDept {
+public class TbSysRoleDept extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -63,5 +65,7 @@ public class TbSysRoleDept {
      */
     @ApiModelProperty(value = "部门ID")
     private Long deptId;
+
+    private Long tenantId;
 
 }

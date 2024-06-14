@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.device.DeviceConfig;
 import io.github.linpeilie.annotations.AutoMapper;
 
@@ -38,7 +40,7 @@ import javax.persistence.*;
 @ApiModel(value = "设备配置")
 @Table(name = "device_config")
 @AutoMapper(target = DeviceConfig.class)
-public class TbDeviceConfig {
+public class TbDeviceConfig extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -67,5 +69,7 @@ public class TbDeviceConfig {
 
     @ApiModelProperty(value = "创建时间")
     private Long createAt;
+
+    private Long tenantId;
 
 }

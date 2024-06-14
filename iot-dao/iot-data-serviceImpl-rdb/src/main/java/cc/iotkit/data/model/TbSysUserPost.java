@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -43,7 +45,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sys_user_post")
 @AutoMapper(target = cc.iotkit.model.system.SysUserPost.class)
-public class TbSysUserPost extends BaseEntity {
+public class TbSysUserPost extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -61,5 +63,7 @@ public class TbSysUserPost extends BaseEntity {
      */
     @ApiModelProperty(value = "岗位ID")
     private Long postId;
+
+    private Long tenantId;
 
 }

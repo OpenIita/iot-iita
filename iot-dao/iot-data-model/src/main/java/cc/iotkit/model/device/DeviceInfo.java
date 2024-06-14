@@ -23,6 +23,7 @@
 package cc.iotkit.model.device;
 
 import cc.iotkit.model.Owned;
+import cc.iotkit.model.TenantModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,7 +38,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeviceInfo implements Owned<String> {
+public class DeviceInfo  extends TenantModel implements Owned<String> {
 
     private String id;
 

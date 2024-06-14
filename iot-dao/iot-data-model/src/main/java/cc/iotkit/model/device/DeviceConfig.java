@@ -23,6 +23,7 @@
 package cc.iotkit.model.device;
 
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +36,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeviceConfig implements Id<String> {
+public class DeviceConfig  extends TenantModel implements Id<String> {
 
     private String id;
 

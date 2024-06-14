@@ -22,6 +22,8 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,13 +32,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeviceIdGroup {
+public class DeviceIdGroup extends BaseEntity implements TenantAware {
 
     @ApiModelProperty(value = "设备组id")
-    private String id;
+    private Long id;
     @ApiModelProperty(value = "设备id")
     private String deviceId;
     @ApiModelProperty(value = "组名称")
     private String name;
+
+    private Long tenantId;
 
 }

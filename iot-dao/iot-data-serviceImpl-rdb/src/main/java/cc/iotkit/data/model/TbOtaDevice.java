@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -39,7 +41,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "ota_device")
-public class TbOtaDevice {
+public class TbOtaDevice extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -55,4 +57,6 @@ public class TbOtaDevice {
     private Integer status;
 
     private Long createAt;
+
+    private Long tenantId;
 }

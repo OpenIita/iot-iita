@@ -44,7 +44,6 @@ import java.util.Date;
  * @author Michelle.Chung
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "sys_tenant")
 @AutoMapper(target = SysTenant.class)

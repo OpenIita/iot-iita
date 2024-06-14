@@ -24,6 +24,7 @@
 package cc.iotkit.model.ota;
 
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,7 +39,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OtaDevice implements Id<Long> {
+public class OtaDevice  extends TenantModel implements Id<Long> {
 
     private Long id;
 

@@ -25,6 +25,7 @@ package cc.iotkit.data.service;
 
 import cc.iotkit.common.api.PageRequest;
 import cc.iotkit.common.api.Paging;
+import cc.iotkit.common.satoken.utils.LoginHelper;
 import cc.iotkit.common.utils.MapstructUtils;
 import cc.iotkit.common.utils.ReflectUtil;
 import cc.iotkit.data.dao.*;
@@ -368,7 +369,7 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
     @Transactional
     public void addToGroup(String deviceId, DeviceInfo.Group group) {
         String groupId = UUID.randomUUID().toString();
-        deviceGroupMappingRepository.save(new TbDeviceGroupMapping(groupId, deviceId, group.getId()));
+        deviceGroupMappingRepository.save(new TbDeviceGroupMapping(groupId, deviceId, group.getId(), LoginHelper.getTenantId()));
 
         //更新设备数量
         updateGroupDeviceCount(groupId);
@@ -462,7 +463,8 @@ public class DeviceInfoDataImpl implements IDeviceInfoData, IJPACommData<DeviceI
                 deviceGroupMappingRepository.save(new TbDeviceGroupMapping(
                         UUID.randomUUID().toString(),
                         data.getDeviceId(),
-                        id
+                        id,
+                        LoginHelper.getTenantId()
                 ));
             }
         });

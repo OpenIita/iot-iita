@@ -22,6 +22,8 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.product.Category;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
@@ -37,7 +39,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "category")
 @AutoMapper(target = Category.class)
-public class TbCategory {
+public class TbCategory extends BaseEntity implements TenantAware {
 
     @ApiModelProperty(value = "分类id")
     @Id
@@ -51,5 +53,5 @@ public class TbCategory {
     @ApiModelProperty(value = "分类描述")
     private Long createAt;
 
-
+    private Long tenantId;
 }

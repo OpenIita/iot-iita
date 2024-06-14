@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.system.SysRoleMenu;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
@@ -44,7 +46,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sys_role_menu")
 @AutoMapper(target = SysRoleMenu.class)
-public class TbSysRoleMenu {
+public class TbSysRoleMenu extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -63,5 +65,7 @@ public class TbSysRoleMenu {
      */
     @ApiModelProperty(value = "菜单ID")
     private Long menuId;
+
+    private Long tenantId;
 
 }

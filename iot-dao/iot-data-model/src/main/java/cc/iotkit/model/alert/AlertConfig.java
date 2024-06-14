@@ -23,6 +23,7 @@
 package cc.iotkit.model.alert;
 
 import cc.iotkit.model.Owned;
+import cc.iotkit.model.TenantModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +36,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlertConfig implements Owned<Long> {
+public class AlertConfig  extends TenantModel implements Owned<Long> {
 
     private Long id;
 

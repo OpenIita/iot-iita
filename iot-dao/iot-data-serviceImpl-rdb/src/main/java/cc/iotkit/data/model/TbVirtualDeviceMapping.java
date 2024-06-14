@@ -22,6 +22,8 @@
  */
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,7 +40,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table(name = "virtual_device_mapping")
-public class TbVirtualDeviceMapping {
+public class TbVirtualDeviceMapping extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -51,4 +53,5 @@ public class TbVirtualDeviceMapping {
     @ApiModelProperty(value = "设备ID")
     private String deviceId;
 
+    private Long tenantId;
 }

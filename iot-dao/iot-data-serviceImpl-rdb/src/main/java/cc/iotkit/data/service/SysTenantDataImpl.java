@@ -75,7 +75,7 @@ public class SysTenantDataImpl implements ISysTenantData, IJPACommData<SysTenant
     @Override
     public List<SysTenant> findAllByCondition(SysTenant data) {
         List<TbSysTenant> ret=jpaQueryFactory.selectFrom(tbSysTenant).where(PredicateBuilder.instance()
-                .and(ObjectUtil.isNotNull(data.getTenantId()),()->tbSysTenant.tenantId.eq(data.getTenantId()))
+
                 .and(StringUtils.isNotBlank(data.getContactUserName()),()->tbSysTenant.contactUserName.like(data.getContactUserName()))
                 .and(StringUtils.isNotBlank(data.getContactPhone()),()->tbSysTenant.contactPhone.eq(data.getContactPhone()))
                 .and(StringUtils.isNotBlank(data.getCompanyName()),()->tbSysTenant.companyName.like(data.getCompanyName()))

@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.alert.AlertRecord;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,7 +40,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "alert_record")
 @AutoMapper(target = AlertRecord.class)
-public class TbAlertRecord {
+public class TbAlertRecord extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -82,4 +84,5 @@ public class TbAlertRecord {
     @ApiModelProperty(value = "是否已读")
     private Boolean readFlg;
 
+    private Long tenantId;
 }

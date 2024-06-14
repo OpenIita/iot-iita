@@ -23,6 +23,7 @@
 package cc.iotkit.model.product;
 
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductModel implements Id<String> {
+public class ProductModel  extends TenantModel implements Id<String> {
 
     public static final String TYPE_JS = "JavaScript";
     public static final String TYPE_LUA = "LuaScript";

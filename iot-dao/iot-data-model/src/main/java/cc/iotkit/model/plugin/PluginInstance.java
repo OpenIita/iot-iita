@@ -25,6 +25,7 @@ package cc.iotkit.model.plugin;
 
 import cc.iotkit.model.BaseModel;
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import lombok.*;
 
 import java.io.Serializable;
@@ -39,7 +40,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PluginInstance extends BaseModel implements Id<Long>, Serializable {
+public class PluginInstance  extends TenantModel implements Id<Long>, Serializable {
 
     private Long id;
 

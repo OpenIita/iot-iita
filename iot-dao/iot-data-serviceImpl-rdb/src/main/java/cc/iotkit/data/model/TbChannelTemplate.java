@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.notify.ChannelTemplate;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
@@ -45,7 +47,7 @@ import javax.persistence.Table;
 @Table(name = "channel_template")
 @ApiModel(value = "通道模板")
 @AutoMapper(target= ChannelTemplate.class)
-public class TbChannelTemplate {
+public class TbChannelTemplate extends BaseEntity implements TenantAware {
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
@@ -63,4 +65,6 @@ public class TbChannelTemplate {
 
     @ApiModelProperty(value = "创建时间")
     private Long createAt;
+
+    private Long tenantId;
 }

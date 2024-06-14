@@ -23,12 +23,18 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
+import cc.iotkit.common.tenant.listener.TenantListener;
 import cc.iotkit.model.ota.DeviceOtaDetail;
 import cc.iotkit.model.ota.DeviceOtaInfo;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ParamDef;
 
 import javax.persistence.*;
 
@@ -42,7 +48,8 @@ import javax.persistence.*;
 @Table(name = "device_ota_detail")
 @ApiModel(value = "设备升级明细")
 @AutoMapper(target = DeviceOtaDetail.class)
-public class TbDeviceOtaDetail {
+@EntityListeners(TenantListener.class)
+public class TbDeviceOtaDetail extends BaseEntity implements TenantAware {
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
@@ -66,4 +73,6 @@ public class TbDeviceOtaDetail {
     private String deviceName;
 
     private Long otaInfoId;
+
+    private Long tenantId;
 }

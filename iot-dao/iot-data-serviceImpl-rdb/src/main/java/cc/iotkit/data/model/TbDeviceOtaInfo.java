@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.ota.DeviceOtaInfo;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
@@ -42,7 +44,7 @@ import javax.persistence.*;
 @Table(name = "device_ota_info")
 @ApiModel(value = "设备信息")
 @AutoMapper(target = DeviceOtaInfo.class)
-public class TbDeviceOtaInfo {
+public class TbDeviceOtaInfo extends BaseEntity implements TenantAware {
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(name = "SnowflakeIdGenerator", strategy = "cc.iotkit.data.config.id.SnowflakeIdGenerator")
@@ -66,4 +68,6 @@ public class TbDeviceOtaInfo {
     private String productKey;
 
     private Long createAt;
+
+    private Long tenantId;
 }

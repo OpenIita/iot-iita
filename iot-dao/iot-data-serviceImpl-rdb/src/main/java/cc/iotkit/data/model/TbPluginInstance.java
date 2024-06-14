@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.plugin.PluginInstance;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
@@ -42,7 +44,7 @@ import javax.persistence.Table;
 @ApiModel(value = "插件实例")
 @Table(name = "plugin_instance")
 @AutoMapper(target = PluginInstance.class)
-public class TbPluginInstance extends BaseEntity {
+public class TbPluginInstance extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -80,5 +82,7 @@ public class TbPluginInstance extends BaseEntity {
      */
     @ApiModelProperty(value = "心跳时间")
     private Long heartbeatAt;
+
+    private Long tenantId;
 
 }

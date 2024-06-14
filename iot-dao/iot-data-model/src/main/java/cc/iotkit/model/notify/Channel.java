@@ -24,6 +24,7 @@
 package cc.iotkit.model.notify;
 
 import cc.iotkit.model.Id;
+import cc.iotkit.model.TenantModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,7 +39,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Channel implements Id<Long> {
+public class Channel  extends TenantModel implements Id<Long> {
 
     private Long id;
 

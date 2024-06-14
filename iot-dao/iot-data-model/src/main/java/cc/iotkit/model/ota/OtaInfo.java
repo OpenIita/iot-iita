@@ -23,6 +23,7 @@
 
 package cc.iotkit.model.ota;
 
+import cc.iotkit.model.TenantModel;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -33,6 +34,6 @@ import java.io.Serializable;
  * @Description:
  */
 @Data
-public class OtaInfo implements Serializable {
+public class OtaInfo  extends TenantModel implements Serializable {
 
 }

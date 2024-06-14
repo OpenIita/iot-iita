@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.ota.OtaPackage;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
@@ -39,7 +41,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ota_package")
 @AutoMapper(target = OtaPackage.class)
-public class TbOtaPackage {
+public class TbOtaPackage extends BaseEntity implements TenantAware {
 
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
@@ -72,4 +74,6 @@ public class TbOtaPackage {
     private String extData;
 
     private Long createAt;
+
+    private Long tenantId;
 }

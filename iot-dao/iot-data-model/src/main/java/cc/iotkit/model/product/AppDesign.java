@@ -23,6 +23,7 @@
 package cc.iotkit.model.product;
 
 import cc.iotkit.model.Owned;
+import cc.iotkit.model.TenantModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppDesign implements Owned<String> {
+public class AppDesign  extends TenantModel implements Owned<String> {
 
     private String id;
 

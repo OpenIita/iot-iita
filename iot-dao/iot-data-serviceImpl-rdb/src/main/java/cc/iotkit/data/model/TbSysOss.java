@@ -23,6 +23,8 @@
 
 package cc.iotkit.data.model;
 
+import cc.iotkit.common.tenant.dao.TenantAware;
+import cc.iotkit.common.tenant.entiry.BaseTenantEntity;
 import cc.iotkit.model.system.SysOss;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.annotations.ApiModel;
@@ -47,7 +49,7 @@ import javax.persistence.Table;
 @Table(name = "sys_oss")
 @ApiModel(value = "OSS对象存储对象")
 @AutoMapper(target = SysOss.class)
-public class TbSysOss extends BaseEntity {
+public class TbSysOss extends BaseEntity implements TenantAware {
 
     /**
      * 对象存储主键
