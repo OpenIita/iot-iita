@@ -155,4 +155,5 @@ https://open-iita.feishu.cn/wiki/Km67wBKNNiFMrMkldCJcxa6vnLe
 微信群(添加我微信备注"进群"):
 
 ![输入图片说明](doc/ma.png) 
-
+商务联系:
+![输入图片说明](doc/image.png)
