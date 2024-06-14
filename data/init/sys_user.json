@@ -4,7 +4,7 @@
   "createTime" : 1708254323474,
   "updateBy" : 1,
   "updateTime" : 1708254547736,
-  "tenantId" : "000000",
+  "tenantId" : 0,
   "id" : 1,
   "deptId" : 103,
   "userName" : "admin",

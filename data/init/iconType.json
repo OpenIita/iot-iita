@@ -4,7 +4,7 @@
   "createTime" : 1708254320774,
   "updateBy" : null,
   "updateTime" : 1708254320774,
-  "tenantId" : "000000",
+  "tenantId" : 0,
   "typeDescribe" : null,
   "typeName" : "智能家居"
 }, {
@@ -13,7 +13,7 @@
   "createTime" : 1708254320774,
   "updateBy" : null,
   "updateTime" : 1708254320774,
-  "tenantId" : "000000",
+  "tenantId" : 0,
   "typeDescribe" : null,
   "typeName" : "工业物联网"
 }]

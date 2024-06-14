@@ -5,7 +5,7 @@
   "updateBy" : null,
   "updateTime" : 1708254323415,
   "id" : 1,
-  "tenantId" : "000000",
+  "tenantId" : 0,
   "contactUserName" : "管理组",
   "contactPhone" : "15888888888",
   "companyName" : "XXX有限公司",
