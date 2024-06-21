@@ -40,6 +40,7 @@ import cc.iotkit.mq.MqProducer;
 import cc.iotkit.plugin.core.thing.IDevice;
 import cc.iotkit.plugin.core.thing.IThingService;
 import cc.iotkit.plugin.core.thing.actions.ActionResult;
+import cc.iotkit.plugin.core.thing.actions.down.DeviceConfig;
 import cc.iotkit.plugin.core.thing.actions.down.PropertyGet;
 import cc.iotkit.plugin.core.thing.actions.down.PropertySet;
 import cc.iotkit.plugin.core.thing.actions.down.ServiceInvoke;
@@ -134,52 +135,74 @@ public class PluginMainImpl implements IPluginMain, DeviceService {
         String type = service.getType();
         String identifier = service.getIdentifier();
         ActionResult result = null;
-
-        if (ThingService.TYPE_SERVICE.equals(type)) {
-            if (!(service.getParams() instanceof Map)) {
-                throw new BizException(ErrCode.PARAMS_EXCEPTION);
-            }
-            Map<String, ?> params = (Map<String, ?>) service.getParams();
-            //服务调用
-            ServiceInvoke action = ServiceInvoke.builder()
-                    .id(service.getMid())
-                    .productKey(linkPk)
-                    .deviceName(linkDn)
-                    .name(service.getIdentifier())
-                    .params(params)
-                    .build();
-            //调用插件设备服务接口
-            result = deviceService.serviceInvoke(action);
-            publish(service, deviceInfo.getDeviceId(), result.getCode());
-        } else if (ThingService.TYPE_PROPERTY.equals(type)) {
-            if ("set".equals(identifier)) {
+        Map<String, ?> params = null;
+        switch (type){
+            case ThingService.TYPE_SERVICE:
                 if (!(service.getParams() instanceof Map)) {
                     throw new BizException(ErrCode.PARAMS_EXCEPTION);
                 }
-                Map<String, ?> params = (Map<String, ?>) service.getParams();
-                //属性设置
-                PropertySet action = PropertySet.builder()
+                params = (Map<String, ?>) service.getParams();
+                //服务调用
+                ServiceInvoke action = ServiceInvoke.builder()
                         .id(service.getMid())
                         .productKey(linkPk)
                         .deviceName(linkDn)
+                        .name(service.getIdentifier())
                         .params(params)
                         .build();
                 //调用插件设备服务接口
-                result = deviceService.propertySet(action);
+                result = deviceService.serviceInvoke(action);
                 publish(service, deviceInfo.getDeviceId(), result.getCode());
-            } else if ("get".equals(identifier)) {
-                //属性获取
-                PropertyGet action = PropertyGet.builder()
+                break;
+            case ThingService.TYPE_PROPERTY:
+                if ("set".equals(identifier)) {
+                    if (!(service.getParams() instanceof Map)) {
+                        throw new BizException(ErrCode.PARAMS_EXCEPTION);
+                    }
+                     params = (Map<String, ?>) service.getParams();
+                    //属性设置
+                    PropertySet actionSet = PropertySet.builder()
+                            .id(service.getMid())
+                            .productKey(linkPk)
+                            .deviceName(linkDn)
+                            .params(params)
+                            .build();
+                    //调用插件设备服务接口
+                    result = deviceService.propertySet(actionSet);
+                    publish(service, deviceInfo.getDeviceId(), result.getCode());
+                } else if ("get".equals(identifier)) {
+                    //属性获取
+                    PropertyGet actionGet = PropertyGet.builder()
+                            .id(service.getMid())
+                            .productKey(linkPk)
+                            .deviceName(linkDn)
+                            .keys((List<String>) service.getParams())
+                            .build();
+                    //调用插件设备服务接口
+                    result = deviceService.propertyGet(actionGet);
+                    publish(service, deviceInfo.getDeviceId(), result.getCode());
+                }
+                break;
+            case ThingService.TYPE_OTA:
+
+                break;
+            case ThingService.TYPE_CONFIG:
+                // 下发配置:
+                DeviceConfig actionConfigSet = DeviceConfig.builder()
                         .id(service.getMid())
                         .productKey(linkPk)
                         .deviceName(linkDn)
-                        .keys((List<String>) service.getParams())
+                        .config((Map<String, Object>) service.getParams())
                         .build();
                 //调用插件设备服务接口
-                result = deviceService.propertyGet(action);
+                result = deviceService.config(actionConfigSet);
                 publish(service, deviceInfo.getDeviceId(), result.getCode());
-            }
+                break;
+            default:
+                break;
+
         }
+
 
         if (result == null || result.getCode() != 0) {
             throw new BizException(ErrCode.DEVICE_ACTION_FAILED, result == null ? "" : result.getReason());
