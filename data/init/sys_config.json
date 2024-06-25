@@ -69,7 +69,7 @@
   "createTime" : 1708254321820,
   "updateBy" : null,
   "updateTime" : 1708254321820,
-  "tenantId" : "452748015218757",
+  "tenantId" : 0,
   "id" : 452767972696133,
   "configName" : "主框架页-默认皮肤样式名称",
   "configKey" : "sys.index.skinName",
