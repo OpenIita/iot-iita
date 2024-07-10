@@ -49,6 +49,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -78,23 +79,25 @@ public class ThingServiceImpl implements IThingService {
             log.info("receive plugin:{}, action:{}", pluginId, action);
             String deviceName = action.getDeviceName();
 
-            //添加设备路由
-            deviceRouter.putRouter(deviceName, new PluginRouter(IPluginMain.MAIN_ID, pluginId));
-
+            if(!"NONE".equals(pluginId)){
+                //添加设备路由
+                deviceRouter.putRouter(deviceName, new PluginRouter(IPluginMain.MAIN_ID, pluginId));
+            }
+            long lastTime = System.currentTimeMillis();
             DeviceInfo device = getDeviceInfo(deviceName);
-            if (device == null) {
+            if (Objects.isNull(device)) {
                 log.warn("device:{} is not found.", deviceName);
             }else {
-                long lastTime = System.currentTimeMillis();
                 deviceUpdateLastTime(device, lastTime);
             }
-
 
             ActionType type = action.getType();
             switch (type) {
                 case REGISTER:
                     //设备注册
-                    registerDevice(device, (DeviceRegister) action, null);
+                    String deviceId = registerDevice(device, (DeviceRegister) action, null);
+                    deviceUpdateLastTime(deviceId, lastTime);
+
                     break;
                 case PING:
                     // 设备心跳
@@ -161,7 +164,11 @@ public class ThingServiceImpl implements IThingService {
     }
 
     private void deviceUpdateLastTime(DeviceInfo device, long lastTime) {
-        deviceInfoData.setLastTime(device.getDeviceId(),lastTime);
+        deviceUpdateLastTime(device.getDeviceId(),lastTime);
+    }
+
+    private void deviceUpdateLastTime(String deviceId, long lastTime) {
+        deviceInfoData.setLastTime(deviceId,lastTime);
     }
 
     @Override
