@@ -48,7 +48,7 @@ import javax.persistence.Table;
 @Table(name = "plugin_info")
 @DynamicUpdate
 @AutoMapper(target = PluginInfo.class)
-@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
 public class TbPluginInfo extends BaseEntity implements TenantAware {

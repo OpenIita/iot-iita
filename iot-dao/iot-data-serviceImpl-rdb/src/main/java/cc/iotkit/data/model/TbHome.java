@@ -44,7 +44,7 @@ import javax.persistence.*;
 @Table(name = "home")
 @ApiModel(value = "家庭信息")
 @AutoMapper(target = Home.class)
-@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
 public class TbHome extends BaseEntity implements TenantAware {

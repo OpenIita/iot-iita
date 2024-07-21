@@ -51,7 +51,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "sys_role")
 @AutoMapper(target = SysRole.class)
-@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
 public class TbSysRole extends BaseEntity implements TenantAware {

@@ -49,7 +49,7 @@ import javax.persistence.*;
 @Table(name = "sys_oss_config")
 @ApiModel(value = "对象存储配置对象")
 @AutoMapper(target = SysOssConfig.class)
-@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
 public class TbSysOssConfig extends BaseEntity implements TenantAware {

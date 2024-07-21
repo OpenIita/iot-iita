@@ -49,7 +49,7 @@ import javax.persistence.*;
 @Table(name = "sys_dict_data")
 @AutoMapper(target = SysDictData.class)
 @ApiModel(value = "字典数据表")
-@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
 public class TbSysDictData extends BaseEntity implements TenantAware {

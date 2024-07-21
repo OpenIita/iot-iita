@@ -52,7 +52,7 @@ import java.util.Date;
 @Entity
 @Table(name = "sys_user")
 @AutoMapper(target = SysUser.class)
-@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
 public class TbSysUser extends BaseEntity implements TenantAware {

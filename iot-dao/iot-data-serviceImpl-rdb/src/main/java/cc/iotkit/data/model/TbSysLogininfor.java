@@ -47,7 +47,7 @@ import java.util.Date;
 @Entity
 @Table(name = "sys_logininfor")
 @AutoMapper(target = SysLoginInfo.class)
-@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
 public class TbSysLogininfor extends BaseEntity implements TenantAware {

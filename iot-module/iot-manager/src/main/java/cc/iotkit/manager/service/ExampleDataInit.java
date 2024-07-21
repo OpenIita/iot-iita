@@ -46,6 +46,7 @@ import cc.iotkit.model.space.Space;
 import cc.iotkit.model.space.SpaceDevice;
 import cc.iotkit.model.system.*;
 import cc.iotkit.temporal.IDbStructureData;
+import cn.hutool.core.collection.CollectionUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -116,8 +117,10 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                     List<ThingModel> thingModels = initData("thingModel", SpringUtils.getBean(IThingModelData.class), new TypeReference<>() {
                     });
                     //初始化物模型时序数据结构
-                    for (ThingModel thingModel : thingModels) {
-                        dbStructureData.defineThingModel(thingModel);
+                    if(CollectionUtil.isNotEmpty(thingModels)) {
+                        for (ThingModel thingModel : thingModels) {
+                            dbStructureData.defineThingModel(thingModel);
+                        }
                     }
 
                     initData("userInfo", SpringUtils.getBean(IUserInfoData.class), new TypeReference<List<UserInfo>>() {

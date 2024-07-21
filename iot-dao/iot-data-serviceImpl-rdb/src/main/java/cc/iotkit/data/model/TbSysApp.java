@@ -52,7 +52,7 @@ import javax.persistence.*;
 @Table(name = "SYS_APP")
 @AutoMapper(target = SysApp.class)
 @ApiModel(value = "应用信息表")
-@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
 public class TbSysApp extends BaseEntity implements TenantAware {

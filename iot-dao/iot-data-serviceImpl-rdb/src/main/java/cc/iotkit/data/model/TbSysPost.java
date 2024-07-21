@@ -48,7 +48,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "sys_post")
 @AutoMapper(target = SysPost.class)
-@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "string")})
+@FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "tenantId", type = "long")})
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @EntityListeners(TenantListener.class)
 public class TbSysPost extends BaseEntity implements TenantAware {
