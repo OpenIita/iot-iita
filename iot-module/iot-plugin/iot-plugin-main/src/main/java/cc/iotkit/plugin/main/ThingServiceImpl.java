@@ -47,10 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author sjg
@@ -108,6 +105,20 @@ public class ThingServiceImpl implements IThingService {
                     break;
                 case STATE_CHANGE:
                     deviceStateChange(device, (DeviceStateChange) action);
+                    //父设备ID不为空说明是子设备
+                    if (Objects.isNull(device.getParentId())) {
+                        //否则为父设备，同步透传子设备状态
+                        List<String> subDeviceIds = deviceInfoData.findSubDeviceIds(device.getDeviceId());
+                        for (String subDeviceId : subDeviceIds) {
+                            DeviceInfo subDevice = deviceInfoData.findByDeviceId(subDeviceId);
+                            Product product = productData.findByProductKey(subDevice.getProductKey());
+                            Boolean transparent = product.getTransparent();
+                            //透传设备父设备上线，子设备也上线。非透传设备父设备离线，子设备才离线
+                            if (transparent != null && transparent || ((DeviceStateChange) action).getState() != DeviceState.ONLINE) {
+                                deviceStateChange(subDevice, (DeviceStateChange)action);
+                            }
+                        }
+                    }
                     break;
                 case EVENT_REPORT:
                     EventReport eventReport = (EventReport) action;
