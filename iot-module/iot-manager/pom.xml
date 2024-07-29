@@ -29,10 +29,10 @@
             <artifactId>iot-rule-engine</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>cc.iotkit</groupId>
-            <artifactId>iot-screen</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cc.iotkit</groupId>-->
+<!--            <artifactId>iot-screen</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>cc.iotkit</groupId>

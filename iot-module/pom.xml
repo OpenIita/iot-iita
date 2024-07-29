@@ -15,7 +15,7 @@
         <module>iot-system</module>
         <module>iot-rule-engine</module>
         <module>iot-message-notify</module>
-        <module>iot-screen</module>
+<!--        <module>iot-screen</module>-->
         <module>iot-openapi</module>
         <module>iot-plugin</module>
         <module>iot-manager</module>
