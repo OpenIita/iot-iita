@@ -44,7 +44,7 @@ public class DbStructureDataImpl implements IDbStructureData {
     @Autowired
     private TdRestApi tdRestApi;
 
-    @Value("${spring.td-datasource.db:iita_iot}")
+    @Value("${spring.td-datasource.db:iotkit}")
     private String dbName;
 
     /**
