@@ -92,7 +92,6 @@ public class ProductBo extends BaseDto {
 
     @ApiModelProperty(value = "保活时长")
     @NotNull(message = "保活时长不能为空",groups = { AddGroup.class, EditGroup.class })
-    @Min(value = 10, message = "保活时长(秒)必须大于10")
     private Long keepAliveTime;
 
 }

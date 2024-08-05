@@ -69,7 +69,7 @@ public class DeviceStateCheckTask {
             for (DeviceInfo device : all.getRows()) {
                 Product product = productData.findByProductKey(device.getProductKey());
                 Long keepAliveTime = product.getKeepAliveTime();
-                if (keepAliveTime == null) {
+                if (keepAliveTime == null || keepAliveTime <= 0) {
                     continue;
                 }
                 String deviceId = device.getDeviceId();
