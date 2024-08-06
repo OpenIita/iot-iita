@@ -100,8 +100,8 @@ public class ExampleDataInit implements SmartInitializingSingleton {
                     });
                     initData("home", SpringUtils.getBean(IHomeData.class), new TypeReference<List<Home>>() {
                     });
-                    initData("oauthClient", SpringUtils.getBean(IOauthClientData.class), new TypeReference<List<OauthClient>>() {
-                    });
+//                    initData("oauthClient", SpringUtils.getBean(IOauthClientData.class), new TypeReference<List<OauthClient>>() {
+//                    });
                     initData("product", SpringUtils.getBean(IProductData.class), new TypeReference<List<Product>>() {
                     });
                     initData("productModel", SpringUtils.getBean(IProductModelData.class), new TypeReference<List<ProductModel>>() {
