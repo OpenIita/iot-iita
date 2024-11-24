@@ -152,6 +152,7 @@ https://open-iita.feishu.cn/wiki/Km67wBKNNiFMrMkldCJcxa6vnLe
 商务联系:
 
 ![输入图片说明](doc/image.png)
+![输入图片说明](doc/%E9%9B%86%E7%BE%A4.png)
 
 #### 捐助与支持
 如果您觉得我的开源软件对你有所帮助请关注、star、fork :kissing_heart: 。
